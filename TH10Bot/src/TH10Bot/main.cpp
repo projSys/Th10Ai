@@ -41,7 +41,7 @@ int main()
 			{
 				std::cout << fps << std::endl;
 				fps = 0;
-				t0 = t1;
+				t0 += std::chrono::milliseconds(1000);
 			}
 		}
 	}
