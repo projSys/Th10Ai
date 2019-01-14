@@ -1,6 +1,6 @@
 # TH10Bot
 
-## ¸ÐÐ»
+## æ„Ÿè°¢
 
 [TH10AI](https://github.com/Infinideastudio/TH10AI)
 
