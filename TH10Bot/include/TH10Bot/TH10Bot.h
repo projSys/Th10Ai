@@ -105,6 +105,8 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
+		std::vector<int> m_cutList;
+
 		std::vector<std::vector<Bullet>> m_depthList;
 		std::vector<std::vector<Bullet>> m_clipList;
 

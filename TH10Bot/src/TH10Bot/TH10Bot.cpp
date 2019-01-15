@@ -82,22 +82,33 @@ namespace th
 		m_reader.getBullets(m_bullets);
 		m_reader.getLasers(m_lasers);
 
+		m_cutList.clear();
+		for (int i = 0; i < m_bullets.size(); ++i)
+		{
+			const Bullet& bullet = m_bullets[i];
+			double angle = bullet.angle(m_player);
+			if (angle < 60.0 || m_player.hitTest(bullet, 100.0))
+				m_cutList.push_back(i);
+		}
+		std::cout << m_cutList.size() << std::endl;
+
 		cv::Scalar color(255, 0, 0);
 		for (const Item& item : m_items)
 		{
-			cv::Rect rect(24 + item.x - item.w / 2, 16 + item.y - item.h / 2, item.w, item.h);
+			cv::Rect rect(200 + 24 + item.x - item.w / 2, 16 + item.y - item.h / 2, item.w, item.h);
 			cv::rectangle(m_image.m_data, rect, color);
 		}
 
-		cv::Scalar color1(0, 0, 255);
+		cv::Scalar color1(0, 255, 0);
 		for (const Enemy& enemy : m_enemies)
 		{
-			cv::Rect rect(24 + enemy.x - enemy.w / 2, 16 + enemy.y - enemy.h / 2, enemy.w, enemy.h);
+			cv::Rect rect(200 + 24 + enemy.x - enemy.w / 2, 16 + enemy.y - enemy.h / 2, enemy.w, enemy.h);
 			cv::rectangle(m_image.m_data, rect, color1);
 		}
-		for (const Bullet& bullet : m_bullets)
+		for (int i : m_cutList)
 		{
-			cv::Rect rect(24 + bullet.x - bullet.w / 2, 16 + bullet.y - bullet.h / 2, bullet.w, bullet.h);
+			const Bullet& bullet = m_bullets[i];
+			cv::Rect rect(200 + 24 + bullet.x - bullet.w / 2, 16 + bullet.y - bullet.h / 2, bullet.w, bullet.h);
 			cv::rectangle(m_image.m_data, rect, color1);
 		}
 

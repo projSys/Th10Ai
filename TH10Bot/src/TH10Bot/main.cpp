@@ -34,12 +34,12 @@ int main()
 
 			bot.update();
 
-			fps++;
+			++fps;
 			std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 			time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 			if (e1 >= 1000)
 			{
-				std::cout << fps << std::endl;
+				//std::cout << fps << std::endl;
 				fps = 0;
 				t0 += std::chrono::milliseconds(1000);
 			}

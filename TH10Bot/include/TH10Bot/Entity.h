@@ -17,7 +17,7 @@ namespace th
 	{
 		Player() = default;
 		Player(double x0, double y0, double w0, double h0) :
-			Rect2d(x0 + 200.0, y0, w0, h0) {}
+			Rect2d(x0, y0, w0, h0) {}
 
 		bool hitTest(const Rect2d& other, double epsilon = 0.0) const;
 		bool hitTestSAT(const Laser& laser, double epsilon = 0.0) const;
@@ -59,7 +59,7 @@ namespace th
 	{
 		Item() = default;
 		Item(double x0, double y0, double w0, double h0) :
-			Rect2d(x0 + 200.0, y0, w0, h0) {}
+			Rect2d(x0, y0, w0, h0) {}
 	};
 
 	struct Enemy :
@@ -67,7 +67,7 @@ namespace th
 	{
 		Enemy() = default;
 		Enemy(double x0, double y0, double w0, double h0) :
-			Rect2d(x0 + 200.0, y0, w0, h0) {}
+			Rect2d(x0, y0, w0, h0) {}
 	};
 
 	struct Bullet :
@@ -79,7 +79,7 @@ namespace th
 		Bullet() :
 			dx(0.0), dy(0.0) {}
 		Bullet(double x0, double y0, double w0, double h0, double dx0, double dy0) :
-			Rect2d(x0 + 200.0, y0, w0, h0), dx(dx0), dy(dy0) {}
+			Rect2d(x0, y0, w0, h0), dx(dx0), dy(dy0) {}
 
 		Bullet advance() const;
 		double angle(const Player& player) const;
@@ -103,7 +103,7 @@ namespace th
 		Laser() :
 			arc(0.0) {}
 		Laser(double x0, double y0, double w0, double h0, double arc0) :
-			Rect2d(x0 + 200.0, y0, w0, h0), arc(arc0) {}
+			Rect2d(x0, y0, w0, h0), arc(arc0) {}
 	};
 
 	struct SATBox
