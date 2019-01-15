@@ -25,13 +25,13 @@ namespace th
 	//   |           |           |
 	//   +-----------+-----------+
 	//(-200,480)     Y(0,480)    (200,480)
-	// 坐标原点已调整到左上角
+
 	const double SCENE_WIDTH = 400.0;
 	const double SCENE_HEIGHT = 480.0;
 
 	// 初始位置
-	const Point2d INIT_POS = { 200.0, 400.0 };
-	const Rect2d INIT_RECT = { 200.0, 400.0, 4.0, 4.0 };
+	const Point2d INIT_POS = { 0.0, 400.0 };
+	const Rect2d INIT_RECT = { 0.0, 400.0, 4.0, 4.0 };
 
 
 

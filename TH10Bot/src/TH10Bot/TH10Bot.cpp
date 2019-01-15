@@ -87,29 +87,34 @@ namespace th
 		{
 			const Bullet& bullet = m_bullets[i];
 			double angle = bullet.angle(m_player);
-			if (angle < 60.0 || m_player.hitTest(bullet, 100.0))
+			if (angle < 45.0 || m_player.hitTest(bullet, 100.0))
 				m_cutList.push_back(i);
-		}
-		std::cout << m_cutList.size() << std::endl;
-
-		cv::Scalar color(255, 0, 0);
-		for (const Item& item : m_items)
-		{
-			cv::Rect rect(200 + 24 + item.x - item.w / 2, 16 + item.y - item.h / 2, item.w, item.h);
-			cv::rectangle(m_image.m_data, rect, color);
 		}
 
 		cv::Scalar color1(0, 255, 0);
+		cv::Rect rect1(200 + 24 + m_player.x - m_player.w / 2, 16 + m_player.y - m_player.h / 2, m_player.w, m_player.h);
+		cv::rectangle(m_image.m_data, rect1, color1, -1);
+		cv::Rect rect11(200 + 32 + m_player.x - 200 / 2, 16 + m_player.y - 200 / 2, 200, 200);
+		cv::rectangle(m_image.m_data, rect11, color1, 1);
+
+		cv::Scalar color2(255, 0, 0);
+		for (const Item& item : m_items)
+		{
+			cv::Rect rect(200 + 24 + item.x - item.w / 2, 16 + item.y - item.h / 2, item.w, item.h);
+			cv::rectangle(m_image.m_data, rect, color2, -1);
+		}
+
+		cv::Scalar color3(0, 0, 255);
 		for (const Enemy& enemy : m_enemies)
 		{
 			cv::Rect rect(200 + 24 + enemy.x - enemy.w / 2, 16 + enemy.y - enemy.h / 2, enemy.w, enemy.h);
-			cv::rectangle(m_image.m_data, rect, color1);
+			cv::rectangle(m_image.m_data, rect, color3, -1);
 		}
 		for (int i : m_cutList)
 		{
 			const Bullet& bullet = m_bullets[i];
 			cv::Rect rect(200 + 24 + bullet.x - bullet.w / 2, 16 + bullet.y - bullet.h / 2, bullet.w, bullet.h);
-			cv::rectangle(m_image.m_data, rect, color1);
+			cv::rectangle(m_image.m_data, rect, color3, -1);
 		}
 
 		cv::imshow("TH10", m_image.m_data);
@@ -135,19 +140,19 @@ namespace th
 
 	bool TH10Bot::IsInScene(double x, double y)
 	{
-		return x > 0.0 && x < SCENE_WIDTH && y > 0.0 && y < SCENE_HEIGHT;
+		return x > -200.0 && x < 200.0 && y > 0.0 && y < 480.0;
 	}
 
 	void TH10Bot::FixPos(double& x, double& y)
 	{
-		if (x < 0.0)
-			x = 0.0;
-		if (x > SCENE_WIDTH)
-			x = SCENE_WIDTH;
+		if (x < -200.0)
+			x = -200.0;
+		if (x > 200.0)
+			x = 200.0;
 		if (y < 0.0)
 			y = 0.0;
-		if (y > SCENE_HEIGHT)
-			y = SCENE_HEIGHT;
+		if (y > 480.0)
+			y = 480.0;
 	}
 
 
@@ -227,7 +232,6 @@ namespace th
 		return false;
 	}
 
-	// 然而并不准确
 	bool TH10Bot::hitTestBomb()
 	{
 		if (m_player.hitTest(m_enemies))
@@ -323,6 +327,15 @@ namespace th
 		//int powerId = findPower();
 		//int enemyId = findEnemy();
 
+		POINT mousePos = getMousePos();
+		//std::cout << mousePos.x << " " << mousePos.y << std::endl;
+		Rect2d target = { static_cast<double>(mousePos.x), static_cast<double>(mousePos.y), 20.0, 20.0 };
+		//if (!IsInScene(target.x, target.y))
+		//{
+		//	move(DIR_CENTER, false);
+		//	return false;
+		//}
+
 		int lastDir = DIR_CENTER;
 		bool lastSlow = false;
 		double maxScore = std::numeric_limits<double>::lowest();
@@ -343,11 +356,13 @@ namespace th
 			double yNext = m_player.y + DIR_FACTOR[d].y * MOVE_SPEED[0];
 
 			//FixPos(xNext, yNext);
-			if (xNext < 0.0 || xNext > SCENE_WIDTH || yNext < 0.0 || yNext > SCENE_HEIGHT)
+			if (!IsInScene(xNext, yNext))
+			{
+				std::cout << "!IsInScene " << xNext << " " << yNext << std::endl;
 				continue;
+			}
 
 			Player pNext(static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h);
-
 			if (hitTestMove(pNext))
 			{
 				slow = true;
@@ -357,16 +372,18 @@ namespace th
 				yNext = m_player.y + DIR_FACTOR[d].y * MOVE_SPEED[1];
 
 				//FixPos(xNext, yNext);
-				if (xNext < 0.0 || xNext > SCENE_WIDTH || yNext < 0.0 || yNext > SCENE_HEIGHT)
+				if (!IsInScene(xNext, yNext))
+				{
+					std::cout << "!IsInScene " << xNext << " " << yNext << std::endl;
 					continue;
+				}
 
 				pNext = Player(static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h);
-
 				if (hitTestMove(pNext))
 					continue;
 			}
 
-			//score += getTargetScore(pNext, target);
+			score += getTargetScore(pNext, target);
 
 			//score += 1.0;
 
@@ -404,6 +421,14 @@ namespace th
 		//std::cout << "-----------------------------------------------------------" << std::endl;
 
 		return true;
+	}
+
+	POINT TH10Bot::getMousePos()
+	{
+		POINT mousePos = {};
+		GetCursorPos(&mousePos);
+		Rect clientRect = m_window.getClientRect();
+		return { mousePos.x - clientRect.x - 24 - 200, mousePos.y - clientRect.y - 12 };
 	}
 
 	bool TH10Bot::hitTestMove(const Player& player)
@@ -474,7 +499,7 @@ namespace th
 				double yNext = player.y + DIR_FACTOR[d].y * MOVE_SPEED[m];
 
 				//FixPos(xNext, yNext);
-				if (xNext < 0.0 || xNext > SCENE_WIDTH || yNext < 0.0 || yNext > SCENE_HEIGHT)
+				if (xNext < -200.0 || xNext > 200.0 || yNext < 0.0 || yNext > 480.0)
 					continue;
 
 				Player pNext(static_cast<float>(xNext), static_cast<float>(yNext), player.w, player.h);

@@ -32,6 +32,11 @@ int main()
 			if (IsKeyDown('D'))
 				break;
 
+			if (IsKeyDown(VK_LBUTTON))
+				bot.setSlowManual(true);
+			else
+				bot.setSlowManual(false);
+
 			bot.update();
 
 			++fps;

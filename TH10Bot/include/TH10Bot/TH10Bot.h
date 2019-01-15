@@ -57,6 +57,7 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
+		POINT getMousePos();
 		bool hitTestMove(const Player& player);
 		double getTargetScore(const Player& pNext, const Rect2d& target);
 		double search(const Player& player, int depth);

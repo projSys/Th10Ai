@@ -20,7 +20,7 @@ namespace th
 		player.y = readMemory<float>(baseAddr + 0x3C4);
 		player.dx = readMemory<int>(baseAddr + 0x3F0) / 100.0f;
 		player.dy = readMemory<int>(baseAddr + 0x3F4) / 100.0f;
-		player.w = readMemory<float>(baseAddr + 0x41C) * 2;
+		player.w = readMemory<float>(baseAddr + 0x41C) * 2.0f; // 2»¹ÊÇ4°¡£¿
 		player.h = player.w;
 		player.slow = readMemory<int>(baseAddr + 0x4474);
 		player.powers = readMemory<int>(0x00474C48) / 20.0f;
