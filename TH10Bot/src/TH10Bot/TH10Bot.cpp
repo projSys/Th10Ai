@@ -83,37 +83,41 @@ namespace th
 		m_reader.getLasers(m_lasers);
 
 		m_cutList.clear();
-		for (int i = 0; i < m_bullets.size(); ++i)
+		for (uint_t i = 0; i < m_bullets.size(); ++i)
 		{
 			const Bullet& bullet = m_bullets[i];
-			double angle = bullet.angle(m_player);
-			if (angle < 45.0 || m_player.hitTest(bullet, 100.0))
+			if (bullet.getAngle(m_player) < CLIP_ANGLE || bullet.getDistance(m_player) < CLIP_DISTANCE)
 				m_cutList.push_back(i);
 		}
 
 		cv::Scalar color1(0, 255, 0);
-		cv::Rect rect1(200 + 24 + m_player.x - m_player.w / 2, 16 + m_player.y - m_player.h / 2, m_player.w, m_player.h);
+		Pointi windowPos1 = Scene::ToWindowPos(m_player.getLeftTop());
+		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 		cv::rectangle(m_image.m_data, rect1, color1, -1);
-		cv::Rect rect11(200 + 32 + m_player.x - 200 / 2, 16 + m_player.y - 200 / 2, 200, 200);
-		cv::rectangle(m_image.m_data, rect11, color1, 1);
+		Pointi windowPos11 = Scene::ToWindowPos(m_player.getCenter());
+		cv::Point center11(windowPos11.x, windowPos11.y);
+		cv::circle(m_image.m_data, center11, int_t(CLIP_DISTANCE), color1);
 
 		cv::Scalar color2(255, 0, 0);
 		for (const Item& item : m_items)
 		{
-			cv::Rect rect(200 + 24 + item.x - item.w / 2, 16 + item.y - item.h / 2, item.w, item.h);
+			Pointi windowPos = Scene::ToWindowPos(item.getLeftTop());
+			cv::Rect rect(windowPos.x, windowPos.y, int_t(item.width), int_t(item.height));
 			cv::rectangle(m_image.m_data, rect, color2, -1);
 		}
 
 		cv::Scalar color3(0, 0, 255);
 		for (const Enemy& enemy : m_enemies)
 		{
-			cv::Rect rect(200 + 24 + enemy.x - enemy.w / 2, 16 + enemy.y - enemy.h / 2, enemy.w, enemy.h);
-			cv::rectangle(m_image.m_data, rect, color3, -1);
+			Pointi windowPos = Scene::ToWindowPos(enemy.getLeftTop());
+			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
+			cv::rectangle(m_image.m_data, rect, color3);
 		}
-		for (int i : m_cutList)
+		for (uint_t i : m_cutList)
 		{
 			const Bullet& bullet = m_bullets[i];
-			cv::Rect rect(200 + 24 + bullet.x - bullet.w / 2, 16 + bullet.y - bullet.h / 2, bullet.w, bullet.h);
+			Pointi windowPos = Scene::ToWindowPos(bullet.getLeftTop());
+			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, color3, -1);
 		}
 
@@ -138,12 +142,12 @@ namespace th
 		//std::cout << "-----------------------------------------------------------" << std::endl;
 	}
 
-	bool TH10Bot::IsInScene(double x, double y)
+	bool TH10Bot::IsInScene(float_t x, float_t y)
 	{
 		return x > -200.0 && x < 200.0 && y > 0.0 && y < 480.0;
 	}
 
-	void TH10Bot::FixPos(double& x, double& y)
+	void TH10Bot::FixPos(float_t& x, float_t& y)
 	{
 		if (x < -200.0)
 			x = -200.0;
@@ -158,9 +162,9 @@ namespace th
 
 
 	// Y轴系数
-	double TH10Bot::GetYFactor(const Rect2d& source, const Rect2d& next)
+	float_t TH10Bot::GetYFactor(const Pointf& source, const Pointf& next)
 	{
-		double factor;
+		float_t factor;
 
 		if (next.y > source.y)
 			factor = 1.0;
@@ -173,12 +177,12 @@ namespace th
 	}
 
 	// 距离系数，远离加分，靠近减分
-	double TH10Bot::GetDistFactor(double source, double next, double target)
+	float_t TH10Bot::GetDistFactor(float_t source, float_t next, float_t target)
 	{
-		double factor;
+		float_t factor;
 
-		double dSrc = std::abs(source - target);
-		double dNext = std::abs(next - target);
+		float_t dSrc = std::abs(source - target);
+		float_t dNext = std::abs(next - target);
 		if (dNext > dSrc)
 			factor = 1.0;
 		else if (dNext < dSrc)
@@ -189,17 +193,17 @@ namespace th
 		return factor;
 	}
 
-	double TH10Bot::GetDistXScore(double xNext, double xTarget)
+	float_t TH10Bot::GetDistXScore(float_t xNext, float_t xTarget)
 	{
-		double dx = std::abs(xNext - xTarget);
+		float_t dx = std::abs(xNext - xTarget);
 		if (dx > SCENE_WIDTH)
 			dx = SCENE_WIDTH;
 		return dx / SCENE_WIDTH;
 	}
 
-	double TH10Bot::GetDistYScore(double yNext, double yTarget)
+	float_t TH10Bot::GetDistYScore(float_t yNext, float_t yTarget)
 	{
-		double dy = std::abs(yNext - yTarget);
+		float_t dy = std::abs(yNext - yTarget);
 		if (dy > SCENE_HEIGHT)
 			dy = SCENE_HEIGHT;
 		return dy / SCENE_HEIGHT;
@@ -234,14 +238,23 @@ namespace th
 
 	bool TH10Bot::hitTestBomb()
 	{
-		if (m_player.hitTest(m_enemies))
-			return true;
+		for (const Enemy& enemy : m_enemies)
+		{
+			if (m_player.hitTest(enemy))
+				return true;
+		}
 
-		if (m_player.hitTest(m_bullets))
-			return true;
+		for (const Bullet& bullet : m_bullets)
+		{
+			if (m_player.hitTest(bullet))
+				return true;
+		}
 
-		if (m_player.hitTestSAT(m_lasers))
-			return true;
+		for (const Laser& laser : m_lasers)
+		{
+			if (m_player.hitTestSAT(laser))
+				return true;
+		}
 
 		return false;
 	}
@@ -327,9 +340,8 @@ namespace th
 		//int powerId = findPower();
 		//int enemyId = findEnemy();
 
-		POINT mousePos = getMousePos();
+		Pointf mousePos = getMousePos();
 		//std::cout << mousePos.x << " " << mousePos.y << std::endl;
-		Rect2d target = { static_cast<double>(mousePos.x), static_cast<double>(mousePos.y), 20.0, 20.0 };
 		//if (!IsInScene(target.x, target.y))
 		//{
 		//	move(DIR_CENTER, false);
@@ -338,7 +350,7 @@ namespace th
 
 		int lastDir = DIR_CENTER;
 		bool lastSlow = false;
-		double maxScore = std::numeric_limits<double>::lowest();
+		float_t maxScore = std::numeric_limits<float_t>::lowest();
 		int depth = 0;
 
 		//m_log.str("");
@@ -349,11 +361,11 @@ namespace th
 		{
 			int dir = DIRECTION[d];
 			bool slow = false;
-			double score = 0.0;
+			float_t score = 0.0;
 
 			// 下一个位置
-			double xNext = m_player.x + DIR_FACTOR[d].x * MOVE_SPEED[0];
-			double yNext = m_player.y + DIR_FACTOR[d].y * MOVE_SPEED[0];
+			float_t xNext = m_player.x + DIR_FACTOR[d].x * MOVE_SPEED[0];
+			float_t yNext = m_player.y + DIR_FACTOR[d].y * MOVE_SPEED[0];
 
 			//FixPos(xNext, yNext);
 			if (!IsInScene(xNext, yNext))
@@ -362,7 +374,7 @@ namespace th
 				continue;
 			}
 
-			Player pNext(static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h);
+			Player pNext(xNext, yNext, m_player.width, m_player.height, m_player.dx, m_player.dy);
 			if (hitTestMove(pNext))
 			{
 				slow = true;
@@ -378,12 +390,12 @@ namespace th
 					continue;
 				}
 
-				pNext = Player(static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h);
+				pNext = Player(xNext, yNext, m_player.width, m_player.height, m_player.dx, m_player.dy);
 				if (hitTestMove(pNext))
 					continue;
 			}
 
-			score += getTargetScore(pNext, target);
+			score += getTargetScore(pNext, mousePos);
 
 			//score += 1.0;
 
@@ -423,12 +435,12 @@ namespace th
 		return true;
 	}
 
-	POINT TH10Bot::getMousePos()
+	Pointf TH10Bot::getMousePos()
 	{
 		POINT mousePos = {};
 		GetCursorPos(&mousePos);
 		Rect clientRect = m_window.getClientRect();
-		return { mousePos.x - clientRect.x - 24 - 200, mousePos.y - clientRect.y - 12 };
+		return Scene::ToGamePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
 	}
 
 	bool TH10Bot::hitTestMove(const Player& player)
@@ -458,11 +470,11 @@ namespace th
 		return false;
 	}
 
-	double TH10Bot::getTargetScore(const Player& pNext, const Rect2d& target)
+	float_t TH10Bot::getTargetScore(const Player& pNext, const Pointf& target)
 	{
-		double score = 0.0;
+		float_t score = 0.0;
 
-		if (pNext.hitTest(target))
+		if (pNext.getDistance(target) < 10.0)
 		{
 			score += 3000.0;
 		}
@@ -474,86 +486,86 @@ namespace th
 
 		return score;
 	}
-
-	double TH10Bot::search(const Player& player, int depth)
-	{
-		double score = 0.0;
-
-		//Rect2d moveAera(player.x, player.y, player.w + MOVE_SPEED[0] * 2.0, player.h + MOVE_SPEED[0] * 2.0);
-		//m_clipList[depth].clear();
-		//for (const Bullet& bullet : m_depthList[depth])
-		//{
-		//	if (moveAera.hitTest(bullet, 0.0))
-		//		m_clipList[depth].push_back(bullet);
-		//}
-
-		for (int m = 0; m < MOVE_SPEED_LEN - 1; ++m)
+	/*
+		float_t TH10Bot::search(const Player& player, int depth)
 		{
-			for (int d = 1; d < DIR_LEN; ++d)
+			float_t score = 0.0;
+
+			//Rect2d moveAera(player.x, player.y, player.w + MOVE_SPEED[0] * 2.0, player.h + MOVE_SPEED[0] * 2.0);
+			//m_clipList[depth].clear();
+			//for (const Bullet& bullet : m_depthList[depth])
+			//{
+			//	if (moveAera.hitTest(bullet, 0.0))
+			//		m_clipList[depth].push_back(bullet);
+			//}
+
+			for (int m = 0; m < MOVE_SPEED_LEN - 1; ++m)
 			{
-				int dir = DIRECTION[d];
-				bool slow = static_cast<bool>(m);
+				for (int d = 1; d < DIR_LEN; ++d)
+				{
+					int dir = DIRECTION[d];
+					bool slow = static_cast<bool>(m);
 
-				// 下一个位置
-				double xNext = player.x + DIR_FACTOR[d].x * MOVE_SPEED[m];
-				double yNext = player.y + DIR_FACTOR[d].y * MOVE_SPEED[m];
+					// 下一个位置
+					float_t xNext = player.x + DIR_FACTOR[d].x * MOVE_SPEED[m];
+					float_t yNext = player.y + DIR_FACTOR[d].y * MOVE_SPEED[m];
 
-				//FixPos(xNext, yNext);
-				if (xNext < -200.0 || xNext > 200.0 || yNext < 0.0 || yNext > 480.0)
-					continue;
+					//FixPos(xNext, yNext);
+					if (xNext < -200.0 || xNext > 200.0 || yNext < 0.0 || yNext > 480.0)
+						continue;
 
-				Player pNext(static_cast<float>(xNext), static_cast<float>(yNext), player.w, player.h);
+					Player pNext(xNext, yNext, m_player.width, m_player.height, m_player.dx, m_player.dy);
 
-				// 剪枝：不折返
-				if (m_player.distance(pNext) < m_player.distance(player))
-					continue;
+					// 剪枝：不折返
+					if (m_player.distance(pNext) < m_player.distance(player))
+						continue;
 
-				if (hitTestMove(pNext, depth))
-					continue;
+					if (hitTestMove(pNext, depth))
+						continue;
 
-				score += 1.0;
+					score += 1.0;
 
-				//if (powerId != -1)
-				//	score += getPickupPowerScore(pNext, powerId);
-				//else if (enemyId != -1)
-				//	score += getShootEnemyScore(pNext, enemyId);
-				//else
-				//	score += getGobackScore(pNext);
+					//if (powerId != -1)
+					//	score += getPickupPowerScore(pNext, powerId);
+					//else if (enemyId != -1)
+					//	score += getShootEnemyScore(pNext, enemyId);
+					//else
+					//	score += getGobackScore(pNext);
 
-				if (depth + 1 < DEPTH)
-					score += search(pNext, depth + 1);
+					if (depth + 1 < DEPTH)
+						score += search(pNext, depth + 1);
+				}
 			}
+
+			return score;
 		}
 
-		return score;
-	}
-
-	bool TH10Bot::hitTestMove(const Player& player, int depth)
-	{
-		if (depth == 0)
+		bool TH10Bot::hitTestMove(const Player& player, int depth)
 		{
-			if (player.hitTest(m_enemies, 2.0))
-				return true;
+			if (depth == 0)
+			{
+				if (player.hitTest(m_enemies, 2.0))
+					return true;
 
-			if (player.hitTest(m_bullets, 2.0))
-				return true;
+				if (player.hitTest(m_bullets, 2.0))
+					return true;
 
-			if (player.hitTestSAT(m_lasers, 2.0))
-				return true;
+				if (player.hitTestSAT(m_lasers, 2.0))
+					return true;
+			}
+			else
+			{
+				// Enemy缺失
+
+				if (player.hitTest(m_clipList[depth], 2.0))
+					return true;
+
+				// Laser缺失
+			}
+
+			return false;
 		}
-		else
-		{
-			// Enemy缺失
-
-			if (player.hitTest(m_clipList[depth], 2.0))
-				return true;
-
-			// Laser缺失
-		}
-
-		return false;
-	}
-
+	*/
 	// 查找道具
 	int TH10Bot::findPower()
 	{
@@ -562,7 +574,7 @@ namespace th
 		if (m_player.y < SCENE_HEIGHT / 4.0)
 			return id;
 
-		double minDist = std::numeric_limits<double>::max();
+		float_t minDist = std::numeric_limits<float_t>::max();
 		int size = static_cast<int>(m_items.size());
 		for (int i = 0; i < size; ++i)
 		{
@@ -573,12 +585,12 @@ namespace th
 				continue;
 
 			// 不在自机半屏内
-			double dy = std::abs(m_player.y - item.y);
+			float_t dy = std::abs(m_player.y - item.y);
 			if (dy > SCENE_HEIGHT / 4.0)
 				continue;
 
 			// 与自机距离最近的
-			double distance = m_player.distance(item);
+			float_t distance = m_player.getDistance(item);
 			if (distance < minDist)
 			{
 				minDist = distance;
@@ -597,14 +609,14 @@ namespace th
 		if (m_player.y < SCENE_HEIGHT / 4.0)
 			return id;
 
-		double minDist = std::numeric_limits<double>::max();
+		float_t minDist = std::numeric_limits<float_t>::max();
 		int size = static_cast<int>(m_enemies.size());
 		for (int i = 0; i < size; ++i)
 		{
 			const Enemy& enemy = m_enemies[i];
 
 			//  与自机X轴距离最近
-			double dx = std::abs(m_player.x - enemy.x);
+			float_t dx = std::abs(m_player.x - enemy.x);
 			if (dx < minDist)
 			{
 				minDist = dx;
@@ -615,9 +627,9 @@ namespace th
 		return id;
 	}
 
-	double TH10Bot::getDodgeEnemyScore(const Player& pNext, double epsilon)
+	float_t TH10Bot::getDodgeEnemyScore(const Player& pNext, float_t epsilon)
 	{
-		double score = 0.0;
+		float_t score = 0.0;
 
 		for (const Enemy& enemy : m_enemies)
 		{
@@ -633,9 +645,9 @@ namespace th
 
 	// 躲闪子弹评分
 	// 帧同步后还是没法准确地碰撞检测，只好不要靠子弹那么近
-	double TH10Bot::getDodgeBulletScore(const Player& pNext, double epsilon)
+	float_t TH10Bot::getDodgeBulletScore(const Player& pNext, float_t epsilon)
 	{
-		double score = 0.0;
+		float_t score = 0.0;
 
 		for (const Bullet& bullet : m_bullets)
 		{
@@ -656,9 +668,9 @@ namespace th
 		return score;
 	}
 
-	double TH10Bot::getDodgeLaserScore(const Player& pNext, double epsilon)
+	float_t TH10Bot::getDodgeLaserScore(const Player& pNext, float_t epsilon)
 	{
-		double score = 0.0;
+		float_t score = 0.0;
 
 		for (const Laser& laser : m_lasers)
 		{
@@ -672,13 +684,13 @@ namespace th
 		return score;
 	}
 
-	double TH10Bot::getBulletAngleScore(const Player& pNext)
+	float_t TH10Bot::getBulletAngleScore(const Player& pNext)
 	{
-		double score = 0.0;
+		float_t score = 0.0;
 
 		for (const Bullet& bullet : m_bullets)
 		{
-			double angle = bullet.angle(pNext);
+			float_t angle = bullet.getAngle(pNext);
 			score = 10000 * (1.0 - angle / 180.0);
 		}
 
@@ -686,9 +698,9 @@ namespace th
 	}
 
 	// 拾取道具评分
-	double TH10Bot::getPickupPowerScore(const Player& pNext, int powerId)
+	float_t TH10Bot::getPickupPowerScore(const Player& pNext, int powerId)
 	{
-		double score = 0.0;
+		float_t score = 0.0;
 
 		if (powerId == -1)
 			return score;
@@ -708,15 +720,15 @@ namespace th
 	}
 
 	// 攻击敌人评分
-	double TH10Bot::getShootEnemyScore(const Player& pNext, int enemyId)
+	float_t TH10Bot::getShootEnemyScore(const Player& pNext, int enemyId)
 	{
-		double score = 0.0;
+		float_t score = 0.0;
 
 		if (enemyId == -1)
 			return score;
 
 		const Enemy& enemy = m_enemies[enemyId];
-		double dx = std::abs(pNext.x - enemy.x);
+		float_t dx = std::abs(pNext.x - enemy.x);
 		if (dx < 15.0)
 		{
 			score += 300.0;
@@ -732,18 +744,18 @@ namespace th
 		return score;
 	}
 
-	double TH10Bot::getGobackScore(const Player& pNext)
+	float_t TH10Bot::getGobackScore(const Player& pNext)
 	{
-		double score = 0.0;
+		float_t score = 0.0;
 
-		if (pNext.hitTest(INIT_RECT, 10.0))
+		if (pNext.getDistance(INIT_POS) < 10.0)
 		{
 			score += 30.0;
 		}
 		else
 		{
-			score += 15.0 * (1.0 - GetDistXScore(pNext.x, INIT_RECT.x));
-			score += 15.0 * (1.0 - GetDistYScore(pNext.y, INIT_RECT.y));
+			score += 15.0 * (1.0 - GetDistXScore(pNext.x, INIT_POS.x));
+			score += 15.0 * (1.0 - GetDistYScore(pNext.y, INIT_POS.y));
 		}
 
 		return score;
@@ -868,15 +880,15 @@ namespace th
 	//
 	//	int lastDir = DIR_NONE;
 	//	bool lastShift = false;
-	//	double maxScore = std::numeric_limits<double>::lowest();
+	//	float_t maxScore = std::numeric_limits<float_t>::lowest();
 	//	for (int i = 0; i < DIR_LENGHT; ++i)
 	//	{
 	//		int dir = DIRECTIONS[i];
 	//		bool shift = false;
-	//		double score = 0.0;
+	//		float_t score = 0.0;
 	//
-	//		double xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
-	//		double yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
+	//		float_t xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
+	//		float_t yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(xNext, yNext);
 	//		Player next = { static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h };
 	//		if (hitTest(next, 0.0))
@@ -938,15 +950,15 @@ namespace th
 	//
 	//	int lastDir = DIR_NONE;
 	//	bool lastShift = false;
-	//	double maxScore = 1e-15;
+	//	float_t maxScore = 1e-15;
 	//	for (int i = 0; i < DIR_LENGHT; ++i)
 	//	{
 	//		int dir = DIRECTIONS[i];
 	//		bool shift = false;
-	//		double score = 0.0;
+	//		float_t score = 0.0;
 	//
-	//		double xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
-	//		double yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
+	//		float_t xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
+	//		float_t yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(xNext, yNext);
 	//		Player next = { static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h };
 	//		if (hitTest(next, 0.0))
@@ -979,12 +991,12 @@ namespace th
 	//}
 
 	// 闪避敌人评分
-	//double TH10Bot::dodgeEnemyScore(const Player& next)
+	//float_t TH10Bot::dodgeEnemyScore(const Player& next)
 	//{
-	//	double allScore = 0.0;
+	//	float_t allScore = 0.0;
 	//	for (const Enemy& enemy : m_enemies)
 	//	{
-	//		double score = 0.0;
+	//		float_t score = 0.0;
 	//
 	//		// 在敌机范围50外 
 	//		if (!next.hitTest(enemy, 50.0))
@@ -1016,15 +1028,15 @@ namespace th
 	//
 	//	int lastDir = DIR_NONE;
 	//	bool lastShift = false;
-	//	double maxScore = 1e-15;
+	//	float_t maxScore = 1e-15;
 	//	for (int i = 0; i < DIR_LENGHT; ++i)
 	//	{
 	//		int dir = DIRECTIONS[i];
 	//		bool shift = false;
-	//		double score = 0.0;
+	//		float_t score = 0.0;
 	//
-	//		double nextX = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
-	//		double nextY = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
+	//		float_t nextX = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
+	//		float_t nextY = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(nextX, nextY);
 	//		Player player = { static_cast<float>(nextX), static_cast<float>(nextY), m_player.w, m_player.h };
 	//		if (hitTest(player, 0.0))

@@ -9,7 +9,7 @@ namespace th
 		public DesktopCapturerGPU
 	{
 	public:
-		DesktopCapturerCV();
+		explicit DesktopCapturerCV(UINT output = 0);
 		virtual ~DesktopCapturerCV() = default;
 
 	private:

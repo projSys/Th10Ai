@@ -13,49 +13,46 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\Th10Bot">
-      <UniqueIdentifier>{43386360-f6d4-4168-8fb2-3c71c3e570a9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\TH10Bot">
       <UniqueIdentifier>{48481158-f797-4334-968a-f367e09c4440}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\TH10Bot">
+      <UniqueIdentifier>{43386360-f6d4-4168-8fb2-3c71c3e570a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\TH10Bot\Clock.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\Common.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\Define.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\Entity.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\Key.h">
-      <Filter>头文件\Th10Bot</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TH10Bot\Point2.h">
-      <Filter>头文件\Th10Bot</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TH10Bot\Rect2.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\TH10Bot.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\TH10Reader.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\vec2.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\DesktopCapturerCV.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\DesktopImageCV.h">
-      <Filter>头文件\Th10Bot</Filter>
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Scene.h">
+      <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +78,9 @@
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\TH10Bot\DesktopImageCV.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Scene.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
   </ItemGroup>

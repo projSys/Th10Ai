@@ -16,21 +16,21 @@ namespace th
 			player = Player();
 			return false;
 		}
-		player.x = readMemory<float>(baseAddr + 0x3C0);
-		player.y = readMemory<float>(baseAddr + 0x3C4);
-		player.dx = readMemory<int>(baseAddr + 0x3F0) / 100.0f;
-		player.dy = readMemory<int>(baseAddr + 0x3F4) / 100.0f;
-		player.w = readMemory<float>(baseAddr + 0x41C) * 2.0f; // 2还是4啊？
-		player.h = player.w;
-		player.slow = readMemory<int>(baseAddr + 0x4474);
-		player.powers = readMemory<int>(0x00474C48) / 20.0f;
-		player.type = readMemory<int>(0x00474C68);
-		player.life = readMemory<int>(0x00474C70) + 1;
-		player.itemObtainRange = readMemory<float>(0x00476FB0) + player.type * 4;
+		player.x = readMemory<float32_t>(baseAddr + 0x3C0);
+		player.y = readMemory<float32_t>(baseAddr + 0x3C4);
+		player.dx = readMemory<int32_t>(baseAddr + 0x3F0) / 100.0f;
+		player.dy = readMemory<int32_t>(baseAddr + 0x3F4) / 100.0f;
+		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 4.0f; // 2还是4啊？
+		player.height = player.width;
+		player.slow = readMemory<int32_t>(baseAddr + 0x4474);
+		player.powers = readMemory<int32_t>(0x00474C48) / 20.0f;
+		player.type = readMemory<int32_t>(0x00474C68);
+		player.life = readMemory<int32_t>(0x00474C70) + 1;
+		player.itemObtainRange = readMemory<float32_t>(0x00476FB0) + player.type * 4;
 		if (player.slow)
 			player.itemObtainRange *= 2.5;
-		player.status = readMemory<int>(baseAddr + 0x458);
-		player.invinibleTime = readMemory<int>(baseAddr + 0x4310);
+		player.status = readMemory<int32_t>(baseAddr + 0x458);
+		player.invinibleTime = readMemory<int32_t>(baseAddr + 0x4310);
 		return true;
 	}
 
@@ -53,10 +53,10 @@ namespace th
 			// eax == 4 到达点的收取范围，自动回收的点
 			if (eax == 1)
 			{
-				float x = readMemory<float>(ebp - 0x4);
-				float y = readMemory<float>(ebp);
-				float dx = readMemory<float>(ebp + 0x8);
-				float dy = readMemory<float>(ebp + 0xC);
+				float32_t x = readMemory<float32_t>(ebp - 0x4);
+				float32_t y = readMemory<float32_t>(ebp);
+				float32_t dx = readMemory<float32_t>(ebp + 0x8);
+				float32_t dy = readMemory<float32_t>(ebp + 0xC);
 				int32_t type = readMemory<int32_t>(ebp + 0x30);
 				// 正常点分为以下几种
 				// type == 1 Power Items P点（红点）
@@ -70,7 +70,7 @@ namespace th
 				// type == 9 Faith Items 信仰点（绿点），满灵力时由P点转化而来
 				// type == 10 Power Items P点（红点），由BOSS掉落
 				// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
-				items.emplace_back(x, y, 6.0, 6.0);
+				items.emplace_back(x, y, 6.0f, 6.0f, dx, dy);
 			}
 			ebp += 0x3F0;
 		}
@@ -96,13 +96,13 @@ namespace th
 			{
 				if ((t & 0x12) == 0)
 				{
-					float x = readMemory<float>(objAddr + 0x2C);
-					float y = readMemory<float>(objAddr + 0x30);
-					float dx = readMemory<float>(objAddr + 0x38);
-					float dy = readMemory<float>(objAddr + 0x3C);
-					float w = readMemory<float>(objAddr + 0xB8);
-					float h = readMemory<float>(objAddr + 0xBC);
-					enemies.emplace_back(x, y, w, h);
+					float32_t x = readMemory<float32_t>(objAddr + 0x2C);
+					float32_t y = readMemory<float32_t>(objAddr + 0x30);
+					float32_t dx = readMemory<float32_t>(objAddr + 0x38);
+					float32_t dy = readMemory<float32_t>(objAddr + 0x3C);
+					float32_t width = readMemory<float32_t>(objAddr + 0xB8);
+					float32_t height = readMemory<float32_t>(objAddr + 0xBC);
+					enemies.emplace_back(x, y, width, height, dx, dy);
 				}
 			}
 			if (objNext == 0)
@@ -132,13 +132,13 @@ namespace th
 					eax = readMemory<uint32_t>(eax + 0x58);
 					if (!(eax & 0x00000400))
 					{
-						float x = readMemory<float>(ebx + 0x3B4);
-						float y = readMemory<float>(ebx + 0x3B8);
-						float dx = readMemory<float>(ebx + 0x3C0);
-						float dy = readMemory<float>(ebx + 0x3C4);
-						float w = readMemory<float>(ebx + 0x3F0);
-						float h = readMemory<float>(ebx + 0x3F4);
-						bullets.emplace_back(x, y, w, h, dx, dy);
+						float32_t x = readMemory<float32_t>(ebx + 0x3B4);
+						float32_t y = readMemory<float32_t>(ebx + 0x3B8);
+						float32_t dx = readMemory<float32_t>(ebx + 0x3C0);
+						float32_t dy = readMemory<float32_t>(ebx + 0x3C4);
+						float32_t width = readMemory<float32_t>(ebx + 0x3F0);
+						float32_t height = readMemory<float32_t>(ebx + 0x3F4);
+						bullets.emplace_back(x, y, width, height, dx, dy);
 					}
 				}
 			}
@@ -159,14 +159,14 @@ namespace th
 		while (true)
 		{
 			uint32_t objNext = readMemory<uint32_t>(objAddr + 0x8);
-			float x = readMemory<float>(objAddr + 0x24);
-			float y = readMemory<float>(objAddr + 0x28);
-			float dx = readMemory<float>(objAddr + 0x30);
-			float dy = readMemory<float>(objAddr + 0x34);
-			float arc = readMemory<float>(objAddr + 0x3C);
-			float h = readMemory<float>(objAddr + 0x40);
-			float w = readMemory<float>(objAddr + 0x44);
-			lasers.emplace_back(x, y, w, h, arc);
+			float32_t x = readMemory<float32_t>(objAddr + 0x24);
+			float32_t y = readMemory<float32_t>(objAddr + 0x28);
+			float32_t dx = readMemory<float32_t>(objAddr + 0x30);
+			float32_t dy = readMemory<float32_t>(objAddr + 0x34);
+			float32_t arc = readMemory<float32_t>(objAddr + 0x3C);
+			float32_t height = readMemory<float32_t>(objAddr + 0x40);
+			float32_t width = readMemory<float32_t>(objAddr + 0x44);
+			lasers.emplace_back(x, y, width, height, dx, dy, arc);
 			if (objNext == 0)
 				break;
 			objAddr = objNext;

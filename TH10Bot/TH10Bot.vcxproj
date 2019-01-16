@@ -150,8 +150,7 @@
     <ClInclude Include="include\TH10Bot\DesktopImageCV.h" />
     <ClInclude Include="include\TH10Bot\Entity.h" />
     <ClInclude Include="include\TH10Bot\Key.h" />
-    <ClInclude Include="include\TH10Bot\Point2.h" />
-    <ClInclude Include="include\TH10Bot\Rect2.h" />
+    <ClInclude Include="include\TH10Bot\Scene.h" />
     <ClInclude Include="include\TH10Bot\TH10Bot.h" />
     <ClInclude Include="include\TH10Bot\TH10Reader.h" />
     <ClInclude Include="include\TH10Bot\vec2.h" />
@@ -163,6 +162,7 @@
     <ClCompile Include="src\TH10Bot\Entity.cpp" />
     <ClCompile Include="src\TH10Bot\Key.cpp" />
     <ClCompile Include="src\TH10Bot\main.cpp" />
+    <ClCompile Include="src\TH10Bot\Scene.cpp" />
     <ClCompile Include="src\TH10Bot\TH10Bot.cpp" />
     <ClCompile Include="src\TH10Bot\TH10Reader.cpp" />
   </ItemGroup>

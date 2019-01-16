@@ -9,6 +9,9 @@
 namespace th
 {
 	using namespace cpp;
+	using cpp::float_t;
 	using namespace win;
 	using namespace gc;
 }
+
+#include "TH10Bot/Define.h"

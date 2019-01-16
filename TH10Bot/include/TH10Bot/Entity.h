@@ -1,88 +1,100 @@
 #pragma once
 
-#include <vector>
-
-#include "TH10Bot/Point2.h"
-#include "TH10Bot/Rect2.h"
-
 namespace th
 {
-	struct Item;
-	struct Enemy;
-	struct Bullet;
-	struct Laser;
+	class Player;
+	class Item;
+	class Enemy;
+	class Bullet;
+	class Laser;
 
-	struct Player :
-		Rect2d
+	class Entity
 	{
-		Player() = default;
-		Player(double x0, double y0, double w0, double h0) :
-			Rect2d(x0, y0, w0, h0) {}
+	public:
+		Entity() :
+			x(), y(), width(), height(), dx(), dy() {}
+		Entity(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
+			x(x0), y(y0), width(width0), height(height0), dx(dx0), dy(dy0) {}
 
-		bool hitTest(const Rect2d& other, double epsilon = 0.0) const;
-		bool hitTestSAT(const Laser& laser, double epsilon = 0.0) const;
+		float_t getDistance(const Pointf& other) const;
+		float_t getDistance(const Entity& other) const;
+		float_t getAngle(const Entity& other) const;
+		bool hitTest(const Entity& other, float_t epsilon = 0.0) const;
 
-		bool hitTest(const std::vector<Enemy>& enemies, double epsilon = 0.0) const;
-		bool hitTest(const std::vector<Bullet>& bullets, double epsilon = 0.0) const;
-		bool hitTestSAT(const std::vector<Laser>& lasers, double epsilon = 0.0) const;
+		Pointf getCenter() const;
+		Pointf getLeftTop() const;
+		Pointf getNextPos() const;
 
-		float dx;
-		float dy;
+		float_t x;
+		float_t y;
+		float_t width;
+		float_t height;
+		float_t dx;
+		float_t dy;
+	};
 
-		float powers;
+	class Player :
+		public Entity
+	{
+	public:
+		Player() {};
+		Player(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
+			Entity(x0, y0, width0, height0, dx0, dy0) {}
 
-		int life;
+		bool hitTestSAT(const Laser& laser, float_t epsilon = 0.0) const;
+
+		float_t powers;
+
+		int_t life;
 
 		// type == 0 Reimu
 		// type == 1 Marisa
-		int type;
+		int_t type;
 
 		// slow == 0 High Speed
 		// slow == 1 Low Speed
-		int slow;
+		int_t slow;
 
-		float itemObtainRange;
+		float_t itemObtainRange;
 
 		// status == 0 重生状态，此时无敌
 		// status == 1 正常状态
 		// status == 2 死亡
 		// status == 3 Unknown
 		// status == 4 被弹、决死，此时放B可以决死
-		int status;
+		int_t status;
 
 		// 剩余无敌时间
-		int invinibleTime;
+		int_t invinibleTime;
 	};
 
-	struct Item :
-		Rect2d
+	class Item :
+		public Entity
 	{
-		Item() = default;
-		Item(double x0, double y0, double w0, double h0) :
-			Rect2d(x0, y0, w0, h0) {}
+	public:
+		Item() {};
+		Item(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
+			Entity(x0, y0, width0, height0, dx0, dy0) {}
 	};
 
-	struct Enemy :
-		Rect2d
+	class Enemy :
+		public Entity
 	{
-		Enemy() = default;
-		Enemy(double x0, double y0, double w0, double h0) :
-			Rect2d(x0, y0, w0, h0) {}
+	public:
+		Enemy() {};
+		Enemy(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
+			Entity(x0, y0, width0, height0, dx0, dy0) {}
 	};
 
-	struct Bullet :
-		Rect2d
+	class Bullet :
+		public Entity
 	{
-		double dx;
-		double dy;
-
-		Bullet() :
-			dx(0.0), dy(0.0) {}
-		Bullet(double x0, double y0, double w0, double h0, double dx0, double dy0) :
-			Rect2d(x0, y0, w0, h0), dx(dx0), dy(dy0) {}
+	public:
+		Bullet() {};
+		Bullet(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
+			Entity(x0, y0, width0, height0, dx0, dy0) {}
 
 		Bullet advance() const;
-		double angle(const Player& player) const;
 	};
 
 	//       w
@@ -95,33 +107,34 @@ namespace th
 	// |     |     |
 	// |     |     |
 	// +-----+-----+
-	struct Laser :
-		Rect2d
+	class Laser :
+		public Entity
 	{
-		double arc;
-
+	public:
 		Laser() :
-			arc(0.0) {}
-		Laser(double x0, double y0, double w0, double h0, double arc0) :
-			Rect2d(x0, y0, w0, h0), arc(arc0) {}
+			arc() {}
+		Laser(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0, float_t arc0) :
+			Entity(x0, y0, width0, height0, dx0, dy0), arc(arc0) {}
+
+		float_t arc;
 	};
 
-	struct SATBox
+	class SATBox
 	{
-		double x1, y1;
-		double x2, y2;
-		double x3, y3;
-		double x4, y4;
+	public:
+		static void PointRotate(float_t& x, float_t& y, float_t cx, float_t cy, float_t arc);
+		static bool HitTest(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon);
 
 		//SATBox() :
-		//	x1(0.0), y1(0.0),
-		//	x2(0.0), y2(0.0),
-		//	x3(0.0), y3(0.0),
-		//	x4(0.0), y4(0.0) {}
+		//	x1(), y1(),
+		//	x2(), y2(),
+		//	x3(), y3(),
+		//	x4(), y4() {}
 
-	protected:
-		static void PointRotate(double& x, double& y, double cx, double cy, double arc);
-		static bool HitTest(double c1, double d1, double c2, double d2, double epsilon);
+		float_t x1, y1;
+		float_t x2, y2;
+		float_t x3, y3;
+		float_t x4, y4;
 	};
 
 	struct LaserBox :
@@ -130,7 +143,7 @@ namespace th
 		//LaserBox() = default;
 		LaserBox(const Laser& laser);
 
-		bool hitTestSAT(const Player& player, double epsilon = 0.0) const;
+		bool hitTestSAT(const Player& player, float_t epsilon = 0.0) const;
 	};
 
 	struct PlayerBox :
@@ -139,6 +152,6 @@ namespace th
 		//PlayerBox() = default;
 		PlayerBox(const Player& player, const Laser& laser);
 
-		bool hitTestSAT(const Laser& laser, double epsilon = 0.0) const;
+		bool hitTestSAT(const Laser& laser, float_t epsilon = 0.0) const;
 	};
 }

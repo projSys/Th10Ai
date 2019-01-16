@@ -3,7 +3,8 @@
 
 namespace th
 {
-	DesktopCapturerCV::DesktopCapturerCV()
+	DesktopCapturerCV::DesktopCapturerCV(UINT output) :
+		DesktopCapturerGPU(output)
 	{
 		// initOpenCL --------------------------------------------------
 

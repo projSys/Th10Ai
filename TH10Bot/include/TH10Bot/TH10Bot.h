@@ -11,7 +11,7 @@
 #include "TH10Bot/DesktopImageCV.h"
 #include "TH10Bot/TH10Reader.h"
 #include "TH10Bot/Entity.h"
-#include "TH10Bot/Define.h"
+#include "TH10Bot/Scene.h"
 #include "TH10Bot/Key.h"
 #include "TH10Bot/Clock.h"
 
@@ -24,7 +24,7 @@ namespace th
 		Player player;
 		uint8_t dir;
 		bool slow;
-		double score;
+		float_t score;
 	};
 
 	const int DEPTH = 4;
@@ -41,13 +41,13 @@ namespace th
 		void update();
 
 	private:
-		static bool IsInScene(double x, double y);
-		static void FixPos(double& x, double& y);
+		static bool IsInScene(float_t x, float_t y);
+		static void FixPos(float_t& x, float_t& y);
 
-		static double GetYFactor(const Rect2d& source, const Rect2d& next);
-		static double GetDistFactor(double source, double next, double target);
-		static double GetDistXScore(double xNext, double xTarget);
-		static double GetDistYScore(double yNext, double yTarget);
+		static float_t GetYFactor(const Pointf& source, const Pointf& next);
+		static float_t GetDistFactor(float_t source, float_t next, float_t target);
+		static float_t GetDistXScore(float_t xNext, float_t xTarget);
+		static float_t GetDistYScore(float_t yNext, float_t yTarget);
 
 		bool handleBomb();
 		bool hitTestBomb();
@@ -57,34 +57,34 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
-		POINT getMousePos();
+		Pointf getMousePos();
 		bool hitTestMove(const Player& player);
-		double getTargetScore(const Player& pNext, const Rect2d& target);
-		double search(const Player& player, int depth);
+		float_t getTargetScore(const Player& pNext, const Pointf& target);
+		float_t search(const Player& player, int depth);
 		bool hitTestMove(const Player& player, int depth);
 		int findPower();
 		int findEnemy();
-		double getDodgeEnemyScore(const Player& pNext, double epsilon = 100.0);
-		double getDodgeBulletScore(const Player& pNext, double epsilon = 2.0);
-		double getDodgeLaserScore(const Player& pNext, double epsilon = 2.0);
-		double getBulletAngleScore(const Player& pNext);
-		double getPickupPowerScore(const Player& pNext, int powerId);
-		double getShootEnemyScore(const Player& pNext, int enemyId);
-		double getGobackScore(const Player& pNext);
+		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
+		float_t getDodgeBulletScore(const Player& pNext, float_t epsilon = 2.0);
+		float_t getDodgeLaserScore(const Player& pNext, float_t epsilon = 2.0);
+		float_t getBulletAngleScore(const Player& pNext);
+		float_t getPickupPowerScore(const Player& pNext, int powerId);
+		float_t getShootEnemyScore(const Player& pNext, int enemyId);
+		float_t getGobackScore(const Player& pNext);
 		void move(int dir, bool slow);
 
 		// Power
 		//bool handlePower();
 		//bool checkPickupStatus();
 		//bool pickupPower(int powerId);
-		//double pickupPowerScore(const Player& next, const Power& power);
+		//float_t pickupPowerScore(const Player& next, const Power& power);
 
 		// Enemy
 		//bool handleEnemy();
 		//bool checkShootStatus();
 		//bool shootEnemy(int enemyId);
-		//double dodgeEnemyScore(const Player& next);
-		//double shootEnemyScore(const Player& next, const Enemy& enemy);
+		//float_t dodgeEnemyScore(const Player& next);
+		//float_t shootEnemyScore(const Player& next, const Enemy& enemy);
 
 		//void goback();
 
@@ -106,7 +106,7 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		std::vector<int> m_cutList;
+		std::vector<uint_t> m_cutList;
 
 		std::vector<std::vector<Bullet>> m_depthList;
 		std::vector<std::vector<Bullet>> m_clipList;
