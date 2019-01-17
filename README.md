@@ -2,6 +2,8 @@
 
 东方机器人
 
+![](https://github.com/GiriMind/TH10Bot/raw/master/1.png)
+
 ## 感谢
 
 [TH10AI](https://github.com/Infinideastudio/TH10AI)
