@@ -41,9 +41,6 @@ namespace th
 		void update();
 
 	private:
-		static bool IsInScene(float_t x, float_t y);
-		static void FixPos(float_t& x, float_t& y);
-
 		static float_t GetYFactor(const Pointf& source, const Pointf& next);
 		static float_t GetDistFactor(float_t source, float_t next, float_t target);
 		static float_t GetDistXScore(float_t xNext, float_t xTarget);
@@ -106,7 +103,8 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		std::vector<uint_t> m_cutList;
+		std::vector<uint_t> m_angleList;
+		std::vector<uint_t> m_distList;
 
 		std::vector<std::vector<Bullet>> m_depthList;
 		std::vector<std::vector<Bullet>> m_clipList;

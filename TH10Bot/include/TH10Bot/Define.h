@@ -23,15 +23,14 @@ namespace th
 	//   +-----------+-----------+
 	//(-200,480)     Y(0,480)    (200,480)
 
-	const float_t SCENE_WIDTH = 400;
-	const float_t SCENE_HEIGHT = 480;
+	const Sizef SCENE_SIZE = { 400.0f, 480.0f };
 
-	const Pointf SCENE_OFFSET = { 24, 16 };
+	const Pointf SCENE_OFFSET = { 24.0f, 16.0f };
 
-	const Pointf POS_OFFSET = { 200, 0 };
+	const Pointf POS_OFFSET = { 200.0f, 0.0f };
 
 	// 初始位置
-	const Pointf INIT_POS = { 0, 400 };
+	const Pointf INIT_POS = { 0.0f, 400.0f };
 
 
 
@@ -42,7 +41,7 @@ namespace th
 	const int_t DIR_LEFT = 0x04;
 	const int_t DIR_RIGHT = 0x08;
 
-	const int_t DIRECTION[] =
+	const int_t DIRECTIONS[] =
 	{
 		DIR_UP | DIR_LEFT,		// 5 左上
 		DIR_UP,					// 1 上
@@ -55,47 +54,42 @@ namespace th
 		DIR_DOWN | DIR_RIGHT	// 10 右下
 	};
 
-	const int_t DIR_LEN = sizeof(DIRECTION) / sizeof(DIRECTION[0]);
+	const int_t DIRECTIONS_LEN = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
 
 
 
 	const float_t SQRT_PF = std::sqrt(0.5f);
 
 	// 各方向的移动系数
-	const Pointf DIR_FACTOR[] =
+	const Pointf DIR_FACTORS[] =
 	{
 		{ -SQRT_PF, -SQRT_PF },	// 左上
-		{ 0.0, -1.0 },			// 上
+		{ 0.0f, -1.0f },		// 上
 		{ SQRT_PF, -SQRT_PF },	// 右上
-		{ -1.0, 0.0 },			// 左
-		{ 0.0, 0.0 },			// 中
-		{ 1.0, 0.0 },			// 右
+		{ -1.0f, 0.0f },		// 左
+		{ 0.0f, 0.0f },			// 中
+		{ 1.0f, 0.0f },			// 右
 		{ -SQRT_PF, SQRT_PF },	// 左下
-		{ 0.0, 1.0 },			// 下
+		{ 0.0f, 1.0f },			// 下
 		{ SQRT_PF, SQRT_PF }	// 右下
 	};
 
-	const int_t DIR_FACTOR_LEN = sizeof(DIR_FACTOR) / sizeof(DIR_FACTOR[0]);
+	const int_t DIR_FACTORS_LEN = sizeof(DIR_FACTORS) / sizeof(DIR_FACTORS[0]);
 
-	//static_assert(DIR_LEN == DIR_FACTOR_LEN);
+	//static_assert(DIRECTIONS_LEN == DIR_FACTORS_LEN);
 
 	// 移动速度
-	const float_t MOVE_SPEED[] =
+	const float_t MOVE_SPEEDS[] =
 	{
-		4.5,
-		2.0
+		4.5f,
+		2.0f
 	};
 
-	const int_t MOVE_SPEED_LEN = sizeof(MOVE_SPEED) / sizeof(MOVE_SPEED[0]);
+	const int_t MOVE_SPEEDS_LEN = sizeof(MOVE_SPEEDS) / sizeof(MOVE_SPEEDS[0]);
 
 
 
-	// 场景的最大距离，作为评分分母 624.81
-	const float_t SCENE_MAXDIST = std::sqrt(SCENE_WIDTH * SCENE_WIDTH + SCENE_HEIGHT * SCENE_HEIGHT);
-
-
-
-	// 裁剪角度和距离
-	const float_t CLIP_ANGLE = 45;
-	const float_t CLIP_DISTANCE = 100;
+	// 裁剪距离和角度
+	const float_t CLIP_ANGLE = 45.0f;
+	const float_t CLIP_DISTANCE = 100.0f;
 }

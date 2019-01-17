@@ -1,37 +1,57 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/Entity.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 namespace th
 {
-	float_t Entity::getDistance(const Pointf& other) const
+	float_t Entity::distance(const Pointf& other) const
 	{
 		float_t dx = x - other.x;
 		float_t dy = y - other.y;
 		return std::sqrt(dx * dx + dy * dy);
 	}
 
-	float_t Entity::getDistance(const Entity& other) const
+	float_t Entity::distance(const Entity& other) const
 	{
 		float_t dx = x - other.x;
 		float_t dy = y - other.y;
 		return std::sqrt(dx * dx + dy * dy);
 	}
 
-	// 余弦定理
-	float_t Entity::getAngle(const Entity& other) const
+	float_t Entity::angle(const Entity& other) const
 	{
+		//if (std::abs(dx) <= std::numeric_limits<float_t>::epsilon()
+		//	&& std::abs(dy) <= std::numeric_limits<float_t>::epsilon())
+		//	return 360.0f;
 		Pointf nextPos = getNextPos();
-		float_t ab = getDistance(other);
-		float_t ac = getDistance(nextPos);
-		float_t bc = other.getDistance(nextPos);
-		float_t cosA = (ab * ab + ac * ac - bc * bc) / (2 * ab * ac);
-		return std::acos(cosA) * 180 / 3.14159265358979323846f;
+		float_t AB = distance(other);
+		float_t AC = distance(nextPos);
+		float_t BC = other.distance(nextPos);
+		// 余弦定理
+		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
+		float_t radian = std::acos(cosA);
+		// 角度 = 弧度 * 180 / PI
+		return static_cast<float_t>(radian * 180.0f / M_PI);
+	}
+
+	Pointf Entity::footPoint(const Entity& other) const
+	{
+		if (std::abs(dx) <= std::numeric_limits<float_t>::epsilon()
+			&& std::abs(dy) <= std::numeric_limits<float_t>::epsilon())
+			return Pointf(x, y);
+		//Pointf nextPos = getNextPos();
+		//float_t u = (other.x - x) * (nextPos.x - x) + (other.y - y) * (nextPos.y - y);
+		float_t u = (other.x - x) * dx + (other.y - y) * dy;
+		u /= (dx * dx + dy * dy);
+		return Pointf(x + u * dx, y + u * dy);
 	}
 
 	bool Entity::hitTest(const Entity& other, float_t epsilon) const
 	{
-		return std::abs(x - other.x) < (width + other.width) / 2 + epsilon
-			&& std::abs(y - other.y) < (height + other.height) / 2 + epsilon;
+		return std::abs(x - other.x) < (width + other.width) / 2.0f + epsilon
+			&& std::abs(y - other.y) < (height + other.height) / 2.0f + epsilon;
 	}
 
 	Pointf Entity::getCenter() const
@@ -41,7 +61,12 @@ namespace th
 
 	Pointf Entity::getLeftTop() const
 	{
-		return Pointf(x - width / 2, y - height / 2);
+		return Pointf(x - width / 2.0f, y - height / 2.0f);
+	}
+
+	Pointf Entity::getRightBottom() const
+	{
+		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
 
 	Pointf Entity::getNextPos() const

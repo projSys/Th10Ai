@@ -16,13 +16,15 @@ namespace th
 		Entity(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
 			x(x0), y(y0), width(width0), height(height0), dx(dx0), dy(dy0) {}
 
-		float_t getDistance(const Pointf& other) const;
-		float_t getDistance(const Entity& other) const;
-		float_t getAngle(const Entity& other) const;
-		bool hitTest(const Entity& other, float_t epsilon = 0.0) const;
+		float_t distance(const Pointf& other) const;
+		float_t distance(const Entity& other) const;
+		float_t angle(const Entity& other) const;
+		Pointf footPoint(const Entity& other) const;
+		bool hitTest(const Entity& other, float_t epsilon = 0.0f) const;
 
 		Pointf getCenter() const;
 		Pointf getLeftTop() const;
+		Pointf getRightBottom() const;
 		Pointf getNextPos() const;
 
 		float_t x;
@@ -41,7 +43,7 @@ namespace th
 		Player(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
 			Entity(x0, y0, width0, height0, dx0, dy0) {}
 
-		bool hitTestSAT(const Laser& laser, float_t epsilon = 0.0) const;
+		bool hitTestSAT(const Laser& laser, float_t epsilon = 0.0f) const;
 
 		float_t powers;
 

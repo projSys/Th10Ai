@@ -28,7 +28,7 @@ namespace th
 		player.life = readMemory<int32_t>(0x00474C70) + 1;
 		player.itemObtainRange = readMemory<float32_t>(0x00476FB0) + player.type * 4;
 		if (player.slow)
-			player.itemObtainRange *= 2.5;
+			player.itemObtainRange *= 2.5f;
 		player.status = readMemory<int32_t>(baseAddr + 0x458);
 		player.invinibleTime = readMemory<int32_t>(baseAddr + 0x4310);
 		return true;
