@@ -20,16 +20,15 @@ namespace th
 		return std::sqrt(dx * dx + dy * dy);
 	}
 
+	// 余弦定理
 	float_t Entity::angle(const Entity& other) const
 	{
-		//if (std::abs(dx) <= std::numeric_limits<float_t>::epsilon()
-		//	&& std::abs(dy) <= std::numeric_limits<float_t>::epsilon())
+		//if (Float::IsZero(dx) && Float::IsZero(dy))
 		//	return 360.0f;
 		Pointf nextPos = getNextPos();
 		float_t AB = distance(other);
 		float_t AC = distance(nextPos);
 		float_t BC = other.distance(nextPos);
-		// 余弦定理
 		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
 		float_t radian = std::acos(cosA);
 		// 角度 = 弧度 * 180 / PI
@@ -38,9 +37,9 @@ namespace th
 
 	Pointf Entity::footPoint(const Entity& other) const
 	{
-		if (std::abs(dx) <= std::numeric_limits<float_t>::epsilon()
-			&& std::abs(dy) <= std::numeric_limits<float_t>::epsilon())
-			return Pointf(x, y);
+		//if (Float::IsZero(dx) && Float::IsZero(dy))
+		//	//return Pointf(x, y);
+		//	return other.getCenter();
 		//Pointf nextPos = getNextPos();
 		//float_t u = (other.x - x) * (nextPos.x - x) + (other.y - y) * (nextPos.y - y);
 		float_t u = (other.x - x) * dx + (other.y - y) * dy;

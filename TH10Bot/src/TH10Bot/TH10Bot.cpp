@@ -132,7 +132,7 @@ namespace th
 			Pointi p1 = Scene::ToWindowPos(m_player.getCenter());
 			Pointi p2 = Scene::ToWindowPos(bullet.getCenter());
 			Pointi p3 = Scene::ToWindowPos(footPoint);
-			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), color3);
+			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), color3);
 			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p3.x, p3.y), color3);
 			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), color3);
 		}
