@@ -82,17 +82,26 @@ namespace th
 		m_reader.getBullets(m_bullets);
 		m_reader.getLasers(m_lasers);
 
-		m_angleList.clear();
+		// 裁剪弹幕
 		m_distList.clear();
+		m_angleList.clear();
 		for (uint_t i = 0; i < m_bullets.size(); ++i)
 		{
 			const Bullet& bullet = m_bullets[i];
-			float_t distance = bullet.distance(m_player);
-			float_t angle = bullet.angle(m_player);
+			float_t distance = bullet.calcDistance(m_player);
+			float_t angle = bullet.calcAngle(m_player);
 			if (angle < CLIP_ANGLE)
-				m_angleList.push_back(i);
+				m_angleList.emplace_back(i, distance, angle);
 			else if (distance < CLIP_DISTANCE)
-				m_distList.push_back(i);
+				m_distList.emplace_back(i, distance, angle);
+		}
+		m_footPointList.clear();
+		for (const BulletLv1& it : m_angleList)
+		{
+			const Bullet& bullet = m_bullets[it.index];
+			Pointf footPoint = bullet.calcFootPoint(m_player.getCenter());
+			if (m_player.calcDistance(footPoint) < CLIP_DISTANCE)
+				m_footPointList.emplace_back(it.index, footPoint);
 		}
 
 		cv::Scalar color1(0, 255, 0);
@@ -118,28 +127,26 @@ namespace th
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
 			cv::rectangle(m_image.m_data, rect, color3);
 		}
-		for (uint_t i : m_angleList)
+		for (const BulletLv2& it : m_footPointList)
 		{
-			const Bullet& bullet = m_bullets[i];
+			const Bullet& bullet = m_bullets[it.index];
+
 			Pointi windowPos = Scene::ToWindowPos(bullet.getLeftTop());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, color3, -1);
-		}
-		for (uint_t i : m_angleList)
-		{
-			const Bullet& bullet = m_bullets[i];
-			Pointf footPoint = bullet.footPoint(m_player);
+
 			Pointi p1 = Scene::ToWindowPos(m_player.getCenter());
 			Pointi p2 = Scene::ToWindowPos(bullet.getCenter());
-			Pointi p3 = Scene::ToWindowPos(footPoint);
+			Pointi p3 = Scene::ToWindowPos(it.footPoint);
 			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), color3);
 			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p3.x, p3.y), color3);
 			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), color3);
 		}
 		cv::Scalar color4(0, 255, 255);
-		for (uint_t i : m_distList)
+		for (const BulletLv1& it : m_distList)
 		{
-			const Bullet& bullet = m_bullets[i];
+			const Bullet& bullet = m_bullets[it.index];
+
 			Pointi windowPos = Scene::ToWindowPos(bullet.getLeftTop());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, color4, -1);
@@ -464,7 +471,7 @@ namespace th
 	{
 		float_t score = 0.0;
 
-		if (pNext.distance(target) < 10.0)
+		if (pNext.calcDistance(target) < 10.0)
 		{
 			score += 3000.0;
 		}
@@ -580,7 +587,7 @@ namespace th
 				continue;
 
 			// 与自机距离最近的
-			float_t distance = m_player.distance(item);
+			float_t distance = m_player.calcDistance(item);
 			if (distance < minDist)
 			{
 				minDist = distance;
@@ -680,7 +687,7 @@ namespace th
 
 		for (const Bullet& bullet : m_bullets)
 		{
-			float_t angle = bullet.angle(pNext);
+			float_t angle = bullet.calcAngle(pNext);
 			score = 10000 * (1.0 - angle / 180.0);
 		}
 
@@ -738,7 +745,7 @@ namespace th
 	{
 		float_t score = 0.0;
 
-		if (pNext.distance(INIT_POS) < 10.0)
+		if (pNext.calcDistance(INIT_POS) < 10.0)
 		{
 			score += 30.0;
 		}

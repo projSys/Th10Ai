@@ -6,14 +6,14 @@
 
 namespace th
 {
-	float_t Entity::distance(const Pointf& other) const
+	float_t Entity::calcDistance(const Pointf& pos) const
 	{
-		float_t dx = x - other.x;
-		float_t dy = y - other.y;
+		float_t dx = x - pos.x;
+		float_t dy = y - pos.y;
 		return std::sqrt(dx * dx + dy * dy);
 	}
 
-	float_t Entity::distance(const Entity& other) const
+	float_t Entity::calcDistance(const Entity& other) const
 	{
 		float_t dx = x - other.x;
 		float_t dy = y - other.y;
@@ -21,28 +21,28 @@ namespace th
 	}
 
 	// 余弦定理
-	float_t Entity::angle(const Entity& other) const
+	float_t Entity::calcAngle(const Entity& other) const
 	{
 		//if (Float::IsZero(dx) && Float::IsZero(dy))
 		//	return 360.0f;
 		Pointf nextPos = getNextPos();
-		float_t AB = distance(other);
-		float_t AC = distance(nextPos);
-		float_t BC = other.distance(nextPos);
+		float_t AB = calcDistance(other);
+		float_t AC = calcDistance(nextPos);
+		float_t BC = other.calcDistance(nextPos);
 		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
 		float_t radian = std::acos(cosA);
 		// 角度 = 弧度 * 180 / PI
 		return static_cast<float_t>(radian * 180.0f / M_PI);
 	}
 
-	Pointf Entity::footPoint(const Entity& other) const
+	// 点到直线的垂足
+	Pointf Entity::calcFootPoint(const Pointf& pos) const
 	{
 		//if (Float::IsZero(dx) && Float::IsZero(dy))
-		//	//return Pointf(x, y);
-		//	return other.getCenter();
+		//	return Pointf(x, y);
 		//Pointf nextPos = getNextPos();
 		//float_t u = (other.x - x) * (nextPos.x - x) + (other.y - y) * (nextPos.y - y);
-		float_t u = (other.x - x) * dx + (other.y - y) * dy;
+		float_t u = (pos.x - x) * dx + (pos.y - y) * dy;
 		u /= (dx * dx + dy * dy);
 		return Pointf(x + u * dx, y + u * dy);
 	}
