@@ -31,21 +31,14 @@ namespace th
 
 	struct BulletLv1
 	{
-		BulletLv1(uint_t index0, float_t distance0, float_t angle0) :
-			index(index0), distance(distance0), angle(angle0) {}
+		BulletLv1(uint_t index0, float_t distance0, float_t footFrame0, const Pointf& footPoint0, float_t angle0) :
+			index(index0), distance(distance0), footFrame(footFrame0), footPoint(footPoint0), angle(angle0) {}
 
 		uint_t index;
 		float_t distance;
-		float_t angle;
-	};
-
-	struct BulletLv2
-	{
-		BulletLv2(uint_t index0, const Pointf& footPoint0) :
-			index(index0), footPoint(footPoint0) {}
-
-		uint_t index;
+		float_t footFrame;
 		Pointf footPoint;
+		float_t angle;
 	};
 
 	class TH10Bot
@@ -122,12 +115,11 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		std::vector<BulletLv1> m_distList;
-		std::vector<BulletLv1> m_angleList;
-		std::vector<BulletLv2> m_footPointList;
+		std::vector<BulletLv1> m_redList;
+		std::vector<BulletLv1> m_yellowList;
 
-		std::vector<std::vector<Bullet>> m_depthList;
-		std::vector<std::vector<Bullet>> m_clipList;
+		//std::vector<std::vector<Bullet>> m_depthList;
+		//std::vector<std::vector<Bullet>> m_clipList;
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;

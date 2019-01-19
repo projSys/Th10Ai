@@ -15,8 +15,8 @@ namespace th
 		m_active(false),
 		m_keyUp(VK_UP), m_keyDown(VK_DOWN), m_keyLeft(VK_LEFT), m_keyRight(VK_RIGHT),
 		m_keyShift(VK_SHIFT), m_keyZ('Z'), m_keyX('X'),
-		m_depthList(DEPTH),
-		m_clipList(DEPTH),
+		//m_depthList(DEPTH),
+		//m_clipList(DEPTH),
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_shootCooldown(0),
@@ -83,73 +83,80 @@ namespace th
 		m_reader.getLasers(m_lasers);
 
 		// ²Ã¼ôµ¯Ä»
-		m_distList.clear();
-		m_angleList.clear();
+		m_redList.clear();
+		m_yellowList.clear();
 		for (uint_t i = 0; i < m_bullets.size(); ++i)
 		{
 			const Bullet& bullet = m_bullets[i];
 			float_t distance = bullet.calcDistance(m_player);
-			float_t angle = bullet.calcAngle(m_player);
-			if (angle < CLIP_ANGLE)
-				m_angleList.emplace_back(i, distance, angle);
-			else if (distance < CLIP_DISTANCE)
-				m_distList.emplace_back(i, distance, angle);
-		}
-		m_footPointList.clear();
-		for (const BulletLv1& it : m_angleList)
-		{
-			const Bullet& bullet = m_bullets[it.index];
-			Pointf footPoint = bullet.calcFootPoint(m_player.getCenter());
-			if (m_player.calcDistance(footPoint) < CLIP_DISTANCE)
-				m_footPointList.emplace_back(it.index, footPoint);
+			if (distance < CLIP_DISTANCE)
+			{
+				float_t footFrame = bullet.calcFootFrame(m_player.getCenter());
+				Pointf footPoint = bullet.calcFootPoint(footFrame);
+				float_t angle = bullet.calcAngle(m_player);
+				m_redList.emplace_back(i, distance, footFrame, footPoint, angle);
+			}
+			else
+			{
+				float_t footFrame = bullet.calcFootFrame(m_player.getCenter());
+				Pointf footPoint = bullet.calcFootPoint(footFrame);
+				if (m_player.calcDistance(footPoint) < CLIP_DISTANCE)
+				{
+					float_t angle = bullet.calcAngle(m_player);
+					if (angle < CLIP_ANGLE90)
+						m_yellowList.emplace_back(i, distance, footFrame, footPoint, angle);
+				}
+			}
 		}
 
-		cv::Scalar color1(0, 255, 0);
+		cv::Scalar red(0, 0, 255);
+		cv::Scalar green(0, 255, 0);
+		cv::Scalar blue(255, 0, 0);
+		cv::Scalar orange(0, 97, 255);
+		cv::Scalar yellow(0, 255, 255);
+
 		Pointi windowPos1 = Scene::ToWindowPos(m_player.getLeftTop());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-		cv::rectangle(m_image.m_data, rect1, color1, -1);
+		cv::rectangle(m_image.m_data, rect1, green, -1);
 		Pointi windowPos11 = Scene::ToWindowPos(m_player.getCenter());
 		cv::Point center11(windowPos11.x, windowPos11.y);
-		cv::circle(m_image.m_data, center11, int_t(CLIP_DISTANCE), color1);
+		cv::circle(m_image.m_data, center11, int_t(CLIP_DISTANCE), green);
 
-		//cv::Scalar color2(255, 0, 0);
 		//for (const Item& item : m_items)
 		//{
 		//	Pointi windowPos = Scene::ToWindowPos(item.getLeftTop());
 		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(item.width), int_t(item.height));
-		//	cv::rectangle(m_image.m_data, rect, color2, -1);
+		//	cv::rectangle(m_image.m_data, rect, blue, -1);
 		//}
 
-		cv::Scalar color3(0, 0, 255);
 		for (const Enemy& enemy : m_enemies)
 		{
 			Pointi windowPos = Scene::ToWindowPos(enemy.getLeftTop());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
-			cv::rectangle(m_image.m_data, rect, color3);
+			cv::rectangle(m_image.m_data, rect, red);
 		}
-		for (const BulletLv2& it : m_footPointList)
+		for (const BulletLv1& it : m_redList)
 		{
 			const Bullet& bullet = m_bullets[it.index];
 
 			Pointi windowPos = Scene::ToWindowPos(bullet.getLeftTop());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-			cv::rectangle(m_image.m_data, rect, color3, -1);
+			cv::rectangle(m_image.m_data, rect, red, -1);
+		}
+		for (const BulletLv1& it : m_yellowList)
+		{
+			const Bullet& bullet = m_bullets[it.index];
+
+			Pointi windowPos = Scene::ToWindowPos(bullet.getLeftTop());
+			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
+			cv::rectangle(m_image.m_data, rect, yellow, -1);
 
 			Pointi p1 = Scene::ToWindowPos(m_player.getCenter());
 			Pointi p2 = Scene::ToWindowPos(bullet.getCenter());
 			Pointi p3 = Scene::ToWindowPos(it.footPoint);
-			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), color3);
-			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p3.x, p3.y), color3);
-			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), color3);
-		}
-		cv::Scalar color4(0, 255, 255);
-		for (const BulletLv1& it : m_distList)
-		{
-			const Bullet& bullet = m_bullets[it.index];
-
-			Pointi windowPos = Scene::ToWindowPos(bullet.getLeftTop());
-			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-			cv::rectangle(m_image.m_data, rect, color4, -1);
+			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), yellow);
+			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p3.x, p3.y), yellow);
+			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), yellow);
 		}
 
 		cv::imshow("TH10", m_image.m_data);

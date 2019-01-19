@@ -19,7 +19,9 @@ namespace th
 		float_t calcDistance(const Pointf& pos) const;
 		float_t calcDistance(const Entity& other) const;
 		float_t calcAngle(const Entity& other) const;
-		Pointf calcFootPoint(const Pointf& pos) const;
+		//Pointf calcFootPoint(const Pointf& pos) const;
+		float_t calcFootFrame(const Pointf& pos) const;
+		Pointf calcFootPoint(float_t footFrame) const;
 		bool hitTest(const Entity& other, float_t epsilon = 0.0f) const;
 
 		Pointf getCenter() const;

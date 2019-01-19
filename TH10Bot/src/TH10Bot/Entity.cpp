@@ -36,15 +36,25 @@ namespace th
 	}
 
 	// 点到直线的垂足
-	Pointf Entity::calcFootPoint(const Pointf& pos) const
+	//Pointf Entity::calcFootPoint(const Pointf& pos) const
+	//{
+	//	//if (Float::IsZero(dx) && Float::IsZero(dy))
+	//	//	return Pointf(x, y);
+	//	//Pointf nextPos = getNextPos();
+	//	//float_t u = (other.x - x) * (nextPos.x - x) + (other.y - y) * (nextPos.y - y);
+	//	float_t u = (pos.x - x) * dx + (pos.y - y) * dy;
+	//	u /= (dx * dx + dy * dy);
+	//	return Pointf(x + u * dx, y + u * dy);
+	//}
+
+	float_t Entity::calcFootFrame(const Pointf& pos) const
 	{
-		//if (Float::IsZero(dx) && Float::IsZero(dy))
-		//	return Pointf(x, y);
-		//Pointf nextPos = getNextPos();
-		//float_t u = (other.x - x) * (nextPos.x - x) + (other.y - y) * (nextPos.y - y);
-		float_t u = (pos.x - x) * dx + (pos.y - y) * dy;
-		u /= (dx * dx + dy * dy);
-		return Pointf(x + u * dx, y + u * dy);
+		return ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);
+	}
+
+	Pointf Entity::calcFootPoint(float_t footFrame) const
+	{
+		return Pointf(x + footFrame * dx, y + footFrame * dy);
 	}
 
 	bool Entity::hitTest(const Entity& other, float_t epsilon) const
