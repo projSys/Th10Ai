@@ -63,7 +63,7 @@ namespace th
 			&& std::abs(y - other.y) < (height + other.height) / 2.0f + epsilon;
 	}
 
-	Pointf Entity::getCenter() const
+	Pointf Entity::getPos() const
 	{
 		return Pointf(x, y);
 	}
@@ -78,12 +78,27 @@ namespace th
 		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
 
+	Sizef Entity::getSize() const
+	{
+		return Sizef(width, height);
+	}
+
+	Rectf Entity::getRect() const
+	{
+		return Rectf(getLeftTop(), getSize());
+	}
+
 	Pointf Entity::getNextPos() const
 	{
 		return Pointf(x + dx, y + dy);
 	}
 
 
+
+	Pointf Player::getNextPos(int_t dir, bool slow) const
+	{
+		return Pointf(x, y);
+	}
 
 	bool Player::hitTestSAT(const Laser& laser, float_t epsilon) const
 	{
@@ -107,11 +122,11 @@ namespace th
 
 
 
-	void SATBox::PointRotate(float_t& x, float_t& y, float_t cx, float_t cy, float_t arc)
+	void SATBox::PointRotate(float_t& x, float_t& y, float_t cx, float_t cy, float_t radian)
 	{
 		// 设平面上一点（x,y），绕另一点（cx,cy）逆时针旋转A角度后的点为（x0,y0）,则：
-		float_t x0 = (x - cx) * std::cos(arc) - (y - cy) * std::sin(arc) + cx;
-		float_t y0 = (x - cx) * std::sin(arc) + (y - cy) * std::cos(arc) + cy;
+		float_t x0 = (x - cx) * std::cos(radian) - (y - cy) * std::sin(radian) + cx;
+		float_t y0 = (x - cx) * std::sin(radian) + (y - cy) * std::cos(radian) + cy;
 		x = x0;
 		y = y0;
 	}
@@ -128,11 +143,11 @@ namespace th
 		x3 = laser.x - laser.width / 2.0; y3 = laser.y + laser.height;
 		x4 = laser.x + laser.width / 2.0; y4 = laser.y + laser.height;
 		// emmm?
-		float_t arc = laser.arc - 3.14159265358979323846 * 5.0 / 2.0;
-		PointRotate(x1, y1, laser.x, laser.y, arc);
-		PointRotate(x2, y2, laser.x, laser.y, arc);
-		PointRotate(x3, y3, laser.x, laser.y, arc);
-		PointRotate(x4, y4, laser.x, laser.y, arc);
+		float_t radian = laser.radian - 3.14159265358979323846 * 5.0 / 2.0;
+		PointRotate(x1, y1, laser.x, laser.y, radian);
+		PointRotate(x2, y2, laser.x, laser.y, radian);
+		PointRotate(x3, y3, laser.x, laser.y, radian);
+		PointRotate(x4, y4, laser.x, laser.y, radian);
 	}
 
 	// 分离轴定理
@@ -159,11 +174,11 @@ namespace th
 		x3 = player.x - player.width / 2.0; y3 = player.y + player.height / 2.0;
 		x4 = player.x + player.width / 2.0; y4 = player.y + player.height / 2.0;
 		// emmm?
-		float_t arc = laser.arc - 3.14159265358979323846 * 5.0 / 2.0;
-		PointRotate(x1, y1, laser.x, laser.y, -arc);
-		PointRotate(x2, y2, laser.x, laser.y, -arc);
-		PointRotate(x3, y3, laser.x, laser.y, -arc);
-		PointRotate(x4, y4, laser.x, laser.y, -arc);
+		float_t radian = laser.radian - 3.14159265358979323846 * 5.0 / 2.0;
+		PointRotate(x1, y1, laser.x, laser.y, -radian);
+		PointRotate(x2, y2, laser.x, laser.y, -radian);
+		PointRotate(x3, y3, laser.x, laser.y, -radian);
+		PointRotate(x4, y4, laser.x, laser.y, -radian);
 	}
 
 	// 分离轴定理

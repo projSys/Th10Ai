@@ -42,7 +42,7 @@ namespace th
 			return false;
 		uint32_t esi = baseAddr + 0x14;
 		uint32_t ebp = esi + 0x3B0;
-		for (int i = 0; i < 2000; ++i)
+		for (int_t i = 0; i < 2000; ++i)
 		{
 			uint32_t eax = readMemory<uint32_t>(ebp + 0x2C);
 			// 点的类型分为以下几种
@@ -119,7 +119,7 @@ namespace th
 		if (baseAddr == 0)
 			return false;
 		uint32_t ebx = baseAddr + 0x60;
-		for (int i = 0; i < 2000; ++i)
+		for (int_t i = 0; i < 2000; ++i)
 		{
 			uint32_t edi = ebx + 0x400;
 			uint32_t bp = readMemory<uint32_t>(edi + 0x46);
@@ -163,10 +163,10 @@ namespace th
 			float32_t y = readMemory<float32_t>(objAddr + 0x28);
 			float32_t dx = readMemory<float32_t>(objAddr + 0x30);
 			float32_t dy = readMemory<float32_t>(objAddr + 0x34);
-			float32_t arc = readMemory<float32_t>(objAddr + 0x3C);
+			float32_t radian = readMemory<float32_t>(objAddr + 0x3C);
 			float32_t height = readMemory<float32_t>(objAddr + 0x40);
 			float32_t width = readMemory<float32_t>(objAddr + 0x44);
-			lasers.emplace_back(x, y, width, height, dx, dy, arc);
+			lasers.emplace_back(x, y, width, height, dx, dy, radian);
 			if (objNext == 0)
 				break;
 			objAddr = objNext;

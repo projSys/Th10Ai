@@ -59,18 +59,15 @@ namespace th
 	{
 		//m_sync.waitForPresent();
 
-		if (!m_active)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			return;
-		}
-
 		Rect rect = m_window.getClientRect();
 		if (!m_capturer.capture(m_image, rect))
 		{
 			std::cout << "抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。" << std::endl;
 			return;
 		}
+
+		if (!m_active)
+			return;
 
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
@@ -91,14 +88,14 @@ namespace th
 			float_t distance = bullet.calcDistance(m_player);
 			if (distance < CLIP_DISTANCE)
 			{
-				float_t footFrame = bullet.calcFootFrame(m_player.getCenter());
+				float_t footFrame = bullet.calcFootFrame(m_player.getPos());
 				Pointf footPoint = bullet.calcFootPoint(footFrame);
 				float_t angle = bullet.calcAngle(m_player);
 				m_redList.emplace_back(i, distance, footFrame, footPoint, angle);
 			}
 			else
 			{
-				float_t footFrame = bullet.calcFootFrame(m_player.getCenter());
+				float_t footFrame = bullet.calcFootFrame(m_player.getPos());
 				Pointf footPoint = bullet.calcFootPoint(footFrame);
 				if (m_player.calcDistance(footPoint) < CLIP_DISTANCE)
 				{
@@ -109,6 +106,17 @@ namespace th
 			}
 		}
 
+		std::sort(m_redList.begin(), m_redList.end(),
+			[](const BulletLv1& left, const BulletLv1& right)->bool
+		{
+			return left.distance < right.distance;
+		});
+		std::sort(m_yellowList.begin(), m_yellowList.end(),
+			[](const BulletLv1& left, const BulletLv1& right)->bool
+		{
+			return left.footFrame < right.footFrame;
+		});
+
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
 		cv::Scalar blue(255, 0, 0);
@@ -118,7 +126,7 @@ namespace th
 		Pointi windowPos1 = Scene::ToWindowPos(m_player.getLeftTop());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 		cv::rectangle(m_image.m_data, rect1, green, -1);
-		Pointi windowPos11 = Scene::ToWindowPos(m_player.getCenter());
+		Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
 		cv::Point center11(windowPos11.x, windowPos11.y);
 		cv::circle(m_image.m_data, center11, int_t(CLIP_DISTANCE), green);
 
@@ -151,8 +159,8 @@ namespace th
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, yellow, -1);
 
-			Pointi p1 = Scene::ToWindowPos(m_player.getCenter());
-			Pointi p2 = Scene::ToWindowPos(bullet.getCenter());
+			Pointi p1 = Scene::ToWindowPos(m_player.getPos());
+			Pointi p2 = Scene::ToWindowPos(bullet.getPos());
 			Pointi p3 = Scene::ToWindowPos(it.footPoint);
 			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), yellow);
 			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p3.x, p3.y), yellow);
@@ -166,7 +174,6 @@ namespace th
 
 		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
-		//std::cout << "-----------------------------------------------------------" << std::endl;
 		//std::cout << "e1: " << e1 << std::endl;
 
 		handleBomb();
@@ -177,7 +184,6 @@ namespace th
 		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 		//std::cout << "e2: " << e2 << std::endl;
-		//std::cout << "-----------------------------------------------------------" << std::endl;
 	}
 
 	// Y轴系数
@@ -331,11 +337,9 @@ namespace th
 	// 处理移动
 	bool TH10Bot::handleMove()
 	{
-		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
-
 		//m_depthList[0].clear();
 		//m_depthList[0].assign(m_bullets.begin(), m_bullets.end());
-		//for (int i = 1; i < DEPTH; ++i)
+		//for (int_t i = 1; i < DEPTH; ++i)
 		//{
 		//	m_depthList[i].clear();
 		//	m_clipList[i].clear();
@@ -349,30 +353,25 @@ namespace th
 		//	}
 		//}
 
-		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
-		//std::cout << "-----------------------------------------------------------" << std::endl;
-		//std::cout << "e1: " << e1 << std::endl;
-
-		//int powerId = findPower();
-		//int enemyId = findEnemy();
+		//int_t powerId = findPower();
+		//int_t enemyId = findEnemy();
 
 		Pointf mousePos = getMousePos();
 		//std::cout << mousePos.x << " " << mousePos.y << std::endl;
 		//if (!IsInScene(target.x, target.y))
 		//{
-		//	move(DIR_CENTER, false);
+		//	move(DIR_HOLD, false);
 		//	return false;
 		//}
 
-		int_t lastDir = DIR_CENTER;
+		int_t lastDir = DIR_HOLD;
 		bool lastSlow = false;
 		float_t maxScore = std::numeric_limits<float_t>::lowest();
-		int_t depth = 0;
+		//int_t depth = 0;
 
 		//m_log.str("");
 		//m_log << "----------------------------------------------" << std::endl;
-		for (int_t d = 0; d < DIRECTIONS_LEN; ++d)
+		for (int_t d = 0; d < NUM_DIRECTIONS; ++d)
 		{
 			int_t dir = DIRECTIONS[d];
 			bool slow = false;
@@ -416,8 +415,8 @@ namespace th
 			//else
 			//	score += getGobackScore(pNext);
 
-			//std::cout << (int)dir << " " << slow << " " << score << std::endl;
-			//m_log << (int)dir << " " << slow << " " << score << std::endl;
+			//std::cout << (int_t)dir << " " << slow << " " << score << std::endl;
+			//m_log << (int_t)dir << " " << slow << " " << score << std::endl;
 			if (score > maxScore)
 			{
 				maxScore = score;
@@ -426,16 +425,7 @@ namespace th
 			}
 		}
 
-		//std::cout << "last " << (int)lastDir << " " << lastSlow << " " << maxScore << std::endl;
-		//m_log << "last " << (int)lastDir << " " << lastSlow << " " << maxScore << std::endl;
-		//m_log << "----------------------------------------------" << std::endl;
 		move(lastDir, lastSlow);
-
-		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-		//std::cout << "e2: " << e2 << std::endl;
-		//std::cout << "-----------------------------------------------------------" << std::endl;
-
 		return true;
 	}
 
@@ -491,7 +481,7 @@ namespace th
 		return score;
 	}
 	/*
-	float_t TH10Bot::search(const Player& player, int depth)
+	float_t TH10Bot::search(const Player& player, int_t depth)
 	{
 		float_t score = 0.0;
 
@@ -503,11 +493,11 @@ namespace th
 		//		m_clipList[depth].push_back(bullet);
 		//}
 
-		for (int m = 0; m < MOVE_SPEED_LEN - 1; ++m)
+		for (int_t m = 0; m < MOVE_SPEED_LEN - 1; ++m)
 		{
-			for (int d = 1; d < DIR_LEN; ++d)
+			for (int_t d = 1; d < DIR_LEN; ++d)
 			{
-				int dir = DIRECTION[d];
+				int_t dir = DIRECTION[d];
 				bool slow = static_cast<bool>(m);
 
 				// 下一个位置
@@ -544,7 +534,7 @@ namespace th
 		return score;
 	}
 
-	bool TH10Bot::hitTestMove(const Player& player, int depth)
+	bool TH10Bot::hitTestMove(const Player& player, int_t depth)
 	{
 		if (depth == 0)
 		{
@@ -571,16 +561,15 @@ namespace th
 	}
 	*/
 	// 查找道具
-	int TH10Bot::findPower()
+	int_t TH10Bot::findPower()
 	{
-		int id = -1;
+		int_t id = -1;
 
 		if (m_player.y < SCENE_SIZE.height / 4)
 			return id;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
-		int size = static_cast<int>(m_items.size());
-		for (int i = 0; i < size; ++i)
+		for (uint_t i = 0; i < m_items.size(); ++i)
 		{
 			const Item& item = m_items[i];
 
@@ -606,16 +595,15 @@ namespace th
 	}
 
 	// 查找敌人
-	int TH10Bot::findEnemy()
+	int_t TH10Bot::findEnemy()
 	{
-		int id = -1;
+		int_t id = -1;
 
 		if (m_player.y < SCENE_SIZE.height / 4)
 			return id;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
-		int size = static_cast<int>(m_enemies.size());
-		for (int i = 0; i < size; ++i)
+		for (uint_t i = 0; i < m_enemies.size(); ++i)
 		{
 			const Enemy& enemy = m_enemies[i];
 
@@ -702,7 +690,7 @@ namespace th
 	}
 
 	// 拾取道具评分
-	float_t TH10Bot::getPickupPowerScore(const Player& pNext, int powerId)
+	float_t TH10Bot::getPickupPowerScore(const Player& pNext, int_t powerId)
 	{
 		float_t score = 0.0;
 
@@ -724,7 +712,7 @@ namespace th
 	}
 
 	// 攻击敌人评分
-	float_t TH10Bot::getShootEnemyScore(const Player& pNext, int enemyId)
+	float_t TH10Bot::getShootEnemyScore(const Player& pNext, int_t enemyId)
 	{
 		float_t score = 0.0;
 
@@ -765,7 +753,7 @@ namespace th
 		return score;
 	}
 
-	void TH10Bot::move(int dir, bool slow)
+	void TH10Bot::move(int_t dir, bool slow)
 	{
 		if (slow || m_slowManual)
 		{
@@ -780,9 +768,9 @@ namespace th
 
 		switch (dir)
 		{
-		case DIR_UP | DIR_LEFT:
-			m_keyUp.press(), m_keyDown.release(), m_keyLeft.press(), m_keyRight.release();
-			//std::cout << "左上" << std::endl;
+		case DIR_HOLD:
+			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release();
+			//std::cout << "不动" << std::endl;
 			break;
 
 		case DIR_UP:
@@ -790,9 +778,9 @@ namespace th
 			//std::cout << "上" << std::endl;
 			break;
 
-		case DIR_UP | DIR_RIGHT:
-			m_keyUp.press(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
-			//std::cout << "右上" << std::endl;
+		case DIR_DOWN:
+			m_keyUp.release(), m_keyDown.press(), m_keyLeft.release(), m_keyRight.release();
+			//std::cout << "下" << std::endl;
 			break;
 
 		case DIR_LEFT:
@@ -800,24 +788,24 @@ namespace th
 			//std::cout << "左" << std::endl;
 			break;
 
-		case DIR_CENTER:
-			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release();
-			//std::cout << "中" << std::endl;
-			break;
-
 		case DIR_RIGHT:
 			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
 			//std::cout << "右" << std::endl;
 			break;
 
+		case DIR_UP | DIR_LEFT:
+			m_keyUp.press(), m_keyDown.release(), m_keyLeft.press(), m_keyRight.release();
+			//std::cout << "左上" << std::endl;
+			break;
+
+		case DIR_UP | DIR_RIGHT:
+			m_keyUp.press(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
+			//std::cout << "右上" << std::endl;
+			break;
+
 		case DIR_DOWN | DIR_LEFT:
 			m_keyUp.release(), m_keyDown.press(), m_keyLeft.press(), m_keyRight.release();
 			//std::cout << "左下" << std::endl;
-			break;
-
-		case DIR_DOWN:
-			m_keyUp.release(), m_keyDown.press(), m_keyLeft.release(), m_keyRight.release();
-			//std::cout << "下" << std::endl;
 			break;
 
 		case DIR_DOWN | DIR_RIGHT:
@@ -832,7 +820,7 @@ namespace th
 	//{
 	//	if (checkPickupStatus())
 	//	{
-	//		int powerId = findPower();
+	//		int_t powerId = findPower();
 	//		if (powerId != -1)
 	//			return pickupPower(powerId);
 	//	}
@@ -874,7 +862,7 @@ namespace th
 	//}
 
 	// 拾取道具
-	//bool TH10Bot::pickupPower(int powerId)
+	//bool TH10Bot::pickupPower(int_t powerId)
 	//{
 	//	const Power& power = m_powers[powerId];
 	//
@@ -882,26 +870,26 @@ namespace th
 	//	if (m_player.hitTest(power, 5.0))
 	//		return true;
 	//
-	//	int lastDir = DIR_NONE;
+	//	int_t lastDir = DIR_NONE;
 	//	bool lastShift = false;
 	//	float_t maxScore = std::numeric_limits<float_t>::lowest();
-	//	for (int i = 0; i < DIR_LENGHT; ++i)
+	//	for (int_t i = 0; i < DIR_LENGHT; ++i)
 	//	{
-	//		int dir = DIRECTIONS[i];
+	//		int_t dir = DIRECTIONS[i];
 	//		bool shift = false;
 	//		float_t score = 0.0;
 	//
 	//		float_t xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
 	//		float_t yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(xNext, yNext);
-	//		Player next = { static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h };
+	//		Player next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
 	//		if (hitTest(next, 0.0))
 	//		{
 	//			shift = true;
 	//			xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
 	//			yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
 	//			FixPos(xNext, yNext);
-	//			next = { static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h };
+	//			next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
 	//			if (hitTest(next, 0.0))
 	//				continue;
 	//		}
@@ -928,7 +916,7 @@ namespace th
 	//{
 	//	if (checkShootStatus())
 	//	{
-	//		int enemyId = findEnemy();
+	//		int_t enemyId = findEnemy();
 	//		if (enemyId != -1)
 	//			return shootEnemy(enemyId);
 	//	}
@@ -948,30 +936,30 @@ namespace th
 	//}
 
 	// 攻击敌人
-	//bool TH10Bot::shootEnemy(int enemyId)
+	//bool TH10Bot::shootEnemy(int_t enemyId)
 	//{
 	//	const Enemy& enemy = m_enemies[enemyId];
 	//
-	//	int lastDir = DIR_NONE;
+	//	int_t lastDir = DIR_NONE;
 	//	bool lastShift = false;
 	//	float_t maxScore = 1e-15;
-	//	for (int i = 0; i < DIR_LENGHT; ++i)
+	//	for (int_t i = 0; i < DIR_LENGHT; ++i)
 	//	{
-	//		int dir = DIRECTIONS[i];
+	//		int_t dir = DIRECTIONS[i];
 	//		bool shift = false;
 	//		float_t score = 0.0;
 	//
 	//		float_t xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
 	//		float_t yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(xNext, yNext);
-	//		Player next = { static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h };
+	//		Player next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
 	//		if (hitTest(next, 0.0))
 	//		{
 	//			shift = true;
 	//			xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
 	//			yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
 	//			FixPos(xNext, yNext);
-	//			next = { static_cast<float>(xNext), static_cast<float>(yNext), m_player.w, m_player.h };
+	//			next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
 	//			if (hitTest(next, 0.0))
 	//				continue;
 	//		}
@@ -1030,33 +1018,33 @@ namespace th
 	//		return;
 	//	}
 	//
-	//	int lastDir = DIR_NONE;
+	//	int_t lastDir = DIR_NONE;
 	//	bool lastShift = false;
 	//	float_t maxScore = 1e-15;
-	//	for (int i = 0; i < DIR_LENGHT; ++i)
+	//	for (int_t i = 0; i < DIR_LENGHT; ++i)
 	//	{
-	//		int dir = DIRECTIONS[i];
+	//		int_t dir = DIRECTIONS[i];
 	//		bool shift = false;
 	//		float_t score = 0.0;
 	//
 	//		float_t nextX = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
 	//		float_t nextY = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(nextX, nextY);
-	//		Player player = { static_cast<float>(nextX), static_cast<float>(nextY), m_player.w, m_player.h };
+	//		Player player = { static_cast<float_t>(nextX), static_cast<float_t>(nextY), m_player.w, m_player.h };
 	//		if (hitTest(player, 0.0))
 	//		{
 	//			shift = true;
 	//			nextX = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
 	//			nextY = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
 	//			FixPos(nextX, nextY);
-	//			player = { static_cast<float>(nextX), static_cast<float>(nextY), m_player.w, m_player.h };
+	//			player = { static_cast<float_t>(nextX), static_cast<float_t>(nextY), m_player.w, m_player.h };
 	//			if (hitTest(player, 0.0))
 	//				continue;
 	//		}
 	//
 	//		score += 1.0 - GetDistScore(player, INIT_RECT);
 	//
-	//		//std::cout << (int)dir << " " << score << std::endl;
+	//		//std::cout << (int_t)dir << " " << score << std::endl;
 	//		if (score > maxScore)
 	//		{
 	//			maxScore = score;
@@ -1064,7 +1052,7 @@ namespace th
 	//			lastShift = shift;
 	//		}
 	//	}
-	//	//std::cout << "last " << (int)lastDir << " " << lastShift << std::endl;
+	//	//std::cout << "last " << (int_t)lastDir << " " << lastShift << std::endl;
 	//	if (lastDir != DIR_NONE)
 	//		move(lastDir, lastShift);
 	//	else

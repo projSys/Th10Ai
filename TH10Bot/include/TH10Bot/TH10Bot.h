@@ -19,15 +19,15 @@ namespace th
 {
 	struct Node
 	{
-		int depth;
-		int parentId;
+		int_t depth;
+		int_t parentId;
 		Player player;
-		uint8_t dir;
+		int_t dir;
 		bool slow;
 		float_t score;
 	};
 
-	const int DEPTH = 4;
+	const int_t DEPTH = 4;
 
 	struct BulletLv1
 	{
@@ -69,29 +69,29 @@ namespace th
 		Pointf getMousePos();
 		bool hitTestMove(const Player& player);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
-		float_t search(const Player& player, int depth);
-		bool hitTestMove(const Player& player, int depth);
-		int findPower();
-		int findEnemy();
+		float_t search(const Player& player, int_t depth);
+		bool hitTestMove(const Player& player, int_t depth);
+		int_t findPower();
+		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
 		float_t getDodgeBulletScore(const Player& pNext, float_t epsilon = 2.0);
 		float_t getDodgeLaserScore(const Player& pNext, float_t epsilon = 2.0);
 		float_t getBulletAngleScore(const Player& pNext);
-		float_t getPickupPowerScore(const Player& pNext, int powerId);
-		float_t getShootEnemyScore(const Player& pNext, int enemyId);
+		float_t getPickupPowerScore(const Player& pNext, int_t powerId);
+		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);
 		float_t getGobackScore(const Player& pNext);
-		void move(int dir, bool slow);
+		void move(int_t dir, bool slow);
 
 		// Power
 		//bool handlePower();
 		//bool checkPickupStatus();
-		//bool pickupPower(int powerId);
+		//bool pickupPower(int_t powerId);
 		//float_t pickupPowerScore(const Player& next, const Power& power);
 
 		// Enemy
 		//bool handleEnemy();
 		//bool checkShootStatus();
-		//bool shootEnemy(int enemyId);
+		//bool shootEnemy(int_t enemyId);
 		//float_t dodgeEnemyScore(const Player& next);
 		//float_t shootEnemyScore(const Player& next, const Enemy& enemy);
 
@@ -126,6 +126,6 @@ namespace th
 		time_t m_shootCooldown;
 		time_t m_pickupCooldown;
 
-		std::ostringstream m_log;
+		//std::ostringstream m_log;
 	};
 }

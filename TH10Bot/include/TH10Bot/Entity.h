@@ -22,11 +22,14 @@ namespace th
 		//Pointf calcFootPoint(const Pointf& pos) const;
 		float_t calcFootFrame(const Pointf& pos) const;
 		Pointf calcFootPoint(float_t footFrame) const;
+
 		bool hitTest(const Entity& other, float_t epsilon = 0.0f) const;
 
-		Pointf getCenter() const;
+		Pointf getPos() const; // ÖÐÐÄµã
 		Pointf getLeftTop() const;
 		Pointf getRightBottom() const;
+		Sizef getSize() const;
+		Rectf getRect() const;
 		Pointf getNextPos() const;
 
 		float_t x;
@@ -44,6 +47,8 @@ namespace th
 		Player() {};
 		Player(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
 			Entity(x0, y0, width0, height0, dx0, dy0) {}
+
+		Pointf getNextPos(int_t dir, bool slow) const;
 
 		bool hitTestSAT(const Laser& laser, float_t epsilon = 0.0f) const;
 
@@ -101,8 +106,8 @@ namespace th
 		Bullet advance() const;
 	};
 
-	//       w
-	// +---(x,y)---+
+	//     (x,y)
+	// +-----+-----+
 	// |     |     |
 	// |     |     |
 	// |     |     |
@@ -111,22 +116,23 @@ namespace th
 	// |     |     |
 	// |     |     |
 	// +-----+-----+
+	//       w
 	class Laser :
 		public Entity
 	{
 	public:
 		Laser() :
-			arc() {}
-		Laser(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0, float_t arc0) :
-			Entity(x0, y0, width0, height0, dx0, dy0), arc(arc0) {}
+			radian() {}
+		Laser(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0, float_t radian0) :
+			Entity(x0, y0, width0, height0, dx0, dy0), radian(radian0) {}
 
-		float_t arc;
+		float_t radian;
 	};
 
 	class SATBox
 	{
 	public:
-		static void PointRotate(float_t& x, float_t& y, float_t cx, float_t cy, float_t arc);
+		static void PointRotate(float_t& x, float_t& y, float_t cx, float_t cy, float_t radian);
 		static bool HitTest(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon);
 
 		//SATBox() :
