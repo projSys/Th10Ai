@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <sstream>
-
 #include <Windows/Process.h>
 #include <Windows/Window.h>
 #include <GraphCap/D3D9FrameSync.h>
@@ -17,28 +16,30 @@
 
 namespace th
 {
-	struct Node
-	{
-		int_t depth;
-		int_t parentId;
-		Player player;
-		int_t dir;
-		bool slow;
-		float_t score;
-	};
+	//struct Node
+	//{
+	//	int_t depth;
+	//	int_t parentId;
+	//	Player player;
+	//	int_t dir;
+	//	bool slow;
+	//	float_t score;
+	//};
 
-	const int_t DEPTH = 4;
+	//const int_t DEPTH = 4;
 
 	struct BulletLv1
 	{
-		BulletLv1(uint_t index0, float_t distance0, float_t footFrame0, const Pointf& footPoint0, float_t angle0) :
-			index(index0), distance(distance0), footFrame(footFrame0), footPoint(footPoint0), angle(angle0) {}
+		BulletLv1(uint_t index0, float_t distance0, float_t footFrame0,
+			const Pointf& footPoint0, float_t angleOfPlayer0) :
+			index(index0), distance(distance0), footFrame(footFrame0),
+			footPoint(footPoint0), angleOfPlayer(angleOfPlayer0) {}
 
 		uint_t index;
 		float_t distance;
 		float_t footFrame;
-		Pointf footPoint;
-		float_t angle;
+		Pointf footPoint;		// 自机在子弹前进方向的垂足
+		float_t angleOfPlayer;	// 自机与子弹前进方向的角度
 	};
 
 	class TH10Bot
@@ -69,8 +70,8 @@ namespace th
 		Pointf getMousePos();
 		bool hitTestMove(const Player& player);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
-		float_t search(const Player& player, int_t depth);
-		bool hitTestMove(const Player& player, int_t depth);
+		//float_t search(const Player& player, int_t depth);
+		//bool hitTestMove(const Player& player, int_t depth);
 		int_t findPower();
 		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
@@ -80,7 +81,9 @@ namespace th
 		float_t getPickupPowerScore(const Player& pNext, int_t powerId);
 		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);
 		float_t getGobackScore(const Player& pNext);
-		void move(int_t dir, bool slow);
+
+		static bool IsSlow(Direction dir);
+		void move(Direction dir);
 
 		// Power
 		//bool handlePower();

@@ -85,23 +85,23 @@ namespace th
 		for (uint_t i = 0; i < m_bullets.size(); ++i)
 		{
 			const Bullet& bullet = m_bullets[i];
-			float_t distance = bullet.calcDistance(m_player);
+			float_t distance = bullet.distance(m_player);
 			if (distance < CLIP_DISTANCE)
 			{
-				float_t footFrame = bullet.calcFootFrame(m_player.getPos());
-				Pointf footPoint = bullet.calcFootPoint(footFrame);
-				float_t angle = bullet.calcAngle(m_player);
-				m_redList.emplace_back(i, distance, footFrame, footPoint, angle);
+				float_t footFrame = bullet.footFrame(m_player.getPos());
+				Pointf footPoint = bullet.footPoint(footFrame);
+				float_t angleOfPlayer = bullet.angle(m_player);
+				m_redList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
 			}
 			else
 			{
-				float_t footFrame = bullet.calcFootFrame(m_player.getPos());
-				Pointf footPoint = bullet.calcFootPoint(footFrame);
-				if (m_player.calcDistance(footPoint) < CLIP_DISTANCE)
+				float_t footFrame = bullet.footFrame(m_player.getPos());
+				Pointf footPoint = bullet.footPoint(footFrame);
+				if (m_player.distance(footPoint) < CLIP_DISTANCE)
 				{
-					float_t angle = bullet.calcAngle(m_player);
-					if (angle < CLIP_ANGLE90)
-						m_yellowList.emplace_back(i, distance, footFrame, footPoint, angle);
+					float_t angleOfPlayer = bullet.angle(m_player);
+					if (angleOfPlayer < CLIP_ANGLE90)
+						m_yellowList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
 				}
 			}
 		}
@@ -117,13 +117,46 @@ namespace th
 			return left.footFrame < right.footFrame;
 		});
 
+		for (const BulletLv1& it : m_redList)
+		{
+			const Bullet& bullet = m_bullets[it.index];
+
+			Pointf xPos = bullet.getPos();
+			xPos.x += SCENE_SIZE.width;	// 按X轴平移
+			float_t angleOfXAxis = bullet.angle(xPos);
+			if (bullet.dy > 0) // 转换成360度
+				angleOfXAxis = 360.0f - angleOfXAxis;
+
+			int_t dir = DIR_HOLD;
+			if (angleOfXAxis > 337.5f)
+				dir = DIR_RIGHT;
+			else if (angleOfXAxis > 292.5f)
+				dir = DIR_DOWNRIGHT;
+			else if (angleOfXAxis > 247.5f)
+				dir = DIR_DOWN;
+			else if (angleOfXAxis > 202.5f)
+				dir = DIR_DOWNLEFT;
+			else if (angleOfXAxis > 157.5f)
+				dir = DIR_LEFT;
+			else if (angleOfXAxis > 112.5f)
+				dir = DIR_UPLEFT;
+			else if (angleOfXAxis > 67.5f)
+				dir = DIR_UP;
+			else if (angleOfXAxis > 22.5f)
+				dir = DIR_UPRIGHT;
+			else
+				dir = DIR_RIGHT;
+
+
+		}
+
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
 		cv::Scalar blue(255, 0, 0);
 		cv::Scalar orange(0, 97, 255);
 		cv::Scalar yellow(0, 255, 255);
 
-		Pointi windowPos1 = Scene::ToWindowPos(m_player.getLeftTop());
+		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 		cv::rectangle(m_image.m_data, rect1, green, -1);
 		Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
@@ -139,7 +172,7 @@ namespace th
 
 		for (const Enemy& enemy : m_enemies)
 		{
-			Pointi windowPos = Scene::ToWindowPos(enemy.getLeftTop());
+			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
 			cv::rectangle(m_image.m_data, rect, red);
 		}
@@ -147,7 +180,7 @@ namespace th
 		{
 			const Bullet& bullet = m_bullets[it.index];
 
-			Pointi windowPos = Scene::ToWindowPos(bullet.getLeftTop());
+			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, red, -1);
 		}
@@ -155,7 +188,7 @@ namespace th
 		{
 			const Bullet& bullet = m_bullets[it.index];
 
-			Pointi windowPos = Scene::ToWindowPos(bullet.getLeftTop());
+			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, yellow, -1);
 
@@ -355,53 +388,38 @@ namespace th
 
 		//int_t powerId = findPower();
 		//int_t enemyId = findEnemy();
-
 		Pointf mousePos = getMousePos();
-		//std::cout << mousePos.x << " " << mousePos.y << std::endl;
-		//if (!IsInScene(target.x, target.y))
-		//{
-		//	move(DIR_HOLD, false);
-		//	return false;
-		//}
 
-		int_t lastDir = DIR_HOLD;
+		Direction lastDir = DIR_HOLD;
 		bool lastSlow = false;
 		float_t maxScore = std::numeric_limits<float_t>::lowest();
 		//int_t depth = 0;
 
-		//m_log.str("");
-		//m_log << "----------------------------------------------" << std::endl;
-		for (int_t d = 0; d < NUM_DIRECTIONS; ++d)
+		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
-			int_t dir = DIRECTIONS[d];
-			bool slow = false;
-			float_t score = 0.0;
+			Direction dir = DIRECTIONS[i];
+			assert(dir == i);
 
-			// 下一个位置
-			float_t xNext = m_player.x + DIR_FACTORS[d].x * MOVE_SPEEDS[0];
-			float_t yNext = m_player.y + DIR_FACTORS[d].y * MOVE_SPEEDS[0];
-
-			if (!Scene::IsInScene(Pointf(xNext, yNext)))
+			float_t nextX, nextY;
+			if (!IsSlow(dir))
+			{
+				nextX = m_player.x + DIR_FACTORS[dir].x * MOVE_SPEED;
+				nextY = m_player.y + DIR_FACTORS[dir].y * MOVE_SPEED;
+			}
+			else
+			{
+				nextX = m_player.x + DIR_FACTORS[dir].x * MOVE_SPEED_SLOW;
+				nextY = m_player.y + DIR_FACTORS[dir].y * MOVE_SPEED_SLOW;
+			}
+			if (!Scene::IsInScene(Pointf(nextX, nextY)))
 				continue;
 
-			Player pNext(xNext, yNext, m_player.width, m_player.height, m_player.dx, m_player.dy);
-			if (hitTestMove(pNext))
-			{
-				slow = true;
+			Player nextPlayer(nextX, nextY, m_player.width, m_player.height, m_player.dx, m_player.dy);
+			if (hitTestMove(nextPlayer))
+				continue;
 
-				// 下一个位置
-				xNext = m_player.x + DIR_FACTORS[d].x * MOVE_SPEEDS[1];
-				yNext = m_player.y + DIR_FACTORS[d].y * MOVE_SPEEDS[1];
-
-				if (!Scene::IsInScene(Pointf(xNext, yNext)))
-					continue;
-
-				pNext = Player(xNext, yNext, m_player.width, m_player.height, m_player.dx, m_player.dy);
-				if (hitTestMove(pNext))
-					continue;
-			}
-
-			score += getTargetScore(pNext, mousePos);
+			float_t score = 0.0;
+			score += getTargetScore(nextPlayer, mousePos);
 
 			//score += search(pNext, depth + 1);
 
@@ -415,17 +433,14 @@ namespace th
 			//else
 			//	score += getGobackScore(pNext);
 
-			//std::cout << (int_t)dir << " " << slow << " " << score << std::endl;
-			//m_log << (int_t)dir << " " << slow << " " << score << std::endl;
 			if (score > maxScore)
 			{
 				maxScore = score;
 				lastDir = dir;
-				lastSlow = slow;
 			}
 		}
 
-		move(lastDir, lastSlow);
+		move(lastDir);
 		return true;
 	}
 
@@ -468,7 +483,7 @@ namespace th
 	{
 		float_t score = 0.0;
 
-		if (pNext.calcDistance(target) < 10.0)
+		if (pNext.distance(target) < 10.0)
 		{
 			score += 3000.0;
 		}
@@ -583,7 +598,7 @@ namespace th
 				continue;
 
 			// 与自机距离最近的
-			float_t distance = m_player.calcDistance(item);
+			float_t distance = m_player.distance(item);
 			if (distance < minDist)
 			{
 				minDist = distance;
@@ -682,7 +697,7 @@ namespace th
 
 		for (const Bullet& bullet : m_bullets)
 		{
-			float_t angle = bullet.calcAngle(pNext);
+			float_t angle = bullet.angle(pNext);
 			score = 10000 * (1.0 - angle / 180.0);
 		}
 
@@ -740,7 +755,7 @@ namespace th
 	{
 		float_t score = 0.0;
 
-		if (pNext.calcDistance(INIT_POS) < 10.0)
+		if (pNext.distance(INIT_POS) < 10.0)
 		{
 			score += 30.0;
 		}
@@ -753,14 +768,19 @@ namespace th
 		return score;
 	}
 
-	void TH10Bot::move(int_t dir, bool slow)
+	bool TH10Bot::IsSlow(Direction dir)
 	{
-		if (slow || m_slowManual)
+		return (dir == DIR_HOLD_SLOW) || (dir >= DIR_UP_SLOW && dir <= DIR_DOWNRIGHT_SLOW);
+	}
+
+	void TH10Bot::move(Direction dir)
+	{
+		if (IsSlow(dir))
 		{
 			m_keyShift.press();
 			//std::cout << "慢速 PRESS" << std::endl;
 		}
-		if (!slow && !m_slowManual)
+		else
 		{
 			m_keyShift.release();
 			//std::cout << "慢速 RELEASE" << std::endl;
@@ -768,47 +788,56 @@ namespace th
 
 		switch (dir)
 		{
+		case DIR_HOLD_SLOW:
 		case DIR_HOLD:
 			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release();
 			//std::cout << "不动" << std::endl;
 			break;
 
 		case DIR_UP:
+		case DIR_UP_SLOW:
 			m_keyUp.press(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release();
 			//std::cout << "上" << std::endl;
 			break;
 
 		case DIR_DOWN:
+		case DIR_DOWN_SLOW:
 			m_keyUp.release(), m_keyDown.press(), m_keyLeft.release(), m_keyRight.release();
 			//std::cout << "下" << std::endl;
 			break;
 
 		case DIR_LEFT:
+		case DIR_LEFT_SLOW:
 			m_keyUp.release(), m_keyDown.release(), m_keyLeft.press(), m_keyRight.release();
 			//std::cout << "左" << std::endl;
 			break;
 
 		case DIR_RIGHT:
+		case DIR_RIGHT_SLOW:
 			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
 			//std::cout << "右" << std::endl;
 			break;
 
-		case DIR_UP | DIR_LEFT:
+		case DIR_UPLEFT:
+		case DIR_UPLEFT_SLOW:
 			m_keyUp.press(), m_keyDown.release(), m_keyLeft.press(), m_keyRight.release();
 			//std::cout << "左上" << std::endl;
 			break;
 
-		case DIR_UP | DIR_RIGHT:
+		case DIR_UPRIGHT:
+		case DIR_UPRIGHT_SLOW:
 			m_keyUp.press(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
 			//std::cout << "右上" << std::endl;
 			break;
 
-		case DIR_DOWN | DIR_LEFT:
+		case DIR_DOWNLEFT:
+		case DIR_DOWNLEFT_SLOW:
 			m_keyUp.release(), m_keyDown.press(), m_keyLeft.press(), m_keyRight.release();
 			//std::cout << "左下" << std::endl;
 			break;
 
-		case DIR_DOWN | DIR_RIGHT:
+		case DIR_DOWNRIGHT:
+		case DIR_DOWNRIGHT_SLOW:
 			m_keyUp.release(), m_keyDown.press(), m_keyLeft.release(), m_keyRight.press();
 			//std::cout << "右下" << std::endl;
 			break;

@@ -16,20 +16,23 @@ namespace th
 		Entity(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
 			x(x0), y(y0), width(width0), height(height0), dx(dx0), dy(dy0) {}
 
-		float_t calcDistance(const Pointf& pos) const;
-		float_t calcDistance(const Entity& other) const;
-		float_t calcAngle(const Entity& other) const;
-		//Pointf calcFootPoint(const Pointf& pos) const;
-		float_t calcFootFrame(const Pointf& pos) const;
-		Pointf calcFootPoint(float_t footFrame) const;
+		float_t distance(const Pointf& pos) const;
+		float_t distance(const Entity& other) const;
+		float_t angle(const Pointf& pos) const;
+		float_t angle(const Entity& other) const;
+		//Pointf footPoint(const Pointf& pos) const;
+		float_t footFrame(const Pointf& pos) const;
+		Pointf footPoint(float_t footFrame) const;
 
 		bool hitTest(const Entity& other, float_t epsilon = 0.0f) const;
 
 		Pointf getPos() const; // ÖÐÐÄµã
-		Pointf getLeftTop() const;
-		Pointf getRightBottom() const;
+		Pointf setPos(const Pointf& newPos);
+		Pointf getTopLeft() const;
+		Pointf getBottomRight() const;
 		Sizef getSize() const;
 		Rectf getRect() const;
+		bool isResting() const;
 		Pointf getNextPos() const;
 
 		float_t x;

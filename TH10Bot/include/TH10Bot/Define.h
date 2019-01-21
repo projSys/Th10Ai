@@ -4,7 +4,7 @@ namespace th
 {
 	// 场景坐标
 	//     +-----------------------+-----------------------+
-	//     | 24  8                                         |16
+	//     | 24  8|                                 |      |16
 	//     |----+-+----------------+----------------+-+----|---------> X
 	//   (-200,0) (-192,0)         |(0,0)     (192,0) (200,0)
 	//     |    | |                |                | |    |
@@ -24,7 +24,7 @@ namespace th
 	//     |    | |                |                | |    |
 	// (-200,448) (-192,448)       |(0,448) (192,448) (200,448)
 	//     |----+-+----------------+----------------+-+----|
-	//     |    | |               384               | |    |
+	//     |      |               384               |      |
 	//     +-----------------------+-----------------------+
 	//                             |
 	//                            \|/
@@ -40,58 +40,81 @@ namespace th
 
 	const Pointf INIT_POS = { 0.0f, 400.0f };
 
-
-
 	// 方向
-	const int_t DIR_HOLD = 0x00;
-	const int_t DIR_UP = 0x01;
-	const int_t DIR_DOWN = 0x02;
-	const int_t DIR_LEFT = 0x04;
-	const int_t DIR_RIGHT = 0x08;
-
-	const int_t DIRECTIONS[] =
+	enum Direction
 	{
-		DIR_HOLD,				// 0 不动
-		DIR_UP,					// 1 上
-		DIR_DOWN,				// 2 下
-		DIR_LEFT,				// 4 左
-		DIR_RIGHT,				// 8 右
-		DIR_UP | DIR_LEFT,		// 5 左上
-		DIR_UP | DIR_RIGHT,		// 9 右上
-		DIR_DOWN | DIR_LEFT,	// 6 左下
-		DIR_DOWN | DIR_RIGHT	// 10 右下
+		DIR_HOLD_SLOW,
+		DIR_HOLD,				// 不动
+		DIR_UP,					// 上
+		DIR_DOWN,				// 下
+		DIR_LEFT,				// 左
+		DIR_RIGHT,				// 右
+		DIR_UPLEFT,				// 左上
+		DIR_UPRIGHT,			// 右上
+		DIR_DOWNLEFT,			// 左下
+		DIR_DOWNRIGHT,			// 右下
+		DIR_UP_SLOW,
+		DIR_DOWN_SLOW,
+		DIR_LEFT_SLOW,
+		DIR_RIGHT_SLOW,
+		DIR_UPLEFT_SLOW,
+		DIR_UPRIGHT_SLOW,
+		DIR_DOWNLEFT_SLOW,
+		DIR_DOWNRIGHT_SLOW,
+		DIR_MAXCOUNT
 	};
 
-	const int_t NUM_DIRECTIONS = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
+	const Direction DIRECTIONS[DIR_MAXCOUNT] =
+	{
+		DIR_HOLD_SLOW,
+		DIR_HOLD,
+		DIR_UP,
+		DIR_DOWN,
+		DIR_LEFT,
+		DIR_RIGHT,
+		DIR_UPLEFT,
+		DIR_UPRIGHT,
+		DIR_DOWNLEFT,
+		DIR_DOWNRIGHT,
+		DIR_UP_SLOW,
+		DIR_DOWN_SLOW,
+		DIR_LEFT_SLOW,
+		DIR_RIGHT_SLOW,
+		DIR_UPLEFT_SLOW,
+		DIR_UPRIGHT_SLOW,
+		DIR_DOWNLEFT_SLOW,
+		DIR_DOWNRIGHT_SLOW,
+	};
 
+	// 斜方向的移动系数 x^2 + x^2 = 1^2
 	const float_t SQRT_PF = std::sqrt(0.5f);
 
 	// 各方向的移动系数
-	const Pointf DIR_FACTORS[] =
+	const Pointf DIR_FACTORS[DIR_MAXCOUNT] =
 	{
-		{ 0.0f, 0.0f },			// 不动
-		{ 0.0f, -1.0f },		// 上
-		{ 0.0f, 1.0f },			// 下
-		{ -1.0f, 0.0f },		// 左
-		{ 1.0f, 0.0f },			// 右
-		{ -SQRT_PF, -SQRT_PF },	// 左上
-		{ SQRT_PF, -SQRT_PF },	// 右上
-		{ -SQRT_PF, SQRT_PF },	// 左下
-		{ SQRT_PF, SQRT_PF }	// 右下
+		{ 0.0f, 0.0f },
+		{ 0.0f, 0.0f },				// 不动
+		{ 0.0f, -1.0f },			// 上
+		{ 0.0f, 1.0f },				// 下
+		{ -1.0f, 0.0f },			// 左
+		{ 1.0f, 0.0f },				// 右
+		{ -SQRT_PF, -SQRT_PF },		// 左上
+		{ SQRT_PF, -SQRT_PF },		// 右上
+		{ -SQRT_PF, SQRT_PF },		// 左下
+		{ SQRT_PF, SQRT_PF },		// 右下
+		{ 0.0f, -1.0f },
+		{ 0.0f, 1.0f },
+		{ -1.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ -SQRT_PF, -SQRT_PF },
+		{ SQRT_PF, -SQRT_PF },
+		{ -SQRT_PF, SQRT_PF },
+		{ SQRT_PF, SQRT_PF }
 	};
-
-	const int_t NUM_DIR_FACTORS = sizeof(DIR_FACTORS) / sizeof(DIR_FACTORS[0]);
-
-	//static_assert(NUM_DIRECTIONS == NUM_DIR_FACTORS);
 
 	// 移动速度
-	const float_t MOVE_SPEEDS[] =
-	{
-		4.5f,
-		2.0f
-	};
-
-	const int_t NUM_MOVE_SPEEDS = sizeof(MOVE_SPEEDS) / sizeof(MOVE_SPEEDS[0]);
+	const float_t MOVE_SPEED = 4.5f;
+	const float_t MOVE_SPEED_SLOW = 2.0f;
 
 
 

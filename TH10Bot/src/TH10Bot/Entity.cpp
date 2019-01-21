@@ -1,42 +1,36 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/Entity.h"
 
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include "TH10Bot/MyMath.h"
 
 namespace th
 {
-	float_t Entity::calcDistance(const Pointf& pos) const
+	float_t Entity::distance(const Pointf& pos) const
 	{
-		float_t dx = x - pos.x;
-		float_t dy = y - pos.y;
-		return std::sqrt(dx * dx + dy * dy);
+		return MyMath::Distance(getPos(), pos);
 	}
 
-	float_t Entity::calcDistance(const Entity& other) const
+	float_t Entity::distance(const Entity& other) const
 	{
-		float_t dx = x - other.x;
-		float_t dy = y - other.y;
-		return std::sqrt(dx * dx + dy * dy);
+		return MyMath::Distance(getPos(), other.getPos());
 	}
 
-	// 余弦定理
-	float_t Entity::calcAngle(const Entity& other) const
+	float_t Entity::angle(const Pointf& pos) const
 	{
-		//if (Float::IsZero(dx) && Float::IsZero(dy))
-		//	return 360.0f;
-		Pointf nextPos = getNextPos();
-		float_t AB = calcDistance(other);
-		float_t AC = calcDistance(nextPos);
-		float_t BC = other.calcDistance(nextPos);
-		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
-		float_t radian = std::acos(cosA);
-		// 角度 = 弧度 * 180 / PI
-		return static_cast<float_t>(radian * 180.0f / M_PI);
+		//if (isResting())
+		//	return 181.0f;
+		return MyMath::Angle(getPos(), getNextPos(), pos);
+	}
+
+	float_t Entity::angle(const Entity& other) const
+	{
+		//if (isResting())
+		//	return 181.0f;
+		return MyMath::Angle(getPos(), getNextPos(), other.getPos());
 	}
 
 	// 点到直线的垂足
-	//Pointf Entity::calcFootPoint(const Pointf& pos) const
+	//Pointf Entity::footPoint(const Pointf& pos) const
 	//{
 	//	//if (Float::IsZero(dx) && Float::IsZero(dy))
 	//	//	return Pointf(x, y);
@@ -47,12 +41,12 @@ namespace th
 	//	return Pointf(x + u * dx, y + u * dy);
 	//}
 
-	float_t Entity::calcFootFrame(const Pointf& pos) const
+	float_t Entity::footFrame(const Pointf& pos) const
 	{
 		return ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);
 	}
 
-	Pointf Entity::calcFootPoint(float_t footFrame) const
+	Pointf Entity::footPoint(float_t footFrame) const
 	{
 		return Pointf(x + footFrame * dx, y + footFrame * dy);
 	}
@@ -68,12 +62,20 @@ namespace th
 		return Pointf(x, y);
 	}
 
-	Pointf Entity::getLeftTop() const
+	Pointf Entity::setPos(const Pointf& newPos)
+	{
+		Pointf oldPos(x, y);
+		x = newPos.x;
+		y = newPos.y;
+		return oldPos;
+	}
+
+	Pointf Entity::getTopLeft() const
 	{
 		return Pointf(x - width / 2.0f, y - height / 2.0f);
 	}
 
-	Pointf Entity::getRightBottom() const
+	Pointf Entity::getBottomRight() const
 	{
 		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
@@ -85,7 +87,12 @@ namespace th
 
 	Rectf Entity::getRect() const
 	{
-		return Rectf(getLeftTop(), getSize());
+		return Rectf(getTopLeft(), getSize());
+	}
+
+	bool Entity::isResting() const
+	{
+		return Float::IsZero(dx) && Float::IsZero(dy);
 	}
 
 	Pointf Entity::getNextPos() const
