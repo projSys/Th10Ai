@@ -50,7 +50,6 @@ namespace th
 
 		void start();
 		void stop();
-		void setSlowManual(bool slowManual);
 		void update();
 
 	private:
@@ -102,7 +101,7 @@ namespace th
 
 		Process m_process;
 		Window m_window;
-		//D3D9FrameSync m_sync;
+		D3D9FrameSync m_sync;
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_image;
 		TH10Reader m_reader;
@@ -110,7 +109,6 @@ namespace th
 		bool m_active;
 		Clock m_clock;
 		Key m_keyUp, m_keyDown, m_keyLeft, m_keyRight, m_keyShift, m_keyZ, m_keyX;
-		bool m_slowManual;
 
 		Player m_player;
 		std::vector<Item> m_items;

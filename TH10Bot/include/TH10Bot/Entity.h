@@ -26,8 +26,8 @@ namespace th
 
 		bool hitTest(const Entity& other, float_t epsilon = 0.0f) const;
 
-		Pointf getPos() const; // 中心点
-		Pointf setPos(const Pointf& newPos);
+		Pointf getPos() const;
+		void setPos(const Pointf& pos);
 		Pointf getTopLeft() const;
 		Pointf getBottomRight() const;
 		Sizef getSize() const;
@@ -35,7 +35,7 @@ namespace th
 		bool isResting() const;
 		Pointf getNextPos() const;
 
-		float_t x;
+		float_t x;			// 中心点
 		float_t y;
 		float_t width;
 		float_t height;

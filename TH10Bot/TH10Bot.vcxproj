@@ -154,7 +154,6 @@
     <ClInclude Include="include\TH10Bot\Scene.h" />
     <ClInclude Include="include\TH10Bot\TH10Bot.h" />
     <ClInclude Include="include\TH10Bot\TH10Reader.h" />
-    <ClInclude Include="include\TH10Bot\vec2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TH10Bot\Clock.cpp" />

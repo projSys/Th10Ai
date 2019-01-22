@@ -1,16 +1,8 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/Key.h"
 
-#include <thread>
-#include <chrono>
-
 namespace th
 {
-	void Key::Delay(time_t ms)
-	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
-	}
-
 	Key::Key(WORD vkey) :
 		m_vkey(vkey),
 		m_scan(MapVirtualKey(vkey, MAPVK_VK_TO_VSC)),

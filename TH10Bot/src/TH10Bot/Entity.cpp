@@ -18,21 +18,21 @@ namespace th
 	float_t Entity::angle(const Pointf& pos) const
 	{
 		//if (isResting())
-		//	return 181.0f;
+		//	return -1.0f;
 		return MyMath::Angle(getPos(), getNextPos(), pos);
 	}
 
 	float_t Entity::angle(const Entity& other) const
 	{
 		//if (isResting())
-		//	return 181.0f;
+		//	return -1.0f;
 		return MyMath::Angle(getPos(), getNextPos(), other.getPos());
 	}
 
 	// 点到直线的垂足
 	//Pointf Entity::footPoint(const Pointf& pos) const
 	//{
-	//	//if (Float::IsZero(dx) && Float::IsZero(dy))
+	//	//if (isResting())
 	//	//	return Pointf(x, y);
 	//	//Pointf nextPos = getNextPos();
 	//	//float_t u = (other.x - x) * (nextPos.x - x) + (other.y - y) * (nextPos.y - y);
@@ -62,12 +62,10 @@ namespace th
 		return Pointf(x, y);
 	}
 
-	Pointf Entity::setPos(const Pointf& newPos)
+	void Entity::setPos(const Pointf& pos)
 	{
-		Pointf oldPos(x, y);
-		x = newPos.x;
-		y = newPos.y;
-		return oldPos;
+		x = pos.x;
+		y = pos.y;
 	}
 
 	Pointf Entity::getTopLeft() const

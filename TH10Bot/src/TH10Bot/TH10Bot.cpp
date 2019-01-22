@@ -10,7 +10,7 @@ namespace th
 	TH10Bot::TH10Bot() :
 		m_process(Process::FindByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
-		//m_sync(m_process),
+		m_sync(m_process),
 		m_reader(m_process),
 		m_active(false),
 		m_keyUp(VK_UP), m_keyDown(VK_DOWN), m_keyLeft(VK_LEFT), m_keyRight(VK_RIGHT),
@@ -57,17 +57,24 @@ namespace th
 
 	void TH10Bot::update()
 	{
-		//m_sync.waitForPresent();
-
-		Rect rect = m_window.getClientRect();
-		if (!m_capturer.capture(m_image, rect))
+		if (!m_active)
 		{
-			std::cout << "抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。" << std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			return;
 		}
 
-		if (!m_active)
+		if (!m_sync.waitForPresent())
+		{
+			std::cout << "等待帧同步超时。" << std::endl;
 			return;
+		}
+
+		//Rect rect = m_window.getClientRect();
+		//if (!m_capturer.capture(m_image, rect))
+		//{
+		//	std::cout << "抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。" << std::endl;
+		//	return;
+		//}
 
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
@@ -119,7 +126,16 @@ namespace th
 
 		for (const BulletLv1& it : m_redList)
 		{
-			const Bullet& bullet = m_bullets[it.index];
+			Bullet& bullet = m_bullets[it.index];
+
+			Pointf oldPos = bullet.getPos();
+			bullet.setPos(it.footPoint);
+			// 自机与子弹的垂足距离最近，只要与垂足不碰撞，那么与子弹前进路径上的其他点都不会碰撞。
+			if (!bullet.hitTest(m_player))
+			{
+				bullet.setPos(oldPos);
+				continue;
+			}
 
 			Pointf xPos = bullet.getPos();
 			xPos.x += SCENE_SIZE.width;	// 按X轴平移
@@ -127,7 +143,7 @@ namespace th
 			if (bullet.dy > 0) // 转换成360度
 				angleOfXAxis = 360.0f - angleOfXAxis;
 
-			int_t dir = DIR_HOLD;
+			Direction dir = DIR_HOLD;
 			if (angleOfXAxis > 337.5f)
 				dir = DIR_RIGHT;
 			else if (angleOfXAxis > 292.5f)
@@ -147,8 +163,38 @@ namespace th
 			else
 				dir = DIR_RIGHT;
 
+			switch (dir)
+			{
+			case DIR_UP:
+				move(rand() % 2 == 0 ? DIR_LEFT : DIR_RIGHT);
+				break;
+			case DIR_DOWN:
+				move(rand() % 2 == 0 ? DIR_LEFT : DIR_RIGHT);
+				break;
+			case DIR_LEFT:
+				move(rand() % 2 == 0 ? DIR_UP : DIR_DOWN);
+				break;
+			case DIR_RIGHT:
+				move(rand() % 2 == 0 ? DIR_UP : DIR_DOWN);
+				break;
+			case DIR_UPLEFT:
+				move(rand() % 2 == 0 ? DIR_UPRIGHT : DIR_DOWNLEFT);
+				break;
+			case DIR_UPRIGHT:
+				move(rand() % 2 == 0 ? DIR_UPLEFT : DIR_DOWNRIGHT);
+				break;
+			case DIR_DOWNLEFT:
+				move(rand() % 2 == 0 ? DIR_UPLEFT : DIR_DOWNRIGHT);
+				break;
+			case DIR_DOWNRIGHT:
+				move(rand() % 2 == 0 ? DIR_UPRIGHT : DIR_DOWNLEFT);
+				break;
+			}
 
+			break;
 		}
+
+		return;
 
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
