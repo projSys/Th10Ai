@@ -20,8 +20,7 @@ namespace th
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_shootCooldown(0),
-		m_pickupCooldown(0),
-		m_slowManual(false)
+		m_pickupCooldown(0)
 	{
 		srand((unsigned int)time(nullptr));
 	}
@@ -48,11 +47,6 @@ namespace th
 				m_keyShift.release(), m_keyZ.release(), m_keyX.release();
 			std::cout << "Í£Ö¹Bot¡£" << std::endl;
 		}
-	}
-
-	void TH10Bot::setSlowManual(bool slowManual)
-	{
-		m_slowManual = slowManual;
 	}
 
 	void TH10Bot::update()
