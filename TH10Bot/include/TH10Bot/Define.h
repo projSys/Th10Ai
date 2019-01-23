@@ -32,7 +32,7 @@ namespace th
 
 	const Sizef WINDOW_SIZE = { 640.0f, 480.0f };
 
-	const Pointf SCENE_POS = { 24.0f, 16.0f };
+	const Pointf SCENE_OFFSET = { 24.0f, 16.0f };
 
 	const Sizef SCENE_SIZE = { 384.0f, 448.0f };
 
@@ -43,6 +43,7 @@ namespace th
 	// 方向
 	enum Direction
 	{
+		DIR_NONE = -1,
 		DIR_HOLD_SLOW,
 		DIR_HOLD,				// 不动
 		DIR_UP,					// 上

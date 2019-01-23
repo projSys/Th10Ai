@@ -124,12 +124,26 @@ namespace th
 
 			Pointf oldPos = bullet.getPos();
 			bullet.setPos(it.footPoint);
-			// 自机与子弹的垂足距离最近，只要与垂足不碰撞，那么与子弹前进路径上的其他点都不会碰撞。
+			// 自机与子弹前进路径的垂足距离最近，只要与垂足不碰撞，那么与路径上的其他点都不会碰撞。
 			if (!bullet.hitTest(m_player))
 			{
 				bullet.setPos(oldPos);
 				continue;
 			}
+			bullet.setPos(oldPos);
+
+			int_t minFrame = -1;
+			oldPos = bullet.getPos();
+			for (int_t i = static_cast<int_t>(it.footFrame); i > 0; --i)
+			{
+				Pointf framePoint = bullet.advanceFrame(i);
+				bullet.setPos(framePoint);
+				if (bullet.hitTest(m_player))
+					minFrame = i;
+				else
+					break;
+			}
+			bullet.setPos(oldPos);
 
 			Pointf xPos = bullet.getPos();
 			xPos.x += SCENE_SIZE.width;	// 按X轴平移
@@ -137,7 +151,7 @@ namespace th
 			if (bullet.dy > 0) // 转换成360度
 				angleOfXAxis = 360.0f - angleOfXAxis;
 
-			Direction dir = DIR_HOLD;
+			Direction dir = DIR_NONE;
 			if (angleOfXAxis > 337.5f)
 				dir = DIR_RIGHT;
 			else if (angleOfXAxis > 292.5f)
@@ -430,7 +444,7 @@ namespace th
 		//int_t enemyId = findEnemy();
 		Pointf mousePos = getMousePos();
 
-		Direction lastDir = DIR_HOLD;
+		Direction lastDir = DIR_NONE;
 		bool lastSlow = false;
 		float_t maxScore = std::numeric_limits<float_t>::lowest();
 		//int_t depth = 0;

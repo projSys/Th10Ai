@@ -48,7 +48,12 @@ namespace th
 
 	Pointf Entity::footPoint(float_t footFrame) const
 	{
-		return Pointf(x + footFrame * dx, y + footFrame * dy);
+		return Pointf(x + dx * footFrame, y + dy * footFrame);
+	}
+
+	Pointf Entity::advanceFrame(int_t frame) const
+	{
+		return Pointf(x + dx * frame, y + dy * frame);
 	}
 
 	bool Entity::hitTest(const Entity& other, float_t epsilon) const

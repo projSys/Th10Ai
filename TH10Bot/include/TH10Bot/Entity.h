@@ -23,6 +23,7 @@ namespace th
 		//Pointf footPoint(const Pointf& pos) const;
 		float_t footFrame(const Pointf& pos) const;
 		Pointf footPoint(float_t footFrame) const;
+		Pointf advanceFrame(int_t frame) const;
 
 		bool hitTest(const Entity& other, float_t epsilon = 0.0f) const;
 
