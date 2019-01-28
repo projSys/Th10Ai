@@ -38,8 +38,17 @@ namespace th
 		uint_t index;
 		float_t distance;
 		float_t footFrame;
-		Pointf footPoint;		// 自机在子弹前进方向的垂足
-		float_t angleOfPlayer;	// 自机与子弹前进方向的角度
+		Pointf footPoint;
+		float_t angleOfPlayer;
+	};
+
+	struct ActionLv1
+	{
+		ActionLv1(uint_t index0, Direction dir0) :
+			index(index0), dir(dir0) {}
+
+		uint_t index;
+		Direction dir;
 	};
 
 	class TH10Bot
@@ -118,6 +127,7 @@ namespace th
 
 		std::vector<BulletLv1> m_redList;
 		std::vector<BulletLv1> m_yellowList;
+		std::vector<std::vector<ActionLv1>> m_actions;
 
 		//std::vector<std::vector<Bullet>> m_depthList;
 		//std::vector<std::vector<Bullet>> m_clipList;

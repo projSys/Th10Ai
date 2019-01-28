@@ -15,6 +15,7 @@ namespace th
 		m_active(false),
 		m_keyUp(VK_UP), m_keyDown(VK_DOWN), m_keyLeft(VK_LEFT), m_keyRight(VK_RIGHT),
 		m_keyShift(VK_SHIFT), m_keyZ('Z'), m_keyX('X'),
+		m_actions(60 * 30), // 30秒
 		//m_depthList(DEPTH),
 		//m_clipList(DEPTH),
 		m_bombCooldown(0),
@@ -57,9 +58,15 @@ namespace th
 			return;
 		}
 
-		if (!m_sync.waitForPresent())
+		//m_clock.update();
+		if (m_sync.waitForPresent())
 		{
-			std::cout << "等待帧同步超时。" << std::endl;
+			//m_clock.update();
+			//std::cout << m_clock.getTimespan() << std::endl;
+		}
+		else
+		{
+			//std::cout << "等待帧同步超时。" << std::endl;
 			return;
 		}
 
@@ -132,6 +139,7 @@ namespace th
 			}
 			bullet.setPos(oldPos);
 
+			// 获取最快的碰撞帧
 			int_t minFrame = -1;
 			oldPos = bullet.getPos();
 			for (int_t i = static_cast<int_t>(it.footFrame); i > 0; --i)
@@ -144,6 +152,8 @@ namespace th
 					break;
 			}
 			bullet.setPos(oldPos);
+			if (minFrame == -1)
+				continue;
 
 			Pointf xPos = bullet.getPos();
 			xPos.x += SCENE_SIZE.width;	// 按X轴平移
@@ -151,53 +161,56 @@ namespace th
 			if (bullet.dy > 0) // 转换成360度
 				angleOfXAxis = 360.0f - angleOfXAxis;
 
-			Direction dir = DIR_NONE;
+			Direction bulletDir = DIR_NONE;
 			if (angleOfXAxis > 337.5f)
-				dir = DIR_RIGHT;
+				bulletDir = DIR_RIGHT;
 			else if (angleOfXAxis > 292.5f)
-				dir = DIR_DOWNRIGHT;
+				bulletDir = DIR_DOWNRIGHT;
 			else if (angleOfXAxis > 247.5f)
-				dir = DIR_DOWN;
+				bulletDir = DIR_DOWN;
 			else if (angleOfXAxis > 202.5f)
-				dir = DIR_DOWNLEFT;
+				bulletDir = DIR_DOWNLEFT;
 			else if (angleOfXAxis > 157.5f)
-				dir = DIR_LEFT;
+				bulletDir = DIR_LEFT;
 			else if (angleOfXAxis > 112.5f)
-				dir = DIR_UPLEFT;
+				bulletDir = DIR_UPLEFT;
 			else if (angleOfXAxis > 67.5f)
-				dir = DIR_UP;
+				bulletDir = DIR_UP;
 			else if (angleOfXAxis > 22.5f)
-				dir = DIR_UPRIGHT;
+				bulletDir = DIR_UPRIGHT;
 			else
-				dir = DIR_RIGHT;
+				bulletDir = DIR_RIGHT;
 
-			switch (dir)
+			Direction dir = DIR_NONE;
+			switch (bulletDir)
 			{
 			case DIR_UP:
-				move(rand() % 2 == 0 ? DIR_LEFT : DIR_RIGHT);
+				dir = (rand() % 2 == 0 ? DIR_LEFT : DIR_RIGHT);
 				break;
 			case DIR_DOWN:
-				move(rand() % 2 == 0 ? DIR_LEFT : DIR_RIGHT);
+				dir = (rand() % 2 == 0 ? DIR_LEFT : DIR_RIGHT);
 				break;
 			case DIR_LEFT:
-				move(rand() % 2 == 0 ? DIR_UP : DIR_DOWN);
+				dir = (rand() % 2 == 0 ? DIR_UP : DIR_DOWN);
 				break;
 			case DIR_RIGHT:
-				move(rand() % 2 == 0 ? DIR_UP : DIR_DOWN);
+				dir = (rand() % 2 == 0 ? DIR_UP : DIR_DOWN);
 				break;
 			case DIR_UPLEFT:
-				move(rand() % 2 == 0 ? DIR_UPRIGHT : DIR_DOWNLEFT);
+				dir = (rand() % 2 == 0 ? DIR_UPRIGHT : DIR_DOWNLEFT);
 				break;
 			case DIR_UPRIGHT:
-				move(rand() % 2 == 0 ? DIR_UPLEFT : DIR_DOWNRIGHT);
+				dir = (rand() % 2 == 0 ? DIR_UPLEFT : DIR_DOWNRIGHT);
 				break;
 			case DIR_DOWNLEFT:
-				move(rand() % 2 == 0 ? DIR_UPLEFT : DIR_DOWNRIGHT);
+				dir = (rand() % 2 == 0 ? DIR_UPLEFT : DIR_DOWNRIGHT);
 				break;
 			case DIR_DOWNRIGHT:
-				move(rand() % 2 == 0 ? DIR_UPRIGHT : DIR_DOWNLEFT);
+				dir = (rand() % 2 == 0 ? DIR_UPRIGHT : DIR_DOWNLEFT);
 				break;
 			}
+			//m_actions[minFrame].emplace_back(it.index, dir);
+			move(dir);
 
 			break;
 		}
@@ -503,7 +516,7 @@ namespace th
 		POINT mousePos = {};
 		GetCursorPos(&mousePos);
 		Rect clientRect = m_window.getClientRect();
-		return Scene::ToGamePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
+		return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
 	}
 
 	bool TH10Bot::hitTestMove(const Player& player)

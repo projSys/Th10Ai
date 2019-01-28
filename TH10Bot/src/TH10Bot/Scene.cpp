@@ -3,16 +3,16 @@
 
 namespace th
 {
-	Pointi Scene::ToWindowPos(const Pointf& gamePos)
+	Pointi Scene::ToWindowPos(const Pointf& scenePos)
 	{
-		return Pointi(static_cast<Pointi::value_t>(SCENE_OFFSET.x + GAME_OFFSET.x + gamePos.x + 0.5f),
-			static_cast<Pointi::value_t>(SCENE_OFFSET.y + GAME_OFFSET.y + gamePos.y + 0.5f));
+		return Pointi(static_cast<Pointi::value_t>(SCENE_POS.x + POS_OFFSET.x + scenePos.x + 0.5f),
+			static_cast<Pointi::value_t>(SCENE_POS.y + POS_OFFSET.y + scenePos.y + 0.5f));
 	}
 
-	Pointf Scene::ToGamePos(const Pointi& windowPos)
+	Pointf Scene::ToScenePos(const Pointi& windowPos)
 	{
-		return Pointf(static_cast<Pointf::value_t>(windowPos.x) - SCENE_OFFSET.x - GAME_OFFSET.x,
-			static_cast<Pointf::value_t>(windowPos.y) - SCENE_OFFSET.y - GAME_OFFSET.y);
+		return Pointf(static_cast<Pointf::value_t>(windowPos.x) - SCENE_POS.x - POS_OFFSET.x,
+			static_cast<Pointf::value_t>(windowPos.y) - SCENE_POS.y - POS_OFFSET.y);
 	}
 
 	bool Scene::IsInScene(const Pointf& pos)

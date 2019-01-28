@@ -32,11 +32,11 @@ namespace th
 
 	const Sizef WINDOW_SIZE = { 640.0f, 480.0f };
 
-	const Pointf SCENE_OFFSET = { 24.0f, 16.0f };
+	const Pointf SCENE_POS = { 24.0f, 16.0f };
 
 	const Sizef SCENE_SIZE = { 384.0f, 448.0f };
 
-	const Pointf GAME_OFFSET = { 200.0f, 0.0f };
+	const Pointf POS_OFFSET = { 200.0f, 0.0f };
 
 	const Pointf INIT_POS = { 0.0f, 400.0f };
 
