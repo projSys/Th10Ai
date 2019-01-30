@@ -125,6 +125,7 @@ namespace th
 			return left.footFrame < right.footFrame;
 		});
 
+		Direction lastDir = DIR_HOLD;
 		for (const BulletLv1& it : m_redList)
 		{
 			Bullet& bullet = m_bullets[it.index];
@@ -152,7 +153,7 @@ namespace th
 					break;
 			}
 			bullet.setPos(oldPos);
-			if (minFrame == -1)
+			if (minFrame != 1)
 				continue;
 
 			Pointf xPos = bullet.getPos();
@@ -181,7 +182,7 @@ namespace th
 			else
 				bulletDir = DIR_RIGHT;
 
-			Direction dir = DIR_NONE;
+			Direction dir = DIR_HOLD;
 			switch (bulletDir)
 			{
 			case DIR_UP:
@@ -210,10 +211,12 @@ namespace th
 				break;
 			}
 			//m_actions[minFrame].emplace_back(it.index, dir);
-			move(dir);
+			lastDir = dir;
 
 			break;
 		}
+
+		move(lastDir);
 
 		return;
 
@@ -507,7 +510,11 @@ namespace th
 			}
 		}
 
-		move(lastDir);
+		if (lastDir != DIR_NONE)
+			move(lastDir);
+		else
+			std::cout << "无路可走。" << std::endl;
+
 		return true;
 	}
 
@@ -530,10 +537,6 @@ namespace th
 		for (const Bullet& bullet : m_bullets)
 		{
 			if (player.hitTest(bullet, 2.0))
-				return true;
-
-			Bullet next = bullet.advance();
-			if (player.hitTest(next, 2.0))
 				return true;
 		}
 

@@ -10,7 +10,6 @@ namespace th
 	{
 	public:
 		DesktopCapturerCV();
-		virtual ~DesktopCapturerCV() = default;
 
 	private:
 		cv::ocl::Context m_oclContext;

@@ -9,8 +9,6 @@ namespace th
 		public DesktopImage
 	{
 	public:
-		virtual ~DesktopImageCV() = default;
-
 		virtual void convertFromGPU(CComPtr<ID3D11Texture2D> texture2D) override;
 
 	//private:
