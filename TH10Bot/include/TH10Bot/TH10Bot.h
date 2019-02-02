@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <set>
 #include <sstream>
 #include <Windows/Process.h>
 #include <Windows/Window.h>
@@ -49,6 +50,36 @@ namespace th
 
 		uint_t index;
 		Direction dir;
+	};
+
+	class Frame
+	{
+	public:
+		
+
+	private:
+		int16_t m_map[200][200];
+	};
+
+	class FrameAxis
+	{
+	public:
+		
+
+		bool operator <(const FrameAxis& other) const
+		{
+			return m_pos < other.m_pos;
+		}
+
+	private:
+		Pointf m_pos;
+		std::vector<Frame> m_frames;
+	};
+
+	class AxisPos
+	{
+	public:
+		
 	};
 
 	class TH10Bot

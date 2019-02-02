@@ -145,7 +145,7 @@ namespace th
 			oldPos = bullet.getPos();
 			for (int_t i = static_cast<int_t>(it.footFrame); i > 0; --i)
 			{
-				Pointf framePoint = bullet.advanceFrame(i);
+				Pointf framePoint = bullet.advanceTo(i);
 				bullet.setPos(framePoint);
 				if (bullet.hitTest(m_player))
 					minFrame = i;

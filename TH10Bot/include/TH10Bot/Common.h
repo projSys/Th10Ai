@@ -1,6 +1,9 @@
 #pragma once
 
 #include <cpp/Common.h>
+#include <cpp/Point.h>
+#include <cpp/Size.h>
+#include <cpp/Rect.h>
 #include <Windows/Common.h>
 #include <GraphCap/Common.h>
 

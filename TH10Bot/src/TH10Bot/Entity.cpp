@@ -51,7 +51,7 @@ namespace th
 		return Pointf(x + dx * footFrame, y + dy * footFrame);
 	}
 
-	Pointf Entity::advanceFrame(int_t frame) const
+	Pointf Entity::advanceTo(int_t frame) const
 	{
 		return Pointf(x + dx * frame, y + dy * frame);
 	}
@@ -95,7 +95,7 @@ namespace th
 
 	bool Entity::isResting() const
 	{
-		return Float::IsZero(dx) && Float::IsZero(dy);
+		return TypeTraits<float_t>::IsZero(dx) && TypeTraits<float_t>::IsZero(dy);
 	}
 
 	Pointf Entity::getNextPos() const
