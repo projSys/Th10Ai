@@ -3,7 +3,8 @@
 
 namespace th
 {
-	void DesktopImageCV::convertFromGPU(CComPtr<ID3D11Texture2D> texture2D)
+	void DesktopImageCV::convertFromD3D11Texture2D(CComPtr<ID3D11DeviceContext> deviceContext,
+		CComPtr<ID3D11Texture2D> texture2D)
 	{
 		cv::directx::convertFromD3D11Texture2D(texture2D, m_data);
 	}

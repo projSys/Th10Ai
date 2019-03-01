@@ -58,15 +58,9 @@ namespace th
 			return;
 		}
 
-		//m_clock.update();
-		if (m_sync.waitForPresent())
+		if (!m_sync.waitForPresent())
 		{
-			//m_clock.update();
-			//std::cout << m_clock.getTimespan() << std::endl;
-		}
-		else
-		{
-			//std::cout << "等待帧同步超时。" << std::endl;
+			std::cout << "等待帧同步超时。" << std::endl;
 			return;
 		}
 
@@ -86,7 +80,7 @@ namespace th
 		m_reader.getEnemies(m_enemies);
 		m_reader.getBullets(m_bullets);
 		m_reader.getLasers(m_lasers);
-
+		/*
 		// 裁剪弹幕
 		m_redList.clear();
 		m_yellowList.clear();
@@ -219,6 +213,21 @@ namespace th
 		move(lastDir);
 
 		return;
+		*/
+		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
+		//std::cout << "e1: " << e1 << std::endl;
+
+		handleBomb();
+		if (!handleTalk())
+			handleShoot();
+		handleMove();
+
+		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+		//std::cout << "e2: " << e2 << std::endl;
+
+		return;
 
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
@@ -272,21 +281,6 @@ namespace th
 
 		cv::imshow("TH10", m_image.m_data);
 		cv::waitKey(1);
-
-		return;
-
-		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
-		//std::cout << "e1: " << e1 << std::endl;
-
-		handleBomb();
-		if (!handleTalk())
-			handleShoot();
-		handleMove();
-
-		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-		//std::cout << "e2: " << e2 << std::endl;
 	}
 
 	// Y轴系数
@@ -354,7 +348,6 @@ namespace th
 				m_bombCooldown = m_clock.getTimestamp();
 				m_keyX.press();
 				//std::cout << "炸弹 PRESS" << std::endl;
-				//std::cout << m_log.str() << std::endl;
 				return true;
 			}
 		}
@@ -440,31 +433,54 @@ namespace th
 	// 处理移动
 	bool TH10Bot::handleMove()
 	{
-		//m_depthList[0].clear();
-		//m_depthList[0].assign(m_bullets.begin(), m_bullets.end());
-		//for (int_t i = 1; i < DEPTH; ++i)
-		//{
-		//	m_depthList[i].clear();
-		//	m_clipList[i].clear();
-		//	Rect2d moveAera(m_player.x, m_player.y, m_player.w + MOVE_SPEED[0] * 2 * i, m_player.h + MOVE_SPEED[0] * 2 * i);
-		//	for (const Bullet& bullet : m_depthList[i - 1])
-		//	{
-		//		Bullet next = bullet.advance();
-		//		m_depthList[i].push_back(next);
-		//		if (moveAera.hitTest(next, 0.0))
-		//			m_clipList[i].push_back(next);
-		//	}
-		//}
+		int_t powerId = findPower();
+		int_t enemyId = findEnemy();
+		//Pointf mousePos = getMousePos();
 
-		//int_t powerId = findPower();
-		//int_t enemyId = findEnemy();
-		Pointf mousePos = getMousePos();
+		//Direction lastDir = DIR_NONE;
+		//float_t maxScore = std::numeric_limits<float_t>::lowest();
+		////int_t depth = 0;
 
-		Direction lastDir = DIR_NONE;
-		bool lastSlow = false;
-		float_t maxScore = std::numeric_limits<float_t>::lowest();
-		//int_t depth = 0;
+		DfsResult res = dfs(m_player, 0, 3, enemyId, powerId);
+		std::cout << res.score << " " << res.dir << std::endl;
 
+		if (res.dir != DIR_NONE)
+			move(res.dir);
+		else
+			std::cout << "无路可走。" << std::endl;
+
+		return true;
+	}
+
+	DfsResult TH10Bot::dfs(const Player& player, int_t frame, int_t depth, int_t enemyId, int_t powerId)
+	{
+		DfsResult res;
+
+		if (hitTestMove(player, frame))
+		{
+			res.score += -10000.0f;
+			return res;
+		}
+		else
+		{
+			res.score += 1000.0f;
+		}
+
+		//res.score += getDodgeEnemyScore(player);
+		//res.score += getDodgeBulletScore(player);
+		//res.score += getDodgeLaserScore(player);
+		if (enemyId != -1)
+			res.score += getShootEnemyScore(player, enemyId);
+		else if (powerId != -1)
+			res.score += getPickupPowerScore(player, powerId);
+		//else
+		//	score += getGobackScore(player);
+
+		if (depth <= 0)
+			return res;
+
+		float_t bestScore = std::numeric_limits<float_t>::lowest();
+		Direction bestDir = DIR_NONE;
 		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
 			Direction dir = DIRECTIONS[i];
@@ -485,39 +501,45 @@ namespace th
 				continue;
 
 			Player nextPlayer(nextX, nextY, m_player.width, m_player.height, m_player.dx, m_player.dy);
-			if (hitTestMove(nextPlayer))
-				continue;
 
-			float_t score = 0.0;
-			score += getTargetScore(nextPlayer, mousePos);
-
-			//score += search(pNext, depth + 1);
-
-			//score += getDodgeEnemyScore(pNext);
-			//score += getDodgeBulletScore(pNext);
-			//score += getDodgeLaserScore(pNext);
-			//if (powerId != -1)
-			//	score += getPickupPowerScore(pNext, powerId);
-			//else if (enemyId != -1)
-			//	score += getShootEnemyScore(pNext, enemyId);
-			//else
-			//	score += getGobackScore(pNext);
-
-			if (score > maxScore)
+			DfsResult nextRes = dfs(nextPlayer, frame + 1, depth - 1, enemyId, powerId);
+			if (nextRes.score > bestScore)
 			{
-				maxScore = score;
-				lastDir = dir;
+				bestScore = nextRes.score;
+				bestDir = dir;
 			}
 		}
-
-		if (lastDir != DIR_NONE)
-			move(lastDir);
-		else
-			std::cout << "无路可走。" << std::endl;
-
-		return true;
+		res.score += bestScore;
+		res.dir = bestDir;
+		return res;
 	}
+	/*
+	bool TH10Bot::hitTestMove(const Player& player, int_t depth)
+	{
+		if (depth == 0)
+		{
+			if (player.hitTest(m_enemies, 2.0))
+				return true;
 
+			if (player.hitTest(m_bullets, 2.0))
+				return true;
+
+			if (player.hitTestSAT(m_lasers, 2.0))
+				return true;
+		}
+		else
+		{
+			// Enemy缺失
+
+			if (player.hitTest(m_clipList[depth], 2.0))
+				return true;
+
+			// Laser缺失
+		}
+
+		return false;
+	}
+	*/
 	Pointf TH10Bot::getMousePos()
 	{
 		POINT mousePos = {};
@@ -549,102 +571,67 @@ namespace th
 		return false;
 	}
 
+	bool TH10Bot::hitTestMove(const Player& player, int_t frame)
+	{
+		for (Enemy& enemy : m_enemies)
+		{
+			Pointf oldPos = enemy.getPos();
+			Pointf newPos = enemy.advanceTo(frame);
+			enemy.setPos(newPos);
+			if (player.hitTest(enemy, 2.0))
+			{
+				enemy.setPos(oldPos);
+				return true;
+			}
+			enemy.setPos(oldPos);
+		}
+
+		for (Bullet& bullet : m_bullets)
+		{
+			Pointf oldPos = bullet.getPos();
+			Pointf newPos = bullet.advanceTo(frame);
+			bullet.setPos(newPos);
+			if (player.hitTest(bullet, 2.0))
+			{
+				bullet.setPos(oldPos);
+				return true;
+			}
+			bullet.setPos(oldPos);
+		}
+
+		for (Laser& laser : m_lasers)
+		{
+			Pointf oldPos = laser.getPos();
+			Pointf newPos = laser.advanceTo(frame);
+			laser.setPos(newPos);
+			if (player.hitTest(laser, 2.0))
+			{
+				laser.setPos(oldPos);
+				return true;
+			}
+			laser.setPos(oldPos);
+		}
+
+		return false;
+	}
+
 	float_t TH10Bot::getTargetScore(const Player& pNext, const Pointf& target)
 	{
 		float_t score = 0.0;
 
 		if (pNext.distance(target) < 10.0)
 		{
-			score += 3000.0;
+			score += 300.0;
 		}
 		else
 		{
-			score += 1500.0 * (1.0 - GetDistXScore(pNext.x, target.x));
-			score += 1500.0 * (1.0 - GetDistYScore(pNext.y, target.y));
-		}
-
-		return score;
-	}
-	/*
-	float_t TH10Bot::search(const Player& player, int_t depth)
-	{
-		float_t score = 0.0;
-
-		//Rect2d moveAera(player.x, player.y, player.w + MOVE_SPEED[0] * 2.0, player.h + MOVE_SPEED[0] * 2.0);
-		//m_clipList[depth].clear();
-		//for (const Bullet& bullet : m_depthList[depth])
-		//{
-		//	if (moveAera.hitTest(bullet, 0.0))
-		//		m_clipList[depth].push_back(bullet);
-		//}
-
-		for (int_t m = 0; m < MOVE_SPEED_LEN - 1; ++m)
-		{
-			for (int_t d = 1; d < DIR_LEN; ++d)
-			{
-				int_t dir = DIRECTION[d];
-				bool slow = static_cast<bool>(m);
-
-				// 下一个位置
-				float_t xNext = player.x + DIR_FACTOR[d].x * MOVE_SPEED[m];
-				float_t yNext = player.y + DIR_FACTOR[d].y * MOVE_SPEED[m];
-
-				//FixPos(xNext, yNext);
-				if (xNext < -200.0 || xNext > 200.0 || yNext < 0.0 || yNext > 480.0)
-					continue;
-
-				Player pNext(xNext, yNext, m_player.width, m_player.height, m_player.dx, m_player.dy);
-
-				// 剪枝：不折返
-				if (m_player.distance(pNext) < m_player.distance(player))
-					continue;
-
-				if (hitTestMove(pNext, depth))
-					continue;
-
-				score += 1.0;
-
-				//if (powerId != -1)
-				//	score += getPickupPowerScore(pNext, powerId);
-				//else if (enemyId != -1)
-				//	score += getShootEnemyScore(pNext, enemyId);
-				//else
-				//	score += getGobackScore(pNext);
-
-				if (depth + 1 < DEPTH)
-					score += search(pNext, depth + 1);
-			}
+			score += 150.0 * (1.0 - GetDistXScore(pNext.x, target.x));
+			score += 150.0 * (1.0 - GetDistYScore(pNext.y, target.y));
 		}
 
 		return score;
 	}
 
-	bool TH10Bot::hitTestMove(const Player& player, int_t depth)
-	{
-		if (depth == 0)
-		{
-			if (player.hitTest(m_enemies, 2.0))
-				return true;
-
-			if (player.hitTest(m_bullets, 2.0))
-				return true;
-
-			if (player.hitTestSAT(m_lasers, 2.0))
-				return true;
-		}
-		else
-		{
-			// Enemy缺失
-
-			if (player.hitTest(m_clipList[depth], 2.0))
-				return true;
-
-			// Laser缺失
-		}
-
-		return false;
-	}
-	*/
 	// 查找道具
 	int_t TH10Bot::findPower()
 	{

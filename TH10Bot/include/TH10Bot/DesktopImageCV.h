@@ -9,7 +9,8 @@ namespace th
 		public DesktopImage
 	{
 	public:
-		virtual void convertFromGPU(CComPtr<ID3D11Texture2D> texture2D) override;
+		virtual void convertFromD3D11Texture2D(CComPtr<ID3D11DeviceContext> deviceContext,
+			CComPtr<ID3D11Texture2D> texture2D) override;
 
 	//private:
 		cv::Mat m_data;

@@ -27,8 +27,6 @@ namespace th
 	//	float_t score;
 	//};
 
-	//const int_t DEPTH = 4;
-
 	struct BulletLv1
 	{
 		BulletLv1(uint_t index0, float_t distance0, float_t footFrame0,
@@ -55,7 +53,7 @@ namespace th
 	class Frame
 	{
 	public:
-		
+
 
 	private:
 		int16_t m_map[200][200];
@@ -64,7 +62,7 @@ namespace th
 	class FrameAxis
 	{
 	public:
-		
+
 
 		bool operator <(const FrameAxis& other) const
 		{
@@ -79,7 +77,17 @@ namespace th
 	class AxisPos
 	{
 	public:
-		
+
+	};
+
+	struct DfsResult
+	{
+		float_t score;
+		Direction dir;
+
+		DfsResult() :
+			score(0.0f), dir(DIR_NONE)
+		{}
 	};
 
 	class TH10Bot
@@ -106,11 +114,12 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
+		DfsResult dfs(const Player& player, int_t frame, int_t depth, int_t enemyId, int_t powerId);
+		//bool hitTestMove(const Player& player, int_t depth);
 		Pointf getMousePos();
 		bool hitTestMove(const Player& player);
+		bool hitTestMove(const Player& player, int_t frame);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
-		//float_t search(const Player& player, int_t depth);
-		//bool hitTestMove(const Player& player, int_t depth);
 		int_t findPower();
 		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
@@ -167,7 +176,5 @@ namespace th
 		time_t m_talkCooldown;
 		time_t m_shootCooldown;
 		time_t m_pickupCooldown;
-
-		//std::ostringstream m_log;
 	};
 }

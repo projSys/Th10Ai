@@ -88,13 +88,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include;..\..\..\Boost\boost_1_69_0;..\..\..\cpp\cpp-git\cpp\include;..\..\..\GraphCap\GraphCap-git\GraphCap\include;D:\Develop\OpenCV\opencv-3.4.5\build32\install\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;..\..\..\Boost\boost_1_69_0;..\..\..\cpp\cpp-git\cpp\include;..\..\..\GraphCap\GraphCap-git\GraphCap\include;D:\Develop\OpenCV\opencv-4.0.0\build32\install\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>..\..\..\Boost\boost_1_69_0\lib32-msvc-14.1;..\..\..\cpp\cpp-git\Debug;..\..\..\GraphCap\GraphCap-git\Debug;D:\Develop\OpenCV\opencv-3.4.5\build32\install\x86\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;cpp.lib;GraphCap.lib;opencv_core345d.lib;opencv_highgui345d.lib;opencv_imgproc345d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\Boost\boost_1_69_0\lib32-msvc-14.1;..\..\..\cpp\cpp-git\Debug;..\..\..\GraphCap\GraphCap-git\Debug;D:\Develop\OpenCV\opencv-4.0.0\build32\install\x86\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;cpp.lib;GraphCap.lib;opencv_core400d.lib;opencv_highgui400d.lib;opencv_imgproc400d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
