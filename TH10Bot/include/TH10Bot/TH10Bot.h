@@ -17,16 +17,6 @@
 
 namespace th
 {
-	//struct Node
-	//{
-	//	int_t depth;
-	//	int_t parentId;
-	//	Player player;
-	//	int_t dir;
-	//	bool slow;
-	//	float_t score;
-	//};
-
 	struct BulletLv1
 	{
 		BulletLv1(uint_t index0, float_t distance0, float_t footFrame0,
@@ -114,30 +104,28 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
-		DfsResult dfs(const Player& player, int_t frame, int_t depth, int_t enemyId, int_t powerId);
-		//bool hitTestMove(const Player& player, int_t depth);
-		Pointf getMousePos();
+		DfsResult dfs(const Player& player, int_t frame, int_t depth, int_t itemId, int_t enemyId);
 		bool hitTestMove(const Player& player);
 		bool hitTestMove(const Player& player, int_t frame);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
-		int_t findPower();
+		int_t findItem();
 		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
 		float_t getDodgeBulletScore(const Player& pNext, float_t epsilon = 2.0);
 		float_t getDodgeLaserScore(const Player& pNext, float_t epsilon = 2.0);
 		float_t getBulletAngleScore(const Player& pNext);
-		float_t getPickupPowerScore(const Player& pNext, int_t powerId);
+		float_t getPickupItemScore(const Player& pNext, int_t itemId);
 		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);
 		float_t getGobackScore(const Player& pNext);
 
 		static bool IsSlow(Direction dir);
 		void move(Direction dir);
 
-		// Power
-		//bool handlePower();
+		// Item
+		//bool handleItem();
 		//bool checkPickupStatus();
-		//bool pickupPower(int_t powerId);
-		//float_t pickupPowerScore(const Player& next, const Power& power);
+		//bool pickupItem(int_t itemId);
+		//float_t pickupItemScore(const Player& next, const Item& item);
 
 		// Enemy
 		//bool handleEnemy();
@@ -168,9 +156,6 @@ namespace th
 		std::vector<BulletLv1> m_redList;
 		std::vector<BulletLv1> m_yellowList;
 		std::vector<std::vector<ActionLv1>> m_actions;
-
-		//std::vector<std::vector<Bullet>> m_depthList;
-		//std::vector<std::vector<Bullet>> m_clipList;
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;

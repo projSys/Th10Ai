@@ -16,8 +16,6 @@ namespace th
 		m_keyUp(VK_UP), m_keyDown(VK_DOWN), m_keyLeft(VK_LEFT), m_keyRight(VK_RIGHT),
 		m_keyShift(VK_SHIFT), m_keyZ('Z'), m_keyX('X'),
 		m_actions(60 * 30), // 30秒
-		//m_depthList(DEPTH),
-		//m_clipList(DEPTH),
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_shootCooldown(0),
@@ -71,7 +69,7 @@ namespace th
 		//	return;
 		//}
 
-		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
 		m_clock.update();
 
@@ -214,8 +212,8 @@ namespace th
 
 		return;
 		*/
-		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
+		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 		//std::cout << "e1: " << e1 << std::endl;
 
 		handleBomb();
@@ -223,9 +221,9 @@ namespace th
 			handleShoot();
 		handleMove();
 
-		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-		//std::cout << "e2: " << e2 << std::endl;
+		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+		std::cout << "e2: " << e2 << std::endl;
 
 		return;
 
@@ -433,15 +431,10 @@ namespace th
 	// 处理移动
 	bool TH10Bot::handleMove()
 	{
-		int_t powerId = findPower();
+		int_t itemId = findItem();
 		int_t enemyId = findEnemy();
-		//Pointf mousePos = getMousePos();
 
-		//Direction lastDir = DIR_NONE;
-		//float_t maxScore = std::numeric_limits<float_t>::lowest();
-		////int_t depth = 0;
-
-		DfsResult res = dfs(m_player, 0, 3, enemyId, powerId);
+		DfsResult res = dfs(m_player, 0, 2, itemId, enemyId);
 		std::cout << res.score << " " << res.dir << std::endl;
 
 		if (res.dir != DIR_NONE)
@@ -452,7 +445,7 @@ namespace th
 		return true;
 	}
 
-	DfsResult TH10Bot::dfs(const Player& player, int_t frame, int_t depth, int_t enemyId, int_t powerId)
+	DfsResult TH10Bot::dfs(const Player& player, int_t frame, int_t depth, int_t itemId, int_t enemyId)
 	{
 		DfsResult res;
 
@@ -466,15 +459,12 @@ namespace th
 			res.score += 1000.0f;
 		}
 
-		//res.score += getDodgeEnemyScore(player);
-		//res.score += getDodgeBulletScore(player);
-		//res.score += getDodgeLaserScore(player);
-		if (enemyId != -1)
+		if (itemId != -1)
+			res.score += getPickupItemScore(player, itemId);
+		else if (enemyId != -1)
 			res.score += getShootEnemyScore(player, enemyId);
-		else if (powerId != -1)
-			res.score += getPickupPowerScore(player, powerId);
-		//else
-		//	score += getGobackScore(player);
+		else
+			res.score += getGobackScore(player);
 
 		if (depth <= 0)
 			return res;
@@ -502,7 +492,7 @@ namespace th
 
 			Player nextPlayer(nextX, nextY, m_player.width, m_player.height, m_player.dx, m_player.dy);
 
-			DfsResult nextRes = dfs(nextPlayer, frame + 1, depth - 1, enemyId, powerId);
+			DfsResult nextRes = dfs(nextPlayer, frame + 1, depth - 1, itemId, enemyId);
 			if (nextRes.score > bestScore)
 			{
 				bestScore = nextRes.score;
@@ -512,40 +502,6 @@ namespace th
 		res.score += bestScore;
 		res.dir = bestDir;
 		return res;
-	}
-	/*
-	bool TH10Bot::hitTestMove(const Player& player, int_t depth)
-	{
-		if (depth == 0)
-		{
-			if (player.hitTest(m_enemies, 2.0))
-				return true;
-
-			if (player.hitTest(m_bullets, 2.0))
-				return true;
-
-			if (player.hitTestSAT(m_lasers, 2.0))
-				return true;
-		}
-		else
-		{
-			// Enemy缺失
-
-			if (player.hitTest(m_clipList[depth], 2.0))
-				return true;
-
-			// Laser缺失
-		}
-
-		return false;
-	}
-	*/
-	Pointf TH10Bot::getMousePos()
-	{
-		POINT mousePos = {};
-		GetCursorPos(&mousePos);
-		Rect clientRect = m_window.getClientRect();
-		return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
 	}
 
 	bool TH10Bot::hitTestMove(const Player& player)
@@ -578,7 +534,7 @@ namespace th
 			Pointf oldPos = enemy.getPos();
 			Pointf newPos = enemy.advanceTo(frame);
 			enemy.setPos(newPos);
-			if (player.hitTest(enemy, 2.0))
+			if (player.hitTest(enemy, 1.0))
 			{
 				enemy.setPos(oldPos);
 				return true;
@@ -591,7 +547,7 @@ namespace th
 			Pointf oldPos = bullet.getPos();
 			Pointf newPos = bullet.advanceTo(frame);
 			bullet.setPos(newPos);
-			if (player.hitTest(bullet, 2.0))
+			if (player.hitTest(bullet, 1.0))
 			{
 				bullet.setPos(oldPos);
 				return true;
@@ -604,7 +560,7 @@ namespace th
 			Pointf oldPos = laser.getPos();
 			Pointf newPos = laser.advanceTo(frame);
 			laser.setPos(newPos);
-			if (player.hitTest(laser, 2.0))
+			if (player.hitTest(laser, 1.0))
 			{
 				laser.setPos(oldPos);
 				return true;
@@ -633,7 +589,7 @@ namespace th
 	}
 
 	// 查找道具
-	int_t TH10Bot::findPower()
+	int_t TH10Bot::findItem()
 	{
 		int_t id = -1;
 
@@ -762,14 +718,14 @@ namespace th
 	}
 
 	// 拾取道具评分
-	float_t TH10Bot::getPickupPowerScore(const Player& pNext, int_t powerId)
+	float_t TH10Bot::getPickupItemScore(const Player& pNext, int_t itemId)
 	{
 		float_t score = 0.0;
 
-		if (powerId == -1)
+		if (itemId == -1)
 			return score;
 
-		const Item& item = m_items[powerId];
+		const Item& item = m_items[itemId];
 		if (pNext.hitTest(item, 5.0))
 		{
 			score += 3000.0;
@@ -902,13 +858,13 @@ namespace th
 	}
 
 	// 处理道具
-	//bool TH10Bot::handlePower()
+	//bool TH10Bot::handleItem()
 	//{
 	//	if (checkPickupStatus())
 	//	{
-	//		int_t powerId = findPower();
-	//		if (powerId != -1)
-	//			return pickupPower(powerId);
+	//		int_t itemId = findItem();
+	//		if (itemId != -1)
+	//			return pickupItem(itemId);
 	//	}
 	//	return false;
 	//}
@@ -921,7 +877,7 @@ namespace th
 	//		return false;
 	//
 	//	// 无道具
-	//	if (m_powers.empty())
+	//	if (m_items.empty())
 	//	{
 	//		// 进入冷却
 	//		m_pickupCooldown = m_clock.getTimestamp();
@@ -929,7 +885,7 @@ namespace th
 	//	}
 	//
 	//	// 自机在上半屏，道具少于10个，敌人多于2个
-	//	if (m_player.y < SCENE_HEIGHT / 2.0 && m_powers.size() < 10 && m_enemies.size() > 2)
+	//	if (m_player.y < SCENE_HEIGHT / 2.0 && m_items.size() < 10 && m_enemies.size() > 2)
 	//	{
 	//		// 进入冷却
 	//		m_pickupCooldown = m_clock.getTimestamp();
@@ -948,12 +904,12 @@ namespace th
 	//}
 
 	// 拾取道具
-	//bool TH10Bot::pickupPower(int_t powerId)
+	//bool TH10Bot::pickupItem(int_t itemId)
 	//{
-	//	const Power& power = m_powers[powerId];
+	//	const Item& item = m_items[itemId];
 	//
 	//	// 靠近道具了
-	//	if (m_player.hitTest(power, 5.0))
+	//	if (m_player.hitTest(item, 5.0))
 	//		return true;
 	//
 	//	int_t lastDir = DIR_NONE;
@@ -980,7 +936,7 @@ namespace th
 	//				continue;
 	//		}
 	//
-	//		score += pickupPowerScore(next, power);
+	//		score += pickupItemScore(next, item);
 	//
 	//		if (score > maxScore)
 	//		{
@@ -992,7 +948,7 @@ namespace th
 	//	if (lastDir != DIR_NONE)
 	//		move(lastDir, lastShift);
 	//	else
-	//		std::cout << "pickupPower()无路可走" << std::endl;
+	//		std::cout << "pickupItem()无路可走" << std::endl;
 	//
 	//	return true;
 	//}
