@@ -78,34 +78,34 @@ namespace th
 		m_reader.getEnemies(m_enemies);
 		m_reader.getBullets(m_bullets);
 		m_reader.getLasers(m_lasers);
-		/*
-		// 裁剪弹幕
-		m_redList.clear();
-		m_yellowList.clear();
-		for (uint_t i = 0; i < m_bullets.size(); ++i)
-		{
-			const Bullet& bullet = m_bullets[i];
-			float_t distance = bullet.distance(m_player);
-			if (distance < CLIP_DISTANCE)
-			{
-				float_t footFrame = bullet.footFrame(m_player.getPos());
-				Pointf footPoint = bullet.footPoint(footFrame);
-				float_t angleOfPlayer = bullet.angle(m_player);
-				m_redList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
-			}
-			else
-			{
-				float_t footFrame = bullet.footFrame(m_player.getPos());
-				Pointf footPoint = bullet.footPoint(footFrame);
-				if (m_player.distance(footPoint) < CLIP_DISTANCE)
-				{
-					float_t angleOfPlayer = bullet.angle(m_player);
-					if (angleOfPlayer < CLIP_ANGLE90)
-						m_yellowList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
-				}
-			}
-		}
 
+		// 裁剪弹幕
+		//m_nearbyList.clear();
+		//m_yellowList.clear();
+		//for (uint_t i = 0; i < m_bullets.size(); ++i)
+		//{
+		//	const Bullet& bullet = m_bullets[i];
+		//	float_t distance = bullet.distance(m_player);
+		//	if (distance < CLIP_DISTANCE)
+		//	{
+		//		float_t footFrame = bullet.footFrame(m_player.getPos());
+		//		Pointf footPoint = bullet.footPoint(footFrame);
+		//		float_t angleOfPlayer = bullet.angle(m_player);
+		//		m_nearbyList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
+		//	}
+		//	else
+		//	{
+		//		float_t footFrame = bullet.footFrame(m_player.getPos());
+		//		Pointf footPoint = bullet.footPoint(footFrame);
+		//		if (m_player.distance(footPoint) < CLIP_DISTANCE)
+		//		{
+		//			float_t angleOfPlayer = bullet.angle(m_player);
+		//			if (angleOfPlayer < CLIP_ANGLE)
+		//				m_yellowList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
+		//		}
+		//	}
+		//}
+		/*
 		std::sort(m_redList.begin(), m_redList.end(),
 			[](const BulletLv1& left, const BulletLv1& right)->bool
 		{
@@ -125,7 +125,7 @@ namespace th
 			Pointf oldPos = bullet.getPos();
 			bullet.setPos(it.footPoint);
 			// 自机与子弹前进路径的垂足距离最近，只要与垂足不碰撞，那么与路径上的其他点都不会碰撞。
-			if (!bullet.hitTest(m_player))
+			if (!bullet.collide(m_player))
 			{
 				bullet.setPos(oldPos);
 				continue;
@@ -139,7 +139,7 @@ namespace th
 			{
 				Pointf framePoint = bullet.advanceTo(i);
 				bullet.setPos(framePoint);
-				if (bullet.hitTest(m_player))
+				if (bullet.collide(m_player))
 					minFrame = i;
 				else
 					break;
@@ -253,7 +253,7 @@ namespace th
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
 			cv::rectangle(m_image.m_data, rect, red);
 		}
-		for (const BulletLv1& it : m_redList)
+		for (const BulletLv1& it : m_nearbyList)
 		{
 			const Bullet& bullet = m_bullets[it.index];
 
@@ -341,7 +341,7 @@ namespace th
 		// 放了炸弹3秒后再检测碰撞
 		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
 		{
-			if (hitTestBomb())
+			if (collideBomb())
 			{
 				m_bombCooldown = m_clock.getTimestamp();
 				m_keyX.press();
@@ -353,23 +353,23 @@ namespace th
 		return false;
 	}
 
-	bool TH10Bot::hitTestBomb()
+	bool TH10Bot::collideBomb()
 	{
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (m_player.hitTest(enemy))
+			if (m_player.collide(enemy, 0.0f))
 				return true;
 		}
 
 		for (const Bullet& bullet : m_bullets)
 		{
-			if (m_player.hitTest(bullet))
+			if (m_player.collide(bullet, 0.0f))
 				return true;
 		}
 
 		for (const Laser& laser : m_lasers)
 		{
-			if (m_player.hitTestSAT(laser))
+			if (m_player.collideSAT(laser, 0.0f))
 				return true;
 		}
 
@@ -447,9 +447,9 @@ namespace th
 
 	DfsResult TH10Bot::dfs(const Player& player, int_t frame, int_t depth, int_t itemId, int_t enemyId)
 	{
-		DfsResult res;
+		DfsResult res = { 0.0f, DIR_NONE };
 
-		if (hitTestMove(player, frame))
+		if (collideMove(player, frame))
 		{
 			res.score += -10000.0f;
 			return res;
@@ -471,7 +471,7 @@ namespace th
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
-		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
+		for (int_t i = DIR_HOLD; i < DIR_UP_SLOW; ++i)
 		{
 			Direction dir = DIRECTIONS[i];
 			assert(dir == i);
@@ -499,42 +499,49 @@ namespace th
 				bestDir = dir;
 			}
 		}
-		res.score += bestScore;
-		res.dir = bestDir;
+		if (bestDir != DIR_NONE)
+		{
+			res.score += bestScore;
+			res.dir = bestDir;
+		}
+		else
+		{
+			std::cout << "ssssssssssssssssssssssbbbbbbbbbbbbbbbbbbbb" << std::endl;
+		}
 		return res;
 	}
 
-	bool TH10Bot::hitTestMove(const Player& player)
+	bool TH10Bot::collideMove(const Player& player)
 	{
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (player.hitTest(enemy, 2.0))
+			if (player.collide(enemy, 2.0))
 				return true;
 		}
 
 		for (const Bullet& bullet : m_bullets)
 		{
-			if (player.hitTest(bullet, 2.0))
+			if (player.collide(bullet, 2.0))
 				return true;
 		}
 
 		for (const Laser& laser : m_lasers)
 		{
-			if (player.hitTestSAT(laser, 2.0))
+			if (player.collideSAT(laser, 2.0))
 				return true;
 		}
 
 		return false;
 	}
 
-	bool TH10Bot::hitTestMove(const Player& player, int_t frame)
+	bool TH10Bot::collideMove(const Player& player, int_t frame)
 	{
 		for (Enemy& enemy : m_enemies)
 		{
 			Pointf oldPos = enemy.getPos();
 			Pointf newPos = enemy.advanceTo(frame);
 			enemy.setPos(newPos);
-			if (player.hitTest(enemy, 1.0))
+			if (player.collide(enemy, 1.0))
 			{
 				enemy.setPos(oldPos);
 				return true;
@@ -547,7 +554,7 @@ namespace th
 			Pointf oldPos = bullet.getPos();
 			Pointf newPos = bullet.advanceTo(frame);
 			bullet.setPos(newPos);
-			if (player.hitTest(bullet, 1.0))
+			if (player.collide(bullet, 1.0))
 			{
 				bullet.setPos(oldPos);
 				return true;
@@ -560,7 +567,7 @@ namespace th
 			Pointf oldPos = laser.getPos();
 			Pointf newPos = laser.advanceTo(frame);
 			laser.setPos(newPos);
-			if (player.hitTest(laser, 1.0))
+			if (player.collideSAT(laser, 1.0))
 			{
 				laser.setPos(oldPos);
 				return true;
@@ -653,7 +660,7 @@ namespace th
 
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (pNext.hitTest(enemy, epsilon))
+			if (pNext.collide(enemy, epsilon))
 			{
 				score = -10000.0;
 				break;
@@ -671,14 +678,14 @@ namespace th
 
 		for (const Bullet& bullet : m_bullets)
 		{
-			if (pNext.hitTest(bullet, epsilon))
+			if (pNext.collide(bullet, epsilon))
 			{
 				score = -10000.0;
 				break;
 			}
 
 			Bullet bNext = bullet.advance();
-			if (pNext.hitTest(bNext, epsilon))
+			if (pNext.collide(bNext, epsilon))
 			{
 				score = -10000.0;
 				break;
@@ -694,7 +701,7 @@ namespace th
 
 		for (const Laser& laser : m_lasers)
 		{
-			if (pNext.hitTestSAT(laser, epsilon))
+			if (pNext.collideSAT(laser, epsilon))
 			{
 				score = -10000.0;
 				break;
@@ -726,7 +733,7 @@ namespace th
 			return score;
 
 		const Item& item = m_items[itemId];
-		if (pNext.hitTest(item, 5.0))
+		if (pNext.collide(item, 5.0))
 		{
 			score += 3000.0;
 		}
@@ -909,7 +916,7 @@ namespace th
 	//	const Item& item = m_items[itemId];
 	//
 	//	// 靠近道具了
-	//	if (m_player.hitTest(item, 5.0))
+	//	if (m_player.collide(item, 5.0))
 	//		return true;
 	//
 	//	int_t lastDir = DIR_NONE;
@@ -925,14 +932,14 @@ namespace th
 	//		float_t yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(xNext, yNext);
 	//		Player next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
-	//		if (hitTest(next, 0.0))
+	//		if (collide(next, 0.0))
 	//		{
 	//			shift = true;
 	//			xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
 	//			yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
 	//			FixPos(xNext, yNext);
 	//			next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
-	//			if (hitTest(next, 0.0))
+	//			if (collide(next, 0.0))
 	//				continue;
 	//		}
 	//
@@ -995,14 +1002,14 @@ namespace th
 	//		float_t yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(xNext, yNext);
 	//		Player next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
-	//		if (hitTest(next, 0.0))
+	//		if (collide(next, 0.0))
 	//		{
 	//			shift = true;
 	//			xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
 	//			yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
 	//			FixPos(xNext, yNext);
 	//			next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
-	//			if (hitTest(next, 0.0))
+	//			if (collide(next, 0.0))
 	//				continue;
 	//		}
 	//
@@ -1033,7 +1040,7 @@ namespace th
 	//		float_t score = 0.0;
 	//
 	//		// 在敌机范围50外 
-	//		if (!next.hitTest(enemy, 50.0))
+	//		if (!next.collide(enemy, 50.0))
 	//		{
 	//			score += 100.0;
 	//		}
@@ -1054,7 +1061,7 @@ namespace th
 	//void TH10Bot::goback()
 	//{
 	//	// 靠近初始位置了
-	//	if (m_player.hitTest(INIT_RECT, 5.0))
+	//	if (m_player.collide(INIT_RECT, 5.0))
 	//	{
 	//		move(DIR_CENTER, false);
 	//		return;
@@ -1073,14 +1080,14 @@ namespace th
 	//		float_t nextY = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
 	//		FixPos(nextX, nextY);
 	//		Player player = { static_cast<float_t>(nextX), static_cast<float_t>(nextY), m_player.w, m_player.h };
-	//		if (hitTest(player, 0.0))
+	//		if (collide(player, 0.0))
 	//		{
 	//			shift = true;
 	//			nextX = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
 	//			nextY = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
 	//			FixPos(nextX, nextY);
 	//			player = { static_cast<float_t>(nextX), static_cast<float_t>(nextY), m_player.w, m_player.h };
-	//			if (hitTest(player, 0.0))
+	//			if (collide(player, 0.0))
 	//				continue;
 	//		}
 	//

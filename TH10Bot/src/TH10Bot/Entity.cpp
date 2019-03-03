@@ -56,10 +56,15 @@ namespace th
 		return Pointf(x + dx * frame, y + dy * frame);
 	}
 
-	bool Entity::hitTest(const Entity& other, float_t epsilon) const
+	bool Entity::collide(const Entity& other, float_t epsilon) const
 	{
 		return std::abs(x - other.x) < (width + other.width) / 2.0f + epsilon
 			&& std::abs(y - other.y) < (height + other.height) / 2.0f + epsilon;
+	}
+
+	bool Entity::collide2(const Entity& other) const
+	{
+		return getBottomRight() > other.getTopLeft() && other.getBottomRight() > getTopLeft();
 	}
 
 	Pointf Entity::getPos() const
@@ -110,14 +115,14 @@ namespace th
 		return Pointf(x, y);
 	}
 
-	bool Player::hitTestSAT(const Laser& laser, float_t epsilon) const
+	bool Player::collideSAT(const Laser& laser, float_t epsilon) const
 	{
 		LaserBox laserBox(laser);
-		if (!laserBox.hitTestSAT(*this, epsilon))
+		if (!laserBox.collideSAT(*this, epsilon))
 			return false;
 
 		PlayerBox playerBox(*this, laser);
-		if (!playerBox.hitTestSAT(laser, epsilon))
+		if (!playerBox.collideSAT(laser, epsilon))
 			return false;
 
 		return true;
@@ -141,7 +146,7 @@ namespace th
 		y = y0;
 	}
 
-	bool SATBox::HitTest(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon)
+	bool SATBox::Collide(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon)
 	{
 		return std::abs(c1 - c2) < (d1 + d2) / 2.0 + epsilon;
 	}
@@ -161,16 +166,16 @@ namespace th
 	}
 
 	// 分离轴定理
-	bool LaserBox::hitTestSAT(const Player& player, float_t epsilon) const
+	bool LaserBox::collideSAT(const Player& player, float_t epsilon) const
 	{
 		float_t xMin = std::min(std::min(x1, x2), std::min(x3, x4));
 		float_t xMax = std::max(std::max(x1, x2), std::max(x3, x4));
-		if (!HitTest(xMin + (xMax - xMin) / 2.0, xMax - xMin, player.x, player.width, epsilon))
+		if (!Collide(xMin + (xMax - xMin) / 2.0, xMax - xMin, player.x, player.width, epsilon))
 			return false;
 
 		float_t yMin = std::min(std::min(y1, y2), std::min(y3, y4));
 		float_t yMax = std::max(std::max(y1, y2), std::max(y3, y4));
-		if (!HitTest(yMin + (yMax - yMin) / 2.0, yMax - yMin, player.y, player.height, epsilon))
+		if (!Collide(yMin + (yMax - yMin) / 2.0, yMax - yMin, player.y, player.height, epsilon))
 			return false;
 
 		return true;
@@ -192,16 +197,16 @@ namespace th
 	}
 
 	// 分离轴定理
-	bool PlayerBox::hitTestSAT(const Laser& laser, float_t epsilon) const
+	bool PlayerBox::collideSAT(const Laser& laser, float_t epsilon) const
 	{
 		float_t xMin = std::min(std::min(x1, x2), std::min(x3, x4));
 		float_t xMax = std::max(std::max(x1, x2), std::max(x3, x4));
-		if (!HitTest(xMin + (xMax - xMin) / 2.0, xMax - xMin, laser.x, laser.width, epsilon))
+		if (!Collide(xMin + (xMax - xMin) / 2.0, xMax - xMin, laser.x, laser.width, epsilon))
 			return false;
 
 		float_t yMin = std::min(std::min(y1, y2), std::min(y3, y4));
 		float_t yMax = std::max(std::max(y1, y2), std::max(y3, y4));
-		if (!HitTest(yMin + (yMax - yMin) / 2.0, yMax - yMin, laser.y + laser.height / 2.0, laser.height, epsilon))
+		if (!Collide(yMin + (yMax - yMin) / 2.0, yMax - yMin, laser.y + laser.height / 2.0, laser.height, epsilon))
 			return false;
 
 		return true;

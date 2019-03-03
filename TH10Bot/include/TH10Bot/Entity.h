@@ -25,7 +25,8 @@ namespace th
 		Pointf footPoint(float_t footFrame) const;
 		Pointf advanceTo(int_t frame) const;
 
-		bool hitTest(const Entity& other, float_t epsilon = 0.0f) const;
+		bool collide(const Entity& other, float_t epsilon) const;
+		bool collide2(const Entity& other) const;
 
 		Pointf getPos() const;
 		void setPos(const Pointf& pos);
@@ -54,7 +55,7 @@ namespace th
 
 		Pointf getNextPos(int_t dir, bool slow) const;
 
-		bool hitTestSAT(const Laser& laser, float_t epsilon = 0.0f) const;
+		bool collideSAT(const Laser& laser, float_t epsilon = 0.0f) const;
 
 		float_t powers;
 
@@ -137,7 +138,7 @@ namespace th
 	{
 	public:
 		static void PointRotate(float_t& x, float_t& y, float_t cx, float_t cy, float_t radian);
-		static bool HitTest(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon);
+		static bool Collide(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon);
 
 		//SATBox() :
 		//	x1(), y1(),
@@ -157,7 +158,7 @@ namespace th
 		//LaserBox() = default;
 		LaserBox(const Laser& laser);
 
-		bool hitTestSAT(const Player& player, float_t epsilon = 0.0) const;
+		bool collideSAT(const Player& player, float_t epsilon = 0.0) const;
 	};
 
 	struct PlayerBox :
@@ -166,6 +167,6 @@ namespace th
 		//PlayerBox() = default;
 		PlayerBox(const Player& player, const Laser& laser);
 
-		bool hitTestSAT(const Laser& laser, float_t epsilon = 0.0) const;
+		bool collideSAT(const Laser& laser, float_t epsilon = 0.0) const;
 	};
 }

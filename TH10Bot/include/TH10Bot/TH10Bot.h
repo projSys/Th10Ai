@@ -46,7 +46,7 @@ namespace th
 
 
 	private:
-		int16_t m_map[200][200];
+		int_t m_map[448][384];
 	};
 
 	class FrameAxis
@@ -74,10 +74,6 @@ namespace th
 	{
 		float_t score;
 		Direction dir;
-
-		DfsResult() :
-			score(0.0f), dir(DIR_NONE)
-		{}
 	};
 
 	class TH10Bot
@@ -97,7 +93,7 @@ namespace th
 		static float_t GetDistYScore(float_t yNext, float_t yTarget);
 
 		bool handleBomb();
-		bool hitTestBomb();
+		bool collideBomb();
 
 		bool handleTalk();
 
@@ -105,8 +101,8 @@ namespace th
 
 		bool handleMove();
 		DfsResult dfs(const Player& player, int_t frame, int_t depth, int_t itemId, int_t enemyId);
-		bool hitTestMove(const Player& player);
-		bool hitTestMove(const Player& player, int_t frame);
+		bool collideMove(const Player& player);
+		bool collideMove(const Player& player, int_t frame);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
 		int_t findItem();
 		int_t findEnemy();
@@ -153,7 +149,7 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		std::vector<BulletLv1> m_redList;
+		std::vector<BulletLv1> m_nearbyList;
 		std::vector<BulletLv1> m_yellowList;
 		std::vector<std::vector<ActionLv1>> m_actions;
 
