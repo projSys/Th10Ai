@@ -21,7 +21,7 @@ namespace th
 
 	private:
 		template <typename T>
-		inline T readMemory(uintptr_t baseAddr)
+		T readMemory(uintptr_t baseAddr)
 		{
 			T value = T();
 			ReadProcessMemory(m_process, reinterpret_cast<LPCVOID>(baseAddr), &value, sizeof(value), nullptr);

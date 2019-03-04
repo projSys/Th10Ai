@@ -12,9 +12,9 @@ namespace th
 	{
 	public:
 		Entity() :
-			x(), y(), width(), height(), dx(), dy() {}
-		Entity(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
-			x(x0), y(y0), width(width0), height(height0), dx(dx0), dy(dy0) {}
+			x(), y(), dx(), dy(), width(), height() {}
+		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
+			x(x0), y(y0), dx(dx0), dy(dy0), width(width0), height(height0) {}
 
 		float_t distance(const Pointf& pos) const;
 		float_t distance(const Entity& other) const;
@@ -32,26 +32,28 @@ namespace th
 		void setPos(const Pointf& pos);
 		Pointf getTopLeft() const;
 		Pointf getBottomRight() const;
-		Sizef getSize() const;
-		Rectf getRect() const;
 		bool isResting() const;
 		Pointf getNextPos() const;
+		Sizef getSize() const;
+		Rectf getRect() const;
 
 		float_t x;			// ÖÐÐÄµã
 		float_t y;
-		float_t width;
-		float_t height;
 		float_t dx;
 		float_t dy;
+		float_t width;
+		float_t height;
 	};
 
 	class Player :
 		public Entity
 	{
 	public:
-		Player() {};
-		Player(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
-			Entity(x0, y0, width0, height0, dx0, dy0) {}
+		Player() :
+			powers(), life(), type(), slow(), itemObtainRange(), status(), invinibleTime() {}
+		Player(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
+			Entity(x0, y0, dx0, dy0, width0, height0),
+			powers(), life(), type(), slow(), itemObtainRange(), status(), invinibleTime() {}
 
 		Pointf getNextPos(int_t dir, bool slow) const;
 
@@ -86,9 +88,12 @@ namespace th
 		public Entity
 	{
 	public:
-		Item() {};
-		Item(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
-			Entity(x0, y0, width0, height0, dx0, dy0) {}
+		Item() :
+			type() {}
+		Item(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
+			Entity(x0, y0, dx0, dy0, width0, height0), type() {}
+
+		int32_t type;
 	};
 
 	class Enemy :
@@ -96,8 +101,8 @@ namespace th
 	{
 	public:
 		Enemy() {};
-		Enemy(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
-			Entity(x0, y0, width0, height0, dx0, dy0) {}
+		Enemy(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
+			Entity(x0, y0, dx0, dy0, width0, height0) {}
 	};
 
 	class Bullet :
@@ -105,8 +110,8 @@ namespace th
 	{
 	public:
 		Bullet() {};
-		Bullet(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0) :
-			Entity(x0, y0, width0, height0, dx0, dy0) {}
+		Bullet(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
+			Entity(x0, y0, dx0, dy0, width0, height0) {}
 
 		Bullet advance() const;
 	};
@@ -128,8 +133,8 @@ namespace th
 	public:
 		Laser() :
 			radian() {}
-		Laser(float_t x0, float_t y0, float_t width0, float_t height0, float_t dx0, float_t dy0, float_t radian0) :
-			Entity(x0, y0, width0, height0, dx0, dy0), radian(radian0) {}
+		Laser(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0, float_t radian0) :
+			Entity(x0, y0, dx0, dy0, width0, height0), radian(radian0) {}
 
 		float_t radian;
 	};

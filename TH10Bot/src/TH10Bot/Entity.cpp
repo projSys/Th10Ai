@@ -1,6 +1,10 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/Entity.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <cmath>
+
 #include "TH10Bot/MyMath.h"
 
 namespace th
@@ -88,16 +92,6 @@ namespace th
 		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
 
-	Sizef Entity::getSize() const
-	{
-		return Sizef(width, height);
-	}
-
-	Rectf Entity::getRect() const
-	{
-		return Rectf(getTopLeft(), getSize());
-	}
-
 	bool Entity::isResting() const
 	{
 		return TypeTraits<float_t>::IsZero(dx) && TypeTraits<float_t>::IsZero(dy);
@@ -106,6 +100,16 @@ namespace th
 	Pointf Entity::getNextPos() const
 	{
 		return Pointf(x + dx, y + dy);
+	}
+
+	Sizef Entity::getSize() const
+	{
+		return Sizef(width, height);
+	}
+
+	Rectf Entity::getRect() const
+	{
+		return Rectf(getTopLeft(), getSize());
 	}
 
 
@@ -148,17 +152,17 @@ namespace th
 
 	bool SATBox::Collide(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon)
 	{
-		return std::abs(c1 - c2) < (d1 + d2) / 2.0 + epsilon;
+		return std::abs(c1 - c2) < (d1 + d2) / 2.0f + epsilon;
 	}
 
 	LaserBox::LaserBox(const Laser& laser)
 	{
-		x1 = laser.x - laser.width / 2.0; y1 = laser.y;
-		x2 = laser.x + laser.width / 2.0; y2 = laser.y;
-		x3 = laser.x - laser.width / 2.0; y3 = laser.y + laser.height;
-		x4 = laser.x + laser.width / 2.0; y4 = laser.y + laser.height;
+		x1 = laser.x - laser.width / 2.0f; y1 = laser.y;
+		x2 = laser.x + laser.width / 2.0f; y2 = laser.y;
+		x3 = laser.x - laser.width / 2.0f; y3 = laser.y + laser.height;
+		x4 = laser.x + laser.width / 2.0f; y4 = laser.y + laser.height;
 		// emmm?
-		float_t radian = laser.radian - 3.14159265358979323846 * 5.0 / 2.0;
+		float_t radian = laser.radian - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
 		PointRotate(x1, y1, laser.x, laser.y, radian);
 		PointRotate(x2, y2, laser.x, laser.y, radian);
 		PointRotate(x3, y3, laser.x, laser.y, radian);
@@ -170,12 +174,12 @@ namespace th
 	{
 		float_t xMin = std::min(std::min(x1, x2), std::min(x3, x4));
 		float_t xMax = std::max(std::max(x1, x2), std::max(x3, x4));
-		if (!Collide(xMin + (xMax - xMin) / 2.0, xMax - xMin, player.x, player.width, epsilon))
+		if (!Collide(xMin + (xMax - xMin) / 2.0f, xMax - xMin, player.x, player.width, epsilon))
 			return false;
 
 		float_t yMin = std::min(std::min(y1, y2), std::min(y3, y4));
 		float_t yMax = std::max(std::max(y1, y2), std::max(y3, y4));
-		if (!Collide(yMin + (yMax - yMin) / 2.0, yMax - yMin, player.y, player.height, epsilon))
+		if (!Collide(yMin + (yMax - yMin) / 2.0f, yMax - yMin, player.y, player.height, epsilon))
 			return false;
 
 		return true;
@@ -184,12 +188,12 @@ namespace th
 	// 反向旋转画布，即把激光转回来，再反向旋转自机坐标
 	PlayerBox::PlayerBox(const Player& player, const Laser& laser)
 	{
-		x1 = player.x - player.width / 2.0; y1 = player.y - player.height / 2.0;
-		x2 = player.x + player.width / 2.0; y2 = player.y - player.height / 2.0;
-		x3 = player.x - player.width / 2.0; y3 = player.y + player.height / 2.0;
-		x4 = player.x + player.width / 2.0; y4 = player.y + player.height / 2.0;
+		x1 = player.x - player.width / 2.0f; y1 = player.y - player.height / 2.0f;
+		x2 = player.x + player.width / 2.0f; y2 = player.y - player.height / 2.0f;
+		x3 = player.x - player.width / 2.0f; y3 = player.y + player.height / 2.0f;
+		x4 = player.x + player.width / 2.0f; y4 = player.y + player.height / 2.0f;
 		// emmm?
-		float_t radian = laser.radian - 3.14159265358979323846 * 5.0 / 2.0;
+		float_t radian = laser.radian - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
 		PointRotate(x1, y1, laser.x, laser.y, -radian);
 		PointRotate(x2, y2, laser.x, laser.y, -radian);
 		PointRotate(x3, y3, laser.x, laser.y, -radian);
@@ -201,12 +205,12 @@ namespace th
 	{
 		float_t xMin = std::min(std::min(x1, x2), std::min(x3, x4));
 		float_t xMax = std::max(std::max(x1, x2), std::max(x3, x4));
-		if (!Collide(xMin + (xMax - xMin) / 2.0, xMax - xMin, laser.x, laser.width, epsilon))
+		if (!Collide(xMin + (xMax - xMin) / 2.0f, xMax - xMin, laser.x, laser.width, epsilon))
 			return false;
 
 		float_t yMin = std::min(std::min(y1, y2), std::min(y3, y4));
 		float_t yMax = std::max(std::max(y1, y2), std::max(y3, y4));
-		if (!Collide(yMin + (yMax - yMin) / 2.0, yMax - yMin, laser.y + laser.height / 2.0, laser.height, epsilon))
+		if (!Collide(yMin + (yMax - yMin) / 2.0f, yMax - yMin, laser.y + laser.height / 2.0f, laser.height, epsilon))
 			return false;
 
 		return true;

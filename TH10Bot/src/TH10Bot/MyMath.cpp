@@ -23,6 +23,6 @@ namespace th
 		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
 		float_t radian = std::acos(cosA);
 		// ½Ç¶È = »¡¶È * 180 / PI
-		return static_cast<float_t>(radian * 180.0f / M_PI);
+		return radian * 180.0f / static_cast<float_t>(M_PI);
 	}
 }

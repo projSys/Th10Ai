@@ -21,6 +21,11 @@ namespace th
 		m_shootCooldown(0),
 		m_pickupCooldown(0)
 	{
+		m_items.reserve(2000);
+		m_enemies.reserve(2000);
+		m_bullets.reserve(2000);
+		m_lasers.reserve(2000);
+
 		srand((unsigned int)time(nullptr));
 	}
 
@@ -80,31 +85,31 @@ namespace th
 		m_reader.getLasers(m_lasers);
 
 		// 裁剪弹幕
-		//m_nearbyList.clear();
-		//m_yellowList.clear();
-		//for (uint_t i = 0; i < m_bullets.size(); ++i)
-		//{
-		//	const Bullet& bullet = m_bullets[i];
-		//	float_t distance = bullet.distance(m_player);
-		//	if (distance < CLIP_DISTANCE)
-		//	{
-		//		float_t footFrame = bullet.footFrame(m_player.getPos());
-		//		Pointf footPoint = bullet.footPoint(footFrame);
-		//		float_t angleOfPlayer = bullet.angle(m_player);
-		//		m_nearbyList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
-		//	}
-		//	else
-		//	{
-		//		float_t footFrame = bullet.footFrame(m_player.getPos());
-		//		Pointf footPoint = bullet.footPoint(footFrame);
-		//		if (m_player.distance(footPoint) < CLIP_DISTANCE)
-		//		{
-		//			float_t angleOfPlayer = bullet.angle(m_player);
-		//			if (angleOfPlayer < CLIP_ANGLE)
-		//				m_yellowList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
-		//		}
-		//	}
-		//}
+		m_nearbyList.clear();
+		m_yellowList.clear();
+		for (uint_t i = 0; i < m_bullets.size(); ++i)
+		{
+			const Bullet& bullet = m_bullets[i];
+			float_t distance = bullet.distance(m_player);
+			if (distance < CLIP_DISTANCE)
+			{
+				float_t footFrame = bullet.footFrame(m_player.getPos());
+				Pointf footPoint = bullet.footPoint(footFrame);
+				float_t angleOfPlayer = bullet.angle(m_player);
+				m_nearbyList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
+			}
+			else
+			{
+				float_t footFrame = bullet.footFrame(m_player.getPos());
+				Pointf footPoint = bullet.footPoint(footFrame);
+				if (m_player.distance(footPoint) < CLIP_DISTANCE)
+				{
+					float_t angleOfPlayer = bullet.angle(m_player);
+					if (angleOfPlayer < CLIP_ANGLE)
+						m_yellowList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
+				}
+			}
+		}
 		/*
 		std::sort(m_redList.begin(), m_redList.end(),
 			[](const BulletLv1& left, const BulletLv1& right)->bool
@@ -339,16 +344,17 @@ namespace th
 		}
 
 		// 放了炸弹3秒后再检测碰撞
-		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
-		{
-			if (collideBomb())
+		//if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
+		//{
+			//if (collideBomb())
+			if (m_player.status == 4)
 			{
-				m_bombCooldown = m_clock.getTimestamp();
+				//m_bombCooldown = m_clock.getTimestamp();
 				m_keyX.press();
 				//std::cout << "炸弹 PRESS" << std::endl;
 				return true;
 			}
-		}
+		//}
 
 		return false;
 	}
@@ -434,7 +440,7 @@ namespace th
 		int_t itemId = findItem();
 		int_t enemyId = findEnemy();
 
-		DfsResult res = dfs(m_player, 0, 2, itemId, enemyId);
+		DfsResult res = dfs(m_player, 0, 3, itemId, enemyId);
 		std::cout << res.score << " " << res.dir << std::endl;
 
 		if (res.dir != DIR_NONE)
@@ -471,7 +477,7 @@ namespace th
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
-		for (int_t i = DIR_HOLD; i < DIR_UP_SLOW; ++i)
+		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
 			Direction dir = DIRECTIONS[i];
 			assert(dir == i);
@@ -490,7 +496,9 @@ namespace th
 			if (!Scene::IsInScene(Pointf(nextX, nextY)))
 				continue;
 
-			Player nextPlayer(nextX, nextY, m_player.width, m_player.height, m_player.dx, m_player.dy);
+			Player nextPlayer = player;
+			nextPlayer.x = nextX;
+			nextPlayer.y = nextY;
 
 			DfsResult nextRes = dfs(nextPlayer, frame + 1, depth - 1, itemId, enemyId);
 			if (nextRes.score > bestScore)
@@ -511,29 +519,6 @@ namespace th
 		return res;
 	}
 
-	bool TH10Bot::collideMove(const Player& player)
-	{
-		for (const Enemy& enemy : m_enemies)
-		{
-			if (player.collide(enemy, 2.0))
-				return true;
-		}
-
-		for (const Bullet& bullet : m_bullets)
-		{
-			if (player.collide(bullet, 2.0))
-				return true;
-		}
-
-		for (const Laser& laser : m_lasers)
-		{
-			if (player.collideSAT(laser, 2.0))
-				return true;
-		}
-
-		return false;
-	}
-
 	bool TH10Bot::collideMove(const Player& player, int_t frame)
 	{
 		for (Enemy& enemy : m_enemies)
@@ -541,7 +526,7 @@ namespace th
 			Pointf oldPos = enemy.getPos();
 			Pointf newPos = enemy.advanceTo(frame);
 			enemy.setPos(newPos);
-			if (player.collide(enemy, 1.0))
+			if (player.collide(enemy, 2.0f))
 			{
 				enemy.setPos(oldPos);
 				return true;
@@ -554,7 +539,7 @@ namespace th
 			Pointf oldPos = bullet.getPos();
 			Pointf newPos = bullet.advanceTo(frame);
 			bullet.setPos(newPos);
-			if (player.collide(bullet, 1.0))
+			if (player.collide(bullet, 2.0f))
 			{
 				bullet.setPos(oldPos);
 				return true;
@@ -567,7 +552,7 @@ namespace th
 			Pointf oldPos = laser.getPos();
 			Pointf newPos = laser.advanceTo(frame);
 			laser.setPos(newPos);
-			if (player.collideSAT(laser, 1.0))
+			if (player.collideSAT(laser, 2.0f))
 			{
 				laser.setPos(oldPos);
 				return true;
@@ -580,16 +565,16 @@ namespace th
 
 	float_t TH10Bot::getTargetScore(const Player& pNext, const Pointf& target)
 	{
-		float_t score = 0.0;
+		float_t score = 0.0f;
 
-		if (pNext.distance(target) < 10.0)
+		if (pNext.distance(target) < 10.0f)
 		{
-			score += 300.0;
+			score += 300.0f;
 		}
 		else
 		{
-			score += 150.0 * (1.0 - GetDistXScore(pNext.x, target.x));
-			score += 150.0 * (1.0 - GetDistYScore(pNext.y, target.y));
+			score += 150.0f * (1.0f - GetDistXScore(pNext.x, target.x));
+			score += 150.0f * (1.0f - GetDistYScore(pNext.y, target.y));
 		}
 
 		return score;
@@ -600,7 +585,7 @@ namespace th
 	{
 		int_t id = -1;
 
-		if (m_player.y < SCENE_SIZE.height / 4)
+		if (m_player.y < SCENE_SIZE.height / 4.0f)
 			return id;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
@@ -609,12 +594,12 @@ namespace th
 			const Item& item = m_items[i];
 
 			// 高于1/5屏
-			if (item.y < SCENE_SIZE.height / 5)
+			if (item.y < SCENE_SIZE.height / 5.0f)
 				continue;
 
 			// 不在自机半屏内
 			float_t dy = std::abs(m_player.y - item.y);
-			if (dy > SCENE_SIZE.height / 4)
+			if (dy > SCENE_SIZE.height / 3.0f)
 				continue;
 
 			// 与自机距离最近的
@@ -634,7 +619,7 @@ namespace th
 	{
 		int_t id = -1;
 
-		if (m_player.y < SCENE_SIZE.height / 4)
+		if (m_player.y < SCENE_SIZE.height / 4.0f)
 			return id;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
@@ -656,13 +641,13 @@ namespace th
 
 	float_t TH10Bot::getDodgeEnemyScore(const Player& pNext, float_t epsilon)
 	{
-		float_t score = 0.0;
+		float_t score = 0.0f;
 
 		for (const Enemy& enemy : m_enemies)
 		{
 			if (pNext.collide(enemy, epsilon))
 			{
-				score = -10000.0;
+				score = -10000.0f;
 				break;
 			}
 		}
@@ -674,20 +659,20 @@ namespace th
 	// 帧同步后还是没法准确地碰撞检测，只好不要靠子弹那么近
 	float_t TH10Bot::getDodgeBulletScore(const Player& pNext, float_t epsilon)
 	{
-		float_t score = 0.0;
+		float_t score = 0.0f;
 
 		for (const Bullet& bullet : m_bullets)
 		{
 			if (pNext.collide(bullet, epsilon))
 			{
-				score = -10000.0;
+				score = -10000.0f;
 				break;
 			}
 
 			Bullet bNext = bullet.advance();
 			if (pNext.collide(bNext, epsilon))
 			{
-				score = -10000.0;
+				score = -10000.0f;
 				break;
 			}
 		}
@@ -697,13 +682,13 @@ namespace th
 
 	float_t TH10Bot::getDodgeLaserScore(const Player& pNext, float_t epsilon)
 	{
-		float_t score = 0.0;
+		float_t score = 0.0f;
 
 		for (const Laser& laser : m_lasers)
 		{
 			if (pNext.collideSAT(laser, epsilon))
 			{
-				score = -10000.0;
+				score = -10000.0f;
 				break;
 			}
 		}
@@ -713,12 +698,12 @@ namespace th
 
 	float_t TH10Bot::getBulletAngleScore(const Player& pNext)
 	{
-		float_t score = 0.0;
+		float_t score = 0.0f;
 
 		for (const Bullet& bullet : m_bullets)
 		{
 			float_t angle = bullet.angle(pNext);
-			score = 10000 * (1.0 - angle / 180.0);
+			score = 10000.0f * (1.0f - angle / 180.0f);
 		}
 
 		return score;
@@ -727,20 +712,20 @@ namespace th
 	// 拾取道具评分
 	float_t TH10Bot::getPickupItemScore(const Player& pNext, int_t itemId)
 	{
-		float_t score = 0.0;
+		float_t score = 0.0f;
 
 		if (itemId == -1)
 			return score;
 
 		const Item& item = m_items[itemId];
-		if (pNext.collide(item, 5.0))
+		if (pNext.collide(item, 5.0f))
 		{
-			score += 3000.0;
+			score += 3000.0f;
 		}
 		else
 		{
-			score += 1500.0 * (1.0 - GetDistXScore(pNext.x, item.x));
-			score += 1500.0 * (1.0 - GetDistYScore(pNext.y, item.y));
+			score += 1500.0f * (1.0f - GetDistXScore(pNext.x, item.x));
+			score += 1500.0f * (1.0f - GetDistYScore(pNext.y, item.y));
 		}
 
 		return score;
@@ -749,23 +734,23 @@ namespace th
 	// 攻击敌人评分
 	float_t TH10Bot::getShootEnemyScore(const Player& pNext, int_t enemyId)
 	{
-		float_t score = 0.0;
+		float_t score = 0.0f;
 
 		if (enemyId == -1)
 			return score;
 
 		const Enemy& enemy = m_enemies[enemyId];
 		float_t dx = std::abs(pNext.x - enemy.x);
-		if (dx < 15.0)
+		if (dx < 15.0f)
 		{
-			score += 300.0;
+			score += 300.0f;
 		}
 		else
 		{
 			// X轴距离越远得分越少
 			if (dx > SCENE_SIZE.width)
 				dx = SCENE_SIZE.width;
-			score += 300.0 * (1.0 - dx / SCENE_SIZE.width);
+			score += 300.0f * (1.0f - dx / SCENE_SIZE.width);
 		}
 
 		return score;
@@ -773,16 +758,16 @@ namespace th
 
 	float_t TH10Bot::getGobackScore(const Player& pNext)
 	{
-		float_t score = 0.0;
+		float_t score = 0.0f;
 
-		if (pNext.distance(INIT_POS) < 10.0)
+		if (pNext.distance(INIT_POS) < 10.0f)
 		{
-			score += 30.0;
+			score += 30.0f;
 		}
 		else
 		{
-			score += 15.0 * (1.0 - GetDistXScore(pNext.x, INIT_POS.x));
-			score += 15.0 * (1.0 - GetDistYScore(pNext.y, INIT_POS.y));
+			score += 15.0f * (1.0f - GetDistXScore(pNext.x, INIT_POS.x));
+			score += 15.0f * (1.0f - GetDistYScore(pNext.y, INIT_POS.y));
 		}
 
 		return score;

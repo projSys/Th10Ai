@@ -10,12 +10,11 @@ namespace th
 
 	bool TH10Reader::getPlayer(Player& player)
 	{
+		player = Player();
+
 		uint32_t baseAddr = readMemory<uint32_t>(0x00477834);
 		if (baseAddr == 0)
-		{
-			player = Player();
 			return false;
-		}
 		player.x = readMemory<float32_t>(baseAddr + 0x3C0);
 		player.y = readMemory<float32_t>(baseAddr + 0x3C4);
 		player.dx = readMemory<int32_t>(baseAddr + 0x3F0) / 100.0f;
@@ -37,6 +36,7 @@ namespace th
 	bool TH10Reader::getItems(std::vector<Item>& items)
 	{
 		items.clear();
+
 		uint32_t baseAddr = readMemory<uint32_t>(0x00477818);
 		if (baseAddr == 0)
 			return false;
@@ -53,11 +53,13 @@ namespace th
 			// eax == 4 到达点的收取范围，自动回收的点
 			if (eax == 1)
 			{
-				float32_t x = readMemory<float32_t>(ebp - 0x4);
-				float32_t y = readMemory<float32_t>(ebp);
-				float32_t dx = readMemory<float32_t>(ebp + 0x8);
-				float32_t dy = readMemory<float32_t>(ebp + 0xC);
-				int32_t type = readMemory<int32_t>(ebp + 0x30);
+				Item item;
+				item.x = readMemory<float32_t>(ebp - 0x4);
+				item.y = readMemory<float32_t>(ebp);
+				item.dx = readMemory<float32_t>(ebp + 0x8);
+				item.dy = readMemory<float32_t>(ebp + 0xC);
+				item.height = item.width = 6.0f;
+				item.type = readMemory<int32_t>(ebp + 0x30);
 				// 正常点分为以下几种
 				// type == 1 Power Items P点（红点）
 				// type == 2 Point Items 得分点（蓝点）
@@ -70,7 +72,7 @@ namespace th
 				// type == 9 Faith Items 信仰点（绿点），满灵力时由P点转化而来
 				// type == 10 Power Items P点（红点），由BOSS掉落
 				// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
-				items.emplace_back(x, y, 6.0f, 6.0f, dx, dy);
+				items.push_back(item);
 			}
 			ebp += 0x3F0;
 		}
@@ -80,6 +82,7 @@ namespace th
 	bool TH10Reader::getEnemies(std::vector<Enemy>& enemies)
 	{
 		enemies.clear();
+
 		uint32_t baseAddr = readMemory<uint32_t>(0x00477704);
 		if (baseAddr == 0)
 			return false;
@@ -96,13 +99,14 @@ namespace th
 			{
 				if ((t & 0x12) == 0)
 				{
-					float32_t x = readMemory<float32_t>(objAddr + 0x2C);
-					float32_t y = readMemory<float32_t>(objAddr + 0x30);
-					float32_t dx = readMemory<float32_t>(objAddr + 0x38);
-					float32_t dy = readMemory<float32_t>(objAddr + 0x3C);
-					float32_t width = readMemory<float32_t>(objAddr + 0xB8);
-					float32_t height = readMemory<float32_t>(objAddr + 0xBC);
-					enemies.emplace_back(x, y, width, height, dx, dy);
+					Enemy enemy;
+					enemy.x = readMemory<float32_t>(objAddr + 0x2C);
+					enemy.y = readMemory<float32_t>(objAddr + 0x30);
+					enemy.dx = readMemory<float32_t>(objAddr + 0x38);
+					enemy.dy = readMemory<float32_t>(objAddr + 0x3C);
+					enemy.width = readMemory<float32_t>(objAddr + 0xB8);
+					enemy.height = readMemory<float32_t>(objAddr + 0xBC);
+					enemies.push_back(enemy);
 				}
 			}
 			if (objNext == 0)
@@ -115,6 +119,7 @@ namespace th
 	bool TH10Reader::getBullets(std::vector<Bullet>& bullets)
 	{
 		bullets.clear();
+
 		uint32_t baseAddr = readMemory<uint32_t>(0x004776F0);
 		if (baseAddr == 0)
 			return false;
@@ -132,13 +137,14 @@ namespace th
 					eax = readMemory<uint32_t>(eax + 0x58);
 					if (!(eax & 0x00000400))
 					{
-						float32_t x = readMemory<float32_t>(ebx + 0x3B4);
-						float32_t y = readMemory<float32_t>(ebx + 0x3B8);
-						float32_t dx = readMemory<float32_t>(ebx + 0x3C0);
-						float32_t dy = readMemory<float32_t>(ebx + 0x3C4);
-						float32_t width = readMemory<float32_t>(ebx + 0x3F0);
-						float32_t height = readMemory<float32_t>(ebx + 0x3F4);
-						bullets.emplace_back(x, y, width, height, dx, dy);
+						Bullet bullet;
+						bullet.x = readMemory<float32_t>(ebx + 0x3B4);
+						bullet.y = readMemory<float32_t>(ebx + 0x3B8);
+						bullet.dx = readMemory<float32_t>(ebx + 0x3C0);
+						bullet.dy = readMemory<float32_t>(ebx + 0x3C4);
+						bullet.width = readMemory<float32_t>(ebx + 0x3F0);
+						bullet.height = readMemory<float32_t>(ebx + 0x3F4);
+						bullets.push_back(bullet);
 					}
 				}
 			}
@@ -150,6 +156,7 @@ namespace th
 	bool TH10Reader::getLasers(std::vector<Laser>& lasers)
 	{
 		lasers.clear();
+
 		uint32_t baseAddr = readMemory<uint32_t>(0x0047781C);
 		if (baseAddr == 0)
 			return false;
@@ -159,14 +166,15 @@ namespace th
 		while (true)
 		{
 			uint32_t objNext = readMemory<uint32_t>(objAddr + 0x8);
-			float32_t x = readMemory<float32_t>(objAddr + 0x24);
-			float32_t y = readMemory<float32_t>(objAddr + 0x28);
-			float32_t dx = readMemory<float32_t>(objAddr + 0x30);
-			float32_t dy = readMemory<float32_t>(objAddr + 0x34);
-			float32_t radian = readMemory<float32_t>(objAddr + 0x3C);
-			float32_t height = readMemory<float32_t>(objAddr + 0x40);
-			float32_t width = readMemory<float32_t>(objAddr + 0x44);
-			lasers.emplace_back(x, y, width, height, dx, dy, radian);
+			Laser laser;
+			laser.x = readMemory<float32_t>(objAddr + 0x24);
+			laser.y = readMemory<float32_t>(objAddr + 0x28);
+			laser.dx = readMemory<float32_t>(objAddr + 0x30);
+			laser.dy = readMemory<float32_t>(objAddr + 0x34);
+			laser.radian = readMemory<float32_t>(objAddr + 0x3C);
+			laser.height = readMemory<float32_t>(objAddr + 0x40);
+			laser.width = readMemory<float32_t>(objAddr + 0x44);
+			lasers.push_back(laser);
 			if (objNext == 0)
 				break;
 			objAddr = objNext;

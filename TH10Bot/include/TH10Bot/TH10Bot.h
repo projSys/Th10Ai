@@ -101,7 +101,6 @@ namespace th
 
 		bool handleMove();
 		DfsResult dfs(const Player& player, int_t frame, int_t depth, int_t itemId, int_t enemyId);
-		bool collideMove(const Player& player);
 		bool collideMove(const Player& player, int_t frame);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
 		int_t findItem();
