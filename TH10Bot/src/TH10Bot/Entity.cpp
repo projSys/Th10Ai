@@ -21,38 +21,64 @@ namespace th
 
 	float_t Entity::angle(const Pointf& pos) const
 	{
-		//if (isResting())
-		//	return -1.0f;
+		if (isResting())
+			return -1.0f;
+
 		return MyMath::Angle(getPos(), getNextPos(), pos);
 	}
 
 	float_t Entity::angle(const Entity& other) const
 	{
-		//if (isResting())
-		//	return -1.0f;
+		if (isResting())
+			return -1.0f;
+
 		return MyMath::Angle(getPos(), getNextPos(), other.getPos());
 	}
 
-	// 点到直线的垂足
-	//Pointf Entity::footPoint(const Pointf& pos) const
-	//{
-	//	//if (isResting())
-	//	//	return Pointf(x, y);
-	//	//Pointf nextPos = getNextPos();
-	//	//float_t u = (other.x - x) * (nextPos.x - x) + (other.y - y) * (nextPos.y - y);
-	//	float_t u = (pos.x - x) * dx + (pos.y - y) * dy;
-	//	u /= (dx * dx + dy * dy);
-	//	return Pointf(x + u * dx, y + u * dy);
-	//}
-
 	float_t Entity::footFrame(const Pointf& pos) const
 	{
+		if (isResting())
+			return 0.0f;
+
 		return ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);
 	}
 
 	Pointf Entity::footPoint(float_t footFrame) const
 	{
 		return Pointf(x + dx * footFrame, y + dy * footFrame);
+	}
+
+	Direction Entity::direction() const
+	{
+		if (isResting())
+			return DIR_NONE;
+
+		Pointf xPos = getPos();
+		xPos.x += SCENE_SIZE.width;	// 按X轴平移
+		float_t angleOfXAxis = angle(xPos);
+		if (dy > 0.0f)	// 转换成360度
+			angleOfXAxis = 360.0f - angleOfXAxis;
+
+		Direction dir;
+		if (angleOfXAxis > 337.5f)
+			dir = DIR_RIGHT;
+		else if (angleOfXAxis > 292.5f)
+			dir = DIR_DOWNRIGHT;
+		else if (angleOfXAxis > 247.5f)
+			dir = DIR_DOWN;
+		else if (angleOfXAxis > 202.5f)
+			dir = DIR_DOWNLEFT;
+		else if (angleOfXAxis > 157.5f)
+			dir = DIR_LEFT;
+		else if (angleOfXAxis > 112.5f)
+			dir = DIR_UPLEFT;
+		else if (angleOfXAxis > 67.5f)
+			dir = DIR_UP;
+		else if (angleOfXAxis > 22.5f)
+			dir = DIR_UPRIGHT;
+		else
+			dir = DIR_RIGHT;
+		return dir;
 	}
 
 	Pointf Entity::advanceTo(int_t frame) const
@@ -114,11 +140,6 @@ namespace th
 
 
 
-	Pointf Player::getNextPos(int_t dir, bool slow) const
-	{
-		return Pointf(x, y);
-	}
-
 	bool Player::collideSAT(const Laser& laser, float_t epsilon) const
 	{
 		LaserBox laserBox(laser);
@@ -130,13 +151,6 @@ namespace th
 			return false;
 
 		return true;
-	}
-
-
-
-	Bullet Bullet::advance() const
-	{
-		return Bullet(x + dx, y + dy, width, height, dx, dy);
 	}
 
 

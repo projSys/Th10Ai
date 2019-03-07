@@ -10,8 +10,8 @@
 
 ## 感谢
 
-[TH10_DataReversing](https://github.com/binvec/TH10_DataReversing)
-
 [TH10AI](https://github.com/Infinideastudio/TH10AI)
+
+[TH10_DataReversing](https://github.com/binvec/TH10_DataReversing)
 
 [twinject](https://github.com/Netdex/twinject)

@@ -20,11 +20,11 @@ namespace th
 		float_t distance(const Entity& other) const;
 		float_t angle(const Pointf& pos) const;
 		float_t angle(const Entity& other) const;
-		//Pointf footPoint(const Pointf& pos) const;
 		float_t footFrame(const Pointf& pos) const;
 		Pointf footPoint(float_t footFrame) const;
-		Pointf advanceTo(int_t frame) const;
+		Direction direction() const;
 
+		Pointf advanceTo(int_t frame) const;
 		bool collide(const Entity& other, float_t epsilon) const;
 		bool collide2(const Entity& other) const;
 
@@ -37,7 +37,7 @@ namespace th
 		Sizef getSize() const;
 		Rectf getRect() const;
 
-		float_t x;			// 中心点
+		float_t x;		// 坐标在中心点
 		float_t y;
 		float_t dx;
 		float_t dy;
@@ -55,31 +55,23 @@ namespace th
 			Entity(x0, y0, dx0, dy0, width0, height0),
 			powers(), life(), type(), slow(), itemObtainRange(), status(), invinibleTime() {}
 
-		Pointf getNextPos(int_t dir, bool slow) const;
-
 		bool collideSAT(const Laser& laser, float_t epsilon = 0.0f) const;
 
 		float_t powers;
-
 		int_t life;
-
 		// type == 0 Reimu
 		// type == 1 Marisa
 		int_t type;
-
 		// slow == 0 High Speed
 		// slow == 1 Low Speed
 		int_t slow;
-
 		float_t itemObtainRange;
-
 		// status == 0 重生状态，此时无敌
 		// status == 1 正常状态
 		// status == 2 死亡
 		// status == 3 Unknown
 		// status == 4 被弹、决死，此时放B可以决死
 		int_t status;
-
 		// 剩余无敌时间
 		int_t invinibleTime;
 	};
@@ -112,10 +104,9 @@ namespace th
 		Bullet() {};
 		Bullet(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
 			Entity(x0, y0, dx0, dy0, width0, height0) {}
-
-		Bullet advance() const;
 	};
 
+	// 激光结构
 	//     (x,y)
 	// +-----+-----+
 	// |     |     |
@@ -133,8 +124,8 @@ namespace th
 	public:
 		Laser() :
 			radian() {}
-		Laser(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0, float_t radian0) :
-			Entity(x0, y0, dx0, dy0, width0, height0), radian(radian0) {}
+		Laser(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
+			Entity(x0, y0, dx0, dy0, width0, height0), radian() {}
 
 		float_t radian;
 	};

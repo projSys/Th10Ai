@@ -6,6 +6,7 @@
 #include <Windows/Process.h>
 #include <Windows/Window.h>
 #include <GraphCap/D3D9FrameSync.h>
+#include <GraphCap/GraphCap.h>
 
 #include "TH10Bot/DesktopCapturerCV.h"
 #include "TH10Bot/DesktopImageCV.h"
@@ -19,22 +20,24 @@ namespace th
 {
 	struct BulletLv1
 	{
-		BulletLv1(uint_t index0, float_t distance0, float_t footFrame0,
-			const Pointf& footPoint0, float_t angleOfPlayer0) :
-			index(index0), distance(distance0), footFrame(footFrame0),
-			footPoint(footPoint0), angleOfPlayer(angleOfPlayer0) {}
+		//BulletLv1() {}
+		//BulletLv1(uint_t index0, float_t distance0, float_t footFrame0,
+		//	const Pointf& footPoint0, float_t angleOfPlayer0) :
+		//	index(index0), distance(distance0), footFrame(footFrame0),
+		//	footPoint(footPoint0), angleOfPlayer(angleOfPlayer0) {}
 
 		uint_t index;
 		float_t distance;
 		float_t footFrame;
 		Pointf footPoint;
-		float_t angleOfPlayer;
+		float_t angle;
+		Direction dir;
 	};
 
 	struct ActionLv1
 	{
-		ActionLv1(uint_t index0, Direction dir0) :
-			index(index0), dir(dir0) {}
+		//ActionLv1(uint_t index0, Direction dir0) :
+		//	index(index0), dir(dir0) {}
 
 		uint_t index;
 		Direction dir;
@@ -134,6 +137,7 @@ namespace th
 		Process m_process;
 		Window m_window;
 		D3D9FrameSync m_sync;
+		GraphCap m_graphCap;
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_image;
 		TH10Reader m_reader;
@@ -148,9 +152,7 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		std::vector<BulletLv1> m_nearbyList;
-		std::vector<BulletLv1> m_yellowList;
-		std::vector<std::vector<ActionLv1>> m_actions;
+		std::vector<BulletLv1> m_focusBullets;
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;

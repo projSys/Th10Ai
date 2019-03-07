@@ -86,8 +86,4 @@ namespace th
 	// 移动速度
 	const float_t MOVE_SPEED = 4.5f;
 	const float_t MOVE_SPEED_SLOW = 2.0f;
-
-	// 裁剪距离和角度
-	const float_t CLIP_DISTANCE = 100.0f;
-	const float_t CLIP_ANGLE = 90.0f;
 }

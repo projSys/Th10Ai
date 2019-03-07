@@ -5,17 +5,19 @@
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
+#define PLAY 1
+
 namespace th
 {
 	TH10Bot::TH10Bot() :
 		m_process(Process::FindByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
-		m_sync(m_process),
+		m_sync(),
+		m_graphCap(m_process, GHT_D3D9FRAMESYNC),
 		m_reader(m_process),
 		m_active(false),
 		m_keyUp(VK_UP), m_keyDown(VK_DOWN), m_keyLeft(VK_LEFT), m_keyRight(VK_RIGHT),
 		m_keyShift(VK_SHIFT), m_keyZ('Z'), m_keyX('X'),
-		m_actions(60 * 30), // 30秒
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_shootCooldown(0),
@@ -25,6 +27,8 @@ namespace th
 		m_enemies.reserve(2000);
 		m_bullets.reserve(2000);
 		m_lasers.reserve(2000);
+
+		m_focusBullets.reserve(500);
 
 		srand((unsigned int)time(nullptr));
 	}
@@ -57,26 +61,26 @@ namespace th
 	{
 		if (!m_active)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			std::this_thread::sleep_for(std::chrono::milliseconds(17));
 			return;
 		}
-
+#if PLAY
 		if (!m_sync.waitForPresent())
 		{
 			std::cout << "等待帧同步超时。" << std::endl;
 			return;
 		}
-
-		//Rect rect = m_window.getClientRect();
-		//if (!m_capturer.capture(m_image, rect))
-		//{
-		//	std::cout << "抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。" << std::endl;
-		//	return;
-		//}
+#else
+		Rect rect = m_window.getClientRect();
+		if (!m_capturer.capture(m_image, rect))
+		{
+			std::cout << "抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。" << std::endl;
+			return;
+		}
+#endif
+		m_clock.update();
 
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
-
-		m_clock.update();
 
 		m_reader.getPlayer(m_player);
 		m_reader.getItems(m_items);
@@ -84,32 +88,33 @@ namespace th
 		m_reader.getBullets(m_bullets);
 		m_reader.getLasers(m_lasers);
 
+		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
+		//std::cout << "e1: " << e1 << std::endl;
+
 		// 裁剪弹幕
-		m_nearbyList.clear();
-		m_yellowList.clear();
+		m_focusBullets.clear();
 		for (uint_t i = 0; i < m_bullets.size(); ++i)
 		{
 			const Bullet& bullet = m_bullets[i];
-			float_t distance = bullet.distance(m_player);
-			if (distance < CLIP_DISTANCE)
+
+			BulletLv1 lv1;
+			lv1.index = i;
+			lv1.distance = bullet.distance(m_player);
+			lv1.footFrame = bullet.footFrame(m_player.getPos());
+			lv1.footPoint = bullet.footPoint(lv1.footFrame);
+			lv1.angle = bullet.angle(m_player);
+			lv1.dir = bullet.direction();
+			if (lv1.distance < 100.0f	// 在附近的
+				|| (m_player.distance(lv1.footPoint) < 100.0f && lv1.angle > 0.0f && lv1.angle < 90.0f))	// 将来可能碰撞的
 			{
-				float_t footFrame = bullet.footFrame(m_player.getPos());
-				Pointf footPoint = bullet.footPoint(footFrame);
-				float_t angleOfPlayer = bullet.angle(m_player);
-				m_nearbyList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
-			}
-			else
-			{
-				float_t footFrame = bullet.footFrame(m_player.getPos());
-				Pointf footPoint = bullet.footPoint(footFrame);
-				if (m_player.distance(footPoint) < CLIP_DISTANCE)
-				{
-					float_t angleOfPlayer = bullet.angle(m_player);
-					if (angleOfPlayer < CLIP_ANGLE)
-						m_yellowList.emplace_back(i, distance, footFrame, footPoint, angleOfPlayer);
-				}
+				m_focusBullets.push_back(lv1);
 			}
 		}
+
+		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+		//std::cout << "e2: " << e2 << std::endl;
 		/*
 		std::sort(m_redList.begin(), m_redList.end(),
 			[](const BulletLv1& left, const BulletLv1& right)->bool
@@ -156,7 +161,7 @@ namespace th
 			Pointf xPos = bullet.getPos();
 			xPos.x += SCENE_SIZE.width;	// 按X轴平移
 			float_t angleOfXAxis = bullet.angle(xPos);
-			if (bullet.dy > 0) // 转换成360度
+			if (bullet.dy > 0)	// 转换成360度
 				angleOfXAxis = 360.0f - angleOfXAxis;
 
 			Direction bulletDir = DIR_NONE;
@@ -214,24 +219,18 @@ namespace th
 		}
 
 		move(lastDir);
-
-		return;
 		*/
-		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
-		//std::cout << "e1: " << e1 << std::endl;
-
+#if PLAY
 		handleBomb();
 		if (!handleTalk())
 			handleShoot();
 		handleMove();
 
-		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-		std::cout << "e2: " << e2 << std::endl;
-
-		return;
-
+		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
+		if (e3 > 10)
+			std::cout << "e3: " << e3 << std::endl;
+#else
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
 		cv::Scalar blue(255, 0, 0);
@@ -243,7 +242,7 @@ namespace th
 		cv::rectangle(m_image.m_data, rect1, green, -1);
 		Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
 		cv::Point center11(windowPos11.x, windowPos11.y);
-		cv::circle(m_image.m_data, center11, int_t(CLIP_DISTANCE), green);
+		cv::circle(m_image.m_data, center11, int_t(100.0f), green);
 
 		//for (const Item& item : m_items)
 		//{
@@ -252,38 +251,58 @@ namespace th
 		//	cv::rectangle(m_image.m_data, rect, blue, -1);
 		//}
 
-		for (const Enemy& enemy : m_enemies)
+		//for (const Enemy& enemy : m_enemies)
+		//{
+		//	Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
+		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
+		//	cv::rectangle(m_image.m_data, rect, red);
+		//}
+		//for (const BulletLv1& it : m_nearbyList)
+		//{
+		//	const Bullet& bullet = m_bullets[it.index];
+
+		//	Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
+		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
+		//	cv::rectangle(m_image.m_data, rect, red, -1);
+		//}
+		for (const BulletLv1& lv1 : m_focusBullets)
 		{
-			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
-			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
-			cv::rectangle(m_image.m_data, rect, red);
-		}
-		for (const BulletLv1& it : m_nearbyList)
-		{
-			const Bullet& bullet = m_bullets[it.index];
+			const Bullet& bullet = m_bullets[lv1.index];
 
 			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, red, -1);
-		}
-		for (const BulletLv1& it : m_yellowList)
-		{
-			const Bullet& bullet = m_bullets[it.index];
 
-			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
-			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-			cv::rectangle(m_image.m_data, rect, yellow, -1);
-
-			Pointi p1 = Scene::ToWindowPos(m_player.getPos());
+			// 显示垂足
+			//Pointi p1 = Scene::ToWindowPos(m_player.getPos());
 			Pointi p2 = Scene::ToWindowPos(bullet.getPos());
-			Pointi p3 = Scene::ToWindowPos(it.footPoint);
-			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), yellow);
-			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p3.x, p3.y), yellow);
-			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), yellow);
+			//Pointi p3 = Scene::ToWindowPos(lv1.footPoint);
+			////cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
+			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p3.x, p3.y), red);
+			//cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
+
+			// 显示方向
+			if (lv1.dir == DIR_UP)
+				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x, p2.y - 10), green);
+			else if (lv1.dir == DIR_DOWN)
+				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x, p2.y + 10), green);
+			else if (lv1.dir == DIR_LEFT)
+				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x - 10, p2.y), green);
+			else if (lv1.dir == DIR_RIGHT)
+				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x + 10, p2.y), green);
+			else if (lv1.dir == DIR_UPLEFT)
+				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x - 10, p2.y - 10), green);
+			else if (lv1.dir == DIR_UPRIGHT)
+				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x + 10, p2.y - 10), green);
+			else if (lv1.dir == DIR_DOWNLEFT)
+				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x - 10, p2.y + 10), green);
+			else if (lv1.dir == DIR_DOWNRIGHT)
+				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x + 10, p2.y + 10), green);
 		}
 
 		cv::imshow("TH10", m_image.m_data);
 		cv::waitKey(1);
+#endif
 	}
 
 	// Y轴系数
@@ -346,14 +365,14 @@ namespace th
 		// 放了炸弹3秒后再检测碰撞
 		//if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
 		//{
-			//if (collideBomb())
-			if (m_player.status == 4)
-			{
-				//m_bombCooldown = m_clock.getTimestamp();
-				m_keyX.press();
-				//std::cout << "炸弹 PRESS" << std::endl;
-				return true;
-			}
+		//	if (collideBomb())
+		if (m_player.status == 4)
+		{
+			//m_bombCooldown = m_clock.getTimestamp();
+			m_keyX.press();
+			std::cout << "炸弹 PRESS" << std::endl;
+			return true;
+		}
 		//}
 
 		return false;
@@ -440,13 +459,12 @@ namespace th
 		int_t itemId = findItem();
 		int_t enemyId = findEnemy();
 
-		DfsResult res = dfs(m_player, 0, 3, itemId, enemyId);
-		std::cout << res.score << " " << res.dir << std::endl;
+		DfsResult res = dfs(m_player, 0, 4, itemId, enemyId);
 
 		if (res.dir != DIR_NONE)
 			move(res.dir);
-		else
-			std::cout << "无路可走。" << std::endl;
+		//else
+		//	std::cout << "无路可走。" << std::endl;
 
 		return true;
 	}
@@ -477,7 +495,7 @@ namespace th
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
-		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
+		for (int_t i = DIR_HOLD; i < DIR_UP_SLOW; ++i)
 		{
 			Direction dir = DIRECTIONS[i];
 			assert(dir == i);
@@ -512,30 +530,32 @@ namespace th
 			res.score += bestScore;
 			res.dir = bestDir;
 		}
-		else
-		{
-			std::cout << "ssssssssssssssssssssssbbbbbbbbbbbbbbbbbbbb" << std::endl;
-		}
+		//else
+		//{
+		//	std::cout << "ssssssssssssssssssssssbbbbbbbbbbbbbbbbbbbb" << std::endl;
+		//}
 		return res;
 	}
 
 	bool TH10Bot::collideMove(const Player& player, int_t frame)
 	{
-		for (Enemy& enemy : m_enemies)
-		{
-			Pointf oldPos = enemy.getPos();
-			Pointf newPos = enemy.advanceTo(frame);
-			enemy.setPos(newPos);
-			if (player.collide(enemy, 2.0f))
-			{
-				enemy.setPos(oldPos);
-				return true;
-			}
-			enemy.setPos(oldPos);
-		}
+		//for (Enemy& enemy : m_enemies)
+		//{
+		//	Pointf oldPos = enemy.getPos();
+		//	Pointf newPos = enemy.advanceTo(frame);
+		//	enemy.setPos(newPos);
+		//	if (player.collide(enemy, 2.0f))
+		//	{
+		//		enemy.setPos(oldPos);
+		//		return true;
+		//	}
+		//	enemy.setPos(oldPos);
+		//}
 
-		for (Bullet& bullet : m_bullets)
+		for (const BulletLv1& lv1 : m_focusBullets)
 		{
+			Bullet& bullet = m_bullets[lv1.index];
+
 			Pointf oldPos = bullet.getPos();
 			Pointf newPos = bullet.advanceTo(frame);
 			bullet.setPos(newPos);
@@ -547,18 +567,18 @@ namespace th
 			bullet.setPos(oldPos);
 		}
 
-		for (Laser& laser : m_lasers)
-		{
-			Pointf oldPos = laser.getPos();
-			Pointf newPos = laser.advanceTo(frame);
-			laser.setPos(newPos);
-			if (player.collideSAT(laser, 2.0f))
-			{
-				laser.setPos(oldPos);
-				return true;
-			}
-			laser.setPos(oldPos);
-		}
+		//for (Laser& laser : m_lasers)
+		//{
+		//	Pointf oldPos = laser.getPos();
+		//	Pointf newPos = laser.advanceTo(frame);
+		//	laser.setPos(newPos);
+		//	if (player.collideSAT(laser, 2.0f))
+		//	{
+		//		laser.setPos(oldPos);
+		//		return true;
+		//	}
+		//	laser.setPos(oldPos);
+		//}
 
 		return false;
 	}
@@ -655,8 +675,6 @@ namespace th
 		return score;
 	}
 
-	// 躲闪子弹评分
-	// 帧同步后还是没法准确地碰撞检测，只好不要靠子弹那么近
 	float_t TH10Bot::getDodgeBulletScore(const Player& pNext, float_t epsilon)
 	{
 		float_t score = 0.0f;
@@ -664,13 +682,6 @@ namespace th
 		for (const Bullet& bullet : m_bullets)
 		{
 			if (pNext.collide(bullet, epsilon))
-			{
-				score = -10000.0f;
-				break;
-			}
-
-			Bullet bNext = bullet.advance();
-			if (pNext.collide(bNext, epsilon))
 			{
 				score = -10000.0f;
 				break;
