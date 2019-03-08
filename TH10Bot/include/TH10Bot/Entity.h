@@ -8,6 +8,15 @@ namespace th
 	class Bullet;
 	class Laser;
 
+	// Ò»°ã½á¹¹
+	// +-----------+
+	// |           |
+	// |   (x,y)   |
+	// |     +     | h
+	// |           |
+	// |           |
+	// +-----------+
+	//       w
 	class Entity
 	{
 	public:
@@ -25,12 +34,13 @@ namespace th
 		Direction direction() const;
 
 		Pointf advanceTo(int_t frame) const;
-		bool collide(const Entity& other, float_t epsilon) const;
-		bool collide2(const Entity& other) const;
+		bool collide(const Entity& other) const;
 
 		Pointf getPos() const;
 		void setPos(const Pointf& pos);
 		Pointf getTopLeft() const;
+		Pointf getTopRight() const;
+		Pointf getBottomLeft() const;
 		Pointf getBottomRight() const;
 		bool isResting() const;
 		Pointf getNextPos() const;
@@ -55,7 +65,7 @@ namespace th
 			Entity(x0, y0, dx0, dy0, width0, height0),
 			powers(), life(), type(), slow(), itemObtainRange(), status(), invinibleTime() {}
 
-		bool collideSAT(const Laser& laser, float_t epsilon = 0.0f) const;
+		bool collideSAT(const Laser& laser) const;
 
 		float_t powers;
 		int_t life;
@@ -123,46 +133,44 @@ namespace th
 	{
 	public:
 		Laser() :
-			radian() {}
+			arc() {}
 		Laser(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
-			Entity(x0, y0, dx0, dy0, width0, height0), radian() {}
+			Entity(x0, y0, dx0, dy0, width0, height0), arc() {}
 
-		float_t radian;
+		Pointf getTopLeft() const;
+		Pointf getTopRight() const;
+		Pointf getBottomLeft() const;
+		Pointf getBottomRight() const;
+
+		float_t arc;
 	};
 
 	class SATBox
 	{
 	public:
-		static void PointRotate(float_t& x, float_t& y, float_t cx, float_t cy, float_t radian);
-		static bool Collide(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon);
+		static bool Collide(float_t p1, float_t l1, float_t p2, float_t l2);
 
-		//SATBox() :
-		//	x1(), y1(),
-		//	x2(), y2(),
-		//	x3(), y3(),
-		//	x4(), y4() {}
-
-		float_t x1, y1;
-		float_t x2, y2;
-		float_t x3, y3;
-		float_t x4, y4;
+		Pointf topLeft;
+		Pointf topRight;
+		Pointf bottomLeft;
+		Pointf bottomRight;
 	};
 
-	struct LaserBox :
-		SATBox
+	class LaserBox :
+		public SATBox
 	{
-		//LaserBox() = default;
+	public:
 		LaserBox(const Laser& laser);
 
-		bool collideSAT(const Player& player, float_t epsilon = 0.0) const;
+		bool collideSAT(const Player& player) const;
 	};
 
-	struct PlayerBox :
-		SATBox
+	class PlayerBox :
+		public SATBox
 	{
-		//PlayerBox() = default;
+	public:
 		PlayerBox(const Player& player, const Laser& laser);
 
-		bool collideSAT(const Laser& laser, float_t epsilon = 0.0) const;
+		bool collideSAT(const Laser& laser) const;
 	};
 }

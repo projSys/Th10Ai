@@ -5,7 +5,7 @@
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
-#define PLAY 1
+#define PLAY 0
 
 namespace th
 {
@@ -29,6 +29,7 @@ namespace th
 		m_lasers.reserve(2000);
 
 		m_focusBullets.reserve(500);
+		m_focusLasers.reserve(300);
 
 		srand((unsigned int)time(nullptr));
 	}
@@ -111,6 +112,24 @@ namespace th
 				m_focusBullets.push_back(lv1);
 			}
 		}
+		//m_focusLasers.clear();
+		//for (uint_t i = 0; i < m_lasers.size(); ++i)
+		//{
+		//	const Laser& laser = m_lasers[i];
+
+		//	LaserLv1 lv1;
+		//	lv1.index = i;
+		//	lv1.distance = laser.distance(m_player);
+		//	lv1.footFrame = laser.footFrame(m_player.getPos());
+		//	lv1.footPoint = laser.footPoint(lv1.footFrame);
+		//	lv1.angle = laser.angle(m_player);
+		//	lv1.dir = laser.direction();
+		//	if (lv1.distance < 100.0f	// 在附近的
+		//		|| (m_player.distance(lv1.footPoint) < 100.0f && lv1.angle > 0.0f && lv1.angle < 90.0f))	// 将来可能碰撞的
+		//	{
+		//		m_focusLasers.push_back(lv1);
+		//	}
+		//}
 
 		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -227,7 +246,7 @@ namespace th
 		handleMove();
 
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
-		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
+		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
 		if (e3 > 10)
 			std::cout << "e3: " << e3 << std::endl;
 #else
@@ -274,9 +293,9 @@ namespace th
 			cv::rectangle(m_image.m_data, rect, red, -1);
 
 			// 显示垂足
-			//Pointi p1 = Scene::ToWindowPos(m_player.getPos());
+			Pointi p1 = Scene::ToWindowPos(m_player.getPos());
 			Pointi p2 = Scene::ToWindowPos(bullet.getPos());
-			//Pointi p3 = Scene::ToWindowPos(lv1.footPoint);
+			Pointi p3 = Scene::ToWindowPos(lv1.footPoint);
 			////cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
 			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p3.x, p3.y), red);
 			//cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
@@ -299,6 +318,22 @@ namespace th
 			else if (lv1.dir == DIR_DOWNRIGHT)
 				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x + 10, p2.y + 10), green);
 		}
+
+		//for (const Laser& laser : m_lasers)
+		////for (const LaserLv1& lv1 : m_focusLasers)
+		//{
+		//	//const Laser& laser = m_lasers[lv1.index];
+
+		//	LaserBox laserBox(laser);
+		//	Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
+		//	Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
+		//	Pointi p3 = Scene::ToWindowPos(laserBox.bottomLeft);
+		//	Pointi p4 = Scene::ToWindowPos(laserBox.bottomRight);
+		//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
+		//	cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
+		//	cv::line(m_image.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
+		//	cv::line(m_image.m_data, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), red);
+		//}
 
 		cv::imshow("TH10", m_image.m_data);
 		cv::waitKey(1);
@@ -370,7 +405,7 @@ namespace th
 		{
 			//m_bombCooldown = m_clock.getTimestamp();
 			m_keyX.press();
-			std::cout << "炸弹 PRESS" << std::endl;
+			//std::cout << "炸弹 PRESS" << std::endl;
 			return true;
 		}
 		//}
@@ -382,19 +417,19 @@ namespace th
 	{
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (m_player.collide(enemy, 0.0f))
+			if (m_player.collide(enemy))
 				return true;
 		}
 
 		for (const Bullet& bullet : m_bullets)
 		{
-			if (m_player.collide(bullet, 0.0f))
+			if (m_player.collide(bullet))
 				return true;
 		}
 
 		for (const Laser& laser : m_lasers)
 		{
-			if (m_player.collideSAT(laser, 0.0f))
+			if (m_player.collideSAT(laser))
 				return true;
 		}
 
@@ -459,7 +494,7 @@ namespace th
 		int_t itemId = findItem();
 		int_t enemyId = findEnemy();
 
-		DfsResult res = dfs(m_player, 0, 4, itemId, enemyId);
+		DfsResult res = dfs(m_player, 0, 3, itemId, enemyId);
 
 		if (res.dir != DIR_NONE)
 			move(res.dir);
@@ -495,7 +530,7 @@ namespace th
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
-		for (int_t i = DIR_HOLD; i < DIR_UP_SLOW; ++i)
+		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
 			Direction dir = DIRECTIONS[i];
 			assert(dir == i);
@@ -544,7 +579,7 @@ namespace th
 		//	Pointf oldPos = enemy.getPos();
 		//	Pointf newPos = enemy.advanceTo(frame);
 		//	enemy.setPos(newPos);
-		//	if (player.collide(enemy, 2.0f))
+		//	if (player.collide(enemy))
 		//	{
 		//		enemy.setPos(oldPos);
 		//		return true;
@@ -559,7 +594,7 @@ namespace th
 			Pointf oldPos = bullet.getPos();
 			Pointf newPos = bullet.advanceTo(frame);
 			bullet.setPos(newPos);
-			if (player.collide(bullet, 2.0f))
+			if (player.collide(bullet))
 			{
 				bullet.setPos(oldPos);
 				return true;
@@ -567,12 +602,14 @@ namespace th
 			bullet.setPos(oldPos);
 		}
 
-		//for (Laser& laser : m_lasers)
+		//for (const LaserLv1& lv1 : m_focusLasers)
 		//{
+		//	Laser& laser = m_lasers[lv1.index];
+
 		//	Pointf oldPos = laser.getPos();
 		//	Pointf newPos = laser.advanceTo(frame);
 		//	laser.setPos(newPos);
-		//	if (player.collideSAT(laser, 2.0f))
+		//	if (player.collideSAT(laser))
 		//	{
 		//		laser.setPos(oldPos);
 		//		return true;
@@ -665,7 +702,7 @@ namespace th
 
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (pNext.collide(enemy, epsilon))
+			if (pNext.collide(enemy))
 			{
 				score = -10000.0f;
 				break;
@@ -681,7 +718,7 @@ namespace th
 
 		for (const Bullet& bullet : m_bullets)
 		{
-			if (pNext.collide(bullet, epsilon))
+			if (pNext.collide(bullet))
 			{
 				score = -10000.0f;
 				break;
@@ -697,7 +734,7 @@ namespace th
 
 		for (const Laser& laser : m_lasers)
 		{
-			if (pNext.collideSAT(laser, epsilon))
+			if (pNext.collideSAT(laser))
 			{
 				score = -10000.0f;
 				break;
@@ -729,7 +766,7 @@ namespace th
 			return score;
 
 		const Item& item = m_items[itemId];
-		if (pNext.collide(item, 5.0f))
+		if (pNext.distance(item) < 5.0f)
 		{
 			score += 3000.0f;
 		}

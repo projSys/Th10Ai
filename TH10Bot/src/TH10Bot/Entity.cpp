@@ -53,9 +53,9 @@ namespace th
 		if (isResting())
 			return DIR_NONE;
 
-		Pointf xPos = getPos();
-		xPos.x += SCENE_SIZE.width;	// 按X轴平移
-		float_t angleOfXAxis = angle(xPos);
+		Pointf xAxis = getPos();
+		xAxis.x += SCENE_SIZE.width;	// 按X轴平移
+		float_t angleOfXAxis = angle(xAxis);
 		if (dy > 0.0f)	// 转换成360度
 			angleOfXAxis = 360.0f - angleOfXAxis;
 
@@ -86,15 +86,12 @@ namespace th
 		return Pointf(x + dx * frame, y + dy * frame);
 	}
 
-	bool Entity::collide(const Entity& other, float_t epsilon) const
+	bool Entity::collide(const Entity& other) const
 	{
-		return std::abs(x - other.x) < (width + other.width) / 2.0f + epsilon
-			&& std::abs(y - other.y) < (height + other.height) / 2.0f + epsilon;
-	}
-
-	bool Entity::collide2(const Entity& other) const
-	{
-		return getBottomRight() > other.getTopLeft() && other.getBottomRight() > getTopLeft();
+		return std::abs(x - other.x) < (width + other.width) / 2.0f
+			&& std::abs(y - other.y) < (height + other.height) / 2.0f;
+		//return getBottomRight() > other.getTopLeft()
+		//	&& other.getBottomRight() > getTopLeft();
 	}
 
 	Pointf Entity::getPos() const
@@ -111,6 +108,16 @@ namespace th
 	Pointf Entity::getTopLeft() const
 	{
 		return Pointf(x - width / 2.0f, y - height / 2.0f);
+	}
+
+	Pointf Entity::getTopRight() const
+	{
+		return Pointf(x + width / 2.0f, y - height / 2.0f);
+	}
+
+	Pointf Entity::getBottomLeft() const
+	{
+		return Pointf(x - width / 2.0f, y + height / 2.0f);
 	}
 
 	Pointf Entity::getBottomRight() const
@@ -140,14 +147,14 @@ namespace th
 
 
 
-	bool Player::collideSAT(const Laser& laser, float_t epsilon) const
+	bool Player::collideSAT(const Laser& laser) const
 	{
 		LaserBox laserBox(laser);
-		if (!laserBox.collideSAT(*this, epsilon))
+		if (!laserBox.collideSAT(*this))
 			return false;
 
 		PlayerBox playerBox(*this, laser);
-		if (!playerBox.collideSAT(laser, epsilon))
+		if (!playerBox.collideSAT(laser))
 			return false;
 
 		return true;
@@ -155,45 +162,59 @@ namespace th
 
 
 
-	void SATBox::PointRotate(float_t& x, float_t& y, float_t cx, float_t cy, float_t radian)
+	Pointf Laser::getTopLeft() const
 	{
-		// 设平面上一点（x,y），绕另一点（cx,cy）逆时针旋转A角度后的点为（x0,y0）,则：
-		float_t x0 = (x - cx) * std::cos(radian) - (y - cy) * std::sin(radian) + cx;
-		float_t y0 = (x - cx) * std::sin(radian) + (y - cy) * std::cos(radian) + cy;
-		x = x0;
-		y = y0;
+		return Pointf(x - width / 2.0f, y);
 	}
 
-	bool SATBox::Collide(float_t c1, float_t d1, float_t c2, float_t d2, float_t epsilon)
+	Pointf Laser::getTopRight() const
 	{
-		return std::abs(c1 - c2) < (d1 + d2) / 2.0f + epsilon;
+		return Pointf(x + width / 2.0f, y);
+	}
+
+	Pointf Laser::getBottomLeft() const
+	{
+		return Pointf(x - width / 2.0f, y + height);
+	}
+
+	Pointf Laser::getBottomRight() const
+	{
+		return Pointf(x + width / 2.0f, y + height);
+	}
+
+
+
+	bool SATBox::Collide(float_t p1, float_t l1, float_t p2, float_t l2)
+	{
+		return std::abs(p1 - p2) < (l1 + l2) / 2.0f;
 	}
 
 	LaserBox::LaserBox(const Laser& laser)
 	{
-		x1 = laser.x - laser.width / 2.0f; y1 = laser.y;
-		x2 = laser.x + laser.width / 2.0f; y2 = laser.y;
-		x3 = laser.x - laser.width / 2.0f; y3 = laser.y + laser.height;
-		x4 = laser.x + laser.width / 2.0f; y4 = laser.y + laser.height;
-		// emmm?
-		float_t radian = laser.radian - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		PointRotate(x1, y1, laser.x, laser.y, radian);
-		PointRotate(x2, y2, laser.x, laser.y, radian);
-		PointRotate(x3, y3, laser.x, laser.y, radian);
-		PointRotate(x4, y4, laser.x, laser.y, radian);
+		Pointf C = laser.getPos();
+		// emmm...你说这个谁懂啊？
+		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
+		topLeft = MyMath::Rotate(laser.getTopLeft(), C, radianC);
+		topRight = MyMath::Rotate(laser.getTopRight(), C, radianC);
+		bottomLeft = MyMath::Rotate(laser.getBottomLeft(), C, radianC);
+		bottomRight = MyMath::Rotate(laser.getBottomRight(), C, radianC);
 	}
 
 	// 分离轴定理
-	bool LaserBox::collideSAT(const Player& player, float_t epsilon) const
+	bool LaserBox::collideSAT(const Player& player) const
 	{
-		float_t xMin = std::min(std::min(x1, x2), std::min(x3, x4));
-		float_t xMax = std::max(std::max(x1, x2), std::max(x3, x4));
-		if (!Collide(xMin + (xMax - xMin) / 2.0f, xMax - xMin, player.x, player.width, epsilon))
+		// 投影到X轴
+		float_t minX = std::min(std::min(topLeft.x, topRight.x), std::min(bottomLeft.x, bottomRight.x));
+		float_t maxX = std::max(std::max(topLeft.x, topRight.x), std::max(bottomLeft.x, bottomRight.x));
+		// 检测2条线段是否重叠
+		if (!Collide(minX + (maxX - minX) / 2.0f, maxX - minX, player.x, player.width))
 			return false;
 
-		float_t yMin = std::min(std::min(y1, y2), std::min(y3, y4));
-		float_t yMax = std::max(std::max(y1, y2), std::max(y3, y4));
-		if (!Collide(yMin + (yMax - yMin) / 2.0f, yMax - yMin, player.y, player.height, epsilon))
+		// 投影到Y轴
+		float_t minY = std::min(std::min(topLeft.y, topRight.y), std::min(bottomLeft.y, bottomRight.y));
+		float_t maxY = std::max(std::max(topLeft.y, topRight.y), std::max(bottomLeft.y, bottomRight.y));
+		// 检测2条线段是否重叠
+		if (!Collide(minY + (maxY - minY) / 2.0f, maxY - minY, player.y, player.height))
 			return false;
 
 		return true;
@@ -202,29 +223,30 @@ namespace th
 	// 反向旋转画布，即把激光转回来，再反向旋转自机坐标
 	PlayerBox::PlayerBox(const Player& player, const Laser& laser)
 	{
-		x1 = player.x - player.width / 2.0f; y1 = player.y - player.height / 2.0f;
-		x2 = player.x + player.width / 2.0f; y2 = player.y - player.height / 2.0f;
-		x3 = player.x - player.width / 2.0f; y3 = player.y + player.height / 2.0f;
-		x4 = player.x + player.width / 2.0f; y4 = player.y + player.height / 2.0f;
-		// emmm?
-		float_t radian = laser.radian - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		PointRotate(x1, y1, laser.x, laser.y, -radian);
-		PointRotate(x2, y2, laser.x, laser.y, -radian);
-		PointRotate(x3, y3, laser.x, laser.y, -radian);
-		PointRotate(x4, y4, laser.x, laser.y, -radian);
+		Pointf C = laser.getPos();
+		// emmm...你说这个谁懂啊？
+		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
+		topLeft = MyMath::Rotate(player.getTopLeft(), C, radianC);
+		topRight = MyMath::Rotate(player.getTopRight(), C, radianC);
+		bottomLeft = MyMath::Rotate(player.getBottomLeft(), C, radianC);
+		bottomRight = MyMath::Rotate(player.getBottomRight(), C, radianC);
 	}
 
 	// 分离轴定理
-	bool PlayerBox::collideSAT(const Laser& laser, float_t epsilon) const
+	bool PlayerBox::collideSAT(const Laser& laser) const
 	{
-		float_t xMin = std::min(std::min(x1, x2), std::min(x3, x4));
-		float_t xMax = std::max(std::max(x1, x2), std::max(x3, x4));
-		if (!Collide(xMin + (xMax - xMin) / 2.0f, xMax - xMin, laser.x, laser.width, epsilon))
+		// 投影到X轴
+		float_t minX = std::min(std::min(topLeft.x, topRight.x), std::min(bottomLeft.x, bottomRight.x));
+		float_t maxX = std::max(std::max(topLeft.x, topRight.x), std::max(bottomLeft.x, bottomRight.x));
+		// 检测2条线段是否重叠
+		if (!Collide(minX + (maxX - minX) / 2.0f, maxX - minX, laser.x, laser.width))
 			return false;
 
-		float_t yMin = std::min(std::min(y1, y2), std::min(y3, y4));
-		float_t yMax = std::max(std::max(y1, y2), std::max(y3, y4));
-		if (!Collide(yMin + (yMax - yMin) / 2.0f, yMax - yMin, laser.y + laser.height / 2.0f, laser.height, epsilon))
+		// 投影到Y轴
+		float_t minY = std::min(std::min(topLeft.y, topRight.y), std::min(bottomLeft.y, bottomRight.y));
+		float_t maxY = std::max(std::max(topLeft.y, topRight.y), std::max(bottomLeft.y, bottomRight.y));
+		// 检测2条线段是否重叠
+		if (!Collide(minY + (maxY - minY) / 2.0f, maxY - minY, laser.y + laser.height / 2.0f, laser.height))
 			return false;
 
 		return true;

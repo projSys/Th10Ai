@@ -34,6 +34,16 @@ namespace th
 		Direction dir;
 	};
 
+	struct LaserLv1
+	{
+		uint_t index;
+		float_t distance;
+		float_t footFrame;
+		Pointf footPoint;
+		float_t angle;
+		Direction dir;
+	};
+
 	struct ActionLv1
 	{
 		//ActionLv1(uint_t index0, Direction dir0) :
@@ -153,6 +163,7 @@ namespace th
 		std::vector<Laser> m_lasers;
 
 		std::vector<BulletLv1> m_focusBullets;
+		std::vector<LaserLv1> m_focusLasers;
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;

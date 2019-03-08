@@ -1,4 +1,4 @@
-// ¸ÐÐ» https://github.com/binvec/TH10_DataReversing
+// https://github.com/binvec/TH10_DataReversing
 #pragma once
 
 #include <vector>
@@ -21,11 +21,11 @@ namespace th
 
 	private:
 		template <typename T>
-		T readMemory(uintptr_t baseAddr)
+		T readMemory(uint_t baseAddress)
 		{
-			T value = T();
-			ReadProcessMemory(m_process, reinterpret_cast<LPCVOID>(baseAddr), &value, sizeof(value), nullptr);
-			return value;
+			T data = T();
+			ReadProcessMemory(m_process, reinterpret_cast<LPCVOID>(baseAddress), &data, sizeof(data), nullptr);
+			return data;
 		}
 
 		Process& m_process;

@@ -20,7 +20,7 @@ namespace th
 		player.dx = readMemory<int32_t>(baseAddr + 0x3F0) / 100.0f;
 		player.dy = readMemory<int32_t>(baseAddr + 0x3F4) / 100.0f;
 		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 2.0f;	// 2还是4啊？
-		player.height = player.width = 4.0f;	// 先4吧
+		player.height = player.width = 6.0f;	// 设大点不容易撞
 		player.slow = readMemory<int32_t>(baseAddr + 0x4474);
 		player.powers = readMemory<int32_t>(0x00474C48) / 20.0f;
 		player.type = readMemory<int32_t>(0x00474C68);
@@ -171,7 +171,7 @@ namespace th
 			laser.y = readMemory<float32_t>(objAddr + 0x28);
 			laser.dx = readMemory<float32_t>(objAddr + 0x30);
 			laser.dy = readMemory<float32_t>(objAddr + 0x34);
-			laser.radian = readMemory<float32_t>(objAddr + 0x3C);
+			laser.arc = readMemory<float32_t>(objAddr + 0x3C);
 			laser.height = readMemory<float32_t>(objAddr + 0x40);
 			laser.width = readMemory<float32_t>(objAddr + 0x44);
 			lasers.push_back(laser);
