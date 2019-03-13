@@ -5,7 +5,7 @@
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
-#define PLAY 0
+#define PLAY 1
 
 namespace th
 {
@@ -21,7 +21,7 @@ namespace th
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_shootCooldown(0),
-		m_pickupCooldown(0)
+		m_collectCooldown(0)
 	{
 		m_items.reserve(2000);
 		m_enemies.reserve(2000);
@@ -98,17 +98,16 @@ namespace th
 		for (uint_t i = 0; i < m_bullets.size(); ++i)
 		{
 			const Bullet& bullet = m_bullets[i];
-
-			BulletLv1 lv1;
-			lv1.index = i;
-			lv1.distance = bullet.distance(m_player);
-			lv1.footFrame = bullet.footFrame(m_player.getPos());
-			lv1.footPoint = bullet.footPoint(lv1.footFrame);
-			lv1.angle = bullet.angle(m_player);
-			lv1.dir = bullet.direction();
-			if (lv1.distance < 100.0f	// 在附近的
-				|| (m_player.distance(lv1.footPoint) < 100.0f && lv1.angle > 0.0f && lv1.angle < 90.0f))	// 将来可能碰撞的
+			float_t distance = bullet.distance(m_player);
+			float_t footFrame = bullet.footFrame(m_player.getPos());
+			Pointf footPoint = bullet.footPoint(footFrame);
+			float_t angle = bullet.angle(m_player);
+			if (distance < 100.0f	// 在附近的
+				|| (m_player.distance(footPoint) < 100.0f && angle > 0.0f && angle < 90.0f))	// 将来可能碰撞的
 			{
+				BulletLv1 lv1;
+				lv1.index = i;
+				lv1.dir = bullet.direction();
 				m_focusBullets.push_back(lv1);
 			}
 		}
@@ -518,12 +517,12 @@ namespace th
 			res.score += 1000.0f;
 		}
 
-		if (itemId != -1)
-			res.score += getPickupItemScore(player, itemId);
-		else if (enemyId != -1)
-			res.score += getShootEnemyScore(player, enemyId);
-		else
-			res.score += getGobackScore(player);
+		//if (itemId != -1)
+		//	res.score += getCollectItemScore(player, itemId);
+		//else if (enemyId != -1)
+		//	res.score += getShootEnemyScore(player, enemyId);
+		//else
+		//	res.score += getGobackScore(player);
 
 		if (depth <= 0)
 			return res;
@@ -712,19 +711,32 @@ namespace th
 		return score;
 	}
 
-	float_t TH10Bot::getDodgeBulletScore(const Player& pNext, float_t epsilon)
+	float_t TH10Bot::getDodgeBulletScore(const Player& player)
 	{
 		float_t score = 0.0f;
-
-		for (const Bullet& bullet : m_bullets)
+		float_t minFootFrame = std::numeric_limits<float_t>::max();
+		Direction dir = DIR_NONE;
+		for (const BulletLv1& lv1 : m_focusBullets)
 		{
-			if (pNext.collide(bullet))
+			Bullet& bullet = m_bullets[lv1.index];
+			float_t footFrame = bullet.footFrame(player.getPos());
+			Pointf footPoint = bullet.footPoint(footFrame);
+			Pointf oldPos = bullet.getPos();
+			bullet.setPos(footPoint);
+			if (bullet.collide(player))
 			{
-				score = -10000.0f;
-				break;
+				if (footFrame < minFootFrame)
+				{
+					minFootFrame = footFrame;
+					dir = lv1.dir;
+				}
 			}
+			bullet.setPos(oldPos);
 		}
+		if (dir != DIR_NONE)
+		{
 
+		}
 		return score;
 	}
 
@@ -744,21 +756,8 @@ namespace th
 		return score;
 	}
 
-	float_t TH10Bot::getBulletAngleScore(const Player& pNext)
-	{
-		float_t score = 0.0f;
-
-		for (const Bullet& bullet : m_bullets)
-		{
-			float_t angle = bullet.angle(pNext);
-			score = 10000.0f * (1.0f - angle / 180.0f);
-		}
-
-		return score;
-	}
-
 	// 拾取道具评分
-	float_t TH10Bot::getPickupItemScore(const Player& pNext, int_t itemId)
+	float_t TH10Bot::getCollectItemScore(const Player& pNext, int_t itemId)
 	{
 		float_t score = 0.0f;
 
@@ -900,27 +899,27 @@ namespace th
 	// 处理道具
 	//bool TH10Bot::handleItem()
 	//{
-	//	if (checkPickupStatus())
+	//	if (checkCollectStatus())
 	//	{
 	//		int_t itemId = findItem();
 	//		if (itemId != -1)
-	//			return pickupItem(itemId);
+	//			return collectItem(itemId);
 	//	}
 	//	return false;
 	//}
 
 	// 检测拾取状况
-	//bool TH10Bot::checkPickupStatus()
+	//bool TH10Bot::checkCollectStatus()
 	//{
 	//	// 拾取冷却中
-	//	if (m_clock.getTimestamp() - m_pickupCooldown < 2000)
+	//	if (m_clock.getTimestamp() - m_collectCooldown < 2000)
 	//		return false;
 	//
 	//	// 无道具
 	//	if (m_items.empty())
 	//	{
 	//		// 进入冷却
-	//		m_pickupCooldown = m_clock.getTimestamp();
+	//		m_collectCooldown = m_clock.getTimestamp();
 	//		return false;
 	//	}
 	//
@@ -928,7 +927,7 @@ namespace th
 	//	if (m_player.y < SCENE_HEIGHT / 2.0 && m_items.size() < 10 && m_enemies.size() > 2)
 	//	{
 	//		// 进入冷却
-	//		m_pickupCooldown = m_clock.getTimestamp();
+	//		m_collectCooldown = m_clock.getTimestamp();
 	//		return false;
 	//	}
 	//
@@ -936,7 +935,7 @@ namespace th
 	//	if (m_player.y < SCENE_HEIGHT * 0.25)
 	//	{
 	//		// 进入冷却
-	//		m_pickupCooldown = m_clock.getTimestamp();
+	//		m_collectCooldown = m_clock.getTimestamp();
 	//		return false;
 	//	}
 	//
@@ -944,7 +943,7 @@ namespace th
 	//}
 
 	// 拾取道具
-	//bool TH10Bot::pickupItem(int_t itemId)
+	//bool TH10Bot::collectItem(int_t itemId)
 	//{
 	//	const Item& item = m_items[itemId];
 	//
@@ -976,7 +975,7 @@ namespace th
 	//				continue;
 	//		}
 	//
-	//		score += pickupItemScore(next, item);
+	//		score += collectItemScore(next, item);
 	//
 	//		if (score > maxScore)
 	//		{
@@ -988,7 +987,7 @@ namespace th
 	//	if (lastDir != DIR_NONE)
 	//		move(lastDir, lastShift);
 	//	else
-	//		std::cout << "pickupItem()无路可走" << std::endl;
+	//		std::cout << "collectItem()无路可走" << std::endl;
 	//
 	//	return true;
 	//}

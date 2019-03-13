@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="include\TH10Bot\Clock.h" />
     <ClInclude Include="include\TH10Bot\Common.h" />
+    <ClInclude Include="include\TH10Bot\Controller.h" />
     <ClInclude Include="include\TH10Bot\Define.h" />
     <ClInclude Include="include\TH10Bot\DesktopCapturerCV.h" />
     <ClInclude Include="include\TH10Bot\DesktopImageCV.h" />
@@ -158,9 +159,11 @@
     <ClInclude Include="include\TH10Bot\Scene.h" />
     <ClInclude Include="include\TH10Bot\TH10Bot.h" />
     <ClInclude Include="include\TH10Bot\TH10Reader.h" />
+    <ClInclude Include="include\TH10Bot\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TH10Bot\Clock.cpp" />
+    <ClCompile Include="src\TH10Bot\Controller.cpp" />
     <ClCompile Include="src\TH10Bot\DesktopCapturerCV.cpp" />
     <ClCompile Include="src\TH10Bot\DesktopImageCV.cpp" />
     <ClCompile Include="src\TH10Bot\Entity.cpp" />

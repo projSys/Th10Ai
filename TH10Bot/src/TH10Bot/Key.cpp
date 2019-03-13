@@ -12,7 +12,13 @@ namespace th
 
 	Key::~Key()
 	{
-		release();
+		try
+		{
+			release();
+		}
+		catch (...)
+		{
+		}
 	}
 
 	void Key::press()

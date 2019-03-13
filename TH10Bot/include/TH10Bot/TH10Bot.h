@@ -27,21 +27,21 @@ namespace th
 		//	footPoint(footPoint0), angleOfPlayer(angleOfPlayer0) {}
 
 		uint_t index;
-		float_t distance;
-		float_t footFrame;
-		Pointf footPoint;
-		float_t angle;
 		Direction dir;
+		//float_t distance;
+		//float_t footFrame;
+		//Pointf footPoint;
+		//float_t angle;
 	};
 
 	struct LaserLv1
 	{
 		uint_t index;
+		Direction dir;
 		float_t distance;
 		float_t footFrame;
 		Pointf footPoint;
 		float_t angle;
-		Direction dir;
 	};
 
 	struct ActionLv1
@@ -119,10 +119,9 @@ namespace th
 		int_t findItem();
 		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
-		float_t getDodgeBulletScore(const Player& pNext, float_t epsilon = 2.0);
+		float_t getDodgeBulletScore(const Player& player);
 		float_t getDodgeLaserScore(const Player& pNext, float_t epsilon = 2.0);
-		float_t getBulletAngleScore(const Player& pNext);
-		float_t getPickupItemScore(const Player& pNext, int_t itemId);
+		float_t getCollectItemScore(const Player& pNext, int_t itemId);
 		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);
 		float_t getGobackScore(const Player& pNext);
 
@@ -131,9 +130,9 @@ namespace th
 
 		// Item
 		//bool handleItem();
-		//bool checkPickupStatus();
-		//bool pickupItem(int_t itemId);
-		//float_t pickupItemScore(const Player& next, const Item& item);
+		//bool checkCollectStatus();
+		//bool collectItem(int_t itemId);
+		//float_t collectItemScore(const Player& next, const Item& item);
 
 		// Enemy
 		//bool handleEnemy();
@@ -168,6 +167,6 @@ namespace th
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;
 		time_t m_shootCooldown;
-		time_t m_pickupCooldown;
+		time_t m_collectCooldown;
 	};
 }

@@ -226,10 +226,10 @@ namespace th
 		Pointf C = laser.getPos();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		topLeft = MyMath::Rotate(player.getTopLeft(), C, radianC);
-		topRight = MyMath::Rotate(player.getTopRight(), C, radianC);
-		bottomLeft = MyMath::Rotate(player.getBottomLeft(), C, radianC);
-		bottomRight = MyMath::Rotate(player.getBottomRight(), C, radianC);
+		topLeft = MyMath::Rotate(player.getTopLeft(), C, -radianC);
+		topRight = MyMath::Rotate(player.getTopRight(), C, -radianC);
+		bottomLeft = MyMath::Rotate(player.getBottomLeft(), C, -radianC);
+		bottomRight = MyMath::Rotate(player.getBottomRight(), C, -radianC);
 	}
 
 	// 分离轴定理

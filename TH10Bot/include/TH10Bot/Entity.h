@@ -17,6 +17,7 @@ namespace th
 	// |           |
 	// +-----------+
 	//       w
+
 	class Entity
 	{
 	public:
@@ -128,6 +129,7 @@ namespace th
 	// |     |     |
 	// +-----+-----+
 	//       w
+
 	class Laser :
 		public Entity
 	{
