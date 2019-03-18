@@ -57,6 +57,144 @@ namespace th
 		DIR_DOWNRIGHT_SLOW,
 	};
 
+	const Direction PD[DIR_UP_SLOW][DIR_UP_SLOW] =
+	{
+		{	// DIR_HOLD_SLOW
+			DIR_HOLD_SLOW,
+			DIR_HOLD,
+			DIR_UP,
+			DIR_DOWN,
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_UPLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWNLEFT,
+			DIR_DOWNRIGHT
+		},
+		{	// DIR_HOLD
+			DIR_HOLD_SLOW,
+			DIR_HOLD,
+			DIR_UP,
+			DIR_DOWN,
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_UPLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWNLEFT,
+			DIR_DOWNRIGHT
+		},
+		{	// DIR_UP
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_UPLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWNLEFT,
+			DIR_DOWNRIGHT,
+			DIR_UP,
+			DIR_DOWN,
+			DIR_HOLD_SLOW,
+			DIR_HOLD
+		},
+		{	// DIR_DOWN
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_DOWNLEFT,
+			DIR_DOWNRIGHT,
+			DIR_UPLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWN,
+			DIR_UP,
+			DIR_HOLD_SLOW,
+			DIR_HOLD
+		},
+		{	// DIR_LEFT
+			DIR_UP,
+			DIR_DOWN,
+			DIR_UPLEFT,
+			DIR_DOWNLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWNRIGHT,
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_HOLD_SLOW,
+			DIR_HOLD
+		},
+		{	// DIR_RIGHT
+			DIR_UP,
+			DIR_DOWN,
+			DIR_UPRIGHT,
+			DIR_DOWNRIGHT,
+			DIR_UPLEFT,
+			DIR_DOWNLEFT,
+			DIR_RIGHT,
+			DIR_LEFT,
+			DIR_HOLD_SLOW,
+			DIR_HOLD
+		},
+		{	// DIR_UPLEFT
+			DIR_HOLD_SLOW,
+			DIR_HOLD,
+			DIR_UP,
+			DIR_DOWN,
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_UPLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWNLEFT,
+			DIR_DOWNRIGHT
+		},
+		{	// DIR_UPRIGHT
+			DIR_HOLD_SLOW,
+			DIR_HOLD,
+			DIR_UP,
+			DIR_DOWN,
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_UPLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWNLEFT,
+			DIR_DOWNRIGHT
+		},
+		{	// DIR_DOWNLEFT
+			DIR_HOLD_SLOW,
+			DIR_HOLD,
+			DIR_UP,
+			DIR_DOWN,
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_UPLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWNLEFT,
+			DIR_DOWNRIGHT
+		},
+		{	// DIR_DOWNRIGHT
+			DIR_HOLD_SLOW,
+			DIR_HOLD,
+			DIR_UP,
+			DIR_DOWN,
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_UPLEFT,
+			DIR_UPRIGHT,
+			DIR_DOWNLEFT,
+			DIR_DOWNRIGHT
+		}
+	};
+
+	const float_t PS[DIR_UP_SLOW] =
+	{
+		1.5f,
+		1.5f,
+		1.4f,
+		1.4f,
+		1.3f,
+		1.3f,
+		1.0f,
+		0.8f,
+		0.6f,
+		0.6f
+	};
+
 	// 斜方向的移动系数 x^2 + x^2 = 1^2
 	const float_t SQRT_PF = std::sqrt(0.5f);
 

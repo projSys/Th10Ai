@@ -27,21 +27,18 @@ namespace th
 		//	footPoint(footPoint0), angleOfPlayer(angleOfPlayer0) {}
 
 		uint_t index;
-		Direction dir;
 		//float_t distance;
-		//float_t footFrame;
-		//Pointf footPoint;
-		//float_t angle;
+		FootPoint footPoint;
+		Direction dir;
 	};
 
 	struct LaserLv1
 	{
 		uint_t index;
-		Direction dir;
 		float_t distance;
-		float_t footFrame;
-		Pointf footPoint;
+		FootPoint footPoint;
 		float_t angle;
+		Direction dir;
 	};
 
 	struct ActionLv1
@@ -89,6 +86,13 @@ namespace th
 		Direction dir;
 	};
 
+	struct DodgeResult
+	{
+		float_t score;
+		float_t minFrames;
+		Direction dir;
+	};
+
 	class TH10Bot
 	{
 	public:
@@ -106,7 +110,7 @@ namespace th
 		static float_t GetDistYScore(float_t yNext, float_t yTarget);
 
 		bool handleBomb();
-		bool collideBomb();
+		//bool collideBomb();
 
 		bool handleTalk();
 
@@ -119,7 +123,7 @@ namespace th
 		int_t findItem();
 		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
-		float_t getDodgeBulletScore(const Player& player);
+		DodgeResult getDodgeBulletScore(const Player& player);
 		float_t getDodgeLaserScore(const Player& pNext, float_t epsilon = 2.0);
 		float_t getCollectItemScore(const Player& pNext, int_t itemId);
 		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);

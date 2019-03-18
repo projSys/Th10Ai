@@ -9,53 +9,54 @@
 
 namespace th
 {
-	float_t Entity::distance(const Pointf& pos) const
+	// 点与实体的距离
+	float_t Entity::getDistance(const Pointf& other) const
 	{
-		return MyMath::Distance(getPos(), pos);
+		return MyMath::Distance(getPosition(), other);
 	}
 
-	float_t Entity::distance(const Entity& other) const
+	float_t Entity::getDistance(const Entity& other) const
 	{
-		return MyMath::Distance(getPos(), other.getPos());
+		return getDistance(other.getPosition());
 	}
 
-	float_t Entity::angle(const Pointf& pos) const
+	// 点与实体前进直线的角度
+	float_t Entity::getAngle(const Pointf& other) const
 	{
-		if (isResting())
+		if (isHolded())
 			return -1.0f;
 
-		return MyMath::Angle(getPos(), getNextPos(), pos);
+		return MyMath::Angle(getPosition(), getNextPos(), other);
 	}
 
-	float_t Entity::angle(const Entity& other) const
+	float_t Entity::getAngle(const Entity& other) const
 	{
-		if (isResting())
-			return -1.0f;
-
-		return MyMath::Angle(getPos(), getNextPos(), other.getPos());
+		return getAngle(other.getPosition());
 	}
 
-	float_t Entity::footFrame(const Pointf& pos) const
+	// 点到实体前进直线的垂足
+	FootPoint Entity::getFootPoint(const Pointf& other) const
 	{
-		if (isResting())
-			return 0.0f;
+		if (isHolded())
+			return { 0.0f, Pointf(x, y) };
 
-		return ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);
+		float_t ratio = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
+		return { ratio, Pointf(x + dx * ratio, y + dy * ratio) };
 	}
 
-	Pointf Entity::footPoint(float_t footFrame) const
+	FootPoint Entity::getFootPoint(const Entity& other) const
 	{
-		return Pointf(x + dx * footFrame, y + dy * footFrame);
+		return getFootPoint(other.getPosition());
 	}
 
-	Direction Entity::direction() const
+	Direction Entity::getDirection() const
 	{
-		if (isResting())
-			return DIR_NONE;
+		if (isHolded())
+			return DIR_HOLD;
 
-		Pointf xAxis = getPos();
+		Pointf xAxis = getPosition();
 		xAxis.x += SCENE_SIZE.width;	// 按X轴平移
-		float_t angleOfXAxis = angle(xAxis);
+		float_t angleOfXAxis = getAngle(xAxis);
 		if (dy > 0.0f)	// 转换成360度
 			angleOfXAxis = 360.0f - angleOfXAxis;
 
@@ -94,12 +95,12 @@ namespace th
 		//	&& other.getBottomRight() > getTopLeft();
 	}
 
-	Pointf Entity::getPos() const
+	Pointf Entity::getPosition() const
 	{
 		return Pointf(x, y);
 	}
 
-	void Entity::setPos(const Pointf& pos)
+	void Entity::setPosition(const Pointf& pos)
 	{
 		x = pos.x;
 		y = pos.y;
@@ -125,7 +126,7 @@ namespace th
 		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
 
-	bool Entity::isResting() const
+	bool Entity::isHolded() const
 	{
 		return TypeTraits<float_t>::IsZero(dx) && TypeTraits<float_t>::IsZero(dy);
 	}
@@ -191,7 +192,7 @@ namespace th
 
 	LaserBox::LaserBox(const Laser& laser)
 	{
-		Pointf C = laser.getPos();
+		Pointf C = laser.getPosition();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
 		topLeft = MyMath::Rotate(laser.getTopLeft(), C, radianC);
@@ -223,7 +224,7 @@ namespace th
 	// 反向旋转画布，即把激光转回来，再反向旋转自机坐标
 	PlayerBox::PlayerBox(const Player& player, const Laser& laser)
 	{
-		Pointf C = laser.getPos();
+		Pointf C = laser.getPosition();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
 		topLeft = MyMath::Rotate(player.getTopLeft(), C, -radianC);

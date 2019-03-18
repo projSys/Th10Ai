@@ -8,6 +8,12 @@ namespace th
 	class Bullet;
 	class Laser;
 
+	struct FootPoint
+	{
+		float_t frames;	// 到达垂足的帧数
+		Pointf pos;		// 垂足坐标
+	};
+
 	// 一般结构
 	// +-----------+
 	// |           |
@@ -26,24 +32,24 @@ namespace th
 		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
 			x(x0), y(y0), dx(dx0), dy(dy0), width(width0), height(height0) {}
 
-		float_t distance(const Pointf& pos) const;
-		float_t distance(const Entity& other) const;
-		float_t angle(const Pointf& pos) const;
-		float_t angle(const Entity& other) const;
-		float_t footFrame(const Pointf& pos) const;
-		Pointf footPoint(float_t footFrame) const;
-		Direction direction() const;
+		float_t getDistance(const Pointf& other) const;
+		float_t getDistance(const Entity& other) const;
+		float_t getAngle(const Pointf& other) const;
+		float_t getAngle(const Entity& other) const;
+		FootPoint getFootPoint(const Pointf& other) const;
+		FootPoint getFootPoint(const Entity& other) const;
+		Direction getDirection() const;
 
 		Pointf advanceTo(int_t frame) const;
 		bool collide(const Entity& other) const;
 
-		Pointf getPos() const;
-		void setPos(const Pointf& pos);
+		Pointf getPosition() const;
+		void setPosition(const Pointf& pos);
 		Pointf getTopLeft() const;
 		Pointf getTopRight() const;
 		Pointf getBottomLeft() const;
 		Pointf getBottomRight() const;
-		bool isResting() const;
+		bool isHolded() const;
 		Pointf getNextPos() const;
 		Sizef getSize() const;
 		Rectf getRect() const;

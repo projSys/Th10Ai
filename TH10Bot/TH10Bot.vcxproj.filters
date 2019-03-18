@@ -57,9 +57,6 @@
     <ClInclude Include="include\TH10Bot\Controller.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\Vector2.h">
-      <Filter>头文件\TH10Bot</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TH10Bot\Clock.cpp">

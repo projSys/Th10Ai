@@ -32,8 +32,8 @@ namespace th
 	{
 		float_t dx = B.x - A.x;
 		float_t dy = B.y - A.y;
-		float_t u = ((P.x - A.x) * dx + (P.y - A.y) * dy) / (dx * dx + dy * dy);
-		return Pointf(A.x + dx * u, A.y + dy * u);
+		float_t ratio = ((P.x - A.x) * dx + (P.y - A.y) * dy) / (dx * dx + dy * dy);
+		return Pointf(A.x + dx * ratio, A.y + dy * ratio);
 	}
 
 	Pointf MyMath::Rotate(const Pointf& P, const Pointf& C, float_t radianC)
@@ -48,9 +48,6 @@ namespace th
 		float_t dy = P.y - C.y;
 		float_t sinC = std::sin(radianC);
 		float_t cosC = std::cos(radianC);
-		Pointf PP;
-		PP.x = dx * cosC - dy * sinC + C.x;
-		PP.y = dx * sinC + dy * cosC + C.y;
-		return PP;
+		return Pointf(dx * cosC - dy * sinC + C.x, dx * sinC + dy * cosC + C.y);
 	}
 }
