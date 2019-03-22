@@ -101,7 +101,7 @@ namespace th
 			float_t distance = bullet.getDistance(m_player);
 			FootPoint footPoint = bullet.getFootPoint(m_player);
 			if (distance < 100.0f	// 在附近的
-				|| (footPoint.frames >= 0.0f && m_player.getDistance(footPoint.pos) < 100.0f))	// 将来可能碰撞的
+				|| (footPoint.frames >= 0.0f && footPoint.frames < 120.0f && m_player.getDistance(footPoint.pos) < 100.0f))	// 将来可能碰撞的
 			{
 				BulletLv1 lv1;
 				lv1.index = i;
@@ -299,21 +299,21 @@ namespace th
 
 			// 显示方向
 			if (lv1.dir == DIR_UP)
-				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x, p2.y - 20), yellow);
+				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y - 20), yellow);
 			else if (lv1.dir == DIR_DOWN)
-				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x, p2.y + 20), yellow);
+				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y + 20), yellow);
 			else if (lv1.dir == DIR_LEFT)
-				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x - 20, p2.y), yellow);
+				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y), yellow);
 			else if (lv1.dir == DIR_RIGHT)
-				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x + 20, p2.y), yellow);
+				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y), yellow);
 			else if (lv1.dir == DIR_UPLEFT)
-				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x - 20, p2.y - 20), yellow);
+				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y - 20), yellow);
 			else if (lv1.dir == DIR_UPRIGHT)
-				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x + 20, p2.y - 20), yellow);
+				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y - 20), yellow);
 			else if (lv1.dir == DIR_DOWNLEFT)
-				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x - 20, p2.y + 20), yellow);
+				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y + 20), yellow);
 			else if (lv1.dir == DIR_DOWNRIGHT)
-				cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p2.x + 20, p2.y + 20), yellow);
+				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
 		}
 
 		//for (const Laser& laser : m_lasers)
@@ -495,8 +495,11 @@ namespace th
 
 		if (res.dir != DIR_NONE)
 			move(res.dir);
-		//else
-		//	std::cout << "无路可走。" << std::endl;
+		else
+		{
+			move(DIR_HOLD);
+			std::cout << "无路可走。" << std::endl;
+		}
 
 		return true;
 	}

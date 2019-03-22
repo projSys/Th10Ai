@@ -23,7 +23,7 @@ namespace th
 	// 点与实体前进直线的角度
 	float_t Entity::getAngle(const Pointf& other) const
 	{
-		if (isHolded())
+		if (isHolding())
 			return -1.0f;
 
 		return MyMath::Angle(getPosition(), getNextPos(), other);
@@ -37,7 +37,7 @@ namespace th
 	// 点到实体前进直线的垂足
 	FootPoint Entity::getFootPoint(const Pointf& other) const
 	{
-		if (isHolded())
+		if (isHolding())
 			return { 0.0f, Pointf(x, y) };
 
 		float_t ratio = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
@@ -51,7 +51,7 @@ namespace th
 
 	Direction Entity::getDirection() const
 	{
-		if (isHolded())
+		if (isHolding())
 			return DIR_HOLD;
 
 		Pointf xAxis = getPosition();
@@ -126,7 +126,7 @@ namespace th
 		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
 
-	bool Entity::isHolded() const
+	bool Entity::isHolding() const
 	{
 		return TypeTraits<float_t>::IsZero(dx) && TypeTraits<float_t>::IsZero(dy);
 	}

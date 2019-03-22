@@ -20,12 +20,6 @@ namespace th
 {
 	struct BulletLv1
 	{
-		//BulletLv1() {}
-		//BulletLv1(uint_t index0, float_t distance0, float_t footFrame0,
-		//	const Pointf& footPoint0, float_t angleOfPlayer0) :
-		//	index(index0), distance(distance0), footFrame(footFrame0),
-		//	footPoint(footPoint0), angleOfPlayer(angleOfPlayer0) {}
-
 		uint_t index;
 		//float_t distance;
 		FootPoint footPoint;
@@ -43,9 +37,6 @@ namespace th
 
 	struct ActionLv1
 	{
-		//ActionLv1(uint_t index0, Direction dir0) :
-		//	index(index0), dir(dir0) {}
-
 		uint_t index;
 		Direction dir;
 	};

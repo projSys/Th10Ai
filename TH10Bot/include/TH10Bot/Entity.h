@@ -14,7 +14,7 @@ namespace th
 		Pointf pos;		// 垂足坐标
 	};
 
-	// 一般结构
+	// 实体结构
 	// +-----------+
 	// |           |
 	// |   (x,y)   |
@@ -49,7 +49,7 @@ namespace th
 		Pointf getTopRight() const;
 		Pointf getBottomLeft() const;
 		Pointf getBottomRight() const;
-		bool isHolded() const;
+		bool isHolding() const;
 		Pointf getNextPos() const;
 		Sizef getSize() const;
 		Rectf getRect() const;
