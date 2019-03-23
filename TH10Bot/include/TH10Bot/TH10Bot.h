@@ -108,7 +108,7 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
-		DfsResult dfs(const Player& player, int_t frame, int_t depth, int_t itemId, int_t enemyId);
+		DfsResult dfs(const Player& player, int_t frame, int_t depth);
 		bool collideMove(const Player& player, int_t frame);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
 		int_t findItem();
@@ -158,6 +158,9 @@ namespace th
 
 		std::vector<BulletLv1> m_focusBullets;
 		std::vector<LaserLv1> m_focusLasers;
+
+		int_t m_itemId;
+		int_t m_enemyId;
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;

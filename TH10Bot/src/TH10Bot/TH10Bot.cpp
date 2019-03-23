@@ -18,6 +18,8 @@ namespace th
 		m_active(false),
 		m_keyUp(VK_UP), m_keyDown(VK_DOWN), m_keyLeft(VK_LEFT), m_keyRight(VK_RIGHT),
 		m_keyShift(VK_SHIFT), m_keyZ('Z'), m_keyX('X'),
+		m_itemId(-1),
+		m_enemyId(-1),
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_shootCooldown(0),
@@ -98,10 +100,12 @@ namespace th
 		for (uint_t i = 0; i < m_bullets.size(); ++i)
 		{
 			const Bullet& bullet = m_bullets[i];
+
 			float_t distance = bullet.getDistance(m_player);
 			FootPoint footPoint = bullet.getFootPoint(m_player);
 			if (distance < 100.0f	// 在附近的
-				|| (footPoint.frames >= 0.0f && footPoint.frames < 120.0f && m_player.getDistance(footPoint.pos) < 100.0f))	// 将来可能碰撞的
+				|| (footPoint.frames >= 0.0f && footPoint.frames < 120.0f	// 将来可能碰撞的
+				&& m_player.getDistance(footPoint.pos) < 100.0f))
 			{
 				BulletLv1 lv1;
 				lv1.index = i;
@@ -488,10 +492,10 @@ namespace th
 	// 处理移动
 	bool TH10Bot::handleMove()
 	{
-		int_t itemId = findItem();
-		int_t enemyId = findEnemy();
+		m_itemId = findItem();
+		m_enemyId = findEnemy();
 
-		DfsResult res = dfs(m_player, 0, 3, itemId, enemyId);
+		DfsResult res = dfs(m_player, 0, 3);
 
 		if (res.dir != DIR_NONE)
 			move(res.dir);
@@ -504,7 +508,7 @@ namespace th
 		return true;
 	}
 
-	DfsResult TH10Bot::dfs(const Player& player, int_t frame, int_t depth, int_t itemId, int_t enemyId)
+	DfsResult TH10Bot::dfs(const Player& player, int_t frame, int_t depth)
 	{
 		DfsResult res = { 0.0f, DIR_NONE };
 
@@ -559,7 +563,7 @@ namespace th
 			nextPlayer.x = nextX;
 			nextPlayer.y = nextY;
 
-			DfsResult nextRes = dfs(nextPlayer, frame + 1, depth - 1, itemId, enemyId);
+			DfsResult nextRes = dfs(nextPlayer, frame + 1, depth - 1);
 			nextRes.score *= PS[i];
 			if (nextRes.score > bestScore)
 			{
@@ -727,12 +731,13 @@ namespace th
 		for (const BulletLv1& lv1 : m_focusBullets)
 		{
 			Bullet& bullet = m_bullets[lv1.index];
+
 			FootPoint footPoint = bullet.getFootPoint(m_player);
 			Pointf oldPos = bullet.getPosition();
 			bullet.setPosition(footPoint.pos);
 			if (bullet.collide(player))
 			{
-				score += -1000.0f;
+				score = -1000.0f;	// += sbl
 				if (footPoint.frames < minFrames)
 				{
 					minFrames = footPoint.frames;
