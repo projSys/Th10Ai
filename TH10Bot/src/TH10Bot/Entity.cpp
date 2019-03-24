@@ -9,7 +9,6 @@
 
 namespace th
 {
-	// 点与实体的距离
 	float_t Entity::getDistance(const Pointf& other) const
 	{
 		return MyMath::Distance(getPosition(), other);
@@ -20,7 +19,6 @@ namespace th
 		return getDistance(other.getPosition());
 	}
 
-	// 点与实体前进直线的角度
 	float_t Entity::getAngle(const Pointf& other) const
 	{
 		if (isHolding())
@@ -34,14 +32,13 @@ namespace th
 		return getAngle(other.getPosition());
 	}
 
-	// 点到实体前进直线的垂足
 	FootPoint Entity::getFootPoint(const Pointf& other) const
 	{
 		if (isHolding())
-			return { 0.0f, Pointf(x, y) };
+			return { x, y, 0.0f };
 
 		float_t ratio = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
-		return { ratio, Pointf(x + dx * ratio, y + dy * ratio) };
+		return { x + dx * ratio, y + dy * ratio, ratio };
 	}
 
 	FootPoint Entity::getFootPoint(const Entity& other) const
@@ -54,8 +51,7 @@ namespace th
 		if (isHolding())
 			return DIR_HOLD;
 
-		Pointf xAxis = getPosition();
-		xAxis.x += SCENE_SIZE.width;	// 按X轴平移
+		Pointf xAxis(x + 100.0f, y);	// 按X轴平移
 		float_t angleOfXAxis = getAngle(xAxis);
 		if (dy > 0.0f)	// 转换成360度
 			angleOfXAxis = 360.0f - angleOfXAxis;
@@ -82,17 +78,22 @@ namespace th
 		return dir;
 	}
 
-	Pointf Entity::advanceTo(int_t frame) const
-	{
-		return Pointf(x + dx * frame, y + dy * frame);
-	}
-
 	bool Entity::collide(const Entity& other) const
 	{
 		return std::abs(x - other.x) < (width + other.width) / 2.0f
 			&& std::abs(y - other.y) < (height + other.height) / 2.0f;
 		//return getBottomRight() > other.getTopLeft()
 		//	&& other.getBottomRight() > getTopLeft();
+	}
+
+	float_t Entity::willCollideWith(const Entity& other) const
+	{
+		FootPoint footPoint = getFootPoint(other);
+		Entity temp(footPoint.x, footPoint.y, dx, dy, width, height);
+		if (temp.collide(other))
+			return footPoint.frames;
+		else
+			return -600.0f;		// -10秒
 	}
 
 	Pointf Entity::getPosition() const

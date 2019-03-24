@@ -105,7 +105,7 @@ namespace th
 			FootPoint footPoint = bullet.getFootPoint(m_player);
 			if (distance < 100.0f	// 在附近的
 				|| (footPoint.frames >= 0.0f && footPoint.frames < 120.0f	// 将来可能碰撞的
-				&& m_player.getDistance(footPoint.pos) < 100.0f))
+					&& m_player.getDistance(Pointf(footPoint.x, footPoint.y)) < 100.0f))
 			{
 				BulletLv1 lv1;
 				lv1.index = i;
@@ -602,15 +602,9 @@ namespace th
 		{
 			Bullet& bullet = m_bullets[lv1.index];
 
-			Pointf oldPos = bullet.getPosition();
-			Pointf newPos = bullet.advanceTo(frame);
-			bullet.setPosition(newPos);
-			if (player.collide(bullet))
-			{
-				bullet.setPosition(oldPos);
+			float_t frames = bullet.willCollideWith(m_player);
+			if (frames >= 0.0f)
 				return true;
-			}
-			bullet.setPosition(oldPos);
 		}
 
 		//for (const LaserLv1& lv1 : m_focusLasers)
@@ -732,19 +726,16 @@ namespace th
 		{
 			Bullet& bullet = m_bullets[lv1.index];
 
-			FootPoint footPoint = bullet.getFootPoint(m_player);
-			Pointf oldPos = bullet.getPosition();
-			bullet.setPosition(footPoint.pos);
-			if (bullet.collide(player))
+			float_t frames = bullet.willCollideWith(m_player);
+			if (frames >= 0.0f)		// 将来会碰撞
 			{
-				score = -1000.0f;	// += sbl
-				if (footPoint.frames < minFrames)
+				if (frames < minFrames)
 				{
-					minFrames = footPoint.frames;
+					score = -1000.0f;
+					minFrames = frames;
 					dir = lv1.dir;
 				}
 			}
-			bullet.setPosition(oldPos);
 		}
 		return { score, minFrames, dir };
 	}

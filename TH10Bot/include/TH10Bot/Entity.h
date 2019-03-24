@@ -10,8 +10,9 @@ namespace th
 
 	struct FootPoint
 	{
+		float_t x;		// 垂足坐标
+		float_t y;
 		float_t frames;	// 到达垂足的帧数
-		Pointf pos;		// 垂足坐标
 	};
 
 	// 实体结构
@@ -40,8 +41,8 @@ namespace th
 		FootPoint getFootPoint(const Entity& other) const;
 		Direction getDirection() const;
 
-		Pointf advanceTo(int_t frame) const;
 		bool collide(const Entity& other) const;
+		float_t willCollideWith(const Entity& other) const;
 
 		Pointf getPosition() const;
 		void setPosition(const Pointf& pos);
