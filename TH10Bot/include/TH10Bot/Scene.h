@@ -29,7 +29,6 @@ namespace th
 	//                             |
 	//                            \|/
 	//                             Y
-
 	class Scene
 	{
 	public:

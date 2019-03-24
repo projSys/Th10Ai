@@ -93,7 +93,7 @@ namespace th
 		if (temp.collide(other))
 			return footPoint.frames;
 		else
-			return -600.0f;		// -10√Î
+			return -3600.0f;	// -60√Î
 	}
 
 	Pointf Entity::getPosition() const

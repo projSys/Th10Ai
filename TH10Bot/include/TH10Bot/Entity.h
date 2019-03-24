@@ -24,7 +24,6 @@ namespace th
 	// |           |
 	// +-----------+
 	//       w
-
 	class Entity
 	{
 	public:
@@ -55,7 +54,7 @@ namespace th
 		Sizef getSize() const;
 		Rectf getRect() const;
 
-		float_t x;		// 坐标在中心点
+		float_t x;	// 坐标在中心点
 		float_t y;
 		float_t dx;
 		float_t dy;
@@ -136,7 +135,6 @@ namespace th
 	// |     |     |
 	// +-----+-----+
 	//       w
-
 	class Laser :
 		public Entity
 	{

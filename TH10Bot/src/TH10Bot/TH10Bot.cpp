@@ -1,6 +1,7 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/TH10Bot.h"
 
+#include <array>
 #include <thread>
 #include <chrono>
 #include <opencv2/opencv.hpp>
@@ -440,11 +441,7 @@ namespace th
 	// 处理对话
 	bool TH10Bot::handleTalk()
 	{
-		if (m_enemies.size() > 1 || !m_bullets.empty() || !m_lasers.empty())
-		{
-			m_talkCooldown = m_clock.getTimestamp();
-		}
-		else
+		if (m_enemies.size() <= 1 && m_bullets.empty() && m_lasers.empty())
 		{
 			// 延时2秒后对话
 			if (m_clock.getTimestamp() - m_talkCooldown >= 2000)
@@ -462,7 +459,10 @@ namespace th
 				return true;
 			}
 		}
-
+		else
+		{
+			m_talkCooldown = m_clock.getTimestamp();
+		}
 		return false;
 	}
 
@@ -534,16 +534,21 @@ namespace th
 		if (depth <= 0)
 			return res;
 
+		if (depth == 3)
+		{
+			std::cout << "---------------------------------" << std::endl;
+			std::cout << "bullet " << dres.dir << " " << dres.score << std::endl;
+		}
+
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
-		for (int_t i = DIR_HOLD; i < DIR_UP_SLOW; ++i)
+		for (int_t i = DIR_HOLD; i < DIR_HOLD_SLOW; ++i)
 		{
 			Direction dir;
 			if (dres.dir == DIR_NONE)
 				dir = DIRECTIONS[i];
 			else
 				dir = PD[dres.dir][i];
-			//assert(dir == i);
 
 			float_t nextX, nextY;
 			if (!IsSlow(dir))
@@ -564,11 +569,17 @@ namespace th
 			nextPlayer.y = nextY;
 
 			DfsResult nextRes = dfs(nextPlayer, frame + 1, depth - 1);
-			nextRes.score *= PS[i];
+			if (dres.dir != DIR_NONE)
+				nextRes.score += PS[i];	// 乘法会导致负分越乘越小
 			if (nextRes.score > bestScore)
 			{
 				bestScore = nextRes.score;
 				bestDir = dir;
+			}
+
+			if (depth == 3)
+			{
+				std::cout << dir << " " << nextRes.score << std::endl;
 			}
 		}
 		if (bestDir != DIR_NONE)
@@ -580,6 +591,10 @@ namespace th
 		//{
 		//	std::cout << "ssssssssssssssssssssssbbbbbbbbbbbbbbbbbbbb" << std::endl;
 		//}
+		if (depth == 3)
+		{
+			std::cout << "best " << bestDir << " " << bestScore << std::endl;
+		}
 		return res;
 	}
 
@@ -719,7 +734,7 @@ namespace th
 
 	DodgeResult TH10Bot::getDodgeBulletScore(const Player& player)
 	{
-		float_t score = 0.0f;
+		float_t score = 1000.0f;
 		float_t minFrames = std::numeric_limits<float_t>::max();
 		Direction dir = DIR_NONE;
 		for (const BulletLv1& lv1 : m_focusBullets)
@@ -727,7 +742,7 @@ namespace th
 			Bullet& bullet = m_bullets[lv1.index];
 
 			float_t frames = bullet.willCollideWith(m_player);
-			if (frames >= 0.0f)		// 将来会碰撞
+			if (frames >= 0.0f)	// 将来会碰撞
 			{
 				if (frames < minFrames)
 				{
