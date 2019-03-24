@@ -12,7 +12,7 @@ namespace th
 	{
 		float_t x;		// 垂足坐标
 		float_t y;
-		float_t frames;	// 到达垂足的帧数
+		float_t frame;	// 到达垂足的帧数
 	};
 
 	// 实体结构
@@ -41,7 +41,9 @@ namespace th
 		Direction getDirection() const;
 
 		bool collide(const Entity& other) const;
+		bool collide(const Entity& other, float_t frame) const;
 		float_t willCollideWith(const Entity& other) const;
+		float_t willCollideWith(const Entity& other, float_t frame) const;
 
 		Pointf getPosition() const;
 		void setPosition(const Pointf& pos);

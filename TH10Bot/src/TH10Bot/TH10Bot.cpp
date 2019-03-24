@@ -105,7 +105,7 @@ namespace th
 			float_t distance = bullet.getDistance(m_player);
 			FootPoint footPoint = bullet.getFootPoint(m_player);
 			if (distance < 100.0f	// 在附近的
-				|| (footPoint.frames >= 0.0f && footPoint.frames < 120.0f	// 将来可能碰撞的
+				|| (footPoint.frame >= 0.0f && footPoint.frame < 120.0f	// 将来可能碰撞的
 					&& m_player.getDistance(Pointf(footPoint.x, footPoint.y)) < 100.0f))
 			{
 				BulletLv1 lv1;
@@ -495,10 +495,12 @@ namespace th
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
-		DfsResult res = dfs(m_player, 0, 3);
+		DfsResult res = dfs(m_player, 0.0f, 3);
 
 		if (res.dir != DIR_NONE)
+		{
 			move(res.dir);
+		}
 		else
 		{
 			move(DIR_HOLD);
@@ -508,11 +510,12 @@ namespace th
 		return true;
 	}
 
-	DfsResult TH10Bot::dfs(const Player& player, int_t frame, int_t depth)
+	DfsResult TH10Bot::dfs(const Player& player, float_t frame, int_t depth)
 	{
 		DfsResult res = { 0.0f, DIR_NONE };
 
-		DodgeResult dres = getDodgeBulletScore(player);
+		DodgeResult dres = getDodgeBulletScore(player, frame);
+
 		res.score += dres.score;
 		//if (collideMove(player, frame))
 		//{
@@ -529,16 +532,16 @@ namespace th
 		//else if (enemyId != -1)
 		//	res.score += getShootEnemyScore(player, enemyId);
 		//else
-		//	res.score += getGobackScore(player);
+			res.score += getGobackScore(player);
 
 		if (depth <= 0)
 			return res;
 
-		if (depth == 3)
-		{
-			std::cout << "---------------------------------" << std::endl;
-			std::cout << "bullet " << dres.dir << " " << dres.score << std::endl;
-		}
+		//if (depth == 3)
+		//{
+		//	std::cout << "---------------------------------" << std::endl;
+		//	std::cout << "bullet " << dres.dir << " " << dres.score << std::endl;
+		//}
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
@@ -568,19 +571,21 @@ namespace th
 			nextPlayer.x = nextX;
 			nextPlayer.y = nextY;
 
-			DfsResult nextRes = dfs(nextPlayer, frame + 1, depth - 1);
+			DfsResult nextRes = dfs(nextPlayer, frame + 1.0f, depth - 1);
+
 			if (dres.dir != DIR_NONE)
 				nextRes.score += PS[i];	// 乘法会导致负分越乘越小
+
 			if (nextRes.score > bestScore)
 			{
 				bestScore = nextRes.score;
 				bestDir = dir;
 			}
 
-			if (depth == 3)
-			{
-				std::cout << dir << " " << nextRes.score << std::endl;
-			}
+			//if (depth == 3)
+			//{
+			//	std::cout << dir << " " << nextRes.score << std::endl;
+			//}
 		}
 		if (bestDir != DIR_NONE)
 		{
@@ -591,10 +596,12 @@ namespace th
 		//{
 		//	std::cout << "ssssssssssssssssssssssbbbbbbbbbbbbbbbbbbbb" << std::endl;
 		//}
-		if (depth == 3)
-		{
-			std::cout << "best " << bestDir << " " << bestScore << std::endl;
-		}
+
+		//if (depth == 3)
+		//{
+		//	std::cout << "best " << bestDir << " " << bestScore << std::endl;
+		//}
+
 		return res;
 	}
 
@@ -617,8 +624,8 @@ namespace th
 		{
 			Bullet& bullet = m_bullets[lv1.index];
 
-			float_t frames = bullet.willCollideWith(m_player);
-			if (frames >= 0.0f)
+			float_t collided = bullet.willCollideWith(m_player);
+			if (collided >= 0.0f)
 				return true;
 		}
 
@@ -732,27 +739,27 @@ namespace th
 		return score;
 	}
 
-	DodgeResult TH10Bot::getDodgeBulletScore(const Player& player)
+	DodgeResult TH10Bot::getDodgeBulletScore(const Player& player, float_t frame)
 	{
 		float_t score = 1000.0f;
-		float_t minFrames = std::numeric_limits<float_t>::max();
+		float_t minFrame = std::numeric_limits<float_t>::max();
 		Direction dir = DIR_NONE;
 		for (const BulletLv1& lv1 : m_focusBullets)
 		{
 			Bullet& bullet = m_bullets[lv1.index];
 
-			float_t frames = bullet.willCollideWith(m_player);
-			if (frames >= 0.0f)	// 将来会碰撞
+			float_t collided = bullet.willCollideWith(m_player, frame);
+			if (collided > -1.0f)	// 将来会碰撞
 			{
-				if (frames < minFrames)
+				if (collided < minFrame)
 				{
 					score = -1000.0f;
-					minFrames = frames;
+					minFrame = collided;
 					dir = lv1.dir;
 				}
 			}
 		}
-		return { score, minFrames, dir };
+		return { score, minFrame, dir };
 	}
 
 	float_t TH10Bot::getDodgeLaserScore(const Player& pNext, float_t epsilon)

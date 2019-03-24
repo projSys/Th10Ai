@@ -108,13 +108,13 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
-		DfsResult dfs(const Player& player, int_t frame, int_t depth);
+		DfsResult dfs(const Player& player, float_t frame, int_t depth);
 		bool collideMove(const Player& player, int_t frame);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
 		int_t findItem();
 		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
-		DodgeResult getDodgeBulletScore(const Player& player);
+		DodgeResult getDodgeBulletScore(const Player& player, float_t frame);
 		float_t getDodgeLaserScore(const Player& pNext, float_t epsilon = 2.0);
 		float_t getCollectItemScore(const Player& pNext, int_t itemId);
 		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);

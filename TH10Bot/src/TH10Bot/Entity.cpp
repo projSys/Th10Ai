@@ -86,14 +86,26 @@ namespace th
 		//	&& other.getBottomRight() > getTopLeft();
 	}
 
+	bool Entity::collide(const Entity& other, float_t frame) const
+	{
+		Entity temp(x + dx * frame, y + dy * frame, dx, dy, width, height);
+		return temp.collide(other);
+	}
+
 	float_t Entity::willCollideWith(const Entity& other) const
 	{
 		FootPoint footPoint = getFootPoint(other);
 		Entity temp(footPoint.x, footPoint.y, dx, dy, width, height);
 		if (temp.collide(other))
-			return footPoint.frames;
+			return footPoint.frame;
 		else
-			return -3600.0f;	// -60√Î
+			return std::numeric_limits<float_t>::lowest();
+	}
+
+	float_t Entity::willCollideWith(const Entity& other, float_t frame) const
+	{
+		Entity temp(x + dx * frame, y + dy * frame, dx, dy, width, height);
+		return temp.willCollideWith(other);
 	}
 
 	Pointf Entity::getPosition() const
