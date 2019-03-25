@@ -81,15 +81,15 @@ namespace th
 
 	const float_t PS[DIR_HOLD_SLOW] =
 	{
-		1200.0f,
-		1200.0f,
-		1100.0f,
-		1100.0f,
-		1000.0f,
-		900.0f,
-		800.0f,
-		800.0f,
-		700.0f
+		120.0f,
+		120.0f,
+		110.0f,
+		110.0f,
+		100.0f,
+		90.0f,
+		80.0f,
+		80.0f,
+		70.0f
 	};
 
 	// 斜方向的移动系数 x^2 + x^2 = 1^2
@@ -98,7 +98,6 @@ namespace th
 	// 各方向的移动系数
 	const Pointf DIR_FACTORS[DIR_MAXCOUNT] =
 	{
-		{ 0.0f, 0.0f },
 		{ 0.0f, 0.0f },				// 不动
 		{ 0.0f, -1.0f },			// 上
 		{ 0.0f, 1.0f },				// 下
@@ -108,6 +107,7 @@ namespace th
 		{ SQRT_PF, -SQRT_PF },		// 右上
 		{ -SQRT_PF, SQRT_PF },		// 左下
 		{ SQRT_PF, SQRT_PF },		// 右下
+		{ 0.0f, 0.0f },
 		{ 0.0f, -1.0f },
 		{ 0.0f, 1.0f },
 		{ -1.0f, 0.0f },

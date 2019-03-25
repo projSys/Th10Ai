@@ -1,7 +1,6 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/TH10Bot.h"
 
-#include <array>
 #include <thread>
 #include <chrono>
 #include <opencv2/opencv.hpp>
@@ -105,14 +104,13 @@ namespace th
 			float_t distance = bullet.getDistance(m_player);
 			FootPoint footPoint = bullet.getFootPoint(m_player);
 			if (distance < 100.0f	// 在附近的
-				|| (footPoint.frame >= 0.0f && footPoint.frame < 120.0f	// 将来可能碰撞的
-					&& m_player.getDistance(Pointf(footPoint.x, footPoint.y)) < 100.0f))
+				|| (m_player.getDistance(Pointf(footPoint.x, footPoint.y)) < 100.0f
+					&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
 			{
-				BulletLv1 lv1;
-				lv1.index = i;
-				lv1.footPoint = footPoint;
-				lv1.dir = bullet.getDirection();
-				m_focusBullets.push_back(lv1);
+				BulletView view;
+				view.index = i;
+				view.dir = bullet.getDirection();
+				m_focusBullets.push_back(view);
 			}
 		}
 		//m_focusLasers.clear();
@@ -495,7 +493,7 @@ namespace th
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
-		DfsResult res = dfs(m_player, 0.0f, 3);
+		DfsResult res = dfs(m_player, 0.0f, 1);
 
 		if (res.dir != DIR_NONE)
 		{
@@ -527,11 +525,11 @@ namespace th
 		//	res.score += 1000.0f;
 		//}
 
-		//if (itemId != -1)
-		//	res.score += getCollectItemScore(player, itemId);
-		//else if (enemyId != -1)
-		//	res.score += getShootEnemyScore(player, enemyId);
-		//else
+		if (m_itemId != -1)
+			res.score += getCollectItemScore(player, m_itemId);
+		else if (m_enemyId != -1)
+			res.score += getShootEnemyScore(player, m_enemyId);
+		else
 			res.score += getGobackScore(player);
 
 		if (depth <= 0)
@@ -620,9 +618,9 @@ namespace th
 		//	enemy.setPos(oldPos);
 		//}
 
-		for (const BulletLv1& lv1 : m_focusBullets)
+		for (const BulletView& view : m_focusBullets)
 		{
-			Bullet& bullet = m_bullets[lv1.index];
+			Bullet& bullet = m_bullets[view.index];
 
 			float_t collided = bullet.willCollideWith(m_player);
 			if (collided >= 0.0f)
@@ -744,9 +742,9 @@ namespace th
 		float_t score = 1000.0f;
 		float_t minFrame = std::numeric_limits<float_t>::max();
 		Direction dir = DIR_NONE;
-		for (const BulletLv1& lv1 : m_focusBullets)
+		for (const BulletView& view : m_focusBullets)
 		{
-			Bullet& bullet = m_bullets[lv1.index];
+			Bullet& bullet = m_bullets[view.index];
 
 			float_t collided = bullet.willCollideWith(m_player, frame);
 			if (collided > -1.0f)	// 将来会碰撞
@@ -755,7 +753,7 @@ namespace th
 				{
 					score = -1000.0f;
 					minFrame = collided;
-					dir = lv1.dir;
+					dir = view.dir;
 				}
 			}
 		}

@@ -18,11 +18,9 @@
 
 namespace th
 {
-	struct BulletLv1
+	struct BulletView
 	{
 		uint_t index;
-		//float_t distance;
-		FootPoint footPoint;
 		Direction dir;
 	};
 
@@ -33,42 +31,6 @@ namespace th
 		FootPoint footPoint;
 		float_t angle;
 		Direction dir;
-	};
-
-	struct ActionLv1
-	{
-		uint_t index;
-		Direction dir;
-	};
-
-	class Frame
-	{
-	public:
-
-
-	private:
-		int_t m_map[448][384];
-	};
-
-	class FrameAxis
-	{
-	public:
-
-
-		bool operator <(const FrameAxis& other) const
-		{
-			return m_pos < other.m_pos;
-		}
-
-	private:
-		Pointf m_pos;
-		std::vector<Frame> m_frames;
-	};
-
-	class AxisPos
-	{
-	public:
-
 	};
 
 	struct DfsResult
@@ -156,7 +118,7 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		std::vector<BulletLv1> m_focusBullets;
+		std::vector<BulletView> m_focusBullets;
 		std::vector<LaserLv1> m_focusLasers;
 
 		int_t m_itemId;

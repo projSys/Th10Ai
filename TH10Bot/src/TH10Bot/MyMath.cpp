@@ -32,8 +32,8 @@ namespace th
 	{
 		float_t dx = B.x - A.x;
 		float_t dy = B.y - A.y;
-		float_t ratio = ((P.x - A.x) * dx + (P.y - A.y) * dy) / (dx * dx + dy * dy);
-		return Pointf(A.x + dx * ratio, A.y + dy * ratio);
+		float_t scale = ((P.x - A.x) * dx + (P.y - A.y) * dy) / (dx * dx + dy * dy);
+		return Pointf(A.x + dx * scale, A.y + dy * scale);
 	}
 
 	Pointf MyMath::Rotate(const Pointf& P, const Pointf& C, float_t radianC)

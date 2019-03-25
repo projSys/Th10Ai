@@ -37,8 +37,8 @@ namespace th
 		if (isHolding())
 			return { x, y, 0.0f };
 
-		float_t ratio = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
-		return { x + dx * ratio, y + dy * ratio, ratio };
+		float_t scale = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
+		return { x + dx * scale, y + dy * scale, scale };
 	}
 
 	FootPoint Entity::getFootPoint(const Entity& other) const
