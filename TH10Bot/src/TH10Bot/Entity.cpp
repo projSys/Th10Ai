@@ -35,7 +35,7 @@ namespace th
 	FootPoint Entity::getFootPoint(const Pointf& other) const
 	{
 		if (isHolding())
-			return { x, y, 0.0f };
+			return { x, y, std::numeric_limits<float_t>::max() };
 
 		float_t scale = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
 		return { x + dx * scale, y + dy * scale, scale };

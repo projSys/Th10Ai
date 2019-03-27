@@ -56,6 +56,7 @@ namespace th
 		Sizef getSize() const;
 		Rectf getRect() const;
 
+	//private:
 		float_t x;	// 坐标在中心点
 		float_t y;
 		float_t dx;
