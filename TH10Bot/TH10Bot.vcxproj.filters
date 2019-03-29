@@ -57,6 +57,21 @@
     <ClInclude Include="include\TH10Bot\Controller.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
+    <ClInclude Include="include\TH10Bot\Bullet.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Enemy.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Item.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Laser.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Player.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TH10Bot\Clock.cpp">
@@ -90,6 +105,21 @@
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\TH10Bot\Controller.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Bullet.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Enemy.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Item.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Laser.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Player.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
   </ItemGroup>

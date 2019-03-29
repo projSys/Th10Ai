@@ -92,33 +92,26 @@ namespace th
 		70.0f
 	};
 
-	// 斜方向的移动系数 x^2 + x^2 = 1^2
-	const float_t SQRT_PF = std::sqrt(0.5f);
-
-	// 各方向的移动系数
-	const Pointf DIR_FACTORS[DIR_MAXCOUNT] =
+	// 各方向的移动速度
+	const Pointf MOVE_SPEED[DIR_MAXCOUNT] =
 	{
-		{ 0.0f, 0.0f },				// 不动
-		{ 0.0f, -1.0f },			// 上
-		{ 0.0f, 1.0f },				// 下
-		{ -1.0f, 0.0f },			// 左
-		{ 1.0f, 0.0f },				// 右
-		{ -SQRT_PF, -SQRT_PF },		// 左上
-		{ SQRT_PF, -SQRT_PF },		// 右上
-		{ -SQRT_PF, SQRT_PF },		// 左下
-		{ SQRT_PF, SQRT_PF },		// 右下
+		{ 0.0f, 0.0f },			// 不动
+		{ 0.0f, -4.5f },		// 上
+		{ 0.0f, 4.5f },			// 下
+		{ -4.5f, 0.0f },		// 左
+		{ 4.5f, 0.0f },			// 右
+		{ -3.18f, -3.18f },		// 左上
+		{ 3.18f, -3.18f },		// 右上
+		{ -3.18f, 3.18f },		// 左下
+		{ 3.18f, 3.18f },		// 右下
 		{ 0.0f, 0.0f },
-		{ 0.0f, -1.0f },
-		{ 0.0f, 1.0f },
-		{ -1.0f, 0.0f },
-		{ 1.0f, 0.0f },
-		{ -SQRT_PF, -SQRT_PF },
-		{ SQRT_PF, -SQRT_PF },
-		{ -SQRT_PF, SQRT_PF },
-		{ SQRT_PF, SQRT_PF }
+		{ 0.0f, -2.0f },
+		{ 0.0f, 2.0f },
+		{ -2.0f, 0.0f },
+		{ 2.0f, 0.0f },
+		{ -1.41f, -1.41f },
+		{ 1.41f, -1.41f },
+		{ -1.41f, 1.41f },
+		{ 1.41f, 1.41f }
 	};
-
-	// 移动速度
-	const float_t MOVE_SPEED = 4.5f;
-	const float_t MOVE_SPEED_SLOW = 2.0f;
 }

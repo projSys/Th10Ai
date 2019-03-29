@@ -33,6 +33,8 @@ namespace th
 		m_focusBullets.reserve(500);
 		m_focusLasers.reserve(300);
 
+		m_path.reserve(100);
+
 		srand((unsigned int)time(nullptr));
 	}
 
@@ -91,6 +93,23 @@ namespace th
 		m_reader.getBullets(m_bullets);
 		m_reader.getLasers(m_lasers);
 
+		//std::cout << m_player.x << " " << m_player.y << std::endl;
+		//m_keyShift.press();
+		//static bool b = true;
+		//if (b)
+		//{
+		//	m_keyRight.press();
+		//	m_keyUp.press();
+		//	b = false;
+		//}
+		//else
+		//{
+		//	m_keyRight.release();
+		//	m_keyUp.release();
+		//	b = true;
+		//}
+		//return;
+
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 		//std::cout << "e1: " << e1 << std::endl;
@@ -110,6 +129,7 @@ namespace th
 				BulletView view;
 				view.index = i;
 				view.dir = bullet.getDirection();
+				view.footPoint = footPoint;
 				m_focusBullets.push_back(view);
 			}
 		}
@@ -180,9 +200,9 @@ namespace th
 		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 		//	cv::rectangle(m_image.m_data, rect, red, -1);
 		//}
-		for (const BulletLv1& lv1 : m_focusBullets)
+		for (const BulletView& view : m_focusBullets)
 		{
-			const Bullet& bullet = m_bullets[lv1.index];
+			const Bullet& bullet = m_bullets[view.index];
 
 			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
@@ -190,27 +210,27 @@ namespace th
 
 			// 显示垂足
 			Pointi p1 = Scene::ToWindowPos(bullet.getPosition());
-			Pointi p2 = Scene::ToWindowPos(lv1.footPoint.pos);
+			Pointi p2 = Scene::ToWindowPos(Pointf(view.footPoint.x, view.footPoint.y));
 			Pointi p3 = Scene::ToWindowPos(m_player.getPosition());
 			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), orange);
 			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), orange);
 
 			// 显示方向
-			if (lv1.dir == DIR_UP)
+			if (view.dir == DIR_UP)
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y - 20), yellow);
-			else if (lv1.dir == DIR_DOWN)
+			else if (view.dir == DIR_DOWN)
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y + 20), yellow);
-			else if (lv1.dir == DIR_LEFT)
+			else if (view.dir == DIR_LEFT)
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y), yellow);
-			else if (lv1.dir == DIR_RIGHT)
+			else if (view.dir == DIR_RIGHT)
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y), yellow);
-			else if (lv1.dir == DIR_UPLEFT)
+			else if (view.dir == DIR_UPLEFT)
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y - 20), yellow);
-			else if (lv1.dir == DIR_UPRIGHT)
+			else if (view.dir == DIR_UPRIGHT)
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y - 20), yellow);
-			else if (lv1.dir == DIR_DOWNLEFT)
+			else if (view.dir == DIR_DOWNLEFT)
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y + 20), yellow);
-			else if (lv1.dir == DIR_DOWNRIGHT)
+			else if (view.dir == DIR_DOWNRIGHT)
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
 		}
 
@@ -388,6 +408,10 @@ namespace th
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
+		Node start = {};
+		Node goal = {};
+		aStar(start, goal);
+
 		NodeResult result = dfs(m_player, 0.0f, 3);
 		if (result.nextDir != DIR_NONE)
 		{
@@ -409,20 +433,20 @@ namespace th
 		// 计算当前节点分数
 		float_t minCollideFrame = std::numeric_limits<float_t>::max();
 		Direction minCollideDir = DIR_NONE;
-		int_t collideCount = 0;
+		int_t willCollideCount = 0;
 		for (const BulletView& view : m_focusBullets)
 		{
 			Bullet& bullet = m_bullets[view.index];
 
 			float_t collideFrame = bullet.willCollideWith(m_player, frame);
-			if (collideFrame > -1.0f)	// 已/会碰撞
+			if (collideFrame > -1.0f)	// 已？/会碰撞
 			{
 				if (collideFrame < minCollideFrame)
 				{
 					minCollideFrame = collideFrame;
 					minCollideDir = view.dir;
 				}
-				collideCount += 1;
+				willCollideCount += 1;
 			}
 		}
 		curResult.minCollideFrame = minCollideFrame;
@@ -465,23 +489,13 @@ namespace th
 			else
 				dir = PD[minCollideDir][i];
 
-			float_t nextX, nextY;
-			if (!IsSlow(dir))
-			{
-				nextX = m_player.x + DIR_FACTORS[dir].x * MOVE_SPEED;
-				nextY = m_player.y + DIR_FACTORS[dir].y * MOVE_SPEED;
-			}
-			else
-			{
-				nextX = m_player.x + DIR_FACTORS[dir].x * MOVE_SPEED_SLOW;
-				nextY = m_player.y + DIR_FACTORS[dir].y * MOVE_SPEED_SLOW;
-			}
-			if (!Scene::IsInScene(Pointf(nextX, nextY)))
+			Pointf nextPos = m_player.getPosition() + MOVE_SPEED[dir];
+
+			if (!Scene::IsInScene(nextPos))
 				continue;
 
 			Player nextPlayer = player;
-			nextPlayer.x = nextX;
-			nextPlayer.y = nextY;
+			nextPlayer.setPosition(nextPos);
 
 			NodeResult nextResult = dfs(nextPlayer, frame + 1.0f, depth - 1);
 
@@ -509,6 +523,69 @@ namespace th
 		return curResult;
 	}
 
+	void TH10Bot::aStar(Node& start, Node& goal)
+	{
+		//std::set<Node, PositionLess> openSet;
+		//std::set<Node, PositionLess> closedSet;
+
+		//start.gScore = 0.0f;
+		//start.hScore = heuristicCostEstimate(start, goal);
+		//start.fScore = start.gScore + start.hScore;
+		//openSet.insert(start);
+
+		//while (!openSet.empty())
+		//{
+		//	// fScore取最大值，优先靠近终点的节点，和wiki的A*相反
+		//	auto maxIt = --openSet.end();
+		//	Node current = *maxIt;
+		//	if (current == goal)
+		//	{
+		//		reconstructPath(current);
+		//		return;
+		//	}
+
+		//	openSet.erase(maxIt);
+		//	closedSet.insert(current);	// O(log(N))1
+
+		//	for (Node neighbor : current)
+		//	{
+		//		if (closedSet.count(neighbor) == 1)	// O(log(N))2
+		//			continue;
+
+		//		// gScore在递增
+		//		neighbor.gScore = current.gScore + distBetween(current, neighbor);
+		//		neighbor.hScore = heuristicCostEstimate(neighbor, goal);
+		//		neighbor.fScore = neighbor.gScore + neighbor.hScore;
+
+		//		auto oldIt = openSet.find(neighbor);	// O(log(N))3
+		//		if (oldIt == openSet.end())
+		//		{
+		//			openSet.insert(neighbor);	// O(log(N))4
+		//		}
+		//		else if (neighbor.gScore > (*oldIt).gScore)
+		//		{
+		//			openSet.erase(oldIt);
+		//			openSet.insert(neighbor);	// O(log(N))4
+		//		}
+		//	}
+		//}
+	}
+
+	float_t TH10Bot::distBetween(const Node& current, const Node& neighbor)
+	{
+		return 0.0f;
+	}
+
+	float_t TH10Bot::heuristicCostEstimate(const Node& neighbor, const Node& goal)
+	{
+		return 0.0f;
+	}
+
+	void TH10Bot::reconstructPath(const Node& goal)
+	{
+		m_path.clear();
+	}
+
 	NodeScore TH10Bot::getNodeScore(const Player& player, float_t frame)
 	{
 		NodeScore score = { 0.0f, std::numeric_limits<float_t>::max(), DIR_NONE, 0 };
@@ -518,14 +595,14 @@ namespace th
 			Bullet& bullet = m_bullets[view.index];
 
 			float_t collideFrame = bullet.willCollideWith(m_player, frame);
-			if (collideFrame > -1.0f)	// 已/会碰撞
+			if (collideFrame > -1.0f)	// 已？/会碰撞
 			{
 				if (collideFrame < score.minCollideFrame)
 				{
 					score.minCollideFrame = collideFrame;
 					score.minCollideDir = view.dir;
 				}
-				score.collideCount += 1;
+				score.willCollideCount += 1;
 			}
 		}
 

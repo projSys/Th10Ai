@@ -141,7 +141,7 @@ namespace th
 
 	bool Entity::isHolding() const
 	{
-		return TypeTraits<float_t>::IsZero(dx) && TypeTraits<float_t>::IsZero(dy);
+		return dx == 0.0f && dy == 0.0f;
 	}
 
 	Pointf Entity::getNextPos() const

@@ -147,28 +147,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\TH10Bot\Bullet.h" />
     <ClInclude Include="include\TH10Bot\Clock.h" />
     <ClInclude Include="include\TH10Bot\Common.h" />
     <ClInclude Include="include\TH10Bot\Controller.h" />
     <ClInclude Include="include\TH10Bot\Define.h" />
     <ClInclude Include="include\TH10Bot\DesktopCapturerCV.h" />
     <ClInclude Include="include\TH10Bot\DesktopImageCV.h" />
+    <ClInclude Include="include\TH10Bot\Enemy.h" />
     <ClInclude Include="include\TH10Bot\Entity.h" />
+    <ClInclude Include="include\TH10Bot\Item.h" />
     <ClInclude Include="include\TH10Bot\Key.h" />
+    <ClInclude Include="include\TH10Bot\Laser.h" />
     <ClInclude Include="include\TH10Bot\MyMath.h" />
+    <ClInclude Include="include\TH10Bot\Player.h" />
     <ClInclude Include="include\TH10Bot\Scene.h" />
     <ClInclude Include="include\TH10Bot\TH10Bot.h" />
     <ClInclude Include="include\TH10Bot\TH10Reader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\TH10Bot\Bullet.cpp" />
     <ClCompile Include="src\TH10Bot\Clock.cpp" />
     <ClCompile Include="src\TH10Bot\Controller.cpp" />
     <ClCompile Include="src\TH10Bot\DesktopCapturerCV.cpp" />
     <ClCompile Include="src\TH10Bot\DesktopImageCV.cpp" />
+    <ClCompile Include="src\TH10Bot\Enemy.cpp" />
     <ClCompile Include="src\TH10Bot\Entity.cpp" />
+    <ClCompile Include="src\TH10Bot\Item.cpp" />
     <ClCompile Include="src\TH10Bot\Key.cpp" />
+    <ClCompile Include="src\TH10Bot\Laser.cpp" />
     <ClCompile Include="src\TH10Bot\main.cpp" />
     <ClCompile Include="src\TH10Bot\MyMath.cpp" />
+    <ClCompile Include="src\TH10Bot\Player.cpp" />
     <ClCompile Include="src\TH10Bot\Scene.cpp" />
     <ClCompile Include="src\TH10Bot\TH10Bot.cpp" />
     <ClCompile Include="src\TH10Bot\TH10Reader.cpp" />

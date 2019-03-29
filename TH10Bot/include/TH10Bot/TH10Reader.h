@@ -1,4 +1,3 @@
-// https://github.com/binvec/TH10_DataReversing
 #pragma once
 
 #include <vector>
@@ -8,6 +7,7 @@
 
 namespace th
 {
+	// https://github.com/binvec/TH10_DataReversing
 	class TH10Reader
 	{
 	public:

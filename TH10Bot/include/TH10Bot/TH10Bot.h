@@ -22,6 +22,8 @@ namespace th
 	{
 		uint_t index;
 		Direction dir;
+
+		FootPoint footPoint;
 	};
 
 	struct LaserLv1
@@ -35,7 +37,25 @@ namespace th
 
 	struct Node
 	{
+		float_t gScore;
+		float_t hScore;
+		float_t fScore;
+	};
 
+	struct PositionLess
+	{
+		bool operator ()(const Node& left, const Node& right) const
+		{
+			return false;
+		}
+	};
+
+	struct ScoreLess
+	{
+		bool operator ()(const Node& left, const Node& right) const
+		{
+			return left.fScore < right.fScore;
+		}
 	};
 
 	struct NodeScore
@@ -43,7 +63,7 @@ namespace th
 		float_t score;
 		float_t minCollideFrame;
 		Direction minCollideDir;
-		int_t collideCount;
+		int_t willCollideCount;
 	};
 
 	struct NodeResult
@@ -78,6 +98,10 @@ namespace th
 
 		bool handleMove();
 		NodeResult dfs(const Player& player, float_t frame, int_t depth);
+		void aStar(Node& start, Node& goal);
+		float_t distBetween(const Node& current, const Node& neighbor);
+		float_t heuristicCostEstimate(const Node& neighbor, const Node& goal);
+		void reconstructPath(const Node& goal);
 		NodeScore getNodeScore(const Player& player, float_t frame);
 		//bool collideMove(const Player& player, int_t frame);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
@@ -130,6 +154,8 @@ namespace th
 
 		int_t m_itemId;
 		int_t m_enemyId;
+
+		std::vector<Node> m_path;
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;

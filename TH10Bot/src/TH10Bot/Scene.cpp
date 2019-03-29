@@ -17,6 +17,6 @@ namespace th
 
 	bool Scene::IsInScene(const Pointf& pos)
 	{
-		return pos.x > -192.0f && pos.x < 192.0f && pos.y > 0.0f && pos.y < 448.0f;
+		return pos.x > -184.0f && pos.x < 184.0f && pos.y > 32.0f && pos.y < 432.0f;
 	}
 }
