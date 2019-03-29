@@ -103,7 +103,7 @@ namespace th
 		float_t heuristicCostEstimate(const Node& neighbor, const Node& goal);
 		void reconstructPath(const Node& goal);
 		NodeScore getNodeScore(const Player& player, float_t frame);
-		//bool collideMove(const Player& player, int_t frame);
+		bool collideMove(const Player& player, float_t frame);
 		float_t getTargetScore(const Player& pNext, const Pointf& target);
 		int_t findItem();
 		int_t findEnemy();

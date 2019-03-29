@@ -408,9 +408,9 @@ namespace th
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
-		Node start = {};
-		Node goal = {};
-		aStar(start, goal);
+		//Node start = {};
+		//Node goal = {};
+		//aStar(start, goal);
 
 		NodeResult result = dfs(m_player, 0.0f, 3);
 		if (result.nextDir != DIR_NONE)
@@ -431,43 +431,42 @@ namespace th
 		NodeResult curResult = { 0.0f, DIR_NONE, 0.0f };
 
 		// 计算当前节点分数
-		float_t minCollideFrame = std::numeric_limits<float_t>::max();
-		Direction minCollideDir = DIR_NONE;
-		int_t willCollideCount = 0;
-		for (const BulletView& view : m_focusBullets)
+		//float_t minCollideFrame = std::numeric_limits<float_t>::max();
+		//Direction minCollideDir = DIR_NONE;
+		//int_t willCollideCount = 0;
+		//for (const BulletView& view : m_focusBullets)
+		//{
+		//	Bullet& bullet = m_bullets[view.index];
+
+		//	float_t collideFrame = bullet.willCollideWith(m_player, frame);
+		//	if (collideFrame > -1.0f)	// 已？/会碰撞
+		//	{
+		//		if (collideFrame < minCollideFrame)
+		//		{
+		//			minCollideFrame = collideFrame;
+		//			minCollideDir = view.dir;
+		//		}
+		//		willCollideCount += 1;
+		//	}
+		//}
+		//curResult.minCollideFrame = minCollideFrame;
+
+		if (collideMove(player, frame))
 		{
-			Bullet& bullet = m_bullets[view.index];
-
-			float_t collideFrame = bullet.willCollideWith(m_player, frame);
-			if (collideFrame > -1.0f)	// 已？/会碰撞
-			{
-				if (collideFrame < minCollideFrame)
-				{
-					minCollideFrame = collideFrame;
-					minCollideDir = view.dir;
-				}
-				willCollideCount += 1;
-			}
+			curResult.score += -50000.0f;
+			return curResult;
 		}
-		curResult.minCollideFrame = minCollideFrame;
-
-		//thisResult.score += thisScore.score;
-		//if (collideMove(player, frame))
-		//{
-		//	thisResult.score += -10000.0f;
-		//	return res;
-		//}
 		//else
 		//{
-		//	thisResult.score += 1000.0f;
+		//	curResult.score += 1000.0f;
 		//}
 
-		//if (m_itemId != -1)
-		//	thisResult.score += getCollectItemScore(player, m_itemId);
-		//else if (m_enemyId != -1)
-		//	thisResult.score += getShootEnemyScore(player, m_enemyId);
-		//else
-		//	thisResult.score += getGobackScore(player);
+		if (m_itemId != -1)
+			curResult.score += getCollectItemScore(player, m_itemId);
+		else if (m_enemyId != -1)
+			curResult.score += getShootEnemyScore(player, m_enemyId);
+		else
+			curResult.score += getGobackScore(player);
 
 		if (depth <= 0)
 			return curResult;
@@ -479,15 +478,16 @@ namespace th
 		//}
 
 		// 计算子节点分数
-		float_t nextMaxCollideFrame = std::numeric_limits<float_t>::lowest();
+		//float_t nextMaxCollideFrame = std::numeric_limits<float_t>::lowest();
+		float_t nextScore = std::numeric_limits<float_t>::lowest();
 		Direction nextDir = DIR_NONE;
-		for (int_t i = DIR_HOLD; i < 9; ++i)
+		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
 			Direction dir;
-			if (minCollideDir == DIR_NONE)
+			//if (minCollideDir == DIR_NONE)
 				dir = DIRECTIONS[i];
-			else
-				dir = PD[minCollideDir][i];
+			//else
+			//	dir = PD[minCollideDir][i];
 
 			Pointf nextPos = m_player.getPosition() + MOVE_SPEED[dir];
 
@@ -502,9 +502,13 @@ namespace th
 			//if (minCollideDir != DIR_NONE)
 			//	nextResult.score += PS[i];
 
-			if (nextResult.minCollideFrame > nextMaxCollideFrame)
+/*			if (nextResult.score < -10000.0f)
 			{
-				nextMaxCollideFrame = nextResult.minCollideFrame;
+				continue;
+			}
+			else */if (nextResult.score > nextScore)
+			{
+				nextScore = nextResult.score;
 				nextDir = dir;
 			}
 
@@ -513,6 +517,7 @@ namespace th
 			//	std::cout << dir << " " << nextRes.score << std::endl;
 			//}
 		}
+		curResult.score += nextScore;
 		curResult.nextDir = nextDir;
 
 		//if (depth == 3)
@@ -536,7 +541,7 @@ namespace th
 		//while (!openSet.empty())
 		//{
 		//	// fScore取最大值，优先靠近终点的节点，和wiki的A*相反
-		//	auto maxIt = --openSet.end();
+		//	auto maxIt = --openSet.end(); // 错的
 		//	Node current = *maxIt;
 		//	if (current == goal)
 		//	{
@@ -609,47 +614,32 @@ namespace th
 		return score;
 	}
 
-	//bool TH10Bot::collideMove(const Player& player, int_t frame)
-	//{
-	//	for (Enemy& enemy : m_enemies)
-	//	{
-	//		Pointf oldPos = enemy.getPos();
-	//		Pointf newPos = enemy.advanceTo(frame);
-	//		enemy.setPos(newPos);
-	//		if (player.collide(enemy))
-	//		{
-	//			enemy.setPos(oldPos);
-	//			return true;
-	//		}
-	//		enemy.setPos(oldPos);
-	//	}
+	bool TH10Bot::collideMove(const Player& player, float_t frame)
+	{
+		for (Enemy& enemy : m_enemies)
+		{
+			if (enemy.collide(m_player, frame))
+				return true;
+		}
 
-	//	for (const BulletView& view : m_focusBullets)
-	//	{
-	//		Bullet& bullet = m_bullets[view.index];
+		for (const BulletView& view : m_focusBullets)
+		{
+			Bullet& bullet = m_bullets[view.index];
 
-	//		float_t collided = bullet.willCollideWith(m_player);
-	//		if (collided >= 0.0f)
-	//			return true;
-	//	}
+			if (bullet.collide(m_player, frame))
+				return true;
+		}
 
-	//	for (const LaserLv1& lv1 : m_focusLasers)
-	//	{
-	//		Laser& laser = m_lasers[lv1.index];
+		for (const LaserLv1& lv1 : m_focusLasers)
+		{
+			Laser& laser = m_lasers[lv1.index];
 
-	//		Pointf oldPos = laser.getPos();
-	//		Pointf newPos = laser.advanceTo(frame);
-	//		laser.setPos(newPos);
-	//		if (player.collideSAT(laser))
-	//		{
-	//			laser.setPos(oldPos);
-	//			return true;
-	//		}
-	//		laser.setPos(oldPos);
-	//	}
+			if (player.collideSAT(laser))
+				return true;
+		}
 
-	//	return false;
-	//}
+		return false;
+	}
 
 	float_t TH10Bot::getTargetScore(const Player& pNext, const Pointf& target)
 	{

@@ -93,6 +93,8 @@ namespace th
 	};
 
 	// 各方向的移动速度
+	// 3.18 = 4.5 * sqrt(0.5)
+	// 1.41 = 2.0 * sqrt(0.5)
 	const Pointf MOVE_SPEED[DIR_MAXCOUNT] =
 	{
 		{ 0.0f, 0.0f },			// 不动
