@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <set>
 #include <sstream>
 #include <Windows/Process.h>
 #include <Windows/Window.h>
@@ -18,61 +17,6 @@
 
 namespace th
 {
-	struct BulletView
-	{
-		uint_t index;
-		Direction dir;
-
-		FootPoint footPoint;
-	};
-
-	struct LaserLv1
-	{
-		uint_t index;
-		float_t distance;
-		FootPoint footPoint;
-		float_t angle;
-		Direction dir;
-	};
-
-	struct Node
-	{
-		float_t gScore;
-		float_t hScore;
-		float_t fScore;
-	};
-
-	struct PositionLess
-	{
-		bool operator ()(const Node& left, const Node& right) const
-		{
-			return false;
-		}
-	};
-
-	struct ScoreLess
-	{
-		bool operator ()(const Node& left, const Node& right) const
-		{
-			return left.fScore < right.fScore;
-		}
-	};
-
-	struct NodeScore
-	{
-		float_t score;
-		float_t minCollideFrame;
-		Direction minCollideDir;
-		int_t willCollideCount;
-	};
-
-	struct NodeResult
-	{
-		float_t score;
-		Direction nextDir;
-		float_t minCollideFrame;
-	};
-
 	class TH10Bot
 	{
 	public:

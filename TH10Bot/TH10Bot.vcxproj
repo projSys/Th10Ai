@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\TH10Bot\AStar.h" />
     <ClInclude Include="include\TH10Bot\Bullet.h" />
     <ClInclude Include="include\TH10Bot\Clock.h" />
     <ClInclude Include="include\TH10Bot\Common.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="include\TH10Bot\TH10Reader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\TH10Bot\AStar.cpp" />
     <ClCompile Include="src\TH10Bot\Bullet.cpp" />
     <ClCompile Include="src\TH10Bot\Clock.cpp" />
     <ClCompile Include="src\TH10Bot\Controller.cpp" />

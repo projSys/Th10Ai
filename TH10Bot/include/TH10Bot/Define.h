@@ -116,4 +116,75 @@ namespace th
 		{ -1.41f, 1.41f },
 		{ 1.41f, 1.41f }
 	};
+
+	struct FootPoint
+	{
+		float_t x;		// 垂足坐标
+		float_t y;
+		float_t frame;	// 到达垂足的帧数
+	};
+
+	struct BulletView
+	{
+		uint_t index;
+		Direction dir;
+
+		FootPoint footPoint;
+	};
+
+	struct LaserLv1
+	{
+		uint_t index;
+		float_t distance;
+		FootPoint footPoint;
+		float_t angle;
+		Direction dir;
+	};
+
+	struct Node
+	{
+		float_t x;
+		float_t y;
+
+		float_t gScore;
+		float_t hScore;
+		float_t fScore;
+
+		bool operator ==(const Node& other) const
+		{
+			return TypeTraits<float_t>::Equals(x, other.x)
+				&& TypeTraits<float_t>::Equals(y, other.y);
+		}
+	};
+
+	struct PosLess
+	{
+		bool operator ()(const Node& left, const Node& right) const
+		{
+			return left.x < right.x && left.y < right.y;
+		}
+	};
+
+	struct ScoreLess
+	{
+		bool operator ()(const Node& left, const Node& right) const
+		{
+			return left.fScore < right.fScore;
+		}
+	};
+
+	struct NodeScore
+	{
+		float_t score;
+		float_t minCollideFrame;
+		Direction minCollideDir;
+		int_t willCollideCount;
+	};
+
+	struct NodeResult
+	{
+		float_t score;
+		Direction nextDir;
+		float_t minCollideFrame;
+	};
 }

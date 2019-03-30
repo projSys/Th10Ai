@@ -72,6 +72,9 @@
     <ClInclude Include="include\TH10Bot\Player.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
+    <ClInclude Include="include\TH10Bot\AStar.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TH10Bot\Clock.cpp">
@@ -120,6 +123,9 @@
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\TH10Bot\Player.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\AStar.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
   </ItemGroup>

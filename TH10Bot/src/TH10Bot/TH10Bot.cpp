@@ -1,6 +1,7 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/TH10Bot.h"
 
+#include <set>
 #include <thread>
 #include <chrono>
 #include <opencv2/opencv.hpp>
@@ -485,7 +486,7 @@ namespace th
 		{
 			Direction dir;
 			//if (minCollideDir == DIR_NONE)
-				dir = DIRECTIONS[i];
+			dir = DIRECTIONS[i];
 			//else
 			//	dir = PD[minCollideDir][i];
 
@@ -530,50 +531,70 @@ namespace th
 
 	void TH10Bot::aStar(Node& start, Node& goal)
 	{
-		//std::set<Node, PositionLess> openSet;
-		//std::set<Node, PositionLess> closedSet;
+		std::set<Node, PosLess> closedSet;
+		std::set<Node, PosLess> openSet;
+		std::set<Node, ScoreLess> openScoreSet;
+		//std::multiset<Node, ScoreLess> openScoreSet;
 
-		//start.gScore = 0.0f;
-		//start.hScore = heuristicCostEstimate(start, goal);
-		//start.fScore = start.gScore + start.hScore;
-		//openSet.insert(start);
+		start.gScore = 0.0f;
+		start.hScore = heuristicCostEstimate(start, goal);
+		start.fScore = start.gScore + start.hScore;
+		openSet.insert(start);
+		openScoreSet.insert(start);
+		assert(openSet.size() == openScoreSet.size());
 
-		//while (!openSet.empty())
-		//{
-		//	// fScore取最大值，优先靠近终点的节点，和wiki的A*相反
-		//	auto maxIt = --openSet.end(); // 错的
-		//	Node current = *maxIt;
-		//	if (current == goal)
-		//	{
-		//		reconstructPath(current);
-		//		return;
-		//	}
+		m_path.clear();
+		while (!openSet.empty())
+		{
+			auto lowestIt = openScoreSet.begin();
+			//auto maxIt = --openScoreSet.end();
+			Node current = *lowestIt;
 
-		//	openSet.erase(maxIt);
-		//	closedSet.insert(current);	// O(log(N))1
+			if (current == goal)
+			{
+				reconstructPath(current);
+				return;
+			}
 
-		//	for (Node neighbor : current)
-		//	{
-		//		if (closedSet.count(neighbor) == 1)	// O(log(N))2
-		//			continue;
+			openSet.erase(current);		// O(log(N)) #1
+			openScoreSet.erase(lowestIt);
+			assert(openSet.size() == openScoreSet.size());
+			closedSet.insert(current);	// O(log(N)) #2
 
-		//		// gScore在递增
-		//		neighbor.gScore = current.gScore + distBetween(current, neighbor);
-		//		neighbor.hScore = heuristicCostEstimate(neighbor, goal);
-		//		neighbor.fScore = neighbor.gScore + neighbor.hScore;
+			for (Node neighbor : current)
+			{
+				if (closedSet.find(neighbor) == closedSet.end())	// O(log(N)) #3
+					continue;
 
-		//		auto oldIt = openSet.find(neighbor);	// O(log(N))3
-		//		if (oldIt == openSet.end())
-		//		{
-		//			openSet.insert(neighbor);	// O(log(N))4
-		//		}
-		//		else if (neighbor.gScore > (*oldIt).gScore)
-		//		{
-		//			openSet.erase(oldIt);
-		//			openSet.insert(neighbor);	// O(log(N))4
-		//		}
-		//	}
-		//}
+				// gScore在递增
+				neighbor.gScore = current.gScore + distBetween(current, neighbor);
+				// hScore在递减
+				neighbor.hScore = heuristicCostEstimate(neighbor, goal);
+				neighbor.fScore = neighbor.gScore + neighbor.hScore;
+
+				auto oldIt = openSet.find(neighbor);	// O(log(N)) #4
+				if (oldIt == openSet.end())
+				{
+					openSet.insert(neighbor);		// O(log(N)) #5
+					openScoreSet.insert(neighbor);	// O(log(N)) #6
+					assert(openSet.size() == openScoreSet.size());
+				}
+				else if (neighbor.gScore < oldIt->gScore)
+				{
+					openSet.erase(oldIt);
+					openSet.insert(neighbor);		// O(log(N)) #5
+					openScoreSet.erase(*oldIt);		// O(log(N)) #6
+					//auto range = openScoreSet.equal_range(*oldIt);	// O(log(N)) #6
+					//for (auto it = range.first; it != range.second; ++it)
+					//{
+					//	if (*it == *oldIt)
+					//		openScoreSet.erase(it);
+					//}
+					openScoreSet.insert(neighbor);	// O(log(N)) #7
+					assert(openSet.size() == openScoreSet.size());
+				}
+			}
+		}
 	}
 
 	float_t TH10Bot::distBetween(const Node& current, const Node& neighbor)
@@ -588,7 +609,6 @@ namespace th
 
 	void TH10Bot::reconstructPath(const Node& goal)
 	{
-		m_path.clear();
 	}
 
 	NodeScore TH10Bot::getNodeScore(const Player& player, float_t frame)

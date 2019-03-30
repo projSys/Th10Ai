@@ -8,13 +8,6 @@ namespace th
 	class Bullet;
 	class Laser;
 
-	struct FootPoint
-	{
-		float_t x;		// 垂足坐标
-		float_t y;
-		float_t frame;	// 到达垂足的帧数
-	};
-
 	// 实体结构
 	// +-----------+
 	// |           |
