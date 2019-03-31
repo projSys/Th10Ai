@@ -2,6 +2,7 @@
 #include "TH10Bot/TH10Bot.h"
 
 #include <set>
+#include <map>
 #include <thread>
 #include <chrono>
 #include <opencv2/opencv.hpp>
@@ -531,24 +532,25 @@ namespace th
 
 	void TH10Bot::aStar(Node& start, Node& goal)
 	{
-		std::set<Node, PosLess> closedSet;
-		std::set<Node, PosLess> openSet;
-		std::set<Node, ScoreLess> openScoreSet;
-		//std::multiset<Node, ScoreLess> openScoreSet;
+		std::map<Pointf, Node, PosLess> closedSet;
+		std::map<Pointf, Node, PosLess> openSet;
+		std::map<float_t, Node, ScoreLess> openScoreSet;
+		//std::multimap<float_t, Node, ScoreLess> openScoreSet;	// score可能重复
 
 		start.gScore = 0.0f;
 		start.hScore = heuristicCostEstimate(start, goal);
 		start.fScore = start.gScore + start.hScore;
-		openSet.insert(start);
-		openScoreSet.insert(start);
+		openSet.insert(std::make_pair(start.pos, start));
+		openScoreSet.insert(std::make_pair(start.fScore, start));
 		assert(openSet.size() == openScoreSet.size());
 
 		m_path.clear();
+
 		while (!openSet.empty())
 		{
 			auto lowestIt = openScoreSet.begin();
 			//auto maxIt = --openScoreSet.end();
-			Node current = *lowestIt;
+			Node current = lowestIt->second;
 
 			if (current == goal)
 			{
@@ -556,14 +558,24 @@ namespace th
 				return;
 			}
 
-			openSet.erase(current);		// O(log(N)) #1
+			openSet.erase(current.pos);
 			openScoreSet.erase(lowestIt);
 			assert(openSet.size() == openScoreSet.size());
-			closedSet.insert(current);	// O(log(N)) #2
+			closedSet.insert(std::make_pair(current.pos, current));
 
-			for (Node neighbor : current)
+			//for (Node neighbor : current)
+			//{
+			for (int_t i = DIR_UP; i < DIR_HOLD_SLOW; ++i)
 			{
-				if (closedSet.find(neighbor) == closedSet.end())	// O(log(N)) #3
+				Direction dir = DIRECTIONS[i];
+
+				Node neighbor = {};
+				neighbor.pos = current.pos + MOVE_SPEED[dir];
+
+				if (!Scene::IsInScene(neighbor.pos))
+					continue;
+
+				if (closedSet.find(neighbor.pos) == closedSet.end())
 					continue;
 
 				// gScore在递增
@@ -572,26 +584,30 @@ namespace th
 				neighbor.hScore = heuristicCostEstimate(neighbor, goal);
 				neighbor.fScore = neighbor.gScore + neighbor.hScore;
 
-				auto oldIt = openSet.find(neighbor);	// O(log(N)) #4
+				auto oldIt = openSet.find(neighbor.pos);
 				if (oldIt == openSet.end())
 				{
-					openSet.insert(neighbor);		// O(log(N)) #5
-					openScoreSet.insert(neighbor);	// O(log(N)) #6
+					openSet.insert(std::make_pair(neighbor.pos, neighbor));
+					openScoreSet.insert(std::make_pair(neighbor.fScore, neighbor));
 					assert(openSet.size() == openScoreSet.size());
 				}
-				else if (neighbor.gScore < oldIt->gScore)
+				else
 				{
-					openSet.erase(oldIt);
-					openSet.insert(neighbor);		// O(log(N)) #5
-					openScoreSet.erase(*oldIt);		// O(log(N)) #6
-					//auto range = openScoreSet.equal_range(*oldIt);	// O(log(N)) #6
-					//for (auto it = range.first; it != range.second; ++it)
-					//{
-					//	if (*it == *oldIt)
-					//		openScoreSet.erase(it);
-					//}
-					openScoreSet.insert(neighbor);	// O(log(N)) #7
-					assert(openSet.size() == openScoreSet.size());
+					Node& old = oldIt->second;
+					if (neighbor.gScore < old.gScore)
+					{
+						openSet.erase(oldIt);
+						openSet.insert(std::make_pair(neighbor.pos, neighbor));
+						openScoreSet.erase(old.fScore);
+						//auto range = openScoreSet.equal_range(old.fScore);
+						//for (auto it = range.first; it != range.second; ++it)
+						//{
+						//	if (it->second == old)
+						//		openScoreSet.erase(it);
+						//}
+						openScoreSet.insert(std::make_pair(neighbor.fScore, neighbor));
+						assert(openSet.size() == openScoreSet.size());
+					}
 				}
 			}
 		}
