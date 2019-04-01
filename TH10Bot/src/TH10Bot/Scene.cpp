@@ -1,12 +1,14 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/Scene.h"
 
+#include <cmath>
+
 namespace th
 {
 	Pointi Scene::ToWindowPos(const Pointf& scenePos)
 	{
-		return Pointi(static_cast<Pointi::value_t>(SCENE_POS.x + POS_OFFSET.x + scenePos.x + 0.5f),
-			static_cast<Pointi::value_t>(SCENE_POS.y + POS_OFFSET.y + scenePos.y + 0.5f));
+		return Pointi(static_cast<Pointi::value_t>(std::round(SCENE_POS.x + POS_OFFSET.x + scenePos.x)),
+			static_cast<Pointi::value_t>(std::round(SCENE_POS.y + POS_OFFSET.y + scenePos.y)));
 	}
 
 	Pointf Scene::ToScenePos(const Pointi& windowPos)

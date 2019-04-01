@@ -7,6 +7,8 @@
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
+#include "TH10Bot/MyMath.h"
+
 #define PLAY 1
 
 namespace th
@@ -410,14 +412,23 @@ namespace th
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
-		//Node start = {};
-		//Node goal = {};
-		//aStar(start, goal);
+		Node start = {};
+		start.pos = m_player.getPosition();
+		start.fromDir = DIR_NONE;
 
-		NodeResult result = dfs(m_player, 0.0f, 3);
-		if (result.nextDir != DIR_NONE)
+		Node goal = {};
+		goal.pos = getMousePos();
+		goal.fromDir = DIR_NONE;
+
+		m_path.clear();
+		m_dir = DIR_NONE;
+
+		astar(start, goal);
+
+		//NodeResult result = dfs(m_player, 0.0f, 3);
+		if (m_dir != DIR_NONE)
 		{
-			move(result.nextDir);
+			move(m_dir);
 		}
 		else
 		{
@@ -530,12 +541,12 @@ namespace th
 		return curResult;
 	}
 
-	void TH10Bot::aStar(Node& start, Node& goal)
+	void TH10Bot::astar(Node& start, Node& goal)
 	{
-		std::map<Pointf, Node, PosLess> closedSet;
-		std::map<Pointf, Node, PosLess> openSet;
-		std::map<float_t, Node, ScoreLess> openScoreSet;
-		//std::multimap<float_t, Node, ScoreLess> openScoreSet;	// score可能重复
+		std::map<Pointf, Node> closedSet;
+		std::map<Pointf, Node> openSet;
+		//std::map<float_t, Node> openScoreSet;
+		std::multimap<float_t, Node> openScoreSet;	// score可能重复
 
 		start.gScore = 0.0f;
 		start.hScore = heuristicCostEstimate(start, goal);
@@ -544,17 +555,17 @@ namespace th
 		openScoreSet.insert(std::make_pair(start.fScore, start));
 		assert(openSet.size() == openScoreSet.size());
 
-		m_path.clear();
-
+		int_t count = 0;
 		while (!openSet.empty())
 		{
 			auto lowestIt = openScoreSet.begin();
-			//auto maxIt = --openScoreSet.end();
+			//auto maxIt = --(openScoreSet.end());
 			Node current = lowestIt->second;
 
-			if (current == goal)
+			//if (current == goal)
+			if (MyMath::Distance(current.pos, goal.pos) < 5.0f)
 			{
-				reconstructPath(current);
+				reconstructPath(closedSet, current);
 				return;
 			}
 
@@ -562,6 +573,10 @@ namespace th
 			openScoreSet.erase(lowestIt);
 			assert(openSet.size() == openScoreSet.size());
 			closedSet.insert(std::make_pair(current.pos, current));
+
+			++count;
+			if (count > 1000)
+				break;
 
 			//for (Node neighbor : current)
 			//{
@@ -571,11 +586,13 @@ namespace th
 
 				Node neighbor = {};
 				neighbor.pos = current.pos + MOVE_SPEED[dir];
+				neighbor.fromPos = current.pos;
+				neighbor.fromDir = dir;
 
 				if (!Scene::IsInScene(neighbor.pos))
 					continue;
 
-				if (closedSet.find(neighbor.pos) == closedSet.end())
+				if (closedSet.find(neighbor.pos) != closedSet.end())
 					continue;
 
 				// gScore在递增
@@ -593,38 +610,59 @@ namespace th
 				}
 				else
 				{
-					Node& old = oldIt->second;
+					Node old = oldIt->second;
 					if (neighbor.gScore < old.gScore)
 					{
 						openSet.erase(oldIt);
 						openSet.insert(std::make_pair(neighbor.pos, neighbor));
-						openScoreSet.erase(old.fScore);
-						//auto range = openScoreSet.equal_range(old.fScore);
-						//for (auto it = range.first; it != range.second; ++it)
-						//{
-						//	if (it->second == old)
-						//		openScoreSet.erase(it);
-						//}
+						//openScoreSet.erase(old.fScore);
+						auto range = openScoreSet.equal_range(old.fScore);
+						auto it = range.first;
+						while (it != range.second)
+						{
+							if (it->second == old)
+								it = openScoreSet.erase(it);
+							else
+								++it;
+						}
 						openScoreSet.insert(std::make_pair(neighbor.fScore, neighbor));
 						assert(openSet.size() == openScoreSet.size());
 					}
 				}
-			}
-		}
+			} // for
+		} // while
 	}
 
 	float_t TH10Bot::distBetween(const Node& current, const Node& neighbor)
 	{
-		return 0.0f;
+		float_t score = MyMath::Distance(current.pos, neighbor.pos);
+		return std::round(score * 100.0f) / 100.0f;
 	}
 
 	float_t TH10Bot::heuristicCostEstimate(const Node& neighbor, const Node& goal)
 	{
-		return 0.0f;
+		float_t score = MyMath::Distance(neighbor.pos, goal.pos);
+		return std::round(score * 100.0f) / 100.0f;
 	}
 
-	void TH10Bot::reconstructPath(const Node& goal)
+	void TH10Bot::reconstructPath(const std::map<Pointf, Node>& closedSet, const Node& goal)
 	{
+		Node current = goal;
+		while (current.fromDir != DIR_NONE)
+		{
+			m_dir = current.fromDir;
+			auto fromIt = closedSet.find(current.fromPos);
+			assert(fromIt != closedSet.end());
+			current = fromIt->second;
+		}
+	}
+
+	Pointf TH10Bot::getMousePos()
+	{
+		POINT mousePos = {};
+		GetCursorPos(&mousePos);
+		Rect clientRect = m_window.getClientRect();
+		return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
 	}
 
 	NodeScore TH10Bot::getNodeScore(const Player& player, float_t frame)

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <tuple>
-
 namespace th
 {
 	const Pointf SCENE_POS = { 24.0f, 16.0f };
@@ -146,6 +144,8 @@ namespace th
 	struct Node
 	{
 		Pointf pos;
+		Pointf fromPos;
+		Direction fromDir;
 
 		float_t gScore;
 		float_t hScore;
@@ -154,22 +154,6 @@ namespace th
 		bool operator ==(const Node& other) const
 		{
 			return pos == other.pos;
-		}
-	};
-
-	struct PosLess
-	{
-		bool operator ()(const Pointf& left, const Pointf& right) const
-		{
-			return std::tie(left.x, left.y) < std::tie(right.x, right.y);
-		}
-	};
-
-	struct ScoreLess
-	{
-		bool operator ()(const float_t& left, const float_t& right) const
-		{
-			return left < right;
 		}
 	};
 
