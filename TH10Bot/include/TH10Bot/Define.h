@@ -1,14 +1,17 @@
 #pragma once
 
+#include <tuple>
+#include <map>
+
 namespace th
 {
 	const Pointf SCENE_POS = { 24.0f, 16.0f };
 
+	const Pointf ORIGIN_POINT_POS = { 200.0f, 0.0f };
+
+	const Pointf PLAYER_INIT_POS = { 0.0f, 400.0f };
+
 	const Sizef SCENE_SIZE = { 384.0f, 448.0f };
-
-	const Pointf POS_OFFSET = { 200.0f, 0.0f };
-
-	const Pointf INIT_POS = { 0.0f, 400.0f };
 
 	// 方向
 	enum Direction
@@ -146,16 +149,29 @@ namespace th
 		Pointf pos;
 		Pointf fromPos;
 		Direction fromDir;
+		float_t frame;
 
 		float_t gScore;
 		float_t hScore;
 		float_t fScore;
 
-		bool operator ==(const Node& other) const
+		//bool operator ==(const Node& other) const
+		//{
+		//	return pos == other.pos;
+		//}
+	};
+
+	struct PointLess
+	{
+		bool operator ()(const Pointf& left, const Pointf& right) const
 		{
-			return pos == other.pos;
+			return std::tie(left.x, left.y) < std::tie(right.x, right.y);
 		}
 	};
+
+	typedef std::map<Pointf, Node, PointLess> PointNodeMap;
+	//typedef std::map<float_t, Node> ScoreNodeMap;
+	typedef std::multimap<float_t, Node> ScoreNodeMap;	// score可能重复
 
 	struct NodeScore
 	{

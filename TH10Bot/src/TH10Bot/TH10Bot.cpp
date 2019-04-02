@@ -1,8 +1,6 @@
 #include "TH10Bot/Common.h"
 #include "TH10Bot/TH10Bot.h"
 
-#include <set>
-#include <map>
 #include <thread>
 #include <chrono>
 #include <opencv2/opencv.hpp>
@@ -37,7 +35,7 @@ namespace th
 		m_focusBullets.reserve(500);
 		m_focusLasers.reserve(300);
 
-		m_path.reserve(100);
+		m_path.reserve(200);
 
 		srand((unsigned int)time(nullptr));
 	}
@@ -167,8 +165,8 @@ namespace th
 
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		//if (e3 > 10)
-		//	std::cout << "e3: " << e3 << std::endl;
+		if (e3 > 10)
+			std::cout << "e3: " << e3 << std::endl;
 #else
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
@@ -421,14 +419,14 @@ namespace th
 		goal.fromDir = DIR_NONE;
 
 		m_path.clear();
-		m_dir = DIR_NONE;
-
 		astar(start, goal);
 
 		//NodeResult result = dfs(m_player, 0.0f, 3);
-		if (m_dir != DIR_NONE)
+
+		if (!m_path.empty())
 		{
-			move(m_dir);
+			Node next = m_path.back();
+			move(next.fromDir);
 		}
 		else
 		{
@@ -439,114 +437,113 @@ namespace th
 		return true;
 	}
 
-	NodeResult TH10Bot::dfs(const Player& player, float_t frame, int_t depth)
-	{
-		NodeResult curResult = { 0.0f, DIR_NONE, 0.0f };
+	//NodeResult TH10Bot::dfs(const Player& player, float_t frame, int_t depth)
+	//{
+	//	NodeResult curResult = { 0.0f, DIR_NONE, 0.0f };
 
-		// 计算当前节点分数
-		//float_t minCollideFrame = std::numeric_limits<float_t>::max();
-		//Direction minCollideDir = DIR_NONE;
-		//int_t willCollideCount = 0;
-		//for (const BulletView& view : m_focusBullets)
-		//{
-		//	Bullet& bullet = m_bullets[view.index];
+	//	// 计算当前节点分数
+	//	//float_t minCollideFrame = std::numeric_limits<float_t>::max();
+	//	//Direction minCollideDir = DIR_NONE;
+	//	//int_t willCollideCount = 0;
+	//	//for (const BulletView& view : m_focusBullets)
+	//	//{
+	//	//	Bullet& bullet = m_bullets[view.index];
 
-		//	float_t collideFrame = bullet.willCollideWith(m_player, frame);
-		//	if (collideFrame > -1.0f)	// 已？/会碰撞
-		//	{
-		//		if (collideFrame < minCollideFrame)
-		//		{
-		//			minCollideFrame = collideFrame;
-		//			minCollideDir = view.dir;
-		//		}
-		//		willCollideCount += 1;
-		//	}
-		//}
-		//curResult.minCollideFrame = minCollideFrame;
+	//	//	float_t collideFrame = bullet.willCollideWith(m_player, frame);
+	//	//	if (collideFrame > -1.0f)	// 已？/会碰撞
+	//	//	{
+	//	//		if (collideFrame < minCollideFrame)
+	//	//		{
+	//	//			minCollideFrame = collideFrame;
+	//	//			minCollideDir = view.dir;
+	//	//		}
+	//	//		willCollideCount += 1;
+	//	//	}
+	//	//}
+	//	//curResult.minCollideFrame = minCollideFrame;
 
-		if (collideMove(player, frame))
-		{
-			curResult.score += -50000.0f;
-			return curResult;
-		}
-		//else
-		//{
-		//	curResult.score += 1000.0f;
-		//}
+	//	if (collideMove(player, frame))
+	//	{
+	//		curResult.score += -50000.0f;
+	//		return curResult;
+	//	}
+	//	//else
+	//	//{
+	//	//	curResult.score += 1000.0f;
+	//	//}
 
-		if (m_itemId != -1)
-			curResult.score += getCollectItemScore(player, m_itemId);
-		else if (m_enemyId != -1)
-			curResult.score += getShootEnemyScore(player, m_enemyId);
-		else
-			curResult.score += getGobackScore(player);
+	//	if (m_itemId != -1)
+	//		curResult.score += getCollectItemScore(player, m_itemId);
+	//	else if (m_enemyId != -1)
+	//		curResult.score += getShootEnemyScore(player, m_enemyId);
+	//	else
+	//		curResult.score += getGobackScore(player);
 
-		if (depth <= 0)
-			return curResult;
+	//	if (depth <= 0)
+	//		return curResult;
 
-		//if (depth == 3)
-		//{
-		//	std::cout << "---------------------------------" << std::endl;
-		//	std::cout << "bullet " << dr.score << " " << dr.minFrame << " " << dr.minDir << std::endl;
-		//}
+	//	//if (depth == 3)
+	//	//{
+	//	//	std::cout << "---------------------------------" << std::endl;
+	//	//	std::cout << "bullet " << dr.score << " " << dr.minFrame << " " << dr.minDir << std::endl;
+	//	//}
 
-		// 计算子节点分数
-		//float_t nextMaxCollideFrame = std::numeric_limits<float_t>::lowest();
-		float_t nextScore = std::numeric_limits<float_t>::lowest();
-		Direction nextDir = DIR_NONE;
-		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
-		{
-			Direction dir;
-			//if (minCollideDir == DIR_NONE)
-			dir = DIRECTIONS[i];
-			//else
-			//	dir = PD[minCollideDir][i];
+	//	// 计算子节点分数
+	//	//float_t nextMaxCollideFrame = std::numeric_limits<float_t>::lowest();
+	//	float_t nextScore = std::numeric_limits<float_t>::lowest();
+	//	Direction nextDir = DIR_NONE;
+	//	for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
+	//	{
+	//		Direction dir;
+	//		//if (minCollideDir == DIR_NONE)
+	//		dir = DIRECTIONS[i];
+	//		//else
+	//		//	dir = PD[minCollideDir][i];
 
-			Pointf nextPos = m_player.getPosition() + MOVE_SPEED[dir];
+	//		Pointf nextPos = m_player.getPosition() + MOVE_SPEED[dir];
 
-			if (!Scene::IsInScene(nextPos))
-				continue;
+	//		if (!Scene::IsInScene(nextPos))
+	//			continue;
 
-			Player nextPlayer = player;
-			nextPlayer.setPosition(nextPos);
+	//		Player nextPlayer = player;
+	//		nextPlayer.setPosition(nextPos);
 
-			NodeResult nextResult = dfs(nextPlayer, frame + 1.0f, depth - 1);
+	//		NodeResult nextResult = dfs(nextPlayer, frame + 1.0f, depth - 1);
 
-			//if (minCollideDir != DIR_NONE)
-			//	nextResult.score += PS[i];
+	//		//if (minCollideDir != DIR_NONE)
+	//		//	nextResult.score += PS[i];
 
-/*			if (nextResult.score < -10000.0f)
-			{
-				continue;
-			}
-			else */if (nextResult.score > nextScore)
-			{
-				nextScore = nextResult.score;
-				nextDir = dir;
-			}
+	//		/*if (nextResult.score < -10000.0f)
+	//		{
+	//			continue;
+	//		}
+	//		else */if (nextResult.score > nextScore)
+	//		{
+	//			nextScore = nextResult.score;
+	//			nextDir = dir;
+	//		}
 
-			//if (depth == 3)
-			//{
-			//	std::cout << dir << " " << nextRes.score << std::endl;
-			//}
-		}
-		curResult.score += nextScore;
-		curResult.nextDir = nextDir;
+	//		//if (depth == 3)
+	//		//{
+	//		//	std::cout << dir << " " << nextRes.score << std::endl;
+	//		//}
+	//	}
+	//	curResult.score += nextScore;
+	//	curResult.nextDir = nextDir;
 
-		//if (depth == 3)
-		//{
-		//	std::cout << "best " << bestDir << " " << bestScore << std::endl;
-		//}
+	//	//if (depth == 3)
+	//	//{
+	//	//	std::cout << "best " << bestDir << " " << bestScore << std::endl;
+	//	//}
 
-		return curResult;
-	}
+	//	return curResult;
+	//}
 
 	void TH10Bot::astar(Node& start, Node& goal)
 	{
-		std::map<Pointf, Node> closedSet;
-		std::map<Pointf, Node> openSet;
-		//std::map<float_t, Node> openScoreSet;
-		std::multimap<float_t, Node> openScoreSet;	// score可能重复
+		PointNodeMap closedSet;
+		PointNodeMap openSet;
+		ScoreNodeMap openScoreSet;
 
 		start.gScore = 0.0f;
 		start.hScore = heuristicCostEstimate(start, goal);
@@ -562,7 +559,7 @@ namespace th
 			//auto maxIt = --(openScoreSet.end());
 			Node current = lowestIt->second;
 
-			//if (current == goal)
+			// 到达终点
 			if (MyMath::Distance(current.pos, goal.pos) < 5.0f)
 			{
 				reconstructPath(closedSet, current);
@@ -578,8 +575,6 @@ namespace th
 			if (count > 1000)
 				break;
 
-			//for (Node neighbor : current)
-			//{
 			for (int_t i = DIR_UP; i < DIR_HOLD_SLOW; ++i)
 			{
 				Direction dir = DIRECTIONS[i];
@@ -588,6 +583,7 @@ namespace th
 				neighbor.pos = current.pos + MOVE_SPEED[dir];
 				neighbor.fromPos = current.pos;
 				neighbor.fromDir = dir;
+				neighbor.frame = current.frame + 1.0f;
 
 				if (!Scene::IsInScene(neighbor.pos))
 					continue;
@@ -620,7 +616,7 @@ namespace th
 						auto it = range.first;
 						while (it != range.second)
 						{
-							if (it->second == old)
+							if (it->second.pos == old.pos)
 								it = openScoreSet.erase(it);
 							else
 								++it;
@@ -645,12 +641,13 @@ namespace th
 		return std::round(score * 100.0f) / 100.0f;
 	}
 
-	void TH10Bot::reconstructPath(const std::map<Pointf, Node>& closedSet, const Node& goal)
+	void TH10Bot::reconstructPath(const PointNodeMap& closedSet, const Node& goal)
 	{
 		Node current = goal;
 		while (current.fromDir != DIR_NONE)
 		{
-			m_dir = current.fromDir;
+			m_path.push_back(current);
+
 			auto fromIt = closedSet.find(current.fromPos);
 			assert(fromIt != closedSet.end());
 			current = fromIt->second;
@@ -874,14 +871,14 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (pNext.getDistance(INIT_POS) < 10.0f)
+		if (pNext.getDistance(PLAYER_INIT_POS) < 10.0f)
 		{
 			score += 30.0f;
 		}
 		else
 		{
-			score += 15.0f * (1.0f - GetDistXScore(pNext.x, INIT_POS.x));
-			score += 15.0f * (1.0f - GetDistYScore(pNext.y, INIT_POS.y));
+			score += 15.0f * (1.0f - GetDistXScore(pNext.x, PLAYER_INIT_POS.x));
+			score += 15.0f * (1.0f - GetDistYScore(pNext.y, PLAYER_INIT_POS.y));
 		}
 
 		return score;

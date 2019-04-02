@@ -7,14 +7,14 @@ namespace th
 {
 	Pointi Scene::ToWindowPos(const Pointf& scenePos)
 	{
-		return Pointi(static_cast<Pointi::value_t>(std::round(SCENE_POS.x + POS_OFFSET.x + scenePos.x)),
-			static_cast<Pointi::value_t>(std::round(SCENE_POS.y + POS_OFFSET.y + scenePos.y)));
+		return Pointi(static_cast<int_t>(std::round(SCENE_POS.x + ORIGIN_POINT_POS.x + scenePos.x)),
+			static_cast<int_t>(std::round(SCENE_POS.y + ORIGIN_POINT_POS.y + scenePos.y)));
 	}
 
 	Pointf Scene::ToScenePos(const Pointi& windowPos)
 	{
-		return Pointf(static_cast<Pointf::value_t>(windowPos.x) - SCENE_POS.x - POS_OFFSET.x,
-			static_cast<Pointf::value_t>(windowPos.y) - SCENE_POS.y - POS_OFFSET.y);
+		return Pointf(static_cast<float_t>(windowPos.x) - SCENE_POS.x - ORIGIN_POINT_POS.x,
+			static_cast<float_t>(windowPos.y) - SCENE_POS.y - ORIGIN_POINT_POS.y);
 	}
 
 	bool Scene::IsInScene(const Pointf& pos)

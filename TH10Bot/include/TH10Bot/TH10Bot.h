@@ -41,11 +41,11 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
-		NodeResult dfs(const Player& player, float_t frame, int_t depth);
+		//NodeResult dfs(const Player& player, float_t frame, int_t depth);
 		void astar(Node& start, Node& goal);
 		float_t distBetween(const Node& current, const Node& neighbor);
 		float_t heuristicCostEstimate(const Node& neighbor, const Node& goal);
-		void reconstructPath(const std::map<Pointf, Node>& closedSet, const Node& goal);
+		void reconstructPath(const PointNodeMap& closedSet, const Node& goal);
 		Pointf getMousePos();
 		NodeScore getNodeScore(const Player& player, float_t frame);
 		bool collideMove(const Player& player, float_t frame);
@@ -101,7 +101,6 @@ namespace th
 		int_t m_enemyId;
 
 		std::vector<Node> m_path;
-		Direction m_dir;
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;
