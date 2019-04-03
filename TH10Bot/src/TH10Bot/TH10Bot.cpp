@@ -38,6 +38,8 @@ namespace th
 		m_path.reserve(200);
 
 		srand((unsigned int)time(nullptr));
+
+		m_buffer = cv::Mat(480, 640, CV_8UC3, cv::Scalar(255, 255, 255));
 	}
 
 	TH10Bot::~TH10Bot()
@@ -434,6 +436,32 @@ namespace th
 			std::cout << "无路可走。" << std::endl;
 		}
 
+		cv::Scalar red(0, 0, 255);
+		cv::Scalar green(0, 255, 0);
+
+		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
+		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
+		cv::rectangle(m_buffer, rect1, green, -1);
+
+		for (const Enemy& enemy : m_enemies)
+		{
+			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
+			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
+			cv::rectangle(m_buffer, rect, red);
+		}
+
+		for (const BulletView& view : m_focusBullets)
+		{
+			const Bullet& bullet = m_bullets[view.index];
+
+			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
+			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
+			cv::rectangle(m_buffer, rect, red, -1);
+		}
+
+		cv::imshow("TH10", m_buffer);
+		cv::waitKey(1);
+
 		return true;
 	}
 
@@ -591,6 +619,11 @@ namespace th
 				if (closedSet.find(neighbor.pos) != closedSet.end())
 					continue;
 
+				Player player = m_player;
+				player.setPosition(neighbor.pos);
+				if (collideMove(player, neighbor.frame))
+					continue;
+
 				// gScore在递增
 				neighbor.gScore = current.gScore + distBetween(current, neighbor);
 				// hScore在递减
@@ -643,10 +676,20 @@ namespace th
 
 	void TH10Bot::reconstructPath(const PointNodeMap& closedSet, const Node& goal)
 	{
+		m_buffer = cv::Scalar(255, 255, 255);
+		cv::Scalar green(0, 255, 0);
+
 		Node current = goal;
+		//Pointi p1 = Scene::ToWindowPos(current.pos);
+		//Pointi p2 = Scene::ToWindowPos(current.fromPos);
+		//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), green);
 		while (current.fromDir != DIR_NONE)
 		{
 			m_path.push_back(current);
+
+			Pointi p1 = Scene::ToWindowPos(current.pos);
+			Pointi p2 = Scene::ToWindowPos(current.fromPos);
+			cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), green);
 
 			auto fromIt = closedSet.find(current.fromPos);
 			assert(fromIt != closedSet.end());

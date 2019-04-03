@@ -106,5 +106,7 @@ namespace th
 		time_t m_talkCooldown;
 		time_t m_shootCooldown;
 		time_t m_collectCooldown;
+
+		cv::Mat m_buffer;
 	};
 }
