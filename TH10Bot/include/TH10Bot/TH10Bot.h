@@ -10,7 +10,11 @@
 #include "TH10Bot/DesktopCapturerCV.h"
 #include "TH10Bot/DesktopImageCV.h"
 #include "TH10Bot/TH10Reader.h"
-#include "TH10Bot/Entity.h"
+#include "TH10Bot/Entity/Player.h"
+#include "TH10Bot/Entity/Item.h"
+#include "TH10Bot/Entity/Enemy.h"
+#include "TH10Bot/Entity/Bullet.h"
+#include "TH10Bot/Entity/Laser.h"
 #include "TH10Bot/Scene.h"
 #include "TH10Bot/Key.h"
 #include "TH10Bot/Clock.h"
@@ -49,7 +53,7 @@ namespace th
 		Pointf getMousePos();
 		NodeScore getNodeScore(const Player& player, float_t frame);
 		bool collideMove(const Player& player, float_t frame);
-		float_t getTargetScore(const Player& pNext, const Pointf& target);
+		//float_t getTargetScore(const Player& pNext, const Pointf& target);
 		int_t findItem();
 		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);

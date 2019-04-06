@@ -409,6 +409,8 @@ namespace th
 	// 处理移动
 	bool TH10Bot::handleMove()
 	{
+		//m_buffer = cv::Scalar(255, 255, 255);
+
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
@@ -423,8 +425,6 @@ namespace th
 		m_path.clear();
 		astar(start, goal);
 
-		//NodeResult result = dfs(m_player, 0.0f, 3);
-
 		if (!m_path.empty())
 		{
 			Node next = m_path.back();
@@ -436,31 +436,31 @@ namespace th
 			std::cout << "无路可走。" << std::endl;
 		}
 
-		cv::Scalar red(0, 0, 255);
-		cv::Scalar green(0, 255, 0);
+		//cv::Scalar red(0, 0, 255);
+		//cv::Scalar green(0, 255, 0);
 
-		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
-		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-		cv::rectangle(m_buffer, rect1, green, -1);
+		//Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
+		//cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
+		//cv::rectangle(m_buffer, rect1, green, -1);
 
-		for (const Enemy& enemy : m_enemies)
-		{
-			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
-			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
-			cv::rectangle(m_buffer, rect, red);
-		}
+		//for (const Enemy& enemy : m_enemies)
+		//{
+		//	Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
+		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
+		//	cv::rectangle(m_buffer, rect, red);
+		//}
 
-		for (const BulletView& view : m_focusBullets)
-		{
-			const Bullet& bullet = m_bullets[view.index];
+		//for (const BulletView& view : m_focusBullets)
+		//{
+		//	const Bullet& bullet = m_bullets[view.index];
 
-			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
-			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-			cv::rectangle(m_buffer, rect, red, -1);
-		}
+		//	Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
+		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
+		//	cv::rectangle(m_buffer, rect, red, -1);
+		//}
 
-		cv::imshow("TH10", m_buffer);
-		cv::waitKey(1);
+		//cv::imshow("TH10", m_buffer);
+		//cv::waitKey(1);
 
 		return true;
 	}
@@ -569,6 +569,9 @@ namespace th
 
 	void TH10Bot::astar(Node& start, Node& goal)
 	{
+		//cv::Scalar green(0, 255, 0);
+		//cv::Scalar blue(255, 0, 0);
+
 		PointNodeMap closedSet;
 		PointNodeMap openSet;
 		ScoreNodeMap openScoreSet;
@@ -588,10 +591,10 @@ namespace th
 			Node current = lowestIt->second;
 
 			// 到达终点
-			if (MyMath::Distance(current.pos, goal.pos) < 5.0f)
+			if (MyMath::GetDistance(current.pos, goal.pos) < 5.0f)
 			{
 				reconstructPath(closedSet, current);
-				return;
+				break;
 			}
 
 			openSet.erase(current.pos);
@@ -658,38 +661,51 @@ namespace th
 						assert(openSet.size() == openScoreSet.size());
 					}
 				}
+
+				//Pointi windowPos1 = Scene::ToWindowPos(neighbor.pos - Pointf(m_player.width / 2.0f, m_player.height / 2.0f));
+				//cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
+				//cv::rectangle(m_buffer, rect1, green);
+
+				//Pointi p1 = Scene::ToWindowPos(neighbor.pos);
+				//Pointi p2 = Scene::ToWindowPos(neighbor.fromPos);
+				//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
+
+				//cv::imshow("TH10", m_buffer);
+				//cv::waitKey(10);
 			} // for
 		} // while
+		//std::cout << count << std::endl;
 	}
 
 	float_t TH10Bot::distBetween(const Node& current, const Node& neighbor)
 	{
-		float_t score = MyMath::Distance(current.pos, neighbor.pos);
+		float_t score = MyMath::GetDistance(current.pos, neighbor.pos);
 		return std::round(score * 100.0f) / 100.0f;
 	}
 
 	float_t TH10Bot::heuristicCostEstimate(const Node& neighbor, const Node& goal)
 	{
-		float_t score = MyMath::Distance(neighbor.pos, goal.pos);
+		float_t score = MyMath::GetDistance(neighbor.pos, goal.pos);
 		return std::round(score * 100.0f) / 100.0f;
 	}
 
 	void TH10Bot::reconstructPath(const PointNodeMap& closedSet, const Node& goal)
 	{
-		m_buffer = cv::Scalar(255, 255, 255);
-		cv::Scalar green(0, 255, 0);
+		//cv::Scalar green(0, 255, 0);
+		//cv::Scalar blue(255, 0, 0);
 
 		Node current = goal;
-		//Pointi p1 = Scene::ToWindowPos(current.pos);
-		//Pointi p2 = Scene::ToWindowPos(current.fromPos);
-		//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), green);
 		while (current.fromDir != DIR_NONE)
 		{
 			m_path.push_back(current);
 
-			Pointi p1 = Scene::ToWindowPos(current.pos);
-			Pointi p2 = Scene::ToWindowPos(current.fromPos);
-			cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), green);
+			//Pointi windowPos1 = Scene::ToWindowPos(current.pos - Pointf(m_player.width / 2.0f, m_player.height / 2.0f));
+			//cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
+			//cv::rectangle(m_buffer, rect1, green);
+
+			//Pointi p1 = Scene::ToWindowPos(current.pos);
+			//Pointi p2 = Scene::ToWindowPos(current.fromPos);
+			//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
 
 			auto fromIt = closedSet.find(current.fromPos);
 			assert(fromIt != closedSet.end());
@@ -711,7 +727,7 @@ namespace th
 
 		for (const BulletView& view : m_focusBullets)
 		{
-			Bullet& bullet = m_bullets[view.index];
+			const Bullet& bullet = m_bullets[view.index];
 
 			float_t collideFrame = bullet.willCollideWith(m_player, frame);
 			if (collideFrame > -1.0f)	// 已？/会碰撞
@@ -730,47 +746,47 @@ namespace th
 
 	bool TH10Bot::collideMove(const Player& player, float_t frame)
 	{
-		for (Enemy& enemy : m_enemies)
+		for (const Enemy& enemy : m_enemies)
 		{
-			if (enemy.collide(m_player, frame))
+			if (enemy.collide(player, frame))
 				return true;
 		}
 
 		for (const BulletView& view : m_focusBullets)
 		{
-			Bullet& bullet = m_bullets[view.index];
+			const Bullet& bullet = m_bullets[view.index];
 
-			if (bullet.collide(m_player, frame))
+			if (bullet.collide(player, frame))
 				return true;
 		}
 
 		for (const LaserLv1& lv1 : m_focusLasers)
 		{
-			Laser& laser = m_lasers[lv1.index];
+			const Laser& laser = m_lasers[lv1.index];
 
-			if (player.collideSAT(laser))
+			if (laser.collide(player, frame))
 				return true;
 		}
 
 		return false;
 	}
 
-	float_t TH10Bot::getTargetScore(const Player& pNext, const Pointf& target)
-	{
-		float_t score = 0.0f;
+	//float_t TH10Bot::getTargetScore(const Player& pNext, const Pointf& target)
+	//{
+	//	float_t score = 0.0f;
 
-		if (pNext.getDistance(target) < 10.0f)
-		{
-			score += 300.0f;
-		}
-		else
-		{
-			score += 150.0f * (1.0f - GetDistXScore(pNext.x, target.x));
-			score += 150.0f * (1.0f - GetDistYScore(pNext.y, target.y));
-		}
+	//	if (pNext.getDistance(target) < 10.0f)
+	//	{
+	//		score += 300.0f;
+	//	}
+	//	else
+	//	{
+	//		score += 150.0f * (1.0f - GetDistXScore(pNext.x, target.x));
+	//		score += 150.0f * (1.0f - GetDistYScore(pNext.y, target.y));
+	//	}
 
-		return score;
-	}
+	//	return score;
+	//}
 
 	// 查找道具
 	int_t TH10Bot::findItem()
@@ -790,12 +806,12 @@ namespace th
 				continue;
 
 			// 不在自机半屏内
-			float_t dy = std::abs(m_player.y - item.y);
+			float_t dy = std::abs(item.y - m_player.y);
 			if (dy > SCENE_SIZE.height / 3.0f)
 				continue;
 
 			// 与自机距离最近的
-			float_t distance = m_player.getDistance(item);
+			float_t distance = item.getDistance(m_player);
 			if (distance < minDist)
 			{
 				minDist = distance;
@@ -820,7 +836,7 @@ namespace th
 			const Enemy& enemy = m_enemies[i];
 
 			//  与自机X轴距离最近
-			float_t dx = std::abs(m_player.x - enemy.x);
+			float_t dx = std::abs(enemy.x - m_player.x);
 			if (dx < minDist)
 			{
 				minDist = dx;
@@ -837,7 +853,7 @@ namespace th
 
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (pNext.collide(enemy))
+			if (enemy.collide(pNext))
 			{
 				score = -10000.0f;
 				break;
@@ -853,7 +869,7 @@ namespace th
 
 		for (const Laser& laser : m_lasers)
 		{
-			if (pNext.collideSAT(laser))
+			if (laser.collide(pNext))
 			{
 				score = -10000.0f;
 				break;
