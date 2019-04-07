@@ -154,11 +154,6 @@ namespace th
 		float_t gScore;
 		float_t hScore;
 		float_t fScore;
-
-		//bool operator ==(const Node& other) const
-		//{
-		//	return pos == other.pos;
-		//}
 	};
 
 	struct PointLess

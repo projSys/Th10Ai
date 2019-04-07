@@ -112,5 +112,7 @@ namespace th
 		time_t m_collectCooldown;
 
 		cv::Mat m_buffer;
+
+		uint8_t m_mask[480][640];
 	};
 }

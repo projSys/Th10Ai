@@ -40,6 +40,8 @@ namespace th
 		srand((unsigned int)time(nullptr));
 
 		m_buffer = cv::Mat(480, 640, CV_8UC3, cv::Scalar(255, 255, 255));
+
+		memset(m_mask, 0, sizeof(m_mask));
 	}
 
 	TH10Bot::~TH10Bot()
@@ -336,19 +338,19 @@ namespace th
 	//{
 	//	for (const Enemy& enemy : m_enemies)
 	//	{
-	//		if (m_player.collide(enemy))
+	//		if (enemy.collide(m_player))
 	//			return true;
 	//	}
 
 	//	for (const Bullet& bullet : m_bullets)
 	//	{
-	//		if (m_player.collide(bullet))
+	//		if (bullet.collide(m_player))
 	//			return true;
 	//	}
 
 	//	for (const Laser& laser : m_lasers)
 	//	{
-	//		if (m_player.collideSAT(laser))
+	//		if (laser.collide(m_player))
 	//			return true;
 	//	}
 
@@ -409,7 +411,7 @@ namespace th
 	// 处理移动
 	bool TH10Bot::handleMove()
 	{
-		//m_buffer = cv::Scalar(255, 255, 255);
+		m_buffer = cv::Scalar(255, 255, 255);
 
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
@@ -423,6 +425,7 @@ namespace th
 		goal.fromDir = DIR_NONE;
 
 		m_path.clear();
+		memset(m_mask, 0, sizeof(uint8_t) * 640 * 480);
 		astar(start, goal);
 
 		if (!m_path.empty())
@@ -569,8 +572,17 @@ namespace th
 
 	void TH10Bot::astar(Node& start, Node& goal)
 	{
-		//cv::Scalar green(0, 255, 0);
-		//cv::Scalar blue(255, 0, 0);
+		cv::Scalar red(0, 0, 255);
+		cv::Scalar green(0, 255, 0);
+		cv::Scalar blue(255, 0, 0);
+
+		Pointi windowPos1 = Scene::ToWindowPos(start.pos - Pointf(m_player.width / 2.0f, m_player.height / 2.0f));
+		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
+		cv::rectangle(m_buffer, rect1, green);
+
+		windowPos1 = Scene::ToWindowPos(goal.pos - Pointf(m_player.width / 2.0f, m_player.height / 2.0f));
+		cv::Rect rect2(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
+		cv::rectangle(m_buffer, rect2, green);
 
 		PointNodeMap closedSet;
 		PointNodeMap openSet;
@@ -627,6 +639,39 @@ namespace th
 				if (collideMove(player, neighbor.frame))
 					continue;
 
+				Pointf topLeft = player.getTopLeft();
+				topLeft.x = std::ceil(topLeft.x);
+				topLeft.y = std::ceil(topLeft.y);
+				Pointf topRight = player.getTopRight();
+				topRight.x = std::floor(topRight.x);
+				topRight.y = std::ceil(topRight.y);
+				Pointf bottomLeft = player.getBottomLeft();
+				bottomLeft.x = std::ceil(bottomLeft.x);
+				bottomLeft.y = std::floor(bottomLeft.y);
+				Pointf bottomRight = player.getBottomRight();
+				bottomRight.x = std::floor(bottomRight.x);
+				bottomRight.y = std::floor(bottomRight.y);
+
+				Pointi t1 = Scene::ToWindowPos(topLeft);
+				if (m_mask[t1.y][t1.x] != 0)
+					continue;
+				Pointi t2 = Scene::ToWindowPos(topRight);
+				if (m_mask[t2.y][t2.x] != 0)
+					continue;
+				Pointi t3 = Scene::ToWindowPos(bottomLeft);
+				if (m_mask[t3.y][t3.x] != 0)
+					continue;
+				Pointi t4 = Scene::ToWindowPos(bottomRight);
+				if (m_mask[t4.y][t4.x] != 0)
+					continue;
+
+				for (int_t y = t1.y; y <= t3.y; ++y)
+					for (int_t x = t1.x; x <= t2.x; ++x)
+						m_mask[y][x] = 1;
+
+				cv::Rect rect1(t1.x, t1.y, int_t(t2.x - t1.x), int_t(t3.y - t1.y));
+				cv::rectangle(m_buffer, rect1, red, -1);
+
 				// gScore在递增
 				neighbor.gScore = current.gScore + distBetween(current, neighbor);
 				// hScore在递减
@@ -666,12 +711,12 @@ namespace th
 				//cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 				//cv::rectangle(m_buffer, rect1, green);
 
-				//Pointi p1 = Scene::ToWindowPos(neighbor.pos);
-				//Pointi p2 = Scene::ToWindowPos(neighbor.fromPos);
-				//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
+				Pointi p1 = Scene::ToWindowPos(neighbor.pos);
+				Pointi p2 = Scene::ToWindowPos(neighbor.fromPos);
+				cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
 
-				//cv::imshow("TH10", m_buffer);
-				//cv::waitKey(10);
+				cv::imshow("TH10", m_buffer);
+				cv::waitKey(10);
 			} // for
 		} // while
 		//std::cout << count << std::endl;
