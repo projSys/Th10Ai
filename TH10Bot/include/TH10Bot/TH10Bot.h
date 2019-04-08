@@ -113,6 +113,6 @@ namespace th
 
 		cv::Mat m_buffer;
 
-		uint8_t m_mask[480][640];
+		int_t m_mask[480][640];
 	};
 }

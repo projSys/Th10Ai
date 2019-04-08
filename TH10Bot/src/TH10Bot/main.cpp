@@ -1,5 +1,6 @@
 #include "TH10Bot/Common.h"
 
+#include <memory>
 #include <chrono>
 #include <boost/log/utility/setup/file.hpp>
 
@@ -23,20 +24,20 @@ int main()
 
 	try
 	{
-		th::TH10Bot bot;
+		std::shared_ptr<th::TH10Bot> bot = std::make_shared<th::TH10Bot>();
 		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出。" << std::endl;
 		//int fps = 0;
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 		while (true)
 		{
 			if (IsKeyDown('A'))
-				bot.start();
+				bot->start();
 			if (IsKeyDown('S'))
-				bot.stop();
+				bot->stop();
 			if (IsKeyDown('D'))
 				break;
 
-			bot.update();
+			bot->update();
 
 			//++fps;
 			//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();

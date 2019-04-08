@@ -425,7 +425,7 @@ namespace th
 		goal.fromDir = DIR_NONE;
 
 		m_path.clear();
-		memset(m_mask, 0, sizeof(uint8_t) * 640 * 480);
+		memset(m_mask, 0, sizeof(m_mask));
 		astar(start, goal);
 
 		if (!m_path.empty())
@@ -653,24 +653,24 @@ namespace th
 				bottomRight.y = std::floor(bottomRight.y);
 
 				Pointi t1 = Scene::ToWindowPos(topLeft);
-				if (m_mask[t1.y][t1.x] != 0)
-					continue;
 				Pointi t2 = Scene::ToWindowPos(topRight);
-				if (m_mask[t2.y][t2.x] != 0)
-					continue;
 				Pointi t3 = Scene::ToWindowPos(bottomLeft);
-				if (m_mask[t3.y][t3.x] != 0)
-					continue;
 				Pointi t4 = Scene::ToWindowPos(bottomRight);
-				if (m_mask[t4.y][t4.x] != 0)
+
+				bool overflow = false;
+				for (int_t y = t1.y; y <= t3.y; ++y)
+					for (int_t x = t1.x; x <= t2.x; ++x)
+						if (m_mask[y][x] > 2)
+							overflow = true;
+				if (overflow)
 					continue;
 
 				for (int_t y = t1.y; y <= t3.y; ++y)
 					for (int_t x = t1.x; x <= t2.x; ++x)
-						m_mask[y][x] = 1;
+						m_mask[y][x] += 1;
 
-				cv::Rect rect1(t1.x, t1.y, int_t(t2.x - t1.x), int_t(t3.y - t1.y));
-				cv::rectangle(m_buffer, rect1, red, -1);
+				//cv::Rect rect1(t1.x, t1.y, int_t(t2.x - t1.x), int_t(t3.y - t1.y));
+				//cv::rectangle(m_buffer, rect1, red, -1);
 
 				// gScoreÔÚµÝÔö
 				neighbor.gScore = current.gScore + distBetween(current, neighbor);
