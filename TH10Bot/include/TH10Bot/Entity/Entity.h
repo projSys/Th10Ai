@@ -9,6 +9,16 @@ namespace th
 	// |       |
 	// +-------+
 	//     w
+	struct EntityData
+	{
+		float_t x;	// 坐标在中心点
+		float_t y;
+		float_t dx;
+		float_t dy;
+		float_t width;
+		float_t height;
+	};
+
 	class Entity
 	{
 	public:

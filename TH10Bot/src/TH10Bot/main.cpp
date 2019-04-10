@@ -8,9 +8,9 @@
 
 namespace bl = boost::log;
 
-bool IsKeyDown(int vkey)
+bool IsKeyPressed(int vKey)
 {
-	return (GetAsyncKeyState(vkey) & 0x8000) != 0;
+	return (GetAsyncKeyState(vKey) & 0x8000) != 0;
 }
 
 int main()
@@ -30,11 +30,11 @@ int main()
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 		while (true)
 		{
-			if (IsKeyDown('A'))
+			if (IsKeyPressed('A'))
 				bot->start();
-			if (IsKeyDown('S'))
+			if (IsKeyPressed('S'))
 				bot->stop();
-			if (IsKeyDown('D'))
+			if (IsKeyPressed('D'))
 				break;
 
 			bot->update();

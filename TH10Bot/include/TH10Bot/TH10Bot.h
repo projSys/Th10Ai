@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <sstream>
 #include <Windows/Process.h>
 #include <Windows/Window.h>
 #include <GraphCap/D3D9FrameSync.h>
@@ -38,7 +37,6 @@ namespace th
 		static float_t GetDistYScore(float_t yNext, float_t yTarget);
 
 		bool handleBomb();
-		//bool collideBomb();
 
 		bool handleTalk();
 
@@ -62,8 +60,8 @@ namespace th
 		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);
 		float_t getGobackScore(const Player& pNext);
 
-		static bool IsSlow(Direction dir);
-		void move(Direction dir);
+		//static bool IsSlow(Direction dir);
+		void move(Direction dir, bool slow);
 
 		// Item
 		//bool handleItem();
@@ -100,19 +98,16 @@ namespace th
 
 		std::vector<BulletView> m_focusBullets;
 		std::vector<LaserLv1> m_focusLasers;
+		std::vector<Node> m_path;
+		cv::Mat m_buffer;
+		uint8_t m_mask[480][640];
 
 		int_t m_itemId;
 		int_t m_enemyId;
-
-		std::vector<Node> m_path;
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;
 		time_t m_shootCooldown;
 		time_t m_collectCooldown;
-
-		cv::Mat m_buffer;
-
-		int_t m_mask[480][640];
 	};
 }

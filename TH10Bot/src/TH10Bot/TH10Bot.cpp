@@ -6,6 +6,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "TH10Bot/MyMath.h"
+#include "TH10Bot/Mover.h"
 
 #define PLAY 1
 
@@ -34,14 +35,11 @@ namespace th
 
 		m_focusBullets.reserve(500);
 		m_focusLasers.reserve(300);
-
 		m_path.reserve(200);
+		m_buffer = cv::Mat(480, 640, CV_8UC3, cv::Scalar(255, 255, 255));
+		memset(m_mask, 0, sizeof(m_mask));
 
 		srand((unsigned int)time(nullptr));
-
-		m_buffer = cv::Mat(480, 640, CV_8UC3, cv::Scalar(255, 255, 255));
-
-		memset(m_mask, 0, sizeof(m_mask));
 	}
 
 	TH10Bot::~TH10Bot()
@@ -98,23 +96,6 @@ namespace th
 		m_reader.getEnemies(m_enemies);
 		m_reader.getBullets(m_bullets);
 		m_reader.getLasers(m_lasers);
-
-		//std::cout << m_player.x << " " << m_player.y << std::endl;
-		//m_keyShift.press();
-		//static bool b = true;
-		//if (b)
-		//{
-		//	m_keyRight.press();
-		//	m_keyUp.press();
-		//	b = false;
-		//}
-		//else
-		//{
-		//	m_keyRight.release();
-		//	m_keyUp.release();
-		//	b = true;
-		//}
-		//return;
 
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
@@ -267,11 +248,11 @@ namespace th
 		float_t factor;
 
 		if (next.y > source.y)
-			factor = 1.0;
+			factor = 1.0f;
 		else if (next.y < source.y)
-			factor = -1.0;
+			factor = -1.0f;
 		else
-			factor = 0.0;
+			factor = 0.0f;
 
 		return factor;
 	}
@@ -284,11 +265,11 @@ namespace th
 		float_t dSrc = std::abs(source - target);
 		float_t dNext = std::abs(next - target);
 		if (dNext > dSrc)
-			factor = 1.0;
+			factor = 1.0f;
 		else if (dNext < dSrc)
-			factor = -1.0;
+			factor = -1.0f;
 		else
-			factor = 0.0;
+			factor = 0.0f;
 
 		return factor;
 	}
@@ -319,43 +300,20 @@ namespace th
 		}
 
 		// 放了炸弹3秒后再检测碰撞
-		//if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
-		//{
-		//	if (collideBomb())
-		if (m_player.status == 4)
+		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
 		{
-			//m_bombCooldown = m_clock.getTimestamp();
-			m_keyX.press();
-			//std::cout << "炸弹 PRESS" << std::endl;
-			return true;
+			//if (collideBomb())
+			if (m_player.status == 4)
+			{
+				m_keyX.press();
+				m_bombCooldown = m_clock.getTimestamp();
+				//std::cout << "炸弹 PRESS" << std::endl;
+				return true;
+			}
 		}
-		//}
 
 		return false;
 	}
-
-	//bool TH10Bot::collideBomb()
-	//{
-	//	for (const Enemy& enemy : m_enemies)
-	//	{
-	//		if (enemy.collide(m_player))
-	//			return true;
-	//	}
-
-	//	for (const Bullet& bullet : m_bullets)
-	//	{
-	//		if (bullet.collide(m_player))
-	//			return true;
-	//	}
-
-	//	for (const Laser& laser : m_lasers)
-	//	{
-	//		if (laser.collide(m_player))
-	//			return true;
-	//	}
-
-	//	return false;
-	//}
 
 	// 处理对话
 	bool TH10Bot::handleTalk()
@@ -382,6 +340,7 @@ namespace th
 		{
 			m_talkCooldown = m_clock.getTimestamp();
 		}
+
 		return false;
 	}
 
@@ -411,14 +370,12 @@ namespace th
 	// 处理移动
 	bool TH10Bot::handleMove()
 	{
-		m_buffer = cv::Scalar(255, 255, 255);
-
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
 		Node start = {};
 		start.pos = m_player.getPosition();
-		start.fromDir = DIR_NONE;
+		start.fromDir = DIR_HOLD;
 
 		Node goal = {};
 		goal.pos = getMousePos();
@@ -431,39 +388,13 @@ namespace th
 		if (!m_path.empty())
 		{
 			Node next = m_path.back();
-			move(next.fromDir);
+			move(next.fromDir, false);
 		}
 		else
 		{
-			move(DIR_HOLD);
+			move(DIR_HOLD, false);
 			std::cout << "无路可走。" << std::endl;
 		}
-
-		//cv::Scalar red(0, 0, 255);
-		//cv::Scalar green(0, 255, 0);
-
-		//Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
-		//cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-		//cv::rectangle(m_buffer, rect1, green, -1);
-
-		//for (const Enemy& enemy : m_enemies)
-		//{
-		//	Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
-		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
-		//	cv::rectangle(m_buffer, rect, red);
-		//}
-
-		//for (const BulletView& view : m_focusBullets)
-		//{
-		//	const Bullet& bullet = m_bullets[view.index];
-
-		//	Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
-		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-		//	cv::rectangle(m_buffer, rect, red, -1);
-		//}
-
-		//cv::imshow("TH10", m_buffer);
-		//cv::waitKey(1);
 
 		return true;
 	}
@@ -572,6 +503,8 @@ namespace th
 
 	void TH10Bot::astar(Node& start, Node& goal)
 	{
+		m_buffer = cv::Scalar(255, 255, 255);
+
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
 		cv::Scalar blue(255, 0, 0);
@@ -618,9 +551,10 @@ namespace th
 			if (count > 1000)
 				break;
 
-			for (int_t i = DIR_UP; i < DIR_HOLD_SLOW; ++i)
+			Mover mover(current.fromDir);
+			while (mover.hasNext())
 			{
-				Direction dir = DIRECTIONS[i];
+				Direction dir = mover.next();
 
 				Node neighbor = {};
 				neighbor.pos = current.pos + MOVE_SPEED[dir];
@@ -711,15 +645,14 @@ namespace th
 				//cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 				//cv::rectangle(m_buffer, rect1, green);
 
-				Pointi p1 = Scene::ToWindowPos(neighbor.pos);
-				Pointi p2 = Scene::ToWindowPos(neighbor.fromPos);
-				cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
+				//Pointi p1 = Scene::ToWindowPos(neighbor.pos);
+				//Pointi p2 = Scene::ToWindowPos(neighbor.fromPos);
+				//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
 
-				cv::imshow("TH10", m_buffer);
-				cv::waitKey(10);
-			} // for
-		} // while
-		//std::cout << count << std::endl;
+				//cv::imshow("TH10", m_buffer);
+				//cv::waitKey(10);
+			} // while (mover.hasNext())
+		} // while (!openSet.empty())
 	}
 
 	float_t TH10Bot::distBetween(const Node& current, const Node& neighbor)
@@ -740,7 +673,7 @@ namespace th
 		//cv::Scalar blue(255, 0, 0);
 
 		Node current = goal;
-		while (current.fromDir != DIR_NONE)
+		while (current.fromDir != DIR_HOLD)
 		{
 			m_path.push_back(current);
 
@@ -988,14 +921,14 @@ namespace th
 		return score;
 	}
 
-	bool TH10Bot::IsSlow(Direction dir)
-	{
-		return (dir == DIR_HOLD_SLOW) || (dir >= DIR_UP_SLOW && dir <= DIR_DOWNRIGHT_SLOW);
-	}
+	//bool TH10Bot::IsSlow(Direction dir)
+	//{
+	//	return (dir == DIR_HOLD_SLOW) || (dir >= DIR_UP_SLOW && dir <= DIR_DOWNRIGHT_SLOW);
+	//}
 
-	void TH10Bot::move(Direction dir)
+	void TH10Bot::move(Direction dir, bool slow)
 	{
-		if (IsSlow(dir))
+		if (slow)
 		{
 			m_keyShift.press();
 			//std::cout << "慢速 PRESS" << std::endl;
@@ -1008,56 +941,47 @@ namespace th
 
 		switch (dir)
 		{
-		case DIR_HOLD_SLOW:
 		case DIR_HOLD:
 			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release();
 			//std::cout << "不动" << std::endl;
 			break;
 
 		case DIR_UP:
-		case DIR_UP_SLOW:
 			m_keyUp.press(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release();
 			//std::cout << "上" << std::endl;
 			break;
 
 		case DIR_DOWN:
-		case DIR_DOWN_SLOW:
 			m_keyUp.release(), m_keyDown.press(), m_keyLeft.release(), m_keyRight.release();
 			//std::cout << "下" << std::endl;
 			break;
 
 		case DIR_LEFT:
-		case DIR_LEFT_SLOW:
 			m_keyUp.release(), m_keyDown.release(), m_keyLeft.press(), m_keyRight.release();
 			//std::cout << "左" << std::endl;
 			break;
 
 		case DIR_RIGHT:
-		case DIR_RIGHT_SLOW:
 			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
 			//std::cout << "右" << std::endl;
 			break;
 
 		case DIR_UPLEFT:
-		case DIR_UPLEFT_SLOW:
 			m_keyUp.press(), m_keyDown.release(), m_keyLeft.press(), m_keyRight.release();
 			//std::cout << "左上" << std::endl;
 			break;
 
 		case DIR_UPRIGHT:
-		case DIR_UPRIGHT_SLOW:
 			m_keyUp.press(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
 			//std::cout << "右上" << std::endl;
 			break;
 
 		case DIR_DOWNLEFT:
-		case DIR_DOWNLEFT_SLOW:
 			m_keyUp.release(), m_keyDown.press(), m_keyLeft.press(), m_keyRight.release();
 			//std::cout << "左下" << std::endl;
 			break;
 
 		case DIR_DOWNRIGHT:
-		case DIR_DOWNRIGHT_SLOW:
 			m_keyUp.release(), m_keyDown.press(), m_keyLeft.release(), m_keyRight.press();
 			//std::cout << "右下" << std::endl;
 			break;
