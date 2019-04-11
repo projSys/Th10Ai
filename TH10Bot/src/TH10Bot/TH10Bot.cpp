@@ -107,16 +107,15 @@ namespace th
 		{
 			const Bullet& bullet = m_bullets[i];
 
-			float_t distance = bullet.getDistance(m_player);
+			float_t dist = bullet.getDist(m_player);
 			FootPoint footPoint = bullet.getFootPoint(m_player);
-			if (distance < 100.0f	// 在附近的
-				|| (m_player.getDistance(Pointf(footPoint.x, footPoint.y)) < 100.0f
+			if (dist < 100.0f	// 在附近的
+				|| (m_player.getPos().distance(Pointf(footPoint.x, footPoint.y)) < 100.0f
 					&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
 			{
-				BulletView view;
+				EntityView view;
 				view.index = i;
-				view.dir = bullet.getDirection();
-				view.footPoint = footPoint;
+				view.dir = bullet.getDir();
 				m_focusBullets.push_back(view);
 			}
 		}
@@ -125,17 +124,17 @@ namespace th
 		//{
 		//	const Laser& laser = m_lasers[i];
 
-		//	LaserLv1 lv1;
-		//	lv1.index = i;
-		//	lv1.distance = laser.distance(m_player);
-		//	lv1.footFrame = laser.footFrame(m_player.getPos());
-		//	lv1.footPoint = laser.footPoint(lv1.footFrame);
-		//	lv1.angle = laser.angle(m_player);
-		//	lv1.dir = laser.direction();
-		//	if (lv1.distance < 100.0f	// 在附近的
-		//		|| (m_player.distance(lv1.footPoint) < 100.0f && lv1.angle > 0.0f && lv1.angle < 90.0f))	// 将来可能碰撞的
+		//	EntityView view;
+		//	view.index = i;
+		//	view.dist = laser.distance(m_player);
+		//	view.footFrame = laser.footFrame(m_player.getPos());
+		//	view.footPoint = laser.footPoint(view.footFrame);
+		//	view.angle = laser.angle(m_player);
+		//	view.dir = laser.direction();
+		//	if (view.dist < 100.0f	// 在附近的
+		//		|| (m_player.getPos().distance(view.footPoint) < 100.0f && view.angle > 0.0f && view.angle < 90.0f))	// 将来可能碰撞的
 		//	{
-		//		m_focusLasers.push_back(lv1);
+		//		m_focusLasers.push_back(view);
 		//	}
 		//}
 
@@ -179,15 +178,15 @@ namespace th
 		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
 		//	cv::rectangle(m_image.m_data, rect, red);
 		//}
-		//for (const BulletLv1& it : m_nearbyList)
+		//for (const EntityView& view : m_nearbyList)
 		//{
-		//	const Bullet& bullet = m_bullets[it.index];
+		//	const Bullet& bullet = m_bullets[view.index];
 
 		//	Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 		//	cv::rectangle(m_image.m_data, rect, red, -1);
 		//}
-		for (const BulletView& view : m_focusBullets)
+		for (const EntityView& view : m_focusBullets)
 		{
 			const Bullet& bullet = m_bullets[view.index];
 
@@ -221,10 +220,9 @@ namespace th
 				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
 		}
 
-		//for (const Laser& laser : m_lasers)
-		////for (const LaserLv1& lv1 : m_focusLasers)
+		//for (const EntityView& view : m_focusLasers)
 		//{
-		//	//const Laser& laser = m_lasers[lv1.index];
+		//	//const Laser& laser = m_lasers[view.index];
 
 		//	LaserBox laserBox(laser);
 		//	Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
@@ -374,8 +372,8 @@ namespace th
 		m_enemyId = findEnemy();
 
 		Node start = {};
-		start.pos = m_player.getPosition();
-		start.fromDir = DIR_HOLD;
+		start.pos = m_player.getPos();
+		start.fromDir = DIR_NONE;
 
 		Node goal = {};
 		goal.pos = getMousePos();
@@ -536,7 +534,7 @@ namespace th
 			Node current = lowestIt->second;
 
 			// 到达终点
-			if (MyMath::GetDistance(current.pos, goal.pos) < 5.0f)
+			if (current.pos.distance(goal.pos) < 5.0f)
 			{
 				reconstructPath(closedSet, current);
 				break;
@@ -569,7 +567,7 @@ namespace th
 					continue;
 
 				Player player = m_player;
-				player.setPosition(neighbor.pos);
+				player.setPos(neighbor.pos);
 				if (collideMove(player, neighbor.frame))
 					continue;
 
@@ -650,20 +648,20 @@ namespace th
 				//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
 
 				//cv::imshow("TH10", m_buffer);
-				//cv::waitKey(10);
+				//cv::waitKey(1);
 			} // while (mover.hasNext())
 		} // while (!openSet.empty())
 	}
 
 	float_t TH10Bot::distBetween(const Node& current, const Node& neighbor)
 	{
-		float_t score = MyMath::GetDistance(current.pos, neighbor.pos);
+		float_t score = current.pos.distance(neighbor.pos);
 		return std::round(score * 100.0f) / 100.0f;
 	}
 
 	float_t TH10Bot::heuristicCostEstimate(const Node& neighbor, const Node& goal)
 	{
-		float_t score = MyMath::GetDistance(neighbor.pos, goal.pos);
+		float_t score = neighbor.pos.distance(goal.pos);
 		return std::round(score * 100.0f) / 100.0f;
 	}
 
@@ -673,7 +671,7 @@ namespace th
 		//cv::Scalar blue(255, 0, 0);
 
 		Node current = goal;
-		while (current.fromDir != DIR_HOLD)
+		while (current.fromDir != DIR_NONE)
 		{
 			m_path.push_back(current);
 
@@ -703,11 +701,12 @@ namespace th
 	{
 		NodeScore score = { 0.0f, std::numeric_limits<float_t>::max(), DIR_NONE, 0 };
 
-		for (const BulletView& view : m_focusBullets)
+		for (const EntityView& view : m_focusBullets)
 		{
 			const Bullet& bullet = m_bullets[view.index];
 
-			float_t collideFrame = bullet.willCollideWith(m_player, frame);
+			Bullet adv = bullet.advance(frame);
+			float_t collideFrame = adv.willCollideWith(m_player);
 			if (collideFrame > -1.0f)	// 已？/会碰撞
 			{
 				if (collideFrame < score.minCollideFrame)
@@ -726,23 +725,24 @@ namespace th
 	{
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (enemy.collide(player, frame))
+			Enemy adv = enemy.advance(frame);
+			if (adv.collide(player))
 				return true;
 		}
 
-		for (const BulletView& view : m_focusBullets)
+		for (const EntityView& view : m_focusBullets)
 		{
 			const Bullet& bullet = m_bullets[view.index];
-
-			if (bullet.collide(player, frame))
+			Bullet adv = bullet.advance(frame);
+			if (adv.collide(player))
 				return true;
 		}
 
-		for (const LaserLv1& lv1 : m_focusLasers)
+		for (const EntityView& view : m_focusLasers)
 		{
-			const Laser& laser = m_lasers[lv1.index];
-
-			if (laser.collide(player, frame))
+			const Laser& laser = m_lasers[view.index];
+			Laser adv = laser.advance(frame);
+			if (adv.collide(player))
 				return true;
 		}
 
@@ -789,10 +789,10 @@ namespace th
 				continue;
 
 			// 与自机距离最近的
-			float_t distance = item.getDistance(m_player);
-			if (distance < minDist)
+			float_t dist = item.getDist(m_player);
+			if (dist < minDist)
 			{
-				minDist = distance;
+				minDist = dist;
 				id = i;
 			}
 		}
@@ -866,7 +866,7 @@ namespace th
 			return score;
 
 		const Item& item = m_items[itemId];
-		if (pNext.getDistance(item) < 5.0f)
+		if (pNext.getDist(item) < 5.0f)
 		{
 			score += 300.0f;
 		}
@@ -908,7 +908,7 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (pNext.getDistance(PLAYER_INIT_POS) < 10.0f)
+		if (pNext.getPos().distance(PLAYER_INIT_POS) < 10.0f)
 		{
 			score += 30.0f;
 		}
@@ -920,11 +920,6 @@ namespace th
 
 		return score;
 	}
-
-	//bool TH10Bot::IsSlow(Direction dir)
-	//{
-	//	return (dir == DIR_HOLD_SLOW) || (dir >= DIR_UP_SLOW && dir <= DIR_DOWNRIGHT_SLOW);
-	//}
 
 	void TH10Bot::move(Direction dir, bool slow)
 	{

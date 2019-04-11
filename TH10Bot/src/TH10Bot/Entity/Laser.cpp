@@ -10,6 +10,14 @@
 
 namespace th
 {
+	Laser Laser::advance(float_t frame) const
+	{
+		Laser adv = *this;
+		adv.x += (dx * frame);
+		adv.y += (dy * frame);
+		return adv;
+	}
+
 	bool Laser::collide(const Player& player) const
 	{
 		SATBox laserBox(*this);
@@ -21,14 +29,6 @@ namespace th
 			return false;
 
 		return true;
-	}
-
-	bool Laser::collide(const Player& player, float_t frame) const
-	{
-		Laser temp = *this;
-		temp.x += temp.dx * frame;
-		temp.y += temp.dy * frame;
-		return temp.collide(player);
 	}
 
 	Pointf Laser::getTopLeft() const
@@ -60,7 +60,7 @@ namespace th
 
 	SATBox::SATBox(const Laser& laser)
 	{
-		Pointf C = laser.getPosition();
+		Pointf C = laser.getPos();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
 		topLeft = MyMath::Rotate(laser.getTopLeft(), C, radianC);
@@ -72,7 +72,7 @@ namespace th
 	// 反向旋转画布，即把激光转回来，再反向旋转自机坐标
 	SATBox::SATBox(const Player& player, const Laser& laser)
 	{
-		Pointf C = laser.getPosition();
+		Pointf C = laser.getPos();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
 		topLeft = MyMath::Rotate(player.getTopLeft(), C, -radianC);

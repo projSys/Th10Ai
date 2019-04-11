@@ -29,35 +29,6 @@ namespace th
 		DIR_MAXCOUNT
 	};
 
-	// 移动速度
-	// 3.18 = 4.5 * sqrt(0.5)
-	const Pointf MOVE_SPEED[DIR_MAXCOUNT] =
-	{
-		{ 0.0f, 0.0f },
-		{ 0.0f, -4.5f },
-		{ 0.0f, 4.5f },
-		{ -4.5f, 0.0f },
-		{ 4.5f, 0.0f },
-		{ -3.18f, -3.18f },
-		{ 3.18f, -3.18f },
-		{ -3.18f, 3.18f },
-		{ 3.18f, 3.18f }
-	};
-
-	// 1.41 = 2.0 * sqrt(0.5)
-	const Pointf MOVE_SPEED_SLOW[DIR_MAXCOUNT] =
-	{
-		{ 0.0f, 0.0f },
-		{ 0.0f, -2.0f },
-		{ 0.0f, 2.0f },
-		{ -2.0f, 0.0f },
-		{ 2.0f, 0.0f },
-		{ -1.41f, -1.41f },
-		{ 1.41f, -1.41f },
-		{ -1.41f, 1.41f },
-		{ 1.41f, 1.41f }
-	};
-
 	const Direction COLLIDE_PRIORITY[DIR_MAXCOUNT][5] =
 	{
 		// DIR_HOLD
@@ -117,28 +88,40 @@ namespace th
 		70.0f
 	};
 
+	// 移动速度
+	// 3.18 = 4.5 * sqrt(0.5)
+	const Pointf MOVE_SPEED[DIR_MAXCOUNT] =
+	{
+		{ 0.0f, 0.0f },
+		{ 0.0f, -4.5f },
+		{ 0.0f, 4.5f },
+		{ -4.5f, 0.0f },
+		{ 4.5f, 0.0f },
+		{ -3.18f, -3.18f },
+		{ 3.18f, -3.18f },
+		{ -3.18f, 3.18f },
+		{ 3.18f, 3.18f }
+	};
+
+	// 1.41 = 2.0 * sqrt(0.5)
+	const Pointf MOVE_SPEED_SLOW[DIR_MAXCOUNT] =
+	{
+		{ 0.0f, 0.0f },
+		{ 0.0f, -2.0f },
+		{ 0.0f, 2.0f },
+		{ -2.0f, 0.0f },
+		{ 2.0f, 0.0f },
+		{ -1.41f, -1.41f },
+		{ 1.41f, -1.41f },
+		{ -1.41f, 1.41f },
+		{ 1.41f, 1.41f }
+	};
+
 	struct FootPoint
 	{
 		float_t x;		// 垂足坐标
 		float_t y;
 		float_t frame;	// 到达垂足的帧数
-	};
-
-	struct BulletView
-	{
-		uint_t index;
-		Direction dir;
-
-		FootPoint footPoint;
-	};
-
-	struct LaserLv1
-	{
-		uint_t index;
-		float_t distance;
-		FootPoint footPoint;
-		float_t angle;
-		Direction dir;
 	};
 
 	struct Node

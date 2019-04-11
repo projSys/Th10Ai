@@ -7,20 +7,12 @@
 
 namespace th
 {
-	// 勾股定理
-	float_t MyMath::GetDistance(const Pointf& A, const Pointf& B)
-	{
-		float_t dx = A.x - B.x;
-		float_t dy = A.y - B.y;
-		return std::sqrt(dx * dx + dy * dy);
-	}
-
 	// 余弦定理
 	float_t MyMath::GetAngle(const Pointf& A, const Pointf& B, const Pointf& C)
 	{
-		float_t AB = GetDistance(A, B);
-		float_t AC = GetDistance(A, C);
-		float_t BC = GetDistance(B, C);
+		float_t AB = A.distance(B);
+		float_t AC = A.distance(C);
+		float_t BC = B.distance(C);
 		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
 		float_t radianA = std::acos(cosA);
 		// 角度 = 弧度 * 180 / PI

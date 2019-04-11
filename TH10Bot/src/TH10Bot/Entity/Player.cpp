@@ -3,5 +3,11 @@
 
 namespace th
 {
-
+	Player Player::advance(float_t frame) const
+	{
+		Player adv = *this;
+		adv.x += (dx * frame);
+		adv.y += (dy * frame);
+		return adv;
+	}
 }

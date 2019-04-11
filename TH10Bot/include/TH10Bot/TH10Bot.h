@@ -60,7 +60,6 @@ namespace th
 		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);
 		float_t getGobackScore(const Player& pNext);
 
-		//static bool IsSlow(Direction dir);
 		void move(Direction dir, bool slow);
 
 		// Item
@@ -96,8 +95,8 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		std::vector<BulletView> m_focusBullets;
-		std::vector<LaserLv1> m_focusLasers;
+		std::vector<EntityView> m_focusBullets;
+		std::vector<EntityView> m_focusLasers;
 		std::vector<Node> m_path;
 		cv::Mat m_buffer;
 		uint8_t m_mask[480][640];

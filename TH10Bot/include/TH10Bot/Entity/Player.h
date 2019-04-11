@@ -4,15 +4,10 @@
 
 namespace th
 {
-	class Player :
-		public Entity
+	struct Player :
+		Entity
 	{
-	public:
-		//Player() :
-		//	powers(), life(), type(), slow(), itemObtainRange(), status(), invinibleTime() {}
-		//Player(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
-		//	Entity(x0, y0, dx0, dy0, width0, height0),
-		//	powers(), life(), type(), slow(), itemObtainRange(), status(), invinibleTime() {}
+		Player advance(float_t frame) const;
 
 		float_t powers;
 		int_t life;

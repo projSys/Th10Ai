@@ -9,48 +9,34 @@
 
 namespace th
 {
-	float_t Entity::getDistance(const Pointf& other) const
+	float_t Entity::getDist(const Entity& other) const
 	{
-		return MyMath::GetDistance(getPosition(), other);
-	}
-
-	float_t Entity::getDistance(const Entity& other) const
-	{
-		return getDistance(other.getPosition());
-	}
-
-	float_t Entity::getAngle(const Pointf& other) const
-	{
-		if (isHolding())
-			return -1.0f;
-
-		return MyMath::GetAngle(getPosition(), getNextPos(), other);
+		return getPos().distance(other.getPos());
 	}
 
 	float_t Entity::getAngle(const Entity& other) const
 	{
-		return getAngle(other.getPosition());
-	}
+		if (isHolded())
+			return -1.0f;
 
-	FootPoint Entity::getFootPoint(const Pointf& other) const
-	{
-		if (isHolding())
-			return { x, y, std::numeric_limits<float_t>::max() };
-
-		return MyMath::GetFootPoint(getPosition(), getNextPos(), other);;
+		return MyMath::GetAngle(getPos(), getNextPos(), other.getPos());
 	}
 
 	FootPoint Entity::getFootPoint(const Entity& other) const
 	{
-		return getFootPoint(other.getPosition());
+		if (isHolded())
+			return { x, y, std::numeric_limits<float_t>::max() };
+
+		return MyMath::GetFootPoint(getPos(), getNextPos(), other.getPos());
 	}
 
-	Direction Entity::getDirection() const
+	Direction Entity::getDir() const
 	{
-		if (isHolding())
+		if (isHolded())
 			return DIR_HOLD;
 
-		float_t angleOfXAxis = getAngle(Pointf(x + 100.0f, y));	// 按X轴平移
+		// 与X轴的角度
+		float_t angleOfXAxis = MyMath::GetAngle(getPos(), getNextPos(), Pointf(x + 100.0f, y));
 		if (dy > 0.0f)	// 转换成360度
 			angleOfXAxis = 360.0f - angleOfXAxis;
 
@@ -76,42 +62,40 @@ namespace th
 		return dir;
 	}
 
+	Entity Entity::advance(float_t frame) const
+	{
+		Entity adv = *this;
+		adv.x += (dx * frame);
+		adv.y += (dy * frame);
+		return adv;
+	}
+
 	bool Entity::collide(const Entity& other) const
 	{
 		return std::abs(x - other.x) < (width + other.width) / 2.0f
 			&& std::abs(y - other.y) < (height + other.height) / 2.0f;
-		//return getBottomRight() > other.getTopLeft()
-		//	&& other.getBottomRight() > getTopLeft();
-	}
-
-	bool Entity::collide(const Entity& other, float_t frame) const
-	{
-		Entity temp = { x + dx * frame, y + dy * frame, dx, dy, width, height };
-		return temp.collide(other);
 	}
 
 	float_t Entity::willCollideWith(const Entity& other) const
 	{
 		FootPoint footPoint = getFootPoint(other);
-		Entity temp = { footPoint.x, footPoint.y, dx, dy, width, height };
+
+		Entity temp = *this;
+		temp.x = footPoint.x;
+		temp.y = footPoint.y;
+
 		if (temp.collide(other))
 			return footPoint.frame;
 		else
 			return std::numeric_limits<float_t>::lowest();
 	}
 
-	float_t Entity::willCollideWith(const Entity& other, float_t frame) const
-	{
-		Entity temp = { x + dx * frame, y + dy * frame, dx, dy, width, height };
-		return temp.willCollideWith(other);
-	}
-
-	Pointf Entity::getPosition() const
+	Pointf Entity::getPos() const
 	{
 		return Pointf(x, y);
 	}
 
-	void Entity::setPosition(const Pointf& pos)
+	void Entity::setPos(const Pointf& pos)
 	{
 		x = pos.x;
 		y = pos.y;
@@ -137,7 +121,7 @@ namespace th
 		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
 
-	bool Entity::isHolding() const
+	bool Entity::isHolded() const
 	{
 		return dx == 0.0f && dy == 0.0f;
 	}

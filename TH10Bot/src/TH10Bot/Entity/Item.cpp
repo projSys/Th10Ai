@@ -3,5 +3,11 @@
 
 namespace th
 {
-
+	Item Item::advance(float_t frame) const
+	{
+		Item adv = *this;
+		adv.x += (dx * frame);
+		adv.y += (dy * frame);
+		return adv;
+	}
 }

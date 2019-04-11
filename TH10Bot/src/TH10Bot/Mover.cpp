@@ -7,13 +7,12 @@ namespace th
 		m_fromDir(fromDir),
 		m_i(0)
 	{
+		if (m_fromDir == DIR_NONE)
+			m_fromDir = DIR_HOLD;
 	}
 
 	bool Mover::hasNext() const
 	{
-		if (m_fromDir == DIR_NONE)
-			return false;
-
 		return m_i < FROM_END[m_fromDir];
 	}
 

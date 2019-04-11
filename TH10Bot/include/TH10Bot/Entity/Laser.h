@@ -4,7 +4,7 @@
 
 namespace th
 {
-	class Player;
+	struct Player;
 
 	// ¼¤¹â½á¹¹
 	//   (x,y)
@@ -18,17 +18,11 @@ namespace th
 	// |       |
 	// +-------+
 	//     w
-	class Laser :
-		public Entity
+	struct Laser :
+		Entity
 	{
-	public:
-		//Laser() :
-		//	arc() {}
-		//Laser(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
-		//	Entity(x0, y0, dx0, dy0, width0, height0), arc() {}
-
+		Laser advance(float_t frame) const;
 		bool collide(const Player& player) const;
-		bool collide(const Player& player, float_t frame) const;
 
 		Pointf getTopLeft() const;
 		Pointf getTopRight() const;
@@ -38,9 +32,8 @@ namespace th
 		float_t arc;
 	};
 
-	class SATBox
+	struct SATBox
 	{
-	public:
 		static bool Collide(float_t p1, float_t s1, float_t p2, float_t s2);
 
 		SATBox(const Laser& laser);
