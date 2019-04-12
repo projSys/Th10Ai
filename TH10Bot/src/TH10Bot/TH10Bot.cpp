@@ -161,7 +161,7 @@ namespace th
 		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 		cv::rectangle(m_image.m_data, rect1, green, -1);
-		Pointi windowPos11 = Scene::ToWindowPos(m_player.getPosition());
+		Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
 		cv::Point center11(windowPos11.x, windowPos11.y);
 		cv::circle(m_image.m_data, center11, int_t(100.0f), green);
 
@@ -195,34 +195,35 @@ namespace th
 			cv::rectangle(m_image.m_data, rect, red, -1);
 
 			// 显示垂足
-			Pointi p1 = Scene::ToWindowPos(bullet.getPosition());
-			Pointi p2 = Scene::ToWindowPos(Pointf(view.footPoint.x, view.footPoint.y));
-			Pointi p3 = Scene::ToWindowPos(m_player.getPosition());
+			FootPoint footPoint = bullet.getFootPoint(m_player);
+			Pointi p1 = Scene::ToWindowPos(bullet.getPos());
+			Pointi p2 = Scene::ToWindowPos(Pointf(footPoint.x, footPoint.y));
+			Pointi p3 = Scene::ToWindowPos(m_player.getPos());
 			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), orange);
 			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), orange);
 
-			// 显示方向
-			if (view.dir == DIR_UP)
-				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y - 20), yellow);
-			else if (view.dir == DIR_DOWN)
-				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y + 20), yellow);
-			else if (view.dir == DIR_LEFT)
-				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y), yellow);
-			else if (view.dir == DIR_RIGHT)
-				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y), yellow);
-			else if (view.dir == DIR_UPLEFT)
-				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y - 20), yellow);
-			else if (view.dir == DIR_UPRIGHT)
-				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y - 20), yellow);
-			else if (view.dir == DIR_DOWNLEFT)
-				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y + 20), yellow);
-			else if (view.dir == DIR_DOWNRIGHT)
-				cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
+			//// 显示方向
+			//if (view.dir == DIR_UP)
+			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y - 20), yellow);
+			//else if (view.dir == DIR_DOWN)
+			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y + 20), yellow);
+			//else if (view.dir == DIR_LEFT)
+			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y), yellow);
+			//else if (view.dir == DIR_RIGHT)
+			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y), yellow);
+			//else if (view.dir == DIR_UPLEFT)
+			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y - 20), yellow);
+			//else if (view.dir == DIR_UPRIGHT)
+			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y - 20), yellow);
+			//else if (view.dir == DIR_DOWNLEFT)
+			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y + 20), yellow);
+			//else if (view.dir == DIR_DOWNRIGHT)
+			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
 		}
 
 		//for (const EntityView& view : m_focusLasers)
 		//{
-		//	//const Laser& laser = m_lasers[view.index];
+		//	const Laser& laser = m_lasers[view.index];
 
 		//	LaserBox laserBox(laser);
 		//	Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);

@@ -14,6 +14,16 @@ namespace th
 		return getPos().distance(other.getPos());
 	}
 
+	FootPoint Entity::getFootPoint(const Entity& other) const
+	{
+		if (isHolded())
+			return { x, y, std::numeric_limits<float_t>::max() };
+
+		// 点到直线的垂足
+		float_t ratio = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
+		return { x + dx * ratio, y + dy * ratio, ratio };
+	}
+
 	float_t Entity::getAngle(const Entity& other) const
 	{
 		if (isHolded())
@@ -22,44 +32,36 @@ namespace th
 		return MyMath::GetAngle(getPos(), getNextPos(), other.getPos());
 	}
 
-	FootPoint Entity::getFootPoint(const Entity& other) const
-	{
-		if (isHolded())
-			return { x, y, std::numeric_limits<float_t>::max() };
-
-		return MyMath::GetFootPoint(getPos(), getNextPos(), other.getPos());
-	}
-
 	Direction Entity::getDir() const
 	{
 		if (isHolded())
 			return DIR_HOLD;
 
-		// 与X轴的角度
-		float_t angleOfXAxis = MyMath::GetAngle(getPos(), getNextPos(), Pointf(x + 100.0f, y));
+		// 前进方向与X轴正方向的角度
+		float_t angle = MyMath::GetAngle(getPos(), getNextPos(), Pointf(x + 100.0f, y));
 		if (dy > 0.0f)	// 转换成360度
-			angleOfXAxis = 360.0f - angleOfXAxis;
+			angle = 360.0f - angle;
 
-		Direction dir;
-		if (angleOfXAxis > 337.5f)
-			dir = DIR_RIGHT;
-		else if (angleOfXAxis > 292.5f)
-			dir = DIR_DOWNRIGHT;
-		else if (angleOfXAxis > 247.5f)
-			dir = DIR_DOWN;
-		else if (angleOfXAxis > 202.5f)
-			dir = DIR_DOWNLEFT;
-		else if (angleOfXAxis > 157.5f)
-			dir = DIR_LEFT;
-		else if (angleOfXAxis > 112.5f)
-			dir = DIR_UPLEFT;
-		else if (angleOfXAxis > 67.5f)
-			dir = DIR_UP;
-		else if (angleOfXAxis > 22.5f)
-			dir = DIR_UPRIGHT;
-		else
-			dir = DIR_RIGHT;
-		return dir;
+		// 22.5 = 360 / 8 / 2
+		int_t sector = static_cast<int_t>(angle / 22.5f);
+		assert(sector >= 0 && sector < 16);
+		return SECTOR_TO_DIR[sector];
+	}
+
+	Direction Entity::getDir(const Entity& other) const
+	{
+		if (getPos() == other.getPos())
+			return DIR_HOLD;
+
+		// other与X轴正方向的角度
+		float_t angle = MyMath::GetAngle(getPos(), other.getPos(), Pointf(x + 100.0f, y));
+		if (other.y - y > 0.0f)	// 转换成360度
+			angle = 360.0f - angle;
+
+		// 22.5 = 360 / 8 / 2
+		int_t sector = static_cast<int_t>(angle / 22.5f);
+		assert(sector >= 0 && sector < 16);
+		return SECTOR_TO_DIR[sector];
 	}
 
 	Entity Entity::advance(float_t frame) const

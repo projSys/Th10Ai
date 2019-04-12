@@ -19,15 +19,6 @@ namespace th
 		return radianA * 180.0f / static_cast<float_t>(M_PI);
 	}
 
-	// 点到直线的垂足
-	FootPoint MyMath::GetFootPoint(const Pointf& A, const Pointf& B, const Pointf& P)
-	{
-		float_t dx = B.x - A.x;
-		float_t dy = B.y - A.y;
-		float_t ratio = ((P.x - A.x) * dx + (P.y - A.y) * dy) / (dx * dx + dy * dy);
-		return { A.x + dx * ratio, A.y + dy * ratio, ratio };
-	}
-
 	// 平面中，一个点(x, y)绕任意点(cx, cy)顺时针旋转a度后的坐标
 	// xx = (x - cx) * cos(-a) - (y - cy) * sin(-a) + cx;
 	// yy = (x - cx) * sin(-a) + (y - cy) * cos(-a) + cy;

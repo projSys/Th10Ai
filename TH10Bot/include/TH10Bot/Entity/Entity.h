@@ -2,6 +2,34 @@
 
 namespace th
 {
+	struct FootPoint
+	{
+		float_t x;		// 垂足坐标
+		float_t y;
+		float_t frame;	// 到达垂足的帧数
+	};
+
+	// 与X轴正方向的角度扇区转换成移动方向
+	const Direction SECTOR_TO_DIR[16] =
+	{
+		DIR_RIGHT,
+		DIR_UPRIGHT,
+		DIR_UPRIGHT,
+		DIR_UP,
+		DIR_UP,
+		DIR_UPLEFT,
+		DIR_UPLEFT,
+		DIR_LEFT,
+		DIR_LEFT,
+		DIR_DOWNLEFT,
+		DIR_DOWNLEFT,
+		DIR_DOWN,
+		DIR_DOWN,
+		DIR_DOWNRIGHT,
+		DIR_DOWNRIGHT,
+		DIR_RIGHT
+	};
+
 	// 实体结构
 	// +-------+
 	// | (x,y) |
@@ -12,9 +40,10 @@ namespace th
 	struct Entity
 	{
 		float_t getDist(const Entity& other) const;
-		float_t getAngle(const Entity& other) const;
 		FootPoint getFootPoint(const Entity& other) const;
+		float_t getAngle(const Entity& other) const;
 		Direction getDir() const;
+		Direction getDir(const Entity& other) const;
 
 		Entity advance(float_t frame) const;
 		bool collide(const Entity& other) const;

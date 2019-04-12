@@ -13,7 +13,7 @@ namespace th
 
 	const Sizef SCENE_SIZE = { 384.0f, 448.0f };
 
-	// 方向
+	// 移动方向
 	enum Direction
 	{
 		DIR_NONE = -1,
@@ -115,13 +115,6 @@ namespace th
 		{ 1.41f, -1.41f },
 		{ -1.41f, 1.41f },
 		{ 1.41f, 1.41f }
-	};
-
-	struct FootPoint
-	{
-		float_t x;		// 垂足坐标
-		float_t y;
-		float_t frame;	// 到达垂足的帧数
 	};
 
 	struct Node
