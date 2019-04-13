@@ -3,11 +3,19 @@
 
 namespace th
 {
-	Player Player::advance(float_t frame) const
+	Player Player::move(Direction dir) const
 	{
-		Player adv = *this;
-		adv.x += (dx * frame);
-		adv.y += (dy * frame);
-		return adv;
+		Player next = *this;
+		next.x += MOVE_SPEED[dir].x;
+		next.y += MOVE_SPEED[dir].y;
+		return next;
+	}
+
+	Player Player::moveSlow(Direction dir) const
+	{
+		Player next = *this;
+		next.x += MOVE_SPEED_SLOW[dir].x;
+		next.y += MOVE_SPEED_SLOW[dir].y;
+		return next;
 	}
 }

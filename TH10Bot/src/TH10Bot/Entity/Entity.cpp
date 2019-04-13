@@ -19,7 +19,7 @@ namespace th
 		if (isHolded())
 			return { x, y, std::numeric_limits<float_t>::max() };
 
-		// 点到直线的垂足
+		// 点到前进方向的垂足
 		float_t ratio = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
 		return { x + dx * ratio, y + dy * ratio, ratio };
 	}

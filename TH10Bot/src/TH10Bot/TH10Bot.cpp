@@ -382,11 +382,13 @@ namespace th
 
 		m_path.clear();
 		memset(m_mask, 0, sizeof(m_mask));
-		astar(start, goal);
+		//astar(start, goal);
+		search(start, goal);
 
 		if (!m_path.empty())
 		{
-			Node next = m_path.back();
+			//Node next = m_path.back();
+			Node next = m_path.front();
 			move(next.fromDir, false);
 		}
 		else
@@ -499,6 +501,48 @@ namespace th
 
 	//	return curResult;
 	//}
+
+	void TH10Bot::search(Node& start, Node& goal)
+	{
+		m_buffer = cv::Scalar(255, 255, 255);
+
+		cv::Scalar red(0, 0, 255);
+		cv::Scalar green(0, 255, 0);
+		cv::Scalar blue(255, 0, 0);
+
+		Entity e = { goal.pos.x, goal.pos.y, 0, 0, 5, 5 };
+		m_path.clear();
+
+		Node current = start;
+
+		while (true)
+		{
+			Player player = m_player;
+			player.setPos(current.pos);
+
+			Direction dir = player.getDir(e);
+
+			Node next = {};
+			next.pos = current.pos + MOVE_SPEED[dir];
+			next.fromDir = dir;
+
+			Pointi p1 = Scene::ToWindowPos(current.pos);
+			Pointi p2 = Scene::ToWindowPos(next.pos);
+			cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
+
+			// µΩ¥Ô÷’µ„
+			if (next.pos.distance(goal.pos) < 5.0f)
+			{
+				break;
+			}
+
+			m_path.push_back(next);
+			current = next;
+		}
+
+		cv::imshow("TH10", m_buffer);
+		cv::waitKey(1);
+	}
 
 	void TH10Bot::astar(Node& start, Node& goal)
 	{

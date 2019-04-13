@@ -88,35 +88,6 @@ namespace th
 		70.0f
 	};
 
-	// ÒÆ¶¯ËÙ¶È
-	// 3.18 = 4.5 * sqrt(0.5)
-	const Pointf MOVE_SPEED[DIR_MAXCOUNT] =
-	{
-		{ 0.0f, 0.0f },
-		{ 0.0f, -4.5f },
-		{ 0.0f, 4.5f },
-		{ -4.5f, 0.0f },
-		{ 4.5f, 0.0f },
-		{ -3.18f, -3.18f },
-		{ 3.18f, -3.18f },
-		{ -3.18f, 3.18f },
-		{ 3.18f, 3.18f }
-	};
-
-	// 1.41 = 2.0 * sqrt(0.5)
-	const Pointf MOVE_SPEED_SLOW[DIR_MAXCOUNT] =
-	{
-		{ 0.0f, 0.0f },
-		{ 0.0f, -2.0f },
-		{ 0.0f, 2.0f },
-		{ -2.0f, 0.0f },
-		{ 2.0f, 0.0f },
-		{ -1.41f, -1.41f },
-		{ 1.41f, -1.41f },
-		{ -1.41f, 1.41f },
-		{ 1.41f, 1.41f }
-	};
-
 	struct Node
 	{
 		Pointf pos;

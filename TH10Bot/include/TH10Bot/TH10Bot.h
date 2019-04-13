@@ -44,6 +44,7 @@ namespace th
 
 		bool handleMove();
 		//NodeResult dfs(const Player& player, float_t frame, int_t depth);
+		void search(Node& start, Node& goal);
 		void astar(Node& start, Node& goal);
 		float_t distBetween(const Node& current, const Node& neighbor);
 		float_t heuristicCostEstimate(const Node& neighbor, const Node& goal);
