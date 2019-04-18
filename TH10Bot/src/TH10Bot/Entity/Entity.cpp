@@ -9,27 +9,27 @@
 
 namespace th
 {
-	float_t Entity::getDist(const Entity& other) const
+	float_t Entity::getDist(const Pointf& pos) const
 	{
-		return getPos().distance(other.getPos());
+		return getPos().distance(pos);
 	}
 
-	FootPoint Entity::getFootPoint(const Entity& other) const
+	FootPoint Entity::getFootPoint(const Pointf& pos) const
 	{
 		if (isHolded())
 			return { x, y, std::numeric_limits<float_t>::max() };
 
 		// 点到前进方向的垂足
-		float_t ratio = ((other.x - x) * dx + (other.y - y) * dy) / (dx * dx + dy * dy);
+		float_t ratio = ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);
 		return { x + dx * ratio, y + dy * ratio, ratio };
 	}
 
-	float_t Entity::getAngle(const Entity& other) const
+	float_t Entity::getAngle(const Pointf& pos) const
 	{
 		if (isHolded())
 			return -1.0f;
 
-		return MyMath::GetAngle(getPos(), getNextPos(), other.getPos());
+		return MyMath::GetAngle(getPos(), getNextPos(), pos);
 	}
 
 	Direction Entity::getDir() const
@@ -48,14 +48,14 @@ namespace th
 		return SECTOR_TO_DIR[sector];
 	}
 
-	Direction Entity::getDir(const Entity& other) const
+	Direction Entity::getDir(const Pointf& pos) const
 	{
-		if (getPos() == other.getPos())
+		if (getPos() == pos)
 			return DIR_HOLD;
 
-		// other与X轴正方向的角度
-		float_t angle = MyMath::GetAngle(getPos(), other.getPos(), Pointf(x + 100.0f, y));
-		if (other.y - y > 0.0f)	// 转换成360度
+		// pos与X轴正方向的角度
+		float_t angle = MyMath::GetAngle(getPos(), pos, Pointf(x + 100.0f, y));
+		if (pos.y - y > 0.0f)	// 转换成360度
 			angle = 360.0f - angle;
 
 		// 22.5 = 360 / 8 / 2
@@ -80,7 +80,7 @@ namespace th
 
 	float_t Entity::willCollideWith(const Entity& other) const
 	{
-		FootPoint footPoint = getFootPoint(other);
+		FootPoint footPoint = getFootPoint(other.getPos());
 
 		Entity temp = *this;
 		temp.x = footPoint.x;

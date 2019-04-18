@@ -39,11 +39,11 @@ namespace th
 	//     w
 	struct Entity
 	{
-		float_t getDist(const Entity& other) const;
-		FootPoint getFootPoint(const Entity& other) const;
-		float_t getAngle(const Entity& other) const;
+		float_t getDist(const Pointf& pos) const;
+		FootPoint getFootPoint(const Pointf& pos) const;
+		float_t getAngle(const Pointf& pos) const;
 		Direction getDir() const;
-		Direction getDir(const Entity& other) const;
+		Direction getDir(const Pointf& pos) const;
 
 		Entity advance(float_t frame) const;
 		bool collide(const Entity& other) const;

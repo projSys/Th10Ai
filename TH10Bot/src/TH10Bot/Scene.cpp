@@ -21,4 +21,18 @@ namespace th
 	{
 		return pos.x > -184.0f && pos.x < 184.0f && pos.y > 32.0f && pos.y < 432.0f;
 	}
+
+	Pointf Scene::FixPos(const Pointf& pos)
+	{
+		Pointf fixed = pos;
+		if (fixed.x < -184.0f)
+			fixed.x = -184.0f;
+		if (fixed.x > 184.0f)
+			fixed.x = 184.0f;
+		if (fixed.y < 32.0f)
+			fixed.y = 32.0f;
+		if (fixed.y > 432.0f)
+			fixed.y = 432.0f;
+		return fixed;
+	}
 }

@@ -35,5 +35,6 @@ namespace th
 		static Pointi ToWindowPos(const Pointf& scenePos);
 		static Pointf ToScenePos(const Pointi& windowPos);
 		static bool IsInScene(const Pointf& pos);
+		static Pointf FixPos(const Pointf& pos);
 	};
 }

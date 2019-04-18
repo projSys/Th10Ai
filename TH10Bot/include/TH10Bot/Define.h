@@ -51,7 +51,7 @@ namespace th
 		{ DIR_UPRIGHT, DIR_DOWNLEFT,  DIR_DOWN,     DIR_RIGHT,     DIR_DOWNRIGHT }
 	};
 
-	const Direction FROM_PRIORITY[DIR_MAXCOUNT][8] =
+	const Direction MOVE_PRIORITY_DIR[DIR_MAXCOUNT][8] =
 	{
 		// DIR_HOLD
 		{ DIR_UP,        DIR_DOWN,     DIR_LEFT,      DIR_RIGHT,   DIR_UPLEFT,    DIR_UPRIGHT,  DIR_DOWNLEFT,  DIR_DOWNRIGHT },
@@ -73,7 +73,7 @@ namespace th
 		{ DIR_DOWNRIGHT, DIR_DOWN,     DIR_RIGHT,     DIR_UPRIGHT, DIR_DOWNLEFT,  DIR_NONE,     DIR_NONE,      DIR_NONE      }
 	};
 
-	const int_t FROM_END[DIR_MAXCOUNT] = { 8, 5, 5, 5, 5, 5, 5, 5, 5 };
+	const int_t MOVE_PRIORITY_END[DIR_MAXCOUNT] = { 8, 5, 5, 5, 5, 5, 5, 5, 5 };
 
 	const float_t PS[DIR_MAXCOUNT] =
 	{
@@ -88,16 +88,34 @@ namespace th
 		70.0f
 	};
 
+	//struct Node
+	//{
+	//	Pointf pos;
+	//	Pointf fromPos;
+	//	Direction fromDir;
+	//	float_t frame;
+
+	//	float_t gScore;
+	//	float_t hScore;
+	//	float_t fScore;
+	//};
+
 	struct Node
 	{
 		Pointf pos;
-		Pointf fromPos;
-		Direction fromDir;
 		float_t frame;
+		Pointf target;
+		int_t count;
+	};
 
-		float_t gScore;
-		float_t hScore;
-		float_t fScore;
+	struct NodeScore
+	{
+		bool limit;
+		bool inScene;
+		bool collide;
+		bool reach;
+		Direction dir;
+		bool slow;
 	};
 
 	struct PointLess
@@ -111,19 +129,4 @@ namespace th
 	typedef std::map<Pointf, Node, PointLess> PointNodeMap;
 	//typedef std::map<float_t, Node> ScoreNodeMap;
 	typedef std::multimap<float_t, Node> ScoreNodeMap;	// scoreø…ƒ‹÷ÿ∏¥
-
-	struct NodeScore
-	{
-		float_t score;
-		float_t minCollideFrame;
-		Direction minCollideDir;
-		int_t willCollideCount;
-	};
-
-	struct NodeResult
-	{
-		float_t score;
-		Direction nextDir;
-		float_t minCollideFrame;
-	};
 }

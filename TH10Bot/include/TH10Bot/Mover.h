@@ -5,13 +5,13 @@ namespace th
 	class Mover
 	{
 	public:
-		Mover(Direction fromDir);
+		Mover(Direction targetDir);
 
 		bool hasNext() const;
 		Direction next();
 
 	private:
-		Direction m_fromDir;
+		Direction m_targetDir;
 		int_t m_i;
 	};
 }
