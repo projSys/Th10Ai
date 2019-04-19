@@ -21,7 +21,7 @@ namespace th
 		m_active(false),
 		m_keyUp(VK_UP), m_keyDown(VK_DOWN), m_keyLeft(VK_LEFT), m_keyRight(VK_RIGHT),
 		m_keyShift(VK_SHIFT), m_keyZ('Z'), m_keyX('X'),
-		m_dfsCount(0),
+		m_count(0),
 		m_itemId(-1),
 		m_enemyId(-1),
 		m_bombCooldown(0),
@@ -149,9 +149,10 @@ namespace th
 		handleMove();
 
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
-		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		if (e3 > 10)
-			std::cout << "e3: " << e3 << std::endl;
+		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
+		//time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
+		//if (e4 > 10)
+		std::cout << e1 << " " << e2 << " " << e3 << std::endl;
 #else
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
@@ -162,46 +163,40 @@ namespace th
 		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 		cv::rectangle(m_image.m_data, rect1, green, -1);
-		Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
-		cv::Point center11(windowPos11.x, windowPos11.y);
-		cv::circle(m_image.m_data, center11, int_t(100.0f), green);
+		//Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
+		//cv::Point center11(windowPos11.x, windowPos11.y);
+		//cv::circle(m_image.m_data, center11, int_t(100.0f), green);
 
-		//for (const Item& item : m_items)
-		//{
-		//	Pointi windowPos = Scene::ToWindowPos(item.getLeftTop());
-		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(item.width), int_t(item.height));
-		//	cv::rectangle(m_image.m_data, rect, blue, -1);
-		//}
+		for (const Item& item : m_items)
+		{
+			Pointi windowPos = Scene::ToWindowPos(item.getTopLeft());
+			cv::Rect rect(windowPos.x, windowPos.y, int_t(item.width), int_t(item.height));
+			cv::rectangle(m_image.m_data, rect, blue, -1);
+		}
 
-		//for (const Enemy& enemy : m_enemies)
-		//{
-		//	Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
-		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
-		//	cv::rectangle(m_image.m_data, rect, red);
-		//}
-		//for (const EntityView& view : m_nearbyList)
+		for (const Enemy& enemy : m_enemies)
+		{
+			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
+			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
+			cv::rectangle(m_image.m_data, rect, red);
+		}
+
+		//for (const EntityView& view : m_focusBullets)
 		//{
 		//	const Bullet& bullet = m_bullets[view.index];
-
-		//	Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
-		//	cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-		//	cv::rectangle(m_image.m_data, rect, red, -1);
-		//}
-		for (const EntityView& view : m_focusBullets)
+		for (const Bullet& bullet : m_bullets)
 		{
-			const Bullet& bullet = m_bullets[view.index];
-
 			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, red, -1);
 
 			// 显示垂足
-			FootPoint footPoint = bullet.getFootPoint(m_player);
-			Pointi p1 = Scene::ToWindowPos(bullet.getPos());
-			Pointi p2 = Scene::ToWindowPos(Pointf(footPoint.x, footPoint.y));
-			Pointi p3 = Scene::ToWindowPos(m_player.getPos());
-			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), orange);
-			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), orange);
+			//FootPoint footPoint = bullet.getFootPoint(m_player.getPos());
+			//Pointi p1 = Scene::ToWindowPos(bullet.getPos());
+			//Pointi p2 = Scene::ToWindowPos(Pointf(footPoint.x, footPoint.y));
+			//Pointi p3 = Scene::ToWindowPos(m_player.getPos());
+			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), orange);
+			//cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), orange);
 
 			//// 显示方向
 			//if (view.dir == DIR_UP)
@@ -225,17 +220,18 @@ namespace th
 		//for (const EntityView& view : m_focusLasers)
 		//{
 		//	const Laser& laser = m_lasers[view.index];
-
-		//	LaserBox laserBox(laser);
-		//	Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
-		//	Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
-		//	Pointi p3 = Scene::ToWindowPos(laserBox.bottomLeft);
-		//	Pointi p4 = Scene::ToWindowPos(laserBox.bottomRight);
-		//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
-		//	cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
-		//	cv::line(m_image.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
-		//	cv::line(m_image.m_data, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), red);
-		//}
+		for (const Laser& laser : m_lasers)
+		{
+			SATBox laserBox(laser);
+			Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
+			Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
+			Pointi p3 = Scene::ToWindowPos(laserBox.bottomLeft);
+			Pointi p4 = Scene::ToWindowPos(laserBox.bottomRight);
+			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
+			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
+			cv::line(m_image.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
+			cv::line(m_image.m_data, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), red);
+		}
 
 		cv::imshow("TH10", m_image.m_data);
 		cv::waitKey(1);
@@ -392,11 +388,11 @@ namespace th
 		node.frame = 0.0f;
 		node.target = Scene::FixPos(getMousePos());
 
-		m_dfsCount = 0;
+		m_count = 0;
 		NodeScore score = dfs(node);
 
 		if (score.limit)
-			std::cout << "------------超过节点数限制。" << std::endl;
+			std::cout << "----------------超过节点数限制。" << std::endl;
 
 		//if (score.reach)
 		//	std::cout << "到达目标。" << std::endl;
@@ -422,7 +418,7 @@ namespace th
 		NodeScore score = {};
 		score.dir = DIR_NONE;
 
-		score.limit = (++m_dfsCount >= 150);
+		score.limit = (++m_count >= 1000);
 		if (score.limit)
 			return score;
 

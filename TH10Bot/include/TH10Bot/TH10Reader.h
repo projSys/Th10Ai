@@ -17,19 +17,30 @@ namespace th
 	public:
 		TH10Reader(Process& process);
 
-		bool getPlayer(Player& player);
-		bool getItems(std::vector<Item>& items);
-		bool getEnemies(std::vector<Enemy>& enemies);
-		bool getBullets(std::vector<Bullet>& bullets);
-		bool getLasers(std::vector<Laser>& lasers);
+		bool getPlayer(Player& player) noexcept;
+		bool getItems(std::vector<Item>& items) noexcept;
+		bool getEnemies(std::vector<Enemy>& enemies) noexcept;
+		bool getBullets(std::vector<Bullet>& bullets) noexcept;
+		bool getLasers(std::vector<Laser>& lasers) noexcept;
 
 	private:
 		template <typename T>
-		T readMemory(uint_t baseAddress)
+		inline T readMemory(uint_t baseAddress) noexcept
 		{
 			T data = T();
 			ReadProcessMemory(m_process, reinterpret_cast<LPCVOID>(baseAddress), &data, sizeof(data), nullptr);
 			return data;
+		}
+
+		inline void readMemoryBuffer(uint_t baseAddress, byte_t* buffer, uint_t size) noexcept
+		{
+			ReadProcessMemory(m_process, reinterpret_cast<LPCVOID>(baseAddress), buffer, size, nullptr);
+		}
+
+		template <typename T>
+		inline T readBuffer(byte_t* buffer) noexcept
+		{
+			return *reinterpret_cast<T*>(buffer);
 		}
 
 		Process& m_process;

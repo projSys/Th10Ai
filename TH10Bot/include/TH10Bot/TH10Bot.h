@@ -100,7 +100,7 @@ namespace th
 		std::vector<Node> m_path;
 		cv::Mat m_buffer;
 		uint8_t m_mask[480][640];
-		int_t m_dfsCount;
+		int_t m_count;
 
 		int_t m_itemId;
 		int_t m_enemyId;
