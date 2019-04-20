@@ -418,7 +418,7 @@ namespace th
 		NodeScore score = {};
 		score.dir = DIR_NONE;
 
-		score.limit = (++m_count >= 1000);
+		score.limit = (++m_count > 1000);
 		if (score.limit)
 			return score;
 
