@@ -38,11 +38,12 @@ namespace th
 		}
 
 		template <typename T>
-		inline T readBuffer(byte_t* buffer) noexcept
+		inline T readBuffer(byte_t* address) noexcept
 		{
-			return *reinterpret_cast<T*>(buffer);
+			return *reinterpret_cast<T*>(address);
 		}
 
 		Process& m_process;
+		byte_t m_buffer[0x7F0 * 2000];
 	};
 }

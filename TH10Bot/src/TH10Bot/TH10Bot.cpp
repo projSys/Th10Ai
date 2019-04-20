@@ -152,7 +152,7 @@ namespace th
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		//time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
 		//if (e4 > 10)
-		std::cout << e1 << " " << e2 << " " << e3 << std::endl;
+			std::cout << e1 << " " << e2 << " " << e3 << std::endl;
 #else
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
