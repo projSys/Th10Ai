@@ -26,6 +26,7 @@ namespace th
 		TH10Bot();
 		~TH10Bot();
 
+		void draw();
 		void start();
 		void stop();
 		void update();
@@ -43,15 +44,14 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
+		Pointf getMousePos();
 		NodeScore dfs(const Node& node);
 		//void astar(Node& start, Node& goal);
 		//float_t distBetween(const Node& current, const Node& neighbor);
 		//float_t heuristicCostEstimate(const Node& neighbor, const Node& goal);
 		//void reconstructPath(const PointNodeMap& closedSet, const Node& goal);
-		Pointf getMousePos();
 		NodeScore getNodeScore(const Player& player, float_t frame);
 		bool collideMove(const Player& player, float_t frame);
-		//float_t getTargetScore(const Player& pNext, const Pointf& target);
 		int_t findItem();
 		int_t findEnemy();
 		float_t getDodgeEnemyScore(const Player& pNext, float_t epsilon = 100.0);
@@ -97,6 +97,7 @@ namespace th
 
 		std::vector<EntityView> m_focusBullets;
 		std::vector<EntityView> m_focusLasers;
+
 		std::vector<Node> m_path;
 		cv::Mat m_buffer;
 		uint8_t m_mask[480][640];
@@ -109,5 +110,7 @@ namespace th
 		time_t m_talkCooldown;
 		time_t m_shootCooldown;
 		time_t m_collectCooldown;
+
+		bool m_draw;
 	};
 }

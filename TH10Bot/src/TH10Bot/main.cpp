@@ -36,6 +36,8 @@ int main()
 				bot->stop();
 			if (IsKeyPressed('D'))
 				break;
+			if (IsKeyPressed(VK_LBUTTON))
+				bot->draw();
 
 			bot->update();
 

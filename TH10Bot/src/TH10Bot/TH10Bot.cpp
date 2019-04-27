@@ -27,15 +27,17 @@ namespace th
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_shootCooldown(0),
-		m_collectCooldown(0)
+		m_collectCooldown(0),
+		m_draw(false)
 	{
-		m_items.reserve(2000);
-		m_enemies.reserve(2000);
-		m_bullets.reserve(2000);
-		m_lasers.reserve(2000);
+		m_items.reserve(200);
+		m_enemies.reserve(200);
+		m_bullets.reserve(1000);
+		m_lasers.reserve(500);
 
 		m_focusBullets.reserve(500);
-		m_focusLasers.reserve(300);
+		m_focusLasers.reserve(500);
+
 		m_path.reserve(200);
 		m_buffer = cv::Mat(480, 640, CV_8UC3, cv::Scalar(255, 255, 255));
 		memset(m_mask, 0, sizeof(m_mask));
@@ -45,6 +47,11 @@ namespace th
 
 	TH10Bot::~TH10Bot()
 	{
+	}
+
+	void TH10Bot::draw()
+	{
+		m_draw = true;
 	}
 
 	void TH10Bot::start()
@@ -150,8 +157,8 @@ namespace th
 
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
-		//time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		//if (e4 > 10)
+		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
+		if (e4 > 10)
 			std::cout << e1 << " " << e2 << " " << e3 << std::endl;
 #else
 		cv::Scalar red(0, 0, 255);
@@ -225,8 +232,8 @@ namespace th
 			SATBox laserBox(laser);
 			Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
 			Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
-			Pointi p3 = Scene::ToWindowPos(laserBox.bottomLeft);
-			Pointi p4 = Scene::ToWindowPos(laserBox.bottomRight);
+			Pointi p3 = Scene::ToWindowPos(laserBox.bottomRight);
+			Pointi p4 = Scene::ToWindowPos(laserBox.bottomLeft);
 			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
 			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
 			cv::line(m_image.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
@@ -381,7 +388,20 @@ namespace th
 		//memset(m_mask, 0, sizeof(m_mask));
 		//astar(start, goal);
 
-		//m_buffer = cv::Scalar(255, 255, 255);
+		if (m_draw)
+		{
+			m_buffer = cv::Scalar(255, 255, 255);
+
+			cv::Scalar red(0, 0, 255);
+			for (const EntityView& view : m_focusBullets)
+			{
+				const Bullet& bullet = m_bullets[view.index];
+
+				Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
+				cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
+				cv::rectangle(m_buffer, rect, red, -1);
+			}
+		}
 
 		Node node;
 		node.pos = m_player.getPos();
@@ -407,10 +427,22 @@ namespace th
 			//std::cout << "无路可走。" << std::endl;
 		}
 
-		//cv::imshow("TH10", m_buffer);
-		//cv::waitKey(1);
+		if (m_draw)
+		{
+			cv::imshow("TH10", m_buffer);
+			cv::waitKey(1);
+			m_draw = false;
+		}
 
 		return true;
+	}
+
+	Pointf TH10Bot::getMousePos()
+	{
+		POINT mousePos = {};
+		GetCursorPos(&mousePos);
+		Rect clientRect = m_window.getClientRect();
+		return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
 	}
 
 	NodeScore TH10Bot::dfs(const Node& node)
@@ -418,7 +450,7 @@ namespace th
 		NodeScore score = {};
 		score.dir = DIR_NONE;
 
-		score.limit = (++m_count > 1000);
+		score.limit = (++m_count > 2000);
 		if (score.limit)
 			return score;
 
@@ -458,18 +490,11 @@ namespace th
 
 			NodeScore nextScore = dfs(nextNode);
 
-			//Pointi p1 = Scene::ToWindowPos(node.pos);
-			//Pointi p2 = Scene::ToWindowPos(nextNode.pos);
-			//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(0, 255, 0));
-
-			//cv::imshow("TH10", m_buffer);
-			//cv::waitKey(10);
-
 			if (nextScore.limit)
 			{
 				score.limit = true;
-				score.dir = dir;	// 先走，可能有问题
-				score.slow = slow;
+				//score.dir = dir;	// 先走，可能有问题
+				//score.slow = slow;
 				break;
 			}
 
@@ -484,13 +509,23 @@ namespace th
 				if (nextScore.limit)
 				{
 					score.limit = true;
-					score.dir = dir;	// 先走，可能有问题
-					score.slow = slow;
+					//score.dir = dir;	// 先走，可能有问题
+					//score.slow = slow;
 					break;
 				}
 
 				if (!nextScore.inScene || nextScore.collide)
 					continue;
+			}
+
+			if (m_draw)
+			{
+				Pointi p1 = Scene::ToWindowPos(node.pos);
+				Pointi p2 = Scene::ToWindowPos(nextNode.pos);
+				cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(0, 255, 0));
+
+				cv::imshow("TH10", m_buffer);
+				cv::waitKey(10);
 			}
 
 			if (nextScore.reach)
@@ -695,14 +730,6 @@ namespace th
 	//	}
 	//}
 
-	Pointf TH10Bot::getMousePos()
-	{
-		POINT mousePos = {};
-		GetCursorPos(&mousePos);
-		Rect clientRect = m_window.getClientRect();
-		return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
-	}
-
 	//NodeScore TH10Bot::getNodeScore(const Player& player, float_t frame)
 	//{
 	//	NodeScore score = { 0.0f, std::numeric_limits<float_t>::max(), DIR_NONE, 0 };
@@ -754,23 +781,6 @@ namespace th
 
 		return false;
 	}
-
-	//float_t TH10Bot::getTargetScore(const Player& pNext, const Pointf& target)
-	//{
-	//	float_t score = 0.0f;
-
-	//	if (pNext.getDistance(target) < 10.0f)
-	//	{
-	//		score += 300.0f;
-	//	}
-	//	else
-	//	{
-	//		score += 150.0f * (1.0f - GetDistXScore(pNext.x, target.x));
-	//		score += 150.0f * (1.0f - GetDistYScore(pNext.y, target.y));
-	//	}
-
-	//	return score;
-	//}
 
 	// 查找道具
 	int_t TH10Bot::findItem()
