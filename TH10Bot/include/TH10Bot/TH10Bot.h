@@ -5,6 +5,7 @@
 #include <Windows/Window.h>
 #include <GraphCap/D3D9FrameSync.h>
 #include <GraphCap/GraphCap.h>
+#include <GraphCap/DesktopInput.h>
 
 #include "TH10Bot/DesktopCapturerCV.h"
 #include "TH10Bot/DesktopImageCV.h"
@@ -15,7 +16,6 @@
 #include "TH10Bot/Entity/Bullet.h"
 #include "TH10Bot/Entity/Laser.h"
 #include "TH10Bot/Scene.h"
-#include "TH10Bot/Key.h"
 #include "TH10Bot/Clock.h"
 
 namespace th
@@ -26,6 +26,7 @@ namespace th
 		TH10Bot();
 		~TH10Bot();
 
+		void run();
 		void draw();
 		void start();
 		void stop();
@@ -79,15 +80,18 @@ namespace th
 
 		Process m_process;
 		Window m_window;
+
 		D3D9FrameSync m_sync;
 		GraphCap m_graphCap;
+
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_image;
+		DesktopInput m_input;
+
 		TH10Reader m_reader;
 
 		bool m_active;
 		Clock m_clock;
-		Key m_keyUp, m_keyDown, m_keyLeft, m_keyRight, m_keyShift, m_keyZ, m_keyX;
 
 		Player m_player;
 		std::vector<Item> m_items;

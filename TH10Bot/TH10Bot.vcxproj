@@ -159,7 +159,6 @@
     <ClInclude Include="include\TH10Bot\Entity\Item.h" />
     <ClInclude Include="include\TH10Bot\Entity\Laser.h" />
     <ClInclude Include="include\TH10Bot\Entity\Player.h" />
-    <ClInclude Include="include\TH10Bot\Key.h" />
     <ClInclude Include="include\TH10Bot\Mover.h" />
     <ClInclude Include="include\TH10Bot\MyMath.h" />
     <ClInclude Include="include\TH10Bot\Scene.h" />
@@ -177,7 +176,6 @@
     <ClCompile Include="src\TH10Bot\Entity\Item.cpp" />
     <ClCompile Include="src\TH10Bot\Entity\Laser.cpp" />
     <ClCompile Include="src\TH10Bot\Entity\Player.cpp" />
-    <ClCompile Include="src\TH10Bot\Key.cpp" />
     <ClCompile Include="src\TH10Bot\main.cpp" />
     <ClCompile Include="src\TH10Bot\Mover.cpp" />
     <ClCompile Include="src\TH10Bot\MyMath.cpp" />

@@ -15,12 +15,9 @@ namespace th
 	TH10Bot::TH10Bot() :
 		m_process(Process::FindByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
-		m_sync(),
 		m_graphCap(m_process, GHT_D3D9FRAMESYNC),
 		m_reader(m_process),
 		m_active(false),
-		m_keyUp(VK_UP), m_keyDown(VK_DOWN), m_keyLeft(VK_LEFT), m_keyRight(VK_RIGHT),
-		m_keyShift(VK_SHIFT), m_keyZ('Z'), m_keyX('X'),
 		m_count(0),
 		m_itemId(-1),
 		m_enemyId(-1),
@@ -47,6 +44,48 @@ namespace th
 
 	TH10Bot::~TH10Bot()
 	{
+		try
+		{
+			m_input.keyRelease(VK_UP);
+			m_input.keyRelease(VK_DOWN);
+			m_input.keyRelease(VK_LEFT);
+			m_input.keyRelease(VK_RIGHT);
+			m_input.keyRelease(VK_SHIFT);
+			m_input.keyRelease('Z');
+			m_input.keyRelease('X');
+		}
+		catch (...)
+		{
+		}
+	}
+
+	void TH10Bot::run()
+	{
+		//int_t fps = 0;
+		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+		while (true)
+		{
+			if (m_input.isKeyPressed('A'))
+				start();
+			if (m_input.isKeyPressed('S'))
+				stop();
+			if (m_input.isKeyPressed('D'))
+				break;
+			if (m_input.isKeyPressed(VK_LBUTTON))
+				draw();
+
+			update();
+
+			//++fps;
+			//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+			//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
+			//if (e1 >= 1000)
+			//{
+			//	std::cout << fps << std::endl;
+			//	fps = 0;
+			//	t0 += std::chrono::milliseconds(1000);
+			//}
+		}
 	}
 
 	void TH10Bot::draw()
@@ -68,8 +107,13 @@ namespace th
 		if (m_active)
 		{
 			m_active = false;
-			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release(),
-				m_keyShift.release(), m_keyZ.release(), m_keyX.release();
+			m_input.keyRelease(VK_UP);
+			m_input.keyRelease(VK_DOWN);
+			m_input.keyRelease(VK_LEFT);
+			m_input.keyRelease(VK_RIGHT);
+			m_input.keyRelease(VK_SHIFT);
+			m_input.keyRelease('Z');
+			m_input.keyRelease('X');
 			std::cout << "停止Bot。" << std::endl;
 		}
 	}
@@ -296,19 +340,18 @@ namespace th
 	// 处理炸弹
 	bool TH10Bot::handleBomb()
 	{
-		if (m_keyX.isPressed())
+		if (m_input.isKeyPressed('X'))
 		{
-			m_keyX.release();
+			m_input.keyRelease('X');
 			//std::cout << "炸弹 RELEASE" << std::endl;
 		}
 
 		// 放了炸弹3秒后再检测碰撞
 		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
 		{
-			//if (collideBomb())
 			if (m_player.status == 4)
 			{
-				m_keyX.press();
+				m_input.keyPress('X');
 				m_bombCooldown = m_clock.getTimestamp();
 				//std::cout << "炸弹 PRESS" << std::endl;
 				return true;
@@ -326,14 +369,14 @@ namespace th
 			// 延时2秒后对话
 			if (m_clock.getTimestamp() - m_talkCooldown >= 2000)
 			{
-				if (m_keyZ.isPressed())
+				if (m_input.isKeyPressed('Z'))
 				{
-					m_keyZ.release();
+					m_input.keyRelease('Z');
 					//std::cout << "对话 RELEASE" << std::endl;
 				}
 				else
 				{
-					m_keyZ.press();
+					m_input.keyPress('Z');
 					//std::cout << "对话 PRESS" << std::endl;
 				}
 				return true;
@@ -352,8 +395,8 @@ namespace th
 	{
 		if (!m_enemies.empty())
 		{
+			m_input.keyPress('Z');
 			m_shootCooldown = m_clock.getTimestamp();
-			m_keyZ.press();
 			//std::cout << "攻击 PRESS" << std::endl;
 		}
 		else
@@ -361,7 +404,7 @@ namespace th
 			// 没有敌人1秒后停止攻击
 			if (m_clock.getTimestamp() - m_shootCooldown >= 1000)
 			{
-				m_keyZ.release();
+				m_input.keyRelease('Z');
 				//std::cout << "攻击 RELEASE" << std::endl;
 				return false;
 			}
@@ -941,59 +984,86 @@ namespace th
 	{
 		if (slow)
 		{
-			m_keyShift.press();
+			m_input.keyPress(VK_SHIFT);
 			//std::cout << "慢速 PRESS" << std::endl;
 		}
 		else
 		{
-			m_keyShift.release();
+			m_input.keyRelease(VK_SHIFT);
 			//std::cout << "慢速 RELEASE" << std::endl;
 		}
 
 		switch (dir)
 		{
 		case DIR_HOLD:
-			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release();
+			m_input.keyRelease(VK_UP);
+			m_input.keyRelease(VK_DOWN);
+			m_input.keyRelease(VK_LEFT);
+			m_input.keyRelease(VK_RIGHT);
 			//std::cout << "不动" << std::endl;
 			break;
 
 		case DIR_UP:
-			m_keyUp.press(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.release();
+			m_input.keyPress(VK_UP);
+			m_input.keyRelease(VK_DOWN);
+			m_input.keyRelease(VK_LEFT);
+			m_input.keyRelease(VK_RIGHT);
 			//std::cout << "上" << std::endl;
 			break;
 
 		case DIR_DOWN:
-			m_keyUp.release(), m_keyDown.press(), m_keyLeft.release(), m_keyRight.release();
+			m_input.keyRelease(VK_UP);
+			m_input.keyPress(VK_DOWN);
+			m_input.keyRelease(VK_LEFT);
+			m_input.keyRelease(VK_RIGHT);
 			//std::cout << "下" << std::endl;
 			break;
 
 		case DIR_LEFT:
-			m_keyUp.release(), m_keyDown.release(), m_keyLeft.press(), m_keyRight.release();
+			m_input.keyRelease(VK_UP);
+			m_input.keyRelease(VK_DOWN);
+			m_input.keyPress(VK_LEFT);
+			m_input.keyRelease(VK_RIGHT);
 			//std::cout << "左" << std::endl;
 			break;
 
 		case DIR_RIGHT:
-			m_keyUp.release(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
+			m_input.keyRelease(VK_UP);
+			m_input.keyRelease(VK_DOWN);
+			m_input.keyRelease(VK_LEFT);
+			m_input.keyPress(VK_RIGHT);
 			//std::cout << "右" << std::endl;
 			break;
 
 		case DIR_UPLEFT:
-			m_keyUp.press(), m_keyDown.release(), m_keyLeft.press(), m_keyRight.release();
+			m_input.keyPress(VK_UP);
+			m_input.keyRelease(VK_DOWN);
+			m_input.keyPress(VK_LEFT);
+			m_input.keyRelease(VK_RIGHT);
 			//std::cout << "左上" << std::endl;
 			break;
 
 		case DIR_UPRIGHT:
-			m_keyUp.press(), m_keyDown.release(), m_keyLeft.release(), m_keyRight.press();
+			m_input.keyPress(VK_UP);
+			m_input.keyRelease(VK_DOWN);
+			m_input.keyRelease(VK_LEFT);
+			m_input.keyPress(VK_RIGHT);
 			//std::cout << "右上" << std::endl;
 			break;
 
 		case DIR_DOWNLEFT:
-			m_keyUp.release(), m_keyDown.press(), m_keyLeft.press(), m_keyRight.release();
+			m_input.keyRelease(VK_UP);
+			m_input.keyPress(VK_DOWN);
+			m_input.keyPress(VK_LEFT);
+			m_input.keyRelease(VK_RIGHT);
 			//std::cout << "左下" << std::endl;
 			break;
 
 		case DIR_DOWNRIGHT:
-			m_keyUp.release(), m_keyDown.press(), m_keyLeft.release(), m_keyRight.press();
+			m_input.keyRelease(VK_UP);
+			m_input.keyPress(VK_DOWN);
+			m_input.keyRelease(VK_LEFT);
+			m_input.keyPress(VK_RIGHT);
 			//std::cout << "右下" << std::endl;
 			break;
 		}

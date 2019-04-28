@@ -1,17 +1,11 @@
 #include "TH10Bot/Common.h"
 
 #include <memory>
-#include <chrono>
 #include <boost/log/utility/setup/file.hpp>
 
 #include "TH10Bot/TH10Bot.h"
 
 namespace bl = boost::log;
-
-bool IsKeyPressed(int vKey)
-{
-	return (GetAsyncKeyState(vKey) & 0x8000) != 0;
-}
 
 int main()
 {
@@ -24,33 +18,9 @@ int main()
 
 	try
 	{
-		std::shared_ptr<th::TH10Bot> bot = std::make_shared<th::TH10Bot>();
 		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出。" << std::endl;
-		//int fps = 0;
-		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
-		while (true)
-		{
-			if (IsKeyPressed('A'))
-				bot->start();
-			if (IsKeyPressed('S'))
-				bot->stop();
-			if (IsKeyPressed('D'))
-				break;
-			if (IsKeyPressed(VK_LBUTTON))
-				bot->draw();
-
-			bot->update();
-
-			//++fps;
-			//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-			//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
-			//if (e1 >= 1000)
-			//{
-			//	std::cout << fps << std::endl;
-			//	fps = 0;
-			//	t0 += std::chrono::milliseconds(1000);
-			//}
-		}
+		std::shared_ptr<th::TH10Bot> bot = std::make_shared<th::TH10Bot>();
+		bot->run();
 	}
 	catch (...)
 	{

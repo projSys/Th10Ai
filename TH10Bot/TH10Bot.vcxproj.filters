@@ -36,9 +36,6 @@
     <ClInclude Include="include\TH10Bot\Define.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\Key.h">
-      <Filter>头文件\TH10Bot</Filter>
-    </ClInclude>
     <ClInclude Include="include\TH10Bot\TH10Bot.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
@@ -84,9 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TH10Bot\Clock.cpp">
-      <Filter>源文件\TH10Bot</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\Key.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\TH10Bot\main.cpp">
