@@ -18,7 +18,6 @@ int main()
 
 	try
 	{
-		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出。" << std::endl;
 		std::shared_ptr<th::TH10Bot> bot = std::make_shared<th::TH10Bot>();
 		bot->run();
 	}

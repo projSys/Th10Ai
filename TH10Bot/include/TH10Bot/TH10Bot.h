@@ -116,5 +116,6 @@ namespace th
 		time_t m_collectCooldown;
 
 		bool m_draw;
+		float_t m_drawFrame;
 	};
 }

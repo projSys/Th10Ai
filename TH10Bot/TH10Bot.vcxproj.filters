@@ -54,9 +54,6 @@
     <ClInclude Include="include\TH10Bot\MyMath.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\Controller.h">
-      <Filter>头文件\TH10Bot</Filter>
-    </ClInclude>
     <ClInclude Include="include\TH10Bot\Entity\Bullet.h">
       <Filter>头文件\TH10Bot\Entity</Filter>
     </ClInclude>
@@ -102,9 +99,6 @@
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\TH10Bot\MyMath.cpp">
-      <Filter>源文件\TH10Bot</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\Controller.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\TH10Bot\Entity\Bullet.cpp">

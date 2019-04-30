@@ -25,15 +25,16 @@ namespace th
 		m_talkCooldown(0),
 		m_shootCooldown(0),
 		m_collectCooldown(0),
-		m_draw(false)
+		m_draw(false),
+		m_drawFrame(0.0f)
 	{
 		m_items.reserve(200);
 		m_enemies.reserve(200);
-		m_bullets.reserve(1000);
-		m_lasers.reserve(500);
+		m_bullets.reserve(500);
+		m_lasers.reserve(200);
 
-		m_focusBullets.reserve(500);
-		m_focusLasers.reserve(500);
+		m_focusBullets.reserve(250);
+		m_focusLasers.reserve(100);
 
 		m_path.reserve(200);
 		m_buffer = cv::Mat(480, 640, CV_8UC3, cv::Scalar(255, 255, 255));
@@ -61,6 +62,8 @@ namespace th
 
 	void TH10Bot::run()
 	{
+		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出。" << std::endl;
+
 		//int_t fps = 0;
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 		while (true)
@@ -71,8 +74,8 @@ namespace th
 				stop();
 			if (m_input.isKeyPressed('D'))
 				break;
-			if (m_input.isKeyPressed(VK_LBUTTON))
-				draw();
+			//if (m_input.isKeyPressed(VK_LBUTTON))
+			//	draw();
 
 			update();
 
@@ -107,6 +110,8 @@ namespace th
 		if (m_active)
 		{
 			m_active = false;
+			std::cout << "停止Bot。" << std::endl;
+
 			m_input.keyRelease(VK_UP);
 			m_input.keyRelease(VK_DOWN);
 			m_input.keyRelease(VK_LEFT);
@@ -114,7 +119,6 @@ namespace th
 			m_input.keyRelease(VK_SHIFT);
 			m_input.keyRelease('Z');
 			m_input.keyRelease('X');
-			std::cout << "停止Bot。" << std::endl;
 		}
 	}
 
@@ -122,7 +126,7 @@ namespace th
 	{
 		if (!m_active)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(17));
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
 			return;
 		}
 #if PLAY
@@ -431,27 +435,13 @@ namespace th
 		//memset(m_mask, 0, sizeof(m_mask));
 		//astar(start, goal);
 
-		if (m_draw)
-		{
-			m_buffer = cv::Scalar(255, 255, 255);
-
-			cv::Scalar red(0, 0, 255);
-			for (const EntityView& view : m_focusBullets)
-			{
-				const Bullet& bullet = m_bullets[view.index];
-
-				Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
-				cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-				cv::rectangle(m_buffer, rect, red, -1);
-			}
-		}
-
 		Node node;
 		node.pos = m_player.getPos();
 		node.frame = 0.0f;
 		node.target = Scene::FixPos(getMousePos());
 
 		m_count = 0;
+		m_drawFrame = 0.0f;
 		NodeScore score = dfs(node);
 
 		if (score.limit)
@@ -519,6 +509,27 @@ namespace th
 		//else
 		//	curResult.score += getGobackScore(player);
 
+		if (m_draw && m_drawFrame != node.frame)
+		{
+			m_drawFrame = node.frame;
+
+			m_buffer = cv::Scalar(255, 255, 255);
+
+			cv::Scalar red(0, 0, 255);
+			for (const EntityView& view : m_focusBullets)
+			{
+				const Bullet& bullet = m_bullets[view.index];
+				Bullet adv = bullet.advance(node.frame);
+
+				Pointi windowPos = Scene::ToWindowPos(adv.getTopLeft());
+				cv::Rect rect(windowPos.x, windowPos.y, int_t(adv.width), int_t(adv.height));
+				cv::rectangle(m_buffer, rect, red, -1);
+			}
+
+			cv::imshow("TH10", m_buffer);
+			cv::waitKey(1);
+		}
+
 		Direction targetDir = player.getDir(node.target);
 		Mover mover(targetDir);
 		while (mover.hasNext())
@@ -530,6 +541,16 @@ namespace th
 			nextNode.pos = node.pos + MOVE_SPEED[dir];
 			nextNode.frame = node.frame + 1.0f;
 			nextNode.target = node.target;
+
+			if (m_draw)
+			{
+				Pointi p1 = Scene::ToWindowPos(node.pos);
+				Pointi p2 = Scene::ToWindowPos(nextNode.pos);
+				cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(0, 255, 0));
+
+				cv::imshow("TH10", m_buffer);
+				cv::waitKey(10);
+			}
 
 			NodeScore nextScore = dfs(nextNode);
 
@@ -559,16 +580,6 @@ namespace th
 
 				if (!nextScore.inScene || nextScore.collide)
 					continue;
-			}
-
-			if (m_draw)
-			{
-				Pointi p1 = Scene::ToWindowPos(node.pos);
-				Pointi p2 = Scene::ToWindowPos(nextNode.pos);
-				cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(0, 255, 0));
-
-				cv::imshow("TH10", m_buffer);
-				cv::waitKey(10);
 			}
 
 			if (nextScore.reach)
