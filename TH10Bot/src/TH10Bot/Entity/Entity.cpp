@@ -26,7 +26,7 @@ namespace th
 
 	float_t Entity::getAngle(const Pointf& pos) const
 	{
-		if (isHolded())
+		if (isHolded() || getPos() == pos)
 			return -1.0f;
 
 		return MyMath::GetAngle(getPos(), getNextPos(), pos);
@@ -44,7 +44,7 @@ namespace th
 
 		// 22.5 = 360 / 8 / 2
 		int_t sector = static_cast<int_t>(angle / 22.5f);
-		assert(sector >= 0 && sector < 16);
+		assert(sector >= 0 && sector <= 16);
 		return SECTOR_TO_DIR[sector];
 	}
 
@@ -60,7 +60,7 @@ namespace th
 
 		// 22.5 = 360 / 8 / 2
 		int_t sector = static_cast<int_t>(angle / 22.5f);
-		assert(sector >= 0 && sector < 16);
+		assert(sector >= 0 && sector <= 16);
 		return SECTOR_TO_DIR[sector];
 	}
 
@@ -125,7 +125,8 @@ namespace th
 
 	bool Entity::isHolded() const
 	{
-		return dx == 0.0f && dy == 0.0f;
+		return dx <= std::numeric_limits<float_t>::epsilon()
+			&& dy <= std::numeric_limits<float_t>::epsilon();
 	}
 
 	Pointf Entity::getDelta() const

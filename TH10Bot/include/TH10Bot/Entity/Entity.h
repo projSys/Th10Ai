@@ -10,24 +10,25 @@ namespace th
 	};
 
 	// 与X轴正方向的角度扇区转换成移动方向
-	const Direction SECTOR_TO_DIR[16] =
+	const Direction SECTOR_TO_DIR[17] =
 	{
+		DIR_RIGHT,		// 0
+		DIR_UPRIGHT,
+		DIR_UPRIGHT,
+		DIR_UP,
+		DIR_UP,
+		DIR_UPLEFT,
+		DIR_UPLEFT,
+		DIR_LEFT,
+		DIR_LEFT,
+		DIR_DOWNLEFT,
+		DIR_DOWNLEFT,
+		DIR_DOWN,
+		DIR_DOWN,
+		DIR_DOWNRIGHT,
+		DIR_DOWNRIGHT,
 		DIR_RIGHT,
-		DIR_UPRIGHT,
-		DIR_UPRIGHT,
-		DIR_UP,
-		DIR_UP,
-		DIR_UPLEFT,
-		DIR_UPLEFT,
-		DIR_LEFT,
-		DIR_LEFT,
-		DIR_DOWNLEFT,
-		DIR_DOWNLEFT,
-		DIR_DOWN,
-		DIR_DOWN,
-		DIR_DOWNRIGHT,
-		DIR_DOWNRIGHT,
-		DIR_RIGHT
+		DIR_RIGHT		// 360
 	};
 
 	// 实体结构

@@ -13,7 +13,12 @@ namespace th
 		float_t AB = A.distance(B);
 		float_t AC = A.distance(C);
 		float_t BC = B.distance(C);
+		assert(AB != 0.0f && AC != 0.0f);
 		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
+		if (cosA < -1.0f)
+			cosA = -1.0f;
+		if (cosA > 1.0f)
+			cosA = 1.0f;
 		float_t radianA = std::acos(cosA);
 		// ½Ç¶È = »¡¶È * 180 / PI
 		return radianA * 180.0f / static_cast<float_t>(M_PI);

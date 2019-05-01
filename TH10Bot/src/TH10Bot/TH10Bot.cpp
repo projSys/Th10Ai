@@ -18,15 +18,13 @@ namespace th
 		m_graphCap(m_process, GHT_D3D9FRAMESYNC),
 		m_reader(m_process),
 		m_active(false),
-		m_count(0),
 		m_itemId(-1),
 		m_enemyId(-1),
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_shootCooldown(0),
 		m_collectCooldown(0),
-		m_draw(false),
-		m_drawFrame(0.0f)
+		m_count(0)
 	{
 		m_items.reserve(200);
 		m_enemies.reserve(200);
@@ -37,8 +35,7 @@ namespace th
 		m_focusLasers.reserve(100);
 
 		m_path.reserve(200);
-		m_buffer = cv::Mat(480, 640, CV_8UC3, cv::Scalar(255, 255, 255));
-		memset(m_mask, 0, sizeof(m_mask));
+		//memset(m_mask, 0, sizeof(m_mask));
 
 		srand((unsigned int)time(nullptr));
 	}
@@ -74,8 +71,6 @@ namespace th
 				stop();
 			if (m_input.isKeyPressed('D'))
 				break;
-			//if (m_input.isKeyPressed(VK_LBUTTON))
-			//	draw();
 
 			update();
 
@@ -89,11 +84,6 @@ namespace th
 			//	t0 += std::chrono::milliseconds(1000);
 			//}
 		}
-	}
-
-	void TH10Bot::draw()
-	{
-		m_draw = true;
 	}
 
 	void TH10Bot::start()
@@ -158,6 +148,24 @@ namespace th
 		//std::cout << "e1: " << e1 << std::endl;
 
 		// 裁剪弹幕
+		m_focusEnemies.clear();
+		for (uint_t i = 0; i < m_enemies.size(); ++i)
+		{
+			const Enemy& enemy = m_enemies[i];
+
+			float_t dist = enemy.getDist(m_player.getPos());
+			FootPoint footPoint = enemy.getFootPoint(m_player.getPos());
+			if (dist < 100.0f	// 在附近的
+				|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
+					&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
+			{
+				EntityView view;
+				view.index = i;
+				view.dir = enemy.getDir();
+				m_focusEnemies.push_back(view);
+			}
+		}
+
 		m_focusBullets.clear();
 		for (uint_t i = 0; i < m_bullets.size(); ++i)
 		{
@@ -175,24 +183,24 @@ namespace th
 				m_focusBullets.push_back(view);
 			}
 		}
-		//m_focusLasers.clear();
-		//for (uint_t i = 0; i < m_lasers.size(); ++i)
-		//{
-		//	const Laser& laser = m_lasers[i];
 
-		//	EntityView view;
-		//	view.index = i;
-		//	view.dist = laser.distance(m_player);
-		//	view.footFrame = laser.footFrame(m_player.getPos());
-		//	view.footPoint = laser.footPoint(view.footFrame);
-		//	view.angle = laser.angle(m_player);
-		//	view.dir = laser.direction();
-		//	if (view.dist < 100.0f	// 在附近的
-		//		|| (m_player.getPos().distance(view.footPoint) < 100.0f && view.angle > 0.0f && view.angle < 90.0f))	// 将来可能碰撞的
-		//	{
-		//		m_focusLasers.push_back(view);
-		//	}
-		//}
+		m_focusLasers.clear();
+		for (uint_t i = 0; i < m_lasers.size(); ++i)
+		{
+			const Laser& laser = m_lasers[i];
+
+			float_t dist = laser.getDist(m_player.getPos());
+			FootPoint footPoint = laser.getFootPoint(m_player.getPos());
+			if (dist < 100.0f	// 在附近的
+				|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
+					&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
+			{
+				EntityView view;
+				view.index = i;
+				view.dir = laser.getDir();
+				m_focusLasers.push_back(view);
+			}
+		}
 
 		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -229,6 +237,9 @@ namespace th
 			cv::rectangle(m_image.m_data, rect, blue, -1);
 		}
 
+		//for (const EntityView& view : m_focusEnemies)
+		//{
+		//	const Enemy& enemy = m_enemies[view.index];
 		for (const Enemy& enemy : m_enemies)
 		{
 			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
@@ -441,7 +452,6 @@ namespace th
 		node.target = Scene::FixPos(getMousePos());
 
 		m_count = 0;
-		m_drawFrame = 0.0f;
 		NodeScore score = dfs(node);
 
 		if (score.limit)
@@ -460,13 +470,6 @@ namespace th
 			//std::cout << "无路可走。" << std::endl;
 		}
 
-		if (m_draw)
-		{
-			cv::imshow("TH10", m_buffer);
-			cv::waitKey(1);
-			m_draw = false;
-		}
-
 		return true;
 	}
 
@@ -476,6 +479,35 @@ namespace th
 		GetCursorPos(&mousePos);
 		Rect clientRect = m_window.getClientRect();
 		return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
+	}
+
+	bool TH10Bot::collide(const Player& player, float_t frame)
+	{
+		for (const EntityView& view : m_focusEnemies)
+		{
+			const Enemy& enemy = m_enemies[view.index];
+			Enemy adv = enemy.advance(frame);
+			if (adv.collide(player))
+				return true;
+		}
+
+		for (const EntityView& view : m_focusBullets)
+		{
+			const Bullet& bullet = m_bullets[view.index];
+			Bullet adv = bullet.advance(frame);
+			if (adv.collide(player))
+				return true;
+		}
+
+		for (const EntityView& view : m_focusLasers)
+		{
+			const Laser& laser = m_lasers[view.index];
+			Laser adv = laser.advance(frame);
+			if (adv.collide(player))
+				return true;
+		}
+
+		return false;
 	}
 
 	NodeScore TH10Bot::dfs(const Node& node)
@@ -494,7 +526,7 @@ namespace th
 		Player player = m_player;
 		player.setPos(node.pos);
 
-		score.collide = collideMove(player, node.frame);
+		score.collide = collide(player, node.frame);
 		if (score.collide)
 			return score;
 
@@ -509,27 +541,6 @@ namespace th
 		//else
 		//	curResult.score += getGobackScore(player);
 
-		if (m_draw && m_drawFrame != node.frame)
-		{
-			m_drawFrame = node.frame;
-
-			m_buffer = cv::Scalar(255, 255, 255);
-
-			cv::Scalar red(0, 0, 255);
-			for (const EntityView& view : m_focusBullets)
-			{
-				const Bullet& bullet = m_bullets[view.index];
-				Bullet adv = bullet.advance(node.frame);
-
-				Pointi windowPos = Scene::ToWindowPos(adv.getTopLeft());
-				cv::Rect rect(windowPos.x, windowPos.y, int_t(adv.width), int_t(adv.height));
-				cv::rectangle(m_buffer, rect, red, -1);
-			}
-
-			cv::imshow("TH10", m_buffer);
-			cv::waitKey(1);
-		}
-
 		Direction targetDir = player.getDir(node.target);
 		Mover mover(targetDir);
 		while (mover.hasNext())
@@ -541,16 +552,6 @@ namespace th
 			nextNode.pos = node.pos + MOVE_SPEED[dir];
 			nextNode.frame = node.frame + 1.0f;
 			nextNode.target = node.target;
-
-			if (m_draw)
-			{
-				Pointi p1 = Scene::ToWindowPos(node.pos);
-				Pointi p2 = Scene::ToWindowPos(nextNode.pos);
-				cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(0, 255, 0));
-
-				cv::imshow("TH10", m_buffer);
-				cv::waitKey(10);
-			}
 
 			NodeScore nextScore = dfs(nextNode);
 
@@ -808,34 +809,6 @@ namespace th
 	//	return score;
 	//}
 
-	bool TH10Bot::collideMove(const Player& player, float_t frame)
-	{
-		for (const Enemy& enemy : m_enemies)
-		{
-			Enemy adv = enemy.advance(frame);
-			if (adv.collide(player))
-				return true;
-		}
-
-		for (const EntityView& view : m_focusBullets)
-		{
-			const Bullet& bullet = m_bullets[view.index];
-			Bullet adv = bullet.advance(frame);
-			if (adv.collide(player))
-				return true;
-		}
-
-		for (const EntityView& view : m_focusLasers)
-		{
-			const Laser& laser = m_lasers[view.index];
-			Laser adv = laser.advance(frame);
-			if (adv.collide(player))
-				return true;
-		}
-
-		return false;
-	}
-
 	// 查找道具
 	int_t TH10Bot::findItem()
 	{
@@ -893,38 +866,6 @@ namespace th
 		}
 
 		return id;
-	}
-
-	float_t TH10Bot::getDodgeEnemyScore(const Player& pNext, float_t epsilon)
-	{
-		float_t score = 0.0f;
-
-		for (const Enemy& enemy : m_enemies)
-		{
-			if (enemy.collide(pNext))
-			{
-				score = -10000.0f;
-				break;
-			}
-		}
-
-		return score;
-	}
-
-	float_t TH10Bot::getDodgeLaserScore(const Player& pNext, float_t epsilon)
-	{
-		float_t score = 0.0f;
-
-		for (const Laser& laser : m_lasers)
-		{
-			if (laser.collide(pNext))
-			{
-				score = -10000.0f;
-				break;
-			}
-		}
-
-		return score;
 	}
 
 	// 拾取道具评分

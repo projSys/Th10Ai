@@ -60,6 +60,7 @@ namespace th
 			return false;
 
 		readMemoryBuffer(baseAddr + 0x3C0, m_buffer, 0x3F0 * /*2000*/200);
+		//uint32_t ebp = baseAddr + 0x3C0;
 		byte_t* ebp = m_buffer;
 		for (int_t i = 0; i < /*2000*/200; ++i)
 		{
@@ -73,6 +74,12 @@ namespace th
 			if (eax == 1)
 			{
 				Item item;
+				//item.x = readMemory<float32_t>(ebp);
+				//item.y = readMemory<float32_t>(ebp + 0x4);
+				//item.dx = readMemory<float32_t>(ebp + 0xC);
+				//item.dy = readMemory<float32_t>(ebp + 0x10);
+				//item.height = item.width = 6.0f;
+				//item.type = readMemory<int32_t>(ebp + 0x34);
 				item.x = readBuffer<float32_t>(ebp);
 				item.y = readBuffer<float32_t>(ebp + 0x4);
 				item.dx = readBuffer<float32_t>(ebp + 0xC);
@@ -147,6 +154,7 @@ namespace th
 			return false;
 
 		readMemoryBuffer(baseAddr + 0x60, m_buffer, 0x7F0 * 2000);
+		//uint32_t ebx = baseAddr + 0x60;
 		byte_t* ebx = m_buffer;
 		for (int_t i = 0; i < 2000; ++i)
 		{
@@ -154,6 +162,12 @@ namespace th
 			if ((bp & 0x0000FFFF) != 0)
 			{
 				Bullet bullet;
+				//bullet.x = readMemory<float32_t>(ebx + 0x3B4);
+				//bullet.y = readMemory<float32_t>(ebx + 0x3B8);
+				//bullet.dx = readMemory<float32_t>(ebx + 0x3C0);
+				//bullet.dy = readMemory<float32_t>(ebx + 0x3C4);
+				//bullet.width = readMemory<float32_t>(ebx + 0x3F0);
+				//bullet.height = readMemory<float32_t>(ebx + 0x3F4);
 				bullet.x = readBuffer<float32_t>(ebx + 0x3B4);
 				bullet.y = readBuffer<float32_t>(ebx + 0x3B8);
 				bullet.dx = readBuffer<float32_t>(ebx + 0x3C0);
