@@ -34,17 +34,28 @@ namespace th
 
 	struct SATBox
 	{
-		static bool Collide(float_t p1, float_t s1, float_t p2, float_t s2);
-
-		SATBox(const Laser& laser);
-		SATBox(const Player& player, const Laser& laser);
-
-		bool collide(const Player& player) const;
-		bool collide(const Laser& laser) const;
+		static Pointf Rotate(const Pointf& P, const Pointf& C, float_t radianC);
+		static bool Collide(float_t c1, float_t s1, float_t c2, float_t s2);
 
 		Pointf topLeft;
 		Pointf topRight;
 		Pointf bottomLeft;
 		Pointf bottomRight;
+	};
+
+	struct LaserBox :
+		SATBox
+	{
+		LaserBox(const Laser& laser);
+
+		bool collide(const Player& player) const;
+	};
+
+	struct PlayerBox :
+		SATBox
+	{
+		PlayerBox(const Player& player, const Laser& laser);
+
+		bool collide(const Laser& laser) const;
 	};
 }

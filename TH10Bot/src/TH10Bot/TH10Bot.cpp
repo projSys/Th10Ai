@@ -5,10 +5,9 @@
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
-#include "TH10Bot/MyMath.h"
 #include "TH10Bot/Mover.h"
 
-#define PLAY 1
+#define PLAY 0
 
 namespace th
 {
@@ -226,9 +225,9 @@ namespace th
 		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 		cv::rectangle(m_image.m_data, rect1, green, -1);
-		//Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
-		//cv::Point center11(windowPos11.x, windowPos11.y);
-		//cv::circle(m_image.m_data, center11, int_t(100.0f), green);
+		Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
+		cv::Point center11(windowPos11.x, windowPos11.y);
+		cv::circle(m_image.m_data, center11, int_t(100.0f), green);
 
 		for (const Item& item : m_items)
 		{
@@ -247,11 +246,11 @@ namespace th
 			cv::rectangle(m_image.m_data, rect, red);
 		}
 
-		//for (const EntityView& view : m_focusBullets)
-		//{
-		//	const Bullet& bullet = m_bullets[view.index];
-		for (const Bullet& bullet : m_bullets)
+		for (const EntityView& view : m_focusBullets)
 		{
+			const Bullet& bullet = m_bullets[view.index];
+		//for (const Bullet& bullet : m_bullets)
+		//{
 			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_image.m_data, rect, red, -1);
@@ -283,12 +282,12 @@ namespace th
 			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
 		}
 
-		//for (const EntityView& view : m_focusLasers)
-		//{
-		//	const Laser& laser = m_lasers[view.index];
-		for (const Laser& laser : m_lasers)
+		for (const EntityView& view : m_focusLasers)
 		{
-			SATBox laserBox(laser);
+			const Laser& laser = m_lasers[view.index];
+		//for (const Laser& laser : m_lasers)
+		//{
+			LaserBox laserBox(laser);
 			Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
 			Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
 			Pointi p3 = Scene::ToWindowPos(laserBox.bottomRight);
@@ -919,7 +918,7 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (pNext.getPos().distance(PLAYER_INIT_POS) < 10.0f)
+		if (Entity::GetDist(pNext.getPos(), PLAYER_INIT_POS) < 10.0f)
 		{
 			score += 30.0f;
 		}

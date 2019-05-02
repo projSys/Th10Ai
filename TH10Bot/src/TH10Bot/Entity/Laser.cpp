@@ -5,7 +5,6 @@
 #include <math.h>
 #include <cmath>
 
-#include "TH10Bot/MyMath.h"
 #include "TH10Bot/Entity/Player.h"
 
 namespace th
@@ -20,11 +19,11 @@ namespace th
 
 	bool Laser::collide(const Player& player) const
 	{
-		SATBox laserBox(*this);
+		LaserBox laserBox(*this);
 		if (!laserBox.collide(player))
 			return false;
 
-		SATBox playerBox(player, *this);
+		PlayerBox playerBox(player, *this);
 		if (!playerBox.collide(*this))
 			return false;
 
@@ -53,36 +52,39 @@ namespace th
 
 
 
-	bool SATBox::Collide(float_t p1, float_t s1, float_t p2, float_t s2)
+	// 平面中，一个点(x, y)绕任意点(cx, cy)顺时针旋转a度后的坐标
+	// xx = (x - cx) * cos(-a) - (y - cy) * sin(-a) + cx;
+	// yy = (x - cx) * sin(-a) + (y - cy) * cos(-a) + cy;
+	// 平面中，一个点(x, y)绕任意点(cx, cy)逆时针旋转a度后的坐标
+	// xx = (x - cx) * cos(a) - (y - cy) * sin(a) + cx;
+	// yy = (x - cx) * sin(a) + (y - cy) * cos(a) + cy;
+	Pointf SATBox::Rotate(const Pointf& P, const Pointf& C, float_t radianC)
 	{
-		return std::abs(p1 - p2) < (s1 + s2) / 2.0f;
+		float_t dx = P.x - C.x;
+		float_t dy = P.y - C.y;
+		float_t sinC = std::sin(radianC);
+		float_t cosC = std::cos(radianC);
+		return Pointf(dx * cosC - dy * sinC + C.x, dx * sinC + dy * cosC + C.y);
 	}
 
-	SATBox::SATBox(const Laser& laser)
+	bool SATBox::Collide(float_t c1, float_t s1, float_t c2, float_t s2)
+	{
+		return std::abs(c1 - c2) < (s1 + s2) / 2.0f;
+	}
+
+	LaserBox::LaserBox(const Laser& laser)
 	{
 		Pointf C = laser.getPos();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		topLeft = MyMath::Rotate(laser.getTopLeft(), C, radianC);
-		topRight = MyMath::Rotate(laser.getTopRight(), C, radianC);
-		bottomLeft = MyMath::Rotate(laser.getBottomLeft(), C, radianC);
-		bottomRight = MyMath::Rotate(laser.getBottomRight(), C, radianC);
-	}
-
-	// 反向旋转画布，即把激光转回来，再反向旋转自机坐标
-	SATBox::SATBox(const Player& player, const Laser& laser)
-	{
-		Pointf C = laser.getPos();
-		// emmm...你说这个谁懂啊？
-		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		topLeft = MyMath::Rotate(player.getTopLeft(), C, -radianC);
-		topRight = MyMath::Rotate(player.getTopRight(), C, -radianC);
-		bottomLeft = MyMath::Rotate(player.getBottomLeft(), C, -radianC);
-		bottomRight = MyMath::Rotate(player.getBottomRight(), C, -radianC);
+		topLeft = Rotate(laser.getTopLeft(), C, radianC);
+		topRight = Rotate(laser.getTopRight(), C, radianC);
+		bottomLeft = Rotate(laser.getBottomLeft(), C, radianC);
+		bottomRight = Rotate(laser.getBottomRight(), C, radianC);
 	}
 
 	// 分离轴定理
-	bool SATBox::collide(const Player& player) const
+	bool LaserBox::collide(const Player& player) const
 	{
 		// 投影到X轴
 		float_t minX = std::min(std::min(topLeft.x, topRight.x), std::min(bottomLeft.x, bottomRight.x));
@@ -101,8 +103,20 @@ namespace th
 		return true;
 	}
 
+	// 反向旋转画布，即把激光转回来，再反向旋转自机坐标
+	PlayerBox::PlayerBox(const Player& player, const Laser& laser)
+	{
+		Pointf C = laser.getPos();
+		// emmm...你说这个谁懂啊？
+		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
+		topLeft = Rotate(player.getTopLeft(), C, -radianC);
+		topRight = Rotate(player.getTopRight(), C, -radianC);
+		bottomLeft = Rotate(player.getBottomLeft(), C, -radianC);
+		bottomRight = Rotate(player.getBottomRight(), C, -radianC);
+	}
+
 	// 分离轴定理
-	bool SATBox::collide(const Laser& laser) const
+	bool PlayerBox::collide(const Laser& laser) const
 	{
 		// 投影到X轴
 		float_t minX = std::min(std::min(topLeft.x, topRight.x), std::min(bottomLeft.x, bottomRight.x));

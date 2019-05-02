@@ -5,13 +5,60 @@
 #include <math.h>
 #include <cmath>
 
-#include "TH10Bot/MyMath.h"
-
 namespace th
 {
+	// 与X轴正方向的角度扇区转换成移动方向
+	const Direction SECTOR_TO_DIR[17] =
+	{
+		DIR_RIGHT,		// 0
+		DIR_UPRIGHT,
+		DIR_UPRIGHT,
+		DIR_UP,
+		DIR_UP,
+		DIR_UPLEFT,
+		DIR_UPLEFT,
+		DIR_LEFT,
+		DIR_LEFT,
+		DIR_DOWNLEFT,
+		DIR_DOWNLEFT,
+		DIR_DOWN,
+		DIR_DOWN,
+		DIR_DOWNRIGHT,
+		DIR_DOWNRIGHT,
+		DIR_RIGHT,
+		DIR_RIGHT		// 360
+	};
+
+	float_t Entity::GetDist(const Pointf& A, const Pointf& B)
+	{
+		float_t dx = A.x - B.x;
+		float_t dy = A.y - B.y;
+		return std::sqrt(dx * dx + dy * dy);
+	}
+
+	// 余弦定理
+	float_t Entity::GetAngle(const Pointf& A, const Pointf& B, const Pointf& C)
+	{
+		float_t AB = GetDist(A, B);
+		float_t AC = GetDist(A, C);
+		float_t BC = GetDist(B, C);
+		if (AB == 0.0f || AC == 0.0f)
+			return -1.0f;
+
+		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
+		if (cosA < -1.0f)
+			cosA = -1.0f;
+		if (cosA > 1.0f)
+			cosA = 1.0f;
+
+		float_t radianA = std::acos(cosA);
+		// 角度 = 弧度 * 180 / PI
+		return radianA * 180.0f / static_cast<float_t>(M_PI);
+	}
+
 	float_t Entity::getDist(const Pointf& pos) const
 	{
-		return getPos().distance(pos);
+		return GetDist(getPos(), pos);
 	}
 
 	FootPoint Entity::getFootPoint(const Pointf& pos) const
@@ -29,7 +76,7 @@ namespace th
 		if (isHolded() || getPos() == pos)
 			return -1.0f;
 
-		return MyMath::GetAngle(getPos(), getNextPos(), pos);
+		return GetAngle(getPos(), getNextPos(), pos);
 	}
 
 	Direction Entity::getDir() const
@@ -38,7 +85,7 @@ namespace th
 			return DIR_HOLD;
 
 		// 前进方向与X轴正方向的角度
-		float_t angle = MyMath::GetAngle(getPos(), getNextPos(), Pointf(x + 100.0f, y));
+		float_t angle = GetAngle(getPos(), getNextPos(), Pointf(x + 100.0f, y));
 		if (dy > 0.0f)	// 转换成360度
 			angle = 360.0f - angle;
 
@@ -54,8 +101,8 @@ namespace th
 			return DIR_HOLD;
 
 		// pos与X轴正方向的角度
-		float_t angle = MyMath::GetAngle(getPos(), pos, Pointf(x + 100.0f, y));
-		if (pos.y - y > 0.0f)	// 转换成360度
+		float_t angle = GetAngle(getPos(), pos, Pointf(x + 100.0f, y));
+		if (pos.y > y)	// 转换成360度
 			angle = 360.0f - angle;
 
 		// 22.5 = 360 / 8 / 2

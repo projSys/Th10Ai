@@ -9,28 +9,6 @@ namespace th
 		float_t frame;	// 到达垂足的帧数
 	};
 
-	// 与X轴正方向的角度扇区转换成移动方向
-	const Direction SECTOR_TO_DIR[17] =
-	{
-		DIR_RIGHT,		// 0
-		DIR_UPRIGHT,
-		DIR_UPRIGHT,
-		DIR_UP,
-		DIR_UP,
-		DIR_UPLEFT,
-		DIR_UPLEFT,
-		DIR_LEFT,
-		DIR_LEFT,
-		DIR_DOWNLEFT,
-		DIR_DOWNLEFT,
-		DIR_DOWN,
-		DIR_DOWN,
-		DIR_DOWNRIGHT,
-		DIR_DOWNRIGHT,
-		DIR_RIGHT,
-		DIR_RIGHT		// 360
-	};
-
 	// 实体结构
 	// +-------+
 	// | (x,y) |
@@ -40,6 +18,9 @@ namespace th
 	//     w
 	struct Entity
 	{
+		static float_t GetDist(const Pointf& A, const Pointf& B);
+		static float_t GetAngle(const Pointf& A, const Pointf& B, const Pointf& C);
+
 		float_t getDist(const Pointf& pos) const;
 		FootPoint getFootPoint(const Pointf& pos) const;
 		float_t getAngle(const Pointf& pos) const;
