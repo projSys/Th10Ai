@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TH10Bot/Entity/Entity.h"
+#include "TH10Bot/Entity.h"
 
 namespace th
 {
@@ -33,9 +33,12 @@ namespace th
 		{ 1.41f, 1.41f }
 	};
 
-	struct Player :
-		Entity
+	class Player :
+		public Entity
 	{
+	public:
+		static const Pointf INIT_POS;
+
 		Player move(Direction dir) const;
 		Player moveSlow(Direction dir) const;
 

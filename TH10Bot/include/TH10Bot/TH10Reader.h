@@ -3,11 +3,11 @@
 #include <vector>
 #include <Windows/Process.h>
 
-#include "TH10Bot/Entity/Player.h"
-#include "TH10Bot/Entity/Item.h"
-#include "TH10Bot/Entity/Enemy.h"
-#include "TH10Bot/Entity/Bullet.h"
-#include "TH10Bot/Entity/Laser.h"
+#include "TH10Bot/Player.h"
+#include "TH10Bot/Item.h"
+#include "TH10Bot/Enemy.h"
+#include "TH10Bot/Bullet.h"
+#include "TH10Bot/Laser.h"
 
 namespace th
 {

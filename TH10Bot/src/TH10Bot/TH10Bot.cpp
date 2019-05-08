@@ -27,8 +27,10 @@ namespace th
 	{
 		m_items.reserve(200);
 		m_enemies.reserve(200);
-		m_bullets.reserve(500);
+		m_bullets.reserve(2000);
 		m_lasers.reserve(200);
+
+		m_scene.split(6);
 
 		m_focusBullets.reserve(250);
 		m_focusLasers.reserve(100);
@@ -126,7 +128,7 @@ namespace th
 		}
 #else
 		Rect rect = m_window.getClientRect();
-		if (!m_capturer.capture(m_image, rect))
+		if (!m_capturer.capture(m_buffer, rect))
 		{
 			std::cout << "抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。" << std::endl;
 			return;
@@ -146,60 +148,65 @@ namespace th
 		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 		//std::cout << "e1: " << e1 << std::endl;
 
-		// 裁剪弹幕
-		m_focusEnemies.clear();
-		for (uint_t i = 0; i < m_enemies.size(); ++i)
-		{
-			const Enemy& enemy = m_enemies[i];
+		m_scene.clear();
+		m_scene.splitEnemies(m_enemies);
+		m_scene.splitBullets(m_bullets);
+		m_scene.splitLasers(m_lasers);
 
-			float_t dist = enemy.getDist(m_player.getPos());
-			FootPoint footPoint = enemy.getFootPoint(m_player.getPos());
-			if (dist < 100.0f	// 在附近的
-				|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
-					&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
-			{
-				EntityView view;
-				view.index = i;
-				view.dir = enemy.getDir();
-				m_focusEnemies.push_back(view);
-			}
-		}
+		//// 裁剪弹幕
+		//m_focusEnemies.clear();
+		//for (uint_t i = 0; i < m_enemies.size(); ++i)
+		//{
+		//	const Enemy& enemy = m_enemies[i];
 
-		m_focusBullets.clear();
-		for (uint_t i = 0; i < m_bullets.size(); ++i)
-		{
-			const Bullet& bullet = m_bullets[i];
+		//	float_t dist = enemy.getDist(m_player.getPos());
+		//	FootPoint footPoint = enemy.getFootPoint(m_player.getPos());
+		//	if (dist < 100.0f	// 在附近的
+		//		|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
+		//			&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
+		//	{
+		//		EntityView view;
+		//		view.index = i;
+		//		view.dir = enemy.getDir();
+		//		m_focusEnemies.push_back(view);
+		//	}
+		//}
 
-			float_t dist = bullet.getDist(m_player.getPos());
-			FootPoint footPoint = bullet.getFootPoint(m_player.getPos());
-			if (dist < 100.0f	// 在附近的
-				|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
-					&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
-			{
-				EntityView view;
-				view.index = i;
-				view.dir = bullet.getDir();
-				m_focusBullets.push_back(view);
-			}
-		}
+		//m_focusBullets.clear();
+		//for (uint_t i = 0; i < m_bullets.size(); ++i)
+		//{
+		//	const Bullet& bullet = m_bullets[i];
 
-		m_focusLasers.clear();
-		for (uint_t i = 0; i < m_lasers.size(); ++i)
-		{
-			const Laser& laser = m_lasers[i];
+		//	float_t dist = bullet.getDist(m_player.getPos());
+		//	FootPoint footPoint = bullet.getFootPoint(m_player.getPos());
+		//	if (dist < 100.0f	// 在附近的
+		//		|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
+		//			&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
+		//	{
+		//		EntityView view;
+		//		view.index = i;
+		//		view.dir = bullet.getDir();
+		//		m_focusBullets.push_back(view);
+		//	}
+		//}
 
-			float_t dist = laser.getDist(m_player.getPos());
-			FootPoint footPoint = laser.getFootPoint(m_player.getPos());
-			if (dist < 100.0f	// 在附近的
-				|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
-					&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
-			{
-				EntityView view;
-				view.index = i;
-				view.dir = laser.getDir();
-				m_focusLasers.push_back(view);
-			}
-		}
+		//m_focusLasers.clear();
+		//for (uint_t i = 0; i < m_lasers.size(); ++i)
+		//{
+		//	const Laser& laser = m_lasers[i];
+
+		//	float_t dist = laser.getDist(m_player.getPos());
+		//	FootPoint footPoint = laser.getFootPoint(m_player.getPos());
+		//	if (dist < 100.0f	// 在附近的
+		//		|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
+		//			&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
+		//	{
+		//		EntityView view;
+		//		view.index = i;
+		//		view.dir = laser.getDir();
+		//		m_focusLasers.push_back(view);
+		//	}
+		//}
 
 		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -222,18 +229,20 @@ namespace th
 		cv::Scalar orange(0, 97, 255);
 		cv::Scalar yellow(0, 255, 255);
 
+		m_scene.renderTo(m_buffer.m_data, m_player);
+/*
 		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-		cv::rectangle(m_image.m_data, rect1, green, -1);
-		Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
-		cv::Point center11(windowPos11.x, windowPos11.y);
-		cv::circle(m_image.m_data, center11, int_t(100.0f), green);
+		cv::rectangle(m_buffer.m_data, rect1, green, -1);
+		//Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
+		//cv::Point center11(windowPos11.x, windowPos11.y);
+		//cv::circle(m_buffer.m_data, center11, int_t(100.0f), green);
 
 		for (const Item& item : m_items)
 		{
 			Pointi windowPos = Scene::ToWindowPos(item.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(item.width), int_t(item.height));
-			cv::rectangle(m_image.m_data, rect, blue, -1);
+			cv::rectangle(m_buffer.m_data, rect, blue, -1);
 		}
 
 		//for (const EntityView& view : m_focusEnemies)
@@ -243,7 +252,7 @@ namespace th
 		{
 			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
-			cv::rectangle(m_image.m_data, rect, red);
+			cv::rectangle(m_buffer.m_data, rect, red);
 		}
 
 		for (const EntityView& view : m_focusBullets)
@@ -253,33 +262,33 @@ namespace th
 		//{
 			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-			cv::rectangle(m_image.m_data, rect, red, -1);
+			cv::rectangle(m_buffer.m_data, rect, red, -1);
 
 			// 显示垂足
 			//FootPoint footPoint = bullet.getFootPoint(m_player.getPos());
 			//Pointi p1 = Scene::ToWindowPos(bullet.getPos());
 			//Pointi p2 = Scene::ToWindowPos(Pointf(footPoint.x, footPoint.y));
 			//Pointi p3 = Scene::ToWindowPos(m_player.getPos());
-			//cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), orange);
-			//cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), orange);
+			//cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), orange);
+			//cv::line(m_buffer.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), orange);
 
 			//// 显示方向
 			//if (view.dir == DIR_UP)
-			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y - 20), yellow);
+			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y - 20), yellow);
 			//else if (view.dir == DIR_DOWN)
-			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y + 20), yellow);
+			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y + 20), yellow);
 			//else if (view.dir == DIR_LEFT)
-			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y), yellow);
+			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y), yellow);
 			//else if (view.dir == DIR_RIGHT)
-			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y), yellow);
+			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y), yellow);
 			//else if (view.dir == DIR_UPLEFT)
-			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y - 20), yellow);
+			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y - 20), yellow);
 			//else if (view.dir == DIR_UPRIGHT)
-			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y - 20), yellow);
+			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y - 20), yellow);
 			//else if (view.dir == DIR_DOWNLEFT)
-			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y + 20), yellow);
+			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y + 20), yellow);
 			//else if (view.dir == DIR_DOWNRIGHT)
-			//	cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
+			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
 		}
 
 		for (const EntityView& view : m_focusLasers)
@@ -292,13 +301,13 @@ namespace th
 			Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
 			Pointi p3 = Scene::ToWindowPos(laserBox.bottomRight);
 			Pointi p4 = Scene::ToWindowPos(laserBox.bottomLeft);
-			cv::line(m_image.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
-			cv::line(m_image.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
-			cv::line(m_image.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
-			cv::line(m_image.m_data, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), red);
+			cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
+			cv::line(m_buffer.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
+			cv::line(m_buffer.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
+			cv::line(m_buffer.m_data, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), red);
 		}
-
-		cv::imshow("TH10", m_image.m_data);
+*/
+		cv::imshow("TH10", m_buffer.m_data);
 		cv::waitKey(1);
 #endif
 	}
@@ -448,7 +457,7 @@ namespace th
 		Node node;
 		node.pos = m_player.getPos();
 		node.frame = 0.0f;
-		node.target = Scene::FixPos(getMousePos());
+		node.targetPos = Scene::FixPlayerPos(getMousePos());
 
 		m_count = 0;
 		NodeScore score = dfs(node);
@@ -485,24 +494,24 @@ namespace th
 		for (const EntityView& view : m_focusEnemies)
 		{
 			const Enemy& enemy = m_enemies[view.index];
-			Enemy adv = enemy.advance(frame);
-			if (adv.collide(player))
+			Enemy temp = enemy.advance(frame);
+			if (temp.collide(player))
 				return true;
 		}
 
 		for (const EntityView& view : m_focusBullets)
 		{
 			const Bullet& bullet = m_bullets[view.index];
-			Bullet adv = bullet.advance(frame);
-			if (adv.collide(player))
+			Bullet temp = bullet.advance(frame);
+			if (temp.collide(player))
 				return true;
 		}
 
 		for (const EntityView& view : m_focusLasers)
 		{
 			const Laser& laser = m_lasers[view.index];
-			Laser adv = laser.advance(frame);
-			if (adv.collide(player))
+			Laser temp = laser.advance(frame);
+			if (temp.collide(player))
 				return true;
 		}
 
@@ -518,7 +527,7 @@ namespace th
 		if (score.limit)
 			return score;
 
-		score.inScene = Scene::IsInScene(node.pos);
+		score.inScene = Scene::IsInPlayerArea(node.pos);
 		if (!score.inScene)
 			return score;
 
@@ -529,7 +538,7 @@ namespace th
 		if (score.collide)
 			return score;
 
-		score.reach = (player.getDist(node.target) < 10.0f);
+		score.reach = (player.getDist(node.targetPos) < 10.0f);
 		if (score.reach)
 			return score;
 
@@ -540,7 +549,7 @@ namespace th
 		//else
 		//	curResult.score += getGobackScore(player);
 
-		Direction targetDir = player.getDir(node.target);
+		Direction targetDir = player.getDir(node.targetPos);
 		Mover mover(targetDir);
 		while (mover.hasNext())
 		{
@@ -550,7 +559,7 @@ namespace th
 			Node nextNode;
 			nextNode.pos = node.pos + MOVE_SPEED[dir];
 			nextNode.frame = node.frame + 1.0f;
-			nextNode.target = node.target;
+			nextNode.targetPos = node.targetPos;
 
 			NodeScore nextScore = dfs(nextNode);
 
@@ -918,14 +927,14 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (Entity::GetDist(pNext.getPos(), PLAYER_INIT_POS) < 10.0f)
+		if (Entity::GetDist(pNext.getPos(), Player::INIT_POS) < 10.0f)
 		{
 			score += 30.0f;
 		}
 		else
 		{
-			score += 15.0f * (1.0f - GetDistXScore(pNext.x, PLAYER_INIT_POS.x));
-			score += 15.0f * (1.0f - GetDistYScore(pNext.y, PLAYER_INIT_POS.y));
+			score += 15.0f * (1.0f - GetDistXScore(pNext.x, Player::INIT_POS.x));
+			score += 15.0f * (1.0f - GetDistYScore(pNext.y, Player::INIT_POS.y));
 		}
 
 		return score;

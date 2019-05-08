@@ -1,5 +1,5 @@
 #include "TH10Bot/Common.h"
-#include "TH10Bot/Entity/Entity.h"
+#include "TH10Bot/Entity.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -8,7 +8,7 @@
 namespace th
 {
 	// 与X轴正方向的角度扇区转换成移动方向
-	const Direction SECTOR_TO_DIR[17] =
+	const Direction Entity::SECTOR_TO_DIR[17] =
 	{
 		DIR_RIGHT,		// 0
 		DIR_UPRIGHT,
@@ -111,12 +111,20 @@ namespace th
 		return SECTOR_TO_DIR[sector];
 	}
 
+	Entity Entity::advance(const Pointf& pos) const
+	{
+		Entity ret = *this;
+		ret.x = pos.x;
+		ret.y = pos.y;
+		return ret;
+	}
+
 	Entity Entity::advance(float_t frame) const
 	{
-		Entity adv = *this;
-		adv.x += (dx * frame);
-		adv.y += (dy * frame);
-		return adv;
+		Entity ret = *this;
+		ret.x += (dx * frame);
+		ret.y += (dy * frame);
+		return ret;
 	}
 
 	bool Entity::collide(const Entity& other) const
@@ -125,18 +133,14 @@ namespace th
 			&& std::abs(y - other.y) < (height + other.height) / 2.0f;
 	}
 
-	float_t Entity::willCollideWith(const Entity& other) const
+	std::pair<bool, float_t> Entity::willCollideWith(const Entity& other) const
 	{
 		FootPoint footPoint = getFootPoint(other.getPos());
-
-		Entity temp = *this;
-		temp.x = footPoint.x;
-		temp.y = footPoint.y;
-
+		Entity temp = advance(Pointf(footPoint.x, footPoint.y));
 		if (temp.collide(other))
-			return footPoint.frame;
+			return std::make_pair(true, footPoint.frame);
 		else
-			return std::numeric_limits<float_t>::lowest();
+			return std::make_pair(false, 0.0f);
 	}
 
 	Pointf Entity::getPos() const
@@ -172,8 +176,8 @@ namespace th
 
 	bool Entity::isHolded() const
 	{
-		return dx <= std::numeric_limits<float_t>::epsilon()
-			&& dy <= std::numeric_limits<float_t>::epsilon();
+		return std::abs(dx) <= std::numeric_limits<float_t>::epsilon()
+			&& std::abs(dy) <= std::numeric_limits<float_t>::epsilon();
 	}
 
 	Pointf Entity::getDelta() const

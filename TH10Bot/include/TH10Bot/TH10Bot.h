@@ -10,11 +10,11 @@
 #include "TH10Bot/DesktopCapturerCV.h"
 #include "TH10Bot/DesktopImageCV.h"
 #include "TH10Bot/TH10Reader.h"
-#include "TH10Bot/Entity/Player.h"
-#include "TH10Bot/Entity/Item.h"
-#include "TH10Bot/Entity/Enemy.h"
-#include "TH10Bot/Entity/Bullet.h"
-#include "TH10Bot/Entity/Laser.h"
+#include "TH10Bot/Player.h"
+#include "TH10Bot/Item.h"
+#include "TH10Bot/Enemy.h"
+#include "TH10Bot/Bullet.h"
+#include "TH10Bot/Laser.h"
 #include "TH10Bot/Scene.h"
 #include "TH10Bot/Clock.h"
 
@@ -82,7 +82,7 @@ namespace th
 		GraphCap m_graphCap;
 
 		DesktopCapturerCV m_capturer;
-		DesktopImageCV m_image;
+		DesktopImageCV m_buffer;
 		DesktopInput m_input;
 
 		TH10Reader m_reader;
@@ -95,6 +95,8 @@ namespace th
 		std::vector<Enemy> m_enemies;
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
+
+		Scene m_scene;
 
 		std::vector<EntityView> m_focusEnemies;
 		std::vector<EntityView> m_focusBullets;

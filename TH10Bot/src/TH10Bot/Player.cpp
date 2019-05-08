@@ -1,8 +1,10 @@
 #include "TH10Bot/Common.h"
-#include "TH10Bot/Entity/Player.h"
+#include "TH10Bot/Player.h"
 
 namespace th
 {
+	const Pointf Player::INIT_POS = { 0.0f, 400.0f };
+
 	Player Player::move(Direction dir) const
 	{
 		Player next = *this;

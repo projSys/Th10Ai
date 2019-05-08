@@ -1,20 +1,28 @@
 #include "TH10Bot/Common.h"
-#include "TH10Bot/Entity/Laser.h"
+#include "TH10Bot/Laser.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <cmath>
 
-#include "TH10Bot/Entity/Player.h"
+#include "TH10Bot/Player.h"
 
 namespace th
 {
+	Laser Laser::advance(const Pointf& pos) const
+	{
+		Laser ret = *this;
+		ret.x = pos.x;
+		ret.y = pos.y;
+		return ret;
+	}
+
 	Laser Laser::advance(float_t frame) const
 	{
-		Laser adv = *this;
-		adv.x += (dx * frame);
-		adv.y += (dy * frame);
-		return adv;
+		Laser ret = *this;
+		ret.x += (dx * frame);
+		ret.y += (dy * frame);
+		return ret;
 	}
 
 	bool Laser::collide(const Player& player) const

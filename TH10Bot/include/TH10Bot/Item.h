@@ -1,12 +1,14 @@
 #pragma once
 
-#include "TH10Bot/Entity/Entity.h"
+#include "TH10Bot/Entity.h"
 
 namespace th
 {
-	struct Item :
-		Entity
+	class Item :
+		public Entity
 	{
+	public:
+		Item advance(const Pointf& pos) const;
 		Item advance(float_t frame) const;
 
 		// 正常点分为以下几种

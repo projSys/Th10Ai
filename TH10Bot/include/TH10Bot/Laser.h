@@ -1,10 +1,10 @@
 #pragma once
 
-#include "TH10Bot/Entity/Entity.h"
+#include "TH10Bot/Entity.h"
 
 namespace th
 {
-	struct Player;
+	class Player;
 
 	// ¼¤¹â½á¹¹
 	//   (x,y)
@@ -18,9 +18,11 @@ namespace th
 	// |       |
 	// +-------+
 	//     w
-	struct Laser :
-		Entity
+	class Laser :
+		public Entity
 	{
+	public:
+		Laser advance(const Pointf& pos) const;
 		Laser advance(float_t frame) const;
 		bool collide(const Player& player) const;
 
@@ -32,8 +34,9 @@ namespace th
 		float_t arc;
 	};
 
-	struct SATBox
+	class SATBox
 	{
+	public:
 		static Pointf Rotate(const Pointf& P, const Pointf& C, float_t radianC);
 		static bool Collide(float_t c1, float_t s1, float_t c2, float_t s2);
 
@@ -43,17 +46,19 @@ namespace th
 		Pointf bottomRight;
 	};
 
-	struct LaserBox :
-		SATBox
+	class LaserBox :
+		public SATBox
 	{
+	public:
 		LaserBox(const Laser& laser);
 
 		bool collide(const Player& player) const;
 	};
 
-	struct PlayerBox :
-		SATBox
+	class PlayerBox :
+		public SATBox
 	{
+	public:
 		PlayerBox(const Player& player, const Laser& laser);
 
 		bool collide(const Laser& laser) const;

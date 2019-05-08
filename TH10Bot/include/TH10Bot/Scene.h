@@ -1,7 +1,13 @@
 #pragma once
 
+#include <opencv2/opencv.hpp>
+
+#include "TH10Bot/Area.h"
+
 namespace th
 {
+	const Sizef SCENE_SIZE = { 384.0f, 448.0f };
+
 	// ³¡¾°×ø±ê
 	//     +-----------------------+-----------------------+
 	//     | 24  8|                                 |      |16
@@ -34,7 +40,22 @@ namespace th
 	public:
 		static Pointi ToWindowPos(const Pointf& scenePos);
 		static Pointf ToScenePos(const Pointi& windowPos);
-		static bool IsInScene(const Pointf& pos);
-		static Pointf FixPos(const Pointf& pos);
+		static bool IsInPlayerArea(const Pointf& pos);
+		static Pointf FixPlayerPos(const Pointf& pos);
+
+		Scene();
+
+		void split(int_t times);
+		void clear();
+		void splitEnemies(const std::vector<Enemy>& enemies);
+		void splitBullets(const std::vector<Bullet>& bullets);
+		void splitLasers(const std::vector<Laser>& lasers);
+		void renderTo(cv::Mat& buffer, const Player& player);
+
+	private:
+		static const Pointf SCENE_OFFSET;
+		static const Pointf ORIGIN_POINT_OFFSET;
+
+		Area m_area;
 	};
 }

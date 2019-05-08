@@ -19,12 +19,6 @@
     <Filter Include="头文件\TH10Bot">
       <UniqueIdentifier>{43386360-f6d4-4168-8fb2-3c71c3e570a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\TH10Bot\Entity">
-      <UniqueIdentifier>{f9535b24-1c83-4ec5-a1bf-5ca6469f1af6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\TH10Bot\Entity">
-      <UniqueIdentifier>{57b527be-8268-46b6-bf4b-11de0aeebaff}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\TH10Bot\Clock.h">
@@ -51,25 +45,31 @@
     <ClInclude Include="include\TH10Bot\Scene.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\Entity\Bullet.h">
-      <Filter>头文件\TH10Bot\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TH10Bot\Entity\Enemy.h">
-      <Filter>头文件\TH10Bot\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TH10Bot\Entity\Entity.h">
-      <Filter>头文件\TH10Bot\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TH10Bot\Entity\Item.h">
-      <Filter>头文件\TH10Bot\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TH10Bot\Entity\Laser.h">
-      <Filter>头文件\TH10Bot\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TH10Bot\Entity\Player.h">
-      <Filter>头文件\TH10Bot\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="include\TH10Bot\Mover.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Area.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Path.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Bullet.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Enemy.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Entity.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Item.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Laser.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Player.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,25 +95,31 @@
     <ClCompile Include="src\TH10Bot\Scene.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
-    <ClCompile Include="src\TH10Bot\Entity\Bullet.cpp">
-      <Filter>源文件\TH10Bot\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\Entity\Enemy.cpp">
-      <Filter>源文件\TH10Bot\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\Entity\Entity.cpp">
-      <Filter>源文件\TH10Bot\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\Entity\Item.cpp">
-      <Filter>源文件\TH10Bot\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\Entity\Laser.cpp">
-      <Filter>源文件\TH10Bot\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\Entity\Player.cpp">
-      <Filter>源文件\TH10Bot\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="src\TH10Bot\Mover.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Area.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Path.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Bullet.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Enemy.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Entity.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Item.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Laser.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Player.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
   </ItemGroup>

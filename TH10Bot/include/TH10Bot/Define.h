@@ -5,14 +5,6 @@
 
 namespace th
 {
-	const Pointf SCENE_POS = { 24.0f, 16.0f };
-
-	const Pointf ORIGIN_POINT_POS = { 200.0f, 0.0f };
-
-	const Pointf PLAYER_INIT_POS = { 0.0f, 400.0f };
-
-	const Sizef SCENE_SIZE = { 384.0f, 448.0f };
-
 	// ÒÆ¶¯·½Ïò
 	enum Direction
 	{
@@ -104,7 +96,7 @@ namespace th
 	{
 		Pointf pos;
 		float_t frame;
-		Pointf target;
+		Pointf targetPos;
 		int_t count;
 	};
 

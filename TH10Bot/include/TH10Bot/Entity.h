@@ -16,8 +16,9 @@ namespace th
 	// |       |
 	// +-------+
 	//     w
-	struct Entity
+	class Entity
 	{
+	public:
 		static float_t GetDist(const Pointf& A, const Pointf& B);
 		static float_t GetAngle(const Pointf& A, const Pointf& B, const Pointf& C);
 
@@ -27,9 +28,10 @@ namespace th
 		Direction getDir() const;
 		Direction getDir(const Pointf& pos) const;
 
+		Entity advance(const Pointf& pos) const;
 		Entity advance(float_t frame) const;
 		bool collide(const Entity& other) const;
-		float_t willCollideWith(const Entity& other) const;
+		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 
 		Pointf getPos() const;
 		void setPos(const Pointf& pos);
@@ -42,6 +44,8 @@ namespace th
 		Pointf getNextPos() const;
 		Sizef getSize() const;
 		Rectf getRect() const;
+
+		static const Direction SECTOR_TO_DIR[17];
 
 		float_t x;			// 坐标在中心点
 		float_t y;
