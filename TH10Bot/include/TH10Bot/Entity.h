@@ -22,6 +22,9 @@ namespace th
 		static float_t GetDist(const Pointf& A, const Pointf& B);
 		static float_t GetAngle(const Pointf& A, const Pointf& B, const Pointf& C);
 
+		Entity();
+		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
+
 		float_t getDist(const Pointf& pos) const;
 		FootPoint getFootPoint(const Pointf& pos) const;
 		float_t getAngle(const Pointf& pos) const;

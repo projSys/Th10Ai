@@ -5,7 +5,8 @@
 
 namespace th
 {
-	Area::Area()
+	Area::Area(float_t x0, float_t y0, float_t width0, float_t height0) :
+		Entity(x0, y0, 0.0f, 0.0f, width0, height0)
 	{
 		m_enemies.reserve(200);
 		m_bullets.reserve(2000);
@@ -17,69 +18,50 @@ namespace th
 		if (times <= 0)
 			return;
 
-		m_first = std::make_shared<Area>();
-		m_second = std::make_shared<Area>();
 		if (width > height)
 		{
-			m_first->x = x - width / 4.0f;
-			m_first->y = y;
-			m_first->dx = dx;
-			m_first->dy = dy;
-			m_first->width = width / 2.0f;
-			m_first->height = height;
-
-			m_second->x = x + width / 4.0f;
-			m_second->y = y;
-			m_second->dx = dx;
-			m_second->dy = dy;
-			m_second->width = width / 2.0f;
-			m_second->height = height;
+			m_first = std::make_shared<Area>(x - width / 4.0f, y, width / 2.0f, height);
+			m_second = std::make_shared<Area>(x + width / 4.0f, y, width / 2.0f, height);
 		}
 		else
 		{
-			m_first->x = x;
-			m_first->y = y - height / 4.0f;
-			m_first->dx = dx;
-			m_first->dy = dy;
-			m_first->width = width;
-			m_first->height = height / 2.0f;
-
-			m_second->x = x;
-			m_second->y = y + height / 4.0f;
-			m_second->dx = dx;
-			m_second->dy = dy;
-			m_second->width = width;
-			m_second->height = height / 2.0f;
+			m_first = std::make_shared<Area>(x, y - height / 4.0f, width, height / 2.0f);
+			m_second = std::make_shared<Area>(x, y + height / 4.0f, width, height / 2.0f);
 		}
+
 		m_first->split(times - 1);
 		m_second->split(times - 1);
 	}
 
-	void Area::clear()
+	void Area::clearAll()
 	{
 		m_enemies.clear();
 		m_bullets.clear();
 		m_lasers.clear();
 
 		if (m_first != nullptr)
-			m_first->clear();
+			m_first->clearAll();
 		if (m_second != nullptr)
-			m_second->clear();
+			m_second->clearAll();
 	}
 
 	void Area::splitEnemies(const std::vector<Enemy>& enemies)
 	{
 		for (const Enemy& enemy : enemies)
 		{
-			if (enemy.willCollideWith(*this).first)
+			if (enemy.collide(*this))
+			{
 				m_enemies.push_back(enemy);
+			}
+			else
+			{
+				std::pair<bool, float_t> ret = enemy.willCollideWith(*this);
+				if (ret.first && ret.second >= 0.0f && ret.second <= 600.0f)
+					m_enemies.push_back(enemy);
+			}
 		}
 		if (m_enemies.empty())
 			return;
-#ifdef _DEBUG
-		if (m_enemies.size() > 200)
-			std::cout << "Enemy " << m_enemies.size() << std::endl;
-#endif
 
 		if (m_first != nullptr)
 			m_first->splitEnemies(m_enemies);
@@ -91,15 +73,19 @@ namespace th
 	{
 		for (const Bullet& bullet : bullets)
 		{
-			if (bullet.willCollideWith(*this).first)
+			if (bullet.collide(*this))
+			{
 				m_bullets.push_back(bullet);
+			}
+			else
+			{
+				std::pair<bool, float_t> ret = bullet.willCollideWith(*this);
+				if (ret.first && ret.second >= 0.0f && ret.second <= 600.0f)
+					m_bullets.push_back(bullet);
+			}
 		}
 		if (m_bullets.empty())
 			return;
-#ifdef _DEBUG
-		if (m_bullets.size() > 500)
-			std::cout << "Bullet " << m_bullets.size() << std::endl;
-#endif
 
 		if (m_first != nullptr)
 			m_first->splitBullets(m_bullets);
@@ -111,20 +97,67 @@ namespace th
 	{
 		for (const Laser& laser : lasers)
 		{
-			if (laser.willCollideWith(*this).first)
+			if (laser.collide(*this))
+			{
 				m_lasers.push_back(laser);
+			}
+			else
+			{
+				std::pair<bool, float_t> ret = laser.willCollideWith(*this);
+				if (ret.first && ret.second >= 0.0f && ret.second <= 600.0f)
+					m_lasers.push_back(laser);
+			}
 		}
 		if (m_lasers.empty())
 			return;
-#ifdef _DEBUG
-		if (m_lasers.size() > 200)
-			std::cout << "Laser " << m_lasers.size() << std::endl;
-#endif
 
 		if (m_first != nullptr)
 			m_first->splitLasers(m_lasers);
 		if (m_second != nullptr)
 			m_second->splitLasers(m_lasers);
+	}
+
+	bool Area::collideAll(const Player& player, float_t frame) const
+	{
+		if (!collide(player))
+			return false;
+
+		// 只检测叶子节点
+		if (m_first == nullptr && m_second == nullptr)
+		{
+			for (const Enemy& enemy : m_enemies)
+			{
+				Enemy temp = enemy.advance(frame);
+				if (temp.collide(player))
+					return true;
+			}
+
+			for (const Bullet& bullet : m_bullets)
+			{
+				Bullet temp = bullet.advance(frame);
+				if (temp.collide(player))
+					return true;
+			}
+
+			for (const Laser& laser : m_lasers)
+			{
+				Laser temp = laser.advance(frame);
+				if (temp.collide(player))
+					return true;
+			}
+		}
+
+		if (m_first != nullptr)
+		{
+			if (m_first->collideAll(player, frame))
+				return true;
+		}
+		if (m_second != nullptr)
+		{
+			if (m_second->collideAll(player, frame))
+				return true;
+		}
+		return false;
 	}
 
 	void Area::renderTo(cv::Mat& buffer, const Player& player)
@@ -136,18 +169,33 @@ namespace th
 
 		if (collide(player))
 		{
-			bool b1 = false, b2 = false;
-			if (m_first != nullptr)
-				b1 = m_first->collide(player);
-			if (m_second != nullptr)
-				b2 = m_second->collide(player);
-			if ((b1 && b2) || (m_first == nullptr && m_second == nullptr))
+			if (m_first == nullptr && m_second == nullptr)
 			{
+				for (const Enemy& enemy : m_enemies)
+				{
+					Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
+					cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
+					cv::rectangle(buffer, rect, cv::Scalar(0, 0, 255));
+				}
+
 				for (const Bullet& bullet : m_bullets)
 				{
 					Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 					cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-					cv::rectangle(buffer, rect, cv::Scalar(0, 0, 255), -1);
+					cv::rectangle(buffer, rect, cv::Scalar(0, 0, 255));
+				}
+
+				for (const Laser& laser : m_lasers)
+				{
+					LaserBox laserBox(laser);
+					Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
+					Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
+					Pointi p3 = Scene::ToWindowPos(laserBox.bottomRight);
+					Pointi p4 = Scene::ToWindowPos(laserBox.bottomLeft);
+					cv::line(buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(0, 0, 255));
+					cv::line(buffer, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), cv::Scalar(0, 0, 255));
+					cv::line(buffer, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), cv::Scalar(0, 0, 255));
+					cv::line(buffer, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), cv::Scalar(0, 0, 255));
 				}
 			}
 		}

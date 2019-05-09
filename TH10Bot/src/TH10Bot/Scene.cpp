@@ -39,14 +39,9 @@ namespace th
 		return ret;
 	}
 
-	Scene::Scene()
+	Scene::Scene() :
+		m_area(0.0f, 224.0f, 384.0f, 448.0f)
 	{
-		m_area.x = 0.0f;
-		m_area.y = 448.0f / 2.0f;
-		m_area.dx = 0.0f;
-		m_area.dy = 0.0f;
-		m_area.width = 384.0f;
-		m_area.height = 448.0f;
 	}
 
 	void Scene::split(int_t times)
@@ -54,9 +49,9 @@ namespace th
 		m_area.split(times);
 	}
 
-	void Scene::clear()
+	void Scene::clearAll()
 	{
-		m_area.clear();
+		m_area.clearAll();
 	}
 
 	void Scene::splitEnemies(const std::vector<Enemy>& enemies)
@@ -72,6 +67,11 @@ namespace th
 	void Scene::splitLasers(const std::vector<Laser>& lasers)
 	{
 		m_area.splitLasers(lasers);
+	}
+
+	bool Scene::collideAll(const Player& player, float_t frame) const
+	{
+		return m_area.collideAll(player, frame);
 	}
 
 	void Scene::renderTo(cv::Mat& buffer, const Player& player)

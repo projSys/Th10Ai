@@ -16,14 +16,15 @@ namespace th
 		public Entity
 	{
 	public:
-		Area();
+		Area(float_t x0, float_t y0, float_t width0, float_t height0);
 
 		void split(int_t times);
 
-		void clear();
+		void clearAll();
 		void splitEnemies(const std::vector<Enemy>& enemies);
 		void splitBullets(const std::vector<Bullet>& bullets);
 		void splitLasers(const std::vector<Laser>& lasers);
+		bool collideAll(const Player& player, float_t frame) const;
 
 		void renderTo(cv::Mat& buffer, const Player& player);
 

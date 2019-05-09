@@ -46,10 +46,13 @@ namespace th
 		Scene();
 
 		void split(int_t times);
-		void clear();
+
+		void clearAll();
 		void splitEnemies(const std::vector<Enemy>& enemies);
 		void splitBullets(const std::vector<Bullet>& bullets);
 		void splitLasers(const std::vector<Laser>& lasers);
+		bool collideAll(const Player& player, float_t frame) const;
+
 		void renderTo(cv::Mat& buffer, const Player& player);
 
 	private:

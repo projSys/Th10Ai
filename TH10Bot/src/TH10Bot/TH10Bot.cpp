@@ -7,7 +7,7 @@
 
 #include "TH10Bot/Mover.h"
 
-#define PLAY 0
+#define PLAY 1
 
 namespace th
 {
@@ -148,7 +148,7 @@ namespace th
 		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 		//std::cout << "e1: " << e1 << std::endl;
 
-		m_scene.clear();
+		m_scene.clearAll();
 		m_scene.splitEnemies(m_enemies);
 		m_scene.splitBullets(m_bullets);
 		m_scene.splitLasers(m_lasers);
@@ -220,9 +220,15 @@ namespace th
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		if (e4 > 10)
+		//if (e4 > 10)
 			std::cout << e1 << " " << e2 << " " << e3 << std::endl;
 #else
+		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
+		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
+		//if (e4 > 10)
+			std::cout << e1 << " " << e2 << " " << e3 << std::endl;
+
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
 		cv::Scalar blue(255, 0, 0);
@@ -534,7 +540,7 @@ namespace th
 		Player player = m_player;
 		player.setPos(node.pos);
 
-		score.collide = collide(player, node.frame);
+		score.collide = m_scene.collideAll(player, node.frame);
 		if (score.collide)
 			return score;
 

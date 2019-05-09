@@ -24,7 +24,8 @@ namespace th
 	public:
 		Laser advance(const Pointf& pos) const;
 		Laser advance(float_t frame) const;
-		bool collide(const Player& player) const;
+		bool collide(const Entity& other) const;
+		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 
 		Pointf getTopLeft() const;
 		Pointf getTopRight() const;
@@ -52,15 +53,15 @@ namespace th
 	public:
 		LaserBox(const Laser& laser);
 
-		bool collide(const Player& player) const;
+		bool collide(const Entity& other) const;
 	};
 
-	class PlayerBox :
+	class EntityBox :
 		public SATBox
 	{
 	public:
-		PlayerBox(const Player& player, const Laser& laser);
+		EntityBox(const Entity& entity, const Laser& laser);
 
-		bool collide(const Laser& laser) const;
+		bool collide(const Laser& other) const;
 	};
 }
