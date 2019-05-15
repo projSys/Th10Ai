@@ -162,14 +162,14 @@ namespace th
 
 	void Area::renderTo(cv::Mat& buffer, const Player& player)
 	{
-		Pointi pos = Scene::ToWindowPos(getTopLeft());
-		cv::rectangle(buffer, cv::Rect(pos.x, pos.y,
-			static_cast<int_t>(std::round(width)), static_cast<int_t>(std::round(height))),
-			cv::Scalar(0, 255, 0));
-
-		if (collide(player))
+		if (m_first == nullptr && m_second == nullptr)
 		{
-			if (m_first == nullptr && m_second == nullptr)
+			Pointi pos = Scene::ToWindowPos(getTopLeft());
+			cv::rectangle(buffer, cv::Rect(pos.x, pos.y,
+				static_cast<int_t>(std::round(width)), static_cast<int_t>(std::round(height))),
+				cv::Scalar(0, 255, 0));
+
+			if (collide(player))
 			{
 				for (const Enemy& enemy : m_enemies)
 				{

@@ -7,7 +7,7 @@
 
 #include "TH10Bot/Mover.h"
 
-#define PLAY 1
+#define PLAY 0
 
 namespace th
 {
@@ -31,9 +31,6 @@ namespace th
 		m_lasers.reserve(200);
 
 		m_scene.split(6);
-
-		m_focusBullets.reserve(250);
-		m_focusLasers.reserve(100);
 
 		m_path.reserve(200);
 		//memset(m_mask, 0, sizeof(m_mask));
@@ -153,61 +150,6 @@ namespace th
 		m_scene.splitBullets(m_bullets);
 		m_scene.splitLasers(m_lasers);
 
-		//// 裁剪弹幕
-		//m_focusEnemies.clear();
-		//for (uint_t i = 0; i < m_enemies.size(); ++i)
-		//{
-		//	const Enemy& enemy = m_enemies[i];
-
-		//	float_t dist = enemy.getDist(m_player.getPos());
-		//	FootPoint footPoint = enemy.getFootPoint(m_player.getPos());
-		//	if (dist < 100.0f	// 在附近的
-		//		|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
-		//			&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
-		//	{
-		//		EntityView view;
-		//		view.index = i;
-		//		view.dir = enemy.getDir();
-		//		m_focusEnemies.push_back(view);
-		//	}
-		//}
-
-		//m_focusBullets.clear();
-		//for (uint_t i = 0; i < m_bullets.size(); ++i)
-		//{
-		//	const Bullet& bullet = m_bullets[i];
-
-		//	float_t dist = bullet.getDist(m_player.getPos());
-		//	FootPoint footPoint = bullet.getFootPoint(m_player.getPos());
-		//	if (dist < 100.0f	// 在附近的
-		//		|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
-		//			&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
-		//	{
-		//		EntityView view;
-		//		view.index = i;
-		//		view.dir = bullet.getDir();
-		//		m_focusBullets.push_back(view);
-		//	}
-		//}
-
-		//m_focusLasers.clear();
-		//for (uint_t i = 0; i < m_lasers.size(); ++i)
-		//{
-		//	const Laser& laser = m_lasers[i];
-
-		//	float_t dist = laser.getDist(m_player.getPos());
-		//	FootPoint footPoint = laser.getFootPoint(m_player.getPos());
-		//	if (dist < 100.0f	// 在附近的
-		//		|| (m_player.getDist(Pointf(footPoint.x, footPoint.y)) < 100.0f
-		//			&& footPoint.frame >= 0.0f && footPoint.frame <= 180.0f))	// 3秒内可能碰撞的
-		//	{
-		//		EntityView view;
-		//		view.index = i;
-		//		view.dir = laser.getDir();
-		//		m_focusLasers.push_back(view);
-		//	}
-		//}
-
 		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 		//std::cout << "e2: " << e2 << std::endl;
@@ -236,14 +178,14 @@ namespace th
 		cv::Scalar yellow(0, 255, 255);
 
 		m_scene.renderTo(m_buffer.m_data, m_player);
-/*
+
 		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 		cv::rectangle(m_buffer.m_data, rect1, green, -1);
 		//Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
 		//cv::Point center11(windowPos11.x, windowPos11.y);
 		//cv::circle(m_buffer.m_data, center11, int_t(100.0f), green);
-
+		/*
 		for (const Item& item : m_items)
 		{
 			Pointi windowPos = Scene::ToWindowPos(item.getTopLeft());
@@ -312,7 +254,7 @@ namespace th
 			cv::line(m_buffer.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
 			cv::line(m_buffer.m_data, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), red);
 		}
-*/
+		*/
 		cv::imshow("TH10", m_buffer.m_data);
 		cv::waitKey(1);
 #endif
@@ -493,35 +435,6 @@ namespace th
 		GetCursorPos(&mousePos);
 		Rect clientRect = m_window.getClientRect();
 		return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
-	}
-
-	bool TH10Bot::collide(const Player& player, float_t frame)
-	{
-		for (const EntityView& view : m_focusEnemies)
-		{
-			const Enemy& enemy = m_enemies[view.index];
-			Enemy temp = enemy.advance(frame);
-			if (temp.collide(player))
-				return true;
-		}
-
-		for (const EntityView& view : m_focusBullets)
-		{
-			const Bullet& bullet = m_bullets[view.index];
-			Bullet temp = bullet.advance(frame);
-			if (temp.collide(player))
-				return true;
-		}
-
-		for (const EntityView& view : m_focusLasers)
-		{
-			const Laser& laser = m_lasers[view.index];
-			Laser temp = laser.advance(frame);
-			if (temp.collide(player))
-				return true;
-		}
-
-		return false;
 	}
 
 	NodeScore TH10Bot::dfs(const Node& node)

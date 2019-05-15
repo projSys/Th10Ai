@@ -45,7 +45,6 @@ namespace th
 
 		bool handleMove();
 		Pointf getMousePos();
-		bool collide(const Player& player, float_t frame);
 		NodeScore dfs(const Node& node);
 		//void astar(Node& start, Node& goal);
 		//float_t distBetween(const Node& current, const Node& neighbor);
@@ -97,10 +96,6 @@ namespace th
 		std::vector<Laser> m_lasers;
 
 		Scene m_scene;
-
-		std::vector<EntityView> m_focusEnemies;
-		std::vector<EntityView> m_focusBullets;
-		std::vector<EntityView> m_focusLasers;
 
 		std::vector<Node> m_path;
 		//uint8_t m_mask[480][640];
