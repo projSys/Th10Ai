@@ -21,7 +21,7 @@ namespace th
 		DIR_MAXCOUNT
 	};
 
-	const Direction COLLIDE_PRIORITY[DIR_MAXCOUNT][5] =
+	const Direction DODGE_PRIORITY[DIR_MAXCOUNT][5] =
 	{
 		// DIR_HOLD
 		{ DIR_NONE,    DIR_NONE,      DIR_NONE,     DIR_NONE,      DIR_NONE      },
@@ -65,20 +65,7 @@ namespace th
 		{ DIR_DOWNRIGHT, DIR_DOWN,     DIR_RIGHT,     DIR_UPRIGHT, DIR_DOWNLEFT,  DIR_HOLD,    DIR_NONE,     DIR_NONE,      DIR_NONE      }
 	};
 
-	const int_t MOVE_PRIORITY_END[DIR_MAXCOUNT] = { 9, 6, 6, 6, 6, 6, 6, 6, 6 };
-
-	const float_t PS[DIR_MAXCOUNT] =
-	{
-		120.0f,
-		120.0f,
-		110.0f,
-		110.0f,
-		100.0f,
-		90.0f,
-		80.0f,
-		80.0f,
-		70.0f
-	};
+	const int_t MOVE_PRIORITY_END[DIR_MAXCOUNT] = { 1, 6, 6, 6, 6, 6, 6, 6, 6 };
 
 	//struct Node
 	//{
@@ -92,33 +79,15 @@ namespace th
 	//	float_t fScore;
 	//};
 
-	struct Node
-	{
-		Pointf pos;
-		float_t frame;
-		Pointf targetPos;
-		int_t count;
-	};
+	//struct PointLess
+	//{
+	//	bool operator ()(const Pointf& left, const Pointf& right) const
+	//	{
+	//		return std::tie(left.x, left.y) < std::tie(right.x, right.y);
+	//	}
+	//};
 
-	struct NodeScore
-	{
-		bool limit;
-		bool inScene;
-		bool collide;
-		bool reach;
-		Direction dir;
-		bool slow;
-	};
-
-	struct PointLess
-	{
-		bool operator ()(const Pointf& left, const Pointf& right) const
-		{
-			return std::tie(left.x, left.y) < std::tie(right.x, right.y);
-		}
-	};
-
-	typedef std::map<Pointf, Node, PointLess> PointNodeMap;
-	//typedef std::map<float_t, Node> ScoreNodeMap;
-	typedef std::multimap<float_t, Node> ScoreNodeMap;	// score可能重复
+	//typedef std::map<Pointf, Node, PointLess> PointNodeMap;
+	////typedef std::map<float_t, Node> ScoreNodeMap;
+	//typedef std::multimap<float_t, Node> ScoreNodeMap;	// score可能重复
 }

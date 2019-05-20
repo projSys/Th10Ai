@@ -127,21 +127,24 @@ namespace th
 		{
 			for (const Enemy& enemy : m_enemies)
 			{
-				Enemy temp = enemy.advance(frame);
+				Enemy temp = enemy;
+				temp.advance(frame);
 				if (temp.collide(player))
 					return true;
 			}
 
 			for (const Bullet& bullet : m_bullets)
 			{
-				Bullet temp = bullet.advance(frame);
+				Bullet temp = bullet;
+				temp.advance(frame);
 				if (temp.collide(player))
 					return true;
 			}
 
 			for (const Laser& laser : m_lasers)
 			{
-				Laser temp = laser.advance(frame);
+				Laser temp = laser;
+				temp.advance(frame);
 				if (temp.collide(player))
 					return true;
 			}

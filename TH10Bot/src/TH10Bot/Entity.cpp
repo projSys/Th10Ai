@@ -71,14 +71,15 @@ namespace th
 		return GetDist(getPos(), pos);
 	}
 
-	FootPoint Entity::getFootPoint(const Pointf& pos) const
+	// 点到前进方向的垂足
+	std::pair<Pointf, float_t> Entity::getFootPoint(const Pointf& pos) const
 	{
 		if (isHolded())
-			return { x, y, std::numeric_limits<float_t>::max() };
+			return std::make_pair(Pointf(x, y), std::numeric_limits<float_t>::max());
 
-		// 点到前进方向的垂足
-		float_t ratio = ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);
-		return { x + dx * ratio, y + dy * ratio, ratio };
+		// 到达垂足的帧数
+		float_t frame = ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);
+		return std::make_pair(Pointf(x + dx * frame, y + dy * frame), frame);
 	}
 
 	float_t Entity::getAngle(const Pointf& pos) const
@@ -121,20 +122,10 @@ namespace th
 		return SECTOR_TO_DIR[sector];
 	}
 
-	Entity Entity::advance(const Pointf& pos) const
+	void Entity::advance(float_t frame)
 	{
-		Entity ret = *this;
-		ret.x = pos.x;
-		ret.y = pos.y;
-		return ret;
-	}
-
-	Entity Entity::advance(float_t frame) const
-	{
-		Entity ret = *this;
-		ret.x += (dx * frame);
-		ret.y += (dy * frame);
-		return ret;
+		x += (dx * frame);
+		y += (dy * frame);
 	}
 
 	bool Entity::collide(const Entity& other) const
@@ -145,10 +136,11 @@ namespace th
 
 	std::pair<bool, float_t> Entity::willCollideWith(const Entity& other) const
 	{
-		FootPoint footPoint = getFootPoint(other.getPos());
-		Entity temp = advance(Pointf(footPoint.x, footPoint.y));
+		std::pair<Pointf, float_t> footPoint = getFootPoint(other.getPos());
+		Entity temp = *this;
+		temp.setPos(footPoint.first);
 		if (temp.collide(other))
-			return std::make_pair(true, footPoint.frame);
+			return std::make_pair(true, footPoint.second);
 		else
 			return std::make_pair(false, 0.0f);
 	}

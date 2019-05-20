@@ -8,9 +8,6 @@ namespace th
 		public Entity
 	{
 	public:
-		Item advance(const Pointf& pos) const;
-		Item advance(float_t frame) const;
-
 		// 正常点分为以下几种
 		// type == 1 Power Items P点（红点）
 		// type == 2 Point Items 得分点（蓝点）

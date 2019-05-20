@@ -20,6 +20,23 @@
 
 namespace th
 {
+	struct Action
+	{
+		Pointf fromPos;
+		Direction fromDir;
+		bool slowFirst;			// 是否慢速优先
+		float_t frame;
+		Direction targetDir;
+	};
+
+	struct Result
+	{
+		bool valid;
+		bool slow;		// 实际是否慢速
+		float_t score;
+		int_t size;
+	};
+
 	class TH10Bot
 	{
 	public:
@@ -32,11 +49,6 @@ namespace th
 		void update();
 
 	private:
-		static float_t GetYFactor(const Pointf& source, const Pointf& next);
-		static float_t GetDistFactor(float_t source, float_t next, float_t target);
-		static float_t GetDistXScore(float_t xNext, float_t xTarget);
-		static float_t GetDistYScore(float_t yNext, float_t yTarget);
-
 		bool handleBomb();
 
 		bool handleTalk();
@@ -44,18 +56,18 @@ namespace th
 		bool handleShoot();
 
 		bool handleMove();
-		Pointf getMousePos();
-		NodeScore dfs(const Node& node);
+		Result dfs(const Action& action);
+		//Pointf getMousePos();
 		//void astar(Node& start, Node& goal);
 		//float_t distBetween(const Node& current, const Node& neighbor);
 		//float_t heuristicCostEstimate(const Node& neighbor, const Node& goal);
 		//void reconstructPath(const PointNodeMap& closedSet, const Node& goal);
-		NodeScore getNodeScore(const Player& player, float_t frame);
+		//NodeScore getNodeScore(const Player& player, float_t frame);
 		int_t findItem();
 		int_t findEnemy();
-		float_t getCollectItemScore(const Player& pNext, int_t itemId);
-		float_t getShootEnemyScore(const Player& pNext, int_t enemyId);
-		float_t getGobackScore(const Player& pNext);
+		float_t getCollectItemScore(const Player& player);
+		float_t getShootEnemyScore(const Player& player);
+		float_t getGobackScore(const Player& player);
 
 		void move(Direction dir, bool slow);
 
@@ -97,9 +109,13 @@ namespace th
 
 		Scene m_scene;
 
-		std::vector<Node> m_path;
+		std::vector<Action> m_path;
 		//uint8_t m_mask[480][640];
+		float_t m_bestScore;
+		Direction m_bestDir;
+		bool m_bestSlow;
 		int_t m_count;
+		int_t m_limit;
 
 		int_t m_itemId;
 		int_t m_enemyId;

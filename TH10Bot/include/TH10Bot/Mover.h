@@ -9,6 +9,7 @@ namespace th
 
 		bool hasNext() const;
 		Direction next();
+		int_t getSize() const;
 
 	private:
 		Direction m_targetDir;

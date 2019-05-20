@@ -9,22 +9,6 @@
 
 namespace th
 {
-	Laser Laser::advance(const Pointf& pos) const
-	{
-		Laser ret = *this;
-		ret.x = pos.x;
-		ret.y = pos.y;
-		return ret;
-	}
-
-	Laser Laser::advance(float_t frame) const
-	{
-		Laser ret = *this;
-		ret.x += (dx * frame);
-		ret.y += (dy * frame);
-		return ret;
-	}
-
 	bool Laser::collide(const Entity& other) const
 	{
 		LaserBox laserBox(*this);
@@ -40,10 +24,11 @@ namespace th
 
 	std::pair<bool, float_t> Laser::willCollideWith(const Entity& other) const
 	{
-		FootPoint footPoint = getFootPoint(other.getPos());
-		Laser temp = advance(Pointf(footPoint.x, footPoint.y));
+		std::pair<Pointf, float_t> footPoint = getFootPoint(other.getPos());
+		Laser temp = *this;
+		temp.setPos(footPoint.first);
 		if (temp.collide(other))
-			return std::make_pair(true, footPoint.frame);
+			return std::make_pair(true, footPoint.second);
 		else
 			return std::make_pair(false, 0.0f);
 	}

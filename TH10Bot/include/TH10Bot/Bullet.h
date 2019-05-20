@@ -8,7 +8,5 @@ namespace th
 		public Entity
 	{
 	public:
-		Bullet advance(const Pointf& pos) const;
-		Bullet advance(float_t frame) const;
 	};
 }

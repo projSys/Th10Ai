@@ -22,4 +22,9 @@ namespace th
 		++m_i;
 		return dir;
 	}
+
+	int_t Mover::getSize() const
+	{
+		return MOVE_PRIORITY_END[m_targetDir];
+	}
 }

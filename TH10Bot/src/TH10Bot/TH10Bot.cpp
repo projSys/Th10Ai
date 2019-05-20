@@ -7,7 +7,7 @@
 
 #include "TH10Bot/Mover.h"
 
-#define PLAY 0
+#define PLAY 1
 
 namespace th
 {
@@ -23,7 +23,11 @@ namespace th
 		m_talkCooldown(0),
 		m_shootCooldown(0),
 		m_collectCooldown(0),
-		m_count(0)
+		m_bestScore(std::numeric_limits<float_t>::lowest()),
+		m_bestDir(DIR_NONE),
+		m_bestSlow(false),
+		m_count(0),
+		m_limit(1000)
 	{
 		m_items.reserve(200);
 		m_enemies.reserve(200);
@@ -32,7 +36,9 @@ namespace th
 
 		m_scene.split(6);
 
-		m_path.reserve(200);
+		Action initNode = {};
+		initNode.fromDir = DIR_NONE;
+		m_path.resize(m_limit, initNode);
 		//memset(m_mask, 0, sizeof(m_mask));
 
 		srand((unsigned int)time(nullptr));
@@ -162,14 +168,14 @@ namespace th
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		//if (e4 > 10)
+		if (e4 > 10)
 			std::cout << e1 << " " << e2 << " " << e3 << std::endl;
 #else
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
 		//if (e4 > 10)
-			std::cout << e1 << " " << e2 << " " << e3 << std::endl;
+		//	std::cout << e1 << " " << e2 << " " << e3 << std::endl;
 
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
@@ -260,54 +266,6 @@ namespace th
 #endif
 	}
 
-	// Y轴系数
-	float_t TH10Bot::GetYFactor(const Pointf& source, const Pointf& next)
-	{
-		float_t factor;
-
-		if (next.y > source.y)
-			factor = 1.0f;
-		else if (next.y < source.y)
-			factor = -1.0f;
-		else
-			factor = 0.0f;
-
-		return factor;
-	}
-
-	// 距离系数，远离加分，靠近减分
-	float_t TH10Bot::GetDistFactor(float_t source, float_t next, float_t target)
-	{
-		float_t factor;
-
-		float_t dSrc = std::abs(source - target);
-		float_t dNext = std::abs(next - target);
-		if (dNext > dSrc)
-			factor = 1.0f;
-		else if (dNext < dSrc)
-			factor = -1.0f;
-		else
-			factor = 0.0f;
-
-		return factor;
-	}
-
-	float_t TH10Bot::GetDistXScore(float_t xNext, float_t xTarget)
-	{
-		float_t dx = std::abs(xNext - xTarget);
-		if (dx > SCENE_SIZE.width)
-			dx = SCENE_SIZE.width;
-		return dx / SCENE_SIZE.width;
-	}
-
-	float_t TH10Bot::GetDistYScore(float_t yNext, float_t yTarget)
-	{
-		float_t dy = std::abs(yNext - yTarget);
-		if (dy > SCENE_SIZE.height)
-			dy = SCENE_SIZE.height;
-		return dy / SCENE_SIZE.height;
-	}
-
 	// 处理炸弹
 	bool TH10Bot::handleBomb()
 	{
@@ -320,7 +278,7 @@ namespace th
 		// 放了炸弹3秒后再检测碰撞
 		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
 		{
-			if (m_player.status == 4)
+			if (m_player.isColliding())
 			{
 				m_input.keyPress('X');
 				m_bombCooldown = m_clock.getTimestamp();
@@ -387,6 +345,9 @@ namespace th
 	// 处理移动
 	bool TH10Bot::handleMove()
 	{
+		if (!(m_player.isReborn() || m_player.isNormal()))
+			return false;
+
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
@@ -402,125 +363,155 @@ namespace th
 		//memset(m_mask, 0, sizeof(m_mask));
 		//astar(start, goal);
 
-		Node node;
-		node.pos = m_player.getPos();
-		node.frame = 0.0f;
-		node.targetPos = Scene::FixPlayerPos(getMousePos());
+		float_t bestScore = std::numeric_limits<float_t>::lowest();
+		Direction bestDir = DIR_NONE;
+		bool bestSlow = false;
 
-		m_count = 0;
-		NodeScore score = dfs(node);
-
-		if (score.limit)
-			std::cout << "----------------超过节点数限制。" << std::endl;
-
-		//if (score.reach)
-		//	std::cout << "到达目标。" << std::endl;
-
-		if (score.dir != DIR_NONE)
+		//std::cout << "--------------------------------------------------" << std::endl;
+		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
-			move(score.dir, score.slow);
+			Action action;
+			action.fromPos = m_player.getPos();
+			action.fromDir = static_cast<Direction>(i);
+			action.slowFirst = false;
+			action.frame = 1.0f;
+			action.targetDir = static_cast<Direction>(i);
+
+			m_bestScore = std::numeric_limits<float_t>::lowest();
+			m_bestDir = DIR_NONE;
+			m_bestSlow = false;
+			m_count = 0;
+
+			Result result = dfs(action);
+			//std::cout << action.fromDir << " " << m_bestScore << std::endl;
+
+			if (result.valid && m_bestScore > bestScore)
+			{
+				bestScore = m_bestScore;
+				bestDir = action.fromDir;
+				bestSlow = result.slow;
+			}
+		}
+		//std::cout << "--------------------------------------------------" << std::endl;
+
+		if (bestDir != DIR_NONE)
+		{
+			move(bestDir, bestSlow);
 		}
 		else
 		{
 			move(DIR_HOLD, false);
-			//std::cout << "无路可走。" << std::endl;
+			std::cout << "无路可走。" << std::endl;
 		}
 
 		return true;
 	}
 
-	Pointf TH10Bot::getMousePos()
+	Result TH10Bot::dfs(const Action& action)
 	{
-		POINT mousePos = {};
-		GetCursorPos(&mousePos);
-		Rect clientRect = m_window.getClientRect();
-		return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
-	}
+		Result result;
+		result.valid = false;
+		result.slow = false;
+		result.score = 0.0f;
+		result.size = 0;
 
-	NodeScore TH10Bot::dfs(const Node& node)
-	{
-		NodeScore score = {};
-		score.dir = DIR_NONE;
+		// 超过搜索节点限制
+		++m_count;
+		if (m_count >= m_limit)
+			return result;
 
-		score.limit = (++m_count > 2000);
-		if (score.limit)
-			return score;
+		// 前进到下一个坐标
+		Player temp = m_player;
+		if (action.slowFirst)
+		{
+			temp.setPos(action.fromPos);
+			temp.moveSlow(action.fromDir);
+			result.slow = true;
+			if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
+			{
+				temp.setPos(action.fromPos);
+				temp.move(action.fromDir);
+				result.slow = false;
+				if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
+					return result;
+			}
+		}
+		else
+		{
+			temp.setPos(action.fromPos);
+			temp.move(action.fromDir);
+			result.slow = false;
+			if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
+			{
+				temp.setPos(action.fromPos);
+				temp.moveSlow(action.fromDir);
+				result.slow = true;
+				if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
+					return result;
+			}
+		}
+		result.valid = true;
 
-		score.inScene = Scene::IsInPlayerArea(node.pos);
-		if (!score.inScene)
-			return score;
+		if (m_itemId != -1)
+		{
+			result.score += getCollectItemScore(temp);
+			//std::cout << "getCollectItemScore " << result.score << std::endl;
+		}
+		else if (m_enemyId != -1)
+		{
+			result.score += getShootEnemyScore(temp);
+			//std::cout << "getShootEnemyScore " << result.score << std::endl;
+		}
+		else
+		{
+			result.score += getGobackScore(temp);
+			//std::cout << "getGobackScore " << result.score << std::endl;
+		}
 
-		Player player = m_player;
-		player.setPos(node.pos);
+		if (result.score > m_bestScore)
+		{
+			m_bestScore = result.score;
+		}
 
-		score.collide = m_scene.collideAll(player, node.frame);
-		if (score.collide)
-			return score;
-
-		score.reach = (player.getDist(node.targetPos) < 10.0f);
-		if (score.reach)
-			return score;
-
-		//if (m_itemId != -1)
-		//	curResult.score += getCollectItemScore(player, m_itemId);
-		//else if (m_enemyId != -1)
-		//	curResult.score += getShootEnemyScore(player, m_enemyId);
-		//else
-		//	curResult.score += getGobackScore(player);
-
-		Direction targetDir = player.getDir(node.targetPos);
-		Mover mover(targetDir);
+		Mover mover(action.targetDir);
+		result.size = mover.getSize();
 		while (mover.hasNext())
 		{
 			Direction dir = mover.next();
-			bool slow = false;
 
-			Node nextNode;
-			nextNode.pos = node.pos + MOVE_SPEED[dir];
-			nextNode.frame = node.frame + 1.0f;
-			nextNode.targetPos = node.targetPos;
+			Action nextAct;
+			nextAct.fromPos = temp.getPos();
+			nextAct.fromDir = dir;
+			nextAct.slowFirst = action.slowFirst;
+			nextAct.frame = action.frame + 1.0f;
+			nextAct.targetDir = action.targetDir;
 
-			NodeScore nextScore = dfs(nextNode);
+			Result nextRes = dfs(nextAct);
 
-			if (nextScore.limit)
+			if (m_count >= m_limit)
 			{
-				score.limit = true;
-				//score.dir = dir;	// 先走，可能有问题
-				//score.slow = slow;
 				break;
 			}
 
-			if (!nextScore.inScene || nextScore.collide)
+			if (!nextRes.valid)
 			{
-				slow = true;
-
-				nextNode.pos = node.pos + MOVE_SPEED_SLOW[dir];
-
-				nextScore = dfs(nextNode);
-
-				if (nextScore.limit)
-				{
-					score.limit = true;
-					//score.dir = dir;	// 先走，可能有问题
-					//score.slow = slow;
-					break;
-				}
-
-				if (!nextScore.inScene || nextScore.collide)
-					continue;
-			}
-
-			if (nextScore.reach)
-			{
-				score.reach = true;
-				score.dir = dir;
-				score.slow = slow;
-				break;
+				result.size -= 1;
+				continue;
 			}
 		}
+		if (result.size <= 0)
+			result.valid = false;
 
-		return score;
+		return result;
 	}
+
+	//Pointf TH10Bot::getMousePos()
+	//{
+	//	POINT mousePos = {};
+	//	GetCursorPos(&mousePos);
+	//	Rect clientRect = m_window.getClientRect();
+	//	return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
+	//}
 
 	//void TH10Bot::astar(Node& start, Node& goal)
 	//{
@@ -796,64 +787,93 @@ namespace th
 	}
 
 	// 拾取道具评分
-	float_t TH10Bot::getCollectItemScore(const Player& pNext, int_t itemId)
+	float_t TH10Bot::getCollectItemScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
-		if (itemId == -1)
+		if (m_itemId == -1)
 			return score;
 
-		const Item& item = m_items[itemId];
-		if (pNext.getDist(item.getPos()) < 5.0f)
+		const Item& item = m_items[m_itemId];
+
+		if (player.getDist(item.getPos()) < 10.0f)
 		{
 			score += 300.0f;
 		}
 		else
 		{
-			score += 150.0f * (1.0f - GetDistXScore(pNext.x, item.x));
-			score += 150.0f * (1.0f - GetDistYScore(pNext.y, item.y));
+			float_t dx = std::abs(player.x - item.x);
+			if (dx > SCENE_SIZE.width)
+				dx = SCENE_SIZE.width;
+			float_t dy = std::abs(player.y - item.y);
+			if (dy > SCENE_SIZE.height)
+				dy = SCENE_SIZE.height;
+
+			score += 150.0f * (1.0f - dx / SCENE_SIZE.width);
+			score += 150.0f * (1.0f - dy / SCENE_SIZE.height);
 		}
 
 		return score;
 	}
 
 	// 攻击敌人评分
-	float_t TH10Bot::getShootEnemyScore(const Player& pNext, int_t enemyId)
+	float_t TH10Bot::getShootEnemyScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
-		if (enemyId == -1)
+		if (m_enemyId == -1)
 			return score;
 
-		const Enemy& enemy = m_enemies[enemyId];
-		float_t dx = std::abs(pNext.x - enemy.x);
-		if (dx < 15.0f)
+		const Enemy& enemy = m_enemies[m_enemyId];
+
+		float_t dx = std::abs(player.x - enemy.x);
+		if (dx > SCENE_SIZE.width)
+			dx = SCENE_SIZE.width;
+		if (dx < 10.0f)
 		{
-			score += 300.0f;
+			score += 150.0f;
 		}
 		else
 		{
-			// X轴距离越远得分越少
-			if (dx > SCENE_SIZE.width)
-				dx = SCENE_SIZE.width;
-			score += 300.0f * (1.0f - dx / SCENE_SIZE.width);
+			// X轴距离越近得分越高
+			score += 150.0f * (1.0f - dx / SCENE_SIZE.width);
+		}
+
+		float_t dy = std::abs(player.y - enemy.y);
+		if (dy > SCENE_SIZE.height)
+			dy = SCENE_SIZE.height;
+		if (dy > SCENE_SIZE.height / 2.0f)
+		{
+			score += 150.0f;
+		}
+		else
+		{
+			// Y轴距离越远得分越高
+			score += 150.0f * (dy / SCENE_SIZE.height);
 		}
 
 		return score;
 	}
 
-	float_t TH10Bot::getGobackScore(const Player& pNext)
+	float_t TH10Bot::getGobackScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
-		if (Entity::GetDist(pNext.getPos(), Player::INIT_POS) < 10.0f)
+		if (player.getDist(Player::INIT_POS) < 10.0f)
 		{
 			score += 30.0f;
 		}
 		else
 		{
-			score += 15.0f * (1.0f - GetDistXScore(pNext.x, Player::INIT_POS.x));
-			score += 15.0f * (1.0f - GetDistYScore(pNext.y, Player::INIT_POS.y));
+			float_t dx = std::abs(player.x - Player::INIT_POS.x);
+			if (dx > SCENE_SIZE.width)
+				dx = SCENE_SIZE.width;
+			float_t dy = std::abs(player.y - Player::INIT_POS.y);
+			if (dy > SCENE_SIZE.height)
+				dy = SCENE_SIZE.height;
+
+			score += 15.0f * (1.0f - dx / SCENE_SIZE.width);
+			score += 15.0f * (1.0f - dy / SCENE_SIZE.height);
 		}
 
 		return score;

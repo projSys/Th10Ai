@@ -2,13 +2,6 @@
 
 namespace th
 {
-	struct FootPoint
-	{
-		float_t x;		// 垂足坐标
-		float_t y;
-		float_t frame;	// 到达垂足的帧数
-	};
-
 	// 实体结构
 	// +-------+
 	// | (x,y) |
@@ -26,13 +19,12 @@ namespace th
 		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
 
 		float_t getDist(const Pointf& pos) const;
-		FootPoint getFootPoint(const Pointf& pos) const;
+		std::pair<Pointf, float_t> getFootPoint(const Pointf& pos) const;
 		float_t getAngle(const Pointf& pos) const;
 		Direction getDir() const;
 		Direction getDir(const Pointf& pos) const;
 
-		Entity advance(const Pointf& pos) const;
-		Entity advance(float_t frame) const;
+		void advance(float_t frame);
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 

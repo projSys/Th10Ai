@@ -22,8 +22,6 @@ namespace th
 		public Entity
 	{
 	public:
-		Laser advance(const Pointf& pos) const;
-		Laser advance(float_t frame) const;
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 
