@@ -4,8 +4,6 @@
 
 namespace th
 {
-	class Player;
-
 	// ¼¤¹â½á¹¹
 	//   (x,y)
 	// +---+---+

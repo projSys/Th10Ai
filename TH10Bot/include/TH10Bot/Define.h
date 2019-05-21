@@ -1,8 +1,5 @@
 #pragma once
 
-#include <tuple>
-#include <map>
-
 namespace th
 {
 	// 移动方向
@@ -66,28 +63,4 @@ namespace th
 	};
 
 	const int_t MOVE_PRIORITY_END[DIR_MAXCOUNT] = { 1, 6, 6, 6, 6, 6, 6, 6, 6 };
-
-	//struct Node
-	//{
-	//	Pointf pos;
-	//	Pointf fromPos;
-	//	Direction fromDir;
-	//	float_t frame;
-
-	//	float_t gScore;
-	//	float_t hScore;
-	//	float_t fScore;
-	//};
-
-	//struct PointLess
-	//{
-	//	bool operator ()(const Pointf& left, const Pointf& right) const
-	//	{
-	//		return std::tie(left.x, left.y) < std::tie(right.x, right.y);
-	//	}
-	//};
-
-	//typedef std::map<Pointf, Node, PointLess> PointNodeMap;
-	////typedef std::map<float_t, Node> ScoreNodeMap;
-	//typedef std::multimap<float_t, Node> ScoreNodeMap;	// score可能重复
 }

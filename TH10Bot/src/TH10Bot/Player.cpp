@@ -34,16 +34,18 @@ namespace th
 		{ 1.41f, 1.41f }
 	};
 
-	void Player::move(Direction dir)
+	void Player::advance(Direction dir, bool slow)
 	{
-		x += MOVE_SPEED[dir].x;
-		y += MOVE_SPEED[dir].y;
-	}
-
-	void Player::moveSlow(Direction dir)
-	{
-		x += MOVE_SPEED_SLOW[dir].x;
-		y += MOVE_SPEED_SLOW[dir].y;
+		if (slow)
+		{
+			x += MOVE_SPEED_SLOW[dir].x;
+			y += MOVE_SPEED_SLOW[dir].y;
+		}
+		else
+		{
+			x += MOVE_SPEED[dir].x;
+			y += MOVE_SPEED[dir].y;
+		}
 	}
 
 	bool Player::isReborn() const

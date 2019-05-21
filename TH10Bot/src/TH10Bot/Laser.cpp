@@ -5,8 +5,6 @@
 #include <math.h>
 #include <cmath>
 
-#include "TH10Bot/Player.h"
-
 namespace th
 {
 	bool Laser::collide(const Entity& other) const

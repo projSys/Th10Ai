@@ -10,8 +10,7 @@ namespace th
 	public:
 		static const Pointf INIT_POS;
 
-		void move(Direction dir);
-		void moveSlow(Direction dir);
+		void advance(Direction dir, bool slow);
 
 		bool isReborn() const;
 		bool isNormal() const;

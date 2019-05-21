@@ -71,7 +71,7 @@ namespace th
 		return GetDist(getPos(), pos);
 	}
 
-	// 点到前进方向的垂足
+	// 点与前进方向的垂足
 	std::pair<Pointf, float_t> Entity::getFootPoint(const Pointf& pos) const
 	{
 		if (isHolded())

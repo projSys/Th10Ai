@@ -49,10 +49,4 @@ namespace th
 		float_t width;
 		float_t height;
 	};
-
-	struct EntityView
-	{
-		uint_t index;
-		Direction dir;
-	};
 }

@@ -35,13 +35,6 @@ namespace th
 		m_lasers.reserve(200);
 
 		m_scene.split(6);
-
-		Action initNode = {};
-		initNode.fromDir = DIR_NONE;
-		m_path.resize(m_limit, initNode);
-		//memset(m_mask, 0, sizeof(m_mask));
-
-		srand((unsigned int)time(nullptr));
 	}
 
 	TH10Bot::~TH10Bot()
@@ -357,13 +350,12 @@ namespace th
 		Direction bestDir = DIR_NONE;
 		bool bestSlow = false;
 
-		//std::cout << "--------------------------------------------------" << std::endl;
 		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
 			Action action;
 			action.fromPos = m_player.getPos();
 			action.fromDir = static_cast<Direction>(i);
-			action.slowFirst = m_itemId == -1 && underEnemy;
+			action.slowFirst = (m_itemId == -1 && underEnemy);
 			action.frame = 1.0f;
 			action.targetDir = static_cast<Direction>(i);
 
@@ -373,7 +365,6 @@ namespace th
 			m_count = 0;
 
 			Result result = dfs(action);
-			//std::cout << action.fromDir << " " << m_bestScore << std::endl;
 
 			if (result.valid && m_bestScore > bestScore)
 			{
@@ -382,7 +373,6 @@ namespace th
 				bestSlow = result.slow;
 			}
 		}
-		//std::cout << "--------------------------------------------------" << std::endl;
 
 		if (bestDir != DIR_NONE)
 		{
@@ -412,50 +402,31 @@ namespace th
 
 		// 前进到下一个坐标
 		Player temp = m_player;
-		if (action.slowFirst)
+		temp.setPos(action.fromPos);
+		temp.advance(action.fromDir, action.slowFirst);
+		result.slow = action.slowFirst;
+		if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
 		{
 			temp.setPos(action.fromPos);
-			temp.moveSlow(action.fromDir);
-			result.slow = true;
+			temp.advance(action.fromDir, !action.slowFirst);
+			result.slow = !action.slowFirst;
 			if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
-			{
-				temp.setPos(action.fromPos);
-				temp.move(action.fromDir);
-				result.slow = false;
-				if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
-					return result;
-			}
+				return result;
 		}
-		else
-		{
-			temp.setPos(action.fromPos);
-			temp.move(action.fromDir);
-			result.slow = false;
-			if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
-			{
-				temp.setPos(action.fromPos);
-				temp.moveSlow(action.fromDir);
-				result.slow = true;
-				if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
-					return result;
-			}
-		}
+
 		result.valid = true;
 
 		if (m_itemId != -1)
 		{
 			result.score += getCollectItemScore(temp);
-			//std::cout << "getCollectItemScore " << result.score << std::endl;
 		}
 		else if (m_enemyId != -1)
 		{
 			result.score += getShootEnemyScore(temp);
-			//std::cout << "getShootEnemyScore " << result.score << std::endl;
 		}
 		else
 		{
 			result.score += getGobackScore(temp);
-			//std::cout << "getGobackScore " << result.score << std::endl;
 		}
 
 		if (result.score > m_bestScore)
@@ -510,204 +481,6 @@ namespace th
 		}
 		return underEnemy;
 	}
-
-	//Pointf TH10Bot::getMousePos()
-	//{
-	//	POINT mousePos = {};
-	//	GetCursorPos(&mousePos);
-	//	Rect clientRect = m_window.getClientRect();
-	//	return Scene::ToScenePos(Pointi(mousePos.x - clientRect.x, mousePos.y - clientRect.y));
-	//}
-
-	//void TH10Bot::astar(Node& start, Node& goal)
-	//{
-	//	m_buffer = cv::Scalar(255, 255, 255);
-
-	//	cv::Scalar red(0, 0, 255);
-	//	cv::Scalar green(0, 255, 0);
-	//	cv::Scalar blue(255, 0, 0);
-
-	//	Pointi windowPos1 = Scene::ToWindowPos(start.pos - Pointf(m_player.width / 2.0f, m_player.height / 2.0f));
-	//	cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-	//	cv::rectangle(m_buffer, rect1, green);
-
-	//	windowPos1 = Scene::ToWindowPos(goal.pos - Pointf(m_player.width / 2.0f, m_player.height / 2.0f));
-	//	cv::Rect rect2(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-	//	cv::rectangle(m_buffer, rect2, green);
-
-	//	PointNodeMap closedSet;
-	//	PointNodeMap openSet;
-	//	ScoreNodeMap openScoreSet;
-
-	//	start.gScore = 0.0f;
-	//	start.hScore = heuristicCostEstimate(start, goal);
-	//	start.fScore = start.gScore + start.hScore;
-	//	openSet.insert(std::make_pair(start.pos, start));
-	//	openScoreSet.insert(std::make_pair(start.fScore, start));
-	//	assert(openSet.size() == openScoreSet.size());
-
-	//	int_t count = 0;
-	//	while (!openSet.empty())
-	//	{
-	//		auto lowestIt = openScoreSet.begin();
-	//		//auto maxIt = --(openScoreSet.end());
-	//		Node current = lowestIt->second;
-
-	//		// 到达终点
-	//		if (current.pos.distance(goal.pos) < 5.0f)
-	//		{
-	//			reconstructPath(closedSet, current);
-	//			break;
-	//		}
-
-	//		openSet.erase(current.pos);
-	//		openScoreSet.erase(lowestIt);
-	//		assert(openSet.size() == openScoreSet.size());
-	//		closedSet.insert(std::make_pair(current.pos, current));
-
-	//		++count;
-	//		if (count > 1000)
-	//			break;
-
-	//		Mover mover(current.fromDir);
-	//		while (mover.hasNext())
-	//		{
-	//			Direction dir = mover.next();
-
-	//			Node neighbor = {};
-	//			neighbor.pos = current.pos + MOVE_SPEED[dir];
-	//			neighbor.fromPos = current.pos;
-	//			neighbor.fromDir = dir;
-	//			neighbor.frame = current.frame + 1.0f;
-
-	//			if (!Scene::IsInScene(neighbor.pos))
-	//				continue;
-
-	//			if (closedSet.find(neighbor.pos) != closedSet.end())
-	//				continue;
-
-	//			Player player = m_player;
-	//			player.setPos(neighbor.pos);
-	//			if (collideMove(player, neighbor.frame))
-	//				continue;
-
-	//			Pointf topLeft = player.getTopLeft();
-	//			topLeft.x = std::ceil(topLeft.x);
-	//			topLeft.y = std::ceil(topLeft.y);
-	//			Pointf topRight = player.getTopRight();
-	//			topRight.x = std::floor(topRight.x);
-	//			topRight.y = std::ceil(topRight.y);
-	//			Pointf bottomLeft = player.getBottomLeft();
-	//			bottomLeft.x = std::ceil(bottomLeft.x);
-	//			bottomLeft.y = std::floor(bottomLeft.y);
-	//			Pointf bottomRight = player.getBottomRight();
-	//			bottomRight.x = std::floor(bottomRight.x);
-	//			bottomRight.y = std::floor(bottomRight.y);
-
-	//			Pointi t1 = Scene::ToWindowPos(topLeft);
-	//			Pointi t2 = Scene::ToWindowPos(topRight);
-	//			Pointi t3 = Scene::ToWindowPos(bottomLeft);
-	//			Pointi t4 = Scene::ToWindowPos(bottomRight);
-
-	//			bool overflow = false;
-	//			for (int_t y = t1.y; y <= t3.y; ++y)
-	//				for (int_t x = t1.x; x <= t2.x; ++x)
-	//					if (m_mask[y][x] > 2)
-	//						overflow = true;
-	//			if (overflow)
-	//				continue;
-
-	//			for (int_t y = t1.y; y <= t3.y; ++y)
-	//				for (int_t x = t1.x; x <= t2.x; ++x)
-	//					m_mask[y][x] += 1;
-
-	//			//cv::Rect rect1(t1.x, t1.y, int_t(t2.x - t1.x), int_t(t3.y - t1.y));
-	//			//cv::rectangle(m_buffer, rect1, red, -1);
-
-	//			// gScore在递增
-	//			neighbor.gScore = current.gScore + distBetween(current, neighbor);
-	//			// hScore在递减
-	//			neighbor.hScore = heuristicCostEstimate(neighbor, goal);
-	//			neighbor.fScore = neighbor.gScore + neighbor.hScore;
-
-	//			auto oldIt = openSet.find(neighbor.pos);
-	//			if (oldIt == openSet.end())
-	//			{
-	//				openSet.insert(std::make_pair(neighbor.pos, neighbor));
-	//				openScoreSet.insert(std::make_pair(neighbor.fScore, neighbor));
-	//				assert(openSet.size() == openScoreSet.size());
-	//			}
-	//			else
-	//			{
-	//				Node old = oldIt->second;
-	//				if (neighbor.gScore < old.gScore)
-	//				{
-	//					openSet.erase(oldIt);
-	//					openSet.insert(std::make_pair(neighbor.pos, neighbor));
-	//					//openScoreSet.erase(old.fScore);
-	//					auto range = openScoreSet.equal_range(old.fScore);
-	//					auto it = range.first;
-	//					while (it != range.second)
-	//					{
-	//						if (it->second.pos == old.pos)
-	//							it = openScoreSet.erase(it);
-	//						else
-	//							++it;
-	//					}
-	//					openScoreSet.insert(std::make_pair(neighbor.fScore, neighbor));
-	//					assert(openSet.size() == openScoreSet.size());
-	//				}
-	//			}
-
-	//			//Pointi windowPos1 = Scene::ToWindowPos(neighbor.pos - Pointf(m_player.width / 2.0f, m_player.height / 2.0f));
-	//			//cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-	//			//cv::rectangle(m_buffer, rect1, green);
-
-	//			//Pointi p1 = Scene::ToWindowPos(neighbor.pos);
-	//			//Pointi p2 = Scene::ToWindowPos(neighbor.fromPos);
-	//			//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
-
-	//			//cv::imshow("TH10", m_buffer);
-	//			//cv::waitKey(1);
-	//		} // while (mover.hasNext())
-	//	} // while (!openSet.empty())
-	//}
-
-	//float_t TH10Bot::distBetween(const Node& current, const Node& neighbor)
-	//{
-	//	float_t score = current.pos.distance(neighbor.pos);
-	//	return std::round(score * 100.0f) / 100.0f;
-	//}
-
-	//float_t TH10Bot::heuristicCostEstimate(const Node& neighbor, const Node& goal)
-	//{
-	//	float_t score = neighbor.pos.distance(goal.pos);
-	//	return std::round(score * 100.0f) / 100.0f;
-	//}
-
-	//void TH10Bot::reconstructPath(const PointNodeMap& closedSet, const Node& goal)
-	//{
-	//	//cv::Scalar green(0, 255, 0);
-	//	//cv::Scalar blue(255, 0, 0);
-
-	//	Node current = goal;
-	//	while (current.fromDir != DIR_NONE)
-	//	{
-	//		m_path.push_back(current);
-
-	//		//Pointi windowPos1 = Scene::ToWindowPos(current.pos - Pointf(m_player.width / 2.0f, m_player.height / 2.0f));
-	//		//cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-	//		//cv::rectangle(m_buffer, rect1, green);
-
-	//		//Pointi p1 = Scene::ToWindowPos(current.pos);
-	//		//Pointi p2 = Scene::ToWindowPos(current.fromPos);
-	//		//cv::line(m_buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), blue);
-
-	//		auto fromIt = closedSet.find(current.fromPos);
-	//		assert(fromIt != closedSet.end());
-	//		current = fromIt->second;
-	//	}
-	//}
 
 	//NodeScore TH10Bot::getNodeScore(const Player& player, float_t frame)
 	//{
