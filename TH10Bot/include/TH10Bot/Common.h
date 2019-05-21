@@ -1,7 +1,11 @@
 #pragma once
 
 #include <cpp/Common.h>
+#include <cpp/Type.h>
 #include <Windows/Common.h>
+#include <Windows/Point.h>
+#include <Windows/Size.h>
+#include <Windows/Rect.h>
 #include <GraphCap/Common.h>
 
 namespace th
@@ -13,8 +17,5 @@ namespace th
 }
 
 #include <iostream>
-#include <cpp/Point.h>
-#include <cpp/Size.h>
-#include <cpp/Rect.h>
 
 #include "TH10Bot/Define.h"
