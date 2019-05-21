@@ -351,17 +351,7 @@ namespace th
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
 
-		//Node start = {};
-		//start.pos = m_player.getPos();
-		//start.dir = DIR_NONE;
-
-		//Node goal = {};
-		//goal.pos = getMousePos();
-		//goal.dir = DIR_NONE;
-
-		//m_path.clear();
-		//memset(m_mask, 0, sizeof(m_mask));
-		//astar(start, goal);
+		bool underEnemy = isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
@@ -373,7 +363,7 @@ namespace th
 			Action action;
 			action.fromPos = m_player.getPos();
 			action.fromDir = static_cast<Direction>(i);
-			action.slowFirst = false;
+			action.slowFirst = m_itemId == -1 && underEnemy;
 			action.frame = 1.0f;
 			action.targetDir = static_cast<Direction>(i);
 
@@ -499,10 +489,26 @@ namespace th
 				continue;
 			}
 		}
+		// 没气了，当前节点也无效
 		if (result.size <= 0)
 			result.valid = false;
 
 		return result;
+	}
+
+	bool TH10Bot::isUnderEnemy()
+	{
+		bool underEnemy = false;
+		for (const Enemy& enemy : m_enemies)
+		{
+			float_t dx = std::abs(m_player.x - enemy.x);
+			if (dx < 20.0f && m_player.y > enemy.y)
+			{
+				underEnemy = true;
+				break;
+			}
+		}
+		return underEnemy;
 	}
 
 	//Pointf TH10Bot::getMousePos()
@@ -735,6 +741,9 @@ namespace th
 		if (m_player.y < SCENE_SIZE.height / 4.0f)
 			return id;
 
+		if (m_enemies.size() > 10)
+			return id;
+
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (uint_t i = 0; i < m_items.size(); ++i)
 		{
@@ -829,7 +838,7 @@ namespace th
 		float_t dx = std::abs(player.x - enemy.x);
 		if (dx > SCENE_SIZE.width)
 			dx = SCENE_SIZE.width;
-		if (dx < 10.0f)
+		if (dx < 20.0f)
 		{
 			score += 150.0f;
 		}

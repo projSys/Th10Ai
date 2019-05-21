@@ -57,6 +57,7 @@ namespace th
 
 		bool handleMove();
 		Result dfs(const Action& action);
+		bool isUnderEnemy();
 		//Pointf getMousePos();
 		//void astar(Node& start, Node& goal);
 		//float_t distBetween(const Node& current, const Node& neighbor);
