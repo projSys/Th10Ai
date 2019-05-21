@@ -1,6 +1,6 @@
 # TH10Bot
 
-东方机器人
+东方自动机器人
 
 ![](https://github.com/GiriMind/TH10Bot/raw/master/1.png)
 
