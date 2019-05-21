@@ -37,7 +37,7 @@ namespace th
 		player.dx = readBuffer<int32_t>(m_buffer - 0x3C0 + 0x3F0) / 100.0f;
 		player.dy = readBuffer<int32_t>(m_buffer - 0x3C0 + 0x3F4) / 100.0f;
 		player.width = readBuffer<float32_t>(m_buffer - 0x3C0 + 0x41C) * 2.0f;	// 2还是4啊？
-		player.height = player.width = 4.0f;	// 设大点不容易撞
+		player.height = player.width = 5.0f;	// 设大点不容易撞
 		//player.slow = readMemory<int32_t>(baseAddr + 0x4474);
 		//player.powers = readMemory<int32_t>(0x00474C48) / 20.0f;
 		//player.type = readMemory<int32_t>(0x00474C68);

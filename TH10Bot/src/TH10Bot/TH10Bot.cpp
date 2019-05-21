@@ -470,15 +470,17 @@ namespace th
 	bool TH10Bot::isUnderEnemy()
 	{
 		bool underEnemy = false;
+
 		for (const Enemy& enemy : m_enemies)
 		{
-			float_t dx = std::abs(m_player.x - enemy.x);
-			if (dx < 20.0f && m_player.y > enemy.y)
+			if (std::abs(m_player.x - enemy.x) < 20.0f
+				&& m_player.y > enemy.y)
 			{
 				underEnemy = true;
 				break;
 			}
 		}
+
 		return underEnemy;
 	}
 
