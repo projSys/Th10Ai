@@ -17,11 +17,11 @@ namespace th
 		m_graphCap(m_process, GHT_D3D9FRAMESYNC),
 		m_reader(m_process),
 		m_active(false),
+		m_pause(false),
 		m_itemId(-1),
 		m_enemyId(-1),
 		m_bombCooldown(0),
 		m_talkCooldown(0),
-		m_shootCooldown(0),
 		m_collectCooldown(0),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
 		m_bestDir(DIR_NONE),
@@ -41,11 +41,11 @@ namespace th
 	{
 		try
 		{
+			m_input.keyRelease(KEY_SHIFT);
 			m_input.keyRelease(KEY_UP);
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
-			m_input.keyRelease(KEY_SHIFT);
 			m_input.keyRelease(KEY_Z);
 			m_input.keyRelease(KEY_X);
 		}
@@ -96,16 +96,15 @@ namespace th
 	{
 		if (m_active)
 		{
-			m_active = false;
-			std::cout << "停止Bot。" << std::endl;
-
+			m_input.keyRelease(KEY_SHIFT);
 			m_input.keyRelease(KEY_UP);
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
-			m_input.keyRelease(KEY_SHIFT);
 			m_input.keyRelease(KEY_Z);
 			m_input.keyRelease(KEY_X);
+			m_active = false;
+			std::cout << "停止Bot。" << std::endl;
 		}
 	}
 
@@ -113,11 +112,11 @@ namespace th
 	{
 		if (!m_active)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+			std::this_thread::sleep_for(std::chrono::milliseconds(17));
 			return;
 		}
 #if PLAY
-		if (!m_sync.waitForPresent())
+		if (!m_sync.waitForPresent(17))
 		{
 			std::cout << "等待帧同步超时。" << std::endl;
 			return;
@@ -263,23 +262,18 @@ namespace th
 	bool TH10Bot::handleBomb()
 	{
 		if (m_input.isKeyPressed(KEY_X))
-		{
 			m_input.keyRelease(KEY_X);
-			//std::cout << "炸弹 RELEASE" << std::endl;
-		}
 
-		// 放了炸弹3秒后再检测碰撞
+		// 放了炸弹3秒后再检测
 		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
 		{
 			if (m_player.isColliding())
 			{
 				m_input.keyPress(KEY_X);
 				m_bombCooldown = m_clock.getTimestamp();
-				//std::cout << "炸弹 PRESS" << std::endl;
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -288,19 +282,13 @@ namespace th
 	{
 		if (m_enemies.size() <= 1 && m_bullets.empty() && m_lasers.empty())
 		{
-			// 延时2秒后对话
+			// BOSS出现2秒后对话
 			if (m_clock.getTimestamp() - m_talkCooldown >= 2000)
 			{
 				if (m_input.isKeyPressed(KEY_Z))
-				{
 					m_input.keyRelease(KEY_Z);
-					//std::cout << "对话 RELEASE" << std::endl;
-				}
 				else
-				{
 					m_input.keyPress(KEY_Z);
-					//std::cout << "对话 PRESS" << std::endl;
-				}
 				return true;
 			}
 		}
@@ -308,7 +296,6 @@ namespace th
 		{
 			m_talkCooldown = m_clock.getTimestamp();
 		}
-
 		return false;
 	}
 
@@ -318,21 +305,13 @@ namespace th
 		if (!m_enemies.empty())
 		{
 			m_input.keyPress(KEY_Z);
-			m_shootCooldown = m_clock.getTimestamp();
-			//std::cout << "攻击 PRESS" << std::endl;
+			return true;
 		}
 		else
 		{
-			// 没有敌人1秒后停止攻击
-			if (m_clock.getTimestamp() - m_shootCooldown >= 1000)
-			{
-				m_input.keyRelease(KEY_Z);
-				//std::cout << "攻击 RELEASE" << std::endl;
-				return false;
-			}
+			m_input.keyRelease(KEY_Z);
+			return false;
 		}
-
-		return true;
 	}
 
 	// 处理移动
@@ -513,27 +492,44 @@ namespace th
 	{
 		int_t id = -1;
 
-		if (m_player.y < SCENE_SIZE.height / 4.0f)
+		if (m_items.empty())
 			return id;
 
-		if (m_enemies.size() > 10)
+		// 拾取冷却中
+		if (m_clock.getTimestamp() - m_collectCooldown < 4000)
 			return id;
+
+		// 自机高于1/2屏，道具少于10个，敌人多于2个
+		if (m_player.y < SCENE_SIZE.height / 2.0f && m_items.size() < 10 && m_enemies.size() > 2)
+		{
+			// 进入冷却
+			m_collectCooldown = m_clock.getTimestamp();
+			return id;
+		}
+
+		// 自机高于1/4屏
+		if (m_player.y < SCENE_SIZE.height / 4.0f)
+		{
+			// 进入冷却
+			m_collectCooldown = m_clock.getTimestamp();
+			return id;
+		}
 
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (uint_t i = 0; i < m_items.size(); ++i)
 		{
 			const Item& item = m_items[i];
 
-			// 高于1/5屏
+			// 道具高于1/5屏
 			if (item.y < SCENE_SIZE.height / 5.0f)
 				continue;
 
-			// 不在自机半屏内
+			// 道具不在自机1/2屏内
 			float_t dy = std::abs(item.y - m_player.y);
 			if (dy > SCENE_SIZE.height / 3.0f)
 				continue;
 
-			// 与自机距离最近的
+			// 道具与自机距离最近
 			float_t dist = item.getDist(m_player.getPos());
 			if (dist < minDist)
 			{
@@ -558,7 +554,10 @@ namespace th
 		{
 			const Enemy& enemy = m_enemies[i];
 
-			//  与自机X轴距离最近
+			if (enemy.y > m_player.y)
+				continue;
+
+			// 与自机X轴距离最近
 			float_t dx = std::abs(enemy.x - m_player.x);
 			if (dx < minDist)
 			{
@@ -666,15 +665,9 @@ namespace th
 	void TH10Bot::move(Direction dir, bool slow)
 	{
 		if (slow)
-		{
 			m_input.keyPress(KEY_SHIFT);
-			//std::cout << "慢速 PRESS" << std::endl;
-		}
 		else
-		{
 			m_input.keyRelease(KEY_SHIFT);
-			//std::cout << "慢速 RELEASE" << std::endl;
-		}
 
 		switch (dir)
 		{
@@ -683,7 +676,6 @@ namespace th
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
-			//std::cout << "不动" << std::endl;
 			break;
 
 		case DIR_UP:
@@ -691,7 +683,6 @@ namespace th
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
-			//std::cout << "上" << std::endl;
 			break;
 
 		case DIR_DOWN:
@@ -699,7 +690,6 @@ namespace th
 			m_input.keyPress(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
-			//std::cout << "下" << std::endl;
 			break;
 
 		case DIR_LEFT:
@@ -707,7 +697,6 @@ namespace th
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyPress(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
-			//std::cout << "左" << std::endl;
 			break;
 
 		case DIR_RIGHT:
@@ -715,7 +704,6 @@ namespace th
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyPress(KEY_RIGHT);
-			//std::cout << "右" << std::endl;
 			break;
 
 		case DIR_UPLEFT:
@@ -723,7 +711,6 @@ namespace th
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyPress(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
-			//std::cout << "左上" << std::endl;
 			break;
 
 		case DIR_UPRIGHT:
@@ -731,7 +718,6 @@ namespace th
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyPress(KEY_RIGHT);
-			//std::cout << "右上" << std::endl;
 			break;
 
 		case DIR_DOWNLEFT:
@@ -739,7 +725,6 @@ namespace th
 			m_input.keyPress(KEY_DOWN);
 			m_input.keyPress(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
-			//std::cout << "左下" << std::endl;
 			break;
 
 		case DIR_DOWNRIGHT:
@@ -747,252 +732,36 @@ namespace th
 			m_input.keyPress(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyPress(KEY_RIGHT);
-			//std::cout << "右下" << std::endl;
 			break;
 		}
 	}
 
-	// 处理道具
-	//bool TH10Bot::handleItem()
-	//{
-	//	if (checkCollectStatus())
-	//	{
-	//		int_t itemId = findItem();
-	//		if (itemId != -1)
-	//			return collectItem(itemId);
-	//	}
-	//	return false;
-	//}
+	void TH10Bot::pause()
+	{
+		if (!m_pause)
+		{
+			m_input.keyRelease(KEY_SHIFT);
+			m_input.keyRelease(KEY_UP);
+			m_input.keyRelease(KEY_DOWN);
+			m_input.keyRelease(KEY_LEFT);
+			m_input.keyRelease(KEY_RIGHT);
+			m_input.keyRelease(KEY_Z);
+			m_input.keyRelease(KEY_X);
+			m_input.keyPress(KEY_ESCAPE);
+			std::this_thread::sleep_for(std::chrono::milliseconds(17));
+			m_input.keyRelease(KEY_ESCAPE);
+			m_pause = true;
+		}
+	}
 
-	// 检测拾取状况
-	//bool TH10Bot::checkCollectStatus()
-	//{
-	//	// 拾取冷却中
-	//	if (m_clock.getTimestamp() - m_collectCooldown < 2000)
-	//		return false;
-	//
-	//	// 无道具
-	//	if (m_items.empty())
-	//	{
-	//		// 进入冷却
-	//		m_collectCooldown = m_clock.getTimestamp();
-	//		return false;
-	//	}
-	//
-	//	// 自机在上半屏，道具少于10个，敌人多于2个
-	//	if (m_player.y < SCENE_HEIGHT / 2.0 && m_items.size() < 10 && m_enemies.size() > 2)
-	//	{
-	//		// 进入冷却
-	//		m_collectCooldown = m_clock.getTimestamp();
-	//		return false;
-	//	}
-	//
-	//	// 自机高于1/4屏
-	//	if (m_player.y < SCENE_HEIGHT * 0.25)
-	//	{
-	//		// 进入冷却
-	//		m_collectCooldown = m_clock.getTimestamp();
-	//		return false;
-	//	}
-	//
-	//	return true;
-	//}
-
-	// 拾取道具
-	//bool TH10Bot::collectItem(int_t itemId)
-	//{
-	//	const Item& item = m_items[itemId];
-	//
-	//	// 靠近道具了
-	//	if (m_player.collide(item, 5.0))
-	//		return true;
-	//
-	//	int_t lastDir = DIR_NONE;
-	//	bool lastShift = false;
-	//	float_t maxScore = std::numeric_limits<float_t>::lowest();
-	//	for (int_t i = 0; i < DIR_LENGHT; ++i)
-	//	{
-	//		int_t dir = DIRECTIONS[i];
-	//		bool shift = false;
-	//		float_t score = 0.0;
-	//
-	//		float_t xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
-	//		float_t yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
-	//		FixPos(xNext, yNext);
-	//		Player next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
-	//		if (collide(next, 0.0))
-	//		{
-	//			shift = true;
-	//			xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
-	//			yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
-	//			FixPos(xNext, yNext);
-	//			next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
-	//			if (collide(next, 0.0))
-	//				continue;
-	//		}
-	//
-	//		score += collectItemScore(next, item);
-	//
-	//		if (score > maxScore)
-	//		{
-	//			maxScore = score;
-	//			lastDir = dir;
-	//			lastShift = shift;
-	//		}
-	//	}
-	//	if (lastDir != DIR_NONE)
-	//		move(lastDir, lastShift);
-	//	else
-	//		std::cout << "collectItem()无路可走" << std::endl;
-	//
-	//	return true;
-	//}
-
-	// 处理敌人
-	//bool TH10Bot::handleEnemy()
-	//{
-	//	if (checkShootStatus())
-	//	{
-	//		int_t enemyId = findEnemy();
-	//		if (enemyId != -1)
-	//			return shootEnemy(enemyId);
-	//	}
-	//	return false;
-	//}
-
-	// 检测攻击状况
-	//bool TH10Bot::checkShootStatus()
-	//{
-	//	// 无敌人
-	//	if (m_enemies.empty())
-	//	{
-	//		return false;
-	//	}
-	//
-	//	return true;
-	//}
-
-	// 攻击敌人
-	//bool TH10Bot::shootEnemy(int_t enemyId)
-	//{
-	//	const Enemy& enemy = m_enemies[enemyId];
-	//
-	//	int_t lastDir = DIR_NONE;
-	//	bool lastShift = false;
-	//	float_t maxScore = 1e-15;
-	//	for (int_t i = 0; i < DIR_LENGHT; ++i)
-	//	{
-	//		int_t dir = DIRECTIONS[i];
-	//		bool shift = false;
-	//		float_t score = 0.0;
-	//
-	//		float_t xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
-	//		float_t yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
-	//		FixPos(xNext, yNext);
-	//		Player next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
-	//		if (collide(next, 0.0))
-	//		{
-	//			shift = true;
-	//			xNext = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
-	//			yNext = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
-	//			FixPos(xNext, yNext);
-	//			next = { static_cast<float_t>(xNext), static_cast<float_t>(yNext), m_player.w, m_player.h };
-	//			if (collide(next, 0.0))
-	//				continue;
-	//		}
-	//
-	//		score += dodgeEnemyScore(next);
-	//		score += shootEnemyScore(next, enemy);
-	//
-	//		if (score > maxScore)
-	//		{
-	//			maxScore = score;
-	//			lastDir = dir;
-	//			lastShift = shift;
-	//		}
-	//	}
-	//	if (lastDir != DIR_NONE)
-	//		move(lastDir, lastShift);
-	//	else
-	//		std::cout << "shootEnemy()无路可走" << std::endl;
-	//
-	//	return true;
-	//}
-
-	// 闪避敌人评分
-	//float_t TH10Bot::dodgeEnemyScore(const Player& next)
-	//{
-	//	float_t allScore = 0.0;
-	//	for (const Enemy& enemy : m_enemies)
-	//	{
-	//		float_t score = 0.0;
-	//
-	//		// 在敌机范围50外 
-	//		if (!next.collide(enemy, 50.0))
-	//		{
-	//			score += 100.0;
-	//		}
-	//		else
-	//		{
-	//			Point2d dirFactor = GetDirFactor(m_player, next, enemy);
-	//			score += (dirFactor.x * 50.0 + dirFactor.y * 50.0);
-	//		}
-	//
-	//		score += GetYFactor(m_player, next) * 100.0;
-	//
-	//		allScore += score;
-	//	}
-	//	return allScore;
-	//}
-
-	// 归位
-	//void TH10Bot::goback()
-	//{
-	//	// 靠近初始位置了
-	//	if (m_player.collide(INIT_RECT, 5.0))
-	//	{
-	//		move(DIR_CENTER, false);
-	//		return;
-	//	}
-	//
-	//	int_t lastDir = DIR_NONE;
-	//	bool lastShift = false;
-	//	float_t maxScore = 1e-15;
-	//	for (int_t i = 0; i < DIR_LENGHT; ++i)
-	//	{
-	//		int_t dir = DIRECTIONS[i];
-	//		bool shift = false;
-	//		float_t score = 0.0;
-	//
-	//		float_t nextX = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED;
-	//		float_t nextY = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED;
-	//		FixPos(nextX, nextY);
-	//		Player player = { static_cast<float_t>(nextX), static_cast<float_t>(nextY), m_player.w, m_player.h };
-	//		if (collide(player, 0.0))
-	//		{
-	//			shift = true;
-	//			nextX = m_player.x + MOVE_FACTORS[i].x * MOVE_SPEED_SLOW;
-	//			nextY = m_player.y + MOVE_FACTORS[i].y * MOVE_SPEED_SLOW;
-	//			FixPos(nextX, nextY);
-	//			player = { static_cast<float_t>(nextX), static_cast<float_t>(nextY), m_player.w, m_player.h };
-	//			if (collide(player, 0.0))
-	//				continue;
-	//		}
-	//
-	//		score += 1.0 - GetDistScore(player, INIT_RECT);
-	//
-	//		//std::cout << (int_t)dir << " " << score << std::endl;
-	//		if (score > maxScore)
-	//		{
-	//			maxScore = score;
-	//			lastDir = dir;
-	//			lastShift = shift;
-	//		}
-	//	}
-	//	//std::cout << "last " << (int_t)lastDir << " " << lastShift << std::endl;
-	//	if (lastDir != DIR_NONE)
-	//		move(lastDir, lastShift);
-	//	else
-	//		std::cout << "goback()无路可走" << std::endl;
-	//}
+	void TH10Bot::resume()
+	{
+		if (m_pause)
+		{
+			m_input.keyPress(KEY_ESCAPE);
+			std::this_thread::sleep_for(std::chrono::milliseconds(17));
+			m_input.keyRelease(KEY_ESCAPE);
+			m_pause = false;
+		}
+	}
 }

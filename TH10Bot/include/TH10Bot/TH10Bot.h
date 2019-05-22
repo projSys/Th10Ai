@@ -50,11 +50,8 @@ namespace th
 
 	private:
 		bool handleBomb();
-
 		bool handleTalk();
-
 		bool handleShoot();
-
 		bool handleMove();
 		Result dfs(const Action& action);
 		bool isUnderEnemy();
@@ -66,21 +63,8 @@ namespace th
 		float_t getGobackScore(const Player& player);
 
 		void move(Direction dir, bool slow);
-
-		// Item
-		//bool handleItem();
-		//bool checkCollectStatus();
-		//bool collectItem(int_t itemId);
-		//float_t collectItemScore(const Player& next, const Item& item);
-
-		// Enemy
-		//bool handleEnemy();
-		//bool checkShootStatus();
-		//bool shootEnemy(int_t enemyId);
-		//float_t dodgeEnemyScore(const Player& next);
-		//float_t shootEnemyScore(const Player& next, const Enemy& enemy);
-
-		//void goback();
+		void pause();
+		void resume();
 
 		Process m_process;
 		Window m_window;
@@ -95,6 +79,7 @@ namespace th
 		TH10Reader m_reader;
 
 		bool m_active;
+		bool m_pause;
 		Clock m_clock;
 
 		Player m_player;
@@ -116,7 +101,6 @@ namespace th
 
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;
-		time_t m_shootCooldown;
 		time_t m_collectCooldown;
 	};
 }
