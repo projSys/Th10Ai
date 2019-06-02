@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <boost/log/utility/setup/file.hpp>
+#include <Base/Util.h>
 
 #include "TH10Bot/TH10Bot.h"
 
@@ -13,7 +14,7 @@ int main()
 	HMENU menu = GetSystemMenu(window, FALSE);
 	EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
-	std::string logName = win::Utils::GetModuleDir() + "/TH10Bot.log";
+	std::string logName = base::Util::GetModuleDir() + "/TH10Bot.log";
 	bl::add_file_log(logName);
 
 	try

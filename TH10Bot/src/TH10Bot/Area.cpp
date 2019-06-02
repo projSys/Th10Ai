@@ -131,6 +131,9 @@ namespace th
 				temp.advance(frame);
 				if (temp.collide(player))
 					return true;
+				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
+				//if (ret.first && ret.second < 2.0f)
+				//	return true;
 			}
 
 			for (const Bullet& bullet : m_bullets)
@@ -139,6 +142,9 @@ namespace th
 				temp.advance(frame);
 				if (temp.collide(player))
 					return true;
+				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
+				//if (ret.first && ret.second < 2.0f)
+				//	return true;
 			}
 
 			for (const Laser& laser : m_lasers)
@@ -147,6 +153,9 @@ namespace th
 				temp.advance(frame);
 				if (temp.collide(player))
 					return true;
+				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
+				//if (ret.first && ret.second < 2.0f)
+				//	return true;
 			}
 		}
 

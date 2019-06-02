@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <Windows/Process.h>
-#include <Windows/Window.h>
+#include <Base/Process.h>
+#include <Base/Window.h>
 #include <GraphCap/D3D9FrameSync.h>
 #include <GraphCap/GraphCap.h>
 #include <GraphCap/DesktopInput.h>

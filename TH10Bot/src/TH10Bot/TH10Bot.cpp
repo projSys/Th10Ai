@@ -12,7 +12,7 @@
 namespace th
 {
 	TH10Bot::TH10Bot() :
-		m_process(Process::FindByName("th10.exe")),
+		m_process(Process::FindIdByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
 		m_graphCap(m_process, GHT_D3D9FRAMESYNC),
 		m_reader(m_process),

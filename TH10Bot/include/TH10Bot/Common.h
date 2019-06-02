@@ -1,18 +1,17 @@
 #pragma once
 
-#include <cpp/Common.h>
-#include <cpp/Type.h>
-#include <Windows/Common.h>
-#include <Windows/Point.h>
-#include <Windows/Size.h>
-#include <Windows/Rect.h>
+#include <Base/Common.h>
+#include <Base/Type.h>
+#include <Base/Exception.h>
+#include <Base/Point.h>
+#include <Base/Size.h>
+#include <Base/Rect.h>
 #include <GraphCap/Common.h>
 
 namespace th
 {
-	using namespace cpp;
-	using cpp::float_t;
-	using namespace win;
+	using namespace base;
+	using base::float_t;
 	using namespace gc;
 }
 
