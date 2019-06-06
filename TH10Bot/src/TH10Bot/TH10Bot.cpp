@@ -14,7 +14,7 @@ namespace th
 	TH10Bot::TH10Bot() :
 		m_process(Process::FindIdByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
-		m_graphCap(m_process, GHT_D3D9FRAMESYNC),
+		m_graphCap(m_process, GC_D3D9FRAMESYNC),
 		m_reader(m_process),
 		m_active(false),
 		m_pause(false),
@@ -116,7 +116,7 @@ namespace th
 			return;
 		}
 #if PLAY
-		if (!m_sync.waitForPresent(17))
+		if (!m_frameSync.waitForPresent())
 		{
 			std::cout << "等待帧同步超时。" << std::endl;
 			return;

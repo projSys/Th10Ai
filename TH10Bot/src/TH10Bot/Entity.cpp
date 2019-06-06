@@ -75,7 +75,7 @@ namespace th
 	std::pair<Pointf, float_t> Entity::getFootPoint(const Pointf& pos) const
 	{
 		if (isHolded())
-			return std::make_pair(Pointf(x, y), std::numeric_limits<float_t>::max());
+			return std::make_pair(Pointf(x, y), 0.0f);
 
 		// 到达垂足的帧数
 		float_t frame = ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);

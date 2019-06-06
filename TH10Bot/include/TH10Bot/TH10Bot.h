@@ -69,8 +69,8 @@ namespace th
 		Process m_process;
 		Window m_window;
 
-		D3D9FrameSync m_sync;
 		GraphCap m_graphCap;
+		D3D9FrameSync m_frameSync;
 
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_buffer;
