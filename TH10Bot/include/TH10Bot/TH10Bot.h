@@ -3,9 +3,9 @@
 #include <vector>
 #include <Base/Process.h>
 #include <Base/Window.h>
-#include <GraphCap/D3D9FrameSync.h>
 #include <GraphCap/GraphCap.h>
-#include <GraphCap/DesktopInput.h>
+#include <GraphCap/D3D9FrameSync.h>
+#include <GraphCap/DI8Input.h>
 
 #include "TH10Bot/DesktopCapturerCV.h"
 #include "TH10Bot/DesktopImageCV.h"
@@ -43,6 +43,7 @@ namespace th
 		TH10Bot();
 		~TH10Bot();
 
+		bool isKeyPressed(int vkey) const;
 		void run();
 		void start();
 		void stop();
@@ -68,13 +69,11 @@ namespace th
 
 		Process m_process;
 		Window m_window;
-
 		GraphCap m_graphCap;
 		D3D9FrameSync m_frameSync;
-
+		DI8Input m_input;
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_buffer;
-		DesktopInput m_input;
 
 		TH10Reader m_reader;
 

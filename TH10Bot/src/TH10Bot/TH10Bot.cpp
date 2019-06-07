@@ -14,7 +14,7 @@ namespace th
 	TH10Bot::TH10Bot() :
 		m_process(Process::FindIdByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
-		m_graphCap(m_process, GC_D3D9FRAMESYNC),
+		m_graphCap(m_process, GC_D3D9FRAMESYNC | GC_DI8HOOK),
 		m_reader(m_process),
 		m_active(false),
 		m_pause(false),
@@ -41,17 +41,17 @@ namespace th
 	{
 		try
 		{
-			m_input.keyRelease(KEY_SHIFT);
-			m_input.keyRelease(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
-			m_input.keyRelease(KEY_Z);
-			m_input.keyRelease(KEY_X);
+			m_input.clear();
+			m_input.update();
 		}
 		catch (...)
 		{
 		}
+	}
+
+	bool TH10Bot::isKeyPressed(int vkey) const
+	{
+		return (GetAsyncKeyState(vkey) & 0x8000) != 0;
 	}
 
 	void TH10Bot::run()
@@ -62,11 +62,11 @@ namespace th
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 		while (true)
 		{
-			if (m_input.isKeyPressed(KEY_A))
+			if (isKeyPressed('A'))
 				start();
-			if (m_input.isKeyPressed(KEY_S))
+			if (isKeyPressed('S'))
 				stop();
-			if (m_input.isKeyPressed(KEY_D))
+			if (isKeyPressed('D'))
 				break;
 
 			update();
@@ -96,13 +96,8 @@ namespace th
 	{
 		if (m_active)
 		{
-			m_input.keyRelease(KEY_SHIFT);
-			m_input.keyRelease(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
-			m_input.keyRelease(KEY_Z);
-			m_input.keyRelease(KEY_X);
+			m_input.clear();
+			m_input.update();
 			m_active = false;
 			std::cout << "Í£Ö¹Bot¡£" << std::endl;
 		}
@@ -156,6 +151,8 @@ namespace th
 		if (!handleTalk())
 			handleShoot();
 		handleMove();
+
+		m_input.update();
 
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
@@ -665,9 +662,9 @@ namespace th
 	void TH10Bot::move(Direction dir, bool slow)
 	{
 		if (slow)
-			m_input.keyPress(KEY_SHIFT);
+			m_input.keyPress(KEY_LSHIFT);
 		else
-			m_input.keyRelease(KEY_SHIFT);
+			m_input.keyRelease(KEY_LSHIFT);
 
 		switch (dir)
 		{
@@ -740,16 +737,16 @@ namespace th
 	{
 		if (!m_pause)
 		{
-			m_input.keyRelease(KEY_SHIFT);
+			m_input.keyRelease(KEY_LSHIFT);
 			m_input.keyRelease(KEY_UP);
 			m_input.keyRelease(KEY_DOWN);
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyRelease(KEY_RIGHT);
 			m_input.keyRelease(KEY_Z);
 			m_input.keyRelease(KEY_X);
-			m_input.keyPress(KEY_ESCAPE);
+			m_input.keyPress(KEY_ESC);
 			std::this_thread::sleep_for(std::chrono::milliseconds(17));
-			m_input.keyRelease(KEY_ESCAPE);
+			m_input.keyRelease(KEY_ESC);
 			m_pause = true;
 		}
 	}
@@ -758,9 +755,9 @@ namespace th
 	{
 		if (m_pause)
 		{
-			m_input.keyPress(KEY_ESCAPE);
+			m_input.keyPress(KEY_ESC);
 			std::this_thread::sleep_for(std::chrono::milliseconds(17));
-			m_input.keyRelease(KEY_ESCAPE);
+			m_input.keyRelease(KEY_ESC);
 			m_pause = false;
 		}
 	}
