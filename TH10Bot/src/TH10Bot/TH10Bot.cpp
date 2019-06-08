@@ -42,7 +42,7 @@ namespace th
 		try
 		{
 			m_input.clear();
-			m_input.update();
+			m_input.commit();
 		}
 		catch (...)
 		{
@@ -97,7 +97,7 @@ namespace th
 		if (m_active)
 		{
 			m_input.clear();
-			m_input.update();
+			m_input.commit();
 			m_active = false;
 			std::cout << "Í£Ö¹Bot¡£" << std::endl;
 		}
@@ -152,7 +152,7 @@ namespace th
 			handleShoot();
 		handleMove();
 
-		m_input.update();
+		m_input.commit();
 
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
