@@ -14,7 +14,7 @@ namespace th
 	TH10Bot::TH10Bot() :
 		m_process(Process::FindIdByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
-		m_graphCap(m_process, GC_D3D9FRAMESYNC | GC_DI8HOOK),
+		m_graphCap(m_window, GC_D3D9FRAMESYNC | GC_DI8HOOK),
 		m_reader(m_process),
 		m_active(false),
 		m_pause(false),

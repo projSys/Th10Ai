@@ -1,14 +1,12 @@
 # TH10Bot
 
-东方风神录自动机器人
+東方風神録Bot
 
 ![](https://github.com/GiriMind/TH10Bot/raw/master/1.png)
 
 通关视频
 
-https://www.youtube.com/watch?v=b5j3HenpgIk
-
-https://www.youtube.com/watch?v=bxi5VLs6CEc
+https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw
 
 ## 感谢
 
