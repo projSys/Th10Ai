@@ -8,6 +8,16 @@
 
 https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw
 
+## 依赖
+
+[boost](https://www.boost.org)
+
+[opencv](https://github.com/opencv/opencv)
+
+[Base](https://github.com/GiriMind/Base)
+
+[GraphCap](https://github.com/GiriMind/GraphCap)
+
 ## 感谢
 
 [TH10AI](https://github.com/Infinideastudio/TH10AI)
