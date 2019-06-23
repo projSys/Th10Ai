@@ -136,6 +136,7 @@ namespace th
 				//	return true;
 			}
 
+			//int_t count = 0;
 			for (const Bullet& bullet : m_bullets)
 			{
 				Bullet temp = bullet;
@@ -143,9 +144,16 @@ namespace th
 				if (temp.collide(player))
 					return true;
 				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-				//if (ret.first && ret.second < 2.0f)
-				//	return true;
+				//if (ret.first)
+				//{
+				//	//if (ret.second < 3.0f)
+				//	//	return true;
+				//	//else
+				//		++count;
+				//}
 			}
+			//if (count > 20)
+			//	return true;
 
 			for (const Laser& laser : m_lasers)
 			{

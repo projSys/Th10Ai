@@ -46,6 +46,9 @@ namespace th
 		}
 		catch (...)
 		{
+			std::string what = boost::current_exception_diagnostic_information();
+			BOOST_LOG_TRIVIAL(error) << what;
+			std::cout << what << std::endl;
 		}
 	}
 
@@ -524,6 +527,18 @@ namespace th
 			// 道具不在自机1/2屏内
 			float_t dy = std::abs(item.y - m_player.y);
 			if (dy > SCENE_SIZE.height / 3.0f)
+				continue;
+
+			bool tooClose = false;
+			for (const Enemy& enemy : m_enemies)
+			{
+				if (item.getDist(enemy.getPos()) < 60.0f)
+				{
+					tooClose = true;
+					break;
+				}
+			}
+			if (tooClose)
 				continue;
 
 			// 道具与自机距离最近
