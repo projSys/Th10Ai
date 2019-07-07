@@ -8,14 +8,20 @@
 
 https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
-## 依赖
+## 待改进 Todo
+
+* 闪避优化，多帧之间的上下文关联<br />
+* Extra无用<br />
+* Neural Networks<br />
+
+## 依赖 Dependencies
 
 [boost](https://www.boost.org)<br />
 [opencv](https://github.com/opencv/opencv)<br />
 [Base](https://github.com/GiriMind/Base)<br />
 [GraphCap](https://github.com/GiriMind/GraphCap)<br />
 
-## 感谢
+## 感谢 Thanks
 
 [TH10AI](https://github.com/Infinideastudio/TH10AI)<br />
 [TH10_DataReversing](https://github.com/binvec/TH10_DataReversing)<br />

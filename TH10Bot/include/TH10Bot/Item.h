@@ -19,6 +19,6 @@ namespace th
 		// type == 8 Unknown
 		// type == 9 Faith Items 信仰点（绿点），满灵力时由P点转化而来
 		// type == 10 Power Items P点（红点），由BOSS掉落
-		int_t type;
+		//int_t type;
 	};
 }

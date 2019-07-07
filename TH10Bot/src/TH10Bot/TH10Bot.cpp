@@ -483,19 +483,19 @@ namespace th
 			return id;
 
 		// 拾取冷却中
-		if (m_clock.getTimestamp() - m_collectCooldown < 4000)
+		if (m_clock.getTimestamp() - m_collectCooldown < 3000)
 			return id;
 
-		// 自机高于1/2屏，道具少于10个，敌人多于2个
-		if (m_player.y < SCENE_SIZE.height / 2.0f && m_items.size() < 10 && m_enemies.size() > 2)
+		// 自机高于1/4屏
+		if (m_player.y < SCENE_SIZE.height / 4.0f)
 		{
 			// 进入冷却
 			m_collectCooldown = m_clock.getTimestamp();
 			return id;
 		}
 
-		// 自机高于1/4屏
-		if (m_player.y < SCENE_SIZE.height / 4.0f)
+		// 自机高于1/2屏，道具少于10个，敌人多于2个
+		if (m_player.y < SCENE_SIZE.height / 2.0f && m_items.size() < 10 && m_enemies.size() > 2)
 		{
 			// 进入冷却
 			m_collectCooldown = m_clock.getTimestamp();
@@ -511,7 +511,7 @@ namespace th
 			if (item.y < SCENE_SIZE.height / 5.0f)
 				continue;
 
-			// 道具不在自机1/2屏内
+			// 道具不在自机1/3屏内
 			float_t dy = std::abs(item.y - m_player.y);
 			if (dy > SCENE_SIZE.height / 3.0f)
 				continue;
@@ -545,6 +545,10 @@ namespace th
 	{
 		int_t id = -1;
 
+		if (m_enemies.empty())
+			return id;
+
+		// 自机高于1/4屏
 		if (m_player.y < SCENE_SIZE.height / 4.0f)
 			return id;
 

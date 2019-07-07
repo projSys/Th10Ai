@@ -48,5 +48,8 @@ namespace th
 		float_t dy;
 		float_t width;
 		float_t height;
+
+		int_t id;
+		int_t type;
 	};
 }

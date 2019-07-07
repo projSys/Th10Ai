@@ -40,13 +40,14 @@ namespace th
 		player.height = player.width = 4.0f;	// 设大点不容易撞
 		//player.slow = readMemory<int32_t>(baseAddr + 0x4474);
 		//player.powers = readMemory<int32_t>(0x00474C48) / 20.0f;
-		//player.type = readMemory<int32_t>(0x00474C68);
+		player.type = readMemory<int32_t>(0x00474C68);
 		//player.life = readMemory<int32_t>(0x00474C70) + 1;
 		//player.itemObtainRange = readMemory<float32_t>(0x00476FB0) + player.type * 4;
 		//if (player.slow)
 		//	player.itemObtainRange *= 2.5f;
 		player.status = readBuffer<int32_t>(m_buffer + 0x458);
 		//player.invinibleTime = readMemory<int32_t>(baseAddr + 0x4310);
+		player.id = 0;
 
 		return true;
 	}
@@ -87,6 +88,7 @@ namespace th
 				// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
 				item.height = item.width = 6.0f;
 				item.type = readBuffer<int32_t>(ebp + 0x34);
+				item.id = i;
 				items.push_back(item);
 			}
 			ebp += 0x3F0;
@@ -128,6 +130,8 @@ namespace th
 				enemy.dy = readBuffer<float32_t>(m_buffer + 0x3C);
 				enemy.width = readBuffer<float32_t>(m_buffer + 0xB8);
 				enemy.height = readBuffer<float32_t>(m_buffer + 0xBC);
+				enemy.id = static_cast<int_t>(objAddr);
+				enemy.type = static_cast<int_t>(std::round(enemy.width));
 				enemies.push_back(enemy);
 			}
 			if (objNext == 0)
@@ -174,6 +178,8 @@ namespace th
 				bullet.dy = readBuffer<float32_t>(ebx + 0x3C4);
 				bullet.width = readBuffer<float32_t>(ebx + 0x3F0);
 				bullet.height = readBuffer<float32_t>(ebx + 0x3F4);
+				bullet.id = i;
+				bullet.type = static_cast<int_t>(std::round(bullet.width));
 				bullets.push_back(bullet);
 			}
 			ebx += 0x7F0;
@@ -215,6 +221,8 @@ namespace th
 			laser.arc = readBuffer<float32_t>(m_buffer + 0x3C);
 			laser.height = readBuffer<float32_t>(m_buffer + 0x40);
 			laser.width = readBuffer<float32_t>(m_buffer + 0x44);
+			laser.id = static_cast<int_t>(objAddr);
+			laser.type = static_cast<int_t>(std::round(laser.width));
 			lasers.push_back(laser);
 
 			if (objNext == 0)
