@@ -1,6 +1,6 @@
 # TH10Bot
 
-東方風神録Bot，基于深度优先搜索算法。Mountain of Faith's bot, based on depth-first search algorithm.<br />
+東方風神録Bot，基于深度优先搜索算法。Mountain of Faith's bot, based on depth first search algorithm.<br />
 
 ![](https://github.com/GiriMind/TH10Bot/raw/master/1.png)
 

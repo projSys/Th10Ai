@@ -74,8 +74,8 @@ namespace th
 		return m_area.collideAll(player, frame);
 	}
 
-	void Scene::renderTo(cv::Mat& buffer, const Player& player)
+	void Scene::render(cv::Mat& buffer, const Player& player)
 	{
-		m_area.renderTo(buffer, player);
+		m_area.render(buffer, player);
 	}
 }

@@ -31,12 +31,12 @@ namespace th
 		//	player.itemObtainRange *= 2.5f;
 		//player.status = readMemory<int32_t>(baseAddr + 0x458);
 		//player.invinibleTime = readMemory<int32_t>(baseAddr + 0x4310);
-		readMemoryBuffer(baseAddr + 0x3C0, m_buffer, 0x458 - 0x3C0 + 4);
-		player.x = readBuffer<float32_t>(m_buffer - 0x3C0 + 0x3C0);
-		player.y = readBuffer<float32_t>(m_buffer - 0x3C0 + 0x3C4);
-		player.dx = readBuffer<int32_t>(m_buffer - 0x3C0 + 0x3F0) / 100.0f;
-		player.dy = readBuffer<int32_t>(m_buffer - 0x3C0 + 0x3F4) / 100.0f;
-		player.width = readBuffer<float32_t>(m_buffer - 0x3C0 + 0x41C) * 2.0f;	// 2还是4啊？
+		readMemoryBuffer(baseAddr, m_buffer, 0x458 + sizeof(float32_t));
+		player.x = readBuffer<float32_t>(m_buffer + 0x3C0);
+		player.y = readBuffer<float32_t>(m_buffer + 0x3C4);
+		player.dx = readBuffer<int32_t>(m_buffer + 0x3F0) / 100.0f;
+		player.dy = readBuffer<int32_t>(m_buffer + 0x3F4) / 100.0f;
+		player.width = readBuffer<float32_t>(m_buffer + 0x41C) * 2.0f;	// 2还是4啊？
 		player.height = player.width = 4.0f;	// 设大点不容易撞
 		//player.slow = readMemory<int32_t>(baseAddr + 0x4474);
 		//player.powers = readMemory<int32_t>(0x00474C48) / 20.0f;
@@ -45,7 +45,7 @@ namespace th
 		//player.itemObtainRange = readMemory<float32_t>(0x00476FB0) + player.type * 4;
 		//if (player.slow)
 		//	player.itemObtainRange *= 2.5f;
-		player.status = readBuffer<int32_t>(m_buffer - 0x3C0 + 0x458);
+		player.status = readBuffer<int32_t>(m_buffer + 0x458);
 		//player.invinibleTime = readMemory<int32_t>(baseAddr + 0x4310);
 
 		return true;
@@ -121,13 +121,13 @@ namespace th
 				//enemy.dy = readMemory<float32_t>(objAddr + 0x3C);
 				//enemy.width = readMemory<float32_t>(objAddr + 0xB8);
 				//enemy.height = readMemory<float32_t>(objAddr + 0xBC);
-				readMemoryBuffer(objAddr + 0x2C, m_buffer, 0xBC - 0x2C + 4);
-				enemy.x = readBuffer<float32_t>(m_buffer - 0x2C + 0x2C);
-				enemy.y = readBuffer<float32_t>(m_buffer - 0x2C + 0x30);
-				enemy.dx = readBuffer<float32_t>(m_buffer - 0x2C + 0x38);
-				enemy.dy = readBuffer<float32_t>(m_buffer - 0x2C + 0x3C);
-				enemy.width = readBuffer<float32_t>(m_buffer - 0x2C + 0xB8);
-				enemy.height = readBuffer<float32_t>(m_buffer - 0x2C + 0xBC);
+				readMemoryBuffer(objAddr, m_buffer, 0xBC + sizeof(float32_t));
+				enemy.x = readBuffer<float32_t>(m_buffer + 0x2C);
+				enemy.y = readBuffer<float32_t>(m_buffer + 0x30);
+				enemy.dx = readBuffer<float32_t>(m_buffer + 0x38);
+				enemy.dy = readBuffer<float32_t>(m_buffer + 0x3C);
+				enemy.width = readBuffer<float32_t>(m_buffer + 0xB8);
+				enemy.height = readBuffer<float32_t>(m_buffer + 0xBC);
 				enemies.push_back(enemy);
 			}
 			if (objNext == 0)
@@ -196,7 +196,7 @@ namespace th
 
 		while (true)
 		{
-			readMemoryBuffer(objAddr, m_buffer, 0x44 + 4);
+			readMemoryBuffer(objAddr, m_buffer, 0x44 + sizeof(float32_t));
 			//uint32_t objNext = readMemory<uint32_t>(objAddr + 0x8);
 			uint32_t objNext = readBuffer<uint32_t>(m_buffer + 0x8);
 

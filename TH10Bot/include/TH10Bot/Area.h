@@ -26,7 +26,7 @@ namespace th
 		void splitLasers(const std::vector<Laser>& lasers);
 		bool collideAll(const Player& player, float_t frame) const;
 
-		void renderTo(cv::Mat& buffer, const Player& player);
+		void render(cv::Mat& buffer, const Player& player);
 
 	private:
 		std::vector<Enemy> m_enemies;

@@ -17,7 +17,6 @@ namespace th
 		m_graphCap(m_window, GC_D3D9FRAMESYNC | GC_DI8HOOK),
 		m_reader(m_process),
 		m_active(false),
-		m_pause(false),
 		m_itemId(-1),
 		m_enemyId(-1),
 		m_bombCooldown(0),
@@ -175,15 +174,12 @@ namespace th
 		cv::Scalar orange(0, 97, 255);
 		cv::Scalar yellow(0, 255, 255);
 
-		m_scene.renderTo(m_buffer.m_data, m_player);
+		//m_scene.render(m_buffer.m_data, m_player);
 
 		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
 		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
 		cv::rectangle(m_buffer.m_data, rect1, green, -1);
-		//Pointi windowPos11 = Scene::ToWindowPos(m_player.getPos());
-		//cv::Point center11(windowPos11.x, windowPos11.y);
-		//cv::circle(m_buffer.m_data, center11, int_t(100.0f), green);
-		/*
+
 		for (const Item& item : m_items)
 		{
 			Pointi windowPos = Scene::ToWindowPos(item.getTopLeft());
@@ -191,9 +187,6 @@ namespace th
 			cv::rectangle(m_buffer.m_data, rect, blue, -1);
 		}
 
-		//for (const EntityView& view : m_focusEnemies)
-		//{
-		//	const Enemy& enemy = m_enemies[view.index];
 		for (const Enemy& enemy : m_enemies)
 		{
 			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
@@ -201,11 +194,8 @@ namespace th
 			cv::rectangle(m_buffer.m_data, rect, red);
 		}
 
-		for (const EntityView& view : m_focusBullets)
+		for (const Bullet& bullet : m_bullets)
 		{
-			const Bullet& bullet = m_bullets[view.index];
-		//for (const Bullet& bullet : m_bullets)
-		//{
 			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
 			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
 			cv::rectangle(m_buffer.m_data, rect, red, -1);
@@ -237,11 +227,8 @@ namespace th
 			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
 		}
 
-		for (const EntityView& view : m_focusLasers)
+		for (const Laser& laser : m_lasers)
 		{
-			const Laser& laser = m_lasers[view.index];
-		//for (const Laser& laser : m_lasers)
-		//{
 			LaserBox laserBox(laser);
 			Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
 			Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
@@ -252,7 +239,7 @@ namespace th
 			cv::line(m_buffer.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
 			cv::line(m_buffer.m_data, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), red);
 		}
-		*/
+
 		cv::imshow("TH10", m_buffer.m_data);
 		cv::waitKey(1);
 #endif
@@ -745,35 +732,6 @@ namespace th
 			m_input.keyRelease(KEY_LEFT);
 			m_input.keyPress(KEY_RIGHT);
 			break;
-		}
-	}
-
-	void TH10Bot::pause()
-	{
-		if (!m_pause)
-		{
-			m_input.keyRelease(KEY_LSHIFT);
-			m_input.keyRelease(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
-			m_input.keyRelease(KEY_Z);
-			m_input.keyRelease(KEY_X);
-			m_input.keyPress(KEY_ESC);
-			std::this_thread::sleep_for(std::chrono::milliseconds(17));
-			m_input.keyRelease(KEY_ESC);
-			m_pause = true;
-		}
-	}
-
-	void TH10Bot::resume()
-	{
-		if (m_pause)
-		{
-			m_input.keyPress(KEY_ESC);
-			std::this_thread::sleep_for(std::chrono::milliseconds(17));
-			m_input.keyRelease(KEY_ESC);
-			m_pause = false;
 		}
 	}
 }

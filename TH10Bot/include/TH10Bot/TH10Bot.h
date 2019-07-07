@@ -64,8 +64,6 @@ namespace th
 		float_t getGobackScore(const Player& player);
 
 		void move(Direction dir, bool slow);
-		void pause();
-		void resume();
 
 		Process m_process;
 		Window m_window;
@@ -78,7 +76,6 @@ namespace th
 		TH10Reader m_reader;
 
 		bool m_active;
-		bool m_pause;
 		Clock m_clock;
 
 		Player m_player;

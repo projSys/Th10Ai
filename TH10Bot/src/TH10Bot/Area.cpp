@@ -180,7 +180,7 @@ namespace th
 		return false;
 	}
 
-	void Area::renderTo(cv::Mat& buffer, const Player& player)
+	void Area::render(cv::Mat& buffer, const Player& player)
 	{
 		if (m_first == nullptr && m_second == nullptr)
 		{
@@ -221,8 +221,8 @@ namespace th
 		}
 
 		if (m_first != nullptr)
-			m_first->renderTo(buffer, player);
+			m_first->render(buffer, player);
 		if (m_second != nullptr)
-			m_second->renderTo(buffer, player);
+			m_second->render(buffer, player);
 	}
 }
