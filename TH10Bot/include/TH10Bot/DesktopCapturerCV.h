@@ -9,7 +9,7 @@ namespace th
 		public DesktopCapturerGPU
 	{
 	public:
-		DesktopCapturerCV();
+		DesktopCapturerCV(Direct3D& d3d);
 
 	private:
 		cv::ocl::Context m_oclContext;

@@ -6,6 +6,7 @@
 #include <GraphCap/GraphCap.h>
 #include <GraphCap/D3D9FrameSync.h>
 #include <GraphCap/DI8Input.h>
+#include <GraphCap/Direct3D.h>
 
 #include "TH10Bot/DesktopCapturerCV.h"
 #include "TH10Bot/DesktopImageCV.h"
@@ -70,6 +71,7 @@ namespace th
 		GraphCap m_graphCap;
 		D3D9FrameSync m_frameSync;
 		DI8Input m_input;
+		Direct3D m_d3d;
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_buffer;
 

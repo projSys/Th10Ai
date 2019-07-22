@@ -15,6 +15,7 @@ namespace th
 		m_process(Process::FindIdByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
 		m_graphCap(m_window, GC_D3D9FRAMESYNC | GC_DI8HOOK),
+		m_capturer(m_d3d),
 		m_reader(m_process),
 		m_active(false),
 		m_itemId(-1),
