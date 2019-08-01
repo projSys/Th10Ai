@@ -1,0 +1,8 @@
+LIBRARY GraphHook
+EXPORTS
+g_window DATA
+g_threadId DATA
+g_hook DATA
+g_succeeded DATA
+Hook
+Unhook
