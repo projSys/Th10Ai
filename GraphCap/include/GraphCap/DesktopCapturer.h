@@ -19,7 +19,6 @@ namespace gc
 		virtual ~DesktopCapturer() = default;
 
 		bool capture(DesktopImage& image, const Rect& rect, time_t timeout = 17);
-
 		Size getDesktopSize() const;
 
 	protected:

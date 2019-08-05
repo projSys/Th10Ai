@@ -45,7 +45,7 @@ namespace gc
 	void DI8Input::keyClear(Key key)
 	{
 		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str(u8"错误的参数。"));
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
 
 		m_keyState[KEY_MAP[key]] = KS_NONE;
 	}
@@ -53,7 +53,7 @@ namespace gc
 	void DI8Input::keyPress(Key key)
 	{
 		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str(u8"错误的参数。"));
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
 
 		m_keyState[KEY_MAP[key]] = KS_PRESS;
 	}
@@ -61,7 +61,7 @@ namespace gc
 	void DI8Input::keyRelease(Key key)
 	{
 		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str(u8"错误的参数。"));
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
 
 		m_keyState[KEY_MAP[key]] = KS_RELEASE;
 	}
@@ -69,7 +69,7 @@ namespace gc
 	bool DI8Input::isKeyPressed(Key key) const
 	{
 		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str(u8"错误的参数。"));
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
 
 		return m_keyState[KEY_MAP[key]] == KS_PRESS;
 	}

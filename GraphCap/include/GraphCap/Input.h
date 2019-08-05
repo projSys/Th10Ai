@@ -27,7 +27,22 @@ namespace gc
 	enum KeyState
 	{
 		KS_NONE,
+
 		KS_PRESS,
-		KS_RELEASE
+		KS_RELEASE,
+
+		KS_MAXCOUNT
+	};
+
+	enum Mouse
+	{
+		MOUSE_NONE,
+
+		MOUSE_LEFT,
+		MOUSE_RIGHT,
+		MOUSE_MIDDLE,
+		MOUSE_X,
+
+		MOUSE_MAXCOUNT
 	};
 }

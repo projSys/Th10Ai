@@ -3,14 +3,11 @@
 
 namespace gc
 {
-	const WORD DesktopInput::KEY_MAP1[KEY_MAXCOUNT] =
+	const WORD DesktopInput::KEY_MAP[KEY_MAXCOUNT] =
 	{
 		0,
 
-		VK_ESCAPE,
-
-		VK_F1, VK_F2, VK_F3, VK_F4, VK_F5, VK_F6, VK_F7, VK_F8, VK_F9, VK_F10,
-		VK_F11, VK_F12,
+		VK_ESCAPE, VK_F1, VK_F2, VK_F3, VK_F4, VK_F5, VK_F6, VK_F7, VK_F8, VK_F9, VK_F10, VK_F11, VK_F12,
 
 		'1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
 
@@ -23,14 +20,11 @@ namespace gc
 		VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT
 	};
 
-	const WORD DesktopInput::KEY_MAP2[KEY_MAXCOUNT] =
+	const int DesktopInput::IS_KEY_PRESSED_MAP[KEY_MAXCOUNT] =
 	{
 		0,
 
-		VK_ESCAPE,
-
-		VK_F1, VK_F2, VK_F3, VK_F4, VK_F5, VK_F6, VK_F7, VK_F8, VK_F9, VK_F10,
-		VK_F11, VK_F12,
+		VK_ESCAPE, VK_F1, VK_F2, VK_F3, VK_F4, VK_F5, VK_F6, VK_F7, VK_F8, VK_F9, VK_F10, VK_F11, VK_F12,
 
 		'1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
 
@@ -43,15 +37,45 @@ namespace gc
 		VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT
 	};
 
+	const DWORD DesktopInput::MOUSE_PRESS_MAP[MOUSE_MAXCOUNT] =
+	{
+		0,
+
+		MOUSEEVENTF_LEFTDOWN,
+		MOUSEEVENTF_RIGHTDOWN,
+		MOUSEEVENTF_MIDDLEDOWN,
+		MOUSEEVENTF_XDOWN
+	};
+
+	const DWORD DesktopInput::MOUSE_RELEASE_MAP[MOUSE_MAXCOUNT] =
+	{
+		0,
+
+		MOUSEEVENTF_LEFTUP,
+		MOUSEEVENTF_RIGHTUP,
+		MOUSEEVENTF_MIDDLEUP,
+		MOUSEEVENTF_XUP
+	};
+
+	const int DesktopInput::IS_MOUSE_PRESSED_MAP[MOUSE_MAXCOUNT] =
+	{
+		0,
+
+		VK_LBUTTON,
+		VK_RBUTTON,
+		VK_MBUTTON,
+		VK_XBUTTON1
+	};
+
 	void DesktopInput::keyPress(Key key)
 	{
 		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str(u8"错误的参数。"));
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
 
 		INPUT input = {};
 		input.type = INPUT_KEYBOARD;
-		input.ki.wVk = KEY_MAP1[key];
-		input.ki.wScan = MapVirtualKey(KEY_MAP1[key], MAPVK_VK_TO_VSC);
+		input.ki.wVk = KEY_MAP[key];
+		input.ki.wScan = MapVirtualKey(KEY_MAP[key], MAPVK_VK_TO_VSC);
 		//input.ki.dwFlags = KEYEVENTF_SCANCODE;
 		UINT ret = SendInput(1, &input, sizeof(input));
 		if (ret != 1)
@@ -61,12 +85,12 @@ namespace gc
 	void DesktopInput::keyRelease(Key key)
 	{
 		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str(u8"错误的参数。"));
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
 
 		INPUT input = {};
 		input.type = INPUT_KEYBOARD;
-		input.ki.wVk = KEY_MAP1[key];
-		input.ki.wScan = MapVirtualKey(KEY_MAP1[key], MAPVK_VK_TO_VSC);
+		input.ki.wVk = KEY_MAP[key];
+		input.ki.wScan = MapVirtualKey(KEY_MAP[key], MAPVK_VK_TO_VSC);
 		input.ki.dwFlags = /*KEYEVENTF_SCANCODE | */KEYEVENTF_KEYUP;
 		UINT ret = SendInput(1, &input, sizeof(input));
 		if (ret != 1)
@@ -76,49 +100,43 @@ namespace gc
 	bool DesktopInput::isKeyPressed(Key key) const
 	{
 		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str(u8"错误的参数。"));
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
 
-		return (GetAsyncKeyState(KEY_MAP2[key]) & 0x8000);
+		return (GetAsyncKeyState(IS_KEY_PRESSED_MAP[key]) & 0x8000) != 0;
 	}
 
-	void DesktopInput::mouseLeftPress()
+	void DesktopInput::mousePress(Mouse mouse)
 	{
+		if (!(mouse > MOUSE_NONE && mouse < MOUSE_MAXCOUNT))
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
+
 		INPUT input = {};
 		input.type = INPUT_MOUSE;
-		input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+		input.mi.dwFlags = MOUSE_PRESS_MAP[mouse];
 		UINT ret = SendInput(1, &input, sizeof(input));
 		if (ret != 1)
 			THROW_WINDOWS_ERROR(GetLastError());
 	}
 
-	void DesktopInput::mouseLeftRelease()
+	void DesktopInput::mouseRelease(Mouse mouse)
 	{
+		if (!(mouse > MOUSE_NONE && mouse < MOUSE_MAXCOUNT))
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
+
 		INPUT input = {};
 		input.type = INPUT_MOUSE;
-		input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+		input.mi.dwFlags = MOUSE_RELEASE_MAP[mouse];
 		UINT ret = SendInput(1, &input, sizeof(input));
 		if (ret != 1)
 			THROW_WINDOWS_ERROR(GetLastError());
 	}
 
-	void DesktopInput::mouseRightPress()
+	bool DesktopInput::isMousePressed(Mouse mouse) const
 	{
-		INPUT input = {};
-		input.type = INPUT_MOUSE;
-		input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
-		UINT ret = SendInput(1, &input, sizeof(input));
-		if (ret != 1)
-			THROW_WINDOWS_ERROR(GetLastError());
-	}
+		if (!(mouse > MOUSE_NONE && mouse < MOUSE_MAXCOUNT))
+			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
 
-	void DesktopInput::mouseRightRelease()
-	{
-		INPUT input = {};
-		input.type = INPUT_MOUSE;
-		input.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
-		UINT ret = SendInput(1, &input, sizeof(input));
-		if (ret != 1)
-			THROW_WINDOWS_ERROR(GetLastError());
+		return (GetAsyncKeyState(IS_MOUSE_PRESSED_MAP[mouse]) & 0x8000) != 0;
 	}
 
 	Point DesktopInput::getMousePos() const
