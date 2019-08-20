@@ -10,6 +10,8 @@ namespace gc
 
 	struct D3D9FSSharedData
 	{
+		bip::interprocess_mutex endSceneMutex;
+		bip::interprocess_condition endSceneCond;
 		bip::interprocess_mutex presentMutex;
 		bip::interprocess_condition presentCond;
 	};
@@ -19,6 +21,7 @@ namespace gc
 	public:
 		D3D9FrameSync();
 
+		bool waitForEndScene(time_t timeout = 17);
 		bool waitForPresent(time_t timeout = 17);
 
 	private:

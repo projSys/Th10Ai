@@ -16,6 +16,13 @@ namespace gc
 			THROW_BASE_EXCEPTION(Exception() << err_str("D3D9FSSharedData not found."));
 	}
 
+	bool D3D9FrameSync::waitForEndScene(time_t timeout)
+	{
+		bpt::ptime absTime = bpt::microsec_clock::universal_time() + bpt::milliseconds(timeout);
+		bip::scoped_lock<bip::interprocess_mutex> lock(m_data->endSceneMutex);
+		return m_data->endSceneCond.timed_wait(lock, absTime);
+	}
+
 	bool D3D9FrameSync::waitForPresent(time_t timeout)
 	{
 		bpt::ptime absTime = bpt::microsec_clock::universal_time() + bpt::milliseconds(timeout);

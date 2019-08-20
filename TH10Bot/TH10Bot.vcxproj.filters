@@ -27,9 +27,6 @@
     <ClInclude Include="include\TH10Bot\Common.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\Define.h">
-      <Filter>头文件\TH10Bot</Filter>
-    </ClInclude>
     <ClInclude Include="include\TH10Bot\TH10Bot.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
@@ -70,6 +67,9 @@
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\TH10Bot\Player.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Direction.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
   </ItemGroup>

@@ -114,7 +114,7 @@ namespace th
 			return;
 		}
 #if PLAY
-		if (!m_frameSync.waitForPresent())
+		if (!m_frameSync.waitForEndScene())
 		{
 			std::cout << "等待帧同步超时。" << std::endl;
 			return;

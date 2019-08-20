@@ -65,6 +65,7 @@ namespace gh
 			THROW_DIRECTX_HRESULT(hr);
 
 		uint_t* vtable = (uint_t*)(*((uint_t*)device.p));
+		m_endSceneFunc = HookFunc<EndScene_t>(reinterpret_cast<LPVOID>(vtable[42]), &D3D9FrameSync::EndSceneHook);
 		m_presentFunc = HookFunc<Present_t>(reinterpret_cast<LPVOID>(vtable[17]), &D3D9FrameSync::PresentHook);
 	}
 
@@ -73,11 +74,33 @@ namespace gh
 		m_memory.destroy<D3D9FSSharedData>("D3D9FSSharedData");
 	}
 
+	HRESULT D3D9FrameSync::EndSceneHook(IDirect3DDevice9* device)
+	{
+		D3D9FrameSync& d3d9FrameSync = D3D9FrameSync::GetInstance();
+		return d3d9FrameSync.endSceneHook(device);
+	}
+
 	HRESULT D3D9FrameSync::PresentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
 		D3D9FrameSync& d3d9FrameSync = D3D9FrameSync::GetInstance();
 		return d3d9FrameSync.presentHook(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
+	}
+
+	HRESULT D3D9FrameSync::endSceneHook(IDirect3DDevice9* device)
+	{
+		try
+		{
+			bip::scoped_lock<bip::interprocess_mutex> lock(m_data->endSceneMutex);
+			m_data->endSceneCond.notify_one();
+		}
+		catch (...)
+		{
+			//std::string what = boost::current_exception_diagnostic_information();
+			//BOOST_LOG_TRIVIAL(error) << what;
+		}
+
+		return m_endSceneFunc(device);
 	}
 
 	HRESULT D3D9FrameSync::presentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,

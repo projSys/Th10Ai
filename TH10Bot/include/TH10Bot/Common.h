@@ -18,4 +18,4 @@ namespace th
 
 #include <iostream>
 
-#include "TH10Bot/Define.h"
+#include "TH10Bot/Direction.h"
