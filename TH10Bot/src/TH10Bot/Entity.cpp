@@ -29,7 +29,8 @@ namespace th
 		DIR_RIGHT		// 360
 	};
 
-	float_t Entity::GetDist(const Pointf& A, const Pointf& B)
+	// 勾股定理
+	float_t Entity::CalcDistance(const Pointf& A, const Pointf& B)
 	{
 		float_t dx = A.x - B.x;
 		float_t dy = A.y - B.y;
@@ -37,11 +38,11 @@ namespace th
 	}
 
 	// 余弦定理
-	float_t Entity::GetAngle(const Pointf& A, const Pointf& B, const Pointf& C)
+	float_t Entity::CalcAngle(const Pointf& A, const Pointf& B, const Pointf& C)
 	{
-		float_t AB = GetDist(A, B);
-		float_t AC = GetDist(A, C);
-		float_t BC = GetDist(B, C);
+		float_t AB = CalcDistance(A, B);
+		float_t AC = CalcDistance(A, C);
+		float_t BC = CalcDistance(B, C);
 		if (AB == 0.0f || AC == 0.0f)
 			return -1.0f;
 
@@ -66,13 +67,13 @@ namespace th
 	{
 	}
 
-	float_t Entity::getDist(const Pointf& pos) const
+	float_t Entity::calcDistance(const Pointf& pos) const
 	{
-		return GetDist(getPos(), pos);
+		return CalcDistance(getPosition(), pos);
 	}
 
 	// 点与前进方向的垂足
-	std::pair<Pointf, float_t> Entity::getFootPoint(const Pointf& pos) const
+	std::pair<Pointf, float_t> Entity::calcFootPoint(const Pointf& pos) const
 	{
 		if (isHolded())
 			return std::make_pair(Pointf(x, y), 0.0f);
@@ -82,21 +83,21 @@ namespace th
 		return std::make_pair(Pointf(x + dx * frame, y + dy * frame), frame);
 	}
 
-	float_t Entity::getAngle(const Pointf& pos) const
+	float_t Entity::calcAngle(const Pointf& pos) const
 	{
-		if (isHolded() || getPos() == pos)
+		if (isHolded() || getPosition() == pos)
 			return -1.0f;
 
-		return GetAngle(getPos(), getNextPos(), pos);
+		return CalcAngle(getPosition(), getNextPos(), pos);
 	}
 
-	Direction Entity::getDir() const
+	Direction Entity::calcDirection() const
 	{
 		if (isHolded())
 			return DIR_HOLD;
 
 		// 前进方向与X轴正方向的角度
-		float_t angle = GetAngle(getPos(), getNextPos(), Pointf(x + 100.0f, y));
+		float_t angle = CalcAngle(getPosition(), getNextPos(), Pointf(x + 100.0f, y));
 		if (dy > 0.0f)	// 转换成360度
 			angle = 360.0f - angle;
 
@@ -106,13 +107,13 @@ namespace th
 		return SECTOR_TO_DIR[sector];
 	}
 
-	Direction Entity::getDir(const Pointf& pos) const
+	Direction Entity::calcDirection(const Pointf& pos) const
 	{
-		if (getPos() == pos)
+		if (getPosition() == pos)
 			return DIR_HOLD;
 
 		// pos与X轴正方向的角度
-		float_t angle = GetAngle(getPos(), pos, Pointf(x + 100.0f, y));
+		float_t angle = CalcAngle(getPosition(), pos, Pointf(x + 100.0f, y));
 		if (pos.y > y)	// 转换成360度
 			angle = 360.0f - angle;
 
@@ -136,21 +137,21 @@ namespace th
 
 	std::pair<bool, float_t> Entity::willCollideWith(const Entity& other) const
 	{
-		std::pair<Pointf, float_t> footPoint = getFootPoint(other.getPos());
+		std::pair<Pointf, float_t> footPoint = calcFootPoint(other.getPosition());
 		Entity temp = *this;
-		temp.setPos(footPoint.first);
+		temp.setPosition(footPoint.first);
 		if (temp.collide(other))
 			return std::make_pair(true, footPoint.second);
 		else
 			return std::make_pair(false, 0.0f);
 	}
 
-	Pointf Entity::getPos() const
+	Pointf Entity::getPosition() const
 	{
 		return Pointf(x, y);
 	}
 
-	void Entity::setPos(const Pointf& pos)
+	void Entity::setPosition(const Pointf& pos)
 	{
 		x = pos.x;
 		y = pos.y;

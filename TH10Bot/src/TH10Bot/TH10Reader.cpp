@@ -8,7 +8,7 @@ namespace th
 	{
 	}
 
-	bool TH10Reader::getPlayer(Player& player) noexcept
+	bool TH10Reader::readPlayer(Player& player) noexcept
 	{
 		player = {};
 
@@ -52,7 +52,7 @@ namespace th
 		return true;
 	}
 
-	bool TH10Reader::getItems(std::vector<Item>& items) noexcept
+	bool TH10Reader::readItems(std::vector<Item>& items) noexcept
 	{
 		items.clear();
 
@@ -97,7 +97,7 @@ namespace th
 		return true;
 	}
 
-	bool TH10Reader::getEnemies(std::vector<Enemy>& enemies) noexcept
+	bool TH10Reader::readEnemies(std::vector<Enemy>& enemies) noexcept
 	{
 		enemies.clear();
 
@@ -142,7 +142,7 @@ namespace th
 		return true;
 	}
 
-	bool TH10Reader::getBullets(std::vector<Bullet>& bullets) noexcept
+	bool TH10Reader::readBullets(std::vector<Bullet>& bullets) noexcept
 	{
 		bullets.clear();
 
@@ -188,7 +188,7 @@ namespace th
 		return true;
 	}
 
-	bool TH10Reader::getLasers(std::vector<Laser>& lasers) noexcept
+	bool TH10Reader::readLasers(std::vector<Laser>& lasers) noexcept
 	{
 		lasers.clear();
 

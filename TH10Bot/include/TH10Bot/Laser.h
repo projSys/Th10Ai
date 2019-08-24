@@ -31,11 +31,11 @@ namespace th
 		float_t arc;
 	};
 
-	class SATBox
+	class SatBox
 	{
 	public:
 		static Pointf Rotate(const Pointf& P, const Pointf& C, float_t radianC);
-		static bool Collide(float_t c1, float_t s1, float_t c2, float_t s2);
+		static bool Collide(float_t p1, float_t s1, float_t p2, float_t s2);
 
 		Pointf topLeft;
 		Pointf topRight;
@@ -44,7 +44,7 @@ namespace th
 	};
 
 	class LaserBox :
-		public SATBox
+		public SatBox
 	{
 	public:
 		LaserBox(const Laser& laser);
@@ -53,7 +53,7 @@ namespace th
 	};
 
 	class EntityBox :
-		public SATBox
+		public SatBox
 	{
 	public:
 		EntityBox(const Entity& entity, const Laser& laser);

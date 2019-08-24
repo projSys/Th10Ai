@@ -23,7 +23,7 @@ namespace gc
 
 	protected:
 		virtual bool doCapture(DesktopImage& image, const Rect& rect,
-			CComPtr<ID3D11Texture2D> acquiredDesktopImage)/* = 0*/; // Python无法导出
+			CComPtr<ID3D11Texture2D> acquiredDesktopImage) = 0;
 
 		CComPtr<ID3D11Device> m_device;
 		CComPtr<ID3D11DeviceContext> m_deviceContext;

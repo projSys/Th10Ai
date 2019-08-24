@@ -12,24 +12,24 @@ namespace th
 	class Entity
 	{
 	public:
-		static float_t GetDist(const Pointf& A, const Pointf& B);
-		static float_t GetAngle(const Pointf& A, const Pointf& B, const Pointf& C);
+		static float_t CalcDistance(const Pointf& A, const Pointf& B);
+		static float_t CalcAngle(const Pointf& A, const Pointf& B, const Pointf& C);
 
 		Entity();
 		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
 
-		float_t getDist(const Pointf& pos) const;
-		std::pair<Pointf, float_t> getFootPoint(const Pointf& pos) const;
-		float_t getAngle(const Pointf& pos) const;
-		Direction getDir() const;
-		Direction getDir(const Pointf& pos) const;
+		float_t calcDistance(const Pointf& pos) const;
+		std::pair<Pointf, float_t> calcFootPoint(const Pointf& pos) const;
+		float_t calcAngle(const Pointf& pos) const;
+		Direction calcDirection() const;
+		Direction calcDirection(const Pointf& pos) const;
 
 		void advance(float_t frame);
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 
-		Pointf getPos() const;
-		void setPos(const Pointf& pos);
+		Pointf getPosition() const;
+		void setPosition(const Pointf& pos);
 		Pointf getTopLeft() const;
 		Pointf getTopRight() const;
 		Pointf getBottomLeft() const;

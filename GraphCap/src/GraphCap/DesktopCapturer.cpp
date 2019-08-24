@@ -74,13 +74,6 @@ namespace gc
 		return doCapture(image, rect, acquiredDesktopImage);
 	}
 
-	bool DesktopCapturer::doCapture(DesktopImage& image, const Rect& rect,
-		CComPtr<ID3D11Texture2D> acquiredDesktopImage)
-	{
-		THROW_BASE_EXCEPTION(Exception() << err_str("Unimplemented function."));
-		return false;
-	}
-
 	Size DesktopCapturer::getDesktopSize() const
 	{
 		return Size(m_outputDesc.DesktopCoordinates.right - m_outputDesc.DesktopCoordinates.left,

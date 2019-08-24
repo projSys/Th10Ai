@@ -20,11 +20,12 @@ namespace th
 		return true;
 	}
 
+	// 大概应该没有问题吧？
 	std::pair<bool, float_t> Laser::willCollideWith(const Entity& other) const
 	{
-		std::pair<Pointf, float_t> footPoint = getFootPoint(other.getPos());
+		std::pair<Pointf, float_t> footPoint = calcFootPoint(other.getPosition());
 		Laser temp = *this;
-		temp.setPos(footPoint.first);
+		temp.setPosition(footPoint.first);
 		if (temp.collide(other))
 			return std::make_pair(true, footPoint.second);
 		else
@@ -59,7 +60,7 @@ namespace th
 	// 平面中，一个点(x, y)绕任意点(cx, cy)逆时针旋转a度后的坐标
 	// xx = (x - cx) * cos(a) - (y - cy) * sin(a) + cx;
 	// yy = (x - cx) * sin(a) + (y - cy) * cos(a) + cy;
-	Pointf SATBox::Rotate(const Pointf& P, const Pointf& C, float_t radianC)
+	Pointf SatBox::Rotate(const Pointf& P, const Pointf& C, float_t radianC)
 	{
 		float_t dx = P.x - C.x;
 		float_t dy = P.y - C.y;
@@ -68,14 +69,14 @@ namespace th
 		return Pointf(dx * cosC - dy * sinC + C.x, dx * sinC + dy * cosC + C.y);
 	}
 
-	bool SATBox::Collide(float_t c1, float_t s1, float_t c2, float_t s2)
+	bool SatBox::Collide(float_t p1, float_t s1, float_t p2, float_t s2)
 	{
-		return std::abs(c1 - c2) < (s1 + s2) / 2.0f;
+		return std::abs(p1 - p2) < (s1 + s2) / 2.0f;
 	}
 
 	LaserBox::LaserBox(const Laser& laser)
 	{
-		Pointf C = laser.getPos();
+		Pointf C = laser.getPosition();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
 		topLeft = Rotate(laser.getTopLeft(), C, radianC);
@@ -107,7 +108,7 @@ namespace th
 	// 反向旋转画布，即把激光转回来，再反向旋转自机坐标
 	EntityBox::EntityBox(const Entity& entity, const Laser& laser)
 	{
-		Pointf C = laser.getPos();
+		Pointf C = laser.getPosition();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
 		topLeft = Rotate(entity.getTopLeft(), C, -radianC);

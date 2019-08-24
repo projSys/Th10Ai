@@ -131,11 +131,11 @@ namespace th
 
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
-		m_reader.getPlayer(m_player);
-		m_reader.getItems(m_items);
-		m_reader.getEnemies(m_enemies);
-		m_reader.getBullets(m_bullets);
-		m_reader.getLasers(m_lasers);
+		m_reader.readPlayer(m_player);
+		m_reader.readItems(m_items);
+		m_reader.readEnemies(m_enemies);
+		m_reader.readBullets(m_bullets);
+		m_reader.readLasers(m_lasers);
 
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
@@ -202,7 +202,7 @@ namespace th
 			cv::rectangle(m_buffer.m_data, rect, red, -1);
 
 			// 显示垂足
-			//FootPoint footPoint = bullet.getFootPoint(m_player.getPos());
+			//FootPoint footPoint = bullet.getFootPoint(m_player.getPosition());
 			//Pointi p1 = Scene::ToWindowPos(bullet.getPos());
 			//Pointi p2 = Scene::ToWindowPos(Pointf(footPoint.x, footPoint.y));
 			//Pointi p3 = Scene::ToWindowPos(m_player.getPos());
@@ -320,7 +320,7 @@ namespace th
 		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
 			Action action;
-			action.fromPos = m_player.getPos();
+			action.fromPos = m_player.getPosition();
 			action.fromDir = static_cast<Direction>(i);
 			action.slowFirst = (m_itemId == -1 && underEnemy);
 			action.frame = 1.0f;
@@ -331,13 +331,13 @@ namespace th
 			m_bestSlow = false;
 			m_count = 0;
 
-			Result result = dfs(action);
+			Reward reward = dfs(action);
 
-			if (result.valid && m_bestScore > bestScore)
+			if (reward.valid && m_bestScore > bestScore)
 			{
 				bestScore = m_bestScore;
 				bestDir = action.fromDir;
-				bestSlow = result.slow;
+				bestSlow = reward.slow;
 			}
 		}
 
@@ -354,84 +354,84 @@ namespace th
 		return true;
 	}
 
-	Result TH10Bot::dfs(const Action& action)
+	Reward TH10Bot::dfs(const Action& action)
 	{
-		Result result;
-		result.valid = false;
-		result.slow = false;
-		result.score = 0.0f;
-		result.size = 0;
+		Reward reward;
+		reward.valid = false;
+		reward.slow = false;
+		reward.score = 0.0f;
+		reward.size = 0;
 
 		// 超过搜索节点限制
 		++m_count;
 		if (m_count >= m_limit)
-			return result;
+			return reward;
 
 		// 前进到下一个坐标
 		Player temp = m_player;
-		temp.setPos(action.fromPos);
+		temp.setPosition(action.fromPos);
 		temp.advance(action.fromDir, action.slowFirst);
-		result.slow = action.slowFirst;
-		if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
+		reward.slow = action.slowFirst;
+		if (!Scene::IsInPlayerArea(temp.getPosition()) || m_scene.collideAll(temp, action.frame))
 		{
-			temp.setPos(action.fromPos);
+			temp.setPosition(action.fromPos);
 			temp.advance(action.fromDir, !action.slowFirst);
-			result.slow = !action.slowFirst;
-			if (!Scene::IsInPlayerArea(temp.getPos()) || m_scene.collideAll(temp, action.frame))
-				return result;
+			reward.slow = !action.slowFirst;
+			if (!Scene::IsInPlayerArea(temp.getPosition()) || m_scene.collideAll(temp, action.frame))
+				return reward;
 		}
 
-		result.valid = true;
+		reward.valid = true;
 
 		if (m_itemId != -1)
 		{
-			result.score += getCollectItemScore(temp);
+			reward.score += calcCollectItemScore(temp);
 		}
 		else if (m_enemyId != -1)
 		{
-			result.score += getShootEnemyScore(temp);
+			reward.score += calcShootEnemyScore(temp);
 		}
 		else
 		{
-			result.score += getGobackScore(temp);
+			reward.score += calcGobackScore(temp);
 		}
 
-		if (result.score > m_bestScore)
+		if (reward.score > m_bestScore)
 		{
-			m_bestScore = result.score;
+			m_bestScore = reward.score;
 		}
 
 		Mover mover(action.targetDir);
-		result.size = mover.getSize();
+		reward.size = mover.getSize();
 		while (mover.hasNext())
 		{
 			Direction dir = mover.next();
 
 			Action nextAct;
-			nextAct.fromPos = temp.getPos();
+			nextAct.fromPos = temp.getPosition();
 			nextAct.fromDir = dir;
 			nextAct.slowFirst = action.slowFirst;
 			nextAct.frame = action.frame + 1.0f;
 			nextAct.targetDir = action.targetDir;
 
-			Result nextRes = dfs(nextAct);
+			Reward nextRew = dfs(nextAct);
 
 			if (m_count >= m_limit)
 			{
 				break;
 			}
 
-			if (!nextRes.valid)
+			if (!nextRew.valid)
 			{
-				result.size -= 1;
+				reward.size -= 1;
 				continue;
 			}
 		}
 		// 没气了，当前节点也无效
-		if (result.size <= 0)
-			result.valid = false;
+		if (reward.size <= 0)
+			reward.valid = false;
 
-		return result;
+		return reward;
 	}
 
 	bool TH10Bot::isUnderEnemy()
@@ -451,7 +451,7 @@ namespace th
 		return underEnemy;
 	}
 
-	//NodeScore TH10Bot::getNodeScore(const Player& player, float_t frame)
+	//NodeScore TH10Bot::calcNodeScore(const Player& player, float_t frame)
 	//{
 	//	NodeScore score = { 0.0f, std::numeric_limits<float_t>::max(), DIR_NONE, 0 };
 
@@ -520,7 +520,7 @@ namespace th
 			bool tooClose = false;
 			for (const Enemy& enemy : m_enemies)
 			{
-				if (item.getDist(enemy.getPos()) < 60.0f)
+				if (item.calcDistance(enemy.getPosition()) < 60.0f)
 				{
 					tooClose = true;
 					break;
@@ -530,7 +530,7 @@ namespace th
 				continue;
 
 			// 道具与自机距离最近
-			float_t dist = item.getDist(m_player.getPos());
+			float_t dist = item.calcDistance(m_player.getPosition());
 			if (dist < minDist)
 			{
 				minDist = dist;
@@ -574,7 +574,7 @@ namespace th
 	}
 
 	// 拾取道具评分
-	float_t TH10Bot::getCollectItemScore(const Player& player)
+	float_t TH10Bot::calcCollectItemScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
@@ -583,7 +583,7 @@ namespace th
 
 		const Item& item = m_items[m_itemId];
 
-		if (player.getDist(item.getPos()) < 10.0f)
+		if (player.calcDistance(item.getPosition()) < 10.0f)
 		{
 			score += 300.0f;
 		}
@@ -604,7 +604,7 @@ namespace th
 	}
 
 	// 攻击敌人评分
-	float_t TH10Bot::getShootEnemyScore(const Player& player)
+	float_t TH10Bot::calcShootEnemyScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
@@ -642,11 +642,11 @@ namespace th
 		return score;
 	}
 
-	float_t TH10Bot::getGobackScore(const Player& player)
+	float_t TH10Bot::calcGobackScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
-		if (player.getDist(Player::INIT_POS) < 10.0f)
+		if (player.calcDistance(Player::INIT_POS) < 10.0f)
 		{
 			score += 30.0f;
 		}

@@ -30,7 +30,7 @@ namespace th
 		Direction targetDir;
 	};
 
-	struct Result
+	struct Reward
 	{
 		bool valid;
 		bool slow;		// 实际是否慢速
@@ -55,14 +55,14 @@ namespace th
 		bool handleTalk();
 		bool handleShoot();
 		bool handleMove();
-		Result dfs(const Action& action);
+		Reward dfs(const Action& action);
 		bool isUnderEnemy();
-		//NodeScore getNodeScore(const Player& player, float_t frame);
+		//NodeScore calcNodeScore(const Player& player, float_t frame);
 		int_t findItem();
 		int_t findEnemy();
-		float_t getCollectItemScore(const Player& player);
-		float_t getShootEnemyScore(const Player& player);
-		float_t getGobackScore(const Player& player);
+		float_t calcCollectItemScore(const Player& player);
+		float_t calcShootEnemyScore(const Player& player);
+		float_t calcGobackScore(const Player& player);
 
 		void move(Direction dir, bool slow);
 

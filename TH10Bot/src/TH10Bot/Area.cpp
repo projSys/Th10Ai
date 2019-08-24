@@ -56,7 +56,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = enemy.willCollideWith(*this);
-				if (ret.first && ret.second >= 0.0f && ret.second <= 600.0f)
+				if (ret.first /*&& ret.second >= -60.0f && ret.second <= 600.0f*/)
 					m_enemies.push_back(enemy);
 			}
 		}
@@ -80,7 +80,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = bullet.willCollideWith(*this);
-				if (ret.first && ret.second >= 0.0f && ret.second <= 600.0f)
+				if (ret.first /*&& ret.second >= -60.0f && ret.second <= 600.0f*/)
 					m_bullets.push_back(bullet);
 			}
 		}
@@ -104,7 +104,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = laser.willCollideWith(*this);
-				if (ret.first && ret.second >= 0.0f && ret.second <= 600.0f)
+				if (ret.first /*&& ret.second >= -60.0f && ret.second <= 600.0f*/)
 					m_lasers.push_back(laser);
 			}
 		}

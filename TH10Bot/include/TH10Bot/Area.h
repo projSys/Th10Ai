@@ -13,7 +13,7 @@
 namespace th
 {
 	class Area :
-		public Entity
+		private Entity
 	{
 	public:
 		Area(float_t x0, float_t y0, float_t width0, float_t height0);

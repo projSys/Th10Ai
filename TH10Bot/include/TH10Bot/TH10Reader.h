@@ -17,11 +17,11 @@ namespace th
 	public:
 		TH10Reader(Process& process);
 
-		bool getPlayer(Player& player) noexcept;
-		bool getItems(std::vector<Item>& items) noexcept;
-		bool getEnemies(std::vector<Enemy>& enemies) noexcept;
-		bool getBullets(std::vector<Bullet>& bullets) noexcept;
-		bool getLasers(std::vector<Laser>& lasers) noexcept;
+		bool readPlayer(Player& player) noexcept;
+		bool readItems(std::vector<Item>& items) noexcept;
+		bool readEnemies(std::vector<Enemy>& enemies) noexcept;
+		bool readBullets(std::vector<Bullet>& bullets) noexcept;
+		bool readLasers(std::vector<Laser>& lasers) noexcept;
 
 	private:
 		template <typename T>
