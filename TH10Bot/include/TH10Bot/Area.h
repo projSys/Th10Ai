@@ -4,11 +4,11 @@
 #include <memory>
 #include <opencv2/opencv.hpp>
 
-#include "TH10Bot/Entity.h"
-#include "TH10Bot/Player.h"
-#include "TH10Bot/Enemy.h"
-#include "TH10Bot/Bullet.h"
-#include "TH10Bot/Laser.h"
+#include "TH10Bot/Entity/Entity.h"
+#include "TH10Bot/Entity/Player.h"
+#include "TH10Bot/Entity/Enemy.h"
+#include "TH10Bot/Entity/Bullet.h"
+#include "TH10Bot/Entity/Laser.h"
 
 namespace th
 {

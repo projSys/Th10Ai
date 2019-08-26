@@ -1,5 +1,5 @@
 #include "TH10Bot/Common.h"
-#include "TH10Bot/Laser.h"
+#include "TH10Bot/Entity/Laser.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>

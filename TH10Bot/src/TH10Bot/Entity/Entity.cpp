@@ -1,5 +1,5 @@
 #include "TH10Bot/Common.h"
-#include "TH10Bot/Entity.h"
+#include "TH10Bot/Entity/Entity.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>

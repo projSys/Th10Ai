@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TH10Bot/Entity.h"
+#include "TH10Bot/Entity/Entity.h"
 
 namespace th
 {
