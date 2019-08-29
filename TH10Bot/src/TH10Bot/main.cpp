@@ -3,7 +3,7 @@
 #include <memory>
 #include <boost/log/utility/setup/file.hpp>
 
-#include "TH10Bot/TH10Bot.h"
+#include "TH10Bot/Th10Bot.h"
 
 namespace bl = boost::log;
 
@@ -18,7 +18,7 @@ int main()
 		std::string logName = base::Utils::GetModuleDir() + "/TH10Bot.log";
 		bl::add_file_log(logName);
 
-		std::shared_ptr<th::TH10Bot> bot = std::make_shared<th::TH10Bot>();
+		std::shared_ptr<th::Th10Bot> bot = std::make_shared<th::Th10Bot>();
 		bot->run();
 	}
 	catch (...)

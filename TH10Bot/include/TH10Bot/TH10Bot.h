@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <Base/Process.h>
 #include <Base/Window.h>
 #include <GraphCap/GraphCap.h>
@@ -10,12 +9,8 @@
 
 #include "TH10Bot/DesktopCapturerCV.h"
 #include "TH10Bot/DesktopImageCV.h"
-#include "TH10Bot/TH10Reader.h"
-#include "TH10Bot/Entity/Player.h"
-#include "TH10Bot/Entity/Item.h"
-#include "TH10Bot/Entity/Enemy.h"
-#include "TH10Bot/Entity/Bullet.h"
-#include "TH10Bot/Entity/Laser.h"
+#include "TH10Bot/Th10Api.h"
+#include "TH10Bot/Th10Data.h"
 #include "TH10Bot/Scene.h"
 #include "TH10Bot/Clock.h"
 
@@ -38,11 +33,11 @@ namespace th
 		int_t size;
 	};
 
-	class TH10Bot
+	class Th10Bot
 	{
 	public:
-		TH10Bot();
-		~TH10Bot();
+		Th10Bot();
+		~Th10Bot();
 
 		bool isKeyPressed(int vkey) const;
 		void run();
@@ -60,8 +55,8 @@ namespace th
 		//NodeScore calcNodeScore(const Player& player, float_t frame);
 		int_t findItem();
 		int_t findEnemy();
-		float_t calcCollectItemScore(const Player& player);
-		float_t calcShootEnemyScore(const Player& player);
+		float_t calcCollectScore(const Player& player);
+		float_t calcShootScore(const Player& player);
 		float_t calcGobackScore(const Player& player);
 
 		void move(Direction dir, bool slow);
@@ -75,16 +70,11 @@ namespace th
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_buffer;
 
-		TH10Reader m_reader;
+		Th10Api m_api;
+		Th10Data m_data;
 
 		bool m_active;
 		Clock m_clock;
-
-		Player m_player;
-		std::vector<Item> m_items;
-		std::vector<Enemy> m_enemies;
-		std::vector<Bullet> m_bullets;
-		std::vector<Laser> m_lasers;
 
 		Scene m_scene;
 

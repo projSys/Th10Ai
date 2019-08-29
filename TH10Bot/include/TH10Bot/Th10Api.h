@@ -1,29 +1,26 @@
 #pragma once
 
-#include <vector>
 #include <Base/Process.h>
 
-#include "TH10Bot/Entity/Player.h"
-#include "TH10Bot/Entity/Item.h"
-#include "TH10Bot/Entity/Enemy.h"
-#include "TH10Bot/Entity/Bullet.h"
-#include "TH10Bot/Entity/Laser.h"
+#include "TH10Bot/Th10Data.h"
 
 namespace th
 {
 	// https://github.com/binvec/TH10_DataReversing
-	class TH10Reader
+	class Th10Api
 	{
 	public:
-		TH10Reader(Process& process);
+		Th10Api(Process& process);
 
+		void readData(Th10Data& data) noexcept;
+
+	private:
 		bool readPlayer(Player& player) noexcept;
 		bool readItems(std::vector<Item>& items) noexcept;
 		bool readEnemies(std::vector<Enemy>& enemies) noexcept;
 		bool readBullets(std::vector<Bullet>& bullets) noexcept;
 		bool readLasers(std::vector<Laser>& lasers) noexcept;
 
-	private:
 		template <typename T>
 		inline T readMemory(uint_t baseAddress) noexcept
 		{

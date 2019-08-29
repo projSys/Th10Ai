@@ -101,8 +101,9 @@
     <ClInclude Include="include\TH10Bot\Mover.h" />
     <ClInclude Include="include\TH10Bot\Path.h" />
     <ClInclude Include="include\TH10Bot\Scene.h" />
-    <ClInclude Include="include\TH10Bot\TH10Bot.h" />
-    <ClInclude Include="include\TH10Bot\TH10Reader.h" />
+    <ClInclude Include="include\TH10Bot\Th10Api.h" />
+    <ClInclude Include="include\TH10Bot\Th10Bot.h" />
+    <ClInclude Include="include\TH10Bot\Th10Data.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TH10Bot\Area.cpp" />
@@ -119,8 +120,9 @@
     <ClCompile Include="src\TH10Bot\Mover.cpp" />
     <ClCompile Include="src\TH10Bot\Path.cpp" />
     <ClCompile Include="src\TH10Bot\Scene.cpp" />
-    <ClCompile Include="src\TH10Bot\TH10Bot.cpp" />
-    <ClCompile Include="src\TH10Bot\TH10Reader.cpp" />
+    <ClCompile Include="src\TH10Bot\Th10Api.cpp" />
+    <ClCompile Include="src\TH10Bot\Th10Bot.cpp" />
+    <ClCompile Include="src\TH10Bot\Th10Data.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

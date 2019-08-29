@@ -33,12 +33,6 @@
     <ClInclude Include="include\TH10Bot\Common.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\TH10Bot.h">
-      <Filter>头文件\TH10Bot</Filter>
-    </ClInclude>
-    <ClInclude Include="include\TH10Bot\TH10Reader.h">
-      <Filter>头文件\TH10Bot</Filter>
-    </ClInclude>
     <ClInclude Include="include\TH10Bot\DesktopCapturerCV.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
@@ -78,18 +72,21 @@
     <ClInclude Include="include\TH10Bot\Entity\Player.h">
       <Filter>头文件\TH10Bot\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="include\TH10Bot\Th10Bot.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Th10Data.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TH10Bot\Th10Api.h">
+      <Filter>头文件\TH10Bot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\TH10Bot\Clock.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\TH10Bot\main.cpp">
-      <Filter>源文件\TH10Bot</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\TH10Bot.cpp">
-      <Filter>源文件\TH10Bot</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TH10Bot\TH10Reader.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\TH10Bot\DesktopCapturerCV.cpp">
@@ -127,6 +124,15 @@
     </ClCompile>
     <ClCompile Include="src\TH10Bot\Entity\Player.cpp">
       <Filter>源文件\TH10Bot\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Th10Bot.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Th10Data.cpp">
+      <Filter>源文件\TH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TH10Bot\Th10Api.cpp">
+      <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
