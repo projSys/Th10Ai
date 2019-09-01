@@ -23,8 +23,10 @@ namespace gh
 	{
 		bip::interprocess_mutex endSceneMutex;
 		bip::interprocess_condition endSceneCond;
+		bool endSceneReady;
 		bip::interprocess_mutex presentMutex;
 		bip::interprocess_condition presentCond;
+		bool presentReady;
 	};
 
 	class D3D9FrameSync :

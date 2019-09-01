@@ -64,9 +64,9 @@ namespace gh
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
-		uint_t* vtable = (uint_t*)(*((uint_t*)device.p));
-		m_resetFunc = HookFunc<Reset_t>(reinterpret_cast<LPVOID>(vtable[16]), &D3D9Hook::ResetHook);
-		m_presentFunc = HookFunc<Present_t>(reinterpret_cast<LPVOID>(vtable[17]), &D3D9Hook::PresentHook);
+		uint_t* vTable = (uint_t*)(*((uint_t*)device.p));
+		m_resetFunc = HookFunc<Reset_t>(reinterpret_cast<LPVOID>(vTable[16]), &D3D9Hook::ResetHook);
+		m_presentFunc = HookFunc<Present_t>(reinterpret_cast<LPVOID>(vTable[17]), &D3D9Hook::PresentHook);
 	}
 
 	D3D9Hook::~D3D9Hook()

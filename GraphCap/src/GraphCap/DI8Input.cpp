@@ -7,14 +7,9 @@
 
 namespace gc
 {
-	const BYTE DI8Input::KEY_MAP[KEY_MAXCOUNT] =
+	const std::array<BYTE, KEY_MAXCOUNT> DI8Input::KEY_MAP =
 	{
-		0,
-
-		DIK_ESCAPE,
-
-		DIK_F1, DIK_F2, DIK_F3, DIK_F4, DIK_F5, DIK_F6, DIK_F7, DIK_F8, DIK_F9, DIK_F10,
-		DIK_F11, DIK_F12,
+		DIK_ESCAPE, DIK_F1, DIK_F2, DIK_F3, DIK_F4, DIK_F5, DIK_F6, DIK_F7, DIK_F8, DIK_F9, DIK_F10, DIK_F11, DIK_F12,
 
 		DIK_1, DIK_2, DIK_3, DIK_4, DIK_5, DIK_6, DIK_7, DIK_8, DIK_9, DIK_0,
 
@@ -39,39 +34,28 @@ namespace gc
 
 	void DI8Input::clear()
 	{
-		memset(m_keyState, KS_NONE, sizeof(m_keyState));
+		for (KeyState& state : m_keyState)
+			state = KS_NONE;
 	}
 
 	void DI8Input::keyClear(Key key)
 	{
-		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
-
-		m_keyState[KEY_MAP[key]] = KS_NONE;
+		m_keyState[KEY_MAP.at(key)] = KS_NONE;
 	}
 
 	void DI8Input::keyPress(Key key)
 	{
-		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
-
-		m_keyState[KEY_MAP[key]] = KS_PRESS;
+		m_keyState[KEY_MAP.at(key)] = KS_PRESS;
 	}
 
 	void DI8Input::keyRelease(Key key)
 	{
-		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
-
-		m_keyState[KEY_MAP[key]] = KS_RELEASE;
+		m_keyState[KEY_MAP.at(key)] = KS_RELEASE;
 	}
 
 	bool DI8Input::isKeyPressed(Key key) const
 	{
-		if (!(key > KEY_NONE && key < KEY_MAXCOUNT))
-			THROW_BASE_EXCEPTION(Exception() << err_str("Out of range."));
-
-		return m_keyState[KEY_MAP[key]] == KS_PRESS;
+		return m_keyState[KEY_MAP.at(key)] == KS_PRESS;
 	}
 
 	void DI8Input::commit()

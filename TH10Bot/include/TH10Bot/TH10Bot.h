@@ -4,7 +4,7 @@
 #include <Base/Window.h>
 #include <GraphCap/GraphCap.h>
 #include <GraphCap/D3D9FrameSync.h>
-#include <GraphCap/DI8Input.h>
+#include <GraphCap/DesktopInput.h>
 #include <GraphCap/Direct3D.h>
 
 #include "TH10Bot/DesktopCapturerCV.h"
@@ -39,10 +39,11 @@ namespace th
 		Th10Bot();
 		~Th10Bot();
 
-		bool isKeyPressed(int vkey) const;
-		void run();
+		bool isRunning();
 		void start();
 		void stop();
+		void quit();
+		void run();
 		void update();
 
 	private:
@@ -61,11 +62,13 @@ namespace th
 
 		void move(Direction dir, bool slow);
 
+		bool m_active;
+
 		Process m_process;
 		Window m_window;
 		GraphCap m_graphCap;
 		D3D9FrameSync m_frameSync;
-		DI8Input m_input;
+		DesktopInput m_input;
 		Direct3D m_d3d;
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_buffer;
@@ -73,7 +76,6 @@ namespace th
 		Th10Api m_api;
 		Th10Data m_data;
 
-		bool m_active;
 		Clock m_clock;
 
 		Scene m_scene;

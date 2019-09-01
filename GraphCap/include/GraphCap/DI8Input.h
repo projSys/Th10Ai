@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 
@@ -28,7 +29,7 @@ namespace gc
 		void commit();
 
 	private:
-		static const BYTE KEY_MAP[KEY_MAXCOUNT];
+		static const std::array<BYTE, KEY_MAXCOUNT> KEY_MAP;
 
 		bip::managed_shared_memory m_memory;
 		DI8SharedData* m_data;

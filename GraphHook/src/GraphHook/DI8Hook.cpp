@@ -10,8 +10,10 @@ namespace gh
 	{
 		m_memory = bip::managed_shared_memory(bip::create_only, "DI8SharedMemory", 65536);
 		m_data = m_memory.construct<DI8SharedData>("DI8SharedData")();
-		memset(m_data->keyState, KS_NONE, sizeof(m_data->keyState));
-		memset(m_keyState, KS_NONE, sizeof(m_keyState));
+		for (KeyState& state : m_data->keyState)
+			state = KS_NONE;
+		for (KeyState& state : m_keyState)
+			state = KS_NONE;
 
 		HMODULE dinput8Dll = GetModuleHandle(_T("dinput8.dll"));
 		if (dinput8Dll == nullptr)
@@ -32,8 +34,8 @@ namespace gh
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
-		uint_t* vtable = (uint_t*)(*((uint_t*)keyboard.p));
-		m_getDeviceStateFunc = HookFunc<GetDeviceState_t>(reinterpret_cast<LPVOID>(vtable[9]),
+		uint_t* vTable = (uint_t*)(*((uint_t*)keyboard.p));
+		m_getDeviceStateFunc = HookFunc<GetDeviceState_t>(reinterpret_cast<LPVOID>(vTable[9]),
 			&DI8Hook::GetDeviceStateHook);
 	}
 

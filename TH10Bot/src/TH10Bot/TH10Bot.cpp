@@ -12,12 +12,12 @@
 namespace th
 {
 	Th10Bot::Th10Bot() :
+		m_active(false),
 		m_process(Process::FindIdByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
-		m_graphCap(m_window, GC_D3D9FRAMESYNC | GC_DI8HOOK),
+		m_graphCap(m_window, GC_D3D9FRAMESYNC),
 		m_capturer(m_d3d),
 		m_api(m_process),
-		m_active(false),
 		m_itemId(-1),
 		m_enemyId(-1),
 		m_bombCooldown(0),
@@ -36,8 +36,13 @@ namespace th
 	{
 		try
 		{
-			m_input.clear();
-			m_input.commit();
+			m_input.keyRelease(KEY_UP);
+			m_input.keyRelease(KEY_DOWN);
+			m_input.keyRelease(KEY_LEFT);
+			m_input.keyRelease(KEY_RIGHT);
+			m_input.keyRelease(KEY_LSHIFT);
+			m_input.keyRelease(KEY_Z);
+			m_input.keyRelease(KEY_X);
 		}
 		catch (...)
 		{
@@ -47,38 +52,9 @@ namespace th
 		}
 	}
 
-	bool Th10Bot::isKeyPressed(int vkey) const
+	bool Th10Bot::isRunning()
 	{
-		return (GetAsyncKeyState(vkey) & 0x8000) != 0;
-	}
-
-	void Th10Bot::run()
-	{
-		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出。" << std::endl;
-
-		//int_t fps = 0;
-		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
-		while (true)
-		{
-			if (isKeyPressed('A'))
-				start();
-			if (isKeyPressed('S'))
-				stop();
-			if (isKeyPressed('D'))
-				break;
-
-			update();
-
-			//++fps;
-			//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-			//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
-			//if (e1 >= 1000)
-			//{
-			//	std::cout << fps << std::endl;
-			//	fps = 0;
-			//	t0 += std::chrono::milliseconds(1000);
-			//}
-		}
+		return true;
 	}
 
 	void Th10Bot::start()
@@ -94,10 +70,45 @@ namespace th
 	{
 		if (m_active)
 		{
-			m_input.clear();
-			m_input.commit();
+			m_input.keyRelease(KEY_UP);
+			m_input.keyRelease(KEY_DOWN);
+			m_input.keyRelease(KEY_LEFT);
+			m_input.keyRelease(KEY_RIGHT);
+			m_input.keyRelease(KEY_LSHIFT);
+			m_input.keyRelease(KEY_Z);
+			m_input.keyRelease(KEY_X);
+
 			m_active = false;
 			std::cout << "停止Bot。" << std::endl;
+		}
+	}
+
+	void Th10Bot::quit()
+	{
+
+	}
+
+	void Th10Bot::run()
+	{
+		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出。" << std::endl;
+
+		while (true)
+		{
+			if (/*!threading.isRunning() ||*/ m_input.isKeyPressed(KEY_D))
+			{
+				quit();
+				break;
+			}
+			else if (m_input.isKeyPressed(KEY_A))
+			{
+				start();
+			}
+			else if (m_input.isKeyPressed(KEY_S))
+			{
+				stop();
+			}
+
+			update();
 		}
 	}
 
@@ -105,15 +116,11 @@ namespace th
 	{
 		if (!m_active)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(17));
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			return;
 		}
 #if PLAY
-		if (!m_frameSync.waitForEndScene())
-		{
-			std::cout << "等待帧同步超时。" << std::endl;
-			return;
-		}
+		m_frameSync.waitForPresent();
 #else
 		Rect rect = m_window.getClientRect();
 		if (!m_capturer.capture(m_buffer, rect))
@@ -122,6 +129,19 @@ namespace th
 			return;
 		}
 #endif
+
+		static int_t fps = 0;
+		static std::chrono::steady_clock::time_point t011 = std::chrono::steady_clock::now();
+		++fps;
+		std::chrono::steady_clock::time_point t111 = std::chrono::steady_clock::now();
+		time_t e111 = std::chrono::duration_cast<std::chrono::milliseconds>(t111 - t011).count();
+		if (e111 >= 1000)
+		{
+			std::cout << "fps: " << fps << std::endl;
+			fps = 0;
+			t011 += std::chrono::milliseconds(1000);
+		}
+
 		m_clock.update();
 
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
@@ -146,13 +166,11 @@ namespace th
 			handleShoot();
 		handleMove();
 
-		m_input.commit();
-
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
 		if (e4 > 10)
-			std::cout << e1 << " " << e2 << " " << e3 << std::endl;
+			std::cout << "timeout: " << e1 << " " << e2 << " " << e3 << std::endl;
 #else
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();

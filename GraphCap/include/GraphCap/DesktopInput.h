@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <Base/Point.h>
 
 #include "GraphCap/Input.h"
@@ -21,10 +22,10 @@ namespace gc
 		void setMousePos(const Point& pos);
 
 	private:
-		static const WORD KEY_MAP[KEY_MAXCOUNT];
-		static const int IS_KEY_PRESSED_MAP[KEY_MAXCOUNT];
-		static const DWORD MOUSE_PRESS_MAP[MOUSE_MAXCOUNT];
-		static const DWORD MOUSE_RELEASE_MAP[MOUSE_MAXCOUNT];
-		static const int IS_MOUSE_PRESSED_MAP[MOUSE_MAXCOUNT];
+		static const std::array<WORD, KEY_MAXCOUNT> KEY_MAP;
+		static const std::array<int, KEY_MAXCOUNT> IS_KEY_PRESSED_MAP;
+		static const std::array<DWORD, KEY_MAXCOUNT> MOUSE_PRESS_MAP;
+		static const std::array<DWORD, KEY_MAXCOUNT> MOUSE_RELEASE_MAP;
+		static const std::array<int, KEY_MAXCOUNT> IS_MOUSE_PRESSED_MAP;
 	};
 }

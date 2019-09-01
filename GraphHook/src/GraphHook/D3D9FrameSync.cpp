@@ -11,6 +11,8 @@ namespace gh
 	{
 		m_memory = bip::managed_shared_memory(bip::create_only, "D3D9FSSharedMemory", 65536);
 		m_data = m_memory.construct<D3D9FSSharedData>("D3D9FSSharedData")();
+		m_data->endSceneReady = false;
+		m_data->presentReady = false;
 
 		WNDCLASSEX wcex = {};
 		wcex.cbSize = sizeof(wcex);
@@ -64,9 +66,9 @@ namespace gh
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
-		uint_t* vtable = (uint_t*)(*((uint_t*)device.p));
-		m_endSceneFunc = HookFunc<EndScene_t>(reinterpret_cast<LPVOID>(vtable[42]), &D3D9FrameSync::EndSceneHook);
-		m_presentFunc = HookFunc<Present_t>(reinterpret_cast<LPVOID>(vtable[17]), &D3D9FrameSync::PresentHook);
+		uint_t* vTable = (uint_t*)(*((uint_t*)device.p));
+		//m_endSceneFunc = HookFunc<EndScene_t>(reinterpret_cast<LPVOID>(vTable[42]), &D3D9FrameSync::EndSceneHook);
+		m_presentFunc = HookFunc<Present_t>(reinterpret_cast<LPVOID>(vTable[17]), &D3D9FrameSync::PresentHook);
 	}
 
 	D3D9FrameSync::~D3D9FrameSync()
@@ -92,6 +94,7 @@ namespace gh
 		try
 		{
 			bip::scoped_lock<bip::interprocess_mutex> lock(m_data->endSceneMutex);
+			m_data->endSceneReady = true;
 			m_data->endSceneCond.notify_one();
 		}
 		catch (...)
@@ -110,6 +113,7 @@ namespace gh
 		{
 			// 在Hook函数里抛出异常的代价和干扰太大
 			bip::scoped_lock<bip::interprocess_mutex> lock(m_data->presentMutex);
+			m_data->presentReady = true;
 			m_data->presentCond.notify_one();
 		}
 		catch (...)

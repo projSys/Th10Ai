@@ -48,6 +48,12 @@ namespace gh
 
 			std::string logName = Utils::GetModuleDir(g_dllModule) + "/GraphHook1.log";
 			bl::add_file_log(logName);
+			bl::core::get()->set_filter
+			(
+				bl::trivial::severity >= bl::trivial::info
+			);
+			BOOST_LOG_TRIVIAL(error) << "11111111111";
+			BOOST_LOG_TRIVIAL(error) << logName;
 
 			g_window = window;
 			g_threadId = GetWindowThreadProcessId(window, nullptr);
@@ -139,6 +145,8 @@ namespace gh
 
 			std::string logName = Utils::GetModuleDir(g_dllModule) + "/GraphHook2.log";
 			bl::add_file_log(logName);
+			BOOST_LOG_TRIVIAL(error) << "22222222222222222";
+			BOOST_LOG_TRIVIAL(error) << logName;
 
 			m_hookIniter = std::make_shared<HookIniter>();
 			if (hookType & GH_D3D9FRAMESYNC)
