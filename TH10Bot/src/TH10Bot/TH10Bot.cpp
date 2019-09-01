@@ -119,7 +119,7 @@ namespace th
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			return;
 		}
-#if PLAY
+#ifdef PLAY
 		m_frameSync.waitForPresent();
 #else
 		Rect rect = m_window.getClientRect();
@@ -129,18 +129,17 @@ namespace th
 			return;
 		}
 #endif
-
-		static int_t fps = 0;
-		static std::chrono::steady_clock::time_point t011 = std::chrono::steady_clock::now();
-		++fps;
-		std::chrono::steady_clock::time_point t111 = std::chrono::steady_clock::now();
-		time_t e111 = std::chrono::duration_cast<std::chrono::milliseconds>(t111 - t011).count();
-		if (e111 >= 1000)
-		{
-			std::cout << "fps: " << fps << std::endl;
-			fps = 0;
-			t011 += std::chrono::milliseconds(1000);
-		}
+		//static int_t fps = 0;
+		//static std::chrono::steady_clock::time_point t011 = std::chrono::steady_clock::now();
+		//++fps;
+		//std::chrono::steady_clock::time_point t111 = std::chrono::steady_clock::now();
+		//time_t e111 = std::chrono::duration_cast<std::chrono::milliseconds>(t111 - t011).count();
+		//if (e111 >= 1000)
+		//{
+		//	std::cout << "fps: " << fps << std::endl;
+		//	fps = 0;
+		//	t011 += std::chrono::milliseconds(1000);
+		//}
 
 		m_clock.update();
 
@@ -160,7 +159,7 @@ namespace th
 		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 		//std::cout << "e2: " << e2 << std::endl;
-#if PLAY
+#ifdef PLAY
 		handleBomb();
 		if (!handleTalk())
 			handleShoot();

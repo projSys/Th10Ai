@@ -6,18 +6,9 @@
 #include <Base/Point.h>
 #include <Base/Size.h>
 #include <Base/Rect.h>
-#include <Windows/Common.h>
-#include <Windows/Utils.h>
-#include <GraphCap/Common.h>
 
-namespace th
+namespace win
 {
 	using namespace base;
 	using base::float_t;
-	using namespace win;
-	using namespace gc;
 }
-
-#include <iostream>
-
-#include "TH10Bot/Direction.h"

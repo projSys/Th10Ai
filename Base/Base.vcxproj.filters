@@ -22,6 +22,12 @@
     <Filter Include="头文件\Base\RefCounted">
       <UniqueIdentifier>{d2f3bab7-3a9b-43e7-9341-69ff1684f383}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Windows">
+      <UniqueIdentifier>{a2aa18e0-6c4c-4cda-9743-cfd342bf11e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Windows">
+      <UniqueIdentifier>{071a9ab7-e3e3-4d9d-bf26-3589bd8a7b83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Base\Common.h">
@@ -48,15 +54,6 @@
     <ClInclude Include="include\Base\Size.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Process.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Window.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Utils.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\RefCounted\RefCountedObject.h">
       <Filter>头文件\Base\RefCounted</Filter>
     </ClInclude>
@@ -72,6 +69,18 @@
     <ClInclude Include="include\Base\RefCounted\wp.h">
       <Filter>头文件\Base\RefCounted</Filter>
     </ClInclude>
+    <ClInclude Include="include\Windows\Common.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\Process.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\Utils.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\Window.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -80,14 +89,14 @@
     <ClCompile Include="src\Base\RefCountedObject.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Process.cpp">
-      <Filter>源文件\Base</Filter>
+    <ClCompile Include="src\Windows\Process.cpp">
+      <Filter>源文件\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Window.cpp">
-      <Filter>源文件\Base</Filter>
+    <ClCompile Include="src\Windows\Utils.cpp">
+      <Filter>源文件\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Utils.cpp">
-      <Filter>源文件\Base</Filter>
+    <ClCompile Include="src\Windows\Window.cpp">
+      <Filter>源文件\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

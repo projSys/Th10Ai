@@ -1,11 +1,11 @@
-#include "Base/Common.h"
-#include "Base/Window.h"
+#include "Windows/Common.h"
+#include "Windows/Window.h"
 
 #include <boost/locale.hpp>
 
-#include "Base/Utils.h"
+#include "Windows/Utils.h"
 
-namespace base
+namespace win
 {
 	namespace blc = boost::locale::conv;
 

@@ -1,13 +1,13 @@
-#include "Base/Common.h"
-#include "Base/Process.h"
+#include "Windows/Common.h"
+#include "Windows/Process.h"
 
 #include <TlHelp32.h>
 #include <boost/locale.hpp>
 
 #include "Base/ScopeGuard.h"
-#include "Base/Utils.h"
+#include "Windows/Utils.h"
 
-namespace base
+namespace win
 {
 	namespace blc = boost::locale::conv;
 

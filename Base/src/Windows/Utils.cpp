@@ -1,11 +1,11 @@
-#include "Base/Common.h"
-#include "Base/Utils.h"
+#include "Windows/Common.h"
+#include "Windows/Utils.h"
 
 #include <sstream>
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
 
-namespace base
+namespace win
 {
 	namespace bfs = boost::filesystem;
 	namespace blc = boost::locale::conv;

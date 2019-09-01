@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Base/Process.h>
-#include <Base/Window.h>
+#include <Windows/Process.h>
+#include <Windows/Window.h>
 #include <GraphCap/GraphCap.h>
 #include <GraphCap/D3D9FrameSync.h>
 #include <GraphCap/DesktopInput.h>

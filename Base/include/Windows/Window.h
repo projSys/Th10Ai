@@ -5,7 +5,7 @@
 #include "Base/Size.h"
 #include "Base/Rect.h"
 
-namespace base
+namespace win
 {
 	class Window
 	{

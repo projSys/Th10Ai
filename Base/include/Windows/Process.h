@@ -1,6 +1,6 @@
 #pragma once
 
-namespace base
+namespace win
 {
 	class Process
 	{

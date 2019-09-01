@@ -15,7 +15,7 @@ int main()
 		HMENU menu = GetSystemMenu(window, FALSE);
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
-		std::string logName = base::Utils::GetModuleDir() + "/TH10Bot.log";
+		std::string logName = win::Utils::GetModuleDir() + "/TH10Bot.log";
 		bl::add_file_log(logName);
 
 		std::shared_ptr<th::Th10Bot> bot = std::make_shared<th::Th10Bot>();

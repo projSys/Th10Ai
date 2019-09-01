@@ -2,7 +2,7 @@
 
 #include "Base/Exception.h"
 
-namespace base
+namespace win
 {
 	class Utils
 	{
@@ -17,10 +17,10 @@ namespace base
 #define THROW_WINDOWS_ERROR(error) \
 	THROW_BASE_EXCEPTION(base::Exception() \
 		<< base::err_no(error) \
-		<< base::err_str(base::Utils::GetErrorMessage(error)))
+		<< base::err_str(win::Utils::GetErrorMessage(error)))
 
 #define THROW_DIRECTX_HRESULT(hr) \
 	THROW_BASE_EXCEPTION(base::Exception() \
-		<< base::err_hex(base::Utils::HresultToString(hr)) \
-		<< base::err_str(base::Utils::GetErrorMessage(hr)))
+		<< base::err_hex(win::Utils::HresultToString(hr)) \
+		<< base::err_str(win::Utils::GetErrorMessage(hr)))
 }
