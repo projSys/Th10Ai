@@ -30,7 +30,7 @@ namespace th
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
 		m_count(0),
-		m_limit(1000)
+		m_limit(500)
 	{
 		m_scene.split(6);
 	}
@@ -145,8 +145,6 @@ namespace th
 			begin += sc::milliseconds(1000);
 		}
 
-		return;
-
 		m_clock.update();
 
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
@@ -174,7 +172,7 @@ namespace th
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		if (e4 > 10)
+		if (e4 > 8)
 			std::cout << "timeout: " << e1 << " " << e2 << " " << e3 << std::endl;
 #else
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
