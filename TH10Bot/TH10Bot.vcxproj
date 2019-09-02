@@ -86,9 +86,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\TH10Bot\Api.h" />
     <ClInclude Include="include\TH10Bot\Area.h" />
+    <ClInclude Include="include\TH10Bot\Bot.h" />
     <ClInclude Include="include\TH10Bot\Clock.h" />
     <ClInclude Include="include\TH10Bot\Common.h" />
+    <ClInclude Include="include\TH10Bot\Data.h" />
     <ClInclude Include="include\TH10Bot\DesktopCapturerCV.h" />
     <ClInclude Include="include\TH10Bot\DesktopImageCV.h" />
     <ClInclude Include="include\TH10Bot\Direction.h" />
@@ -101,13 +104,13 @@
     <ClInclude Include="include\TH10Bot\Mover.h" />
     <ClInclude Include="include\TH10Bot\Path.h" />
     <ClInclude Include="include\TH10Bot\Scene.h" />
-    <ClInclude Include="include\TH10Bot\Th10Api.h" />
-    <ClInclude Include="include\TH10Bot\Th10Bot.h" />
-    <ClInclude Include="include\TH10Bot\Th10Data.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\TH10Bot\Api.cpp" />
     <ClCompile Include="src\TH10Bot\Area.cpp" />
+    <ClCompile Include="src\TH10Bot\Bot.cpp" />
     <ClCompile Include="src\TH10Bot\Clock.cpp" />
+    <ClCompile Include="src\TH10Bot\Data.cpp" />
     <ClCompile Include="src\TH10Bot\DesktopCapturerCV.cpp" />
     <ClCompile Include="src\TH10Bot\DesktopImageCV.cpp" />
     <ClCompile Include="src\TH10Bot\Entity\Bullet.cpp" />
@@ -120,9 +123,6 @@
     <ClCompile Include="src\TH10Bot\Mover.cpp" />
     <ClCompile Include="src\TH10Bot\Path.cpp" />
     <ClCompile Include="src\TH10Bot\Scene.cpp" />
-    <ClCompile Include="src\TH10Bot\Th10Api.cpp" />
-    <ClCompile Include="src\TH10Bot\Th10Bot.cpp" />
-    <ClCompile Include="src\TH10Bot\Th10Data.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,8 +12,8 @@ namespace th
 
 		void advance(Direction dir, bool slow);
 
-		bool isReborn() const;
-		bool isNormal() const;
+		bool isRebirthStatus() const;
+		bool isNormalStatus() const;
 		bool isColliding() const;
 
 		static const Pointf MOVE_SPEED[DIR_MAXCOUNT];

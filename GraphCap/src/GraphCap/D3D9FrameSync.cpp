@@ -30,11 +30,16 @@ namespace gc
 		return m_data->presentCond.timed_wait(lock, absTime);
 	}
 
-	void D3D9FrameSync::waitForPresent()
+	bool D3D9FrameSync::waitForPresent()
 	{
+		bool waited = false;
 		bip::scoped_lock<bip::interprocess_mutex> lock(m_data->presentMutex);
 		while (!m_data->presentReady)
+		{
 			m_data->presentCond.wait(lock);
+			waited = true;
+		}
 		m_data->presentReady = false;
+		return waited;
 	}
 }

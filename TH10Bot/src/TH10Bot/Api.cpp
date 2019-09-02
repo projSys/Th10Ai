@@ -1,23 +1,14 @@
 #include "TH10Bot/Common.h"
-#include "TH10Bot/Th10Api.h"
+#include "TH10Bot/Api.h"
 
 namespace th
 {
-	Th10Api::Th10Api(Process& process) :
+	Api::Api(Process& process) :
 		m_process(process)
 	{
 	}
 
-	void Th10Api::readData(Th10Data& data) noexcept
-	{
-		readPlayer(data.player);
-		readItems(data.items);
-		readEnemies(data.enemies);
-		readBullets(data.bullets);
-		readLasers(data.lasers);
-	}
-
-	bool Th10Api::readPlayer(Player& player) noexcept
+	bool Api::readPlayer(Player& player) noexcept
 	{
 		player = {};
 
@@ -61,7 +52,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Api::readItems(std::vector<Item>& items) noexcept
+	bool Api::readItems(std::vector<Item>& items) noexcept
 	{
 		items.clear();
 
@@ -106,7 +97,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Api::readEnemies(std::vector<Enemy>& enemies) noexcept
+	bool Api::readEnemies(std::vector<Enemy>& enemies) noexcept
 	{
 		enemies.clear();
 
@@ -151,7 +142,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Api::readBullets(std::vector<Bullet>& bullets) noexcept
+	bool Api::readBullets(std::vector<Bullet>& bullets) noexcept
 	{
 		bullets.clear();
 
@@ -197,7 +188,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Api::readLasers(std::vector<Laser>& lasers) noexcept
+	bool Api::readLasers(std::vector<Laser>& lasers) noexcept
 	{
 		lasers.clear();
 

@@ -48,12 +48,12 @@ namespace th
 		}
 	}
 
-	bool Player::isReborn() const
+	bool Player::isRebirthStatus() const
 	{
 		return status == 0;
 	}
 
-	bool Player::isNormal() const
+	bool Player::isNormalStatus() const
 	{
 		return status == 1;
 	}

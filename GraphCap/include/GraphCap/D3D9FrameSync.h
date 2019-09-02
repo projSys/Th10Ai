@@ -25,7 +25,7 @@ namespace gc
 
 		bool waitForEndScene(time_t timeout);
 		bool waitForPresent(time_t timeout);
-		void waitForPresent();
+		bool waitForPresent();
 
 	private:
 		bip::managed_shared_memory m_memory;

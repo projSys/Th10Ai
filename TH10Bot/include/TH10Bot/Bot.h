@@ -9,8 +9,8 @@
 
 #include "TH10Bot/DesktopCapturerCV.h"
 #include "TH10Bot/DesktopImageCV.h"
-#include "TH10Bot/Th10Api.h"
-#include "TH10Bot/Th10Data.h"
+#include "TH10Bot/Api.h"
+#include "TH10Bot/Data.h"
 #include "TH10Bot/Scene.h"
 #include "TH10Bot/Clock.h"
 
@@ -33,11 +33,11 @@ namespace th
 		int_t size;
 	};
 
-	class Th10Bot
+	class Bot
 	{
 	public:
-		Th10Bot();
-		~Th10Bot();
+		Bot();
+		~Bot();
 
 		bool isRunning();
 		void start();
@@ -52,7 +52,6 @@ namespace th
 		bool handleShoot();
 		bool handleMove();
 		Reward dfs(const Action& action);
-		bool isUnderEnemy();
 		//NodeScore calcNodeScore(const Player& player, float_t frame);
 		int_t findItem();
 		int_t findEnemy();
@@ -73,8 +72,8 @@ namespace th
 		DesktopCapturerCV m_capturer;
 		DesktopImageCV m_buffer;
 
-		Th10Api m_api;
-		Th10Data m_data;
+		Api m_api;
+		Data m_data;
 
 		Clock m_clock;
 

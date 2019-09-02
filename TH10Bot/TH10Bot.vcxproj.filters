@@ -72,13 +72,13 @@
     <ClInclude Include="include\TH10Bot\Entity\Player.h">
       <Filter>头文件\TH10Bot\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\Th10Bot.h">
+    <ClInclude Include="include\TH10Bot\Api.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\Th10Data.h">
+    <ClInclude Include="include\TH10Bot\Bot.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\TH10Bot\Th10Api.h">
+    <ClInclude Include="include\TH10Bot\Data.h">
       <Filter>头文件\TH10Bot</Filter>
     </ClInclude>
   </ItemGroup>
@@ -125,13 +125,13 @@
     <ClCompile Include="src\TH10Bot\Entity\Player.cpp">
       <Filter>源文件\TH10Bot\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="src\TH10Bot\Th10Bot.cpp">
+    <ClCompile Include="src\TH10Bot\Api.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
-    <ClCompile Include="src\TH10Bot\Th10Data.cpp">
+    <ClCompile Include="src\TH10Bot\Bot.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
-    <ClCompile Include="src\TH10Bot\Th10Api.cpp">
+    <ClCompile Include="src\TH10Bot\Data.cpp">
       <Filter>源文件\TH10Bot</Filter>
     </ClCompile>
   </ItemGroup>
