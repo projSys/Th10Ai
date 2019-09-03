@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <Windows/Process.h>
 #include <Windows/Window.h>
 #include <GraphCap/GraphCap.h>
@@ -33,7 +34,8 @@ namespace th
 		int_t size;
 	};
 
-	class Bot
+	class Bot :
+		public FrameListener
 	{
 	public:
 		Bot();
@@ -47,6 +49,9 @@ namespace th
 		void update();
 
 	private:
+		virtual void onPresentBegin(bool waited) override;
+		virtual void onPresentEnd(bool waited) override;
+
 		bool handleBomb();
 		bool handleTalk();
 		bool handleShoot();
@@ -91,5 +96,7 @@ namespace th
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;
 		time_t m_collectCooldown;
+
+		std::chrono::steady_clock::time_point m_t0;
 	};
 }

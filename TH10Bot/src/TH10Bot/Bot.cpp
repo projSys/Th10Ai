@@ -18,6 +18,7 @@ namespace th
 		m_process(Process::FindIdByName("th10.exe")),
 		m_window(Window::FindByClassName("BASE")),
 		m_graphCap(m_window, GC_D3D9FRAMESYNC),
+		m_frameSync(this),
 		m_capturer(m_d3d),
 		m_api(m_process),
 		m_data(m_api),
@@ -30,7 +31,7 @@ namespace th
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
 		m_count(0),
-		m_limit(500)
+		m_limit(320)
 	{
 		m_scene.split(6);
 	}
@@ -115,6 +116,35 @@ namespace th
 		}
 	}
 
+	void Bot::onPresentBegin(bool waited)
+	{
+		//if (!waited)
+		//	std::cout << "onPresentBegin()跳帧。" << std::endl;
+
+		////static int_t fps = 0;
+		////static sc::steady_clock::time_point begin = sc::steady_clock::now();
+		////++fps;
+		////sc::steady_clock::time_point end = sc::steady_clock::now();
+		////sc::milliseconds interval = sc::duration_cast<sc::milliseconds>(end - begin);
+		////if (interval.count() >= 1000)
+		////{
+		////	std::cout << "fps: " << fps << std::endl;
+		////	fps = 0;
+		////	begin += sc::milliseconds(1000);
+		////}
+		//m_t0 = std::chrono::steady_clock::now();
+	}
+
+	void Bot::onPresentEnd(bool waited)
+	{
+		//if (!waited)
+		//	std::cout << "onPresentEnd()跳帧。" << std::endl;
+
+		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - m_t0).count();
+		//std::cout << e1 << std::endl;
+	}
+
 	void Bot::update()
 	{
 		if (!m_active)
@@ -172,8 +202,8 @@ namespace th
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		if (e4 > 8)
-			std::cout << "timeout: " << e1 << " " << e2 << " " << e3 << std::endl;
+		if (e4 > 7)
+			std::cout << "超时: " << e1 << " " << e2 << " " << e3 << std::endl;
 #else
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
@@ -490,8 +520,8 @@ namespace th
 			return id;
 		}
 
-		// 自机高于1/2屏，道具少于10个，敌人多于3个
-		if (m_data.getPlayer().y < SCENE_SIZE.height / 2.0f && m_data.getItems().size() < 10 && m_data.getEnemies().size() > 3)
+		// 自机高于1/2屏，道具少于10个，敌人多于5个
+		if (m_data.getPlayer().y < SCENE_SIZE.height / 2.0f && m_data.getItems().size() < 10 && m_data.getEnemies().size() > 5)
 		{
 			// 进入冷却
 			m_collectCooldown = m_clock.getTimestamp();
@@ -515,7 +545,7 @@ namespace th
 			bool tooClose = false;
 			for (const Enemy& enemy : m_data.getEnemies())
 			{
-				if (item.calcDistance(enemy.getPosition()) < 100.0f)
+				if (item.calcDistance(enemy.getPosition()) < 150.0f)
 				{
 					tooClose = true;
 					break;

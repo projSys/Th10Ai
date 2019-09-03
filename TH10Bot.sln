@@ -22,6 +22,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphCap", "GraphCap\GraphC
 		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2} = {B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TH10AI", "TH10AI\TH10AI.vcxproj", "{534016B9-FDC7-44FF-AF70-16CD8467BD2D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DC6C4B81-B19B-4589-8510-14A7A4E7C34F} = {DC6C4B81-B19B-4589-8510-14A7A4E7C34F}
+		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2} = {B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libTH10AI", "libTH10AI\libTH10AI.vcxproj", "{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2} = {B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -44,6 +55,14 @@ Global
 		{8E60C47C-6FAF-4851-B499-F74CEA158D48}.Debug|x86.Build.0 = Debug|Win32
 		{8E60C47C-6FAF-4851-B499-F74CEA158D48}.Release|x86.ActiveCfg = Release|Win32
 		{8E60C47C-6FAF-4851-B499-F74CEA158D48}.Release|x86.Build.0 = Release|Win32
+		{534016B9-FDC7-44FF-AF70-16CD8467BD2D}.Debug|x86.ActiveCfg = Debug|Win32
+		{534016B9-FDC7-44FF-AF70-16CD8467BD2D}.Debug|x86.Build.0 = Debug|Win32
+		{534016B9-FDC7-44FF-AF70-16CD8467BD2D}.Release|x86.ActiveCfg = Release|Win32
+		{534016B9-FDC7-44FF-AF70-16CD8467BD2D}.Release|x86.Build.0 = Release|Win32
+		{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}.Debug|x86.ActiveCfg = Debug|Win32
+		{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}.Debug|x86.Build.0 = Debug|Win32
+		{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}.Release|x86.ActiveCfg = Release|Win32
+		{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

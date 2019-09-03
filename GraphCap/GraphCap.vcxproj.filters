@@ -60,6 +60,9 @@
     <ClInclude Include="include\GraphCap\Renderer.h">
       <Filter>头文件\GraphCap</Filter>
     </ClInclude>
+    <ClInclude Include="include\GraphCap\FrameListener.h">
+      <Filter>头文件\GraphCap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GraphCap\DllInject.cpp">
@@ -93,6 +96,9 @@
       <Filter>源文件\GraphCap</Filter>
     </ClCompile>
     <ClCompile Include="src\GraphCap\Renderer.cpp">
+      <Filter>源文件\GraphCap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphCap\FrameListener.cpp">
       <Filter>源文件\GraphCap</Filter>
     </ClCompile>
   </ItemGroup>
