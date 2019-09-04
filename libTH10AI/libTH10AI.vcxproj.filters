@@ -13,5 +13,41 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\libTH10AI">
+      <UniqueIdentifier>{7794c356-1e0a-4ac7-bc77-bc8eb4029fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\libTH10AI">
+      <UniqueIdentifier>{a361e8ab-5aec-4181-9503-ebd49a9c8bc8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libTH10AI.def">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\libTH10AI\Common.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\DllMain.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Th10Ai.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Th10AiMain.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\libTH10AI\DllMain.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Th10AiMain.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Th10Ai.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
