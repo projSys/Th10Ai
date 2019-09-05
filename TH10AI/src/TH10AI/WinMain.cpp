@@ -1,9 +1,9 @@
 #include "TH10AI/Common.h"
 
-#include <libTH10AI/Th10AiMain.h>
+#include <libTH10AI/HookMain.h>
 
-int APIENTRY _tWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPTSTR cmdLine, int cmdShow)
+int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
-	th::Th10AiMain();
+	th::HookCreate();
 	return 0;
 }

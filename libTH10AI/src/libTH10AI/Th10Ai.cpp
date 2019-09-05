@@ -1,25 +1,27 @@
 #include "libTH10AI/Common.h"
 #include "libTH10AI/Th10Ai.h"
 
+#include <thread>
+#include <chrono>
+
+#include "libTH10AI/HookThread.h"
+
 namespace th
 {
-	Th10Ai::Th10Ai() :
-		m_done(false)
+	Th10Ai::Th10Ai()
 	{
-		m_thread = std::thread(std::bind(&Th10Ai::proc, this));
 	}
 
 	Th10Ai::~Th10Ai()
 	{
-		m_done = true;
-		if (m_thread.joinable())
-			m_thread.join();
 	}
 
-	void Th10Ai::proc()
+	void Th10Ai::run(HookThread& hookThread)
 	{
-		while (!m_done)
+		while (!hookThread.isDone())
 		{
+			if (GetAsyncKeyState('D') & 0x8000)
+				break;
 			std::this_thread::sleep_for(std::chrono::milliseconds(16));
 		}
 	}

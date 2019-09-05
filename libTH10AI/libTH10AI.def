@@ -4,4 +4,4 @@ g_window DATA
 g_threadId DATA
 g_hook DATA
 g_succeeded DATA
-Th10AiMain
+HookCreate

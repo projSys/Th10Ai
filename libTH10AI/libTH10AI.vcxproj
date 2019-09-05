@@ -89,13 +89,15 @@
   <ItemGroup>
     <ClInclude Include="include\libTH10AI\Common.h" />
     <ClInclude Include="include\libTH10AI\DllMain.h" />
+    <ClInclude Include="include\libTH10AI\HookMain.h" />
+    <ClInclude Include="include\libTH10AI\HookThread.h" />
     <ClInclude Include="include\libTH10AI\Th10Ai.h" />
-    <ClInclude Include="include\libTH10AI\Th10AiMain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\libTH10AI\DllMain.cpp" />
+    <ClCompile Include="src\libTH10AI\HookMain.cpp" />
+    <ClCompile Include="src\libTH10AI\HookThread.cpp" />
     <ClCompile Include="src\libTH10AI\Th10Ai.cpp" />
-    <ClCompile Include="src\libTH10AI\Th10AiMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libTH10AI.def" />

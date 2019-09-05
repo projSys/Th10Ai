@@ -30,7 +30,7 @@ namespace win
 
 		HWND window = FindWindow(classNameW.c_str(), nullptr);
 		if (window == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			THROW_BASE_EXCEPTION(Exception() << err_str(u8"窗口类未找到：" + className));
 		return Window(window);
 	}
 
@@ -40,7 +40,7 @@ namespace win
 
 		HWND window = FindWindow(nullptr, nameW.c_str());
 		if (window == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			THROW_BASE_EXCEPTION(Exception() << err_str(u8"窗口未找到：" + name));
 		return Window(window);
 	}
 
@@ -81,7 +81,7 @@ namespace win
 
 		HWND window = FindWindowEx(m_window, nullptr, classNameW.c_str(), nullptr);
 		if (window == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			THROW_BASE_EXCEPTION(Exception() << err_str(u8"子窗口类未找到：" + className));
 		return Window(window);
 	}
 
@@ -91,7 +91,7 @@ namespace win
 
 		HWND window = FindWindowEx(m_window, nullptr, nullptr, nameW.c_str());
 		if (window == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			THROW_BASE_EXCEPTION(Exception() << err_str(u8"子窗口未找到：" + name));
 		return Window(window);
 	}
 

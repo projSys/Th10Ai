@@ -35,7 +35,10 @@
     <ClInclude Include="include\libTH10AI\Th10Ai.h">
       <Filter>头文件\libTH10AI</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTH10AI\Th10AiMain.h">
+    <ClInclude Include="include\libTH10AI\HookMain.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\HookThread.h">
       <Filter>头文件\libTH10AI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -43,10 +46,13 @@
     <ClCompile Include="src\libTH10AI\DllMain.cpp">
       <Filter>源文件\libTH10AI</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTH10AI\Th10AiMain.cpp">
+    <ClCompile Include="src\libTH10AI\Th10Ai.cpp">
       <Filter>源文件\libTH10AI</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTH10AI\Th10Ai.cpp">
+    <ClCompile Include="src\libTH10AI\HookMain.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\HookThread.cpp">
       <Filter>源文件\libTH10AI</Filter>
     </ClCompile>
   </ItemGroup>
