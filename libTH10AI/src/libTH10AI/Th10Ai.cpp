@@ -8,14 +8,17 @@
 
 namespace th
 {
+	// 在东方窗口线程运行
 	Th10Ai::Th10Ai()
 	{
 	}
 
+	// 在东方窗口线程运行
 	Th10Ai::~Th10Ai()
 	{
 	}
 
+	// 在钩子线程运行
 	void Th10Ai::run(HookThread& container)
 	{
 		while (!container.isDone())

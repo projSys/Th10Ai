@@ -2,12 +2,14 @@
 #include "libTH10AI/HookThread.h"
 
 #include "libTH10AI/HookMain.h"
+#include "libTH10AI/Th10Ai.h"
 
 namespace th
 {
 	HookThread::HookThread() :
 		m_done(false)
 	{
+		m_ai = std::make_shared<Th10Ai>();
 		m_thread = std::thread(std::bind(&HookThread::hookProc, this));
 	}
 
@@ -16,14 +18,14 @@ namespace th
 		m_done = true;
 		if (m_thread.joinable())
 			m_thread.join();
+		m_ai = nullptr;
 	}
 
 	void HookThread::hookProc()
 	{
 		try
 		{
-			std::shared_ptr<Th10Ai> ai = std::make_shared<Th10Ai>();
-			ai->run(*this);
+			m_ai->run(*this);
 		}
 		catch (...)
 		{

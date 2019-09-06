@@ -28,7 +28,7 @@ namespace th
 
 	LRESULT CALLBACK CallWndProc(int code, WPARAM wParam, LPARAM lParam);
 
-	// 在TH10Ai进程运行
+	// 在TH10AI进程运行
 	void WINAPI HookMain()
 	{
 		try
@@ -78,7 +78,7 @@ namespace th
 		}
 	}
 
-	// 在东方进程运行
+	// 在钩子线程运行
 	void HookExit(bool destroy)
 	{
 		try
@@ -125,7 +125,7 @@ namespace th
 	}
 
 	// 在东方窗口线程运行
-	// 不能修改消息，只有SendMessage消息，没有PostMessage消息
+	// 不能修改消息，只有SendMessage的消息，没有PostMessage的消息
 	LRESULT CALLBACK CallWndProc(int code, WPARAM wParam, LPARAM lParam)
 	{
 		if (code < 0)
@@ -144,16 +144,14 @@ namespace th
 					HookCreate();
 					break;
 
-					// 由钩子线程的HookExit触发，钩子线程已结束，仅回收资源
+					// 由钩子线程里的HookExit触发，钩子线程已结束，仅回收资源
 				case HOOK_DESTROY:
 					HookDestroy();
-					//BOOST_LOG_TRIVIAL(debug) << "HOOK_DESTROY";
 					break;
 
 					// 钩子线程未结束，需要等待
 				case WM_CLOSE:
 					HookDestroy();
-					//BOOST_LOG_TRIVIAL(debug) << "WM_CLOSE";
 					break;
 
 				case WM_DESTROY:

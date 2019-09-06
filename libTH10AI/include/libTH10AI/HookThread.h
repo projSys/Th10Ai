@@ -4,10 +4,10 @@
 #include <atomic>
 #include <memory>
 
-#include "libTH10AI/Th10Ai.h"
-
 namespace th
 {
+	class Th10Ai;
+
 	class HookThread
 	{
 	public:
@@ -21,5 +21,6 @@ namespace th
 
 		std::thread m_thread;
 		std::atomic_bool m_done;
+		std::shared_ptr<Th10Ai> m_ai;
 	};
 }
