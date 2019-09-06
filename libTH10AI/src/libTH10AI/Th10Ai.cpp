@@ -16,9 +16,9 @@ namespace th
 	{
 	}
 
-	void Th10Ai::run(HookThread& hookThread)
+	void Th10Ai::run(HookThread& container)
 	{
-		while (!hookThread.isDone())
+		while (!container.isDone())
 		{
 			if (GetAsyncKeyState('D') & 0x8000)
 				break;

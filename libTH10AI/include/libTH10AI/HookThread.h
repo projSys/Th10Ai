@@ -2,6 +2,9 @@
 
 #include <thread>
 #include <atomic>
+#include <memory>
+
+#include "libTH10AI/Th10Ai.h"
 
 namespace th
 {

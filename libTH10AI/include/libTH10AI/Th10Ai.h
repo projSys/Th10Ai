@@ -10,7 +10,7 @@ namespace th
 		Th10Ai();
 		~Th10Ai();
 
-		void run(HookThread& hookThread);
+		void run(HookThread& container);
 
 	private:
 

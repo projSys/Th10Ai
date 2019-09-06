@@ -2,6 +2,8 @@ LIBRARY libTH10AI
 EXPORTS
 g_window DATA
 g_threadId DATA
+g_mainThreadId DATA
 g_hook DATA
-g_succeeded DATA
-HookCreate
+g_created DATA
+g_destroy DATA
+HookMain

@@ -4,6 +4,6 @@
 
 int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
-	th::HookCreate();
+	th::HookMain();
 	return 0;
 }

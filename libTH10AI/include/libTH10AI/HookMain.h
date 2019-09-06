@@ -2,6 +2,7 @@
 
 namespace th
 {
-	void WINAPI HookCreate();
-	void WINAPI HookDestroy();
+	void WINAPI HookMain();
+
+	void HookExit(bool destroy);
 }
