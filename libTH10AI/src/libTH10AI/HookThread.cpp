@@ -18,7 +18,6 @@ namespace th
 		m_done = true;
 		if (m_thread.joinable())
 			m_thread.join();
-		m_ai = nullptr;
 	}
 
 	void HookThread::hookProc()
