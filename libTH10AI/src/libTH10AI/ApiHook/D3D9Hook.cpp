@@ -1,20 +1,16 @@
 #include "libTH10AI/Common.h"
 #include "libTH10AI/ApiHook/D3D9Hook.h"
 
-#include <boost/interprocess/sync/scoped_lock.hpp>
 #include <Base/ScopeGuard.h>
 
 namespace th
 {
 	D3D9Hook::D3D9Hook() :
 		Singleton(this),
-		m_presentBeginReady(false)
+		m_presentBeginReady(false),
+		m_presentEndReady(false),
+		m_presentTimespan(0)
 	{
-		m_memory = bip::managed_shared_memory(bip::create_only, "D3D9FSSharedMemory", 65536);
-		m_data = m_memory.construct<D3D9FSSharedData>("D3D9FSSharedData")();
-		m_data->presentBeginReady = false;
-		m_data->presentEndReady = false;
-
 		WNDCLASSEX wcex = {};
 		wcex.cbSize = sizeof(wcex);
 		wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -69,14 +65,13 @@ namespace th
 
 		uint_t* vTable = (uint_t*)(*((uint_t*)device.p));
 		m_clear = HookFunc<Clear_t>(reinterpret_cast<LPVOID>(vTable[43]), &D3D9Hook::ClearHook);
-		//m_beginScene = HookFunc<BeginScene_t>(reinterpret_cast<LPVOID>(vTable[41]), &D3D9Hook::BeginSceneHook);
-		//m_endScene = HookFunc<EndScene_t>(reinterpret_cast<LPVOID>(vTable[42]), &D3D9Hook::EndSceneHook);
+		m_beginScene = HookFunc<BeginScene_t>(reinterpret_cast<LPVOID>(vTable[41]), &D3D9Hook::BeginSceneHook);
+		m_endScene = HookFunc<EndScene_t>(reinterpret_cast<LPVOID>(vTable[42]), &D3D9Hook::EndSceneHook);
 		m_present = HookFunc<Present_t>(reinterpret_cast<LPVOID>(vTable[17]), &D3D9Hook::PresentHook);
 	}
 
 	D3D9Hook::~D3D9Hook()
 	{
-		m_memory.destroy<D3D9FSSharedData>("D3D9FSSharedData");
 	}
 
 	HRESULT D3D9Hook::ClearHook(IDirect3DDevice9* device, DWORD count, CONST D3DRECT* rects, DWORD flags,
@@ -108,50 +103,44 @@ namespace th
 	HRESULT D3D9Hook::clearHook(IDirect3DDevice9* device, DWORD count, CONST D3DRECT* rects, DWORD flags,
 		D3DCOLOR color, float z, DWORD stencil)
 	{
-		m_t0 = std::chrono::steady_clock::now();
-		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - m_t0).count();
-		//BOOST_LOG_TRIVIAL(error) << e1;
+		m_clearTime = std::chrono::steady_clock::now();	// 帧开始时间？
 		return m_clear(device, count, rects, flags, color, z, stencil);
 	}
 
 	HRESULT D3D9Hook::beginSceneHook(IDirect3DDevice9* device)
 	{
+		m_beginSceneTime = std::chrono::steady_clock::now();	// 帧开始时间？
 		return m_beginScene(device);
 	}
 
 	HRESULT D3D9Hook::endSceneHook(IDirect3DDevice9* device)
 	{
+		m_endSceneTime = std::chrono::steady_clock::now();	// 帧开始时间？
 		return m_endScene(device);
 	}
 
 	HRESULT D3D9Hook::presentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
-		{
-			//bip::scoped_lock<bip::interprocess_mutex> lock(m_data->presentBeginMutex);
-			//m_data->presentBeginReady = true;
-			//m_data->presentBeginCond.notify_one();
-			std::unique_lock<std::mutex> lock(m_presentBeginMutex);
-			m_presentBeginReady = true;
-			m_presentBeginCond.notify_one();
-		}
-		//m_data->m_t0 = std::chrono::steady_clock::now();
-		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+		m_presentBeginTime = std::chrono::steady_clock::now();	// 帧结束时间
+		std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
+			m_presentBeginTime - m_presentEndTime);	// 逻辑处理耗时
+		m_presentTimespan = 16 - interval.count();	// 垂直同步耗时
+		notifyPresentBegin();
 		HRESULT hr = m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
-		//m_t0 = std::chrono::steady_clock::now();
-		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - m_t0).count();
-		//BOOST_LOG_TRIVIAL(error) << e1;
-		//{
-		//	bip::scoped_lock<bip::interprocess_mutex> lock(m_data->presentEndMutex);
-		//	m_data->presentEndReady = true;
-		//	m_data->presentEndCond.notify_one();
-		//}
+		m_presentEndTime = std::chrono::steady_clock::now();	// 帧开始时间
+		//notifyPresentEnd();
 		return hr;
 	}
 
-	bool D3D9Hook::waitForPresent()
+	void D3D9Hook::notifyPresentBegin()
+	{
+		std::unique_lock<std::mutex> lock(m_presentBeginMutex);
+		m_presentBeginReady = true;
+		m_presentBeginCond.notify_one();
+	}
+
+	bool D3D9Hook::waitPresentBegin()
 	{
 		bool waited = false;
 		std::unique_lock<std::mutex> lock(m_presentBeginMutex);
@@ -162,5 +151,30 @@ namespace th
 		}
 		m_presentBeginReady = false;
 		return waited;
+	}
+
+	void D3D9Hook::notifyPresentEnd()
+	{
+		std::unique_lock<std::mutex> lock(m_presentEndMutex);
+		m_presentEndReady = true;
+		m_presentEndCond.notify_one();
+	}
+
+	bool D3D9Hook::waitPresentEnd()
+	{
+		bool waited = false;
+		std::unique_lock<std::mutex> lock(m_presentEndMutex);
+		while (!m_presentEndReady)
+		{
+			m_presentEndCond.wait(lock);
+			waited = true;
+		}
+		m_presentEndReady = false;
+		return waited;
+	}
+
+	time_t D3D9Hook::getPresentTimespan() const
+	{
+		return m_presentTimespan;
 	}
 }

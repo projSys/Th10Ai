@@ -38,10 +38,8 @@ namespace th
 
 		void run(HookThread& container);
 
-		bool isRunning();
 		void start();
 		void stop();
-		void quit();
 		void update();
 
 		bool handleBomb();

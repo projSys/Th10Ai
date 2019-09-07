@@ -15,7 +15,7 @@ namespace th
 		player.y = readMemory<float32_t>(baseAddr + 0x3C4);
 		player.dx = readMemory<int32_t>(baseAddr + 0x3F0) / 100.0f;
 		player.dy = readMemory<int32_t>(baseAddr + 0x3F4) / 100.0f;
-		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 2.0f;
+		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 2.0f;	// 2还是4啊？
 		player.height = player.width = 4.0f;	// 设大点不容易撞
 		//player.slow = readMemory<int32_t>(baseAddr + 0x4474);
 		//player.powers = readMemory<int32_t>(0x00474C48) / 20.0f;
@@ -33,7 +33,7 @@ namespace th
 		//player.y = readBuffer<float32_t>(m_buffer + 0x3C4);
 		//player.dx = readBuffer<int32_t>(m_buffer + 0x3F0) / 100.0f;
 		//player.dy = readBuffer<int32_t>(m_buffer + 0x3F4) / 100.0f;
-		//player.width = readBuffer<float32_t>(m_buffer + 0x41C) * 2.0f;	// 2还是4啊？
+		//player.width = readBuffer<float32_t>(m_buffer + 0x41C) * 2.0f;
 		//player.height = player.width = 4.0f;	// 设大点不容易撞
 		////player.slow = readMemory<int32_t>(baseAddr + 0x4474);
 		////player.powers = readMemory<int32_t>(0x00474C48) / 20.0f;
@@ -121,6 +121,7 @@ namespace th
 				enemy.dy = readMemory<float32_t>(objAddr + 0x3C);
 				enemy.width = readMemory<float32_t>(objAddr + 0xB8);
 				enemy.height = readMemory<float32_t>(objAddr + 0xBC);
+
 				//readMemoryBuffer(objAddr, m_buffer, 0xBC + sizeof(float32_t));
 				//enemy.x = readBuffer<float32_t>(m_buffer + 0x2C);
 				//enemy.y = readBuffer<float32_t>(m_buffer + 0x30);
@@ -170,6 +171,7 @@ namespace th
 				bullet.dy = readMemory<float32_t>(ebx + 0x3C4);
 				bullet.width = readMemory<float32_t>(ebx + 0x3F0);
 				bullet.height = readMemory<float32_t>(ebx + 0x3F4);
+
 				//bullet.x = readBuffer<float32_t>(ebx + 0x3B4);
 				//bullet.y = readBuffer<float32_t>(ebx + 0x3B8);
 				//bullet.dx = readBuffer<float32_t>(ebx + 0x3C0);
@@ -212,6 +214,7 @@ namespace th
 			laser.arc = readMemory<float32_t>(objAddr + 0x3C);
 			laser.height = readMemory<float32_t>(objAddr + 0x40);
 			laser.width = readMemory<float32_t>(objAddr + 0x44);
+
 			//laser.x = readBuffer<float32_t>(m_buffer + 0x24);
 			//laser.y = readBuffer<float32_t>(m_buffer + 0x28);
 			//laser.dx = readBuffer<float32_t>(m_buffer + 0x30);

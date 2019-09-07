@@ -2,37 +2,14 @@
 
 #include <d3d9.h>
 #include <atlbase.h>
-#include <chrono>
 #include <mutex>
 #include <condition_variable>
-#include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/interprocess/sync/interprocess_mutex.hpp>
-#include <boost/interprocess/sync/interprocess_condition.hpp>
 #include <Base/Singleton.h>
 
 #include "libTH10AI/ApiHook/HookFunc.h"
 
 namespace th
 {
-	namespace bip = boost::interprocess;
-
-	struct D3D9FSRemover
-	{
-		D3D9FSRemover() { bip::shared_memory_object::remove("D3D9FSSharedMemory"); }
-		~D3D9FSRemover() { bip::shared_memory_object::remove("D3D9FSSharedMemory"); }
-	};
-
-	struct D3D9FSSharedData
-	{
-		bip::interprocess_mutex presentBeginMutex;
-		bip::interprocess_condition presentBeginCond;
-		bool presentBeginReady;
-		bip::interprocess_mutex presentEndMutex;
-		bip::interprocess_condition presentEndCond;
-		bool presentEndReady;
-		std::chrono::steady_clock::time_point m_t0;
-	};
-
 	class D3D9Hook :
 		private Singleton<D3D9Hook>
 	{
@@ -40,7 +17,12 @@ namespace th
 		D3D9Hook();
 		~D3D9Hook();
 
-		bool waitForPresent();
+		void notifyPresentBegin();
+		bool waitPresentBegin();
+		void notifyPresentEnd();
+		bool waitPresentEnd();
+
+		time_t getPresentTimespan() const;
 
 	private:
 		// IDirect3D9
@@ -65,19 +47,23 @@ namespace th
 		HRESULT presentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 			HWND destWindowOverride, CONST RGNDATA* dirtyRegion);
 
-		D3D9FSRemover m_remover;
-		bip::managed_shared_memory m_memory;
-		D3D9FSSharedData* m_data;
-
 		std::mutex m_presentBeginMutex;
 		std::condition_variable m_presentBeginCond;
 		bool m_presentBeginReady;
+		std::mutex m_presentEndMutex;
+		std::condition_variable m_presentEndCond;
+		bool m_presentEndReady;
+
+		std::chrono::steady_clock::time_point m_clearTime;
+		std::chrono::steady_clock::time_point m_beginSceneTime;
+		std::chrono::steady_clock::time_point m_endSceneTime;
+		std::chrono::steady_clock::time_point m_presentBeginTime;
+		std::chrono::steady_clock::time_point m_presentEndTime;
+		time_t m_presentTimespan;
 
 		HookFunc<Clear_t> m_clear;
 		HookFunc<BeginScene_t> m_beginScene;
 		HookFunc<EndScene_t> m_endScene;
 		HookFunc<Present_t> m_present;
-
-		std::chrono::steady_clock::time_point m_t0;
 	};
 }

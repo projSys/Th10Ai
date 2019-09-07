@@ -2,11 +2,8 @@
 #include "libTH10AI/Th10Ai.h"
 
 #include <thread>
-#include <chrono>
 
 #include "libTH10AI/HookThread.h"
-
-#define PLAY 1
 
 namespace th
 {
@@ -23,9 +20,14 @@ namespace th
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
 		m_count(0),
-		m_limit(320)
+		m_limit(500)
 	{
 		m_scene.split(6);
+
+		AllocConsole();
+		freopen("conin$", "r", stdin);
+		freopen("conout$", "w", stdout);
+		freopen("conout$", "w", stderr);
 	}
 
 	// 在东方窗口线程运行
@@ -51,18 +53,16 @@ namespace th
 	// 在钩子线程运行
 	void Th10Ai::run(HookThread& container)
 	{
+		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出。" << std::endl;
+
 		while (!container.isDone())
 		{
-			if (GetAsyncKeyState('D') & 0x8000)
-				break;
-			else if (m_input.isKeyPressed(KEY_A))
-			{
+			if (m_input.isKeyPressed(KEY_A))
 				start();
-			}
 			else if (m_input.isKeyPressed(KEY_S))
-			{
 				stop();
-			}
+			else if (m_input.isKeyPressed(KEY_D))
+				break;
 
 			update();
 		}
@@ -101,28 +101,22 @@ namespace th
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			return;
 		}
-#ifdef PLAY
-		if (!m_d3d9Hook.waitForPresent())
+
+		if (!m_d3d9Hook.waitPresentBegin())
 			std::cout << "跳帧。" << std::endl;
-#else
-		Rect rect = m_window.getClientRect();
-		if (!m_capturer.capture(m_buffer, rect))
-		{
-			std::cout << "抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。" << std::endl;
-			return;
-		}
-#endif
-		static int_t fps = 0;
-		static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-		++fps;
-		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-		std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-		if (interval.count() >= 1000)
-		{
-			std::cout << "fps: " << fps << std::endl;
-			fps = 0;
-			begin += std::chrono::milliseconds(1000);
-		}
+		time_t presentTimespan = m_d3d9Hook.getPresentTimespan();
+
+		//static int_t fps = 0;
+		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+		//++fps;
+		//std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+		//std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
+		//if (interval.count() >= 1000)
+		//{
+		//	std::cout << "fps: " << fps << std::endl;
+		//	fps = 0;
+		//	begin += std::chrono::milliseconds(1000);
+		//}
 
 		m_clock.update();
 
@@ -142,7 +136,7 @@ namespace th
 		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 		//std::cout << "e2: " << e2 << std::endl;
-#ifdef PLAY
+
 		handleBomb();
 		if (!handleTalk())
 			handleShoot();
@@ -151,90 +145,8 @@ namespace th
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		if (e4 > 7)
-			std::cout << "超时: " << e1 << " " << e2 << " " << e3 << std::endl;
-#else
-		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
-		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
-		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		//if (e4 > 10)
-		//	std::cout << e1 << " " << e2 << " " << e3 << std::endl;
-
-		cv::Scalar red(0, 0, 255);
-		cv::Scalar green(0, 255, 0);
-		cv::Scalar blue(255, 0, 0);
-		cv::Scalar orange(0, 97, 255);
-		cv::Scalar yellow(0, 255, 255);
-
-		//m_scene.render(m_buffer.m_data, m_player);
-
-		Pointi windowPos1 = Scene::ToWindowPos(m_player.getTopLeft());
-		cv::Rect rect1(windowPos1.x, windowPos1.y, int_t(m_player.width), int_t(m_player.height));
-		cv::rectangle(m_buffer.m_data, rect1, green, -1);
-
-		for (const Item& item : m_items)
-		{
-			Pointi windowPos = Scene::ToWindowPos(item.getTopLeft());
-			cv::Rect rect(windowPos.x, windowPos.y, int_t(item.width), int_t(item.height));
-			cv::rectangle(m_buffer.m_data, rect, blue, -1);
-		}
-
-		for (const Enemy& enemy : m_enemies)
-		{
-			Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
-			cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
-			cv::rectangle(m_buffer.m_data, rect, red);
-		}
-
-		for (const Bullet& bullet : m_bullets)
-		{
-			Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
-			cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-			cv::rectangle(m_buffer.m_data, rect, red, -1);
-
-			// 显示垂足
-			//FootPoint footPoint = bullet.getFootPoint(m_player.getPosition());
-			//Pointi p1 = Scene::ToWindowPos(bullet.getPos());
-			//Pointi p2 = Scene::ToWindowPos(Pointf(footPoint.x, footPoint.y));
-			//Pointi p3 = Scene::ToWindowPos(m_player.getPos());
-			//cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), orange);
-			//cv::line(m_buffer.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), orange);
-
-			//// 显示方向
-			//if (view.dir == DIR_UP)
-			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y - 20), yellow);
-			//else if (view.dir == DIR_DOWN)
-			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x, p1.y + 20), yellow);
-			//else if (view.dir == DIR_LEFT)
-			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y), yellow);
-			//else if (view.dir == DIR_RIGHT)
-			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y), yellow);
-			//else if (view.dir == DIR_UPLEFT)
-			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y - 20), yellow);
-			//else if (view.dir == DIR_UPRIGHT)
-			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y - 20), yellow);
-			//else if (view.dir == DIR_DOWNLEFT)
-			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x - 20, p1.y + 20), yellow);
-			//else if (view.dir == DIR_DOWNRIGHT)
-			//	cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p1.x + 20, p1.y + 20), yellow);
-		}
-
-		for (const Laser& laser : m_lasers)
-		{
-			LaserBox laserBox(laser);
-			Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
-			Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
-			Pointi p3 = Scene::ToWindowPos(laserBox.bottomRight);
-			Pointi p4 = Scene::ToWindowPos(laserBox.bottomLeft);
-			cv::line(m_buffer.m_data, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), red);
-			cv::line(m_buffer.m_data, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), red);
-			cv::line(m_buffer.m_data, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), red);
-			cv::line(m_buffer.m_data, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), red);
-		}
-
-		cv::imshow("TH10", m_buffer.m_data);
-		cv::waitKey(1);
-#endif
+		//if (e4 > presentTimespan)
+			std::cout /*<< "超时: "*/ << e1 << " " << e2 << " " << e3 << " " << presentTimespan << std::endl;
 	}
 
 	// 处理炸弹
