@@ -22,12 +22,12 @@ namespace th
 		m_count(0),
 		m_limit(500)
 	{
-		m_scene.split(6);
-
 		AllocConsole();
 		freopen("conin$", "r", stdin);
 		freopen("conout$", "w", stdout);
 		freopen("conout$", "w", stderr);
+
+		m_scene.split(6);
 	}
 
 	// 在东方窗口线程运行
@@ -68,6 +68,12 @@ namespace th
 		}
 	}
 
+	void Th10Ai::notify()
+	{
+		m_active = false;
+		m_d3d9Hook.notifyPresentBegin();
+	}
+
 	void Th10Ai::start()
 	{
 		if (!m_active)
@@ -104,7 +110,7 @@ namespace th
 
 		if (!m_d3d9Hook.waitPresentBegin())
 			std::cout << "跳帧。" << std::endl;
-		time_t presentTimespan = m_d3d9Hook.getPresentTimespan();
+		//time_t presentTimespan = m_d3d9Hook.getPresentTimespan();
 
 		//static int_t fps = 0;
 		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -145,8 +151,9 @@ namespace th
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
+		//std::cout << e1 << " " << e2 << " " << e3 << " " << presentTimespan << std::endl;
 		//if (e4 > presentTimespan)
-			std::cout /*<< "超时: "*/ << e1 << " " << e2 << " " << e3 << " " << presentTimespan << std::endl;
+		//	std::cout << "超时" << std::endl;
 	}
 
 	// 处理炸弹

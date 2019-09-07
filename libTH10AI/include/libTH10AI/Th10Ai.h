@@ -37,6 +37,7 @@ namespace th
 		~Th10Ai();
 
 		void run(HookThread& container);
+		void notify();
 
 		void start();
 		void stop();

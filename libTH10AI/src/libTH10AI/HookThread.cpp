@@ -16,6 +16,7 @@ namespace th
 	HookThread::~HookThread()
 	{
 		m_done = true;
+		m_ai->notify();
 		if (m_thread.joinable())
 			m_thread.join();
 	}
