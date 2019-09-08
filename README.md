@@ -10,6 +10,7 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
 ## 待改进 Todo
 
+* 帧同步失败（迷
 * 闪避优化，多帧之间的上下文关联<br />
 * Extra无用<br />
 * Neural Network?<br />

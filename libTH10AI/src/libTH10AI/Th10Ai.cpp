@@ -22,12 +22,12 @@ namespace th
 		m_count(0),
 		m_limit(500)
 	{
+		m_scene.split(6);
+
 		AllocConsole();
 		freopen("conin$", "r", stdin);
 		freopen("conout$", "w", stdout);
 		freopen("conout$", "w", stderr);
-
-		m_scene.split(6);
 	}
 
 	// 在东方窗口线程运行
