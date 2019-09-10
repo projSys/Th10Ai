@@ -109,7 +109,7 @@ namespace th
 		}
 
 		if (!m_d3d9Hook.waitPresentBegin())
-			std::cout << "跳帧。" << std::endl;
+			std::cout << "读取数据不及时。" << std::endl;
 		//time_t presentTimespan = m_d3d9Hook.getPresentTimespan();
 
 		//static int_t fps = 0;

@@ -3,13 +3,14 @@
 
 #include <Base/ScopeGuard.h>
 
+#include "libTH10AI/ApiHook/DI8Hook.h"
+
 namespace th
 {
 	D3D9Hook::D3D9Hook() :
 		Singleton(this),
 		m_presentBeginReady(false),
-		m_presentEndReady(false),
-		m_presentTimespan(0)
+		m_presentEndReady(false)
 	{
 		WNDCLASSEX wcex = {};
 		wcex.cbSize = sizeof(wcex);
@@ -64,40 +65,11 @@ namespace th
 			THROW_DIRECTX_HRESULT(hr);
 
 		uint_t* vTable = (uint_t*)(*((uint_t*)device.p));
-		m_reset = HookFunc<Reset_t>(reinterpret_cast<LPVOID>(vTable[16]), &D3D9Hook::ResetHook);
-		//m_clear = HookFunc<Clear_t>(reinterpret_cast<LPVOID>(vTable[43]), &D3D9Hook::ClearHook);
-		//m_beginScene = HookFunc<BeginScene_t>(reinterpret_cast<LPVOID>(vTable[41]), &D3D9Hook::BeginSceneHook);
-		//m_endScene = HookFunc<EndScene_t>(reinterpret_cast<LPVOID>(vTable[42]), &D3D9Hook::EndSceneHook);
 		m_present = HookFunc<Present_t>(reinterpret_cast<LPVOID>(vTable[17]), &D3D9Hook::PresentHook);
 	}
 
 	D3D9Hook::~D3D9Hook()
 	{
-	}
-
-	HRESULT D3D9Hook::ResetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* presentationParameters)
-	{
-		D3D9Hook& d3d9Hook = D3D9Hook::GetInstance();
-		return d3d9Hook.resetHook(device, presentationParameters);
-	}
-
-	HRESULT D3D9Hook::ClearHook(IDirect3DDevice9* device, DWORD count, CONST D3DRECT* rects, DWORD flags,
-		D3DCOLOR color, float z, DWORD stencil)
-	{
-		D3D9Hook& d3d9Hook = D3D9Hook::GetInstance();
-		return d3d9Hook.clearHook(device, count, rects, flags, color, z, stencil);
-	}
-
-	HRESULT D3D9Hook::BeginSceneHook(IDirect3DDevice9* device)
-	{
-		D3D9Hook& d3d9Hook = D3D9Hook::GetInstance();
-		return d3d9Hook.beginSceneHook(device);
-	}
-
-	HRESULT D3D9Hook::EndSceneHook(IDirect3DDevice9* device)
-	{
-		D3D9Hook& d3d9Hook = D3D9Hook::GetInstance();
-		return d3d9Hook.endSceneHook(device);
 	}
 
 	HRESULT D3D9Hook::PresentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
@@ -107,47 +79,28 @@ namespace th
 		return d3d9Hook.presentHook(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 	}
 
-	HRESULT D3D9Hook::resetHook(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* presentationParameters)
-	{
-		std::cout << presentationParameters->PresentationInterval << std::endl;
-		return m_reset(device, presentationParameters);
-	}
+	std::chrono::steady_clock::time_point g_presentBeginTime;
+	std::chrono::steady_clock::time_point g_presentEndTime;
 
-	HRESULT D3D9Hook::clearHook(IDirect3DDevice9* device, DWORD count, CONST D3DRECT* rects, DWORD flags,
-		D3DCOLOR color, float z, DWORD stencil)
-	{
-		m_clearTime = std::chrono::steady_clock::now();
-		return m_clear(device, count, rects, flags, color, z, stencil);
-	}
-
-	HRESULT D3D9Hook::beginSceneHook(IDirect3DDevice9* device)
-	{
-		m_beginSceneTime = std::chrono::steady_clock::now();
-		return m_beginScene(device);
-	}
-
-	HRESULT D3D9Hook::endSceneHook(IDirect3DDevice9* device)
-	{
-		m_endSceneTime = std::chrono::steady_clock::now();
-		return m_endScene(device);
-	}
-
-	// 帧同步失败
-	// 垂直同步的等待时间会在0-15之间递增或递减，或者长时间停留在0。
-	// 也就是说没时间读取数据和计算。
 	HRESULT D3D9Hook::presentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
-		m_presentBeginTime = std::chrono::steady_clock::now();
+		// 游戏逻辑的处理时间
+		//g_presentBeginTime = std::chrono::steady_clock::now();
+		//std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
+		//	g_presentBeginTime - g_getDeviceStateTime);
+		//std::cout << interval.count() << " ";
+
 		notifyPresentBegin();
 		HRESULT hr = m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
-		m_presentEndTime = std::chrono::steady_clock::now();
-		std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
-			m_presentEndTime - m_presentBeginTime);
-		m_presentTimespan = interval.count();
-		std::cout << m_presentTimespan << std::endl;
-		//BOOST_LOG_TRIVIAL(debug) << m_presentTimespan;
 		//notifyPresentEnd();
+
+		// 垂直同步的等待时间
+		//g_presentEndTime = std::chrono::steady_clock::now();
+		//interval = std::chrono::duration_cast<std::chrono::milliseconds>(
+		//	g_presentEndTime - g_presentBeginTime);
+		//std::cout << interval.count() << std::endl;
+
 		return hr;
 	}
 
@@ -189,10 +142,5 @@ namespace th
 		}
 		m_presentEndReady = false;
 		return waited;
-	}
-
-	time_t D3D9Hook::getPresentTimespan() const
-	{
-		return m_presentTimespan;
 	}
 }

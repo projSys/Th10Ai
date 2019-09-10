@@ -110,6 +110,9 @@
     <ClInclude Include="include\libTH10AI\Input.h">
       <Filter>头文件\libTH10AI</Filter>
     </ClInclude>
+    <ClInclude Include="include\libTH10AI\ApiHook\DI8Hook.h">
+      <Filter>头文件\libTH10AI\ApiHook</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\libTH10AI\DllMain.cpp">
@@ -171,6 +174,9 @@
     </ClCompile>
     <ClCompile Include="src\libTH10AI\DesktopInput.cpp">
       <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\ApiHook\DI8Hook.cpp">
+      <Filter>源文件\libTH10AI\ApiHook</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
