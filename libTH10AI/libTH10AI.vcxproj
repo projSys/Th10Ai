@@ -96,7 +96,6 @@
     <ClInclude Include="include\libTH10AI\Clock.h" />
     <ClInclude Include="include\libTH10AI\Common.h" />
     <ClInclude Include="include\libTH10AI\Data.h" />
-    <ClInclude Include="include\libTH10AI\DesktopInput.h" />
     <ClInclude Include="include\libTH10AI\Direction.h" />
     <ClInclude Include="include\libTH10AI\DllMain.h" />
     <ClInclude Include="include\libTH10AI\Entity\Bullet.h" />
@@ -107,7 +106,6 @@
     <ClInclude Include="include\libTH10AI\Entity\Player.h" />
     <ClInclude Include="include\libTH10AI\HookMain.h" />
     <ClInclude Include="include\libTH10AI\HookThread.h" />
-    <ClInclude Include="include\libTH10AI\Input.h" />
     <ClInclude Include="include\libTH10AI\Mover.h" />
     <ClInclude Include="include\libTH10AI\Path.h" />
     <ClInclude Include="include\libTH10AI\Scene.h" />
@@ -121,7 +119,6 @@
     <ClCompile Include="src\libTH10AI\Area.cpp" />
     <ClCompile Include="src\libTH10AI\Clock.cpp" />
     <ClCompile Include="src\libTH10AI\Data.cpp" />
-    <ClCompile Include="src\libTH10AI\DesktopInput.cpp" />
     <ClCompile Include="src\libTH10AI\DllMain.cpp" />
     <ClCompile Include="src\libTH10AI\Entity\Bullet.cpp" />
     <ClCompile Include="src\libTH10AI\Entity\Enemy.cpp" />

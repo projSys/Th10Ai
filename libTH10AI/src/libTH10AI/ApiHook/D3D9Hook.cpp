@@ -9,8 +9,8 @@ namespace th
 {
 	D3D9Hook::D3D9Hook() :
 		Singleton(this),
-		m_presentBeginReady(false),
-		m_presentEndReady(false)
+		m_enabled(false),
+		m_presentReadied(false)
 	{
 		WNDCLASSEX wcex = {};
 		wcex.cbSize = sizeof(wcex);
@@ -86,17 +86,19 @@ namespace th
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
 		// 游戏逻辑的处理时间
-		//g_presentBeginTime = std::chrono::steady_clock::now();
+		g_presentBeginTime = std::chrono::steady_clock::now();
 		//std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
 		//	g_presentBeginTime - g_getDeviceStateTime);
 		//std::cout << interval.count() << " ";
 
-		notifyPresentBegin();
+		if (!m_enabled)
+			return m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
+
+		notifyPresent();
 		HRESULT hr = m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
-		//notifyPresentEnd();
 
 		// 垂直同步的等待时间
-		//g_presentEndTime = std::chrono::steady_clock::now();
+		g_presentEndTime = std::chrono::steady_clock::now();
 		//interval = std::chrono::duration_cast<std::chrono::milliseconds>(
 		//	g_presentEndTime - g_presentBeginTime);
 		//std::cout << interval.count() << std::endl;
@@ -104,43 +106,28 @@ namespace th
 		return hr;
 	}
 
-	void D3D9Hook::notifyPresentBegin()
+	void D3D9Hook::enable(bool enabled)
 	{
-		std::unique_lock<std::mutex> lock(m_presentBeginMutex);
-		m_presentBeginReady = true;
-		m_presentBeginCond.notify_one();
+		m_enabled = enabled;
 	}
 
-	bool D3D9Hook::waitPresentBegin()
+	void D3D9Hook::notifyPresent()
+	{
+		std::unique_lock<std::mutex> lock(m_presentMutex);
+		m_presentReadied = true;
+		m_presentCond.notify_one();
+	}
+
+	bool D3D9Hook::waitPresent()
 	{
 		bool waited = false;
-		std::unique_lock<std::mutex> lock(m_presentBeginMutex);
-		while (!m_presentBeginReady)
+		std::unique_lock<std::mutex> lock(m_presentMutex);
+		while (!m_presentReadied)
 		{
-			m_presentBeginCond.wait(lock);
+			m_presentCond.wait(lock);
 			waited = true;
 		}
-		m_presentBeginReady = false;
-		return waited;
-	}
-
-	void D3D9Hook::notifyPresentEnd()
-	{
-		std::unique_lock<std::mutex> lock(m_presentEndMutex);
-		m_presentEndReady = true;
-		m_presentEndCond.notify_one();
-	}
-
-	bool D3D9Hook::waitPresentEnd()
-	{
-		bool waited = false;
-		std::unique_lock<std::mutex> lock(m_presentEndMutex);
-		while (!m_presentEndReady)
-		{
-			m_presentEndCond.wait(lock);
-			waited = true;
-		}
-		m_presentEndReady = false;
+		m_presentReadied = false;
 		return waited;
 	}
 }

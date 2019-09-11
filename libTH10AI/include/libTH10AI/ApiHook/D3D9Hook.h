@@ -2,6 +2,7 @@
 
 #include <d3d9.h>
 #include <atlbase.h>
+#include <atomic>
 #include <mutex>
 #include <condition_variable>
 #include <Base/Singleton.h>
@@ -17,10 +18,9 @@ namespace th
 		D3D9Hook();
 		~D3D9Hook();
 
-		void notifyPresentBegin();
-		bool waitPresentBegin();
-		void notifyPresentEnd();
-		bool waitPresentEnd();
+		void enable(bool enabled);
+		void notifyPresent();
+		bool waitPresent();
 
 	private:
 		// IDirect3D9
@@ -34,12 +34,10 @@ namespace th
 		HRESULT presentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 			HWND destWindowOverride, CONST RGNDATA* dirtyRegion);
 
-		std::mutex m_presentBeginMutex;
-		std::condition_variable m_presentBeginCond;
-		bool m_presentBeginReady;
-		std::mutex m_presentEndMutex;
-		std::condition_variable m_presentEndCond;
-		bool m_presentEndReady;
+		std::atomic_bool m_enabled;
+		std::mutex m_presentMutex;
+		std::condition_variable m_presentCond;
+		bool m_presentReadied;
 
 		HookFunc<Present_t> m_present;
 	};

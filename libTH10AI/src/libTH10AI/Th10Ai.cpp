@@ -35,13 +35,8 @@ namespace th
 	{
 		try
 		{
-			m_input.keyRelease(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
-			m_input.keyRelease(KEY_LSHIFT);
-			m_input.keyRelease(KEY_Z);
-			m_input.keyRelease(KEY_X);
+			m_di8Hook.clear();
+			m_di8Hook.commit(0);
 		}
 		catch (...)
 		{
@@ -53,31 +48,40 @@ namespace th
 	// 在钩子线程运行
 	void Th10Ai::run(HookThread& container)
 	{
-		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出。" << std::endl;
+		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出Bot。" << std::endl;
 
 		while (!container.isDone())
 		{
-			if (m_input.isKeyPressed(KEY_A))
+			if (isKeyPressed('A'))
 				start();
-			else if (m_input.isKeyPressed(KEY_S))
+			else if (isKeyPressed('S'))
 				stop();
-			else if (m_input.isKeyPressed(KEY_D))
+			else if (isKeyPressed('D'))
 				break;
 
 			update();
 		}
+
+		std::cout << "退出Bot。" << std::endl;
 	}
 
 	void Th10Ai::notify()
 	{
 		m_active = false;
-		m_d3d9Hook.notifyPresentBegin();
+		m_d3d9Hook.notifyPresent();
+	}
+
+	bool Th10Ai::isKeyPressed(int vKey) const
+	{
+		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
 	}
 
 	void Th10Ai::start()
 	{
 		if (!m_active)
 		{
+			m_d3d9Hook.enable(true);
+			m_di8Hook.enable(true);
 			m_active = true;
 			std::cout << "开启Bot。" << std::endl;
 		}
@@ -87,13 +91,10 @@ namespace th
 	{
 		if (m_active)
 		{
-			m_input.keyRelease(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
-			m_input.keyRelease(KEY_LSHIFT);
-			m_input.keyRelease(KEY_Z);
-			m_input.keyRelease(KEY_X);
+			m_di8Hook.clear();
+			m_di8Hook.commit(0);
+			m_di8Hook.enable(false);
+			m_d3d9Hook.enable(false);
 
 			m_active = false;
 			std::cout << "停止Bot。" << std::endl;
@@ -108,9 +109,8 @@ namespace th
 			return;
 		}
 
-		if (!m_d3d9Hook.waitPresentBegin())
-			std::cout << "读取数据不及时。" << std::endl;
-		//time_t presentTimespan = m_d3d9Hook.getPresentTimespan();
+		if (!m_d3d9Hook.waitPresent())
+			std::cout << "读取数据延迟了。" << std::endl;
 
 		//static int_t fps = 0;
 		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -151,24 +151,26 @@ namespace th
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		//std::cout << e1 << " " << e2 << " " << e3 << " " << presentTimespan << std::endl;
-		//if (e4 > presentTimespan)
-		//	std::cout << "超时" << std::endl;
+		//if (e4 > 10)
+		//	std::cout << "超时" << e1 << " " << e2 << " " << e3 << std::endl;
+
+		m_di8Hook.commit(e4);
 	}
 
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_input.isKeyPressed(KEY_X))
-			m_input.keyRelease(KEY_X);
+		if (m_di8Hook.isKeyPressed(DIK_X))
+			m_di8Hook.keyRelease(DIK_X);
 
 		// 放了炸弹3秒后再检测
 		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
 		{
 			if (m_data.isColliding())
 			{
-				m_input.keyPress(KEY_X);
+				m_di8Hook.keyPress(DIK_X);
 				m_bombCooldown = m_clock.getTimestamp();
+				std::cout << "决死。" << std::endl;
 				return true;
 			}
 		}
@@ -183,10 +185,10 @@ namespace th
 			// BOSS出现2秒后对话
 			if (m_clock.getTimestamp() - m_talkCooldown >= 2000)
 			{
-				if (m_input.isKeyPressed(KEY_Z))
-					m_input.keyRelease(KEY_Z);
+				if (m_di8Hook.isKeyPressed(DIK_Z))
+					m_di8Hook.keyRelease(DIK_Z);
 				else
-					m_input.keyPress(KEY_Z);
+					m_di8Hook.keyPress(DIK_Z);
 				return true;
 			}
 		}
@@ -202,12 +204,12 @@ namespace th
 	{
 		if (m_data.hasEnemy())
 		{
-			m_input.keyPress(KEY_Z);
+			m_di8Hook.keyPress(DIK_Z);
 			return true;
 		}
 		else
 		{
-			m_input.keyRelease(KEY_Z);
+			m_di8Hook.keyRelease(DIK_Z);
 			return false;
 		}
 	}
@@ -562,73 +564,73 @@ namespace th
 	void Th10Ai::move(Direction dir, bool slow)
 	{
 		if (slow)
-			m_input.keyPress(KEY_LSHIFT);
+			m_di8Hook.keyPress(DIK_LSHIFT);
 		else
-			m_input.keyRelease(KEY_LSHIFT);
+			m_di8Hook.keyRelease(DIK_LSHIFT);
 
 		switch (dir)
 		{
 		case DIR_HOLD:
-			m_input.keyRelease(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_UP:
-			m_input.keyPress(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_DOWN:
-			m_input.keyRelease(KEY_UP);
-			m_input.keyPress(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_LEFT:
-			m_input.keyRelease(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyPress(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyPress(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_RIGHT:
-			m_input.keyRelease(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyPress(KEY_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyPress(DIK_RIGHT);
 			break;
 
 		case DIR_UPLEFT:
-			m_input.keyPress(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyPress(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyPress(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_UPRIGHT:
-			m_input.keyPress(KEY_UP);
-			m_input.keyRelease(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyPress(KEY_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyPress(DIK_RIGHT);
 			break;
 
 		case DIR_DOWNLEFT:
-			m_input.keyRelease(KEY_UP);
-			m_input.keyPress(KEY_DOWN);
-			m_input.keyPress(KEY_LEFT);
-			m_input.keyRelease(KEY_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
+			m_di8Hook.keyPress(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_DOWNRIGHT:
-			m_input.keyRelease(KEY_UP);
-			m_input.keyPress(KEY_DOWN);
-			m_input.keyRelease(KEY_LEFT);
-			m_input.keyPress(KEY_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyPress(DIK_RIGHT);
 			break;
 		}
 	}

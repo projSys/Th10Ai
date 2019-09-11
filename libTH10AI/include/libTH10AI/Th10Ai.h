@@ -3,7 +3,6 @@
 #include "libTH10AI/ApiHook/HookIniter.h"
 #include "libTH10AI/ApiHook/D3D9Hook.h"
 #include "libTH10AI/ApiHook/DI8Hook.h"
-#include "libTH10AI/DesktopInput.h"
 #include "libTH10AI/Api.h"
 #include "libTH10AI/Data.h"
 #include "libTH10AI/Scene.h"
@@ -39,6 +38,7 @@ namespace th
 
 		void run(HookThread& container);
 		void notify();
+		bool isKeyPressed(int vkey) const;
 
 		void start();
 		void stop();
@@ -62,7 +62,6 @@ namespace th
 		HookIniter m_hookIniter;
 		D3D9Hook m_d3d9Hook;
 		DI8Hook m_di8Hook;
-		DesktopInput m_input;
 
 		Api m_api;
 		Data m_data;
