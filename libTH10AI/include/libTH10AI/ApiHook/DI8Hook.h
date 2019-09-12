@@ -4,37 +4,27 @@
 #include <dinput.h>
 #include <atlbase.h>
 #include <atomic>
-#include <mutex>
 #include <Base/Singleton.h>
 
 #include "libTH10AI/ApiHook/HookFunc.h"
 
 namespace th
 {
-	enum KeyState
+	class DI8Listener
 	{
-		KS_NONE = -1,
-
-		KS_RELEASE,
-		KS_PRESS,
-
-		KS_MAXCOUNT
+	public:
+		virtual ~DI8Listener() = default;
+		virtual void onGetDeviceStateBegin(IDirectInputDevice8* device, DWORD size, LPVOID data) {}
+		virtual void onGetDeviceStateEnd(HRESULT& hr, IDirectInputDevice8* device, DWORD size, LPVOID data) {}
 	};
 
 	class DI8Hook :
 		private Singleton<DI8Hook>
 	{
 	public:
-		DI8Hook();
-		~DI8Hook();
+		DI8Hook(DI8Listener* listener);
 
 		void enable(bool enabled);
-		void clear();
-		void keyClear(uint8_t key);
-		void keyPress(uint8_t key);
-		void keyRelease(uint8_t key);
-		bool isKeyPressed(uint8_t key) const;
-		void commit(time_t handleTime);
 
 	private:
 		// IDirectInput8
@@ -42,21 +32,12 @@ namespace th
 		// IDirectInputDevice8
 		typedef HRESULT(STDMETHODCALLTYPE *GetDeviceState_t)(IDirectInputDevice8*, DWORD, LPVOID);
 
-		static HRESULT STDMETHODCALLTYPE GetDeviceStateHook(IDirectInputDevice8* device, DWORD cbData, LPVOID lpvData);
+		static HRESULT STDMETHODCALLTYPE GetDeviceStateHook(IDirectInputDevice8* device, DWORD size, LPVOID data);
 
-		HRESULT getDeviceStateHook(IDirectInputDevice8* device, DWORD cbData, LPVOID lpvData);
+		HRESULT getDeviceStateHook(IDirectInputDevice8* device, DWORD size, LPVOID data);
 
+		DI8Listener* m_listener;
 		std::atomic_bool m_enabled;
-		KeyState m_writeState[256];
-		KeyState m_readState[256];
-		std::mutex m_keyMutex;
-		bool m_keyReadied;
-		bool m_inputDelayed;
-		time_t m_prevPresentTime;
-		time_t m_currInputTime;
-
 		HookFunc<GetDeviceState_t> m_getDeviceState;
 	};
-
-	extern std::chrono::steady_clock::time_point g_getDeviceStateTime;
 }

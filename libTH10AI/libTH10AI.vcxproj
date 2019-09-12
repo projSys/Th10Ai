@@ -104,8 +104,10 @@
     <ClInclude Include="include\libTH10AI\Entity\Item.h" />
     <ClInclude Include="include\libTH10AI\Entity\Laser.h" />
     <ClInclude Include="include\libTH10AI\Entity\Player.h" />
+    <ClInclude Include="include\libTH10AI\FrameSync.h" />
     <ClInclude Include="include\libTH10AI\HookMain.h" />
     <ClInclude Include="include\libTH10AI\HookThread.h" />
+    <ClInclude Include="include\libTH10AI\Input.h" />
     <ClInclude Include="include\libTH10AI\Mover.h" />
     <ClInclude Include="include\libTH10AI\Path.h" />
     <ClInclude Include="include\libTH10AI\Scene.h" />
@@ -126,8 +128,10 @@
     <ClCompile Include="src\libTH10AI\Entity\Item.cpp" />
     <ClCompile Include="src\libTH10AI\Entity\Laser.cpp" />
     <ClCompile Include="src\libTH10AI\Entity\Player.cpp" />
+    <ClCompile Include="src\libTH10AI\FrameSync.cpp" />
     <ClCompile Include="src\libTH10AI\HookMain.cpp" />
     <ClCompile Include="src\libTH10AI\HookThread.cpp" />
+    <ClCompile Include="src\libTH10AI\Input.cpp" />
     <ClCompile Include="src\libTH10AI\Mover.cpp" />
     <ClCompile Include="src\libTH10AI\Path.cpp" />
     <ClCompile Include="src\libTH10AI\Scene.cpp" />

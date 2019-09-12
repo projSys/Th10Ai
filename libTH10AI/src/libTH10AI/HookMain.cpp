@@ -33,8 +33,14 @@ namespace th
 	{
 		try
 		{
-			std::string logName = Utils::GetModuleDir(g_module) + "/TH10AI.log";
-			bl::add_file_log(logName);
+			std::string logName = Utils::GetModuleDir(g_module) + "/TH10AI_%N.log";
+			bl::add_file_log
+			(
+				bl::keywords::file_name = logName,
+				bl::keywords::rotation_size = 10 * 1024 * 1024,
+				bl::keywords::time_based_rotation = bl::sinks::file::rotation_at_time_point(0, 0, 0),
+				bl::keywords::format = "[%TimeStamp%]%Message%"
+			);
 
 			if (g_hook != nullptr)
 				THROW_BASE_EXCEPTION(Exception() << err_str(u8"消息钩子已创建。"));
@@ -101,8 +107,14 @@ namespace th
 	{
 		try
 		{
-			std::string logName = Utils::GetModuleDir(g_module) + "/libTH10AI.log";
-			bl::add_file_log(logName);
+			std::string logName = Utils::GetModuleDir(g_module) + "/libTH10AI_%N.log";
+			bl::add_file_log
+			(
+				bl::keywords::file_name = logName,
+				bl::keywords::rotation_size = 10 * 1024 * 1024,
+				bl::keywords::time_based_rotation = bl::sinks::file::rotation_at_time_point(0, 0, 0),
+				bl::keywords::format = "[%TimeStamp%]%Message%"
+			);
 
 			if (g_hookThread != nullptr)
 				THROW_BASE_EXCEPTION(Exception() << err_str(u8"钩子线程已创建。"));

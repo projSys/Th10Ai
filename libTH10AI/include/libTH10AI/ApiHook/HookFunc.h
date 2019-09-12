@@ -10,10 +10,10 @@ namespace th
 	};
 
 	template <typename Ret, typename... Args>
-	class HookFunc<Ret(STDMETHODCALLTYPE *)(Args...)>
+	class HookFunc<Ret(__stdcall *)(Args...)>
 	{
 	public:
-		typedef Ret(STDMETHODCALLTYPE *FuncPtr_t)(Args...);
+		typedef Ret(__stdcall *FuncPtr_t)(Args...);
 
 		HookFunc() :
 			m_target(nullptr),
