@@ -36,7 +36,7 @@ namespace th
 		try
 		{
 			m_input.clear();
-			m_input.commit(0);
+			m_input.commit();
 		}
 		catch (...)
 		{
@@ -80,8 +80,12 @@ namespace th
 	{
 		if (!m_active)
 		{
+			m_input.clear();
+			m_input.commit();
+
 			m_frameSync.enable(true);
 			m_input.enable(true);
+
 			m_active = true;
 			std::cout << "开启Bot。" << std::endl;
 		}
@@ -92,7 +96,8 @@ namespace th
 		if (m_active)
 		{
 			m_input.clear();
-			m_input.commit(0);
+			m_input.commit();
+
 			m_input.enable(false);
 			m_frameSync.enable(false);
 
@@ -109,8 +114,7 @@ namespace th
 			return;
 		}
 
-		if (!m_frameSync.waitPresent())
-			std::cout << "读取数据延迟了。" << std::endl;
+		m_frameSync.waitPresent();
 
 		//static int_t fps = 0;
 		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -124,10 +128,9 @@ namespace th
 		//	begin += std::chrono::milliseconds(1000);
 		//}
 
-		m_clock.update();
-
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
+		m_clock.update();
 		m_data.update();
 
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
@@ -150,11 +153,9 @@ namespace th
 
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
-		time_t e4 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t0).count();
-		//if (e4 > 10)
-		//	std::cout << "超时" << e1 << " " << e2 << " " << e3 << std::endl;
+		//std::cout << "e3: " << e3 << std::endl;
 
-		m_input.commit(e4);
+		m_input.commit();
 	}
 
 	// 处理炸弹

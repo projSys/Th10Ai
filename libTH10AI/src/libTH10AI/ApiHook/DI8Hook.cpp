@@ -19,14 +19,14 @@ namespace th
 		if (directInput8Create == nullptr)
 			THROW_WINDOWS_ERROR(GetLastError());
 
-		CComPtr<IDirectInput8> di8;
+		CComPtr<IDirectInput8> dinput8;
 		HRESULT hr = directInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION,
-			IID_IDirectInput8, reinterpret_cast<LPVOID*>(&di8), nullptr);
+			IID_IDirectInput8, reinterpret_cast<LPVOID*>(&dinput8), nullptr);
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
 		CComPtr<IDirectInputDevice8> device;
-		hr = di8->CreateDevice(GUID_SysKeyboard, &device, nullptr);
+		hr = dinput8->CreateDevice(GUID_SysKeyboard, &device, nullptr);
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 

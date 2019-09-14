@@ -14,6 +14,7 @@ namespace th
 	{
 	public:
 		virtual ~DI8Listener() = default;
+
 		virtual void onGetDeviceStateBegin(IDirectInputDevice8* device, DWORD size, LPVOID data) {}
 		virtual void onGetDeviceStateEnd(HRESULT& hr, IDirectInputDevice8* device, DWORD size, LPVOID data) {}
 	};

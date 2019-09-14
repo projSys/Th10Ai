@@ -13,6 +13,7 @@ namespace th
 	{
 	public:
 		virtual ~D3D9Listener() = default;
+
 		virtual void onPresentBegin(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 			HWND destWindowOverride, CONST RGNDATA* dirtyRegion) {}
 		virtual void onPresentEnd(HRESULT& hr, IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,

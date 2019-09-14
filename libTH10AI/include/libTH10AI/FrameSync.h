@@ -14,8 +14,9 @@ namespace th
 		FrameSync();
 
 		void enable(bool enabled);
+
 		void notifyPresent();
-		bool waitPresent();
+		void waitPresent();
 
 	private:
 		virtual void onPresentBegin(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
@@ -32,4 +33,5 @@ namespace th
 
 	extern std::chrono::steady_clock::time_point g_presentBeginTime;
 	extern std::chrono::steady_clock::time_point g_presentEndTime;
+	extern time_t g_presentTimespan;
 }

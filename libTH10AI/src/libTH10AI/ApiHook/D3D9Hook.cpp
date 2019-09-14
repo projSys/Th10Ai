@@ -48,20 +48,20 @@ namespace th
 		if (d3d9 == nullptr)
 			THROW_BASE_EXCEPTION(Exception() << err_str("Direct3DCreate9() failed."));
 
-		D3DDISPLAYMODE dm = {};
-		HRESULT hr = d3d9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &dm);
+		D3DDISPLAYMODE d3ddm = {};
+		HRESULT hr = d3d9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
-		D3DPRESENT_PARAMETERS pp = {};
-		pp.Windowed = TRUE;
-		pp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-		pp.BackBufferFormat = dm.Format;
+		D3DPRESENT_PARAMETERS d3dpp = {};
+		d3dpp.Windowed = TRUE;
+		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+		d3dpp.BackBufferFormat = d3ddm.Format;
 
 		CComPtr<IDirect3DDevice9> device;
 		hr = d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_DISABLE_DRIVER_MANAGEMENT,
-			&pp, &device);
+			&d3dpp, &device);
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 

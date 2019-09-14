@@ -9,11 +9,10 @@ namespace th
 {
 	Input::Input() :
 		m_keyReadied(false),
-		m_inputDelayed(false),
-		m_prevPresentTimespan(0),
-		m_currInputTimespan(0),
+		m_keyDelayed(false),
 		m_di8Hook(this)
 	{
+		std::lock_guard<std::mutex> lock(m_keyMutex);
 		for (KeyState& keyState : m_writeState)
 			keyState = KS_NONE;
 		for (KeyState& keyState : m_readState)
@@ -21,57 +20,69 @@ namespace th
 	}
 
 	std::chrono::steady_clock::time_point g_getDeviceStateTime;
+	time_t g_smoothTimespan;
 
 	void Input::onGetDeviceStateBegin(IDirectInputDevice8* device, DWORD size, LPVOID data)
 	{
-		// 获取输入前的迷之等待时间
+		// 帧平滑机制：获取输入前会有等待时间
 		g_getDeviceStateTime = std::chrono::steady_clock::now();
-		//std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
-		//	g_getDeviceStateTime - g_presentEndTime);
+		std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
+			g_getDeviceStateTime - g_presentEndTime);
+		g_smoothTimespan = interval.count();
 		//std::cout << interval.count() << " ";
+
+		// c_dfDIKeyboard
+		if (size == 256 && data != nullptr)
+		{
+			// 如果前一帧的垂直同步等待时间 + 当前帧的平滑等待时间 < 5毫秒，则延时一下
+			if (g_presentTimespan + g_smoothTimespan < 5)
+			{
+				time_t delayTimespan = 5 - g_presentTimespan - g_smoothTimespan;
+				std::cout << "作弊延时: " << delayTimespan << std::endl;
+				std::this_thread::sleep_for(std::chrono::milliseconds(delayTimespan));
+				g_getDeviceStateTime = std::chrono::steady_clock::now();
+			}
+		}
+		// c_dfDIMouse
+		//sizeof(DIMOUSESTATE);
+		// c_dfDIMouse2
+		//sizeof(DIMOUSESTATE2);
+		// c_dfDIJoystick
+		//sizeof(DIJOYSTATE);
+		// c_dfDIJoystick2
+		//sizeof(DIJOYSTATE2);
 	}
 
 	void Input::onGetDeviceStateEnd(HRESULT& hr, IDirectInputDevice8* device, DWORD size, LPVOID data)
 	{
 		if (FAILED(hr))
 			return;
-	AAA:
+
 		// c_dfDIKeyboard
 		if (size == 256 && data != nullptr)
 		{
+			std::lock_guard<std::mutex> lock(m_keyMutex);
+			if (m_keyReadied)
 			{
-				std::lock_guard<std::mutex> lock(m_keyMutex);
-				if (m_keyReadied)
+				BYTE* keyState = reinterpret_cast<BYTE*>(data);
+				for (int_t i = 0; i < 256; ++i)
 				{
-					BYTE* keyState = reinterpret_cast<BYTE*>(data);
-					for (int_t i = 0; i < 256; ++i)
+					switch (m_readState[i])
 					{
-						switch (m_readState[i])
-						{
-						case KS_RELEASE:
-							keyState[i] = 0x00;
-							break;
-						case KS_PRESS:
-							keyState[i] = 0x80;
-							break;
-						}
+					case KS_RELEASE:
+						keyState[i] = 0x00;
+						break;
+					case KS_PRESS:
+						keyState[i] = 0x80;
+						break;
 					}
-					m_keyReadied = false;
 				}
-				else
-				{
-					m_inputDelayed = true;
-					m_prevPresentTimespan = std::chrono::duration_cast<std::chrono::milliseconds>(
-						g_presentEndTime - g_presentBeginTime).count();
-					m_currInputTimespan = std::chrono::duration_cast<std::chrono::milliseconds>(
-						g_getDeviceStateTime - g_presentEndTime).count();
-				}
+				m_keyReadied = false;
+				m_keyDelayed = false;
 			}
-			if (m_inputDelayed && m_prevPresentTimespan + m_currInputTimespan < 5)
+			else
 			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(5 - m_prevPresentTimespan - m_currInputTimespan));
-				g_getDeviceStateTime = std::chrono::steady_clock::now();
-				goto AAA;
+				m_keyDelayed = true;
 			}
 		}
 		// c_dfDIMouse
@@ -115,16 +126,19 @@ namespace th
 		return m_writeState[key] == KS_PRESS;
 	}
 
-	void Input::commit(time_t handleTime)
+	void Input::commit()
 	{
 		std::lock_guard<std::mutex> lock(m_keyMutex);
 		memcpy_s(m_readState, sizeof(m_readState), m_writeState, sizeof(m_writeState));
 		m_keyReadied = true;
-		if (m_inputDelayed)
+		if (m_keyDelayed)
 		{
-			std::cout << "操作延迟了：" << m_prevPresentTimespan << " " << m_currInputTimespan
-				<< " " << handleTime << std::endl;
-			m_inputDelayed = false;
+			std::chrono::steady_clock::time_point inputTime = std::chrono::steady_clock::now();
+			std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
+				inputTime - g_presentBeginTime);
+			std::cout << "操作延迟了：" << g_presentTimespan + g_smoothTimespan
+				<< " " << interval.count() << std::endl;
+			m_keyDelayed = false;
 		}
 	}
 }
