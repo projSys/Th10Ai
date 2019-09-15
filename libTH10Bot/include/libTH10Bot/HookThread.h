@@ -1,0 +1,26 @@
+#pragma once
+
+#include <thread>
+#include <atomic>
+#include <memory>
+
+namespace th
+{
+	class Th10Bot;
+
+	class HookThread
+	{
+	public:
+		HookThread();
+		~HookThread();
+
+		bool isDone() const;
+
+	private:
+		void hookProc();
+
+		std::thread m_thread;
+		std::atomic_bool m_done;
+		std::shared_ptr<Th10Bot> m_bot;
+	};
+}

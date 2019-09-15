@@ -3,9 +3,11 @@
 #include <Base/Common.h>
 #include <Base/Type.h>
 #include <Base/Exception.h>
+#include <Base/Point.h>
+#include <Base/Size.h>
+#include <Base/Rect.h>
 #include <Windows/Common.h>
 #include <Windows/Utils.h>
-#include <libTH10Bot/Common.h>
 
 namespace th
 {
@@ -13,3 +15,8 @@ namespace th
 	using base::float_t;
 	using namespace win;
 }
+
+#include <chrono>
+#include <iostream>
+
+#include "libTH10Bot/Direction.h"

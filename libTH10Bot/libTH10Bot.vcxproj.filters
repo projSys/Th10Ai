@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\libTH10Bot">
+      <UniqueIdentifier>{7794c356-1e0a-4ac7-bc77-bc8eb4029fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\libTH10Bot">
+      <UniqueIdentifier>{a361e8ab-5aec-4181-9503-ebd49a9c8bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\libTH10Bot\Entity">
+      <UniqueIdentifier>{d4d5f2ff-464d-4719-9d91-361ce055feaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\libTH10Bot\Entity">
+      <UniqueIdentifier>{9f79d5f1-dcb4-4456-8b05-dfa3141a9692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\libTH10Bot\ApiHook">
+      <UniqueIdentifier>{3c9d079a-65d9-42c0-a492-14d0869fa3b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\libTH10Bot\ApiHook">
+      <UniqueIdentifier>{5002883c-85ea-4f90-aa7b-1fdc467020f7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libTH10Bot.def">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\libTH10Bot\Api.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Area.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Clock.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Common.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Data.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Direction.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\DllMain.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\FrameSync.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\HookMain.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\HookThread.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Input.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Mover.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Path.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Scene.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\ApiHook\D3D9Hook.h">
+      <Filter>头文件\libTH10Bot\ApiHook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\ApiHook\DI8Hook.h">
+      <Filter>头文件\libTH10Bot\ApiHook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\ApiHook\HookFunc.h">
+      <Filter>头文件\libTH10Bot\ApiHook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\ApiHook\HookIniter.h">
+      <Filter>头文件\libTH10Bot\ApiHook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Entity\Bullet.h">
+      <Filter>头文件\libTH10Bot\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Entity\Enemy.h">
+      <Filter>头文件\libTH10Bot\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Entity\Entity.h">
+      <Filter>头文件\libTH10Bot\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Entity\Item.h">
+      <Filter>头文件\libTH10Bot\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Entity\Laser.h">
+      <Filter>头文件\libTH10Bot\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Entity\Player.h">
+      <Filter>头文件\libTH10Bot\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10Bot\Th10Bot.h">
+      <Filter>头文件\libTH10Bot</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\libTH10Bot\Api.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Area.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Clock.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Data.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\DllMain.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\FrameSync.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\HookMain.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\HookThread.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Input.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Mover.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Path.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Scene.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\ApiHook\D3D9Hook.cpp">
+      <Filter>源文件\libTH10Bot\ApiHook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\ApiHook\DI8Hook.cpp">
+      <Filter>源文件\libTH10Bot\ApiHook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\ApiHook\HookIniter.cpp">
+      <Filter>源文件\libTH10Bot\ApiHook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Entity\Bullet.cpp">
+      <Filter>源文件\libTH10Bot\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Entity\Enemy.cpp">
+      <Filter>源文件\libTH10Bot\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Entity\Entity.cpp">
+      <Filter>源文件\libTH10Bot\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Entity\Item.cpp">
+      <Filter>源文件\libTH10Bot\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Entity\Laser.cpp">
+      <Filter>源文件\libTH10Bot\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Entity\Player.cpp">
+      <Filter>源文件\libTH10Bot\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10Bot\Th10Bot.cpp">
+      <Filter>源文件\libTH10Bot</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

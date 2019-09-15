@@ -1,7 +1,7 @@
 # TH10Bot
 
-东方风神录AI，基于深度优先搜索算法。<br />
-Mountain of Faith's AI, based on depth first search algorithm.<br />
+东方风神录Bot，基于深度优先搜索算法。<br />
+Mountain of Faith's bot, based on depth first search algorithm.<br />
 
 ![](https://github.com/GiriMind/TH10Bot/raw/master/1.png)
 
@@ -24,7 +24,6 @@ Win8或者以上，安装[VC++2017可再发行程序包](https://support.microso
 
 [boost](https://www.boost.org)<br />
 [minhook](https://github.com/TsudaKageyu/minhook)<br />
-[opencv](https://github.com/opencv/opencv)<br />
 
 ## 感谢 Thanks
 

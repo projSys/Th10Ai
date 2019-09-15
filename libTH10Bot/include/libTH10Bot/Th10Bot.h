@@ -1,0 +1,89 @@
+#pragma once
+
+#include "libTH10Bot/ApiHook/HookIniter.h"
+#include "libTH10Bot/FrameSync.h"
+#include "libTH10Bot/Input.h"
+#include "libTH10Bot/Api.h"
+#include "libTH10Bot/Data.h"
+#include "libTH10Bot/Scene.h"
+#include "libTH10Bot/Clock.h"
+#include "libTH10Bot/Mover.h"
+
+namespace th
+{
+	class HookThread;
+
+	struct Action
+	{
+		Pointf fromPos;
+		Direction fromDir;
+		bool slowFirst;			// 是否慢速优先
+		float_t frame;
+		Direction targetDir;
+	};
+
+	struct Reward
+	{
+		bool valid;
+		bool slow;		// 实际是否慢速
+		float_t score;
+		int_t size;
+	};
+
+	class Th10Bot
+	{
+	public:
+		Th10Bot();
+		~Th10Bot();
+
+		void run(HookThread& container);
+		void notify();
+		bool isKeyPressed(int vKey) const;
+
+		void start();
+		void stop();
+		void update();
+
+		bool handleBomb();
+		bool handleTalk();
+		bool handleShoot();
+		bool handleMove();
+		Reward dfs(const Action& action);
+		//NodeScore calcNodeScore(const Player& player, float_t frame);
+		int_t findItem();
+		int_t findEnemy();
+		float_t calcCollectScore(const Player& player);
+		float_t calcShootScore(const Player& player);
+		float_t calcGobackScore(const Player& player);
+
+		void move(Direction dir, bool slow);
+
+	private:
+		HookIniter m_hookIniter;
+		FrameSync m_frameSync;
+		Input m_input;
+
+		Api m_api;
+		Data m_data;
+
+		Clock m_clock;
+
+		Scene m_scene;
+
+		bool m_active;
+		float_t m_bestScore;
+		Direction m_bestDir;
+		bool m_bestSlow;
+		int_t m_count;
+		int_t m_limit;
+
+		int_t m_itemId;
+		int_t m_enemyId;
+
+		time_t m_bombCooldown;
+		time_t m_talkCooldown;
+		time_t m_collectCooldown;
+
+		std::chrono::steady_clock::time_point m_t0;
+	};
+}
