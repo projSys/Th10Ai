@@ -30,11 +30,11 @@ namespace th
 		int_t size;
 	};
 
-	class Th10Bot
+	class Bot
 	{
 	public:
-		Th10Bot();
-		~Th10Bot();
+		Bot();
+		~Bot();
 
 		void run(HookThread& container);
 		void notify();

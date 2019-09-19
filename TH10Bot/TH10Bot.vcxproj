@@ -10,12 +10,6 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\TH10Bot\Common.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\TH10Bot\WinMain.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{534016B9-FDC7-44FF-AF70-16CD8467BD2D}</ProjectGuid>
@@ -94,6 +88,12 @@
       <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\TH10Bot\Common.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\TH10Bot\WinMain.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

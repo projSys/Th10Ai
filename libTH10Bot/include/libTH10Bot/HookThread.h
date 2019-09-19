@@ -6,7 +6,7 @@
 
 namespace th
 {
-	class Th10Bot;
+	class Bot;
 
 	class HookThread
 	{
@@ -21,6 +21,6 @@ namespace th
 
 		std::thread m_thread;
 		std::atomic_bool m_done;
-		std::shared_ptr<Th10Bot> m_bot;
+		std::shared_ptr<Bot> m_bot;
 	};
 }

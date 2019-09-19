@@ -110,7 +110,7 @@
     <ClInclude Include="include\libTH10Bot\Entity\Player.h">
       <Filter>头文件\libTH10Bot\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTH10Bot\Th10Bot.h">
+    <ClInclude Include="include\libTH10Bot\Bot.h">
       <Filter>头文件\libTH10Bot</Filter>
     </ClInclude>
   </ItemGroup>
@@ -178,7 +178,7 @@
     <ClCompile Include="src\libTH10Bot\Entity\Player.cpp">
       <Filter>源文件\libTH10Bot\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTH10Bot\Th10Bot.cpp">
+    <ClCompile Include="src\libTH10Bot\Bot.cpp">
       <Filter>源文件\libTH10Bot</Filter>
     </ClCompile>
   </ItemGroup>

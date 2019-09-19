@@ -1,5 +1,5 @@
 #include "libTH10Bot/Common.h"
-#include "libTH10Bot/Th10Bot.h"
+#include "libTH10Bot/Bot.h"
 
 #include <thread>
 
@@ -8,7 +8,7 @@
 namespace th
 {
 	// 在东方窗口线程运行
-	Th10Bot::Th10Bot() :
+	Bot::Bot() :
 		m_data(m_api),
 		m_active(false),
 		m_itemId(-1),
@@ -35,7 +35,7 @@ namespace th
 	}
 
 	// 在东方窗口线程运行
-	Th10Bot::~Th10Bot()
+	Bot::~Bot()
 	{
 		try
 		{
@@ -50,7 +50,7 @@ namespace th
 	}
 
 	// 在钩子线程运行
-	void Th10Bot::run(HookThread& container)
+	void Bot::run(HookThread& container)
 	{
 		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启Bot，按S停止Bot，按D退出Bot。" << std::endl;
 
@@ -69,18 +69,18 @@ namespace th
 		std::cout << "退出Bot。" << std::endl;
 	}
 
-	void Th10Bot::notify()
+	void Bot::notify()
 	{
 		m_active = false;
 		m_frameSync.notifyPresent();
 	}
 
-	bool Th10Bot::isKeyPressed(int vKey) const
+	bool Bot::isKeyPressed(int vKey) const
 	{
 		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
 	}
 
-	void Th10Bot::start()
+	void Bot::start()
 	{
 		if (!m_active)
 		{
@@ -95,7 +95,7 @@ namespace th
 		}
 	}
 
-	void Th10Bot::stop()
+	void Bot::stop()
 	{
 		if (m_active)
 		{
@@ -110,7 +110,7 @@ namespace th
 		}
 	}
 
-	void Th10Bot::update()
+	void Bot::update()
 	{
 		if (!m_active)
 		{
@@ -135,6 +135,7 @@ namespace th
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
 		m_clock.update();
+
 		m_data.update();
 
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
@@ -163,7 +164,7 @@ namespace th
 	}
 
 	// 处理炸弹
-	bool Th10Bot::handleBomb()
+	bool Bot::handleBomb()
 	{
 		if (m_input.isKeyPressed(DIK_X))
 			m_input.keyRelease(DIK_X);
@@ -183,7 +184,7 @@ namespace th
 	}
 
 	// 处理对话
-	bool Th10Bot::handleTalk()
+	bool Bot::handleTalk()
 	{
 		if (m_data.isTalking())
 		{
@@ -205,7 +206,7 @@ namespace th
 	}
 
 	// 处理攻击
-	bool Th10Bot::handleShoot()
+	bool Bot::handleShoot()
 	{
 		if (m_data.hasEnemy())
 		{
@@ -220,7 +221,7 @@ namespace th
 	}
 
 	// 处理移动
-	bool Th10Bot::handleMove()
+	bool Bot::handleMove()
 	{
 		if (!(m_data.isRebirthStatus() || m_data.isNormalStatus()))
 			return false;
@@ -271,7 +272,7 @@ namespace th
 		return true;
 	}
 
-	Reward Th10Bot::dfs(const Action& action)
+	Reward Bot::dfs(const Action& action)
 	{
 		Reward reward;
 		reward.valid = false;
@@ -351,7 +352,7 @@ namespace th
 		return reward;
 	}
 
-	//NodeScore Th10Bot::calcNodeScore(const Player& player, float_t frame)
+	//NodeScore Bot::calcNodeScore(const Player& player, float_t frame)
 	//{
 	//	NodeScore score = { 0.0f, std::numeric_limits<float_t>::max(), DIR_NONE, 0 };
 
@@ -376,7 +377,7 @@ namespace th
 	//}
 
 	// 查找道具
-	int_t Th10Bot::findItem()
+	int_t Bot::findItem()
 	{
 		int_t id = -1;
 
@@ -442,7 +443,7 @@ namespace th
 	}
 
 	// 查找敌人
-	int_t Th10Bot::findEnemy()
+	int_t Bot::findEnemy()
 	{
 		int_t id = -1;
 
@@ -474,7 +475,7 @@ namespace th
 	}
 
 	// 拾取道具评分
-	float_t Th10Bot::calcCollectScore(const Player& player)
+	float_t Bot::calcCollectScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
@@ -504,7 +505,7 @@ namespace th
 	}
 
 	// 攻击敌人评分
-	float_t Th10Bot::calcShootScore(const Player& player)
+	float_t Bot::calcShootScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
@@ -542,7 +543,7 @@ namespace th
 		return score;
 	}
 
-	float_t Th10Bot::calcGobackScore(const Player& player)
+	float_t Bot::calcGobackScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
@@ -566,7 +567,7 @@ namespace th
 		return score;
 	}
 
-	void Th10Bot::move(Direction dir, bool slow)
+	void Bot::move(Direction dir, bool slow)
 	{
 		if (slow)
 			m_input.keyPress(DIK_LSHIFT);

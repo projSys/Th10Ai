@@ -87,15 +87,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="libTH10Bot.def" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\libTH10Bot\Api.h" />
     <ClInclude Include="include\libTH10Bot\ApiHook\D3D9Hook.h" />
     <ClInclude Include="include\libTH10Bot\ApiHook\DI8Hook.h" />
     <ClInclude Include="include\libTH10Bot\ApiHook\HookFunc.h" />
     <ClInclude Include="include\libTH10Bot\ApiHook\HookIniter.h" />
     <ClInclude Include="include\libTH10Bot\Area.h" />
+    <ClInclude Include="include\libTH10Bot\Bot.h" />
     <ClInclude Include="include\libTH10Bot\Clock.h" />
     <ClInclude Include="include\libTH10Bot\Common.h" />
     <ClInclude Include="include\libTH10Bot\Data.h" />
@@ -114,7 +112,6 @@
     <ClInclude Include="include\libTH10Bot\Mover.h" />
     <ClInclude Include="include\libTH10Bot\Path.h" />
     <ClInclude Include="include\libTH10Bot\Scene.h" />
-    <ClInclude Include="include\libTH10Bot\Th10Bot.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\libTH10Bot\Api.cpp" />
@@ -122,6 +119,7 @@
     <ClCompile Include="src\libTH10Bot\ApiHook\DI8Hook.cpp" />
     <ClCompile Include="src\libTH10Bot\ApiHook\HookIniter.cpp" />
     <ClCompile Include="src\libTH10Bot\Area.cpp" />
+    <ClCompile Include="src\libTH10Bot\Bot.cpp" />
     <ClCompile Include="src\libTH10Bot\Clock.cpp" />
     <ClCompile Include="src\libTH10Bot\Data.cpp" />
     <ClCompile Include="src\libTH10Bot\DllMain.cpp" />
@@ -138,7 +136,9 @@
     <ClCompile Include="src\libTH10Bot\Mover.cpp" />
     <ClCompile Include="src\libTH10Bot\Path.cpp" />
     <ClCompile Include="src\libTH10Bot\Scene.cpp" />
-    <ClCompile Include="src\libTH10Bot\Th10Bot.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libTH10Bot.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

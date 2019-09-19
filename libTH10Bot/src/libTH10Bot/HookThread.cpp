@@ -2,14 +2,14 @@
 #include "libTH10Bot/HookThread.h"
 
 #include "libTH10Bot/HookMain.h"
-#include "libTH10Bot/Th10Bot.h"
+#include "libTH10Bot/Bot.h"
 
 namespace th
 {
 	HookThread::HookThread() :
 		m_done(false)
 	{
-		m_bot = std::make_shared<Th10Bot>();
+		m_bot = std::make_shared<Bot>();
 		m_thread = std::thread(std::bind(&HookThread::hookProc, this));
 	}
 

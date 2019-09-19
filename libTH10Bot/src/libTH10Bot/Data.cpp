@@ -14,11 +14,20 @@ namespace th
 
 	void Data::update()
 	{
-		m_api.readPlayer(m_player);
-		m_api.readItems(m_items);
-		m_api.readEnemies(m_enemies);
-		m_api.readBullets(m_bullets);
-		m_api.readLasers(m_lasers);
+		if (!m_api.readPlayer(m_player))
+			std::cout << "¶ÁÈ¡PlayerÊ§°Ü¡£" << std::endl;
+
+		if (!m_api.readItems(m_items))
+			std::cout << "¶ÁÈ¡ItemsÊ§°Ü¡£" << std::endl;
+
+		if (!m_api.readEnemies(m_enemies))
+			std::cout << "¶ÁÈ¡EnemiesÊ§°Ü¡£" << std::endl;
+
+		if (!m_api.readBullets(m_bullets))
+			std::cout << "¶ÁÈ¡BulletsÊ§°Ü¡£" << std::endl;
+
+		if (m_api.readLasers(m_lasers))
+			std::cout << "¶ÁÈ¡LasersÊ§°Ü¡£" << std::endl;
 	}
 
 	bool Data::isRebirthStatus() const
