@@ -1,6 +1,8 @@
 #include "libTH10Bot/Common.h"
 #include "libTH10Bot/FrameSync.h"
 
+#include <thread>
+
 #include "libTH10Bot/Input.h"
 
 namespace th
@@ -30,12 +32,26 @@ namespace th
 	void FrameSync::onPresentEnd(HRESULT& hr, IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
+		if (FAILED(hr))
+		{
+			std::cout << "Present()失败。" << std::endl;
+			return;
+		}
+
 		// 垂直同步的等待时间
 		g_presentEndTime = std::chrono::steady_clock::now();
 		std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
 			g_presentEndTime - g_presentBeginTime);
-		g_presentTimespan = interval.count();
 		//std::cout << interval.count() << std::endl;
+		g_presentTimespan = interval.count();
+
+		// 如果垂直同步的等待时间小于5毫秒，则延时一下，会导致掉帧
+		if (g_presentTimespan < 5)
+		{
+			time_t delayTimespan = 5 - g_presentTimespan;
+			std::cout << "作弊延时: " << delayTimespan << std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds(delayTimespan));
+		}
 	}
 
 	void FrameSync::enable(bool enabled)

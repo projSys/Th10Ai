@@ -141,8 +141,17 @@ namespace th
 			{
 				Bullet temp = bullet;
 				temp.advance(frame);
-				if (temp.collide(player))
-					return true;
+				if (!temp.isHighSpeed())
+				{
+					if (temp.collide(player))
+						return true;
+				}
+				else
+				{
+					std::pair<bool, float_t> ret = temp.willCollideWith(player);
+					if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
+						return true;
+				}
 				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
 				//if (ret.first)
 				//{

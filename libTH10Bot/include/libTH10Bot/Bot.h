@@ -83,7 +83,5 @@ namespace th
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;
 		time_t m_collectCooldown;
-
-		std::chrono::steady_clock::time_point m_t0;
 	};
 }

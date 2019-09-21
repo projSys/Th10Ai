@@ -27,6 +27,7 @@ namespace th
 		void advance(float_t frame);
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
+		bool isHighSpeed() const;
 
 		Pointf getPosition() const;
 		void setPosition(const Pointf& pos);
@@ -34,7 +35,7 @@ namespace th
 		Pointf getTopRight() const;
 		Pointf getBottomLeft() const;
 		Pointf getBottomRight() const;
-		bool isHolded() const;
+		bool isHolding() const;
 		Pointf getDelta() const;
 		Pointf getNextPos() const;
 		Sizef getSize() const;

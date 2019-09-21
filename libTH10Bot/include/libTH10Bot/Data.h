@@ -34,6 +34,7 @@ namespace th
 
 	private:
 		Api& m_api;
+
 		Player m_player;
 		std::vector<Item> m_items;
 		std::vector<Enemy> m_enemies;

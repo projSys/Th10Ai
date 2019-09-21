@@ -12,10 +12,10 @@ namespace th
 		DIR_DOWN,			// 下
 		DIR_LEFT,			// 左
 		DIR_RIGHT,			// 右
-		DIR_UPLEFT,			// 左上
-		DIR_UPRIGHT,		// 右上
-		DIR_DOWNLEFT,		// 左下
-		DIR_DOWNRIGHT,		// 右下
+		DIR_LEFTUP,			// 左上
+		DIR_RIGHTUP,		// 右上
+		DIR_LEFTDOWN,		// 左下
+		DIR_RIGHTDOWN,		// 右下
 
 		DIR_MAXCOUNT
 	};

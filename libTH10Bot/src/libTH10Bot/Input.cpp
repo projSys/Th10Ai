@@ -34,14 +34,14 @@ namespace th
 		// c_dfDIKeyboard
 		if (size == 256 && data != nullptr)
 		{
-			// 如果前一帧的垂直同步等待时间 + 当前帧的平滑等待时间 < 5毫秒，则延时一下
-			if (g_presentTimespan + g_smoothTimespan < 5)
-			{
-				time_t delayTimespan = 5 - g_presentTimespan - g_smoothTimespan;
-				std::cout << "作弊延时: " << delayTimespan << std::endl;
-				std::this_thread::sleep_for(std::chrono::milliseconds(delayTimespan));
-				g_getDeviceStateTime = std::chrono::steady_clock::now();
-			}
+			//// 如果前一帧的垂直同步等待时间 + 当前帧的平滑等待时间 < 5毫秒，则延时一下
+			//if (g_presentTimespan + g_smoothTimespan < 5)
+			//{
+			//	time_t delayTimespan = 5 - g_presentTimespan - g_smoothTimespan;
+			//	std::cout << "作弊延时: " << delayTimespan << std::endl;
+			//	std::this_thread::sleep_for(std::chrono::milliseconds(delayTimespan));
+			//	g_getDeviceStateTime = std::chrono::steady_clock::now();
+			//}
 		}
 		// c_dfDIMouse
 		//sizeof(DIMOUSESTATE);
@@ -56,7 +56,10 @@ namespace th
 	void Input::onGetDeviceStateEnd(HRESULT& hr, IDirectInputDevice8* device, DWORD size, LPVOID data)
 	{
 		if (FAILED(hr))
+		{
+			std::cout << "GetDeviceState()失败。" << std::endl;
 			return;
+		}
 
 		// c_dfDIKeyboard
 		if (size == 256 && data != nullptr)
@@ -136,7 +139,7 @@ namespace th
 			std::chrono::steady_clock::time_point inputTime = std::chrono::steady_clock::now();
 			std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(
 				inputTime - g_presentBeginTime);
-			std::cout << "操作延迟了：" << g_presentTimespan + g_smoothTimespan
+			std::cout << "输入延迟了：" << g_presentTimespan + g_smoothTimespan
 				<< " " << interval.count() << std::endl;
 			m_keyDelayed = false;
 		}

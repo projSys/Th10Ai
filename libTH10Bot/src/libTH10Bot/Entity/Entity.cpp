@@ -11,20 +11,20 @@ namespace th
 	const Direction Entity::SECTOR_TO_DIR[17] =
 	{
 		DIR_RIGHT,		// 0
-		DIR_UPRIGHT,
-		DIR_UPRIGHT,
+		DIR_RIGHTUP,
+		DIR_RIGHTUP,
 		DIR_UP,
 		DIR_UP,
-		DIR_UPLEFT,
-		DIR_UPLEFT,
+		DIR_LEFTUP,
+		DIR_LEFTUP,
 		DIR_LEFT,
 		DIR_LEFT,
-		DIR_DOWNLEFT,
-		DIR_DOWNLEFT,
+		DIR_LEFTDOWN,
+		DIR_LEFTDOWN,
 		DIR_DOWN,
 		DIR_DOWN,
-		DIR_DOWNRIGHT,
-		DIR_DOWNRIGHT,
+		DIR_RIGHTDOWN,
+		DIR_RIGHTDOWN,
 		DIR_RIGHT,
 		DIR_RIGHT		// 360
 	};
@@ -75,7 +75,7 @@ namespace th
 	// 点与前进方向的垂足
 	std::pair<Pointf, float_t> Entity::calcFootPoint(const Pointf& pos) const
 	{
-		if (isHolded())
+		if (isHolding())
 			return std::make_pair(Pointf(x, y), 0.0f);
 
 		// 到达垂足的帧数
@@ -85,7 +85,7 @@ namespace th
 
 	float_t Entity::calcAngle(const Pointf& pos) const
 	{
-		if (isHolded() || getPosition() == pos)
+		if (isHolding() || getPosition() == pos)
 			return -1.0f;
 
 		return CalcAngle(getPosition(), getNextPos(), pos);
@@ -93,7 +93,7 @@ namespace th
 
 	Direction Entity::calcDirection() const
 	{
-		if (isHolded())
+		if (isHolding())
 			return DIR_HOLD;
 
 		// 前进方向与X轴正方向的角度
@@ -146,6 +146,11 @@ namespace th
 			return std::make_pair(false, 0.0f);
 	}
 
+	bool Entity::isHighSpeed() const
+	{
+		return dx > 4.5f || dy > 4.5f;
+	}
+
 	Pointf Entity::getPosition() const
 	{
 		return Pointf(x, y);
@@ -177,7 +182,7 @@ namespace th
 		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
 
-	bool Entity::isHolded() const
+	bool Entity::isHolding() const
 	{
 		return std::abs(dx) <= std::numeric_limits<float_t>::epsilon()
 			&& std::abs(dy) <= std::numeric_limits<float_t>::epsilon();

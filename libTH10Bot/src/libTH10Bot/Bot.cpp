@@ -41,6 +41,9 @@ namespace th
 		{
 			m_input.clear();
 			m_input.commit();
+
+			m_input.enable(false);
+			m_frameSync.enable(false);
 		}
 		catch (...)
 		{
@@ -611,28 +614,28 @@ namespace th
 			m_input.keyPress(DIK_RIGHT);
 			break;
 
-		case DIR_UPLEFT:
+		case DIR_LEFTUP:
 			m_input.keyPress(DIK_UP);
 			m_input.keyRelease(DIK_DOWN);
 			m_input.keyPress(DIK_LEFT);
 			m_input.keyRelease(DIK_RIGHT);
 			break;
 
-		case DIR_UPRIGHT:
+		case DIR_RIGHTUP:
 			m_input.keyPress(DIK_UP);
 			m_input.keyRelease(DIK_DOWN);
 			m_input.keyRelease(DIK_LEFT);
 			m_input.keyPress(DIK_RIGHT);
 			break;
 
-		case DIR_DOWNLEFT:
+		case DIR_LEFTDOWN:
 			m_input.keyRelease(DIK_UP);
 			m_input.keyPress(DIK_DOWN);
 			m_input.keyPress(DIK_LEFT);
 			m_input.keyRelease(DIK_RIGHT);
 			break;
 
-		case DIR_DOWNRIGHT:
+		case DIR_RIGHTDOWN:
 			m_input.keyRelease(DIK_UP);
 			m_input.keyPress(DIK_DOWN);
 			m_input.keyRelease(DIK_LEFT);
