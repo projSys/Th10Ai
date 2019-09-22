@@ -39,11 +39,7 @@ namespace th
 		KeyState m_writeState[256];
 		KeyState m_readState[256];
 		bool m_keyReadied;
-		bool m_keyDelayed;
 
 		DI8Hook m_di8Hook;
 	};
-
-	extern std::chrono::steady_clock::time_point g_getDeviceStateTime;
-	extern time_t g_smoothTimespan;
 }

@@ -30,8 +30,4 @@ namespace th
 
 		D3D9Hook m_d3d9Hook;
 	};
-
-	extern std::chrono::steady_clock::time_point g_presentBeginTime;
-	extern std::chrono::steady_clock::time_point g_presentEndTime;
-	extern time_t g_presentTimespan;
 }
