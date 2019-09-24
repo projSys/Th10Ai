@@ -43,7 +43,7 @@ namespace th
 			}
 			else
 			{
-				std::cout << "ÊäÈëµôÖ¡1¡£" << std::endl;
+				std::cout << "ÊäÈëµôÖ¡¡£" << std::endl;
 			}
 		}
 		// c_dfDIMouse
@@ -91,8 +91,6 @@ namespace th
 	{
 		std::lock_guard<std::mutex> lock(m_keyMutex);
 		memcpy_s(m_readState, sizeof(m_readState), m_writeState, sizeof(m_writeState));
-		if (m_keyReadied)
-			std::cout << "ÊäÈëµôÖ¡2¡£" << std::endl;
 		m_keyReadied = true;
 	}
 }

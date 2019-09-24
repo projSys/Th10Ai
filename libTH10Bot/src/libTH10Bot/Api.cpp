@@ -20,8 +20,8 @@ namespace th
 		player.y = readMemory<float32_t>(baseAddr + 0x3C4);
 		player.dx = readMemory<int32_t>(baseAddr + 0x3F0) / 100.0f;
 		player.dy = readMemory<int32_t>(baseAddr + 0x3F4) / 100.0f;
-		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 2.0f;	// 2还是4啊？
-		player.height = player.width = 4.0f;	// 设大点不容易撞
+		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 2.0f;
+		player.height = player.width;
 		player.status = readMemory<int32_t>(baseAddr + 0x458);
 		player.invinibleTime = readMemory<int32_t>(baseAddr + 0x4310);
 		player.slow = readMemory<int32_t>(baseAddr + 0x4474);
