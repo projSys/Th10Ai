@@ -1,6 +1,8 @@
 #include "libTH10Bot/Common.h"
 #include "libTH10Bot/ApiHook/DI8Hook.h"
 
+#include <detours.h>
+
 namespace th
 {
 	DI8Hook::DI8Hook(DI8Listener* listener) :
@@ -31,8 +33,20 @@ namespace th
 			THROW_DIRECTX_HRESULT(hr);
 
 		uint_t* vTable = (uint_t*)(*((uint_t*)device.p));
-		m_getDeviceState = HookFunc<GetDeviceState_t>(reinterpret_cast<LPVOID>(vTable[9]),
-			&DI8Hook::GetDeviceStateHook);
+		m_getDeviceState = (GetDeviceState_t)vTable[9];
+
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach((PVOID*)&m_getDeviceState, &DI8Hook::GetDeviceStateHook);
+		DetourTransactionCommit();
+	}
+
+	DI8Hook::~DI8Hook()
+	{
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourDetach((PVOID*)&m_getDeviceState, &DI8Hook::GetDeviceStateHook);
+		DetourTransactionCommit();
 	}
 
 	void DI8Hook::enable(bool enabled)

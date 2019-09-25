@@ -1,6 +1,5 @@
 #pragma once
 
-#include "libTH10Bot/ApiHook/HookIniter.h"
 #include "libTH10Bot/FrameSync.h"
 #include "libTH10Bot/Input.h"
 #include "libTH10Bot/Api.h"
@@ -59,7 +58,6 @@ namespace th
 		void move(Direction dir, bool slow);
 
 	private:
-		HookIniter m_hookIniter;
 		FrameSync m_frameSync;
 		Input m_input;
 
@@ -83,5 +81,7 @@ namespace th
 		time_t m_bombCooldown;
 		time_t m_talkCooldown;
 		time_t m_collectCooldown;
+
+		int_t m_bombCount;
 	};
 }

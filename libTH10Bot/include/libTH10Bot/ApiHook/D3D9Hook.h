@@ -5,8 +5,6 @@
 #include <atomic>
 #include <Base/Singleton.h>
 
-#include "libTH10Bot/ApiHook/HookFunc.h"
-
 namespace th
 {
 	class D3D9Listener
@@ -25,6 +23,7 @@ namespace th
 	{
 	public:
 		D3D9Hook(D3D9Listener* listener);
+		~D3D9Hook();
 
 		void enable(bool enabled);
 
@@ -42,6 +41,6 @@ namespace th
 
 		D3D9Listener* m_listener;
 		std::atomic_bool m_enabled;
-		HookFunc<Present_t> m_present;
+		Present_t m_present;
 	};
 }

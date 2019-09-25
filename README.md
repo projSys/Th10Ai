@@ -23,7 +23,7 @@ Win8或者以上，安装[VC++2017可再发行程序包](https://support.microso
 ## 依赖 Dependencies
 
 [boost](https://www.boost.org)<br />
-[minhook](https://github.com/TsudaKageyu/minhook)<br />
+[Detours](https://github.com/microsoft/detours)<br />
 
 ## 感谢 Thanks
 

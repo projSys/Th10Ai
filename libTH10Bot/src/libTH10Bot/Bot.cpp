@@ -16,6 +16,7 @@ namespace th
 		m_bombCooldown(0),
 		m_talkCooldown(0),
 		m_collectCooldown(0),
+		m_bombCount(0),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
@@ -95,6 +96,8 @@ namespace th
 
 			m_active = true;
 			std::cout << "开启Bot。" << std::endl;
+
+			m_bombCount = 0;
 		}
 	}
 
@@ -110,6 +113,9 @@ namespace th
 
 			m_active = false;
 			std::cout << "停止Bot。" << std::endl;
+
+			std::cout << "决死次数：" << m_bombCount << std::endl;
+			m_bombCount = 0;
 		}
 	}
 
@@ -179,7 +185,8 @@ namespace th
 			{
 				m_input.keyPress(DIK_X);
 				m_bombCooldown = m_clock.getTimestamp();
-				std::cout << "决死。" << std::endl;
+				++m_bombCount;
+				std::cout << "决死：" << m_bombCount << std::endl;
 				return true;
 			}
 		}

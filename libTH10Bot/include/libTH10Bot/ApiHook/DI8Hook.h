@@ -6,8 +6,6 @@
 #include <atomic>
 #include <Base/Singleton.h>
 
-#include "libTH10Bot/ApiHook/HookFunc.h"
-
 namespace th
 {
 	class DI8Listener
@@ -24,6 +22,7 @@ namespace th
 	{
 	public:
 		DI8Hook(DI8Listener* listener);
+		~DI8Hook();
 
 		void enable(bool enabled);
 
@@ -39,6 +38,6 @@ namespace th
 
 		DI8Listener* m_listener;
 		std::atomic_bool m_enabled;
-		HookFunc<GetDeviceState_t> m_getDeviceState;
+		GetDeviceState_t m_getDeviceState;
 	};
 }

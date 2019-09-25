@@ -86,12 +86,6 @@
     <ClInclude Include="include\libTH10Bot\ApiHook\DI8Hook.h">
       <Filter>头文件\libTH10Bot\ApiHook</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTH10Bot\ApiHook\HookFunc.h">
-      <Filter>头文件\libTH10Bot\ApiHook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10Bot\ApiHook\HookIniter.h">
-      <Filter>头文件\libTH10Bot\ApiHook</Filter>
-    </ClInclude>
     <ClInclude Include="include\libTH10Bot\Entity\Bullet.h">
       <Filter>头文件\libTH10Bot\Entity</Filter>
     </ClInclude>
@@ -155,9 +149,6 @@
       <Filter>源文件\libTH10Bot\ApiHook</Filter>
     </ClCompile>
     <ClCompile Include="src\libTH10Bot\ApiHook\DI8Hook.cpp">
-      <Filter>源文件\libTH10Bot\ApiHook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10Bot\ApiHook\HookIniter.cpp">
       <Filter>源文件\libTH10Bot\ApiHook</Filter>
     </ClCompile>
     <ClCompile Include="src\libTH10Bot\Entity\Bullet.cpp">

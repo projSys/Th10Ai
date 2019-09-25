@@ -1,6 +1,7 @@
 #include "libTH10Bot/Common.h"
 #include "libTH10Bot/ApiHook/D3D9Hook.h"
 
+#include <detours.h>
 #include <Base/ScopeGuard.h>
 
 namespace th
@@ -66,7 +67,20 @@ namespace th
 			THROW_DIRECTX_HRESULT(hr);
 
 		uint_t* vTable = (uint_t*)(*((uint_t*)device.p));
-		m_present = HookFunc<Present_t>(reinterpret_cast<LPVOID>(vTable[17]), &D3D9Hook::PresentHook);
+		m_present = (Present_t)vTable[17];
+
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach((PVOID*)&m_present, &D3D9Hook::PresentHook);
+		DetourTransactionCommit();
+	}
+
+	D3D9Hook::~D3D9Hook()
+	{
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
+		DetourDetach((PVOID*)&m_present, &D3D9Hook::PresentHook);
+		DetourTransactionCommit();
 	}
 
 	void D3D9Hook::enable(bool enabled)
