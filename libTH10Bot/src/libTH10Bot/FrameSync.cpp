@@ -43,6 +43,6 @@ namespace th
 		}
 		m_presentReadied = false;
 		if (!waited)
-			std::cout << "读取掉帧。" << std::endl;
+			std::cout << "读取不及时。" << std::endl;
 	}
 }

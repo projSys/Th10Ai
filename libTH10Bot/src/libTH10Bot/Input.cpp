@@ -43,7 +43,7 @@ namespace th
 			}
 			else
 			{
-				std::cout << "输入掉帧。" << std::endl;
+				std::cout << "输入不及时。" << std::endl;
 			}
 		}
 		// c_dfDIMouse

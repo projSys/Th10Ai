@@ -16,8 +16,8 @@ namespace th
 		bool isNormalStatus() const;
 		bool isColliding() const;
 
-		static const Pointf MOVE_SPEED_REIMU[DIR_MAXCOUNT];
 		static const Pointf MOVE_SPEED_MARISA[DIR_MAXCOUNT];
+		static const Pointf MOVE_SPEED_HIGH[DIR_MAXCOUNT];
 		static const Pointf MOVE_SPEED_SLOW[DIR_MAXCOUNT];
 
 		// status == 0 重生状态，此时无敌
