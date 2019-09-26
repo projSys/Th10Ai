@@ -6,14 +6,12 @@
 
 namespace th
 {
-	D3D9Hook::D3D9Hook(D3D9Listener* listener) :
+	D3D9Hook::D3D9Hook() :
 		Singleton(this),
-		m_listener(listener),
-		m_enabled(false)
+		m_enabled(false),
+		m_present(nullptr),
+		m_presentReadied(false)
 	{
-		if (listener == nullptr)
-			THROW_BASE_EXCEPTION(Exception() << err_str("D3D9Listener is null."));
-
 		WNDCLASSEX wcex = {};
 		wcex.cbSize = sizeof(wcex);
 		wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -95,15 +93,44 @@ namespace th
 		return d3d9Hook.presentHook(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 	}
 
+	std::chrono::steady_clock::time_point g_presentBeginTime;
+	std::chrono::steady_clock::time_point g_presentEndTime;
+
 	HRESULT D3D9Hook::presentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
 		if (!m_enabled)
 			return m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 
-		m_listener->onPresentBegin(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
+		g_presentBeginTime = std::chrono::steady_clock::now();
+
+		notifyPresent();
+
 		HRESULT hr = m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
-		m_listener->onPresentEnd(hr, device, sourceRect, destRect, destWindowOverride, dirtyRegion);
+
+		g_presentEndTime = std::chrono::steady_clock::now();
+
 		return hr;
+	}
+
+	void D3D9Hook::notifyPresent()
+	{
+		std::unique_lock<std::mutex> lock(m_presentMutex);
+		m_presentReadied = true;
+		m_presentCond.notify_one();
+	}
+
+	void D3D9Hook::waitPresent()
+	{
+		bool waited = false;
+		std::unique_lock<std::mutex> lock(m_presentMutex);
+		while (!m_presentReadied)
+		{
+			m_presentCond.wait(lock);
+			waited = true;
+		}
+		m_presentReadied = false;
+		if (!waited)
+			std::cout << "读取不及时。" << std::endl;
 	}
 }

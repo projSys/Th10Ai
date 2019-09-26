@@ -1,7 +1,7 @@
 #pragma once
 
-#include "libTH10Bot/FrameSync.h"
-#include "libTH10Bot/Input.h"
+#include "libTH10Bot/ApiHook/D3D9Hook.h"
+#include "libTH10Bot/ApiHook/DI8Hook.h"
 #include "libTH10Bot/Api.h"
 #include "libTH10Bot/Data.h"
 #include "libTH10Bot/Scene.h"
@@ -58,8 +58,8 @@ namespace th
 		void move(Direction dir, bool slow);
 
 	private:
-		FrameSync m_frameSync;
-		Input m_input;
+		D3D9Hook m_d3d9Hook;
+		DI8Hook m_di8Hook;
 
 		Api m_api;
 		Data m_data;

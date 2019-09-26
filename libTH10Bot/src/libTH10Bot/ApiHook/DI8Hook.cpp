@@ -3,15 +3,20 @@
 
 #include <detours.h>
 
+#include "libTH10Bot/ApiHook/D3D9Hook.h"
+
 namespace th
 {
-	DI8Hook::DI8Hook(DI8Listener* listener) :
+	DI8Hook::DI8Hook() :
 		Singleton(this),
-		m_listener(listener),
-		m_enabled(false)
+		m_enabled(false),
+		m_getDeviceState(nullptr),
+		m_keyReadied(false)
 	{
-		if (listener == nullptr)
-			THROW_BASE_EXCEPTION(Exception() << err_str("DI8Listener is null."));
+		for (KeyState& keyState : m_writeState)
+			keyState = KS_NONE;
+		for (KeyState& keyState : m_readState)
+			keyState = KS_NONE;
 
 		HMODULE dinput8Dll = GetModuleHandle(_T("dinput8.dll"));
 		if (dinput8Dll == nullptr)
@@ -60,14 +65,89 @@ namespace th
 		return di8Hook.getDeviceStateHook(device, size, data);
 	}
 
+	std::chrono::steady_clock::time_point g_getDeviceStateTime;
+
 	HRESULT DI8Hook::getDeviceStateHook(IDirectInputDevice8* device, DWORD size, LPVOID data)
 	{
 		if (!m_enabled)
 			return m_getDeviceState(device, size, data);
 
-		m_listener->onGetDeviceStateBegin(device, size, data);
+		g_getDeviceStateTime = std::chrono::steady_clock::now();
+		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(g_presentEndTime - g_presentBeginTime).count();
+		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(g_getDeviceStateTime - g_presentEndTime).count();
+		if (e1 + e2 < 5)
+			std::cout << "计算时间太少了：" << e1 << " " << e2 << std::endl;
+
 		HRESULT hr = m_getDeviceState(device, size, data);
-		m_listener->onGetDeviceStateEnd(hr, device, size, data);
+
+		// c_dfDIKeyboard
+		if (size == 256 && data != nullptr)
+		{
+			std::lock_guard<std::mutex> lock(m_keyMutex);
+			if (m_keyReadied)
+			{
+				BYTE* keyState = reinterpret_cast<BYTE*>(data);
+				for (int_t i = 0; i < 256; ++i)
+				{
+					switch (m_readState[i])
+					{
+					case KS_RELEASE:
+						keyState[i] = 0x00;
+						break;
+					case KS_PRESS:
+						keyState[i] = 0x80;
+						break;
+					}
+				}
+				m_keyReadied = false;
+			}
+			else
+			{
+				std::cout << "输入不及时。" << std::endl;
+			}
+		}
+		// c_dfDIMouse
+		//sizeof(DIMOUSESTATE);
+		// c_dfDIMouse2
+		//sizeof(DIMOUSESTATE2);
+		// c_dfDIJoystick
+		//sizeof(DIJOYSTATE);
+		// c_dfDIJoystick2
+		//sizeof(DIJOYSTATE2);
+
 		return hr;
+	}
+
+	void DI8Hook::clear()
+	{
+		for (KeyState& keyState : m_writeState)
+			keyState = KS_NONE;
+	}
+
+	void DI8Hook::keyClear(uint8_t key)
+	{
+		m_writeState[key] = KS_NONE;
+	}
+
+	void DI8Hook::keyPress(uint8_t key)
+	{
+		m_writeState[key] = KS_PRESS;
+	}
+
+	void DI8Hook::keyRelease(uint8_t key)
+	{
+		m_writeState[key] = KS_RELEASE;
+	}
+
+	bool DI8Hook::isKeyPressed(uint8_t key) const
+	{
+		return m_writeState[key] == KS_PRESS;
+	}
+
+	void DI8Hook::commit()
+	{
+		std::lock_guard<std::mutex> lock(m_keyMutex);
+		memcpy_s(m_readState, sizeof(m_readState), m_writeState, sizeof(m_writeState));
+		m_keyReadied = true;
 	}
 }

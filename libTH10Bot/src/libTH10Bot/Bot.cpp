@@ -40,11 +40,11 @@ namespace th
 	{
 		try
 		{
-			m_input.clear();
-			m_input.commit();
+			m_di8Hook.clear();
+			m_di8Hook.commit();
 
-			m_input.enable(false);
-			m_frameSync.enable(false);
+			m_di8Hook.enable(false);
+			m_d3d9Hook.enable(false);
 		}
 		catch (...)
 		{
@@ -76,7 +76,7 @@ namespace th
 	void Bot::notify()
 	{
 		m_active = false;
-		m_frameSync.notifyPresent();
+		m_d3d9Hook.notifyPresent();
 	}
 
 	bool Bot::isKeyPressed(int vKey) const
@@ -88,16 +88,14 @@ namespace th
 	{
 		if (!m_active)
 		{
-			m_input.clear();
-			m_input.commit();
+			m_di8Hook.clear();
+			m_di8Hook.commit();
 
-			m_frameSync.enable(true);
-			m_input.enable(true);
+			m_d3d9Hook.enable(true);
+			m_di8Hook.enable(true);
 
 			m_active = true;
 			std::cout << "开启Bot。" << std::endl;
-
-			m_bombCount = 0;
 		}
 	}
 
@@ -105,17 +103,15 @@ namespace th
 	{
 		if (m_active)
 		{
-			m_input.clear();
-			m_input.commit();
+			m_di8Hook.clear();
+			m_di8Hook.commit();
 
-			m_input.enable(false);
-			m_frameSync.enable(false);
+			m_di8Hook.enable(false);
+			m_d3d9Hook.enable(false);
 
 			m_active = false;
 			std::cout << "停止Bot。" << std::endl;
-
 			std::cout << "决死次数：" << m_bombCount << std::endl;
-			m_bombCount = 0;
 		}
 	}
 
@@ -127,7 +123,7 @@ namespace th
 			return;
 		}
 
-		m_frameSync.waitPresent();
+		m_d3d9Hook.waitPresent();
 
 		//static int_t fps = 0;
 		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -169,21 +165,21 @@ namespace th
 		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		//std::cout << "e3: " << e3 << std::endl;
 
-		m_input.commit();
+		m_di8Hook.commit();
 	}
 
 	// 处理炸弹
 	bool Bot::handleBomb()
 	{
-		if (m_input.isKeyPressed(DIK_X))
-			m_input.keyRelease(DIK_X);
+		if (m_di8Hook.isKeyPressed(DIK_X))
+			m_di8Hook.keyRelease(DIK_X);
 
 		// 放了炸弹3秒后再检测
 		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
 		{
 			if (m_data.isColliding())
 			{
-				m_input.keyPress(DIK_X);
+				m_di8Hook.keyPress(DIK_X);
 				m_bombCooldown = m_clock.getTimestamp();
 				++m_bombCount;
 				std::cout << "决死：" << m_bombCount << std::endl;
@@ -201,10 +197,10 @@ namespace th
 			// BOSS出现2秒后对话
 			if (m_clock.getTimestamp() - m_talkCooldown >= 2000)
 			{
-				if (m_input.isKeyPressed(DIK_Z))
-					m_input.keyRelease(DIK_Z);
+				if (m_di8Hook.isKeyPressed(DIK_Z))
+					m_di8Hook.keyRelease(DIK_Z);
 				else
-					m_input.keyPress(DIK_Z);
+					m_di8Hook.keyPress(DIK_Z);
 				return true;
 			}
 		}
@@ -220,12 +216,12 @@ namespace th
 	{
 		if (m_data.hasEnemy())
 		{
-			m_input.keyPress(DIK_Z);
+			m_di8Hook.keyPress(DIK_Z);
 			return true;
 		}
 		else
 		{
-			m_input.keyRelease(DIK_Z);
+			m_di8Hook.keyRelease(DIK_Z);
 			return false;
 		}
 	}
@@ -580,73 +576,73 @@ namespace th
 	void Bot::move(Direction dir, bool slow)
 	{
 		if (slow)
-			m_input.keyPress(DIK_LSHIFT);
+			m_di8Hook.keyPress(DIK_LSHIFT);
 		else
-			m_input.keyRelease(DIK_LSHIFT);
+			m_di8Hook.keyRelease(DIK_LSHIFT);
 
 		switch (dir)
 		{
 		case DIR_HOLD:
-			m_input.keyRelease(DIK_UP);
-			m_input.keyRelease(DIK_DOWN);
-			m_input.keyRelease(DIK_LEFT);
-			m_input.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_UP:
-			m_input.keyPress(DIK_UP);
-			m_input.keyRelease(DIK_DOWN);
-			m_input.keyRelease(DIK_LEFT);
-			m_input.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_DOWN:
-			m_input.keyRelease(DIK_UP);
-			m_input.keyPress(DIK_DOWN);
-			m_input.keyRelease(DIK_LEFT);
-			m_input.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_LEFT:
-			m_input.keyRelease(DIK_UP);
-			m_input.keyRelease(DIK_DOWN);
-			m_input.keyPress(DIK_LEFT);
-			m_input.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyPress(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_RIGHT:
-			m_input.keyRelease(DIK_UP);
-			m_input.keyRelease(DIK_DOWN);
-			m_input.keyRelease(DIK_LEFT);
-			m_input.keyPress(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyPress(DIK_RIGHT);
 			break;
 
 		case DIR_LEFTUP:
-			m_input.keyPress(DIK_UP);
-			m_input.keyRelease(DIK_DOWN);
-			m_input.keyPress(DIK_LEFT);
-			m_input.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyPress(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_RIGHTUP:
-			m_input.keyPress(DIK_UP);
-			m_input.keyRelease(DIK_DOWN);
-			m_input.keyRelease(DIK_LEFT);
-			m_input.keyPress(DIK_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyPress(DIK_RIGHT);
 			break;
 
 		case DIR_LEFTDOWN:
-			m_input.keyRelease(DIK_UP);
-			m_input.keyPress(DIK_DOWN);
-			m_input.keyPress(DIK_LEFT);
-			m_input.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
+			m_di8Hook.keyPress(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_RIGHTDOWN:
-			m_input.keyRelease(DIK_UP);
-			m_input.keyPress(DIK_DOWN);
-			m_input.keyRelease(DIK_LEFT);
-			m_input.keyPress(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyPress(DIK_RIGHT);
 			break;
 		}
 	}

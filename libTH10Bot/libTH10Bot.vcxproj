@@ -103,10 +103,8 @@
     <ClInclude Include="include\libTH10Bot\Entity\Item.h" />
     <ClInclude Include="include\libTH10Bot\Entity\Laser.h" />
     <ClInclude Include="include\libTH10Bot\Entity\Player.h" />
-    <ClInclude Include="include\libTH10Bot\FrameSync.h" />
     <ClInclude Include="include\libTH10Bot\HookMain.h" />
     <ClInclude Include="include\libTH10Bot\HookThread.h" />
-    <ClInclude Include="include\libTH10Bot\Input.h" />
     <ClInclude Include="include\libTH10Bot\Mover.h" />
     <ClInclude Include="include\libTH10Bot\Path.h" />
     <ClInclude Include="include\libTH10Bot\Scene.h" />
@@ -126,10 +124,8 @@
     <ClCompile Include="src\libTH10Bot\Entity\Item.cpp" />
     <ClCompile Include="src\libTH10Bot\Entity\Laser.cpp" />
     <ClCompile Include="src\libTH10Bot\Entity\Player.cpp" />
-    <ClCompile Include="src\libTH10Bot\FrameSync.cpp" />
     <ClCompile Include="src\libTH10Bot\HookMain.cpp" />
     <ClCompile Include="src\libTH10Bot\HookThread.cpp" />
-    <ClCompile Include="src\libTH10Bot\Input.cpp" />
     <ClCompile Include="src\libTH10Bot\Mover.cpp" />
     <ClCompile Include="src\libTH10Bot\Path.cpp" />
     <ClCompile Include="src\libTH10Bot\Scene.cpp" />

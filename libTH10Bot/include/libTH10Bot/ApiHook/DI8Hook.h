@@ -4,27 +4,36 @@
 #include <dinput.h>
 #include <atlbase.h>
 #include <atomic>
+#include <mutex>
 #include <Base/Singleton.h>
 
 namespace th
 {
-	class DI8Listener
+	enum KeyState
 	{
-	public:
-		virtual ~DI8Listener() = default;
+		KS_NONE = -1,
 
-		virtual void onGetDeviceStateBegin(IDirectInputDevice8* device, DWORD size, LPVOID data) {}
-		virtual void onGetDeviceStateEnd(HRESULT& hr, IDirectInputDevice8* device, DWORD size, LPVOID data) {}
+		KS_RELEASE,
+		KS_PRESS,
+
+		KS_MAXCOUNT
 	};
 
 	class DI8Hook :
 		private Singleton<DI8Hook>
 	{
 	public:
-		DI8Hook(DI8Listener* listener);
+		DI8Hook();
 		~DI8Hook();
 
 		void enable(bool enabled);
+
+		void clear();
+		void keyClear(uint8_t key);
+		void keyPress(uint8_t key);
+		void keyRelease(uint8_t key);
+		bool isKeyPressed(uint8_t key) const;
+		void commit();
 
 	private:
 		// IDirectInput8
@@ -36,8 +45,12 @@ namespace th
 
 		HRESULT getDeviceStateHook(IDirectInputDevice8* device, DWORD size, LPVOID data);
 
-		DI8Listener* m_listener;
 		std::atomic_bool m_enabled;
 		GetDeviceState_t m_getDeviceState;
+
+		std::mutex m_keyMutex;
+		KeyState m_writeState[256];
+		KeyState m_readState[256];
+		bool m_keyReadied;
 	};
 }

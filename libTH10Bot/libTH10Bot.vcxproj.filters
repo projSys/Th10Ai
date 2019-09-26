@@ -59,16 +59,10 @@
     <ClInclude Include="include\libTH10Bot\DllMain.h">
       <Filter>头文件\libTH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTH10Bot\FrameSync.h">
-      <Filter>头文件\libTH10Bot</Filter>
-    </ClInclude>
     <ClInclude Include="include\libTH10Bot\HookMain.h">
       <Filter>头文件\libTH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\libTH10Bot\HookThread.h">
-      <Filter>头文件\libTH10Bot</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10Bot\Input.h">
       <Filter>头文件\libTH10Bot</Filter>
     </ClInclude>
     <ClInclude Include="include\libTH10Bot\Mover.h">
@@ -124,16 +118,10 @@
     <ClCompile Include="src\libTH10Bot\DllMain.cpp">
       <Filter>源文件\libTH10Bot</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTH10Bot\FrameSync.cpp">
-      <Filter>源文件\libTH10Bot</Filter>
-    </ClCompile>
     <ClCompile Include="src\libTH10Bot\HookMain.cpp">
       <Filter>源文件\libTH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\libTH10Bot\HookThread.cpp">
-      <Filter>源文件\libTH10Bot</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10Bot\Input.cpp">
       <Filter>源文件\libTH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\libTH10Bot\Mover.cpp">

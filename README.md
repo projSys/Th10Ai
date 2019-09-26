@@ -17,8 +17,7 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
 ## 环境要求 Requirements
 
-Win8或者以上，安装[VC++2017可再发行程序包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。<br />
-東方風神録 Mountain of Faith. ver1.00a<br />
+安装[VC++2017可再发行程序包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。<br />
 
 ## 依赖 Dependencies
 
