@@ -7,10 +7,11 @@
 #include "libTH10Bot/Entity/Enemy.h"
 #include "libTH10Bot/Entity/Bullet.h"
 #include "libTH10Bot/Entity/Laser.h"
-#include "libTH10Bot/Api.h"
 
 namespace th
 {
+	class Api;
+
 	class Data
 	{
 	public:
@@ -19,6 +20,7 @@ namespace th
 		void update();
 
 		// Player
+		void checkPrevMove(Direction dir, bool slow);
 		bool isRebirthStatus() const;
 		bool isNormalStatus() const;
 		bool isColliding() const;

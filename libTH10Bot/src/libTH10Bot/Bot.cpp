@@ -15,6 +15,8 @@ namespace th
 		m_enemyId(-1),
 		m_collectCooldown(0),
 		m_bombCount(0),
+		m_prevDir(DIR_HOLD),
+		m_prevSlow(false),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
@@ -140,6 +142,7 @@ namespace th
 		m_clock.update();
 
 		m_data.update();
+		m_data.checkPrevMove(m_prevDir, m_prevSlow);
 
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
@@ -631,5 +634,8 @@ namespace th
 			m_di8Hook.keyPress(DIK_RIGHT);
 			break;
 		}
+
+		m_prevDir = dir;
+		m_prevSlow = slow;
 	}
 }

@@ -39,14 +39,14 @@ namespace th
 		// IDirectInput8
 		typedef HRESULT(WINAPI *DirectInput8Create_t)(HINSTANCE, DWORD, REFIID, LPVOID*, LPUNKNOWN);
 		// IDirectInputDevice8
-		typedef HRESULT(STDMETHODCALLTYPE *GetDeviceState_t)(IDirectInputDevice8*, DWORD, LPVOID);
+		typedef HRESULT(STDMETHODCALLTYPE *GetDeviceStateW_t)(IDirectInputDevice8W*, DWORD, LPVOID);
 
-		static HRESULT STDMETHODCALLTYPE GetDeviceStateHook(IDirectInputDevice8* device, DWORD size, LPVOID data);
+		static HRESULT STDMETHODCALLTYPE GetDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data);
 
-		HRESULT getDeviceStateHook(IDirectInputDevice8* device, DWORD size, LPVOID data);
+		HRESULT getDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data);
 
 		std::atomic_bool m_enabled;
-		GetDeviceState_t m_getDeviceState;
+		GetDeviceStateW_t m_getDeviceStateW;
 
 		std::mutex m_keyMutex;
 		KeyState m_writeState[256];

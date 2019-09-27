@@ -1,6 +1,7 @@
 #include "libTH10Bot/Common.h"
 #include "libTH10Bot/Data.h"
 
+#include "libTH10Bot/Api.h"
 #include "libTH10Bot/Scene.h"
 
 namespace th
@@ -21,6 +22,11 @@ namespace th
 		m_api.readEnemies(m_enemies);
 		m_api.readBullets(m_bullets);
 		m_api.readLasers(m_lasers);
+	}
+
+	void Data::checkPrevMove(Direction dir, bool slow)
+	{
+		m_player.checkPrevMove(dir, slow);
 	}
 
 	bool Data::isRebirthStatus() const

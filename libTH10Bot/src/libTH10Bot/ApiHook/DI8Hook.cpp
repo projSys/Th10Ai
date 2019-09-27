@@ -10,7 +10,7 @@ namespace th
 	DI8Hook::DI8Hook() :
 		Singleton(this),
 		m_enabled(false),
-		m_getDeviceState(nullptr),
+		m_getDeviceStateW(nullptr),
 		m_keyReadied(false)
 	{
 		for (KeyState& keyState : m_writeState)
@@ -26,23 +26,23 @@ namespace th
 		if (directInput8Create == nullptr)
 			THROW_WINDOWS_ERROR(GetLastError());
 
-		CComPtr<IDirectInput8> dinput8;
+		CComPtr<IDirectInput8W> dinput8W;
 		HRESULT hr = directInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION,
-			IID_IDirectInput8, reinterpret_cast<LPVOID*>(&dinput8), nullptr);
+			IID_IDirectInput8W, reinterpret_cast<LPVOID*>(&dinput8W), nullptr);
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
-		CComPtr<IDirectInputDevice8> device;
-		hr = dinput8->CreateDevice(GUID_SysKeyboard, &device, nullptr);
+		CComPtr<IDirectInputDevice8W> deviceW;
+		hr = dinput8W->CreateDevice(GUID_SysKeyboard, &deviceW, nullptr);
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
-		uint_t* vTable = (uint_t*)(*((uint_t*)device.p));
-		m_getDeviceState = (GetDeviceState_t)vTable[9];
+		uint_t* vTableW = (uint_t*)(*((uint_t*)deviceW.p));
+		m_getDeviceStateW = (GetDeviceStateW_t)vTableW[9];
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourAttach((PVOID*)&m_getDeviceState, &DI8Hook::GetDeviceStateHook);
+		DetourAttach((PVOID*)&m_getDeviceStateW, &DI8Hook::GetDeviceStateHookW);
 		DetourTransactionCommit();
 	}
 
@@ -50,7 +50,7 @@ namespace th
 	{
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourDetach((PVOID*)&m_getDeviceState, &DI8Hook::GetDeviceStateHook);
+		DetourDetach((PVOID*)&m_getDeviceStateW, &DI8Hook::GetDeviceStateHookW);
 		DetourTransactionCommit();
 	}
 
@@ -59,18 +59,18 @@ namespace th
 		m_enabled = enabled;
 	}
 
-	HRESULT DI8Hook::GetDeviceStateHook(IDirectInputDevice8* device, DWORD size, LPVOID data)
+	HRESULT DI8Hook::GetDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data)
 	{
 		DI8Hook& di8Hook = DI8Hook::GetInstance();
-		return di8Hook.getDeviceStateHook(device, size, data);
+		return di8Hook.getDeviceStateHookW(device, size, data);
 	}
 
 	std::chrono::steady_clock::time_point g_getDeviceStateTime;
 
-	HRESULT DI8Hook::getDeviceStateHook(IDirectInputDevice8* device, DWORD size, LPVOID data)
+	HRESULT DI8Hook::getDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data)
 	{
 		if (!m_enabled)
-			return m_getDeviceState(device, size, data);
+			return m_getDeviceStateW(device, size, data);
 
 		g_getDeviceStateTime = std::chrono::steady_clock::now();
 		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(g_presentEndTime - g_presentBeginTime).count();
@@ -78,7 +78,7 @@ namespace th
 		if (e1 + e2 < 5)
 			std::cout << "计算时间太少了：" << e1 << " " << e2 << std::endl;
 
-		HRESULT hr = m_getDeviceState(device, size, data);
+		HRESULT hr = m_getDeviceStateW(device, size, data);
 
 		// c_dfDIKeyboard
 		if (size == 256 && data != nullptr)

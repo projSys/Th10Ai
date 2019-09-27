@@ -80,5 +80,7 @@ namespace th
 		time_t m_collectCooldown;
 
 		int_t m_bombCount;
+		Direction m_prevDir;
+		bool m_prevSlow;
 	};
 }
