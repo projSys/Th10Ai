@@ -20,6 +20,8 @@ namespace th
 		public Entity
 	{
 	public:
+		Laser();
+
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 

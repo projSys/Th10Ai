@@ -18,13 +18,19 @@ namespace th
 
 		void update();
 
+		// Player
 		bool isRebirthStatus() const;
 		bool isNormalStatus() const;
 		bool isColliding() const;
-		bool isUnderEnemy() const;
+		bool isInvincible() const;
 
+		// Item
+		int_t findItem();
+
+		// Enemy
 		bool hasEnemy() const;
 		bool isTalking() const;
+		bool isUnderEnemy() const;
 
 		const Player& getPlayer() const;
 		const std::vector<Item>& getItems() const;

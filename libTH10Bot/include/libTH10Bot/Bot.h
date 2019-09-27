@@ -60,7 +60,6 @@ namespace th
 	private:
 		D3D9Hook m_d3d9Hook;
 		DI8Hook m_di8Hook;
-
 		Api m_api;
 		Data m_data;
 
@@ -78,8 +77,6 @@ namespace th
 		int_t m_itemId;
 		int_t m_enemyId;
 
-		time_t m_bombCooldown;
-		time_t m_talkCooldown;
 		time_t m_collectCooldown;
 
 		int_t m_bombCount;

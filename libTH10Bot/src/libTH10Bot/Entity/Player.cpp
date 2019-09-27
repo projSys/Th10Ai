@@ -35,7 +35,7 @@ namespace th
 	};
 
 	// 1.41 = 2.0 * sqrt(0.5)
-	const Pointf Player::MOVE_SPEED_SLOW[DIR_MAXCOUNT] =
+	const Pointf Player::MOVE_SPEED_LOW[DIR_MAXCOUNT] =
 	{
 		{ 0.0f, 0.0f },
 		{ 0.0f, -2.0f },
@@ -48,12 +48,17 @@ namespace th
 		{ 1.41f, 1.41f }
 	};
 
+	Player::Player() :
+		status(), invincibleTime(), slow(), powers(), /*type(),*/ life(), itemObtainRange()
+	{
+	}
+
 	void Player::advance(Direction dir, bool slow)
 	{
 		if (slow)
 		{
-			x += MOVE_SPEED_SLOW[dir].x;
-			y += MOVE_SPEED_SLOW[dir].y;
+			x += MOVE_SPEED_LOW[dir].x;
+			y += MOVE_SPEED_LOW[dir].y;
 		}
 		else
 		{
@@ -83,5 +88,10 @@ namespace th
 	bool Player::isColliding() const
 	{
 		return status == 4;
+	}
+
+	bool Player::isInvincible() const
+	{
+		return invincibleTime != 0;
 	}
 }

@@ -10,7 +10,7 @@ namespace th
 
 	bool Api::readPlayer(Player& player) noexcept
 	{
-		player = {};
+		player = Player();
 
 		uint32_t baseAddr = readMemory<uint32_t>(0x00477834);
 		if (baseAddr == 0)
@@ -23,7 +23,7 @@ namespace th
 		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 2.0f;
 		player.height = player.width;
 		player.status = readMemory<int32_t>(baseAddr + 0x458);
-		player.invinibleTime = readMemory<int32_t>(baseAddr + 0x4310);
+		player.invincibleTime = readMemory<int32_t>(baseAddr + 0x4310);
 		player.slow = readMemory<int32_t>(baseAddr + 0x4474);
 		player.powers = readMemory<int32_t>(0x00474C48) / 20.0f;
 		player.type = readMemory<int32_t>(0x00474C68);

@@ -13,8 +13,6 @@ namespace th
 		m_active(false),
 		m_itemId(-1),
 		m_enemyId(-1),
-		m_bombCooldown(0),
-		m_talkCooldown(0),
 		m_collectCooldown(0),
 		m_bombCount(0),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
@@ -111,7 +109,7 @@ namespace th
 
 			m_active = false;
 			std::cout << "停止Bot。" << std::endl;
-			std::cout << "决死次数：" << m_bombCount << std::endl;
+			std::cout << "决死总次数：" << m_bombCount << std::endl;
 		}
 	}
 
@@ -171,22 +169,18 @@ namespace th
 	// 处理炸弹
 	bool Bot::handleBomb()
 	{
-		if (m_di8Hook.isKeyPressed(DIK_X))
-			m_di8Hook.keyRelease(DIK_X);
-
-		// 放了炸弹3秒后再检测
-		if (m_clock.getTimestamp() - m_bombCooldown >= 3000)
+		if (m_data.isColliding())
 		{
-			if (m_data.isColliding())
-			{
-				m_di8Hook.keyPress(DIK_X);
-				m_bombCooldown = m_clock.getTimestamp();
-				++m_bombCount;
-				std::cout << "决死：" << m_bombCount << std::endl;
-				return true;
-			}
+			m_di8Hook.keyPress(DIK_X);
+			++m_bombCount;
+			std::cout << "决死：" << m_bombCount << std::endl;
+			return true;
 		}
-		return false;
+		else
+		{
+			m_di8Hook.keyRelease(DIK_X);
+			return false;
+		}
 	}
 
 	// 处理对话
@@ -194,21 +188,14 @@ namespace th
 	{
 		if (m_data.isTalking())
 		{
-			// BOSS出现2秒后对话
-			if (m_clock.getTimestamp() - m_talkCooldown >= 2000)
-			{
-				if (m_di8Hook.isKeyPressed(DIK_Z))
-					m_di8Hook.keyRelease(DIK_Z);
-				else
-					m_di8Hook.keyPress(DIK_Z);
-				return true;
-			}
+			m_di8Hook.keyPress(DIK_LCONTROL);
+			return true;
 		}
 		else
 		{
-			m_talkCooldown = m_clock.getTimestamp();
+			m_di8Hook.keyRelease(DIK_LCONTROL);
+			return false;
 		}
-		return false;
 	}
 
 	// 处理攻击
@@ -234,7 +221,6 @@ namespace th
 
 		m_itemId = findItem();
 		m_enemyId = findEnemy();
-
 		bool underEnemy = m_data.isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();

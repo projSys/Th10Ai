@@ -7,6 +7,11 @@
 
 namespace th
 {
+	Laser::Laser() :
+		arc()
+	{
+	}
+
 	bool Laser::collide(const Entity& other) const
 	{
 		LaserBox laserBox(*this);

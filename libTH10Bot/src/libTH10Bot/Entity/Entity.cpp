@@ -58,7 +58,7 @@ namespace th
 	}
 
 	Entity::Entity() :
-		x(), y(), dx(), dy(), width(), height()
+		x(), y(), dx(), dy(), width(), height(), id(), type()
 	{
 	}
 
