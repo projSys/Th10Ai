@@ -155,8 +155,8 @@ namespace th
 		//std::cout << "e2: " << e2 << std::endl;
 
 		handleBomb();
-		if (!handleTalk())
-			handleShoot();
+		handleTalk();
+		handleShoot();
 		handleMove();
 
 		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
