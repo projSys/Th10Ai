@@ -5,7 +5,6 @@
 #include "libTH10Bot/Api.h"
 #include "libTH10Bot/Data.h"
 #include "libTH10Bot/Scene.h"
-#include "libTH10Bot/Clock.h"
 #include "libTH10Bot/Mover.h"
 
 namespace th
@@ -39,6 +38,7 @@ namespace th
 		void notify();
 		bool isKeyPressed(int vKey) const;
 
+		void print();
 		void start();
 		void stop();
 		void update();
@@ -49,8 +49,6 @@ namespace th
 		bool handleMove();
 		Reward dfs(const Action& action);
 		//NodeScore calcNodeScore(const Player& player, float_t frame);
-		int_t findItem();
-		int_t findEnemy();
 		float_t calcCollectScore(const Player& player);
 		float_t calcShootScore(const Player& player);
 		float_t calcGobackScore(const Player& player);
@@ -63,8 +61,6 @@ namespace th
 		Api m_api;
 		Data m_data;
 
-		Clock m_clock;
-
 		Scene m_scene;
 
 		bool m_active;
@@ -76,8 +72,6 @@ namespace th
 
 		int_t m_itemId;
 		int_t m_enemyId;
-
-		time_t m_collectCooldown;
 
 		int_t m_bombCount;
 		Direction m_prevDir;

@@ -18,9 +18,10 @@ namespace th
 		Data(Api& api);
 
 		void update();
+		void print();
 
 		// Player
-		void checkPrevMove(Direction dir, bool slow);
+		void checkPrevMove(Direction prevDir, bool prevSlow);
 		bool isRebirthStatus() const;
 		bool isNormalStatus() const;
 		bool isColliding() const;
@@ -31,8 +32,10 @@ namespace th
 
 		// Enemy
 		bool hasEnemy() const;
+		bool isBoss() const;
 		bool isTalking() const;
 		bool isUnderEnemy() const;
+		int_t findEnemy();
 
 		const Player& getPlayer() const;
 		const std::vector<Item>& getItems() const;
@@ -48,5 +51,7 @@ namespace th
 		std::vector<Enemy> m_enemies;
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
+
+		std::chrono::steady_clock::time_point m_findItemTime;
 	};
 }

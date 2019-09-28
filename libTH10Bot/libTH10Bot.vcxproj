@@ -92,7 +92,6 @@
     <ClInclude Include="include\libTH10Bot\ApiHook\DI8Hook.h" />
     <ClInclude Include="include\libTH10Bot\Area.h" />
     <ClInclude Include="include\libTH10Bot\Bot.h" />
-    <ClInclude Include="include\libTH10Bot\Clock.h" />
     <ClInclude Include="include\libTH10Bot\Common.h" />
     <ClInclude Include="include\libTH10Bot\Data.h" />
     <ClInclude Include="include\libTH10Bot\Direction.h" />
@@ -115,7 +114,6 @@
     <ClCompile Include="src\libTH10Bot\ApiHook\DI8Hook.cpp" />
     <ClCompile Include="src\libTH10Bot\Area.cpp" />
     <ClCompile Include="src\libTH10Bot\Bot.cpp" />
-    <ClCompile Include="src\libTH10Bot\Clock.cpp" />
     <ClCompile Include="src\libTH10Bot\Data.cpp" />
     <ClCompile Include="src\libTH10Bot\DllMain.cpp" />
     <ClCompile Include="src\libTH10Bot\Entity\Bullet.cpp" />

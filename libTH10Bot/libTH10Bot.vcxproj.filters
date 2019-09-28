@@ -44,9 +44,6 @@
     <ClInclude Include="include\libTH10Bot\Area.h">
       <Filter>头文件\libTH10Bot</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTH10Bot\Clock.h">
-      <Filter>头文件\libTH10Bot</Filter>
-    </ClInclude>
     <ClInclude Include="include\libTH10Bot\Common.h">
       <Filter>头文件\libTH10Bot</Filter>
     </ClInclude>
@@ -107,9 +104,6 @@
       <Filter>源文件\libTH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\libTH10Bot\Area.cpp">
-      <Filter>源文件\libTH10Bot</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10Bot\Clock.cpp">
       <Filter>源文件\libTH10Bot</Filter>
     </ClCompile>
     <ClCompile Include="src\libTH10Bot\Data.cpp">

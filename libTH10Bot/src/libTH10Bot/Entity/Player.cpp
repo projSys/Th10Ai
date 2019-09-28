@@ -75,25 +75,25 @@ namespace th
 		}
 	}
 
-	void Player::checkPrevMove(Direction dir, bool slow)
+	void Player::checkPrevMove(Direction prevDir, bool prevSlow)
 	{
-		Pointf delta;
-		if (slow)
+		Pointf prevDelta;
+		if (prevSlow)
 		{
-			delta = MOVE_SPEED_LOW[dir];
+			prevDelta = MOVE_SPEED_LOW[prevDir];
 		}
 		else
 		{
 			if (type == 1)
 			{
-				delta = MOVE_SPEED_MARISA[dir];
+				prevDelta = MOVE_SPEED_MARISA[prevDir];
 			}
 			else
 			{
-				delta = MOVE_SPEED_HIGH[dir];
+				prevDelta = MOVE_SPEED_HIGH[prevDir];
 			}
 		}
-		if (getDelta() != delta)
+		if (getDelta() != prevDelta)
 			std::cout << "ÒÆ¶¯½á¹û´íÎó¡£" << std::endl;
 	}
 

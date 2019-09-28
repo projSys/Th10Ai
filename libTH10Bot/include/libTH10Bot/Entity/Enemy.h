@@ -7,5 +7,7 @@ namespace th
 	class Enemy :
 		public Entity
 	{
+	public:
+		bool isBoss() const;
 	};
 }

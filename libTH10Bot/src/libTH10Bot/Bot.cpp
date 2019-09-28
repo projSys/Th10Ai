@@ -13,7 +13,6 @@ namespace th
 		m_active(false),
 		m_itemId(-1),
 		m_enemyId(-1),
-		m_collectCooldown(0),
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
 		m_prevSlow(false),
@@ -66,6 +65,8 @@ namespace th
 				stop();
 			else if (isKeyPressed('D'))
 				break;
+			else if (isKeyPressed('P'))
+				print();
 
 			update();
 		}
@@ -82,6 +83,11 @@ namespace th
 	bool Bot::isKeyPressed(int vKey) const
 	{
 		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
+	}
+
+	void Bot::print()
+	{
+		m_data.print();
 	}
 
 	void Bot::start()
@@ -138,8 +144,6 @@ namespace th
 		//}
 
 		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
-
-		m_clock.update();
 
 		m_data.update();
 		m_data.checkPrevMove(m_prevDir, m_prevSlow);
@@ -222,8 +226,8 @@ namespace th
 		if (!(m_data.isRebirthStatus() || m_data.isNormalStatus()))
 			return false;
 
-		m_itemId = findItem();
-		m_enemyId = findEnemy();
+		m_itemId = m_data.findItem();
+		m_enemyId = m_data.findEnemy();
 		bool underEnemy = m_data.isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
@@ -370,104 +374,6 @@ namespace th
 
 	//	return score;
 	//}
-
-	// 查找道具
-	int_t Bot::findItem()
-	{
-		int_t id = -1;
-
-		if (m_data.getItems().empty())
-			return id;
-
-		// 拾取冷却中
-		if (m_clock.getTimestamp() - m_collectCooldown < 3000)
-			return id;
-
-		// 自机高于1/4屏
-		if (m_data.getPlayer().y < SCENE_SIZE.height / 4.0f)
-		{
-			// 进入冷却
-			m_collectCooldown = m_clock.getTimestamp();
-			return id;
-		}
-
-		// 自机高于1/2屏，道具少于10个，敌人多于5个
-		if (m_data.getPlayer().y < SCENE_SIZE.height / 2.0f && m_data.getItems().size() < 10 && m_data.getEnemies().size() > 5)
-		{
-			// 进入冷却
-			m_collectCooldown = m_clock.getTimestamp();
-			return id;
-		}
-
-		float_t minDist = std::numeric_limits<float_t>::max();
-		for (uint_t i = 0; i < m_data.getItems().size(); ++i)
-		{
-			const Item& item = m_data.getItems()[i];
-
-			// 道具高于1/5屏
-			if (item.y < SCENE_SIZE.height / 5.0f)
-				continue;
-
-			// 道具不在自机1/3屏内
-			float_t dy = std::abs(item.y - m_data.getPlayer().y);
-			if (dy > SCENE_SIZE.height / 3.0f)
-				continue;
-
-			bool tooClose = false;
-			for (const Enemy& enemy : m_data.getEnemies())
-			{
-				if (item.calcDistance(enemy.getPosition()) < 150.0f)
-				{
-					tooClose = true;
-					break;
-				}
-			}
-			if (tooClose)
-				continue;
-
-			// 道具与自机距离最近
-			float_t dist = item.calcDistance(m_data.getPlayer().getPosition());
-			if (dist < minDist)
-			{
-				minDist = dist;
-				id = i;
-			}
-		}
-
-		return id;
-	}
-
-	// 查找敌人
-	int_t Bot::findEnemy()
-	{
-		int_t id = -1;
-
-		if (m_data.getEnemies().empty())
-			return id;
-
-		// 自机高于1/4屏
-		if (m_data.getPlayer().y < SCENE_SIZE.height / 4.0f)
-			return id;
-
-		float_t minDist = std::numeric_limits<float_t>::max();
-		for (uint_t i = 0; i < m_data.getEnemies().size(); ++i)
-		{
-			const Enemy& enemy = m_data.getEnemies()[i];
-
-			if (enemy.y > m_data.getPlayer().y)
-				continue;
-
-			// 与自机X轴距离最近
-			float_t dx = std::abs(enemy.x - m_data.getPlayer().x);
-			if (dx < minDist)
-			{
-				minDist = dx;
-				id = i;
-			}
-		}
-
-		return id;
-	}
 
 	// 拾取道具评分
 	float_t Bot::calcCollectScore(const Player& player)
