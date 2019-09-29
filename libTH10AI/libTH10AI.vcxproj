@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libTH10AI</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;LIBTH10AI_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_71_0;D:\Develop\Touhou\Detours-master\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_71_0\lib32-msvc-14.1;D:\Develop\Touhou\Detours-master\lib.X86;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>libTH10AI.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;LIBTH10AI_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_71_0;D:\Develop\Touhou\Detours-master\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_71_0\lib32-msvc-14.1;D:\Develop\Touhou\Detours-master\lib.X86;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>libTH10AI.def</ModuleDefinitionFile>
+      <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\libTH10AI\Ai.h" />
+    <ClInclude Include="include\libTH10AI\Api.h" />
+    <ClInclude Include="include\libTH10AI\ApiHook\D3D9Hook.h" />
+    <ClInclude Include="include\libTH10AI\ApiHook\DI8Hook.h" />
+    <ClInclude Include="include\libTH10AI\Area.h" />
+    <ClInclude Include="include\libTH10AI\Common.h" />
+    <ClInclude Include="include\libTH10AI\Data.h" />
+    <ClInclude Include="include\libTH10AI\Direction.h" />
+    <ClInclude Include="include\libTH10AI\DllMain.h" />
+    <ClInclude Include="include\libTH10AI\Entity\Bullet.h" />
+    <ClInclude Include="include\libTH10AI\Entity\Enemy.h" />
+    <ClInclude Include="include\libTH10AI\Entity\Entity.h" />
+    <ClInclude Include="include\libTH10AI\Entity\Item.h" />
+    <ClInclude Include="include\libTH10AI\Entity\Laser.h" />
+    <ClInclude Include="include\libTH10AI\Entity\Player.h" />
+    <ClInclude Include="include\libTH10AI\HookMain.h" />
+    <ClInclude Include="include\libTH10AI\HookThread.h" />
+    <ClInclude Include="include\libTH10AI\Mover.h" />
+    <ClInclude Include="include\libTH10AI\Path.h" />
+    <ClInclude Include="include\libTH10AI\Scene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\libTH10AI\Ai.cpp" />
+    <ClCompile Include="src\libTH10AI\Api.cpp" />
+    <ClCompile Include="src\libTH10AI\ApiHook\D3D9Hook.cpp" />
+    <ClCompile Include="src\libTH10AI\ApiHook\DI8Hook.cpp" />
+    <ClCompile Include="src\libTH10AI\Area.cpp" />
+    <ClCompile Include="src\libTH10AI\Data.cpp" />
+    <ClCompile Include="src\libTH10AI\DllMain.cpp" />
+    <ClCompile Include="src\libTH10AI\Entity\Bullet.cpp" />
+    <ClCompile Include="src\libTH10AI\Entity\Enemy.cpp" />
+    <ClCompile Include="src\libTH10AI\Entity\Entity.cpp" />
+    <ClCompile Include="src\libTH10AI\Entity\Item.cpp" />
+    <ClCompile Include="src\libTH10AI\Entity\Laser.cpp" />
+    <ClCompile Include="src\libTH10AI\Entity\Player.cpp" />
+    <ClCompile Include="src\libTH10AI\HookMain.cpp" />
+    <ClCompile Include="src\libTH10AI\HookThread.cpp" />
+    <ClCompile Include="src\libTH10AI\Mover.cpp" />
+    <ClCompile Include="src\libTH10AI\Path.cpp" />
+    <ClCompile Include="src\libTH10AI\Scene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libTH10AI.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\libTH10AI">
+      <UniqueIdentifier>{7794c356-1e0a-4ac7-bc77-bc8eb4029fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\libTH10AI">
+      <UniqueIdentifier>{a361e8ab-5aec-4181-9503-ebd49a9c8bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\libTH10AI\Entity">
+      <UniqueIdentifier>{d4d5f2ff-464d-4719-9d91-361ce055feaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\libTH10AI\Entity">
+      <UniqueIdentifier>{9f79d5f1-dcb4-4456-8b05-dfa3141a9692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\libTH10AI\ApiHook">
+      <UniqueIdentifier>{3c9d079a-65d9-42c0-a492-14d0869fa3b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\libTH10AI\ApiHook">
+      <UniqueIdentifier>{5002883c-85ea-4f90-aa7b-1fdc467020f7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libTH10AI.def">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\libTH10AI\Api.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Area.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Common.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Data.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Direction.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\DllMain.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\HookMain.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\HookThread.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Mover.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Path.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Scene.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\ApiHook\D3D9Hook.h">
+      <Filter>头文件\libTH10AI\ApiHook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\ApiHook\DI8Hook.h">
+      <Filter>头文件\libTH10AI\ApiHook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Entity\Bullet.h">
+      <Filter>头文件\libTH10AI\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Entity\Enemy.h">
+      <Filter>头文件\libTH10AI\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Entity\Entity.h">
+      <Filter>头文件\libTH10AI\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Entity\Item.h">
+      <Filter>头文件\libTH10AI\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Entity\Laser.h">
+      <Filter>头文件\libTH10AI\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Entity\Player.h">
+      <Filter>头文件\libTH10AI\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Ai.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\libTH10AI\Api.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Area.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Data.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\DllMain.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\HookMain.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\HookThread.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Mover.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Path.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Scene.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\ApiHook\D3D9Hook.cpp">
+      <Filter>源文件\libTH10AI\ApiHook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\ApiHook\DI8Hook.cpp">
+      <Filter>源文件\libTH10AI\ApiHook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Entity\Bullet.cpp">
+      <Filter>源文件\libTH10AI\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Entity\Enemy.cpp">
+      <Filter>源文件\libTH10AI\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Entity\Entity.cpp">
+      <Filter>源文件\libTH10AI\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Entity\Item.cpp">
+      <Filter>源文件\libTH10AI\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Entity\Laser.cpp">
+      <Filter>源文件\libTH10AI\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Entity\Player.cpp">
+      <Filter>源文件\libTH10AI\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Ai.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,9 +1,0 @@
-LIBRARY libTH10Bot
-EXPORTS
-g_window DATA
-g_threadId DATA
-g_mainThreadId DATA
-g_hook DATA
-g_created DATA
-g_destroy DATA
-HookMain
