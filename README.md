@@ -1,6 +1,6 @@
 # TH10AI
 
-东方风神录AI，基于深度优先搜索算法。<br />
+東方風神録AI，基于深度优先搜索算法。<br />
 Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ![](https://github.com/GiriMind/TH10Bot/blob/master/1.png)
