@@ -1,7 +1,7 @@
-# TH10Bot
+# TH10AI
 
-东方风神录Bot，基于深度优先搜索算法。<br />
-Mountain of Faith's bot, based on depth first search algorithm.<br />
+东方风神录AI，基于深度优先搜索算法。<br />
+Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ![](https://github.com/GiriMind/TH10Bot/blob/master/1.png)
 
@@ -24,6 +24,6 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
 ## 感谢 Thanks
 
-[TH10AI](https://github.com/Infinideastudio/TH10AI)<br />
+[TH10AI by Infinideastudio](https://github.com/Infinideastudio/TH10AI)<br />
 [TH10_DataReversing](https://github.com/binvec/TH10_DataReversing)<br />
 [twinject](https://github.com/Netdex/twinject)<br />
