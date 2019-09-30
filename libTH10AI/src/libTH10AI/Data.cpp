@@ -1,7 +1,6 @@
 #include "libTH10AI/Common.h"
 #include "libTH10AI/Data.h"
 
-#include "libTH10AI/Api.h"
 #include "libTH10AI/Scene.h"
 
 namespace th

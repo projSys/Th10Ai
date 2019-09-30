@@ -7,11 +7,10 @@
 #include "libTH10AI/Entity/Enemy.h"
 #include "libTH10AI/Entity/Bullet.h"
 #include "libTH10AI/Entity/Laser.h"
+#include "libTH10AI/Api.h"
 
 namespace th
 {
-	class Api;
-
 	class Data
 	{
 	public:

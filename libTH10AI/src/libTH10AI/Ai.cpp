@@ -4,6 +4,7 @@
 #include <thread>
 
 #include "libTH10AI/HookThread.h"
+#include "libTH10AI/Path.h"
 
 namespace th
 {
@@ -15,12 +16,7 @@ namespace th
 		m_enemyId(-1),
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
-		m_prevSlow(false),
-		m_bestScore(std::numeric_limits<float_t>::lowest()),
-		m_bestDir(DIR_NONE),
-		m_bestSlow(false),
-		m_count(0),
-		m_limit(500)
+		m_prevSlow(false)
 	{
 		m_scene.split(6);
 
@@ -125,7 +121,7 @@ namespace th
 	{
 		if (!m_active)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
 			return;
 		}
 
@@ -143,13 +139,13 @@ namespace th
 		//	begin += std::chrono::milliseconds(1000);
 		//}
 
-		std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
 		m_data.update();
 		m_data.checkPrevMove(m_prevDir, m_prevSlow);
 
-		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
+		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 		//std::cout << "e1: " << e1 << std::endl;
 
 		m_scene.clearAll();
@@ -157,8 +153,8 @@ namespace th
 		m_scene.splitBullets(m_data.getBullets());
 		m_scene.splitLasers(m_data.getLasers());
 
-		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 		//std::cout << "e2: " << e2 << std::endl;
 
 		handleBomb();
@@ -166,8 +162,8 @@ namespace th
 		handleShoot();
 		handleMove();
 
-		std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
-		time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
+		//std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+		//time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		//std::cout << "e3: " << e3 << std::endl;
 
 		m_di8Hook.commit();
@@ -236,24 +232,13 @@ namespace th
 
 		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
-			Action action;
-			action.fromPos = m_data.getPlayer().getPosition();
-			action.fromDir = static_cast<Direction>(i);
-			action.slowFirst = (m_itemId == -1 && underEnemy);
-			action.frame = 1.0f;
-			action.targetDir = static_cast<Direction>(i);
+			Path path(m_data, m_scene, m_itemId, m_enemyId);
+			Reward reward = path.find(static_cast<Direction>(i), underEnemy);
 
-			m_bestScore = std::numeric_limits<float_t>::lowest();
-			m_bestDir = DIR_NONE;
-			m_bestSlow = false;
-			m_count = 0;
-
-			Reward reward = dfs(action);
-
-			if (reward.valid && m_bestScore > bestScore)
+			if (reward.valid && path.m_bestScore > bestScore)
 			{
-				bestScore = m_bestScore;
-				bestDir = action.fromDir;
+				bestScore = path.m_bestScore;
+				bestDir = static_cast<Direction>(i);
 				bestSlow = reward.slow;
 			}
 		}
@@ -269,179 +254,6 @@ namespace th
 		}
 
 		return true;
-	}
-
-	Reward Ai::dfs(const Action& action)
-	{
-		Reward reward;
-		reward.valid = false;
-		reward.slow = false;
-		reward.score = 0.0f;
-		reward.size = 0;
-
-		// 超过搜索节点限制
-		++m_count;
-		if (m_count >= m_limit)
-			return reward;
-
-		// 前进到下一个坐标
-		Player temp = m_data.getPlayer();
-		temp.setPosition(action.fromPos);
-		temp.advance(action.fromDir, action.slowFirst);
-		reward.slow = action.slowFirst;
-		if (!Scene::IsInPlayerArea(temp.getPosition()) || m_scene.collideAll(temp, action.frame))
-		{
-			temp.setPosition(action.fromPos);
-			temp.advance(action.fromDir, !action.slowFirst);
-			reward.slow = !action.slowFirst;
-			if (!Scene::IsInPlayerArea(temp.getPosition()) || m_scene.collideAll(temp, action.frame))
-				return reward;
-		}
-
-		reward.valid = true;
-
-		if (m_itemId != -1)
-		{
-			reward.score += calcCollectScore(temp);
-		}
-		else if (m_enemyId != -1)
-		{
-			reward.score += calcShootScore(temp);
-		}
-		else
-		{
-			reward.score += calcGobackScore(temp);
-		}
-
-		if (reward.score > m_bestScore)
-		{
-			m_bestScore = reward.score;
-		}
-
-		Mover mover(action.targetDir);
-		reward.size = mover.getSize();
-		while (mover.hasNext())
-		{
-			Direction dir = mover.next();
-
-			Action nextAct;
-			nextAct.fromPos = temp.getPosition();
-			nextAct.fromDir = dir;
-			nextAct.slowFirst = action.slowFirst;
-			nextAct.frame = action.frame + 1.0f;
-			nextAct.targetDir = action.targetDir;
-
-			Reward nextRew = dfs(nextAct);
-
-			if (m_count >= m_limit)
-			{
-				break;
-			}
-
-			if (!nextRew.valid)
-			{
-				reward.size -= 1;
-				continue;
-			}
-		}
-		// 没气了，当前节点也无效
-		if (reward.size <= 0)
-			reward.valid = false;
-
-		return reward;
-	}
-
-	// 拾取道具评分
-	float_t Ai::calcCollectScore(const Player& player)
-	{
-		float_t score = 0.0f;
-
-		if (m_itemId == -1)
-			return score;
-
-		const Item& item = m_data.getItems()[m_itemId];
-
-		if (player.calcDistance(item.getPosition()) < 10.0f)
-		{
-			score += 300.0f;
-		}
-		else
-		{
-			float_t dx = std::abs(player.x - item.x);
-			if (dx > SCENE_SIZE.width)
-				dx = SCENE_SIZE.width;
-			float_t dy = std::abs(player.y - item.y);
-			if (dy > SCENE_SIZE.height)
-				dy = SCENE_SIZE.height;
-
-			score += 150.0f * (1.0f - dx / SCENE_SIZE.width);
-			score += 150.0f * (1.0f - dy / SCENE_SIZE.height);
-		}
-
-		return score;
-	}
-
-	// 攻击敌人评分
-	float_t Ai::calcShootScore(const Player& player)
-	{
-		float_t score = 0.0f;
-
-		if (m_enemyId == -1)
-			return score;
-
-		const Enemy& enemy = m_data.getEnemies()[m_enemyId];
-
-		float_t dx = std::abs(player.x - enemy.x);
-		if (dx > SCENE_SIZE.width)
-			dx = SCENE_SIZE.width;
-		if (dx < 20.0f)
-		{
-			score += 150.0f;
-		}
-		else
-		{
-			// X轴距离越近得分越高
-			score += 150.0f * (1.0f - dx / SCENE_SIZE.width);
-		}
-
-		float_t dy = std::abs(player.y - enemy.y);
-		if (dy > SCENE_SIZE.height)
-			dy = SCENE_SIZE.height;
-		if (dy > SCENE_SIZE.height / 2.0f)
-		{
-			score += 150.0f;
-		}
-		else
-		{
-			// Y轴距离越远得分越高
-			score += 150.0f * (dy / SCENE_SIZE.height);
-		}
-
-		return score;
-	}
-
-	float_t Ai::calcGobackScore(const Player& player)
-	{
-		float_t score = 0.0f;
-
-		if (player.calcDistance(Player::INIT_POS) < 10.0f)
-		{
-			score += 30.0f;
-		}
-		else
-		{
-			float_t dx = std::abs(player.x - Player::INIT_POS.x);
-			if (dx > SCENE_SIZE.width)
-				dx = SCENE_SIZE.width;
-			float_t dy = std::abs(player.y - Player::INIT_POS.y);
-			if (dy > SCENE_SIZE.height)
-				dy = SCENE_SIZE.height;
-
-			score += 15.0f * (1.0f - dx / SCENE_SIZE.width);
-			score += 15.0f * (1.0f - dy / SCENE_SIZE.height);
-		}
-
-		return score;
 	}
 
 	void Ai::move(Direction dir, bool slow)
