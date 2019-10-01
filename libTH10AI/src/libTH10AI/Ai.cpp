@@ -10,13 +10,11 @@ namespace th
 {
 	// 在东方窗口线程运行
 	Ai::Ai() :
-		m_data(m_api),
 		m_active(false),
-		m_itemId(-1),
-		m_enemyId(-1),
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
-		m_prevSlow(false)
+		m_prevSlow(false),
+		m_data(m_api)
 	{
 		m_scene.split(6);
 
@@ -219,11 +217,11 @@ namespace th
 	// 处理移动
 	bool Ai::handleMove()
 	{
-		if (!(m_data.isRebirthStatus() || m_data.isNormalStatus()))
+		if (!m_data.isNormalStatus())
 			return false;
 
-		m_itemId = m_data.findItem();
-		m_enemyId = m_data.findEnemy();
+		ItemTarget itemTarget = m_data.findItem();
+		EnemyTarget enemyTarget = m_data.findEnemy();
 		bool underEnemy = m_data.isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
@@ -232,14 +230,14 @@ namespace th
 
 		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
-			Path path(m_data, m_scene, m_itemId, m_enemyId);
-			Reward reward = path.find(static_cast<Direction>(i), underEnemy);
+			Path path(m_data, m_scene, static_cast<Direction>(i), itemTarget, enemyTarget);
+			Result result = path.find(underEnemy);
 
-			if (reward.valid && path.m_bestScore > bestScore)
+			if (result.valid && path.m_bestScore > bestScore)
 			{
 				bestScore = path.m_bestScore;
-				bestDir = static_cast<Direction>(i);
-				bestSlow = reward.slow;
+				bestDir = path.m_pathDir;
+				bestSlow = result.slow;
 			}
 		}
 

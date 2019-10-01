@@ -11,6 +11,18 @@
 
 namespace th
 {
+	struct ItemTarget
+	{
+		bool valid;
+		Item item;
+	};
+
+	struct EnemyTarget
+	{
+		bool valid;
+		Enemy enemy;
+	};
+
 	class Data
 	{
 	public:
@@ -27,14 +39,14 @@ namespace th
 		bool isInvincible() const;
 
 		// Item
-		int_t findItem();
+		ItemTarget findItem();
 
 		// Enemy
 		bool hasEnemy() const;
 		bool isBoss() const;
 		bool isTalking() const;
 		bool isUnderEnemy() const;
-		int_t findEnemy();
+		EnemyTarget findEnemy();
 
 		const Player& getPlayer() const;
 		const std::vector<Item>& getItems() const;

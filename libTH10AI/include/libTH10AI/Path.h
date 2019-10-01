@@ -11,10 +11,9 @@ namespace th
 		Direction fromDir;
 		bool slowFirst;			// 是否慢速优先
 		float_t frame;
-		Direction targetDir;
 	};
 
-	struct Reward
+	struct Result
 	{
 		bool valid;
 		bool slow;		// 实际是否慢速
@@ -25,19 +24,21 @@ namespace th
 	class Path
 	{
 	public:
-		Path(Data& data, Scene& scene, int_t itemId, int_t enemyId);
+		Path(Data& data, Scene& scene, Direction pathDir,
+			const ItemTarget& itemTarget, const EnemyTarget& enemyTarget);
 
-		Reward find(Direction dir, bool underEnemy);
-		Reward dfs(const Action& action);
+		Result find(bool underEnemy);
+		Result dfs(const Action& action);
 		float_t calcCollectScore(const Player& player);
 		float_t calcShootScore(const Player& player);
 		float_t calcGobackScore(const Player& player);
 
 	//private:
-		Data m_data;
-		Scene m_scene;
-		int_t m_itemId;
-		int_t m_enemyId;
+		Data& m_data;
+		Scene& m_scene;
+		Direction m_pathDir;
+		ItemTarget m_itemTarget;
+		EnemyTarget m_enemyTarget;
 
 		float_t m_bestScore;
 		Direction m_bestDir;

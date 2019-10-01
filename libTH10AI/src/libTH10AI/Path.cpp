@@ -5,11 +5,13 @@
 
 namespace th
 {
-	Path::Path(Data& data, Scene& scene, int_t itemId, int_t enemyId) :
+	Path::Path(Data& data, Scene& scene, Direction pathDir,
+		const ItemTarget& itemTarget, const EnemyTarget& enemyTarget) :
 		m_data(data),
 		m_scene(scene),
-		m_itemId(itemId),
-		m_enemyId(enemyId),
+		m_pathDir(pathDir),
+		m_itemTarget(itemTarget),
+		m_enemyTarget(enemyTarget),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
@@ -18,72 +20,66 @@ namespace th
 	{
 	}
 
-	Reward Path::find(Direction dir, bool underEnemy)
+	Result Path::find(bool underEnemy)
 	{
 		Action action;
 		action.fromPos = m_data.getPlayer().getPosition();
-		action.fromDir = dir;
-		action.slowFirst = (m_itemId == -1 && underEnemy);
+		action.fromDir = m_pathDir;
+		action.slowFirst = (!m_itemTarget.valid && underEnemy);
 		action.frame = 1.0f;
-		action.targetDir = dir;
-
-		m_bestScore = std::numeric_limits<float_t>::lowest();
-		m_bestDir = DIR_NONE;
-		m_bestSlow = false;
-		m_count = 0;
 
 		return dfs(action);
 	}
 
-	Reward Path::dfs(const Action& action)
+	Result Path::dfs(const Action& action)
 	{
-		Reward reward;
-		reward.valid = false;
-		reward.slow = false;
-		reward.score = 0.0f;
-		reward.size = 0;
+		Result result;
+		result.valid = false;
+		result.slow = false;
+		result.score = 0.0f;
+		result.size = 0;
 
 		// 超过搜索节点限制
 		++m_count;
 		if (m_count >= m_limit)
-			return reward;
+			return result;
 
 		// 前进到下一个坐标
 		Player temp = m_data.getPlayer();
 		temp.setPosition(action.fromPos);
 		temp.advance(action.fromDir, action.slowFirst);
-		reward.slow = action.slowFirst;
+		result.slow = action.slowFirst;
 		if (!Scene::IsInPlayerArea(temp.getPosition()) || m_scene.collideAll(temp, action.frame))
 		{
 			temp.setPosition(action.fromPos);
 			temp.advance(action.fromDir, !action.slowFirst);
-			reward.slow = !action.slowFirst;
+			result.slow = !action.slowFirst;
 			if (!Scene::IsInPlayerArea(temp.getPosition()) || m_scene.collideAll(temp, action.frame))
-				return reward;
+				return result;
 		}
 
-		reward.valid = true;
+		result.valid = true;
 
-		if (m_itemId != -1)
+		if (m_itemTarget.valid)
 		{
-			reward.score += calcCollectScore(temp);
+			result.score += calcCollectScore(temp);
 		}
-		else if (m_enemyId != -1)
+		else if (m_enemyTarget.valid)
 		{
-			reward.score += calcShootScore(temp);
+			result.score += calcShootScore(temp);
 		}
 		else
 		{
-			reward.score += calcGobackScore(temp);
+			result.score += calcGobackScore(temp);
 		}
 
-		if (reward.score > m_bestScore)
+		if (result.score > m_bestScore)
 		{
-			m_bestScore = reward.score;
+			m_bestScore = result.score;
 		}
 
-		Mover mover(action.targetDir);
-		reward.size = mover.getSize();
+		Mover mover(m_pathDir);
+		result.size = mover.getSize();
 		while (mover.hasNext())
 		{
 			Direction dir = mover.next();
@@ -93,26 +89,25 @@ namespace th
 			nextAct.fromDir = dir;
 			nextAct.slowFirst = action.slowFirst;
 			nextAct.frame = action.frame + 1.0f;
-			nextAct.targetDir = action.targetDir;
 
-			Reward nextRew = dfs(nextAct);
+			Result nextRes = dfs(nextAct);
 
 			if (m_count >= m_limit)
 			{
 				break;
 			}
 
-			if (!nextRew.valid)
+			if (!nextRes.valid)
 			{
-				reward.size -= 1;
+				result.size -= 1;
 				continue;
 			}
 		}
 		// 没气了，当前节点也无效
-		if (reward.size <= 0)
-			reward.valid = false;
+		if (result.size <= 0)
+			result.valid = false;
 
-		return reward;
+		return result;
 	}
 
 	// 拾取道具评分
@@ -120,12 +115,12 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (m_itemId == -1)
+		if (!m_itemTarget.valid)
 			return score;
 
-		const Item& item = m_data.getItems()[m_itemId];
+		const Item& item = m_itemTarget.item;
 
-		if (player.calcDistance(item.getPosition()) < 10.0f)
+		if (player.calcDistance(item.getPosition()) < 8.0f)
 		{
 			score += 300.0f;
 		}
@@ -150,22 +145,22 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (m_enemyId == -1)
+		if (!m_enemyTarget.valid)
 			return score;
 
-		const Enemy& enemy = m_data.getEnemies()[m_enemyId];
+		const Enemy& enemy = m_enemyTarget.enemy;
 
 		float_t dx = std::abs(player.x - enemy.x);
 		if (dx > SCENE_SIZE.width)
 			dx = SCENE_SIZE.width;
-		if (dx < 20.0f)
+		if (dx < 16.0f)
 		{
-			score += 150.0f;
+			score += 100.0f;
 		}
 		else
 		{
 			// X轴距离越近得分越高
-			score += 150.0f * (1.0f - dx / SCENE_SIZE.width);
+			score += 100.0f * (1.0f - dx / SCENE_SIZE.width);
 		}
 
 		float_t dy = std::abs(player.y - enemy.y);
@@ -173,12 +168,12 @@ namespace th
 			dy = SCENE_SIZE.height;
 		if (dy > SCENE_SIZE.height / 2.0f)
 		{
-			score += 150.0f;
+			score += 100.0f;
 		}
 		else
 		{
 			// Y轴距离越远得分越高
-			score += 150.0f * (dy / SCENE_SIZE.height);
+			score += 100.0f * (dy / SCENE_SIZE.height);
 		}
 
 		return score;
@@ -188,9 +183,9 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (player.calcDistance(Player::INIT_POS) < 10.0f)
+		if (player.calcDistance(Player::INIT_POS) < 8.0f)
 		{
-			score += 30.0f;
+			score += 100.0f;
 		}
 		else
 		{
@@ -201,8 +196,8 @@ namespace th
 			if (dy > SCENE_SIZE.height)
 				dy = SCENE_SIZE.height;
 
-			score += 15.0f * (1.0f - dx / SCENE_SIZE.width);
-			score += 15.0f * (1.0f - dy / SCENE_SIZE.height);
+			score += 50.0f * (1.0f - dx / SCENE_SIZE.width);
+			score += 50.0f * (1.0f - dy / SCENE_SIZE.height);
 		}
 
 		return score;

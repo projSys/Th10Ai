@@ -33,20 +33,15 @@ namespace th
 		void move(Direction dir, bool slow);
 
 	private:
+		bool m_active;
+		int_t m_bombCount;
+		Direction m_prevDir;
+		bool m_prevSlow;
+
 		D3D9Hook m_d3d9Hook;
 		DI8Hook m_di8Hook;
 		Api m_api;
 		Data m_data;
-
 		Scene m_scene;
-
-		bool m_active;
-
-		int_t m_itemId;
-		int_t m_enemyId;
-
-		int_t m_bombCount;
-		Direction m_prevDir;
-		bool m_prevSlow;
 	};
 }

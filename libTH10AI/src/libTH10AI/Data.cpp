@@ -53,24 +53,26 @@ namespace th
 	}
 
 	// 查找道具
-	int_t Data::findItem()
+	ItemTarget Data::findItem()
 	{
-		int_t id = -1;
+		ItemTarget target;
+		target.valid = false;
+		target.item = Item();
 
 		if (m_items.empty())
-			return id;
+			return target;
 
 		// 拾取冷却中
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(
 			std::chrono::steady_clock::now() - m_findItemTime).count() < 3000)
-			return id;
+			return target;
 
 		// 自机高于1/4屏
 		if (m_player.y < SCENE_SIZE.height / 4.0f)
 		{
 			// 进入冷却
 			m_findItemTime = std::chrono::steady_clock::now();
-			return id;
+			return target;
 		}
 
 		// 自机高于1/2屏，道具少于10个，敌人多于5个
@@ -78,29 +80,27 @@ namespace th
 		{
 			// 进入冷却
 			m_findItemTime = std::chrono::steady_clock::now();
-			return id;
+			return target;
 		}
 
 		float_t minDist = std::numeric_limits<float_t>::max();
 		//float_t maxY = std::numeric_limits<float_t>::lowest();
-		for (uint_t i = 0; i < m_items.size(); ++i)
+		for (const Item& item : m_items)
 		{
-			const Item& item = m_items[i];
-
 			// 道具高于1/5屏
 			if (item.y < SCENE_SIZE.height / 5.0f)
 				continue;
 
-			// 道具不在自机1/2屏内
+			// 道具不在自机1/3屏内
 			float_t dy = std::abs(item.y - m_player.y);
-			if (dy > SCENE_SIZE.height / 2.0f)
+			if (dy > SCENE_SIZE.height / 3.0f)
 				continue;
 
 			// 道具太靠近敌机
 			bool tooClose = false;
 			for (const Enemy& enemy : m_enemies)
 			{
-				if (item.calcDistance(enemy.getPosition()) < 150.0f)
+				if (item.calcDistance(enemy.getPosition()) < 100.0f)
 				{
 					tooClose = true;
 					break;
@@ -114,17 +114,19 @@ namespace th
 			if (dist < minDist)
 			{
 				minDist = dist;
-				id = i;
+				target.valid = true;
+				target.item = item;
 			}
 
 			//if (item.y > maxY)
 			//{
 			//	maxY = item.y;
-			//	id = i;
+			//	target.valid = true;
+			//	target.item = item;
 			//}
 		}
 
-		return id;
+		return target;
 	}
 
 	bool Data::hasEnemy() const
@@ -145,6 +147,7 @@ namespace th
 	bool Data::isUnderEnemy() const
 	{
 		bool underEnemy = false;
+
 		for (const Enemy& enemy : m_enemies)
 		{
 			if (std::abs(m_player.x - enemy.x) < 16.0f && m_player.y > enemy.y)
@@ -153,26 +156,27 @@ namespace th
 				break;
 			}
 		}
+
 		return underEnemy;
 	}
 
 	// 查找敌人
-	int_t Data::findEnemy()
+	EnemyTarget Data::findEnemy()
 	{
-		int_t id = -1;
+		EnemyTarget target;
+		target.valid = false;
+		target.enemy = Enemy();
 
 		if (m_enemies.empty())
-			return id;
+			return target;
 
 		// 自机高于1/4屏
 		if (m_player.y < SCENE_SIZE.height / 4.0f)
-			return id;
+			return target;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
-		for (uint_t i = 0; i < m_enemies.size(); ++i)
+		for (const Enemy& enemy : m_enemies)
 		{
-			const Enemy& enemy = m_enemies[i];
-
 			if (enemy.y > m_player.y)
 				continue;
 
@@ -181,13 +185,13 @@ namespace th
 			if (dx < minDist)
 			{
 				minDist = dx;
-				id = i;
+				target.valid = true;
+				target.enemy = enemy;
 			}
 		}
 
-		return id;
+		return target;
 	}
-
 
 	const Player& Data::getPlayer() const
 	{
