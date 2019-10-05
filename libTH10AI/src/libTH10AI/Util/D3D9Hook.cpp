@@ -1,5 +1,5 @@
 #include "libTH10AI/Common.h"
-#include "libTH10AI/ApiHook/D3D9Hook.h"
+#include "libTH10AI/Util/D3D9Hook.h"
 
 #include <detours.h>
 #include <Base/ScopeGuard.h>
@@ -12,21 +12,21 @@ namespace th
 		m_present(nullptr),
 		m_presentReadied(false)
 	{
-		WNDCLASSEX wcex = {};
-		wcex.cbSize = sizeof(wcex);
-		wcex.style = CS_HREDRAW | CS_VREDRAW;
-		wcex.lpfnWndProc = &DefWindowProc;
-		wcex.hInstance = GetModuleHandle(nullptr);
-		wcex.lpszClassName = _T("D3D9WndClass");
-		if (RegisterClassEx(&wcex) == 0)
+		WNDCLASSEX wc = {};
+		wc.cbSize = sizeof(wc);
+		wc.style = CS_HREDRAW | CS_VREDRAW;
+		wc.lpfnWndProc = &DefWindowProc;
+		wc.hInstance = GetModuleHandle(nullptr);
+		wc.lpszClassName = _T("D3D9WndClass");
+		if (RegisterClassEx(&wc) == 0)
 			THROW_WINDOWS_ERROR(GetLastError());
 		ON_SCOPE_EXIT([&]()
 		{
-			UnregisterClass(wcex.lpszClassName, wcex.hInstance);
+			UnregisterClass(wc.lpszClassName, wc.hInstance);
 		});
 
-		HWND window = CreateWindowEx(0, wcex.lpszClassName, _T("D3D9Wnd"), WS_OVERLAPPEDWINDOW,
-			CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, wcex.hInstance, nullptr);
+		HWND window = CreateWindowEx(0, wc.lpszClassName, _T("D3D9Wnd"), WS_OVERLAPPEDWINDOW,
+			CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, wc.hInstance, nullptr);
 		if (window == nullptr)
 			THROW_WINDOWS_ERROR(GetLastError());
 		ON_SCOPE_EXIT([&]()

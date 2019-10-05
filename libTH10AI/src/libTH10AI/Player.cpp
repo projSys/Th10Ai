@@ -1,5 +1,5 @@
 #include "libTH10AI/Common.h"
-#include "libTH10AI/Entity/Player.h"
+#include "libTH10AI/Player.h"
 
 namespace th
 {

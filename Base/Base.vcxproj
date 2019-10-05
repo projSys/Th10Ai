@@ -99,14 +99,14 @@
     <ClInclude Include="include\Base\Type.h" />
     <ClInclude Include="include\Windows\Common.h" />
     <ClInclude Include="include\Windows\Process.h" />
-    <ClInclude Include="include\Windows\Utils.h" />
+    <ClInclude Include="include\Windows\Util.h" />
     <ClInclude Include="include\Windows\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\RefCountedObject.cpp" />
     <ClCompile Include="src\Windows\Process.cpp" />
-    <ClCompile Include="src\Windows\Utils.cpp" />
+    <ClCompile Include="src\Windows\Util.cpp" />
     <ClCompile Include="src\Windows\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

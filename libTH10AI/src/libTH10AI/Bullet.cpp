@@ -1,5 +1,5 @@
 #include "libTH10AI/Common.h"
-#include "libTH10AI/Entity/Bullet.h"
+#include "libTH10AI/Bullet.h"
 
 namespace th
 {

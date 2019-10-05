@@ -69,13 +69,8 @@ namespace th
 		m_area.splitLasers(lasers);
 	}
 
-	bool Scene::collideAll(const Player& player, float_t frame) const
+	CellCollideResult Scene::collideAll(const Player& player, float_t frame) const
 	{
 		return m_area.collideAll(player, frame);
 	}
-
-	//void Scene::render(cv::Mat& buffer, const Player& player)
-	//{
-	//	m_area.render(buffer, player);
-	//}
 }

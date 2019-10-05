@@ -117,10 +117,12 @@ namespace th
 			m_second->splitLasers(m_lasers);
 	}
 
-	bool Area::collideAll(const Player& player, float_t frame) const
+	CellCollideResult Area::collideAll(const Player& player, float_t frame) const
 	{
+		CellCollideResult result = { false, false, std::numeric_limits<float_t>::max(), 0 };
+
 		if (!collide(player))
-			return false;
+			return result;
 
 		// 只检测叶子节点
 		if (m_first == nullptr && m_second == nullptr)
@@ -130,46 +132,45 @@ namespace th
 				Enemy temp = enemy;
 				temp.advance(frame);
 				if (temp.collide(player))
-					return true;
+				{
+					result.collided = true;
+				}
 				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
 				//if (ret.first && ret.second < 2.0f)
 				//	return true;
 			}
 
-			//int_t count = 0;
 			for (const Bullet& bullet : m_bullets)
 			{
 				Bullet temp = bullet;
 				temp.advance(frame);
 				//if (!temp.isHighSpeed())
 				//{
-					if (temp.collide(player))
-						return true;
-				//}
-				//else
-				//{
-				//	std::pair<bool, float_t> ret = temp.willCollideWith(player);
-				//	if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
-				//		return true;
-				//}
-				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-				//if (ret.first)
-				//{
-				//	//if (ret.second < 3.0f)
-				//	//	return true;
-				//	//else
-				//		++count;
-				//}
+				if (temp.collide(player))
+				{
+					result.collided = true;
+				}
+				else
+				{
+					std::pair<bool, float_t> ret = temp.willCollideWith(player);
+					if (ret.first && ret.second > 0.0f)
+					{
+						result.willCollide = true;
+						if (ret.second < result.willCollideFrame)
+							result.willCollideFrame = ret.second;
+						result.willCollideCount += 1;
+					}
+				}
 			}
-			//if (count > 20)
-			//	return true;
 
 			for (const Laser& laser : m_lasers)
 			{
 				Laser temp = laser;
 				temp.advance(frame);
 				if (temp.collide(player))
-					return true;
+				{
+					result.collided = true;
+				}
 				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
 				//if (ret.first && ret.second < 2.0f)
 				//	return true;
@@ -178,60 +179,32 @@ namespace th
 
 		if (m_first != nullptr)
 		{
-			if (m_first->collideAll(player, frame))
-				return true;
+			CellCollideResult firstResult = m_first->collideAll(player, frame);
+			if (firstResult.collided)
+				result.collided = true;
+			if (firstResult.willCollide)
+			{
+				result.willCollide = true;
+				if (firstResult.willCollideFrame < result.willCollideFrame)
+					result.willCollideFrame = firstResult.willCollideFrame;
+				result.willCollideCount += firstResult.willCollideCount;
+			}
 		}
+
 		if (m_second != nullptr)
 		{
-			if (m_second->collideAll(player, frame))
-				return true;
+			CellCollideResult secondResult = m_second->collideAll(player, frame);
+			if (secondResult.collided)
+				result.collided = true;
+			if (secondResult.willCollide)
+			{
+				result.willCollide = true;
+				if (secondResult.willCollideFrame < result.willCollideFrame)
+					result.willCollideFrame = secondResult.willCollideFrame;
+				result.willCollideCount += secondResult.willCollideCount;
+			}
 		}
-		return false;
+
+		return result;
 	}
-
-	//void Area::render(cv::Mat& buffer, const Player& player)
-	//{
-	//	if (m_first == nullptr && m_second == nullptr)
-	//	{
-	//		Pointi pos = Scene::ToWindowPos(getTopLeft());
-	//		cv::rectangle(buffer, cv::Rect(pos.x, pos.y,
-	//			static_cast<int_t>(std::round(width)), static_cast<int_t>(std::round(height))),
-	//			cv::Scalar(0, 255, 0));
-
-	//		if (collide(player))
-	//		{
-	//			for (const Enemy& enemy : m_enemies)
-	//			{
-	//				Pointi windowPos = Scene::ToWindowPos(enemy.getTopLeft());
-	//				cv::Rect rect(windowPos.x, windowPos.y, int_t(enemy.width), int_t(enemy.height));
-	//				cv::rectangle(buffer, rect, cv::Scalar(0, 0, 255));
-	//			}
-
-	//			for (const Bullet& bullet : m_bullets)
-	//			{
-	//				Pointi windowPos = Scene::ToWindowPos(bullet.getTopLeft());
-	//				cv::Rect rect(windowPos.x, windowPos.y, int_t(bullet.width), int_t(bullet.height));
-	//				cv::rectangle(buffer, rect, cv::Scalar(0, 0, 255));
-	//			}
-
-	//			for (const Laser& laser : m_lasers)
-	//			{
-	//				LaserBox laserBox(laser);
-	//				Pointi p1 = Scene::ToWindowPos(laserBox.topLeft);
-	//				Pointi p2 = Scene::ToWindowPos(laserBox.topRight);
-	//				Pointi p3 = Scene::ToWindowPos(laserBox.bottomRight);
-	//				Pointi p4 = Scene::ToWindowPos(laserBox.bottomLeft);
-	//				cv::line(buffer, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), cv::Scalar(0, 0, 255));
-	//				cv::line(buffer, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), cv::Scalar(0, 0, 255));
-	//				cv::line(buffer, cv::Point(p3.x, p3.y), cv::Point(p4.x, p4.y), cv::Scalar(0, 0, 255));
-	//				cv::line(buffer, cv::Point(p4.x, p4.y), cv::Point(p1.x, p1.y), cv::Scalar(0, 0, 255));
-	//			}
-	//		}
-	//	}
-
-	//	if (m_first != nullptr)
-	//		m_first->render(buffer, player);
-	//	if (m_second != nullptr)
-	//		m_second->render(buffer, player);
-	//}
 }

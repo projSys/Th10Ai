@@ -1,7 +1,7 @@
 #pragma once
 
-#include "libTH10AI/ApiHook/D3D9Hook.h"
-#include "libTH10AI/ApiHook/DI8Hook.h"
+#include "libTH10AI/Util/D3D9Hook.h"
+#include "libTH10AI/Util/DI8Hook.h"
 #include "libTH10AI/Api.h"
 #include "libTH10AI/Data.h"
 #include "libTH10AI/Scene.h"

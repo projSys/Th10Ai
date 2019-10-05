@@ -33,7 +33,7 @@ namespace th
 	{
 		try
 		{
-			std::string logName = Utils::GetModuleDir(g_module) + "/TH10AI_%N.log";
+			std::string logName = Util::GetModuleDir(g_module) + "/TH10AI_%N.log";
 			bl::add_file_log
 			(
 				bl::keywords::file_name = logName,
@@ -107,7 +107,7 @@ namespace th
 	{
 		try
 		{
-			std::string logName = Utils::GetModuleDir(g_module) + "/libTH10AI_%N.log";
+			std::string logName = Util::GetModuleDir(g_module) + "/libTH10AI_%N.log";
 			bl::add_file_log
 			(
 				bl::keywords::file_name = logName,

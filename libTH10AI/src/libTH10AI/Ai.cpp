@@ -230,7 +230,9 @@ namespace th
 
 		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
 		{
-			Path path(m_data, m_scene, static_cast<Direction>(i), itemTarget, enemyTarget);
+			Direction dir = static_cast<Direction>(i);
+
+			Path path(m_data, m_scene, dir, itemTarget, enemyTarget);
 			Result result = path.find(underEnemy);
 
 			if (result.valid && path.m_bestScore > bestScore)

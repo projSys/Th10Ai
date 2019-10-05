@@ -19,17 +19,11 @@
     <Filter Include="源文件\libTH10AI">
       <UniqueIdentifier>{a361e8ab-5aec-4181-9503-ebd49a9c8bc8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\libTH10AI\Entity">
-      <UniqueIdentifier>{d4d5f2ff-464d-4719-9d91-361ce055feaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\libTH10AI\Entity">
-      <UniqueIdentifier>{9f79d5f1-dcb4-4456-8b05-dfa3141a9692}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\libTH10AI\ApiHook">
-      <UniqueIdentifier>{3c9d079a-65d9-42c0-a492-14d0869fa3b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\libTH10AI\ApiHook">
+    <Filter Include="头文件\libTH10AI\Util">
       <UniqueIdentifier>{5002883c-85ea-4f90-aa7b-1fdc467020f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\libTH10AI\Util">
+      <UniqueIdentifier>{3c9d079a-65d9-42c0-a492-14d0869fa3b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -71,31 +65,31 @@
     <ClInclude Include="include\libTH10AI\Scene.h">
       <Filter>头文件\libTH10AI</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTH10AI\ApiHook\D3D9Hook.h">
-      <Filter>头文件\libTH10AI\ApiHook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10AI\ApiHook\DI8Hook.h">
-      <Filter>头文件\libTH10AI\ApiHook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10AI\Entity\Bullet.h">
-      <Filter>头文件\libTH10AI\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10AI\Entity\Enemy.h">
-      <Filter>头文件\libTH10AI\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10AI\Entity\Entity.h">
-      <Filter>头文件\libTH10AI\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10AI\Entity\Item.h">
-      <Filter>头文件\libTH10AI\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10AI\Entity\Laser.h">
-      <Filter>头文件\libTH10AI\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTH10AI\Entity\Player.h">
-      <Filter>头文件\libTH10AI\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="include\libTH10AI\Ai.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Util\D3D9Hook.h">
+      <Filter>头文件\libTH10AI\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Util\DI8Hook.h">
+      <Filter>头文件\libTH10AI\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Bullet.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Enemy.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Entity.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Item.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Laser.h">
+      <Filter>头文件\libTH10AI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTH10AI\Player.h">
       <Filter>头文件\libTH10AI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -127,31 +121,31 @@
     <ClCompile Include="src\libTH10AI\Scene.cpp">
       <Filter>源文件\libTH10AI</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTH10AI\ApiHook\D3D9Hook.cpp">
-      <Filter>源文件\libTH10AI\ApiHook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10AI\ApiHook\DI8Hook.cpp">
-      <Filter>源文件\libTH10AI\ApiHook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10AI\Entity\Bullet.cpp">
-      <Filter>源文件\libTH10AI\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10AI\Entity\Enemy.cpp">
-      <Filter>源文件\libTH10AI\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10AI\Entity\Entity.cpp">
-      <Filter>源文件\libTH10AI\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10AI\Entity\Item.cpp">
-      <Filter>源文件\libTH10AI\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10AI\Entity\Laser.cpp">
-      <Filter>源文件\libTH10AI\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTH10AI\Entity\Player.cpp">
-      <Filter>源文件\libTH10AI\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="src\libTH10AI\Ai.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Util\D3D9Hook.cpp">
+      <Filter>源文件\libTH10AI\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Util\DI8Hook.cpp">
+      <Filter>源文件\libTH10AI\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Bullet.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Enemy.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Entity.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Item.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Laser.cpp">
+      <Filter>源文件\libTH10AI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTH10AI\Player.cpp">
       <Filter>源文件\libTH10AI</Filter>
     </ClCompile>
   </ItemGroup>

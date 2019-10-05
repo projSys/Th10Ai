@@ -7,7 +7,7 @@
 #include <Base/Size.h>
 #include <Base/Rect.h>
 #include <Windows/Common.h>
-#include <Windows/Utils.h>
+#include <Windows/Util.h>
 
 namespace th
 {

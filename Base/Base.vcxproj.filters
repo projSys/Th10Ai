@@ -75,10 +75,10 @@
     <ClInclude Include="include\Windows\Process.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\Utils.h">
+    <ClInclude Include="include\Windows\Window.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\Window.h">
+    <ClInclude Include="include\Windows\Util.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,10 +92,10 @@
     <ClCompile Include="src\Windows\Process.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Windows\Utils.cpp">
+    <ClCompile Include="src\Windows\Window.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Windows\Window.cpp">
+    <ClCompile Include="src\Windows\Util.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
   </ItemGroup>

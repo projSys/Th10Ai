@@ -55,9 +55,7 @@ namespace th
 	// 查找道具
 	ItemTarget Data::findItem()
 	{
-		ItemTarget target;
-		target.valid = false;
-		target.item = Item();
+		ItemTarget target = { false, Item() };
 
 		if (m_items.empty())
 			return target;
@@ -114,14 +112,14 @@ namespace th
 			if (dist < minDist)
 			{
 				minDist = dist;
-				target.valid = true;
+				target.found = true;
 				target.item = item;
 			}
 
 			//if (item.y > maxY)
 			//{
 			//	maxY = item.y;
-			//	target.valid = true;
+			//	target.found = true;
 			//	target.item = item;
 			//}
 		}
@@ -163,9 +161,7 @@ namespace th
 	// 查找敌人
 	EnemyTarget Data::findEnemy()
 	{
-		EnemyTarget target;
-		target.valid = false;
-		target.enemy = Enemy();
+		EnemyTarget target = { false, Enemy() };
 
 		if (m_enemies.empty())
 			return target;
@@ -185,7 +181,7 @@ namespace th
 			if (dx < minDist)
 			{
 				minDist = dx;
-				target.valid = true;
+				target.found = true;
 				target.enemy = enemy;
 			}
 		}

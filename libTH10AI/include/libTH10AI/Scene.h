@@ -1,7 +1,5 @@
 #pragma once
 
-//#include <opencv2/opencv.hpp>
-
 #include "libTH10AI/Area.h"
 
 namespace th
@@ -51,9 +49,7 @@ namespace th
 		void splitEnemies(const std::vector<Enemy>& enemies);
 		void splitBullets(const std::vector<Bullet>& bullets);
 		void splitLasers(const std::vector<Laser>& lasers);
-		bool collideAll(const Player& player, float_t frame) const;
-
-		//void render(cv::Mat& buffer, const Player& player);
+		CellCollideResult collideAll(const Player& player, float_t frame) const;
 
 	private:
 		static const Pointf SCENE_OFFSET;

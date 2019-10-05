@@ -5,7 +5,7 @@
 #include <boost/locale.hpp>
 
 #include "Base/ScopeGuard.h"
-#include "Windows/Utils.h"
+#include "Windows/Util.h"
 
 namespace win
 {

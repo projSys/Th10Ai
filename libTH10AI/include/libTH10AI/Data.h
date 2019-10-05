@@ -2,24 +2,24 @@
 
 #include <vector>
 
-#include "libTH10AI/Entity/Player.h"
-#include "libTH10AI/Entity/Item.h"
-#include "libTH10AI/Entity/Enemy.h"
-#include "libTH10AI/Entity/Bullet.h"
-#include "libTH10AI/Entity/Laser.h"
+#include "libTH10AI/Player.h"
+#include "libTH10AI/Item.h"
+#include "libTH10AI/Enemy.h"
+#include "libTH10AI/Bullet.h"
+#include "libTH10AI/Laser.h"
 #include "libTH10AI/Api.h"
 
 namespace th
 {
 	struct ItemTarget
 	{
-		bool valid;
+		bool found;
 		Item item;
 	};
 
 	struct EnemyTarget
 	{
-		bool valid;
+		bool found;
 		Enemy enemy;
 	};
 

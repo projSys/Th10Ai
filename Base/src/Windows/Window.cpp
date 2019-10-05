@@ -3,7 +3,7 @@
 
 #include <boost/locale.hpp>
 
-#include "Windows/Utils.h"
+#include "Windows/Util.h"
 
 namespace win
 {

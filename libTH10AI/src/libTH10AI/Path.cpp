@@ -25,7 +25,7 @@ namespace th
 		Action action;
 		action.fromPos = m_data.getPlayer().getPosition();
 		action.fromDir = m_pathDir;
-		action.slowFirst = (!m_itemTarget.valid && underEnemy);
+		action.slowFirst = (!m_itemTarget.found && underEnemy);
 		action.frame = 1.0f;
 
 		return dfs(action);
@@ -44,27 +44,36 @@ namespace th
 		if (m_count >= m_limit)
 			return result;
 
+		CellCollideResult collideResult = {};
 		// 前进到下一个坐标
 		Player temp = m_data.getPlayer();
 		temp.setPosition(action.fromPos);
 		temp.advance(action.fromDir, action.slowFirst);
 		result.slow = action.slowFirst;
-		if (!Scene::IsInPlayerArea(temp.getPosition()) || m_scene.collideAll(temp, action.frame))
+		if (!Scene::IsInPlayerArea(temp.getPosition()) || (collideResult = m_scene.collideAll(temp, action.frame)).collided)
 		{
 			temp.setPosition(action.fromPos);
 			temp.advance(action.fromDir, !action.slowFirst);
 			result.slow = !action.slowFirst;
-			if (!Scene::IsInPlayerArea(temp.getPosition()) || m_scene.collideAll(temp, action.frame))
+			if (!Scene::IsInPlayerArea(temp.getPosition()) || (collideResult = m_scene.collideAll(temp, action.frame)).collided)
 				return result;
+		}
+
+		if (m_pathDir == DIR_HOLD && collideResult.willCollideCount > m_data.getBullets().size() * 0.1)
+		{
+			m_itemTarget.found = false;
+			m_enemyTarget.found = false;
+			std::cout << "被瞄准了，快跑。" << std::endl;
+			return result;
 		}
 
 		result.valid = true;
 
-		if (m_itemTarget.valid)
+		if (m_itemTarget.found)
 		{
 			result.score += calcCollectScore(temp);
 		}
-		else if (m_enemyTarget.valid)
+		else if (m_enemyTarget.found)
 		{
 			result.score += calcShootScore(temp);
 		}
@@ -115,7 +124,7 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (!m_itemTarget.valid)
+		if (!m_itemTarget.found)
 			return score;
 
 		const Item& item = m_itemTarget.item;
@@ -145,7 +154,7 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		if (!m_enemyTarget.valid)
+		if (!m_enemyTarget.found)
 			return score;
 
 		const Enemy& enemy = m_enemyTarget.enemy;

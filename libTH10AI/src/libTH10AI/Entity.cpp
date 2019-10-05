@@ -1,5 +1,5 @@
 #include "libTH10AI/Common.h"
-#include "libTH10AI/Entity/Entity.h"
+#include "libTH10AI/Entity.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>

@@ -2,16 +2,23 @@
 
 #include <vector>
 #include <memory>
-//#include <opencv2/opencv.hpp>
 
-#include "libTH10AI/Entity/Entity.h"
-#include "libTH10AI/Entity/Player.h"
-#include "libTH10AI/Entity/Enemy.h"
-#include "libTH10AI/Entity/Bullet.h"
-#include "libTH10AI/Entity/Laser.h"
+#include "libTH10AI/Entity.h"
+#include "libTH10AI/Player.h"
+#include "libTH10AI/Enemy.h"
+#include "libTH10AI/Bullet.h"
+#include "libTH10AI/Laser.h"
 
 namespace th
 {
+	struct CellCollideResult
+	{
+		bool collided;
+		bool willCollide;
+		float_t willCollideFrame;
+		int_t willCollideCount;
+	};
+
 	class Area :
 		private Entity
 	{
@@ -24,9 +31,7 @@ namespace th
 		void splitEnemies(const std::vector<Enemy>& enemies);
 		void splitBullets(const std::vector<Bullet>& bullets);
 		void splitLasers(const std::vector<Laser>& lasers);
-		bool collideAll(const Player& player, float_t frame) const;
-
-		//void render(cv::Mat& buffer, const Player& player);
+		CellCollideResult collideAll(const Player& player, float_t frame) const;
 
 	private:
 		std::vector<Enemy> m_enemies;

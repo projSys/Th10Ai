@@ -1,9 +1,9 @@
 #include "libTH10AI/Common.h"
-#include "libTH10AI/ApiHook/DI8Hook.h"
+#include "libTH10AI/Util/DI8Hook.h"
 
 #include <detours.h>
 
-#include "libTH10AI/ApiHook/D3D9Hook.h"
+#include "libTH10AI/Util/D3D9Hook.h"
 
 namespace th
 {

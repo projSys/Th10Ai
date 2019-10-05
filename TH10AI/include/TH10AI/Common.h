@@ -4,7 +4,7 @@
 #include <Base/Type.h>
 #include <Base/Exception.h>
 #include <Windows/Common.h>
-#include <Windows/Utils.h>
+#include <Windows/Util.h>
 #include <libTH10AI/Common.h>
 
 namespace th
