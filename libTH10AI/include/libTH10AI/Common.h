@@ -19,4 +19,4 @@ namespace th
 #include <chrono>
 #include <iostream>
 
-#include "libTH10AI/Direction.h"
+#include "libTh10Ai/Direction.h"

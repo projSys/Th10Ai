@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libTH10AI/Entity.h"
+#include "libTh10Ai/Entity.h"
 
 namespace th
 {

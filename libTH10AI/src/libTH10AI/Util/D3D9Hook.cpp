@@ -1,5 +1,5 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/Util/D3D9Hook.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/Util/D3D9Hook.h"
 
 #include <detours.h>
 #include <Base/ScopeGuard.h>

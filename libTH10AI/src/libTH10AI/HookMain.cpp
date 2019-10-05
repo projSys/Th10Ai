@@ -1,12 +1,12 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/HookMain.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/HookMain.h"
 
 #include <memory>
 #include <boost/log/utility/setup/file.hpp>
 #include <Base/ScopeGuard.h>
 
-#include "libTH10AI/DllMain.h"
-#include "libTH10AI/HookThread.h"
+#include "libTh10Ai/DllMain.h"
+#include "libTh10Ai/HookThread.h"
 
 // DLL共享数据段
 #pragma data_seg("SharedDataSeg")
@@ -28,12 +28,12 @@ namespace th
 
 	LRESULT CALLBACK CallWndProc(int code, WPARAM wParam, LPARAM lParam);
 
-	// 在TH10AI进程运行
+	// 在Th10Ai进程运行
 	void WINAPI HookMain()
 	{
 		try
 		{
-			std::string logName = Util::GetModuleDir(g_module) + "/TH10AI_%N.log";
+			std::string logName = Util::GetModuleDir(g_module) + "/Th10Ai_%N.log";
 			bl::add_file_log
 			(
 				bl::keywords::file_name = logName,
@@ -62,7 +62,7 @@ namespace th
 
 			SendMessage(g_window, HOOK_CREATE, 0, 0);
 			if (!g_created)
-				THROW_BASE_EXCEPTION(Exception() << err_str(u8"TH10AI创建失败，详细信息请查看libTH10AI.log。"));
+				THROW_BASE_EXCEPTION(Exception() << err_str(u8"Th10Ai创建失败，详细信息请查看libTh10Ai.log。"));
 			ON_SCOPE_EXIT([]()
 			{
 				if (g_destroy)
@@ -107,7 +107,7 @@ namespace th
 	{
 		try
 		{
-			std::string logName = Util::GetModuleDir(g_module) + "/libTH10AI_%N.log";
+			std::string logName = Util::GetModuleDir(g_module) + "/libTh10Ai_%N.log";
 			bl::add_file_log
 			(
 				bl::keywords::file_name = logName,

@@ -1,6 +1,6 @@
-#include "TH10AI/Common.h"
+#include "Th10Ai/Common.h"
 
-#include <libTH10AI/HookMain.h>
+#include <libTh10Ai/HookMain.h>
 
 int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {

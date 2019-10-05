@@ -1,4 +1,4 @@
-LIBRARY libTH10AI
+LIBRARY libTh10Ai
 EXPORTS
 g_window DATA
 g_threadId DATA

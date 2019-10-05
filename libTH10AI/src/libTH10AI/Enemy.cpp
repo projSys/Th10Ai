@@ -1,5 +1,5 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/Enemy.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/Enemy.h"
 
 namespace th
 {

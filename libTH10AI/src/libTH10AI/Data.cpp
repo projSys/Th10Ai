@@ -1,12 +1,12 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/Data.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/Data.h"
 
-#include "libTH10AI/Scene.h"
+#include "libTh10Ai/Scene.h"
 
 namespace th
 {
-	Data::Data(Api& api) :
-		m_api(api)
+	Data::Data(Reader& reader) :
+		m_reader(reader)
 	{
 		m_items.reserve(200);
 		m_enemies.reserve(200);
@@ -16,11 +16,11 @@ namespace th
 
 	void Data::update()
 	{
-		m_api.readPlayer(m_player);
-		m_api.readItems(m_items);
-		m_api.readEnemies(m_enemies);
-		m_api.readBullets(m_bullets);
-		m_api.readLasers(m_lasers);
+		m_reader.readPlayer(m_player);
+		m_reader.readItems(m_items);
+		m_reader.readEnemies(m_enemies);
+		m_reader.readBullets(m_bullets);
+		m_reader.readLasers(m_lasers);
 	}
 
 	void Data::print()

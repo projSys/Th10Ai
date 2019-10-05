@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libTH10AI/Area.h"
+#include "libTh10Ai/Cell.h"
 
 namespace th
 {
@@ -55,6 +55,6 @@ namespace th
 		static const Pointf SCENE_OFFSET;
 		static const Pointf ORIGIN_POINT_OFFSET;
 
-		Area m_area;
+		Cell m_cell;
 	};
 }

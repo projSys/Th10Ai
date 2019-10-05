@@ -1,5 +1,5 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/Mover.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/Mover.h"
 
 namespace th
 {

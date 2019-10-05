@@ -1,5 +1,5 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/Scene.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/Scene.h"
 
 #include <cmath>
 
@@ -40,37 +40,37 @@ namespace th
 	}
 
 	Scene::Scene() :
-		m_area(0.0f, 224.0f, 384.0f, 448.0f)
+		m_cell(0.0f, 224.0f, 384.0f, 448.0f)
 	{
 	}
 
 	void Scene::split(int_t times)
 	{
-		m_area.split(times);
+		m_cell.split(times);
 	}
 
 	void Scene::clearAll()
 	{
-		m_area.clearAll();
+		m_cell.clearAll();
 	}
 
 	void Scene::splitEnemies(const std::vector<Enemy>& enemies)
 	{
-		m_area.splitEnemies(enemies);
+		m_cell.splitEnemies(enemies);
 	}
 
 	void Scene::splitBullets(const std::vector<Bullet>& bullets)
 	{
-		m_area.splitBullets(bullets);
+		m_cell.splitBullets(bullets);
 	}
 
 	void Scene::splitLasers(const std::vector<Laser>& lasers)
 	{
-		m_area.splitLasers(lasers);
+		m_cell.splitLasers(lasers);
 	}
 
 	CellCollideResult Scene::collideAll(const Player& player, float_t frame) const
 	{
-		return m_area.collideAll(player, frame);
+		return m_cell.collideAll(player, frame);
 	}
 }

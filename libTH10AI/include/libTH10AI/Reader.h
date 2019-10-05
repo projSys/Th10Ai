@@ -3,19 +3,19 @@
 #include <vector>
 //#include <Windows/Process.h>
 
-#include "libTH10AI/Player.h"
-#include "libTH10AI/Item.h"
-#include "libTH10AI/Enemy.h"
-#include "libTH10AI/Bullet.h"
-#include "libTH10AI/Laser.h"
+#include "libTh10Ai/Player.h"
+#include "libTh10Ai/Item.h"
+#include "libTh10Ai/Enemy.h"
+#include "libTh10Ai/Bullet.h"
+#include "libTh10Ai/Laser.h"
 
 namespace th
 {
 	// https://github.com/binvec/TH10_DataReversing
-	class Api
+	class Reader
 	{
 	public:
-		//Api(Process& process);
+		//Reader(Process& process);
 
 		bool readPlayer(Player& player) noexcept;
 		bool readItems(std::vector<Item>& items) noexcept;

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "libTH10AI/Util/D3D9Hook.h"
-#include "libTH10AI/Util/DI8Hook.h"
-#include "libTH10AI/Api.h"
-#include "libTH10AI/Data.h"
-#include "libTH10AI/Scene.h"
+#include "libTh10Ai/Util/D3D9Hook.h"
+#include "libTh10Ai/Util/DI8Hook.h"
+#include "libTh10Ai/Reader.h"
+#include "libTh10Ai/Data.h"
+#include "libTh10Ai/Scene.h"
 
 namespace th
 {
@@ -40,7 +40,7 @@ namespace th
 
 		D3D9Hook m_d3d9Hook;
 		DI8Hook m_di8Hook;
-		Api m_api;
+		Reader m_reader;
 		Data m_data;
 		Scene m_scene;
 	};

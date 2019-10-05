@@ -1,10 +1,10 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/Ai.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/Ai.h"
 
 #include <thread>
 
-#include "libTH10AI/HookThread.h"
-#include "libTH10AI/Path.h"
+#include "libTh10Ai/HookThread.h"
+#include "libTh10Ai/Path.h"
 
 namespace th
 {
@@ -14,7 +14,7 @@ namespace th
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
 		m_prevSlow(false),
-		m_data(m_api)
+		m_data(m_reader)
 	{
 		m_scene.split(6);
 

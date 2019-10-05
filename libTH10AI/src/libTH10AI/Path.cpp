@@ -1,7 +1,7 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/Path.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/Path.h"
 
-#include "libTH10AI/Mover.h"
+#include "libTh10Ai/Mover.h"
 
 namespace th
 {
@@ -61,8 +61,6 @@ namespace th
 
 		if (m_pathDir == DIR_HOLD && collideResult.willCollideCount > m_data.getBullets().size() * 0.1)
 		{
-			m_itemTarget.found = false;
-			m_enemyTarget.found = false;
 			std::cout << "被瞄准了，快跑。" << std::endl;
 			return result;
 		}

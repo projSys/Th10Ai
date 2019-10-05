@@ -1,8 +1,8 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/HookThread.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/HookThread.h"
 
-#include "libTH10AI/HookMain.h"
-#include "libTH10AI/Ai.h"
+#include "libTh10Ai/HookMain.h"
+#include "libTh10Ai/Ai.h"
 
 namespace th
 {

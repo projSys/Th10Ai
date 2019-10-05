@@ -1,7 +1,7 @@
 #pragma once
 
-#include "libTH10AI/Data.h"
-#include "libTH10AI/Scene.h"
+#include "libTh10Ai/Data.h"
+#include "libTh10Ai/Scene.h"
 
 namespace th
 {

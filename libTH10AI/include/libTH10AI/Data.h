@@ -2,12 +2,12 @@
 
 #include <vector>
 
-#include "libTH10AI/Player.h"
-#include "libTH10AI/Item.h"
-#include "libTH10AI/Enemy.h"
-#include "libTH10AI/Bullet.h"
-#include "libTH10AI/Laser.h"
-#include "libTH10AI/Api.h"
+#include "libTh10Ai/Player.h"
+#include "libTh10Ai/Item.h"
+#include "libTh10Ai/Enemy.h"
+#include "libTh10Ai/Bullet.h"
+#include "libTh10Ai/Laser.h"
+#include "libTh10Ai/Reader.h"
 
 namespace th
 {
@@ -26,7 +26,7 @@ namespace th
 	class Data
 	{
 	public:
-		Data(Api& api);
+		Data(Reader& reader);
 
 		void update();
 		void print();
@@ -55,7 +55,7 @@ namespace th
 		const std::vector<Laser>& getLasers() const;
 
 	private:
-		Api& m_api;
+		Reader& m_reader;
 
 		Player m_player;
 		std::vector<Item> m_items;

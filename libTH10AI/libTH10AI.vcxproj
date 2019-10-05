@@ -14,7 +14,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>libTH10AI</RootNamespace>
+    <RootNamespace>libTh10Ai</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -62,7 +62,7 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_71_0\lib32-msvc-14.1;D:\Develop\Touhou\Detours-master\lib.X86;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>libTH10AI.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>libTh10Ai.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,54 +82,54 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_71_0\lib32-msvc-14.1;D:\Develop\Touhou\Detours-master\lib.X86;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>libTH10AI.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>libTh10Ai.def</ModuleDefinitionFile>
       <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\libTH10AI\Ai.h" />
-    <ClInclude Include="include\libTH10AI\Api.h" />
-    <ClInclude Include="include\libTH10AI\Area.h" />
-    <ClInclude Include="include\libTH10AI\Bullet.h" />
-    <ClInclude Include="include\libTH10AI\Common.h" />
-    <ClInclude Include="include\libTH10AI\Data.h" />
-    <ClInclude Include="include\libTH10AI\Direction.h" />
-    <ClInclude Include="include\libTH10AI\DllMain.h" />
-    <ClInclude Include="include\libTH10AI\Enemy.h" />
-    <ClInclude Include="include\libTH10AI\Entity.h" />
-    <ClInclude Include="include\libTH10AI\HookMain.h" />
-    <ClInclude Include="include\libTH10AI\HookThread.h" />
-    <ClInclude Include="include\libTH10AI\Item.h" />
-    <ClInclude Include="include\libTH10AI\Laser.h" />
-    <ClInclude Include="include\libTH10AI\Mover.h" />
-    <ClInclude Include="include\libTH10AI\Path.h" />
-    <ClInclude Include="include\libTH10AI\Player.h" />
-    <ClInclude Include="include\libTH10AI\Scene.h" />
-    <ClInclude Include="include\libTH10AI\Util\D3D9Hook.h" />
-    <ClInclude Include="include\libTH10AI\Util\DI8Hook.h" />
+    <ClInclude Include="include\libTh10Ai\Ai.h" />
+    <ClInclude Include="include\libTh10Ai\Bullet.h" />
+    <ClInclude Include="include\libTh10Ai\Cell.h" />
+    <ClInclude Include="include\libTh10Ai\Common.h" />
+    <ClInclude Include="include\libTh10Ai\Data.h" />
+    <ClInclude Include="include\libTh10Ai\Direction.h" />
+    <ClInclude Include="include\libTh10Ai\DllMain.h" />
+    <ClInclude Include="include\libTh10Ai\Enemy.h" />
+    <ClInclude Include="include\libTh10Ai\Entity.h" />
+    <ClInclude Include="include\libTh10Ai\HookMain.h" />
+    <ClInclude Include="include\libTh10Ai\HookThread.h" />
+    <ClInclude Include="include\libTh10Ai\Item.h" />
+    <ClInclude Include="include\libTh10Ai\Laser.h" />
+    <ClInclude Include="include\libTh10Ai\Mover.h" />
+    <ClInclude Include="include\libTh10Ai\Path.h" />
+    <ClInclude Include="include\libTh10Ai\Player.h" />
+    <ClInclude Include="include\libTh10Ai\Reader.h" />
+    <ClInclude Include="include\libTh10Ai\Scene.h" />
+    <ClInclude Include="include\libTh10Ai\Util\D3D9Hook.h" />
+    <ClInclude Include="include\libTh10Ai\Util\DI8Hook.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\libTH10AI\Ai.cpp" />
-    <ClCompile Include="src\libTH10AI\Api.cpp" />
-    <ClCompile Include="src\libTH10AI\Area.cpp" />
-    <ClCompile Include="src\libTH10AI\Bullet.cpp" />
-    <ClCompile Include="src\libTH10AI\Data.cpp" />
-    <ClCompile Include="src\libTH10AI\DllMain.cpp" />
-    <ClCompile Include="src\libTH10AI\Enemy.cpp" />
-    <ClCompile Include="src\libTH10AI\Entity.cpp" />
-    <ClCompile Include="src\libTH10AI\HookMain.cpp" />
-    <ClCompile Include="src\libTH10AI\HookThread.cpp" />
-    <ClCompile Include="src\libTH10AI\Item.cpp" />
-    <ClCompile Include="src\libTH10AI\Laser.cpp" />
-    <ClCompile Include="src\libTH10AI\Mover.cpp" />
-    <ClCompile Include="src\libTH10AI\Path.cpp" />
-    <ClCompile Include="src\libTH10AI\Player.cpp" />
-    <ClCompile Include="src\libTH10AI\Scene.cpp" />
-    <ClCompile Include="src\libTH10AI\Util\D3D9Hook.cpp" />
-    <ClCompile Include="src\libTH10AI\Util\DI8Hook.cpp" />
+    <ClCompile Include="src\libTh10Ai\Ai.cpp" />
+    <ClCompile Include="src\libTh10Ai\Bullet.cpp" />
+    <ClCompile Include="src\libTh10Ai\Cell.cpp" />
+    <ClCompile Include="src\libTh10Ai\Data.cpp" />
+    <ClCompile Include="src\libTh10Ai\DllMain.cpp" />
+    <ClCompile Include="src\libTh10Ai\Enemy.cpp" />
+    <ClCompile Include="src\libTh10Ai\Entity.cpp" />
+    <ClCompile Include="src\libTh10Ai\HookMain.cpp" />
+    <ClCompile Include="src\libTh10Ai\HookThread.cpp" />
+    <ClCompile Include="src\libTh10Ai\Item.cpp" />
+    <ClCompile Include="src\libTh10Ai\Laser.cpp" />
+    <ClCompile Include="src\libTh10Ai\Mover.cpp" />
+    <ClCompile Include="src\libTh10Ai\Path.cpp" />
+    <ClCompile Include="src\libTh10Ai\Player.cpp" />
+    <ClCompile Include="src\libTh10Ai\Reader.cpp" />
+    <ClCompile Include="src\libTh10Ai\Scene.cpp" />
+    <ClCompile Include="src\libTh10Ai\Util\D3D9Hook.cpp" />
+    <ClCompile Include="src\libTh10Ai\Util\DI8Hook.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="libTH10AI.def" />
+    <None Include="libTh10Ai.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

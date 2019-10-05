@@ -1,14 +1,14 @@
-#include "libTH10AI/Common.h"
-#include "libTH10AI/Api.h"
+#include "libTh10Ai/Common.h"
+#include "libTh10Ai/Reader.h"
 
 namespace th
 {
-	//Api::Api(Process& process) :
+	//Reader::Reader(Process& process) :
 	//	m_process(process)
 	//{
 	//}
 
-	bool Api::readPlayer(Player& player) noexcept
+	bool Reader::readPlayer(Player& player) noexcept
 	{
 		player = Player();
 
@@ -37,7 +37,7 @@ namespace th
 		return true;
 	}
 
-	bool Api::readItems(std::vector<Item>& items) noexcept
+	bool Reader::readItems(std::vector<Item>& items) noexcept
 	{
 		items.clear();
 
@@ -76,7 +76,7 @@ namespace th
 		return true;
 	}
 
-	bool Api::readEnemies(std::vector<Enemy>& enemies) noexcept
+	bool Reader::readEnemies(std::vector<Enemy>& enemies) noexcept
 	{
 		enemies.clear();
 
@@ -116,7 +116,7 @@ namespace th
 		return true;
 	}
 
-	bool Api::readBullets(std::vector<Bullet>& bullets) noexcept
+	bool Reader::readBullets(std::vector<Bullet>& bullets) noexcept
 	{
 		bullets.clear();
 
@@ -157,7 +157,7 @@ namespace th
 		return true;
 	}
 
-	bool Api::readLasers(std::vector<Laser>& lasers) noexcept
+	bool Reader::readLasers(std::vector<Laser>& lasers) noexcept
 	{
 		lasers.clear();
 
