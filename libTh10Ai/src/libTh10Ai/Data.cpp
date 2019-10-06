@@ -8,7 +8,7 @@ namespace th
 	Data::Data(Reader& reader) :
 		m_reader(reader)
 	{
-		m_items.reserve(200);
+		m_items.reserve(2000);
 		m_enemies.reserve(200);
 		m_bullets.reserve(2000);
 		m_lasers.reserve(200);
@@ -66,7 +66,7 @@ namespace th
 			return target;
 
 		// 自机高于1/4屏
-		if (m_player.y < SCENE_SIZE.height / 4.0f)
+		if (m_player.y < Scene::SIZE.height / 4.0f)
 		{
 			// 进入冷却
 			m_findItemTime = std::chrono::steady_clock::now();
@@ -74,7 +74,7 @@ namespace th
 		}
 
 		// 自机高于1/2屏，道具少于10个，敌人多于5个
-		if (m_player.y < SCENE_SIZE.height / 2.0f && m_items.size() < 10 && m_enemies.size() > 5)
+		if (m_player.y < Scene::SIZE.height / 2.0f && m_items.size() < 10 && m_enemies.size() > 5)
 		{
 			// 进入冷却
 			m_findItemTime = std::chrono::steady_clock::now();
@@ -86,12 +86,12 @@ namespace th
 		for (const Item& item : m_items)
 		{
 			// 道具高于1/5屏
-			if (item.y < SCENE_SIZE.height / 5.0f)
+			if (item.y < Scene::SIZE.height / 5.0f)
 				continue;
 
 			// 道具不在自机1/3屏内
 			float_t dy = std::abs(item.y - m_player.y);
-			if (dy > SCENE_SIZE.height / 3.0f)
+			if (dy > Scene::SIZE.height / 3.0f)
 				continue;
 
 			// 道具太靠近敌机
@@ -167,7 +167,7 @@ namespace th
 			return target;
 
 		// 自机高于1/4屏
-		if (m_player.y < SCENE_SIZE.height / 4.0f)
+		if (m_player.y < Scene::SIZE.height / 4.0f)
 			return target;
 
 		float_t minDist = std::numeric_limits<float_t>::max();

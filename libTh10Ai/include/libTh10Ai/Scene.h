@@ -4,30 +4,30 @@
 
 namespace th
 {
-	const Sizef SCENE_SIZE = { 384.0f, 448.0f };
-
 	// ³¡¾°×ø±ê
 	//     +-----------------------+-----------------------+
-	//     | 24  8|                                 |      |16
-	//     |----+-+----------------+----------------+-+----|---------> X
-	//   (-200,0) (-192,0)         |(0,0)     (192,0) (200,0)
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |448             | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	//     |    | |                |                | |    |
-	// (-200,448) (-192,448)       |(0,448) (192,448) (200,448)
-	//     |----+-+----------------+----------------+-+----|
+	//     |      |16                               |      |
+	//     |------+----------------+----------------+------|------> X
+	//     |  32  |(-192,0)        |(0,0)    (192,0)|      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |448             |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |                |                |      |
+	//     |      |(-192,448)      |(0,448)(192,448)|      |
+	//     |------+----------------+----------------+------|
 	//     |      |               384               |      |
 	//     +-----------------------+-----------------------+
 	//                             |
@@ -36,8 +36,11 @@ namespace th
 	class Scene
 	{
 	public:
+		static const Sizef SIZE;
+
 		static Pointi ToWindowPos(const Pointf& scenePos);
 		static Pointf ToScenePos(const Pointi& windowPos);
+		static bool IsInScene(const Pointf& pos);
 		static bool IsInPlayerArea(const Pointf& pos);
 		static Pointf FixPlayerPos(const Pointf& pos);
 
@@ -52,7 +55,7 @@ namespace th
 		CellCollideResult collideAll(const Player& player, float_t frame) const;
 
 	private:
-		static const Pointf SCENE_OFFSET;
+		static const Pointf OFFSET;
 		static const Pointf ORIGIN_POINT_OFFSET;
 
 		Cell m_cell;
