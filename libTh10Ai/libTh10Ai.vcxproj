@@ -87,7 +87,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\libTh10Ai\Ai.h" />
     <ClInclude Include="include\libTh10Ai\Bullet.h" />
     <ClInclude Include="include\libTh10Ai\Cell.h" />
     <ClInclude Include="include\libTh10Ai\Common.h" />
@@ -105,11 +104,11 @@
     <ClInclude Include="include\libTh10Ai\Player.h" />
     <ClInclude Include="include\libTh10Ai\Reader.h" />
     <ClInclude Include="include\libTh10Ai\Scene.h" />
+    <ClInclude Include="include\libTh10Ai\Th10Ai.h" />
     <ClInclude Include="include\libTh10Ai\Util\D3D9Hook.h" />
     <ClInclude Include="include\libTh10Ai\Util\DI8Hook.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\libTh10Ai\Ai.cpp" />
     <ClCompile Include="src\libTh10Ai\Bullet.cpp" />
     <ClCompile Include="src\libTh10Ai\Cell.cpp" />
     <ClCompile Include="src\libTh10Ai\Data.cpp" />
@@ -125,6 +124,7 @@
     <ClCompile Include="src\libTh10Ai\Player.cpp" />
     <ClCompile Include="src\libTh10Ai\Reader.cpp" />
     <ClCompile Include="src\libTh10Ai\Scene.cpp" />
+    <ClCompile Include="src\libTh10Ai\Th10Ai.cpp" />
     <ClCompile Include="src\libTh10Ai\Util\D3D9Hook.cpp" />
     <ClCompile Include="src\libTh10Ai\Util\DI8Hook.cpp" />
   </ItemGroup>

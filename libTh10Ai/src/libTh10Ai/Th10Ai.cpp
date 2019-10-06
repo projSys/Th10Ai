@@ -1,5 +1,5 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/Ai.h"
+#include "libTh10Ai/Th10Ai.h"
 
 #include <thread>
 
@@ -9,7 +9,7 @@
 namespace th
 {
 	// 在东方窗口线程运行
-	Ai::Ai() :
+	Th10Ai::Th10Ai() :
 		m_active(false),
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
@@ -29,7 +29,7 @@ namespace th
 	}
 
 	// 在东方窗口线程运行
-	Ai::~Ai()
+	Th10Ai::~Th10Ai()
 	{
 		try
 		{
@@ -47,7 +47,7 @@ namespace th
 	}
 
 	// 在钩子线程运行
-	void Ai::run(HookThread& container)
+	void Th10Ai::run(HookThread& container)
 	{
 		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启AI，按S停止AI，按D退出AI。" << std::endl;
 
@@ -68,23 +68,23 @@ namespace th
 		std::cout << "退出AI。" << std::endl;
 	}
 
-	void Ai::notify()
+	void Th10Ai::notify()
 	{
 		m_active = false;
 		m_d3d9Hook.notifyPresent();
 	}
 
-	bool Ai::isKeyPressed(int vKey) const
+	bool Th10Ai::isKeyPressed(int vKey) const
 	{
 		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
 	}
 
-	void Ai::print()
+	void Th10Ai::print()
 	{
 		m_data.print();
 	}
 
-	void Ai::start()
+	void Th10Ai::start()
 	{
 		if (!m_active)
 		{
@@ -99,7 +99,7 @@ namespace th
 		}
 	}
 
-	void Ai::stop()
+	void Th10Ai::stop()
 	{
 		if (m_active)
 		{
@@ -115,7 +115,7 @@ namespace th
 		}
 	}
 
-	void Ai::update()
+	void Th10Ai::update()
 	{
 		if (!m_active)
 		{
@@ -168,7 +168,7 @@ namespace th
 	}
 
 	// 处理炸弹
-	bool Ai::handleBomb()
+	bool Th10Ai::handleBomb()
 	{
 		if (m_data.isColliding())
 		{
@@ -185,7 +185,7 @@ namespace th
 	}
 
 	// 处理对话
-	bool Ai::handleTalk()
+	bool Th10Ai::handleTalk()
 	{
 		if (m_data.isTalking())
 		{
@@ -200,7 +200,7 @@ namespace th
 	}
 
 	// 处理攻击
-	bool Ai::handleShoot()
+	bool Th10Ai::handleShoot()
 	{
 		if (m_data.hasEnemy())
 		{
@@ -215,7 +215,7 @@ namespace th
 	}
 
 	// 处理移动
-	bool Ai::handleMove()
+	bool Th10Ai::handleMove()
 	{
 		if (!m_data.isNormalStatus())
 			return false;
@@ -256,7 +256,7 @@ namespace th
 		return true;
 	}
 
-	void Ai::move(Direction dir, bool slow)
+	void Th10Ai::move(Direction dir, bool slow)
 	{
 		if (slow)
 			m_di8Hook.keyPress(DIK_LSHIFT);

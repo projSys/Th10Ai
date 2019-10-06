@@ -59,9 +59,6 @@
     <ClInclude Include="include\libTh10Ai\Scene.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTh10Ai\Ai.h">
-      <Filter>头文件\libTh10Ai</Filter>
-    </ClInclude>
     <ClInclude Include="include\libTh10Ai\Util\D3D9Hook.h">
       <Filter>头文件\libTh10Ai\Util</Filter>
     </ClInclude>
@@ -92,6 +89,9 @@
     <ClInclude Include="include\libTh10Ai\Cell.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
+    <ClInclude Include="include\libTh10Ai\Th10Ai.h">
+      <Filter>头文件\libTh10Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\libTh10Ai\Data.cpp">
@@ -113,9 +113,6 @@
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\Scene.cpp">
-      <Filter>源文件\libTh10Ai</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTh10Ai\Ai.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\Util\D3D9Hook.cpp">
@@ -146,6 +143,9 @@
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\Cell.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTh10Ai\Th10Ai.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
   </ItemGroup>

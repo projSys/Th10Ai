@@ -10,11 +10,11 @@ namespace th
 {
 	class HookThread;
 
-	class Ai
+	class Th10Ai
 	{
 	public:
-		Ai();
-		~Ai();
+		Th10Ai();
+		~Th10Ai();
 
 		void run(HookThread& container);
 		void notify();

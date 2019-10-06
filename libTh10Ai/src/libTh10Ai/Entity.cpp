@@ -184,8 +184,8 @@ namespace th
 
 	bool Entity::isHolding() const
 	{
-		return std::abs(dx) <= std::numeric_limits<float_t>::epsilon()
-			&& std::abs(dy) <= std::numeric_limits<float_t>::epsilon();
+		return TypeTraits<float_t>::Equals(dx, 0.0f)
+			&& TypeTraits<float_t>::Equals(dy, 0.0f);
 	}
 
 	Pointf Entity::getDelta() const
