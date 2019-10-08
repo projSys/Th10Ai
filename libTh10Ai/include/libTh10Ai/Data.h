@@ -7,10 +7,11 @@
 #include "libTh10Ai/Enemy.h"
 #include "libTh10Ai/Bullet.h"
 #include "libTh10Ai/Laser.h"
-#include "libTh10Ai/Reader.h"
 
 namespace th
 {
+	class Reader;
+
 	struct ItemTarget
 	{
 		bool found;

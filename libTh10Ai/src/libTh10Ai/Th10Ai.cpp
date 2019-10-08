@@ -1,8 +1,6 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/Th10Ai.h"
 
-#include <thread>
-
 #include "libTh10Ai/HookThread.h"
 #include "libTh10Ai/Path.h"
 

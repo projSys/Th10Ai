@@ -1,13 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 
-#include "libTh10Ai/Entity.h"
-#include "libTh10Ai/Player.h"
-#include "libTh10Ai/Enemy.h"
-#include "libTh10Ai/Bullet.h"
-#include "libTh10Ai/Laser.h"
+#include "libTh10Ai/Data.h"
 
 namespace th
 {

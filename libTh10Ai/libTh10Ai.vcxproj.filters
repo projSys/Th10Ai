@@ -19,12 +19,6 @@
     <Filter Include="源文件\libTh10Ai">
       <UniqueIdentifier>{a361e8ab-5aec-4181-9503-ebd49a9c8bc8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\libTh10Ai\Util">
-      <UniqueIdentifier>{5002883c-85ea-4f90-aa7b-1fdc467020f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\libTh10Ai\Util">
-      <UniqueIdentifier>{3c9d079a-65d9-42c0-a492-14d0869fa3b6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="libTh10Ai.def">
@@ -41,9 +35,6 @@
     <ClInclude Include="include\libTh10Ai\Direction.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTh10Ai\DllMain.h">
-      <Filter>头文件\libTh10Ai</Filter>
-    </ClInclude>
     <ClInclude Include="include\libTh10Ai\HookMain.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
@@ -58,12 +49,6 @@
     </ClInclude>
     <ClInclude Include="include\libTh10Ai\Scene.h">
       <Filter>头文件\libTh10Ai</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTh10Ai\Util\D3D9Hook.h">
-      <Filter>头文件\libTh10Ai\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="include\libTh10Ai\Util\DI8Hook.h">
-      <Filter>头文件\libTh10Ai\Util</Filter>
     </ClInclude>
     <ClInclude Include="include\libTh10Ai\Bullet.h">
       <Filter>头文件\libTh10Ai</Filter>
@@ -92,12 +77,18 @@
     <ClInclude Include="include\libTh10Ai\Th10Ai.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
+    <ClInclude Include="include\libTh10Ai\DllMain.h">
+      <Filter>头文件\libTh10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTh10Ai\D3D9Hook.h">
+      <Filter>头文件\libTh10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTh10Ai\DI8Hook.h">
+      <Filter>头文件\libTh10Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\libTh10Ai\Data.cpp">
-      <Filter>源文件\libTh10Ai</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTh10Ai\DllMain.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\HookMain.cpp">
@@ -114,12 +105,6 @@
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\Scene.cpp">
       <Filter>源文件\libTh10Ai</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTh10Ai\Util\D3D9Hook.cpp">
-      <Filter>源文件\libTh10Ai\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTh10Ai\Util\DI8Hook.cpp">
-      <Filter>源文件\libTh10Ai\Util</Filter>
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\Bullet.cpp">
       <Filter>源文件\libTh10Ai</Filter>
@@ -146,6 +131,15 @@
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\Th10Ai.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTh10Ai\DllMain.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTh10Ai\D3D9Hook.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTh10Ai\DI8Hook.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
   </ItemGroup>

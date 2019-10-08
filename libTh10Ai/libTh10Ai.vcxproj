@@ -90,7 +90,9 @@
     <ClInclude Include="include\libTh10Ai\Bullet.h" />
     <ClInclude Include="include\libTh10Ai\Cell.h" />
     <ClInclude Include="include\libTh10Ai\Common.h" />
+    <ClInclude Include="include\libTh10Ai\D3D9Hook.h" />
     <ClInclude Include="include\libTh10Ai\Data.h" />
+    <ClInclude Include="include\libTh10Ai\DI8Hook.h" />
     <ClInclude Include="include\libTh10Ai\Direction.h" />
     <ClInclude Include="include\libTh10Ai\DllMain.h" />
     <ClInclude Include="include\libTh10Ai\Enemy.h" />
@@ -105,13 +107,13 @@
     <ClInclude Include="include\libTh10Ai\Reader.h" />
     <ClInclude Include="include\libTh10Ai\Scene.h" />
     <ClInclude Include="include\libTh10Ai\Th10Ai.h" />
-    <ClInclude Include="include\libTh10Ai\Util\D3D9Hook.h" />
-    <ClInclude Include="include\libTh10Ai\Util\DI8Hook.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\libTh10Ai\Bullet.cpp" />
     <ClCompile Include="src\libTh10Ai\Cell.cpp" />
+    <ClCompile Include="src\libTh10Ai\D3D9Hook.cpp" />
     <ClCompile Include="src\libTh10Ai\Data.cpp" />
+    <ClCompile Include="src\libTh10Ai\DI8Hook.cpp" />
     <ClCompile Include="src\libTh10Ai\DllMain.cpp" />
     <ClCompile Include="src\libTh10Ai\Enemy.cpp" />
     <ClCompile Include="src\libTh10Ai\Entity.cpp" />
@@ -125,8 +127,6 @@
     <ClCompile Include="src\libTh10Ai\Reader.cpp" />
     <ClCompile Include="src\libTh10Ai\Scene.cpp" />
     <ClCompile Include="src\libTh10Ai\Th10Ai.cpp" />
-    <ClCompile Include="src\libTh10Ai\Util\D3D9Hook.cpp" />
-    <ClCompile Include="src\libTh10Ai\Util\DI8Hook.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libTh10Ai.def" />
