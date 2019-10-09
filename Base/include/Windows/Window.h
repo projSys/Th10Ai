@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "Base/Point.h"
 #include "Base/Size.h"
 #include "Base/Rect.h"
 

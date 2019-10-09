@@ -61,8 +61,8 @@ namespace base
 			if (diff <= std::numeric_limits<T>::epsilon())
 				return true;
 			// 当比较的数值很大的时候，相对值比较
-			T maxAbs = std::max(std::abs(left), std::abs(right));
-			if (diff <= std::numeric_limits<T>::epsilon() * maxAbs)
+			T largest = std::max(std::abs(left), std::abs(right));
+			if (diff <= largest * std::numeric_limits<T>::epsilon())
 				return true;
 			return false;
 		}

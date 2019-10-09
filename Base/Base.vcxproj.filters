@@ -28,6 +28,9 @@
     <Filter Include="源文件\Windows">
       <UniqueIdentifier>{071a9ab7-e3e3-4d9d-bf26-3589bd8a7b83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Base\RefCounted">
+      <UniqueIdentifier>{94b29b7c-861a-4dd6-83a2-24a2eeed024b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Base\Common.h">
@@ -86,9 +89,6 @@
     <ClCompile Include="src\Base\Exception.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\RefCountedObject.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
     <ClCompile Include="src\Windows\Process.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
@@ -97,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="src\Windows\Util.cpp">
       <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\RefCounted\RefCountedObject.cpp">
+      <Filter>源文件\Base\RefCounted</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

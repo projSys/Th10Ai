@@ -104,7 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp" />
-    <ClCompile Include="src\Base\RefCountedObject.cpp" />
+    <ClCompile Include="src\Base\RefCounted\RefCountedObject.cpp" />
     <ClCompile Include="src\Windows\Process.cpp" />
     <ClCompile Include="src\Windows\Util.cpp" />
     <ClCompile Include="src\Windows\Window.cpp" />

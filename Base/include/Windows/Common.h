@@ -1,11 +1,8 @@
 #pragma once
 
-#include <Base/Common.h>
-#include <Base/Type.h>
-#include <Base/Exception.h>
-#include <Base/Point.h>
-#include <Base/Size.h>
-#include <Base/Rect.h>
+#include "Base/Common.h"
+#include "Base/Type.h"
+#include "Base/Exception.h"
 
 namespace win
 {
