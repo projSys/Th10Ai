@@ -7,7 +7,8 @@ namespace win
 	public:
 		static const DWORD INVALID_ID = 0xFFFFFFFF;
 
-		static DWORD FindIdByName(const std::string& name);
+		static Process FindByName(const std::string& name,
+			DWORD desiredAccess = PROCESS_ALL_ACCESS, BOOL inheritHandle = FALSE);
 
 		Process();
 		explicit Process(DWORD id, DWORD desiredAccess = PROCESS_ALL_ACCESS,

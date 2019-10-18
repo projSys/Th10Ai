@@ -11,7 +11,8 @@ namespace win
 {
 	namespace blc = boost::locale::conv;
 
-	DWORD Process::FindIdByName(const std::string& name)
+	Process Process::FindByName(const std::string& name,
+		DWORD desiredAccess, BOOL inheritHandle)
 	{
 		std::wstring nameW = blc::utf_to_utf<wchar_t>(name);
 
@@ -35,7 +36,9 @@ namespace win
 				break;
 			}
 		}
-		return id;
+		if (id == INVALID_ID)
+			THROW_BASE_EXCEPTION(Exception() << err_str(name + " not found."));
+		return Process(id, desiredAccess, inheritHandle);
 	}
 
 	Process::Process() :

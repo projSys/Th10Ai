@@ -10,7 +10,7 @@ namespace win
 		static std::string GetErrorMessage(DWORD messageId);
 		static std::string HresultToString(HRESULT hr);
 
-		static std::string GetModulePath(HMODULE module = nullptr);
+		static std::string GetModuleName(HMODULE module = nullptr);
 		static std::string GetModuleDir(HMODULE module = nullptr);
 	};
 

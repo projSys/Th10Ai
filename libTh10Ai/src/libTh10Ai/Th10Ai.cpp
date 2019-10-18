@@ -1,13 +1,12 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/Th10Ai.h"
 
-#include "libTh10Ai/HookThread.h"
-#include "libTh10Ai/Path.h"
+#include "libTh10Ai/libTh10Ai.h"
 
 namespace th
 {
-	// 在东方窗口线程运行
 	Th10Ai::Th10Ai() :
+		m_done(false),
 		m_active(false),
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
@@ -24,57 +23,54 @@ namespace th
 		HWND window = GetConsoleWindow();
 		HMENU menu = GetSystemMenu(window, FALSE);
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
+
+		m_thread = std::thread(&Th10Ai::run, this);
 	}
 
-	// 在东方窗口线程运行
 	Th10Ai::~Th10Ai()
 	{
-		try
-		{
-			m_di8Hook.clear();
-			m_di8Hook.commit();
-
-			m_di8Hook.enable(false);
-			m_d3d9Hook.enable(false);
-		}
-		catch (...)
-		{
-			std::string what = boost::current_exception_diagnostic_information();
-			BOOST_LOG_TRIVIAL(error) << what;
-		}
+		m_done = true;
+		m_d3d9Hook.notifyPresent();
+		if (m_thread.joinable())
+			m_thread.join();
 	}
 
-	// 在钩子线程运行
-	void Th10Ai::run(HookThread& container)
+	bool Th10Ai::IsKeyPressed(int vKey)
+	{
+		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
+	}
+
+	void Th10Ai::run()
 	{
 		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启AI，按S停止AI，按D退出AI。" << std::endl;
 
-		while (!container.isDone())
+		while (!m_done)
 		{
-			if (isKeyPressed('A'))
+			if (IsKeyPressed('A'))
+			{
 				start();
-			else if (isKeyPressed('S'))
+			}
+			else if (IsKeyPressed('S'))
+			{
 				stop();
-			else if (isKeyPressed('D'))
+			}
+			else if (IsKeyPressed('D'))
+			{
 				break;
-			else if (isKeyPressed('P'))
+			}
+			else if (IsKeyPressed('P'))
+			{
 				print();
+			}
 
 			update();
 		}
+		stop();
 
 		std::cout << "退出AI。" << std::endl;
-	}
 
-	void Th10Ai::notify()
-	{
-		m_active = false;
-		m_d3d9Hook.notifyPresent();
-	}
-
-	bool Th10Ai::isKeyPressed(int vKey) const
-	{
-		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
+		libTh10Ai& instance = libTh10Ai::GetInstance();
+		instance.notify();
 	}
 
 	void Th10Ai::print()
@@ -109,7 +105,7 @@ namespace th
 
 			m_active = false;
 			std::cout << "停止AI。" << std::endl;
-			std::cout << "决死总次数：" << m_bombCount << std::endl;
+			std::cout << "决死次数：" << m_bombCount << std::endl;
 		}
 	}
 

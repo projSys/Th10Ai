@@ -59,11 +59,11 @@ namespace th
 				return result;
 		}
 
-		if (m_pathDir == DIR_HOLD && collideResult.willCollideCount > m_data.getBullets().size() * 0.1)
-		{
-			std::cout << "被瞄准了，快跑。" << std::endl;
-			return result;
-		}
+		//if (m_pathDir == DIR_HOLD && collideResult.willCollideCount > 20)
+		//{
+		//	std::cout << "被瞄准了，快跑。" << std::endl;
+		//	return result;
+		//}
 
 		result.valid = true;
 

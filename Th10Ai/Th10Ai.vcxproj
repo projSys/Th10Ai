@@ -90,8 +90,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\Th10Ai\Common.h" />
+    <ClInclude Include="include\Th10Ai\DllInject.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Th10Ai\DllInject.cpp" />
     <ClCompile Include="src\Th10Ai\WinMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

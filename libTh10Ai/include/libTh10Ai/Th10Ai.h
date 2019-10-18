@@ -1,27 +1,24 @@
 #pragma once
 
 #include <thread>
+#include <atomic>
 
-#include "libTh10Ai/D3D9Hook.h"
-#include "libTh10Ai/DI8Hook.h"
+#include "libTh10Ai/ApiHook/D3D9Hook.h"
+#include "libTh10Ai/ApiHook/DI8Hook.h"
 #include "libTh10Ai/Reader.h"
 #include "libTh10Ai/Data.h"
 #include "libTh10Ai/Scene.h"
+#include "libTh10Ai/Path.h"
 
 namespace th
 {
-	class HookThread;
-
 	class Th10Ai
 	{
 	public:
 		Th10Ai();
 		~Th10Ai();
 
-		void run(HookThread& container);
-		void notify();
-		bool isKeyPressed(int vKey) const;
-
+		void run();
 		void print();
 		void start();
 		void stop();
@@ -35,6 +32,10 @@ namespace th
 		void move(Direction dir, bool slow);
 
 	private:
+		static bool IsKeyPressed(int vKey);
+
+		std::thread m_thread;
+		std::atomic_bool m_done;
 		bool m_active;
 		int_t m_bombCount;
 		Direction m_prevDir;

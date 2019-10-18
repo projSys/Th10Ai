@@ -1,9 +1,9 @@
 #include "Th10Ai/Common.h"
 
-#include <libTh10Ai/HookMain.h>
+#include "libTh10Ai/libTh10Ai.h"
 
 int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
-	th::HookMain();
+	Th10AiMain();
 	return 0;
 }

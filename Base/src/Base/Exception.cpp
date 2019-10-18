@@ -5,6 +5,6 @@ namespace base
 {
 	const char* Exception::what() const
 	{
-		return "as follows.";
+		return "As follows.";
 	}
 }

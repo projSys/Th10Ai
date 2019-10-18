@@ -1,5 +1,5 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/D3D9Hook.h"
+#include "libTh10Ai/ApiHook/D3D9Hook.h"
 
 #include <detours.h>
 #include <Base/ScopeGuard.h>
@@ -9,7 +9,7 @@ namespace th
 	D3D9Hook::D3D9Hook() :
 		Singleton(this),
 		m_enabled(false),
-		m_present(nullptr),
+		//m_present(nullptr),
 		m_presentReadied(false)
 	{
 		WNDCLASSEX wc = {};
@@ -64,12 +64,12 @@ namespace th
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
-		uint_t* vTable = (uint_t*)(*((uint_t*)device.p));
-		m_present = (Present_t)vTable[17];
+		uint_t* vTable = reinterpret_cast<uint_t*>(*(reinterpret_cast<uint_t*>(device.p)));
+		m_present = reinterpret_cast<Present_t>(vTable[17]);
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourAttach((PVOID*)&m_present, &D3D9Hook::PresentHook);
+		DetourAttach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 		DetourTransactionCommit();
 	}
 
@@ -77,7 +77,7 @@ namespace th
 	{
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourDetach((PVOID*)&m_present, &D3D9Hook::PresentHook);
+		DetourDetach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 		DetourTransactionCommit();
 	}
 
@@ -89,8 +89,8 @@ namespace th
 	HRESULT D3D9Hook::PresentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
-		D3D9Hook& d3d9Hook = D3D9Hook::GetInstance();
-		return d3d9Hook.presentHook(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
+		D3D9Hook& instance = D3D9Hook::GetInstance();
+		return instance.presentHook(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 	}
 
 	std::chrono::steady_clock::time_point g_presentBeginTime;
@@ -105,7 +105,6 @@ namespace th
 		g_presentBeginTime = std::chrono::steady_clock::now();
 
 		notifyPresent();
-
 		HRESULT hr = m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 
 		g_presentEndTime = std::chrono::steady_clock::now();

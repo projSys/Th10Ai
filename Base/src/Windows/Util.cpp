@@ -26,7 +26,7 @@ namespace win
 		return oss.str();
 	}
 
-	std::string Util::GetModulePath(HMODULE module)
+	std::string Util::GetModuleName(HMODULE module)
 	{
 		TCHAR buffer[4096] = {};
 		if (GetModuleFileName(module, buffer, 4095) == 0)

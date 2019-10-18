@@ -84,6 +84,9 @@
     <ClInclude Include="include\Windows\Util.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Windows\Thread.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -100,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="src\Base\RefCounted\RefCountedObject.cpp">
       <Filter>源文件\Base\RefCounted</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\Thread.cpp">
+      <Filter>源文件\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

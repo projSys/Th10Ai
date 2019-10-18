@@ -1,16 +1,16 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/DI8Hook.h"
+#include "libTh10Ai/ApiHook/DI8Hook.h"
 
 #include <detours.h>
 
-#include "libTh10Ai/D3D9Hook.h"
+#include "libTh10Ai/ApiHook/D3D9Hook.h"
 
 namespace th
 {
 	DI8Hook::DI8Hook() :
 		Singleton(this),
 		m_enabled(false),
-		m_getDeviceStateW(nullptr),
+		//m_getDeviceStateW(nullptr),
 		m_keyReadied(false)
 	{
 		for (KeyState& keyState : m_writeState)
@@ -37,12 +37,12 @@ namespace th
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 
-		uint_t* vTableW = (uint_t*)(*((uint_t*)deviceW.p));
-		m_getDeviceStateW = (GetDeviceStateW_t)vTableW[9];
+		uint_t* vTableW = reinterpret_cast<uint_t*>(*(reinterpret_cast<uint_t*>(deviceW.p)));
+		m_getDeviceStateW = reinterpret_cast<GetDeviceStateW_t>(vTableW[9]);
 
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourAttach((PVOID*)&m_getDeviceStateW, &DI8Hook::GetDeviceStateHookW);
+		DetourAttach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
 		DetourTransactionCommit();
 	}
 
@@ -50,7 +50,7 @@ namespace th
 	{
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourDetach((PVOID*)&m_getDeviceStateW, &DI8Hook::GetDeviceStateHookW);
+		DetourDetach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
 		DetourTransactionCommit();
 	}
 
@@ -61,8 +61,8 @@ namespace th
 
 	HRESULT DI8Hook::GetDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data)
 	{
-		DI8Hook& di8Hook = DI8Hook::GetInstance();
-		return di8Hook.getDeviceStateHookW(device, size, data);
+		DI8Hook& instance = DI8Hook::GetInstance();
+		return instance.getDeviceStateHookW(device, size, data);
 	}
 
 	std::chrono::steady_clock::time_point g_getDeviceStateTime;
@@ -75,8 +75,9 @@ namespace th
 		g_getDeviceStateTime = std::chrono::steady_clock::now();
 		time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(g_presentEndTime - g_presentBeginTime).count();
 		time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(g_getDeviceStateTime - g_presentEndTime).count();
+		//std::cout << e1 << " " << e2 << std::endl;
 		if (e1 + e2 < 5)
-			std::cout << "计算时间太少了：" << e1 << " " << e2 << std::endl;
+			std::cout << "计算时间太少了：" << e1 + e2 << std::endl;
 
 		HRESULT hr = m_getDeviceStateW(device, size, data);
 
