@@ -9,7 +9,7 @@ namespace th
 	D3D9Hook::D3D9Hook() :
 		Singleton(this),
 		m_enabled(false),
-		//m_present(nullptr),
+		m_present(nullptr),
 		m_presentReadied(false)
 	{
 		WNDCLASSEX wc = {};

@@ -10,7 +10,7 @@ namespace th
 	DI8Hook::DI8Hook() :
 		Singleton(this),
 		m_enabled(false),
-		//m_getDeviceStateW(nullptr),
+		m_getDeviceStateW(nullptr),
 		m_keyReadied(false)
 	{
 		for (KeyState& keyState : m_writeState)
