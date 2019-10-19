@@ -11,10 +11,8 @@ namespace th
 	class libTh10Ai
 	{
 	public:
-		static bool Attach();
-		static void Detach();
-		static void Wait();
-		static void Notify();
+		static void Main();
+		static void Exit();
 
 	private:
 		static LRESULT CALLBACK CallWndProc(int code, WPARAM wParam, LPARAM lParam);

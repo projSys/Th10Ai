@@ -2,28 +2,24 @@
 #include "libTh10Ai/libTh10Ai.h"
 
 #include <boost/log/utility/setup/file.hpp>
+#include <Base/ScopeGuard.h>
 
 #include "libTh10Ai/DllMain.h"
 #include "libTh10Ai/Th10Ai.h"
 
 // DLL共享数据段
 #pragma data_seg("SharedDataSeg")
-DWORD g_exeThreadId = 0;
 HWND g_window = nullptr;
 HHOOK g_hook = nullptr;
 bool g_succeeded = false;
-bool g_detach = true;
+bool g_sendDetach = true;
+DWORD g_exeThreadId = 0;
 #pragma data_seg()
 #pragma comment(linker, "/section:SharedDataSeg,rws")
 
-// 在Th10Ai.exe进程运行
 void WINAPI Th10AiMain()
 {
-	if (th::libTh10Ai::Attach())
-	{
-		th::libTh10Ai::Wait();
-		th::libTh10Ai::Detach();
-	}
+	th::libTh10Ai::Main();
 }
 
 namespace th
@@ -35,7 +31,8 @@ namespace th
 
 	std::shared_ptr<Th10Ai> libTh10Ai::s_th10Ai;
 
-	bool libTh10Ai::Attach()
+	// 在Th10Ai.exe进程运行
+	void libTh10Ai::Main()
 	{
 		std::string logName = Util::GetModuleDir(g_module) + "/Th10Ai_%N.log";
 		bl::add_file_log
@@ -48,66 +45,48 @@ namespace th
 
 		try
 		{
-			if (g_exeThreadId != 0)
+			if (g_window != nullptr)
 				THROW_BASE_EXCEPTION(Exception() << err_str(u8"Th10Ai已创建。"));
-
-			g_exeThreadId = GetCurrentThreadId();
 
 			g_window = FindWindow(_T("BASE"), nullptr);
 			if (g_window == nullptr)
 				THROW_BASE_EXCEPTION(Exception() << err_str(u8"BASE窗口类未找到。"));
-
 			DWORD wndThreadId = GetWindowThreadProcessId(g_window, nullptr);
 
 			g_hook = SetWindowsHookEx(WH_CALLWNDPROC, &libTh10Ai::CallWndProc, g_module, wndThreadId);
 			if (g_hook == nullptr)
 				THROW_WINDOWS_ERROR(GetLastError());
+			ON_SCOPE_EXIT([&]()
+			{
+				UnhookWindowsHookEx(g_hook);
+			});
 
 			SendMessage(g_window, LIBTH10AI_ATTACH, 0, 0);
 			if (!g_succeeded)
-			{
-				UnhookWindowsHookEx(g_hook);
 				THROW_BASE_EXCEPTION(Exception() << err_str(u8"Th10Ai创建失败，详细信息请查看libTh10Ai.log。"));
-			}
+			ON_SCOPE_EXIT([&]()
+			{
+				if (g_sendDetach)
+					SendMessage(g_window, LIBTH10AI_DETACH, 0, 0);
+			});
 
-			return true;
+			// 等待消息退出，GetMessage()不会导致鼠标转圈
+			g_exeThreadId = GetCurrentThreadId();
+			MSG msg = {};
+			GetMessage(&msg, nullptr, 0, 0);
 		}
 		catch (...)
 		{
 			std::string what = boost::current_exception_diagnostic_information();
 			BOOST_LOG_TRIVIAL(error) << what;
-			return false;
 		}
 	}
 
-	void libTh10Ai::Detach()
-	{
-		if (!g_detach)
-			return;
-
-		if (g_succeeded)
-		{
-			SendMessage(g_window, LIBTH10AI_DETACH, 0, 0);
-			g_succeeded = false;
-		}
-		if (g_hook != nullptr)
-		{
-			UnhookWindowsHookEx(g_hook);
-			g_hook = nullptr;
-		}
-	}
-
-	void libTh10Ai::Wait()
-	{
-		// GetMessage不会导致鼠标转圈
-		MSG msg = {};
-		GetMessage(&msg, nullptr, 0, 0);
-	}
-
-	void libTh10Ai::Notify()
+	void libTh10Ai::Exit()
 	{
 		try
 		{
+			// 发送消息退出
 			if (!PostThreadMessage(g_exeThreadId, WM_QUIT, 0, 0))
 				THROW_WINDOWS_ERROR(GetLastError());
 		}
@@ -119,7 +98,8 @@ namespace th
 	}
 
 	// 在东方窗口线程运行
-	// 不能修改消息，只有SendMessage的消息，没有PostMessage的消息
+	// 只有SendMessage()的消息，没有PostMessage()的消息
+	// 不能修改消息
 	LRESULT libTh10Ai::CallWndProc(int code, WPARAM wParam, LPARAM lParam)
 	{
 		if (code < 0)
@@ -129,10 +109,10 @@ namespace th
 		{
 		case HC_ACTION:
 		{
-			CWPSTRUCT* cwp = reinterpret_cast<CWPSTRUCT*>(lParam);
-			if (cwp != nullptr && cwp->hwnd == g_window)
+			CWPSTRUCT* cwpStruct = reinterpret_cast<CWPSTRUCT*>(lParam);
+			if (cwpStruct != nullptr && cwpStruct->hwnd == g_window)
 			{
-				switch (cwp->message)
+				switch (cwpStruct->message)
 				{
 				case LIBTH10AI_ATTACH:
 					OnAttach();
@@ -187,7 +167,7 @@ namespace th
 
 	void libTh10Ai::OnDestroy()
 	{
-		g_detach = false;
+		g_sendDetach = false;
 		s_th10Ai = nullptr;
 	}
 }

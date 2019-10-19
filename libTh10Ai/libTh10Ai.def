@@ -1,8 +1,8 @@
 LIBRARY libTh10Ai
 EXPORTS
-g_exeThreadId DATA
 g_window DATA
 g_hook DATA
 g_succeeded DATA
-g_detach DATA
+g_sendDetach DATA
+g_exeThreadId DATA
 Th10AiMain

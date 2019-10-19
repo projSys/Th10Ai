@@ -69,7 +69,7 @@ namespace th
 		stop();
 		std::cout << "ÍË³öAI¡£" << std::endl;
 
-		libTh10Ai::Notify();
+		libTh10Ai::Exit();
 	}
 
 	void Th10Ai::print()
