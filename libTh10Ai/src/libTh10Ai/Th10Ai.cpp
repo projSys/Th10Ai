@@ -65,12 +65,11 @@ namespace th
 
 			update();
 		}
-		stop();
 
+		stop();
 		std::cout << "ÍË³öAI¡£" << std::endl;
 
-		libTh10Ai& instance = libTh10Ai::GetInstance();
-		instance.notify();
+		libTh10Ai::Notify();
 	}
 
 	void Th10Ai::print()

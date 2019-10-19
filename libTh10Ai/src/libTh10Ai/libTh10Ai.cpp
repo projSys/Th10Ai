@@ -16,15 +16,13 @@ bool g_detach = true;
 #pragma data_seg()
 #pragma comment(linker, "/section:SharedDataSeg,rws")
 
-th::libTh10Ai g_libTh10Ai;
-
 // 在Th10Ai.exe进程运行
 void WINAPI Th10AiMain()
 {
-	if (g_libTh10Ai.attach())
+	if (th::libTh10Ai::Attach())
 	{
-		g_libTh10Ai.wait();
-		g_libTh10Ai.detach();
+		th::libTh10Ai::Wait();
+		th::libTh10Ai::Detach();
 	}
 }
 
@@ -35,12 +33,9 @@ namespace th
 #define LIBTH10AI_ATTACH (WM_USER + 0x1234)
 #define LIBTH10AI_DETACH (WM_USER + 0x1235)
 
-	libTh10Ai::libTh10Ai() :
-		Singleton(this)
-	{
-	}
+	std::shared_ptr<Th10Ai> libTh10Ai::s_th10Ai;
 
-	bool libTh10Ai::attach()
+	bool libTh10Ai::Attach()
 	{
 		std::string logName = Util::GetModuleDir(g_module) + "/Th10Ai_%N.log";
 		bl::add_file_log
@@ -85,7 +80,7 @@ namespace th
 		}
 	}
 
-	void libTh10Ai::detach()
+	void libTh10Ai::Detach()
 	{
 		if (!g_detach)
 			return;
@@ -102,14 +97,14 @@ namespace th
 		}
 	}
 
-	void libTh10Ai::wait()
+	void libTh10Ai::Wait()
 	{
 		// GetMessage不会导致鼠标转圈
 		MSG msg = {};
 		GetMessage(&msg, nullptr, 0, 0);
 	}
 
-	void libTh10Ai::notify()
+	void libTh10Ai::Notify()
 	{
 		try
 		{
@@ -127,12 +122,6 @@ namespace th
 	// 不能修改消息，只有SendMessage的消息，没有PostMessage的消息
 	LRESULT libTh10Ai::CallWndProc(int code, WPARAM wParam, LPARAM lParam)
 	{
-		libTh10Ai& instance = libTh10Ai::GetInstance();
-		return instance.callWndProc(code, wParam, lParam);
-	}
-
-	LRESULT libTh10Ai::callWndProc(int code, WPARAM wParam, LPARAM lParam)
-	{
 		if (code < 0)
 			return CallNextHookEx(g_hook, code, wParam, lParam);
 
@@ -146,15 +135,15 @@ namespace th
 				switch (cwp->message)
 				{
 				case LIBTH10AI_ATTACH:
-					onAttach();
+					OnAttach();
 					break;
 
 				case LIBTH10AI_DETACH:
-					onDetach();
+					OnDetach();
 					break;
 
 				case WM_DESTROY:
-					onDestroy();
+					OnDestroy();
 					break;
 				}
 			}
@@ -165,7 +154,7 @@ namespace th
 		return CallNextHookEx(g_hook, code, wParam, lParam);
 	}
 
-	void libTh10Ai::onAttach()
+	void libTh10Ai::OnAttach()
 	{
 		std::string logName = Util::GetModuleDir(g_module) + "/libTh10Ai_%N.log";
 		bl::add_file_log
@@ -178,10 +167,10 @@ namespace th
 
 		try
 		{
-			if (m_th10Ai != nullptr)
+			if (s_th10Ai != nullptr)
 				THROW_BASE_EXCEPTION(Exception() << err_str(u8"Th10Ai已创建。"));
 
-			m_th10Ai = std::make_shared<Th10Ai>();
+			s_th10Ai = std::make_shared<Th10Ai>();
 			g_succeeded = true;
 		}
 		catch (...)
@@ -191,14 +180,14 @@ namespace th
 		}
 	}
 
-	void libTh10Ai::onDetach()
+	void libTh10Ai::OnDetach()
 	{
-		m_th10Ai = nullptr;
+		s_th10Ai = nullptr;
 	}
 
-	void libTh10Ai::onDestroy()
+	void libTh10Ai::OnDestroy()
 	{
 		g_detach = false;
-		m_th10Ai = nullptr;
+		s_th10Ai = nullptr;
 	}
 }

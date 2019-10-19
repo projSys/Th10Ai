@@ -18,6 +18,9 @@ namespace th
 		Th10Ai();
 		~Th10Ai();
 
+	private:
+		static bool IsKeyPressed(int vKey);
+
 		void run();
 		void print();
 		void start();
@@ -30,9 +33,6 @@ namespace th
 		bool handleMove();
 
 		void move(Direction dir, bool slow);
-
-	private:
-		static bool IsKeyPressed(int vKey);
 
 		std::thread m_thread;
 		std::atomic_bool m_done;
