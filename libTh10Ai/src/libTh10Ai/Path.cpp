@@ -1,32 +1,35 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/Path.h"
 
-#include "libTh10Ai/Mover.h"
-
 namespace th
 {
-	Path::Path(Data& data, Scene& scene, Direction pathDir,
-		const ItemTarget& itemTarget, const EnemyTarget& enemyTarget) :
+	Path::Path(Data& data, Scene& scene,
+		ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy) :
 		m_data(data),
 		m_scene(scene),
-		m_pathDir(pathDir),
 		m_itemTarget(itemTarget),
 		m_enemyTarget(enemyTarget),
+		m_underEnemy(underEnemy),
+		m_dir(DIR_NONE),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
-		m_count(0),
-		m_limit(500)
+		m_count(0)
 	{
 	}
 
-	Result Path::find(bool underEnemy)
+	Result Path::find(Direction dir)
 	{
+		m_dir = dir;
+
 		Action action;
 		action.fromPos = m_data.getPlayer().getPosition();
-		action.fromDir = m_pathDir;
-		action.slowFirst = (!m_itemTarget.found && underEnemy);
+		action.fromDir = m_dir;
+		action.slowFirst = (!m_itemTarget.found && m_underEnemy);
 		action.frame = 1.0f;
+
+		action.willCollideCount = 0;
+		action.minCollideFrame = 0.0f;
 
 		return dfs(action);
 	}
@@ -40,8 +43,8 @@ namespace th
 		result.size = 0;
 
 		// 超过搜索节点限制
-		++m_count;
-		if (m_count >= m_limit)
+		m_count += 1;
+		if (m_count > FIND_LIMIT)
 			return result;
 
 		CellCollideResult collideResult = {};
@@ -56,28 +59,29 @@ namespace th
 			temp.advance(action.fromDir, !action.slowFirst);
 			result.slow = !action.slowFirst;
 			if (!Scene::IsInPlayerArea(temp.getPosition()) || (collideResult = m_scene.collideAll(temp, action.frame)).collided)
+			{
 				return result;
+			}
 		}
-
-		//if (m_pathDir == DIR_HOLD && collideResult.willCollideCount > 20)
-		//{
-		//	std::cout << "被瞄准了，快跑。" << std::endl;
-		//	return result;
-		//}
 
 		result.valid = true;
 
+		//result.score = action.minCollideFrame;
+		//if (collideResult.willCollideCount > 0)
+		//	result.score += collideResult.minCollideFrame;
+		//result.score /= action.frame;
+
 		if (m_itemTarget.found)
 		{
-			result.score += calcCollectScore(temp);
+			result.score = calcCollectScore(temp);
 		}
 		else if (m_enemyTarget.found)
 		{
-			result.score += calcShootScore(temp);
+			result.score = calcShootScore(temp);
 		}
 		else
 		{
-			result.score += calcGobackScore(temp);
+			result.score = calcGobackScore(temp);
 		}
 
 		if (result.score > m_bestScore)
@@ -85,11 +89,10 @@ namespace th
 			m_bestScore = result.score;
 		}
 
-		Mover mover(m_pathDir);
-		result.size = mover.getSize();
-		while (mover.hasNext())
+		result.size = FIND_SIZES[m_dir];
+		for (int_t i = 0; i < FIND_SIZES[m_dir]; ++i)
 		{
-			Direction dir = mover.next();
+			Direction dir = FIND_DIRS[m_dir][i];
 
 			Action nextAct;
 			nextAct.fromPos = temp.getPosition();
@@ -97,9 +100,17 @@ namespace th
 			nextAct.slowFirst = action.slowFirst;
 			nextAct.frame = action.frame + 1.0f;
 
+			//nextAct.willCollideCount = action.willCollideCount;
+			//nextAct.minCollideFrame = action.minCollideFrame;
+			//if (collideResult.willCollideCount > 0)
+			//{
+			//	nextAct.willCollideCount += collideResult.willCollideCount;
+			//	nextAct.minCollideFrame += collideResult.minCollideFrame;
+			//}
+
 			Result nextRes = dfs(nextAct);
 
-			if (m_count >= m_limit)
+			if (m_count > FIND_LIMIT)
 			{
 				break;
 			}

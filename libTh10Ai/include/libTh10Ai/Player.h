@@ -13,7 +13,7 @@ namespace th
 		Player();
 
 		void advance(Direction dir, bool slow);
-		void checkPrevMove(Direction prevDir, bool prevSlow);
+		void checkPrevMove(Direction prevDir, bool prevSlow) const;
 
 		bool isRebirthStatus() const;
 		bool isNormalStatus() const;

@@ -9,9 +9,8 @@ namespace th
 	struct CellCollideResult
 	{
 		bool collided;
-		bool willCollide;
-		float_t willCollideFrame;
 		int_t willCollideCount;
+		float_t minCollideFrame;
 	};
 
 	class Cell :

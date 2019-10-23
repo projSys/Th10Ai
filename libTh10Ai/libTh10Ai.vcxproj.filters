@@ -36,9 +36,6 @@
     <ClInclude Include="include\libTh10Ai\Direction.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTh10Ai\Mover.h">
-      <Filter>头文件\libTh10Ai</Filter>
-    </ClInclude>
     <ClInclude Include="include\libTh10Ai\Path.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
@@ -87,9 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\libTh10Ai\Data.cpp">
-      <Filter>源文件\libTh10Ai</Filter>
-    </ClCompile>
-    <ClCompile Include="src\libTh10Ai\Mover.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\Path.cpp">

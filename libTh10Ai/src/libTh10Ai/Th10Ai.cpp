@@ -2,6 +2,7 @@
 #include "libTh10Ai/Th10Ai.h"
 
 #include "libTh10Ai/libTh10Ai.h"
+#include "libTh10Ai/Path.h"
 
 namespace th
 {
@@ -133,7 +134,7 @@ namespace th
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
 		m_data.update();
-		m_data.checkPrevMove(m_prevDir, m_prevSlow);
+		m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
 
 		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
@@ -163,7 +164,7 @@ namespace th
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_data.isColliding())
+		if (m_data.getPlayer().isColliding())
 		{
 			m_di8Hook.keyPress(DIK_X);
 			++m_bombCount;
@@ -210,7 +211,7 @@ namespace th
 	// 处理移动
 	bool Th10Ai::handleMove()
 	{
-		if (!m_data.isNormalStatus())
+		if (!m_data.getPlayer().isNormalStatus())
 			return false;
 
 		ItemTarget itemTarget = m_data.findItem();
@@ -225,13 +226,13 @@ namespace th
 		{
 			Direction dir = static_cast<Direction>(i);
 
-			Path path(m_data, m_scene, dir, itemTarget, enemyTarget);
-			Result result = path.find(underEnemy);
+			Path path(m_data, m_scene, itemTarget, enemyTarget, underEnemy);
+			Result result = path.find(dir);
 
 			if (result.valid && path.m_bestScore > bestScore)
 			{
 				bestScore = path.m_bestScore;
-				bestDir = path.m_pathDir;
+				bestDir = dir;
 				bestSlow = result.slow;
 			}
 		}

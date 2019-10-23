@@ -33,11 +33,6 @@ namespace th
 		void print();
 
 		// Player
-		void checkPrevMove(Direction prevDir, bool prevSlow);
-		bool isRebirthStatus() const;
-		bool isNormalStatus() const;
-		bool isColliding() const;
-		bool isInvincible() const;
 
 		// Item
 		ItemTarget findItem();

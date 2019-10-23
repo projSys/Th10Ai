@@ -8,7 +8,6 @@
 #include "libTh10Ai/Reader.h"
 #include "libTh10Ai/Data.h"
 #include "libTh10Ai/Scene.h"
-#include "libTh10Ai/Path.h"
 
 namespace th
 {

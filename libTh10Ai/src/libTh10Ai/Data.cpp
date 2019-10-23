@@ -28,35 +28,12 @@ namespace th
 	{
 	}
 
-	void Data::checkPrevMove(Direction prevDir, bool prevSlow)
-	{
-		m_player.checkPrevMove(prevDir, prevSlow);
-	}
-
-	bool Data::isRebirthStatus() const
-	{
-		return m_player.isRebirthStatus();
-	}
-
-	bool Data::isNormalStatus() const
-	{
-		return m_player.isNormalStatus();
-	}
-
-	bool Data::isColliding() const
-	{
-		return m_player.isColliding();
-	}
-
-	bool Data::isInvincible() const
-	{
-		return m_player.isInvincible();
-	}
-
 	// 查找道具
 	ItemTarget Data::findItem()
 	{
-		ItemTarget target = { false, Item() };
+		ItemTarget target;
+		target.found = false;
+		target.item = Item();
 
 		if (m_items.empty())
 			return target;
@@ -162,7 +139,9 @@ namespace th
 	// 查找敌人
 	EnemyTarget Data::findEnemy()
 	{
-		EnemyTarget target = { false, Enemy() };
+		EnemyTarget target;
+		target.found = false;
+		target.enemy = Enemy();
 
 		if (m_enemies.empty())
 			return target;

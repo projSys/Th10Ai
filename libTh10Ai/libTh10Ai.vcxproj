@@ -100,7 +100,6 @@
     <ClInclude Include="include\libTh10Ai\Item.h" />
     <ClInclude Include="include\libTh10Ai\Laser.h" />
     <ClInclude Include="include\libTh10Ai\libTh10Ai.h" />
-    <ClInclude Include="include\libTh10Ai\Mover.h" />
     <ClInclude Include="include\libTh10Ai\Path.h" />
     <ClInclude Include="include\libTh10Ai\Player.h" />
     <ClInclude Include="include\libTh10Ai\Reader.h" />
@@ -119,7 +118,6 @@
     <ClCompile Include="src\libTh10Ai\Item.cpp" />
     <ClCompile Include="src\libTh10Ai\Laser.cpp" />
     <ClCompile Include="src\libTh10Ai\libTh10Ai.cpp" />
-    <ClCompile Include="src\libTh10Ai\Mover.cpp" />
     <ClCompile Include="src\libTh10Ai\Path.cpp" />
     <ClCompile Include="src\libTh10Ai\Player.cpp" />
     <ClCompile Include="src\libTh10Ai\Reader.cpp" />

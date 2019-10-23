@@ -75,7 +75,7 @@ namespace th
 		}
 	}
 
-	void Player::checkPrevMove(Direction prevDir, bool prevSlow)
+	void Player::checkPrevMove(Direction prevDir, bool prevSlow) const
 	{
 		Pointf prevDelta;
 		if (prevSlow)
