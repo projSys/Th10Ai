@@ -20,7 +20,7 @@ namespace th
 		player.y = readMemory<float32_t>(baseAddr + 0x3C4);
 		player.dx = readMemory<int32_t>(baseAddr + 0x3F0) / 100.0f;
 		player.dy = readMemory<int32_t>(baseAddr + 0x3F4) / 100.0f;
-		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 2.0f;
+		player.width = readMemory<float32_t>(baseAddr + 0x41C) * 2.0f + 1.0f;	// 加点保护距离
 		player.height = player.width;
 		player.status = readMemory<int32_t>(baseAddr + 0x458);
 		player.invincibleTime = readMemory<int32_t>(baseAddr + 0x4310);

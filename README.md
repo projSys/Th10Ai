@@ -10,8 +10,7 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
 ## 待改进 Todo
 
-* 帧同步不稳定<br />
-* 高速弹的碰撞检测有问题<br />
+* 碰撞检测有问题<br />
 
 ## 环境要求 Requirements
 

@@ -17,10 +17,15 @@ namespace th
 
 	void Data::update()
 	{
-		m_reader.readPlayer(m_player);
+		if (!m_reader.readPlayer(m_player))
+			std::cout << "readPlayer()Ê§°Ü¡£" << std::endl;
+
 		m_reader.readItems(m_items);
 		m_reader.readEnemies(m_enemies);
-		m_reader.readBullets(m_bullets);
+
+		if (!m_reader.readBullets(m_bullets))
+			std::cout << "readBullets()Ê§°Ü¡£" << std::endl;
+
 		m_reader.readLasers(m_lasers);
 	}
 

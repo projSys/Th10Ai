@@ -3,6 +3,8 @@
 
 namespace th
 {
+	const float_t Path::FIND_DEPTH = 30.0f;
+
 	Path::Path(Data& data, Scene& scene,
 		ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy) :
 		m_data(data),
@@ -12,9 +14,12 @@ namespace th
 		m_underEnemy(underEnemy),
 		m_dir(DIR_NONE),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
+		//m_bestScore(0.0f),
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
-		m_count(0)
+		m_count(0),
+		m_good(0),
+		m_bad(0)
 	{
 	}
 
@@ -25,7 +30,8 @@ namespace th
 		Action action;
 		action.fromPos = m_data.getPlayer().getPosition();
 		action.fromDir = m_dir;
-		action.slowFirst = (!m_itemTarget.found && m_underEnemy);
+		//action.slowFirst = (!m_itemTarget.found && m_underEnemy);
+		action.slowFirst = false;
 		action.frame = 1.0f;
 
 		action.willCollideCount = 0;
@@ -43,8 +49,11 @@ namespace th
 		result.size = 0;
 
 		// 超过搜索节点限制
-		m_count += 1;
+		++m_count;
 		if (m_count > FIND_LIMIT)
+			return result;
+
+		if (action.frame > FIND_DEPTH)
 			return result;
 
 		CellCollideResult collideResult = {};
@@ -73,16 +82,15 @@ namespace th
 
 		if (m_itemTarget.found)
 		{
-			result.score = calcCollectScore(temp);
+			result.score += calcCollectScore(temp);
 		}
 		else if (m_enemyTarget.found)
 		{
-			result.score = calcShootScore(temp);
+			result.score += calcShootScore(temp);
 		}
-		else
-		{
-			result.score = calcGobackScore(temp);
-		}
+
+		result.score += calcPositionScore(temp) * 100.0f;
+		//result.score += calcDepthScore(action.frame) * 100.0f;
 
 		if (result.score > m_bestScore)
 		{
@@ -197,26 +205,32 @@ namespace th
 		return score;
 	}
 
-	float_t Path::calcGobackScore(const Player& player)
+	// 位置评分
+	float_t Path::calcPositionScore(const Player& player)
 	{
 		float_t score = 0.0f;
 
-		if (player.calcDistance(Player::INIT_POS) < 8.0f)
+		float_t dx = std::abs(player.x - Player::INIT_POS.x);
+		score += 0.5f * (1.0f - dx / (Scene::SIZE.width / 2.0f));
+
+		float_t dy = std::abs(player.y - Player::INIT_POS.y);
+		if (player.y < Player::INIT_POS.y)
 		{
-			score += 100.0f;
+			score += 0.5f * (1.0f - dy / Player::INIT_POS.y);
 		}
 		else
 		{
-			float_t dx = std::abs(player.x - Player::INIT_POS.x);
-			if (dx > Scene::SIZE.width)
-				dx = Scene::SIZE.width;
-			float_t dy = std::abs(player.y - Player::INIT_POS.y);
-			if (dy > Scene::SIZE.height)
-				dy = Scene::SIZE.height;
-
-			score += 50.0f * (1.0f - dx / Scene::SIZE.width);
-			score += 50.0f * (1.0f - dy / Scene::SIZE.height);
+			score += 0.5f * (1.0f - dy / (Scene::SIZE.height - Player::INIT_POS.y));
 		}
+
+		return score;
+	}
+
+	float_t Path::calcDepthScore(float_t frame)
+	{
+		float_t score = 0.0f;
+
+		score = frame / FIND_DEPTH;
 
 		return score;
 	}

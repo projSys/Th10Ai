@@ -157,7 +157,7 @@ namespace th
 				else
 				{
 					std::pair<bool, float_t> ret = temp.willCollideWith(player);
-					if (ret.first && ret.second > -1.0f && ret.second <= 1.0f)
+					if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
 					{
 						result.collided = true;
 						break;
