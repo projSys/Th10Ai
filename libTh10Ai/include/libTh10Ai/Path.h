@@ -62,9 +62,11 @@ namespace th
 		float_t calcPositionScore(const Player& player);
 		float_t calcDepthScore(float_t frame);
 
-		//private:
+	//private:
 		static const int_t FIND_LIMIT = 500;	// 500¸ö½Úµã
 		static const float_t FIND_DEPTH;
+		static const Pointf RESET_POS;
+		static const Sizef SIZE;
 
 		Data& m_data;
 		Scene& m_scene;
@@ -78,7 +80,5 @@ namespace th
 		Direction m_bestDir;
 		bool m_bestSlow;
 		int_t m_count;
-		int_t m_good;
-		int_t m_bad;
 	};
 }

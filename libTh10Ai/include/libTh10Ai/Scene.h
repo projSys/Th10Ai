@@ -17,7 +17,7 @@ namespace th
 	//     |      |                |                |      |
 	//     |      |                |                |      |
 	//     |      |                |                |      |
-	//     |      |                |448             |      |
+	//     |      |                |                |448   |
 	//     |      |                |                |      |
 	//     |      |                |                |      |
 	//     |      |                |                |      |
@@ -38,11 +38,11 @@ namespace th
 	public:
 		static const Sizef SIZE;
 
-		static Pointi ToWindowPos(const Pointf& scenePos);
-		static Pointf ToScenePos(const Pointi& windowPos);
 		static bool IsInScene(const Pointf& pos);
 		static bool IsInPlayerArea(const Pointf& pos);
 		static Pointf FixPlayerPos(const Pointf& pos);
+		static Pointi ToWindowPos(const Pointf& scenePos);
+		static Pointf ToScenePos(const Pointi& windowPos);
 
 		Scene();
 
@@ -55,8 +55,8 @@ namespace th
 		CellCollideResult collideAll(const Player& player, float_t frame) const;
 
 	private:
-		static const Pointf OFFSET;
-		static const Pointf ORIGIN_POINT_OFFSET;
+		static const Sizef OFFSET;
+		static const Sizef ORIGIN_POINT_OFFSET;
 
 		Cell m_cell;
 	};

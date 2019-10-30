@@ -6,20 +6,8 @@
 namespace th
 {
 	const Sizef Scene::SIZE = { 384.0f, 448.0f };
-	const Pointf Scene::OFFSET = { 32.0f, 16.0f };
-	const Pointf Scene::ORIGIN_POINT_OFFSET = { 192.0f, 0.0f };
-
-	Pointi Scene::ToWindowPos(const Pointf& scenePos)
-	{
-		return Pointi(static_cast<int_t>(std::round(scenePos.x + ORIGIN_POINT_OFFSET.x + OFFSET.x)),
-			static_cast<int_t>(std::round(scenePos.y + ORIGIN_POINT_OFFSET.y + OFFSET.y)));
-	}
-
-	Pointf Scene::ToScenePos(const Pointi& windowPos)
-	{
-		return Pointf(static_cast<float_t>(windowPos.x) - OFFSET.x - ORIGIN_POINT_OFFSET.x,
-			static_cast<float_t>(windowPos.y) - OFFSET.y - ORIGIN_POINT_OFFSET.y);
-	}
+	const Sizef Scene::OFFSET = { 32.0f, 16.0f };
+	const Sizef Scene::ORIGIN_POINT_OFFSET = { 192.0f, 0.0f };
 
 	bool Scene::IsInScene(const Pointf& pos)
 	{
@@ -43,6 +31,18 @@ namespace th
 		if (ret.y > 432.0f)
 			ret.y = 432.0f;
 		return ret;
+	}
+
+	Pointi Scene::ToWindowPos(const Pointf& scenePos)
+	{
+		return Pointi(static_cast<int_t>(std::round(scenePos.x + ORIGIN_POINT_OFFSET.width + OFFSET.width)),
+			static_cast<int_t>(std::round(scenePos.y + ORIGIN_POINT_OFFSET.height + OFFSET.height)));
+	}
+
+	Pointf Scene::ToScenePos(const Pointi& windowPos)
+	{
+		return Pointf(static_cast<float_t>(windowPos.x) - OFFSET.width - ORIGIN_POINT_OFFSET.width,
+			static_cast<float_t>(windowPos.y) - OFFSET.height - ORIGIN_POINT_OFFSET.height);
 	}
 
 	Scene::Scene() :

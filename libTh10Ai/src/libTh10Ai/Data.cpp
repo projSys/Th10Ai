@@ -72,9 +72,9 @@ namespace th
 			if (item.y < Scene::SIZE.height / 5.0f)
 				continue;
 
-			// 道具不在自机1/3屏内
+			// 道具不在自机1/4屏内
 			float_t dy = std::abs(item.y - m_player.y);
-			if (dy > Scene::SIZE.height / 3.0f)
+			if (dy > Scene::SIZE.height / 4.0f)
 				continue;
 
 			// 道具太靠近敌机

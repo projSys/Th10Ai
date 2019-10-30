@@ -3,8 +3,6 @@
 
 namespace th
 {
-	const Pointf Player::INIT_POS = { 0.0f, 400.0f };
-
 	// ÒÆ¶¯ËÙ¶È
 	// 3.53 = 5.0 * sqrt(0.5)
 	const Pointf Player::MOVE_SPEED_MARISA[DIR_MAXCOUNT] =

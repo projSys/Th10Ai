@@ -4,6 +4,8 @@
 namespace th
 {
 	const float_t Path::FIND_DEPTH = 30.0f;
+	const Pointf Path::RESET_POS = { 0.0f, 432.0f };	// 拉到底线，安全些
+	const Sizef Path::SIZE = { 184.0f, 400.0f };
 
 	Path::Path(Data& data, Scene& scene,
 		ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy) :
@@ -17,9 +19,7 @@ namespace th
 		//m_bestScore(0.0f),
 		m_bestDir(DIR_NONE),
 		m_bestSlow(false),
-		m_count(0),
-		m_good(0),
-		m_bad(0)
+		m_count(0)
 	{
 	}
 
@@ -82,11 +82,11 @@ namespace th
 
 		if (m_itemTarget.found)
 		{
-			result.score += calcCollectScore(temp);
+			result.score += calcCollectScore(temp) * 300.0f;
 		}
 		else if (m_enemyTarget.found)
 		{
-			result.score += calcShootScore(temp);
+			result.score += calcShootScore(temp) * 200.0f;
 		}
 
 		result.score += calcPositionScore(temp) * 100.0f;
@@ -146,21 +146,22 @@ namespace th
 
 		const Item& item = m_itemTarget.item;
 
-		if (player.calcDistance(item.getPosition()) < 8.0f)
+		if (player.calcDistance(item.getPosition()) < 8.0f)	// 小于8得满分
 		{
-			score += 300.0f;
+			score += 1.0f;
 		}
 		else
 		{
+			// 距离越近得分越高
 			float_t dx = std::abs(player.x - item.x);
 			if (dx > Scene::SIZE.width)
 				dx = Scene::SIZE.width;
+			score += 0.5f * (1.0f - dx / Scene::SIZE.width);
+
 			float_t dy = std::abs(player.y - item.y);
 			if (dy > Scene::SIZE.height)
 				dy = Scene::SIZE.height;
-
-			score += 150.0f * (1.0f - dx / Scene::SIZE.width);
-			score += 150.0f * (1.0f - dy / Scene::SIZE.height);
+			score += 0.5f * (1.0f - dy / Scene::SIZE.height);
 		}
 
 		return score;
@@ -179,27 +180,27 @@ namespace th
 		float_t dx = std::abs(player.x - enemy.x);
 		if (dx > Scene::SIZE.width)
 			dx = Scene::SIZE.width;
-		if (dx < 16.0f)
+		if (dx < 16.0f)	// 小于16得满分
 		{
-			score += 100.0f;
+			score += 0.5f;
 		}
 		else
 		{
 			// X轴距离越近得分越高
-			score += 100.0f * (1.0f - dx / Scene::SIZE.width);
+			score += 0.5f * (1.0f - dx / Scene::SIZE.width);
 		}
 
 		float_t dy = std::abs(player.y - enemy.y);
 		if (dy > Scene::SIZE.height)
 			dy = Scene::SIZE.height;
-		if (dy > Scene::SIZE.height / 2.0f)
+		if (dy > Scene::SIZE.height / 2.0f)	// 大于1/2屏得满分
 		{
-			score += 100.0f;
+			score += 0.5f;
 		}
 		else
 		{
 			// Y轴距离越远得分越高
-			score += 100.0f * (dy / Scene::SIZE.height);
+			score += 0.5f * (dy / Scene::SIZE.height);
 		}
 
 		return score;
@@ -210,18 +211,12 @@ namespace th
 	{
 		float_t score = 0.0f;
 
-		float_t dx = std::abs(player.x - Player::INIT_POS.x);
-		score += 0.5f * (1.0f - dx / (Scene::SIZE.width / 2.0f));
+		// 距离越近得分越高
+		float_t dx = std::abs(player.x - RESET_POS.x);
+		score += 0.5f * (1.0f - dx / SIZE.width);
 
-		float_t dy = std::abs(player.y - Player::INIT_POS.y);
-		if (player.y < Player::INIT_POS.y)
-		{
-			score += 0.5f * (1.0f - dy / Player::INIT_POS.y);
-		}
-		else
-		{
-			score += 0.5f * (1.0f - dy / (Scene::SIZE.height - Player::INIT_POS.y));
-		}
+		float_t dy = std::abs(player.y - RESET_POS.y);
+		score += 0.5f * (1.0f - dy / SIZE.height);
 
 		return score;
 	}
