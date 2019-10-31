@@ -66,7 +66,6 @@ namespace th
 		static const int_t FIND_LIMIT = 500;	// 500¸ö½Úµã
 		static const float_t FIND_DEPTH;
 		static const Pointf RESET_POS;
-		static const Sizef SIZE;
 
 		Data& m_data;
 		Scene& m_scene;

@@ -4,8 +4,7 @@
 namespace th
 {
 	const float_t Path::FIND_DEPTH = 30.0f;
-	const Pointf Path::RESET_POS = { 0.0f, 432.0f };	// 拉到底线，安全些
-	const Sizef Path::SIZE = { 184.0f, 400.0f };
+	const Pointf Path::RESET_POS = { 0.0f, 432.0f };
 
 	Path::Path(Data& data, Scene& scene,
 		ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy) :
@@ -213,10 +212,13 @@ namespace th
 
 		// 距离越近得分越高
 		float_t dx = std::abs(player.x - RESET_POS.x);
-		score += 0.5f * (1.0f - dx / SIZE.width);
+		score += 0.5f * (1.0f - dx / 184.0f);
 
 		float_t dy = std::abs(player.y - RESET_POS.y);
-		score += 0.5f * (1.0f - dy / SIZE.height);
+		if (player.y <= RESET_POS.y)
+			score += 0.5f * (1.0f - dy / (RESET_POS.y - 32.0f));
+		else
+			score += 0.5f * (1.0f - dy / (432.0f - RESET_POS.y));
 
 		return score;
 	}
