@@ -14,10 +14,8 @@ namespace th
 		m_enemyTarget(enemyTarget),
 		m_underEnemy(underEnemy),
 		m_dir(DIR_NONE),
+		m_slowFirst(false),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
-		//m_bestScore(0.0f),
-		m_bestDir(DIR_NONE),
-		m_bestSlow(false),
 		m_count(0)
 	{
 	}
@@ -25,16 +23,16 @@ namespace th
 	Result Path::find(Direction dir)
 	{
 		m_dir = dir;
+		//m_slowFirst = (!m_itemTarget.found && m_underEnemy);
+		m_slowFirst = false;
 
 		Action action;
 		action.fromPos = m_data.getPlayer().getPosition();
 		action.fromDir = m_dir;
-		//action.slowFirst = (!m_itemTarget.found && m_underEnemy);
-		action.slowFirst = false;
 		action.frame = 1.0f;
 
-		action.willCollideCount = 0;
-		action.minCollideFrame = 0.0f;
+		//action.willCollideCount = 0;
+		//action.minCollideFrame = 0.0f;
 
 		return dfs(action);
 	}
@@ -45,7 +43,7 @@ namespace th
 		result.valid = false;
 		result.slow = false;
 		result.score = 0.0f;
-		result.size = 0;
+		//result.size = 0;
 
 		// 超过搜索节点限制
 		++m_count;
@@ -55,18 +53,18 @@ namespace th
 		if (action.frame > FIND_DEPTH)
 			return result;
 
-		CellCollideResult collideResult = {};
+		CellCollideResult ccResult = {};
 		// 前进到下一个坐标
 		Player temp = m_data.getPlayer();
 		temp.setPosition(action.fromPos);
-		temp.advance(action.fromDir, action.slowFirst);
-		result.slow = action.slowFirst;
-		if (!Scene::IsInPlayerArea(temp.getPosition()) || (collideResult = m_scene.collideAll(temp, action.frame)).collided)
+		temp.advance(action.fromDir, m_slowFirst);
+		result.slow = m_slowFirst;
+		if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccResult = m_scene.collideAll(temp, action.frame)).collided)
 		{
 			temp.setPosition(action.fromPos);
-			temp.advance(action.fromDir, !action.slowFirst);
-			result.slow = !action.slowFirst;
-			if (!Scene::IsInPlayerArea(temp.getPosition()) || (collideResult = m_scene.collideAll(temp, action.frame)).collided)
+			temp.advance(action.fromDir, !m_slowFirst);
+			result.slow = !m_slowFirst;
+			if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccResult = m_scene.collideAll(temp, action.frame)).collided)
 			{
 				return result;
 			}
@@ -75,28 +73,28 @@ namespace th
 		result.valid = true;
 
 		//result.score = action.minCollideFrame;
-		//if (collideResult.willCollideCount > 0)
-		//	result.score += collideResult.minCollideFrame;
+		//if (ccResult.willCollideCount > 0)
+		//	result.score += ccResult.minCollideFrame;
 		//result.score /= action.frame;
 
 		if (m_itemTarget.found)
 		{
-			result.score += calcCollectScore(temp) * 300.0f;
+			result.score += CalcNearScore(temp.getPosition(), m_itemTarget.item.getPosition()) * 300.0f;
 		}
 		else if (m_enemyTarget.found)
 		{
-			result.score += calcShootScore(temp) * 200.0f;
+			result.score += CalcShootScore(temp.getPosition(), m_enemyTarget.enemy.getPosition()) * 200.0f;
 		}
 
-		result.score += calcPositionScore(temp) * 100.0f;
-		//result.score += calcDepthScore(action.frame) * 100.0f;
+		result.score += CalcNearScore(temp.getPosition(), RESET_POS) * 40.0f;
+		//result.score += CalcDepthScore(action.frame) * 100.0f;
 
 		if (result.score > m_bestScore)
 		{
 			m_bestScore = result.score;
 		}
 
-		result.size = FIND_SIZES[m_dir];
+		//result.size = FIND_SIZES[m_dir];
 		for (int_t i = 0; i < FIND_SIZES[m_dir]; ++i)
 		{
 			Direction dir = FIND_DIRS[m_dir][i];
@@ -104,15 +102,14 @@ namespace th
 			Action nextAct;
 			nextAct.fromPos = temp.getPosition();
 			nextAct.fromDir = dir;
-			nextAct.slowFirst = action.slowFirst;
 			nextAct.frame = action.frame + 1.0f;
 
 			//nextAct.willCollideCount = action.willCollideCount;
 			//nextAct.minCollideFrame = action.minCollideFrame;
-			//if (collideResult.willCollideCount > 0)
+			//if (ccResult.willCollideCount > 0)
 			//{
-			//	nextAct.willCollideCount += collideResult.willCollideCount;
-			//	nextAct.minCollideFrame += collideResult.minCollideFrame;
+			//	nextAct.willCollideCount += ccResult.willCollideCount;
+			//	nextAct.minCollideFrame += ccResult.minCollideFrame;
 			//}
 
 			Result nextRes = dfs(nextAct);
@@ -122,108 +119,86 @@ namespace th
 				break;
 			}
 
-			if (!nextRes.valid)
-			{
-				result.size -= 1;
-				continue;
-			}
+			//if (!nextRes.valid)
+			//{
+			//	result.size -= 1;
+			//}
 		}
 		// 没气了，当前节点也无效
-		if (result.size <= 0)
-			result.valid = false;
+		//if (result.size <= 0)
+		//	result.valid = false;
 
 		return result;
 	}
 
-	// 拾取道具评分
-	float_t Path::calcCollectScore(const Player& player)
+	float_t Path::CalcFarScore(Pointf player, Pointf target)
 	{
 		float_t score = 0.0f;
 
-		if (!m_itemTarget.found)
-			return score;
+		// 坐标原点移到左上角
+		player.x += (Scene::SIZE.width / 2.0f);
+		target.x += (Scene::SIZE.width / 2.0f);
 
-		const Item& item = m_itemTarget.item;
-
-		if (player.calcDistance(item.getPosition()) < 8.0f)	// 小于8得满分
-		{
-			score += 1.0f;
-		}
+		// 距离越远得分越高
+		if (player.x < target.x)
+			score += 0.5f * ((target.x - player.x) / target.x);
 		else
-		{
-			// 距离越近得分越高
-			float_t dx = std::abs(player.x - item.x);
-			if (dx > Scene::SIZE.width)
-				dx = Scene::SIZE.width;
-			score += 0.5f * (1.0f - dx / Scene::SIZE.width);
+			score += 0.5f * ((player.x - target.x) / (Scene::SIZE.width - target.x));
 
-			float_t dy = std::abs(player.y - item.y);
-			if (dy > Scene::SIZE.height)
-				dy = Scene::SIZE.height;
-			score += 0.5f * (1.0f - dy / Scene::SIZE.height);
-		}
+		if (player.y < target.y)
+			score += 0.5f * ((target.y - player.y) / target.y);
+		else
+			score += 0.5f * ((player.y - target.y) / (Scene::SIZE.height - target.y));
 
 		return score;
 	}
 
-	// 攻击敌人评分
-	float_t Path::calcShootScore(const Player& player)
+	float_t Path::CalcNearScore(Pointf player, Pointf target)
 	{
 		float_t score = 0.0f;
 
-		if (!m_enemyTarget.found)
-			return score;
-
-		const Enemy& enemy = m_enemyTarget.enemy;
-
-		float_t dx = std::abs(player.x - enemy.x);
-		if (dx > Scene::SIZE.width)
-			dx = Scene::SIZE.width;
-		if (dx < 16.0f)	// 小于16得满分
-		{
-			score += 0.5f;
-		}
-		else
-		{
-			// X轴距离越近得分越高
-			score += 0.5f * (1.0f - dx / Scene::SIZE.width);
-		}
-
-		float_t dy = std::abs(player.y - enemy.y);
-		if (dy > Scene::SIZE.height)
-			dy = Scene::SIZE.height;
-		if (dy > Scene::SIZE.height / 2.0f)	// 大于1/2屏得满分
-		{
-			score += 0.5f;
-		}
-		else
-		{
-			// Y轴距离越远得分越高
-			score += 0.5f * (dy / Scene::SIZE.height);
-		}
-
-		return score;
-	}
-
-	// 位置评分
-	float_t Path::calcPositionScore(const Player& player)
-	{
-		float_t score = 0.0f;
+		// 坐标原点移到左上角
+		player.x += (Scene::SIZE.width / 2.0f);
+		target.x += (Scene::SIZE.width / 2.0f);
 
 		// 距离越近得分越高
-		float_t dx = std::abs(player.x - RESET_POS.x);
-		score += 0.5f * (1.0f - dx / 184.0f);
-
-		float_t dy = std::abs(player.y - RESET_POS.y);
-		if (player.y <= RESET_POS.y)
-			score += 0.5f * (1.0f - dy / (RESET_POS.y - 32.0f));
+		if (player.x < target.x)
+			score += 0.5f * (1.0f - (target.x - player.x) / target.x);
 		else
-			score += 0.5f * (1.0f - dy / (432.0f - RESET_POS.y));
+			score += 0.5f * (1.0f - (player.x - target.x) / (Scene::SIZE.width - target.x));
+
+		if (player.y < target.y)
+			score += 0.5f * (1.0f - (target.y - player.y) / target.y);
+		else
+			score += 0.5f * (1.0f - (player.y - target.y) / (Scene::SIZE.height - target.y));
 
 		return score;
 	}
 
-	float_t Path::calcDepthScore(float_t frame)
+	float_t Path::CalcShootScore(Pointf player, Pointf enemy)
+	{
+		float_t score = 0.0f;
+
+		// 坐标原点移到左上角
+		player.x += (Scene::SIZE.width / 2.0f);
+		enemy.x += (Scene::SIZE.width / 2.0f);
+
+		// 距离越近得分越高
+		if (player.x < enemy.x)
+			score += 0.5f * (1.0f - (enemy.x - player.x) / enemy.x);
+		else
+			score += 0.5f * (1.0f - (player.x - enemy.x) / (Scene::SIZE.width - enemy.x));
+
+		// 距离越远得分越高
+		if (player.y <= enemy.y)
+			score = -1.0f;
+		else
+			score += 0.5f * ((player.y - enemy.y) / (Scene::SIZE.height - enemy.y));
+
+		return score;
+	}
+
+	float_t Path::CalcDepthScore(float_t frame)
 	{
 		float_t score = 0.0f;
 

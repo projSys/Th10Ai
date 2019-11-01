@@ -68,6 +68,9 @@ namespace th
 		//float_t maxY = std::numeric_limits<float_t>::lowest();
 		for (const Item& item : m_items)
 		{
+			if (!Scene::IsInScene(item.getPosition()))
+				continue;
+
 			// 道具高于1/5屏
 			if (item.y < Scene::SIZE.height / 5.0f)
 				continue;
@@ -158,6 +161,9 @@ namespace th
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (const Enemy& enemy : m_enemies)
 		{
+			if (!Scene::IsInScene(enemy.getPosition()))
+				continue;
+
 			if (enemy.y > m_player.y)
 				continue;
 

@@ -8,6 +8,8 @@ namespace th
 		public Entity
 	{
 	public:
+		static const Pointf INIT_POS;
+
 		Player();
 
 		void advance(Direction dir, bool slow);

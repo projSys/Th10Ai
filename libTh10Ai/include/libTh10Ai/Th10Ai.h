@@ -45,5 +45,7 @@ namespace th
 		Reader m_reader;
 		Data m_data;
 		Scene m_scene;
+
+		bool p;
 	};
 }

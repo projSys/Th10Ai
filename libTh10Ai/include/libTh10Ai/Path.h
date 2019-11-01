@@ -33,11 +33,10 @@ namespace th
 	{
 		Pointf fromPos;
 		Direction fromDir;
-		bool slowFirst;			// 是否慢速优先
 		float_t frame;
 
-		int_t willCollideCount;
-		float_t minCollideFrame;
+		//int_t willCollideCount;
+		//float_t minCollideFrame;
 	};
 
 	struct Result
@@ -45,7 +44,7 @@ namespace th
 		bool valid;
 		bool slow;		// 实际是否慢速
 		float_t score;
-		int_t size;
+		//int_t size;
 	};
 
 	class Path
@@ -55,17 +54,17 @@ namespace th
 			ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy);
 
 		Result find(Direction dir);
-
 		Result dfs(const Action& action);
-		float_t calcCollectScore(const Player& player);
-		float_t calcShootScore(const Player& player);
-		float_t calcPositionScore(const Player& player);
-		float_t calcDepthScore(float_t frame);
 
 	//private:
 		static const int_t FIND_LIMIT = 500;	// 500个节点
 		static const float_t FIND_DEPTH;
 		static const Pointf RESET_POS;
+
+		static float_t CalcFarScore(Pointf player, Pointf target);
+		static float_t CalcNearScore(Pointf player, Pointf target);
+		static float_t CalcShootScore(Pointf player, Pointf enemy);
+		static float_t CalcDepthScore(float_t frame);
 
 		Data& m_data;
 		Scene& m_scene;
@@ -74,10 +73,9 @@ namespace th
 		bool m_underEnemy;
 
 		Direction m_dir;
+		bool m_slowFirst;			// 是否慢速优先
 
 		float_t m_bestScore;
-		Direction m_bestDir;
-		bool m_bestSlow;
 		int_t m_count;
 	};
 }

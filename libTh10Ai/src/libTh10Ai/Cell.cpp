@@ -156,12 +156,12 @@ namespace th
 				}
 				else
 				{
-					std::pair<bool, float_t> ret = temp.willCollideWith(player);
-					if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
-					{
-						result.collided = true;
-						break;
-					}
+					//std::pair<bool, float_t> ret = temp.willCollideWith(player);
+					//if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
+					//{
+					//	result.collided = true;
+					//	break;
+					//}
 					//if (ret.first && ret.second > 0.0f && ret.second < 10.0f)
 					//{
 					//	result.willCollideCount += 1;

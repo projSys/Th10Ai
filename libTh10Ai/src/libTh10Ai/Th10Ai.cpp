@@ -12,7 +12,7 @@ namespace th
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
 		m_prevSlow(false),
-		m_data(m_reader)
+		m_data(m_reader), p(true)
 	{
 		m_scene.split(6);
 
@@ -75,6 +75,7 @@ namespace th
 
 	void Th10Ai::print()
 	{
+		p = true;
 		m_data.print();
 	}
 
@@ -149,10 +150,22 @@ namespace th
 		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 		//std::cout << "e2: " << e2 << std::endl;
 
+		//if (p)
+		//{
+		//	CellCollideResult collideResult = m_scene.collideAll(m_data.getPlayer(), 0.0f);
+		//	CellCollideResult collideResult1 = m_scene.collideAll(m_data.getPlayer(), 1.0f);
+		//	std::cout << collideResult.collided << " " << collideResult1.collided;
+		//}
+
 		handleBomb();
 		handleTalk();
 		handleShoot();
 		handleMove();
+
+		//if (p)
+		//{
+		//	std::cout << " " << m_prevDir << std::endl;
+		//}
 
 		//std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		//time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
@@ -166,8 +179,7 @@ namespace th
 	{
 		if (m_data.getPlayer().isColliding())
 		{
-			//CellCollideResult collideResult = m_scene.collideAll(m_data.getPlayer(), 0.0f);
-			//std::cout << collideResult.collided << std::endl;
+			p = false;
 
 			m_di8Hook.keyPress(DIK_X);
 			++m_bombCount;
@@ -235,7 +247,7 @@ namespace th
 			if (result.valid && path.m_bestScore > bestScore)
 			{
 				bestScore = path.m_bestScore;
-				bestDir = dir;
+				bestDir = path.m_dir;
 				bestSlow = result.slow;
 			}
 		}
