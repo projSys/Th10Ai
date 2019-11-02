@@ -3,6 +3,31 @@
 
 namespace th
 {
+	const Direction Path::FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT] =
+	{
+		// DIR_HOLD
+		{ DIR_HOLD,      DIR_UP,       DIR_DOWN,      DIR_LEFT,    DIR_RIGHT,     DIR_LEFTUP,  DIR_RIGHTUP,  DIR_LEFTDOWN,  DIR_RIGHTDOWN },
+		// DIR_UP
+		{ DIR_UP,        DIR_LEFTUP,   DIR_RIGHTUP,   DIR_LEFT,    DIR_RIGHT,     DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
+		// DIR_DOWN
+		{ DIR_DOWN,      DIR_LEFTDOWN, DIR_RIGHTDOWN, DIR_LEFT,    DIR_RIGHT,     DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
+		// DIR_LEFT
+		{ DIR_LEFT,      DIR_LEFTUP,   DIR_LEFTDOWN,  DIR_UP,      DIR_DOWN,      DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
+		// DIR_RIGHT
+		{ DIR_RIGHT,     DIR_RIGHTUP,  DIR_RIGHTDOWN, DIR_UP,      DIR_DOWN,      DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
+		// DIR_UPLEFT
+		{ DIR_LEFTUP,    DIR_UP,       DIR_LEFT,      DIR_RIGHTUP, DIR_LEFTDOWN,  DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
+		// DIR_UPRIGHT
+		{ DIR_RIGHTUP,   DIR_UP,       DIR_RIGHT,     DIR_LEFTUP,  DIR_RIGHTDOWN, DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
+		// DIR_DOWNLEFT
+		{ DIR_LEFTDOWN,  DIR_DOWN,     DIR_LEFT,      DIR_LEFTUP,  DIR_RIGHTDOWN, DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
+		// DIR_DOWNRIGHT
+		{ DIR_RIGHTDOWN, DIR_DOWN,     DIR_RIGHT,     DIR_RIGHTUP, DIR_LEFTDOWN,  DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      }
+	};
+
+	const int_t Path::FIND_SIZES[DIR_MAXCOUNT] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
+
+	const int_t Path::FIND_LIMIT = 500;
 	const float_t Path::FIND_DEPTH = 30.0f;
 	const Pointf Path::RESET_POS = { 0.0f, 432.0f };
 
@@ -43,7 +68,7 @@ namespace th
 		result.valid = false;
 		result.slow = false;
 		result.score = 0.0f;
-		//result.size = 0;
+		//result.ttd = 0;
 
 		// 超过搜索节点限制
 		++m_count;
@@ -53,12 +78,12 @@ namespace th
 		if (action.frame > FIND_DEPTH)
 			return result;
 
-		CellCollideResult ccResult = {};
 		// 前进到下一个坐标
 		Player temp = m_data.getPlayer();
 		temp.setPosition(action.fromPos);
 		temp.advance(action.fromDir, m_slowFirst);
 		result.slow = m_slowFirst;
+		CellCollideResult ccResult = {};
 		if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccResult = m_scene.collideAll(temp, action.frame)).collided)
 		{
 			temp.setPosition(action.fromPos);
@@ -66,6 +91,7 @@ namespace th
 			result.slow = !m_slowFirst;
 			if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccResult = m_scene.collideAll(temp, action.frame)).collided)
 			{
+				//result.ttd = 10;
 				return result;
 			}
 		}
@@ -86,7 +112,7 @@ namespace th
 			result.score += CalcShootScore(temp.getPosition(), m_enemyTarget.enemy.getPosition()) * 200.0f;
 		}
 
-		result.score += CalcNearScore(temp.getPosition(), RESET_POS) * 40.0f;
+		result.score += CalcNearScore(temp.getPosition(), RESET_POS) * 50.0f;
 		//result.score += CalcDepthScore(action.frame) * 100.0f;
 
 		if (result.score > m_bestScore)
@@ -94,7 +120,6 @@ namespace th
 			m_bestScore = result.score;
 		}
 
-		//result.size = FIND_SIZES[m_dir];
 		for (int_t i = 0; i < FIND_SIZES[m_dir]; ++i)
 		{
 			Direction dir = FIND_DIRS[m_dir][i];
@@ -115,17 +140,17 @@ namespace th
 			Result nextRes = dfs(nextAct);
 
 			if (m_count > FIND_LIMIT)
-			{
 				break;
-			}
 
 			//if (!nextRes.valid)
 			//{
-			//	result.size -= 1;
+			//	int_t ttd = nextRes.ttd - 1;
+			//	if (ttd > result.ttd)
+			//		result.ttd = ttd;
 			//}
 		}
 		// 没气了，当前节点也无效
-		//if (result.size <= 0)
+		//if (result.ttd > 0)
 		//	result.valid = false;
 
 		return result;

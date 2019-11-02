@@ -5,30 +5,6 @@
 
 namespace th
 {
-	const Direction FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT] =
-	{
-		// DIR_HOLD
-		{ DIR_HOLD,      DIR_UP,       DIR_DOWN,      DIR_LEFT,    DIR_RIGHT,     DIR_LEFTUP,  DIR_RIGHTUP,  DIR_LEFTDOWN,  DIR_RIGHTDOWN },
-		// DIR_UP
-		{ DIR_UP,        DIR_LEFTUP,   DIR_RIGHTUP,   DIR_LEFT,    DIR_RIGHT,     DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_DOWN
-		{ DIR_DOWN,      DIR_LEFTDOWN, DIR_RIGHTDOWN, DIR_LEFT,    DIR_RIGHT,     DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_LEFT
-		{ DIR_LEFT,      DIR_LEFTUP,   DIR_LEFTDOWN,  DIR_UP,      DIR_DOWN,      DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_RIGHT
-		{ DIR_RIGHT,     DIR_RIGHTUP,  DIR_RIGHTDOWN, DIR_UP,      DIR_DOWN,      DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_UPLEFT
-		{ DIR_LEFTUP,    DIR_UP,       DIR_LEFT,      DIR_RIGHTUP, DIR_LEFTDOWN,  DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_UPRIGHT
-		{ DIR_RIGHTUP,   DIR_UP,       DIR_RIGHT,     DIR_LEFTUP,  DIR_RIGHTDOWN, DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_DOWNLEFT
-		{ DIR_LEFTDOWN,  DIR_DOWN,     DIR_LEFT,      DIR_LEFTUP,  DIR_RIGHTDOWN, DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_DOWNRIGHT
-		{ DIR_RIGHTDOWN, DIR_DOWN,     DIR_RIGHT,     DIR_RIGHTUP, DIR_LEFTDOWN,  DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      }
-	};
-
-	const int_t FIND_SIZES[DIR_MAXCOUNT] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
-
 	struct Action
 	{
 		Pointf fromPos;
@@ -44,7 +20,7 @@ namespace th
 		bool valid;
 		bool slow;		// 实际是否慢速
 		float_t score;
-		//int_t size;
+		//int_t ttd;
 	};
 
 	class Path
@@ -57,14 +33,16 @@ namespace th
 		Result dfs(const Action& action);
 
 	//private:
-		static const int_t FIND_LIMIT = 500;	// 500个节点
-		static const float_t FIND_DEPTH;
-		static const Pointf RESET_POS;
-
 		static float_t CalcFarScore(Pointf player, Pointf target);
 		static float_t CalcNearScore(Pointf player, Pointf target);
 		static float_t CalcShootScore(Pointf player, Pointf enemy);
 		static float_t CalcDepthScore(float_t frame);
+
+		static const Direction FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT];
+		static const int_t FIND_SIZES[DIR_MAXCOUNT];
+		static const int_t FIND_LIMIT;
+		static const float_t FIND_DEPTH;
+		static const Pointf RESET_POS;
 
 		Data& m_data;
 		Scene& m_scene;

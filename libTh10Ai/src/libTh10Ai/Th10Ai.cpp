@@ -152,9 +152,9 @@ namespace th
 
 		//if (p)
 		//{
-		//	CellCollideResult collideResult = m_scene.collideAll(m_data.getPlayer(), 0.0f);
-		//	CellCollideResult collideResult1 = m_scene.collideAll(m_data.getPlayer(), 1.0f);
-		//	std::cout << collideResult.collided << " " << collideResult1.collided;
+		//	CellCollideResult ccResult = m_scene.collideAll(m_data.getPlayer(), 0.0f);
+		//	CellCollideResult ccResult1 = m_scene.collideAll(m_data.getPlayer(), 1.0f);
+		//	std::cout << ccResult.collided << " " << ccResult1.collided;
 		//}
 
 		handleBomb();
