@@ -119,7 +119,7 @@ namespace th
 		m_presentCond.notify_one();
 	}
 
-	void D3D9Hook::waitPresent()
+	bool D3D9Hook::waitPresent()
 	{
 		bool waited = false;
 		std::unique_lock<std::mutex> lock(m_presentMutex);
@@ -129,7 +129,6 @@ namespace th
 			waited = true;
 		}
 		m_presentReadied = false;
-		if (!waited)
-			std::cout << "读取不及时。" << std::endl;
+		return waited;
 	}
 }

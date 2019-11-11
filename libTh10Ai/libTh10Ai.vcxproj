@@ -62,7 +62,6 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_71_0\lib32-msvc-14.1;D:\Develop\Touhou\Detours-master\lib.X86;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>libTh10Ai.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,7 +81,6 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_71_0\lib32-msvc-14.1;D:\Develop\Touhou\Detours-master\lib.X86;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>libTh10Ai.def</ModuleDefinitionFile>
       <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -94,7 +92,8 @@
     <ClInclude Include="include\libTh10Ai\Common.h" />
     <ClInclude Include="include\libTh10Ai\Data.h" />
     <ClInclude Include="include\libTh10Ai\Direction.h" />
-    <ClInclude Include="include\libTh10Ai\DllMain.h" />
+    <ClInclude Include="include\libTh10Ai\DllInject\DllInject.h" />
+    <ClInclude Include="include\libTh10Ai\DllInject\DllMain.h" />
     <ClInclude Include="include\libTh10Ai\Enemy.h" />
     <ClInclude Include="include\libTh10Ai\Entity.h" />
     <ClInclude Include="include\libTh10Ai\Item.h" />
@@ -112,7 +111,8 @@
     <ClCompile Include="src\libTh10Ai\Bullet.cpp" />
     <ClCompile Include="src\libTh10Ai\Cell.cpp" />
     <ClCompile Include="src\libTh10Ai\Data.cpp" />
-    <ClCompile Include="src\libTh10Ai\DllMain.cpp" />
+    <ClCompile Include="src\libTh10Ai\DllInject\DllInject.cpp" />
+    <ClCompile Include="src\libTh10Ai\DllInject\DllMain.cpp" />
     <ClCompile Include="src\libTh10Ai\Enemy.cpp" />
     <ClCompile Include="src\libTh10Ai\Entity.cpp" />
     <ClCompile Include="src\libTh10Ai\Item.cpp" />
@@ -123,9 +123,6 @@
     <ClCompile Include="src\libTh10Ai\Reader.cpp" />
     <ClCompile Include="src\libTh10Ai\Scene.cpp" />
     <ClCompile Include="src\libTh10Ai\Th10Ai.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="libTh10Ai.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

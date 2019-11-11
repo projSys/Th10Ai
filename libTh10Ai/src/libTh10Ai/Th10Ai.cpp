@@ -70,7 +70,7 @@ namespace th
 		stop();
 		std::cout << "退出AI。" << std::endl;
 
-		libTh10Ai::Exit();
+		g_libTh10Ai.exit();
 	}
 
 	void Th10Ai::print()
@@ -118,7 +118,8 @@ namespace th
 			return;
 		}
 
-		m_d3d9Hook.waitPresent();
+		if (!m_d3d9Hook.waitPresent())
+			std::cout << "读取不及时。" << std::endl;
 
 		//static int_t fps = 0;
 		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();

@@ -2,24 +2,29 @@
 
 #include <memory>
 
-void WINAPI Th10AiMain();
+#include "libTh10Ai/DllInject/DllInject.h"
 
 namespace th
 {
+#ifdef LIBTH10AI_EXPORTS
+#define DLL_API __declspec(dllexport)
+#else
+#define DLL_API __declspec(dllimport)
+#endif
+
+	extern "C" DLL_API void WINAPI Th10AiMain();
+
 	class Th10Ai;
 
-	class libTh10Ai
+	class libTh10Ai :
+		public DllInject
 	{
-	public:
-		static void Main();
-		static void Exit();
-
 	private:
-		static LRESULT CALLBACK CallWndProc(int code, WPARAM wParam, LPARAM lParam);
-		static void OnAttach();
-		static void OnDetach();
-		static void OnDestroy();
+		virtual bool onAttach();
+		virtual void onDetach();
 
-		static std::shared_ptr<Th10Ai> s_th10Ai;
+		std::shared_ptr<Th10Ai> m_th10Ai;
 	};
+
+	extern libTh10Ai g_libTh10Ai;
 }

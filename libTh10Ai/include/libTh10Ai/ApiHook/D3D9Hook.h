@@ -19,7 +19,7 @@ namespace th
 		void enable(bool enabled);
 
 		void notifyPresent();
-		void waitPresent();
+		bool waitPresent();
 
 	private:
 		// IDirect3D9

@@ -4,6 +4,6 @@
 
 int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
-	Th10AiMain();
+	th::Th10AiMain();
 	return 0;
 }
