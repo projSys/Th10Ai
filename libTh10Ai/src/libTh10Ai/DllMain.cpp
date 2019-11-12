@@ -1,5 +1,5 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/DllInject/DllMain.h"
+#include "libTh10Ai/DllMain.h"
 
 HMODULE g_module = nullptr;
 

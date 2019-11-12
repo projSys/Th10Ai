@@ -1,9 +1,9 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/DllInject/DllInject.h"
+#include "libTh10Ai/Util/DllInject.h"
 
 #include <Base/ScopeGuard.h>
 
-#include "libTh10Ai/DllInject/DllMain.h"
+#include "libTh10Ai/DllMain.h"
 
 // DLL¹²ÏíÊý¾Ý¶Î
 #pragma data_seg("SharedDataSeg")

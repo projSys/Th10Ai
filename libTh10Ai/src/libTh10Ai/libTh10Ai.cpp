@@ -3,7 +3,7 @@
 
 #include <boost/log/utility/setup/file.hpp>
 
-#include "libTh10Ai/DllInject/DllMain.h"
+#include "libTh10Ai/DllMain.h"
 #include "libTh10Ai/Th10Ai.h"
 
 namespace th
