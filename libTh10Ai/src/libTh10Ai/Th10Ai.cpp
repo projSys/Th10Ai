@@ -59,7 +59,7 @@ namespace th
 			{
 				break;
 			}
-			else if (IsKeyPressed('P'))
+			else if (IsKeyPressed('F'))
 			{
 				print();
 			}

@@ -51,7 +51,7 @@ namespace th
 
 			SendMessage(g_window, DI_ATTACH, 0, 0);
 			if (!g_attached)
-				THROW_BASE_EXCEPTION(Exception() << err_str("Dll Inject failed."));
+				THROW_BASE_EXCEPTION(Exception() << err_str("Dll inject failed."));
 			ON_SCOPE_EXIT([&]()
 			{
 				if (g_detach)
