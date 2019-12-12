@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "Base/Point.h"
-#include "Base/Size.h"
-#include "Base/Rect.h"
+#include "Windows/Point.h"
+#include "Windows/Size.h"
+#include "Windows/Rect.h"
 
 namespace win
 {

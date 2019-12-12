@@ -28,7 +28,7 @@ namespace win
 	{
 		std::wstring classNameW = blc::utf_to_utf<wchar_t>(className);
 
-		HWND window = FindWindow(classNameW.c_str(), nullptr);
+		HWND window = FindWindowW(classNameW.c_str(), nullptr);
 		if (window == nullptr)
 			THROW_BASE_EXCEPTION(Exception() << err_str(className + " not found."));
 		return Window(window);
@@ -38,7 +38,7 @@ namespace win
 	{
 		std::wstring nameW = blc::utf_to_utf<wchar_t>(name);
 
-		HWND window = FindWindow(nullptr, nameW.c_str());
+		HWND window = FindWindowW(nullptr, nameW.c_str());
 		if (window == nullptr)
 			THROW_BASE_EXCEPTION(Exception() << err_str(name + " not found."));
 		return Window(window);
@@ -79,7 +79,7 @@ namespace win
 	{
 		std::wstring classNameW = blc::utf_to_utf<wchar_t>(className);
 
-		HWND window = FindWindowEx(m_window, nullptr, classNameW.c_str(), nullptr);
+		HWND window = FindWindowExW(m_window, nullptr, classNameW.c_str(), nullptr);
 		if (window == nullptr)
 			THROW_BASE_EXCEPTION(Exception() << err_str(className + " not found."));
 		return Window(window);
@@ -89,7 +89,7 @@ namespace win
 	{
 		std::wstring nameW = blc::utf_to_utf<wchar_t>(name);
 
-		HWND window = FindWindowEx(m_window, nullptr, nullptr, nameW.c_str());
+		HWND window = FindWindowExW(m_window, nullptr, nullptr, nameW.c_str());
 		if (window == nullptr)
 			THROW_BASE_EXCEPTION(Exception() << err_str(name + " not found."));
 		return Window(window);

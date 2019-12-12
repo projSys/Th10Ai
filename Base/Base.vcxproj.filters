@@ -48,15 +48,6 @@
     <ClInclude Include="include\Base\Type.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Point.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Rect.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Size.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\RefCounted\RefCountedObject.h">
       <Filter>头文件\Base\RefCounted</Filter>
     </ClInclude>
@@ -85,6 +76,15 @@
       <Filter>头文件\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Windows\Thread.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\Point.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\Rect.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\Size.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
   </ItemGroup>

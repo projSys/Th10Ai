@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Base/Type.h"
+#include "Windows/Common.h"
 
-namespace base
+namespace win
 {
 	template <typename T, typename Traits = TypeTraits<T>>
 	class PointBase

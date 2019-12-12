@@ -3,11 +3,11 @@
 #include <Base/Common.h>
 #include <Base/Type.h>
 #include <Base/Exception.h>
-#include <Base/Point.h>
-#include <Base/Size.h>
-#include <Base/Rect.h>
 #include <Windows/Common.h>
 #include <Windows/Util.h>
+#include <Windows/Point.h>
+#include <Windows/Size.h>
+#include <Windows/Rect.h>
 
 namespace th
 {

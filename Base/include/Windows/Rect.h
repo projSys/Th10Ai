@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Base/Type.h"
-#include "Base/Point.h"
-#include "Base/Size.h"
+#include "Windows/Common.h"
+#include "Windows/Point.h"
+#include "Windows/Size.h"
 
-namespace base
+namespace win
 {
 	template <typename T, typename Traits = TypeTraits<T>>
 	class RectBase

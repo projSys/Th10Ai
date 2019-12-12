@@ -1,7 +1,6 @@
 #pragma once
 
 #include <atomic>
-#include <cassert>
 
 #include "Base/Type.h"
 
@@ -60,15 +59,13 @@ namespace base
 			return m_weakCount.load(std::memory_order_relaxed);
 		}
 
-	protected:
-		virtual void destruct() = 0;
-		virtual void deallocate() = 0;
+	private:
+		virtual void destruct() noexcept = 0;
+		virtual void deallocate() noexcept = 0;
 
-		std::atomic_uint64_t m_strongCount;
-		std::atomic<int64_t> m_weakCount;
+		std::atomic_int64_t m_strongCount;
+		std::atomic_int64_t m_weakCount;
 	};
-
-
 
 	template <typename T>
 	class RefCounted :
@@ -80,24 +77,18 @@ namespace base
 		{
 		}
 
-		T* get() const
-		{
-			return m_object;
-		}
-
-		void set(T* object)
+		void setObject(T* object)
 		{
 			m_object = object;
 		}
 
-	protected:
-		virtual void destruct() override
+	private:
+		virtual void destruct() noexcept override
 		{
-			assert(m_object != nullptr);
 			m_object->~T();
 		}
 
-		virtual void deallocate() override
+		virtual void deallocate() noexcept override
 		{
 			this->~RefCounted();
 			delete[] this;

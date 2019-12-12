@@ -86,8 +86,6 @@
   <ItemGroup>
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Exception.h" />
-    <ClInclude Include="include\Base\Point.h" />
-    <ClInclude Include="include\Base\Rect.h" />
     <ClInclude Include="include\Base\RefCounted\RefCounted.h" />
     <ClInclude Include="include\Base\RefCounted\RefCountedObject.h" />
     <ClInclude Include="include\Base\RefCounted\rp.h" />
@@ -95,10 +93,12 @@
     <ClInclude Include="include\Base\RefCounted\wp.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\Singleton.h" />
-    <ClInclude Include="include\Base\Size.h" />
     <ClInclude Include="include\Base\Type.h" />
     <ClInclude Include="include\Windows\Common.h" />
+    <ClInclude Include="include\Windows\Point.h" />
     <ClInclude Include="include\Windows\Process.h" />
+    <ClInclude Include="include\Windows\Rect.h" />
+    <ClInclude Include="include\Windows\Size.h" />
     <ClInclude Include="include\Windows\Thread.h" />
     <ClInclude Include="include\Windows\Util.h" />
     <ClInclude Include="include\Windows\Window.h" />

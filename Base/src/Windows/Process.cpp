@@ -25,10 +25,10 @@ namespace win
 		});
 
 		DWORD id = INVALID_ID;
-		PROCESSENTRY32 pe = {};
+		PROCESSENTRY32W pe = {};
 		pe.dwSize = sizeof(pe);
-		for (BOOL hasNext = Process32First(snapshot, &pe); hasNext;
-			hasNext = Process32Next(snapshot, &pe))
+		for (BOOL hasNext = Process32FirstW(snapshot, &pe); hasNext;
+			hasNext = Process32NextW(snapshot, &pe))
 		{
 			if (pe.szExeFile == nameW)
 			{
@@ -95,10 +95,10 @@ namespace win
 		});
 
 		HMODULE module = nullptr;
-		MODULEENTRY32 me = {};
+		MODULEENTRY32W me = {};
 		me.dwSize = sizeof(me);
-		for (BOOL hasNext = Module32First(snapshot, &me); hasNext;
-			hasNext = Module32Next(snapshot, &me))
+		for (BOOL hasNext = Module32FirstW(snapshot, &me); hasNext;
+			hasNext = Module32NextW(snapshot, &me))
 		{
 			if (me.szModule == moduleNameW)
 			{
