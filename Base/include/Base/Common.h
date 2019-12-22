@@ -32,13 +32,16 @@
 #include <WinSock2.h>
 #include <Windows.h>
 #include <tchar.h>
+#define BASE_WINDOWS 1
 #ifdef _WIN64
 //define something for Windows (64-bit only)
+#define BASE_64BIT 1
 #else
 //define something for Windows (32-bit only)
+#define BASE_32BIT 1
 #endif
+
 #elif __APPLE__
-#include "TargetConditionals.h"
 #if TARGET_IPHONE_SIMULATOR
 // iOS Simulator
 #elif TARGET_OS_IPHONE
@@ -46,7 +49,7 @@
 #elif TARGET_OS_MAC
 // Other kinds of Mac OS
 #else
-#   error "Unknown Apple platform"
+#error "Unknown Apple platform"
 #endif
 #elif __linux__
 // linux
@@ -55,11 +58,8 @@
 #elif defined(_POSIX_VERSION)
 // POSIX
 #else
-#   error "Unknown compiler"
+#error "Unknown compiler"
 #endif
-
-#include <cassert>
-#include <boost/log/trivial.hpp>
 
 namespace base
 {

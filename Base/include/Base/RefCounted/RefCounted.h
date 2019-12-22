@@ -6,6 +6,7 @@
 
 namespace base
 {
+	// сп╢М
 	class RefCountedBase
 	{
 	public:

@@ -10,9 +10,9 @@ namespace win
 		Thread();
 		explicit Thread(DWORD id, DWORD desiredAccess = THREAD_ALL_ACCESS,
 			BOOL inheritHandle = FALSE);
+		~Thread();
 		Thread(const Thread&) = delete;
 		Thread(Thread&& other);
-		~Thread();
 		Thread& operator =(const Thread&) = delete;
 		Thread& operator =(Thread&& other);
 		void swap(Thread& other);

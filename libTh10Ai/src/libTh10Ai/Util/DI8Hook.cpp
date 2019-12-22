@@ -30,12 +30,12 @@ namespace th
 		HRESULT hr = directInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION,
 			IID_IDirectInput8W, reinterpret_cast<LPVOID*>(&dinput8W), nullptr);
 		if (FAILED(hr))
-			THROW_DIRECTX_HRESULT(hr);
+			THROW_DIRECTX_RESULT(hr);
 
 		CComPtr<IDirectInputDevice8W> deviceW;
 		hr = dinput8W->CreateDevice(GUID_SysKeyboard, &deviceW, nullptr);
 		if (FAILED(hr))
-			THROW_DIRECTX_HRESULT(hr);
+			THROW_DIRECTX_RESULT(hr);
 
 		uint_t* vTableW = reinterpret_cast<uint_t*>(*(reinterpret_cast<uint_t*>(deviceW.p)));
 		m_getDeviceStateW = reinterpret_cast<GetDeviceStateW_t>(vTableW[9]);

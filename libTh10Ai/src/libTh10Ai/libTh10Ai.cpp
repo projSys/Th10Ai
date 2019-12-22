@@ -1,6 +1,9 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/libTh10Ai.h"
 
+#include <sstream>
+#include <boost/exception/all.hpp>
+#include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/file.hpp>
 
 #include "libTh10Ai/DllMain.h"
@@ -40,15 +43,26 @@ namespace th
 		try
 		{
 			if (m_th10Ai != nullptr)
-				THROW_BASE_EXCEPTION(Exception() << err_str(u8"Th10Ai已创建。"));
+				THROW_BASE_EXCEPTION(u8"Th10Ai已创建。");
 
 			m_th10Ai = std::make_shared<Th10Ai>();
 			return true;
 		}
-		catch (...)
+		catch (const Exception& ex)
 		{
-			std::string what = boost::current_exception_diagnostic_information();
-			BOOST_LOG_TRIVIAL(error) << what;
+			std::ostringstream oss;
+			ex.print(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str();
+			return false;
+		}
+		catch (const boost::exception& be)
+		{
+			BOOST_LOG_TRIVIAL(error) << boost::diagnostic_information(be);
+			return false;
+		}
+		catch (const std::exception& se)
+		{
+			BOOST_LOG_TRIVIAL(error) << se.what();
 			return false;
 		}
 	}

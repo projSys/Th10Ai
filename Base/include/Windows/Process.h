@@ -13,9 +13,9 @@ namespace win
 		Process();
 		explicit Process(DWORD id, DWORD desiredAccess = PROCESS_ALL_ACCESS,
 			BOOL inheritHandle = FALSE);
+		~Process();
 		Process(const Process&) = delete;
 		Process(Process&& other);
-		~Process();
 		Process& operator =(const Process&) = delete;
 		Process& operator =(Process&& other);
 		void swap(Process& other);

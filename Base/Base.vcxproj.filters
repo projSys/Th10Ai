@@ -87,6 +87,12 @@
     <ClInclude Include="include\Windows\Size.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Windows\WindowsError.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\DirectXResult.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -105,6 +111,12 @@
       <Filter>源文件\Base\RefCounted</Filter>
     </ClCompile>
     <ClCompile Include="src\Windows\Thread.cpp">
+      <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\WindowsError.cpp">
+      <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\DirectXResult.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
   </ItemGroup>

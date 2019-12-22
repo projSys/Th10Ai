@@ -14,14 +14,13 @@ namespace base
 			s_instance = instance;
 		}
 
-		Singleton(const Singleton&) = delete;
-		Singleton(Singleton&&) = delete;
-
 		~Singleton()
 		{
 			s_instance = nullptr;
 		}
 
+		Singleton(const Singleton&) = delete;
+		Singleton(Singleton&&) = delete;
 		Singleton& operator =(const Singleton&) = delete;
 		Singleton& operator =(Singleton&&) = delete;
 

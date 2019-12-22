@@ -31,7 +31,7 @@ namespace th
 		if (!AdjustTokenPrivileges(token, FALSE, &tp, sizeof(tp), nullptr, nullptr))
 			THROW_WINDOWS_ERROR(GetLastError());
 		if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
-			THROW_BASE_EXCEPTION(Exception() << err_str("Please run as administrator."));
+			THROW_BASE_EXCEPTION("Please run as administrator.");
 	}
 
 	void DllInject::Inject(Process& target, const std::string& dllName)
@@ -40,7 +40,7 @@ namespace th
 		uint_t size = (dllNameW.length() + 1) * sizeof(wchar_t);
 
 		if (!bfs::exists(dllNameW))
-			THROW_BASE_EXCEPTION(Exception() << err_str("File not found: " + dllName));
+			THROW_BASE_EXCEPTION("File not found: " + dllName);
 
 		LPVOID remoteMemory = VirtualAllocEx(target, nullptr, size, MEM_COMMIT | MEM_RESERVE,
 			PAGE_READWRITE);

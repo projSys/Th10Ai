@@ -17,9 +17,9 @@ namespace win
 
 		Window();
 		explicit Window(HWND window);
+		~Window();
 		Window(const Window&) = delete;
 		Window(Window&& other);
-		~Window();
 		Window& operator =(const Window&) = delete;
 		Window& operator =(Window&& other);
 		void swap(Window& other);

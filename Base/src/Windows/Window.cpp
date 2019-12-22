@@ -3,6 +3,7 @@
 
 #include <boost/locale.hpp>
 
+#include "Windows/WindowsError.h"
 #include "Windows/Util.h"
 
 namespace win
@@ -30,7 +31,7 @@ namespace win
 
 		HWND window = FindWindowW(classNameW.c_str(), nullptr);
 		if (window == nullptr)
-			THROW_BASE_EXCEPTION(Exception() << err_str(className + " not found."));
+			THROW_BASE_EXCEPTION("Class not found: " + className);
 		return Window(window);
 	}
 
@@ -40,7 +41,7 @@ namespace win
 
 		HWND window = FindWindowW(nullptr, nameW.c_str());
 		if (window == nullptr)
-			THROW_BASE_EXCEPTION(Exception() << err_str(name + " not found."));
+			THROW_BASE_EXCEPTION("Window not found: " + name);
 		return Window(window);
 	}
 
@@ -54,14 +55,14 @@ namespace win
 	{
 	}
 
+	Window::~Window()
+	{
+	}
+
 	Window::Window(Window&& other) :
 		m_window(other.m_window)
 	{
 		other.m_window = nullptr;
-	}
-
-	Window::~Window()
-	{
 	}
 
 	Window& Window::operator =(Window&& other)
@@ -81,7 +82,7 @@ namespace win
 
 		HWND window = FindWindowExW(m_window, nullptr, classNameW.c_str(), nullptr);
 		if (window == nullptr)
-			THROW_BASE_EXCEPTION(Exception() << err_str(className + " not found."));
+			THROW_BASE_EXCEPTION("Class not found: " + className);
 		return Window(window);
 	}
 
@@ -91,7 +92,7 @@ namespace win
 
 		HWND window = FindWindowExW(m_window, nullptr, nullptr, nameW.c_str());
 		if (window == nullptr)
-			THROW_BASE_EXCEPTION(Exception() << err_str(name + " not found."));
+			THROW_BASE_EXCEPTION("Window not found: " + name);
 		return Window(window);
 	}
 

@@ -1,9 +1,10 @@
 #include "Windows/Common.h"
 #include "Windows/Util.h"
 
-#include <sstream>
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
+
+#include "Windows/WindowsError.h"
 
 namespace win
 {
@@ -17,13 +18,6 @@ namespace win
 			nullptr, messageId, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 			buffer, 4095, nullptr);
 		return blc::utf_to_utf<char>(buffer);
-	}
-
-	std::string Util::HresultToString(HRESULT hr)
-	{
-		std::ostringstream oss;
-		oss << "0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << hr;
-		return oss.str();
 	}
 
 	std::string Util::GetModuleName(HMODULE module)

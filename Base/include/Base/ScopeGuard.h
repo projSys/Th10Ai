@@ -12,6 +12,12 @@ namespace base
 		{
 		}
 
+		~ScopeGuard()
+		{
+			if (!m_dismissed)
+				m_functor();
+		}
+
 		ScopeGuard(const ScopeGuard&) = delete;
 
 		ScopeGuard(ScopeGuard&& other) :
@@ -19,12 +25,6 @@ namespace base
 			m_dismissed(other.m_dismissed)
 		{
 			other.m_dismissed = true;
-		}
-
-		~ScopeGuard()
-		{
-			if (!m_dismissed)
-				m_functor();
 		}
 
 		ScopeGuard& operator =(const ScopeGuard&) = delete;

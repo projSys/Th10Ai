@@ -1,6 +1,9 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/Util/DllInject.h"
 
+#include <sstream>
+#include <boost/exception/all.hpp>
+#include <boost/log/trivial.hpp>
 #include <Base/ScopeGuard.h>
 
 #include "libTh10Ai/DllMain.h"
@@ -34,11 +37,11 @@ namespace th
 		try
 		{
 			if (g_hook != nullptr)
-				THROW_BASE_EXCEPTION(Exception() << err_str("Dll injected."));
+				THROW_BASE_EXCEPTION("Dll injected.");
 
 			g_window = FindWindow(className, windowName);
 			if (g_window == nullptr)
-				THROW_BASE_EXCEPTION(Exception() << err_str("Window not found."));
+				THROW_BASE_EXCEPTION("Window not found.");
 			DWORD wndThreadId = GetWindowThreadProcessId(g_window, nullptr);
 
 			g_hook = SetWindowsHookEx(WH_CALLWNDPROC, &DllInject::CallWndProc, g_module, wndThreadId);
@@ -51,7 +54,7 @@ namespace th
 
 			SendMessage(g_window, DI_ATTACH, 0, 0);
 			if (!g_attached)
-				THROW_BASE_EXCEPTION(Exception() << err_str("Dll inject failed."));
+				THROW_BASE_EXCEPTION("Dll inject failed.");
 			ON_SCOPE_EXIT([&]()
 			{
 				if (g_detach)
@@ -63,10 +66,19 @@ namespace th
 			MSG msg = {};
 			GetMessage(&msg, nullptr, 0, 0);
 		}
-		catch (...)
+		catch (const Exception& ex)
 		{
-			std::string what = boost::current_exception_diagnostic_information();
-			BOOST_LOG_TRIVIAL(error) << what;
+			std::ostringstream oss;
+			ex.print(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str();
+		}
+		catch (const boost::exception& be)
+		{
+			BOOST_LOG_TRIVIAL(error) << boost::diagnostic_information(be);
+		}
+		catch (const std::exception& se)
+		{
+			BOOST_LOG_TRIVIAL(error) << se.what();
 		}
 	}
 
@@ -78,10 +90,19 @@ namespace th
 			if (!PostThreadMessage(g_exeThreadId, WM_QUIT, 0, 0))
 				THROW_WINDOWS_ERROR(GetLastError());
 		}
-		catch (...)
+		catch (const Exception& ex)
 		{
-			std::string what = boost::current_exception_diagnostic_information();
-			BOOST_LOG_TRIVIAL(error) << what;
+			std::ostringstream oss;
+			ex.print(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str();
+		}
+		catch (const boost::exception& be)
+		{
+			BOOST_LOG_TRIVIAL(error) << boost::diagnostic_information(be);
+		}
+		catch (const std::exception& se)
+		{
+			BOOST_LOG_TRIVIAL(error) << se.what();
 		}
 	}
 

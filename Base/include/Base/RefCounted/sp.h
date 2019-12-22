@@ -4,6 +4,7 @@
 
 namespace base
 {
+	// сп╢М
 	template <typename T>
 	class sp
 	{
@@ -22,6 +23,15 @@ namespace base
 				RefCountedBase* refCounted = m_object->getRefCounted();
 				assert(refCounted != nullptr);
 				refCounted->incStrongCount();
+			}
+		}
+
+		~sp()
+		{
+			if (m_object != nullptr)
+			{
+				RefCountedBase* refCounted = m_object->getRefCounted();
+				refCounted->decStrongCount();
 			}
 		}
 
@@ -57,15 +67,6 @@ namespace base
 			m_object(other.get())
 		{
 			other.m_object = nullptr;
-		}
-
-		~sp()
-		{
-			if (m_object != nullptr)
-			{
-				RefCountedBase* refCounted = m_object->getRefCounted();
-				refCounted->decStrongCount();
-			}
 		}
 
 		sp& operator =(nullptr_t)
@@ -122,21 +123,6 @@ namespace base
 			return *m_object;
 		}
 
-		operator T*() const
-		{
-			return m_object;
-		}
-
-		T* get() const
-		{
-			return m_object;
-		}
-
-		void set(T* object)
-		{
-			m_object = object;
-		}
-
 		bool operator ==(nullptr_t) const
 		{
 			return m_object == nullptr;
@@ -186,4 +172,16 @@ namespace base
 	private:
 		T* m_object;
 	};
+
+	template <typename T>
+	inline void SetObject(sp<T>& sp, T* object)
+	{
+		sp.m_object = object;
+	}
+
+	template <typename T>
+	inline T* GetObject(sp<T>& sp)
+	{
+		return sp.m_object;
+	}
 }

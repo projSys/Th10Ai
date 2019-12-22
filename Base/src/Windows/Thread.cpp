@@ -1,6 +1,7 @@
 #include "Windows/Common.h"
 #include "Windows/Thread.h"
 
+#include "Windows/WindowsError.h"
 #include "Windows/Util.h"
 
 namespace win
@@ -20,18 +21,18 @@ namespace win
 			THROW_WINDOWS_ERROR(GetLastError());
 	}
 
+	Thread::~Thread()
+	{
+		if (m_thread != nullptr)
+			CloseHandle(m_thread);
+	}
+
 	Thread::Thread(Thread&& other) :
 		m_thread(other.m_thread),
 		m_id(other.m_id)
 	{
 		other.m_thread = nullptr;
 		other.m_id = INVALID_ID;
-	}
-
-	Thread::~Thread()
-	{
-		if (m_thread != nullptr)
-			CloseHandle(m_thread);
 	}
 
 	Thread& Thread::operator =(Thread&& other)

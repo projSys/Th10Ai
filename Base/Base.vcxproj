@@ -57,7 +57,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_71_0;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_72_0;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,7 +74,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_71_0;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_72_0;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -95,6 +95,7 @@
     <ClInclude Include="include\Base\Singleton.h" />
     <ClInclude Include="include\Base\Type.h" />
     <ClInclude Include="include\Windows\Common.h" />
+    <ClInclude Include="include\Windows\DirectXResult.h" />
     <ClInclude Include="include\Windows\Point.h" />
     <ClInclude Include="include\Windows\Process.h" />
     <ClInclude Include="include\Windows\Rect.h" />
@@ -102,14 +103,17 @@
     <ClInclude Include="include\Windows\Thread.h" />
     <ClInclude Include="include\Windows\Util.h" />
     <ClInclude Include="include\Windows\Window.h" />
+    <ClInclude Include="include\Windows\WindowsError.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\RefCounted\RefCountedObject.cpp" />
+    <ClCompile Include="src\Windows\DirectXResult.cpp" />
     <ClCompile Include="src\Windows\Process.cpp" />
     <ClCompile Include="src\Windows\Thread.cpp" />
     <ClCompile Include="src\Windows\Util.cpp" />
     <ClCompile Include="src\Windows\Window.cpp" />
+    <ClCompile Include="src\Windows\WindowsError.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

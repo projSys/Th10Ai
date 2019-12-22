@@ -1,6 +1,7 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/Entity.h"
 
+#include <cassert>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <cmath>

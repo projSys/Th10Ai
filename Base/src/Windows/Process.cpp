@@ -5,6 +5,7 @@
 #include <boost/locale.hpp>
 
 #include "Base/ScopeGuard.h"
+#include "Windows/WindowsError.h"
 #include "Windows/Util.h"
 
 namespace win
@@ -37,7 +38,7 @@ namespace win
 			}
 		}
 		if (id == INVALID_ID)
-			THROW_BASE_EXCEPTION(Exception() << err_str(name + " not found."));
+			THROW_BASE_EXCEPTION("Process not found: " + name);
 		return Process(id, desiredAccess, inheritHandle);
 	}
 
@@ -56,18 +57,18 @@ namespace win
 			THROW_WINDOWS_ERROR(GetLastError());
 	}
 
+	Process::~Process()
+	{
+		if (m_process != nullptr)
+			CloseHandle(m_process);
+	}
+
 	Process::Process(Process&& other) :
 		m_process(other.m_process),
 		m_id(other.m_id)
 	{
 		other.m_process = nullptr;
 		other.m_id = INVALID_ID;
-	}
-
-	Process::~Process()
-	{
-		if (m_process != nullptr)
-			CloseHandle(m_process);
 	}
 
 	Process& Process::operator =(Process&& other)

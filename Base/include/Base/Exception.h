@@ -1,26 +1,43 @@
 #pragma once
 
-#include <exception>
-#include <boost/exception/all.hpp>
+#include <stdexcept>
+#include <ostream>
+#ifdef _DEBUG
 #include <boost/stacktrace.hpp>
+#endif
 
 #include "Base/Type.h"
 
 namespace base
 {
+#ifdef _DEBUG
+	namespace bst = boost::stacktrace;
+#endif
+
 	class Exception :
-		public virtual std::exception,
-		public virtual boost::exception
+		public std::runtime_error
 	{
 	public:
-		virtual const char* what() const override;
+		Exception(const std::string& whatArg,
+			const char* func, const char* file, uint_t line);
+		Exception(const char* whatArg,
+			const char* func, const char* file, uint_t line);
+
+		virtual void print(std::ostream& os) const;
+
+		const char* getFunc() const;
+		const char* getFile() const;
+		uint_t getLine() const;
+
+	protected:
+		const char* m_func;
+		const char* m_file;
+		uint_t m_line;
+#ifdef _DEBUG
+		bst::stacktrace m_stackTrace;
+#endif
 	};
 
-	typedef boost::error_info<struct tag_err_no, int_t> err_no;
-	typedef boost::error_info<struct tag_err_hex, std::string> err_hex;
-	typedef boost::error_info<struct tag_err_str, std::string> err_str;
-	typedef boost::error_info<struct tag_stacktrace, boost::stacktrace::stacktrace> traced;
-
-#define THROW_BASE_EXCEPTION(ex) \
-	BOOST_THROW_EXCEPTION(ex << base::traced(boost::stacktrace::stacktrace()))
+#define THROW_BASE_EXCEPTION(what) \
+	throw base::Exception(what, __func__, __FILE__, __LINE__)
 }

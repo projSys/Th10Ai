@@ -47,7 +47,7 @@ namespace base
 			refCounted->setObject(object);
 			// 引用计数已经默认为1，不需要调用sp的构造函数再加1
 			sp<T> sp;
-			sp.set(object);
+			SetObject(sp, object);
 			return sp;
 		}
 		catch (...)

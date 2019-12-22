@@ -151,22 +151,24 @@ namespace th
 		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 		//std::cout << "e2: " << e2 << std::endl;
 
-		//if (p)
-		//{
-		//	CellCollideResult ccResult = m_scene.collideAll(m_data.getPlayer(), 0.0f);
-		//	CellCollideResult ccResult1 = m_scene.collideAll(m_data.getPlayer(), 1.0f);
-		//	std::cout << ccResult.collided << " " << ccResult1.collided;
-		//}
+		if (p)
+		{
+			CellCollideResult ccResult = m_scene.collideAll(m_data.getPlayer(), 0.0f);
+			std::cout << ccResult.collided;
+		}
 
 		handleBomb();
 		handleTalk();
 		handleShoot();
 		handleMove();
 
-		//if (p)
-		//{
-		//	std::cout << " " << m_prevDir << std::endl;
-		//}
+		if (p)
+		{
+			Player temp = m_data.getPlayer();
+			temp.advance(m_prevDir, m_prevSlow);
+			CellCollideResult ccResult1 = m_scene.collideAll(temp, 1.0f);
+			std::cout << " " << ccResult1.collided << std::endl;
+		}
 
 		//std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		//time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();

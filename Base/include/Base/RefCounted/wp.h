@@ -4,20 +4,21 @@
 
 namespace base
 {
+	// сп╢М
 	template <typename T>
 	class wp
 	{
 	public:
 		wp() :
-			m_object(nullptr),
-			m_refCounted(nullptr)
+			m_refCounted(nullptr),
+			m_object(nullptr)
 		{
 		}
 
 		template <typename U>
 		explicit wp(const sp<U>& other) :
-			m_object(other.get()),
-			m_refCounted(nullptr)
+			m_refCounted(nullptr),
+			m_object(other.get())
 		{
 			if (m_object != nullptr)
 			{
@@ -26,9 +27,15 @@ namespace base
 			}
 		}
 
+		~wp()
+		{
+			if (m_refCounted != nullptr)
+				m_refCounted->decWeakCount();
+		}
+
 		wp(const wp& other) :
-			m_object(other.m_object),
-			m_refCounted(other.m_refCounted)
+			m_refCounted(other.m_refCounted),
+			m_object(other.m_object)
 		{
 			if (m_refCounted != nullptr)
 				m_refCounted->incWeakCount();
@@ -36,34 +43,28 @@ namespace base
 
 		template <typename U>
 		wp(const wp<U>& other) :
-			m_object(other.get()),
-			m_refCounted(other.getRefCounted())
+			m_refCounted(other.getRefCounted()),
+			m_object(other.get())
 		{
 			if (m_refCounted != nullptr)
 				m_refCounted->incWeakCount();
 		}
 
 		wp(wp&& other) :
-			m_object(other.m_object),
-			m_refCounted(other.m_refCounted)
+			m_refCounted(other.m_refCounted),
+			m_object(other.m_object)
 		{
-			other.m_object = nullptr;
 			other.m_refCounted = nullptr;
+			other.m_object = nullptr;
 		}
 
 		template <typename U>
 		wp(wp<U>&& other) :
-			m_object(other.get()),
-			m_refCounted(other.getRefCounted())
+			m_refCounted(other.getRefCounted()),
+			m_object(other.get())
 		{
-			other.m_object = nullptr;
 			other.m_refCounted = nullptr;
-		}
-
-		~wp()
-		{
-			if (m_refCounted != nullptr)
-				m_refCounted->decWeakCount();
+			other.m_object = nullptr;
 		}
 
 		wp& operator =(nullptr_t)
@@ -107,8 +108,8 @@ namespace base
 
 		void swap(wp& other)
 		{
-			std::swap(m_object, other.m_object);
 			std::swap(m_refCounted, other.m_refCounted);
+			std::swap(m_object, other.m_object);
 		}
 
 		bool isValid() const
@@ -122,16 +123,6 @@ namespace base
 				return sp<T>(m_object);
 			else
 				return sp<T>();
-		}
-
-		T* get() const
-		{
-			return m_object;
-		}
-
-		RefCountedBase* getRefCounted() const
-		{
-			return m_refCounted;
 		}
 
 		bool operator ==(nullptr_t) const
@@ -181,7 +172,7 @@ namespace base
 		}
 
 	private:
-		T* m_object;
 		RefCountedBase* m_refCounted;
+		T* m_object;
 	};
 }
