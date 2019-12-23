@@ -7,14 +7,14 @@ namespace win
 {
 	WindowsError::WindowsError(DWORD error,
 		const char* func, const char* file, uint_t line) :
-		Exception(Util::GetErrorMessage(error), func, file, line),
+		Exception(Util::GetErrorMessage(error), func, file, line, 4),
 		m_error(error)
 	{
 	}
 
 	void WindowsError::print(std::ostream& os) const
 	{
-		os << "[" << m_error << "]";
+		os << '[' << m_error << ']';
 		Exception::print(os);
 	}
 

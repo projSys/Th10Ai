@@ -20,5 +20,5 @@ namespace win
 	};
 
 #define THROW_DIRECTX_RESULT(result) \
-	throw win::DirectXResult(result, __func__, __FILE__, __LINE__)
+	throw win::DirectXResult(result, __FUNCTION__, __FILE__, __LINE__)
 }

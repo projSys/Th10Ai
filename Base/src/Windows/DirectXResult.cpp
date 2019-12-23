@@ -10,7 +10,7 @@ namespace win
 	// DX的错误信息有问题
 	DirectXResult::DirectXResult(HRESULT result,
 		const char* func, const char* file, uint_t line) :
-		Exception(Util::GetErrorMessage(result), func, file, line),
+		Exception(Util::GetErrorMessage(result), func, file, line, 4),
 		m_result(result)
 	{
 	}
@@ -20,7 +20,7 @@ namespace win
 		std::ios oldState(nullptr);
 		oldState.copyfmt(os);
 		os << "[0x" << std::hex << std::uppercase << std::setw(8)
-			<< std::setfill('0') << m_result << "]";
+			<< std::setfill('0') << m_result << ']';
 		os.copyfmt(oldState);
 		Exception::print(os);
 	}

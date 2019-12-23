@@ -2,7 +2,6 @@
 #include "libTh10Ai/libTh10Ai.h"
 
 #include <sstream>
-#include <boost/exception/all.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/file.hpp>
 
@@ -48,21 +47,11 @@ namespace th
 			m_th10Ai = std::make_shared<Th10Ai>();
 			return true;
 		}
-		catch (const Exception& ex)
+		catch (...)
 		{
 			std::ostringstream oss;
-			ex.print(oss);
-			BOOST_LOG_TRIVIAL(error) << oss.str();
-			return false;
-		}
-		catch (const boost::exception& be)
-		{
-			BOOST_LOG_TRIVIAL(error) << boost::diagnostic_information(be);
-			return false;
-		}
-		catch (const std::exception& se)
-		{
-			BOOST_LOG_TRIVIAL(error) << se.what();
+			PrintAllException(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str() << std::endl;
 			return false;
 		}
 	}

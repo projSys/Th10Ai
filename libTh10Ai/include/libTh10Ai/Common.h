@@ -5,7 +5,7 @@
 #include <Base/Exception.h>
 #include <Windows/Common.h>
 #include <Windows/WindowsError.h>
-#include "Windows/DirectXResult.h"
+#include <Windows/DirectXResult.h>
 #include <Windows/Util.h>
 #include <Windows/Point.h>
 #include <Windows/Size.h>

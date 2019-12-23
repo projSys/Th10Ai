@@ -2,7 +2,6 @@
 #include "libTh10Ai/Util/DllInject.h"
 
 #include <sstream>
-#include <boost/exception/all.hpp>
 #include <boost/log/trivial.hpp>
 #include <Base/ScopeGuard.h>
 
@@ -66,19 +65,11 @@ namespace th
 			MSG msg = {};
 			GetMessage(&msg, nullptr, 0, 0);
 		}
-		catch (const Exception& ex)
+		catch (...)
 		{
 			std::ostringstream oss;
-			ex.print(oss);
-			BOOST_LOG_TRIVIAL(error) << oss.str();
-		}
-		catch (const boost::exception& be)
-		{
-			BOOST_LOG_TRIVIAL(error) << boost::diagnostic_information(be);
-		}
-		catch (const std::exception& se)
-		{
-			BOOST_LOG_TRIVIAL(error) << se.what();
+			PrintAllException(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str() << std::endl;
 		}
 	}
 
@@ -90,19 +81,11 @@ namespace th
 			if (!PostThreadMessage(g_exeThreadId, WM_QUIT, 0, 0))
 				THROW_WINDOWS_ERROR(GetLastError());
 		}
-		catch (const Exception& ex)
+		catch (...)
 		{
 			std::ostringstream oss;
-			ex.print(oss);
-			BOOST_LOG_TRIVIAL(error) << oss.str();
-		}
-		catch (const boost::exception& be)
-		{
-			BOOST_LOG_TRIVIAL(error) << boost::diagnostic_information(be);
-		}
-		catch (const std::exception& se)
-		{
-			BOOST_LOG_TRIVIAL(error) << se.what();
+			PrintAllException(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str() << std::endl;
 		}
 	}
 

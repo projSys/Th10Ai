@@ -1,6 +1,9 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/Th10Ai.h"
 
+#include <sstream>
+#include <boost/log/trivial.hpp>
+
 #include "libTh10Ai/libTh10Ai.h"
 #include "libTh10Ai/Path.h"
 
@@ -43,32 +46,41 @@ namespace th
 
 	void Th10Ai::run()
 	{
-		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启AI，按S停止AI，按D退出AI。" << std::endl;
-
-		while (!m_done)
+		try
 		{
-			if (IsKeyPressed('A'))
+			std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启AI，按S停止AI，按D退出AI。" << std::endl;
+
+			while (!m_done)
 			{
-				start();
-			}
-			else if (IsKeyPressed('S'))
-			{
-				stop();
-			}
-			else if (IsKeyPressed('D'))
-			{
-				break;
-			}
-			else if (IsKeyPressed('F'))
-			{
-				print();
+				if (IsKeyPressed('A'))
+				{
+					start();
+				}
+				else if (IsKeyPressed('S'))
+				{
+					stop();
+				}
+				else if (IsKeyPressed('D'))
+				{
+					break;
+				}
+				else if (IsKeyPressed('F'))
+				{
+					print();
+				}
+
+				update();
 			}
 
-			update();
+			stop();
+			std::cout << "退出AI。" << std::endl;
 		}
-
-		stop();
-		std::cout << "退出AI。" << std::endl;
+		catch (...)
+		{
+			std::ostringstream oss;
+			PrintAllException(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str() << std::endl;
+		}
 
 		g_libTh10Ai.exit();
 	}

@@ -20,5 +20,5 @@ namespace win
 	};
 
 #define THROW_WINDOWS_ERROR(error) \
-	throw win::WindowsError(error, __func__, __FILE__, __LINE__)
+	throw win::WindowsError(error, __FUNCTION__, __FILE__, __LINE__)
 }
