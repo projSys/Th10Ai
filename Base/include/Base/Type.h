@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include <string>
+#include <type_traits>
 #include <cstdlib>
 #include <algorithm>
 #include <limits>
@@ -31,7 +32,7 @@ namespace base
 	};
 
 	template <typename T>
-	class TypeTraits<T, typename std::enable_if<std::is_integral<T>::value>::type>
+	class TypeTraits<T, std::enable_if_t<std::is_integral_v<T>>>
 	{
 	public:
 		typedef T value_t;
@@ -43,7 +44,7 @@ namespace base
 	};
 
 	template <typename T>
-	class TypeTraits<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
+	class TypeTraits<T, std::enable_if_t<std::is_floating_point_v<T>>>
 	{
 	public:
 		typedef T value_t;

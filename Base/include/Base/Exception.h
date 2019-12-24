@@ -59,9 +59,9 @@ namespace base
 	};
 
 	template <typename T,
-		typename = std::enable_if_t<std::is_base_of<Exception, T>::value>>
-		inline void ThrowException(T&& ex,
-			const char* func, const char* file, uint_t line)
+		typename = std::enable_if_t<std::is_base_of_v<Exception, T>>>
+	void ThrowException(T&& ex,
+		const char* func, const char* file, uint_t line)
 	{
 		throw ExceptionPackage<T>(std::forward<T>(ex), func, file, line);
 	}
