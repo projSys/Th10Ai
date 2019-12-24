@@ -24,7 +24,7 @@ namespace win
 	{
 		TCHAR buffer[4096] = {};
 		if (GetModuleFileName(module, buffer, 4095) == 0)
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		return blc::utf_to_utf<char>(buffer);
 	}
 
@@ -32,7 +32,7 @@ namespace win
 	{
 		TCHAR buffer[4096] = {};
 		if (GetModuleFileName(module, buffer, 4095) == 0)
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		bfs::path path(buffer);
 		return blc::utf_to_utf<char>(path.remove_filename().wstring());
 	}

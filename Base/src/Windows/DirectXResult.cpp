@@ -8,9 +8,8 @@
 namespace win
 {
 	// DX的错误信息有问题
-	DirectXResult::DirectXResult(HRESULT result,
-		const char* func, const char* file, uint_t line) :
-		Exception(Util::GetErrorMessage(result), func, file, line, 4),
+	DirectXResult::DirectXResult(HRESULT result) :
+		Exception(Util::GetErrorMessage(result)),
 		m_result(result)
 	{
 	}
@@ -23,10 +22,5 @@ namespace win
 			<< std::setfill('0') << m_result << ']';
 		os.copyfmt(oldState);
 		Exception::print(os);
-	}
-
-	HRESULT DirectXResult::getResult() const
-	{
-		return m_result;
 	}
 }

@@ -21,7 +21,7 @@ namespace win
 			return TRUE;
 		};
 		if (!::EnumWindows(enumFunc, reinterpret_cast<LPARAM>(&windows)))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		return windows;
 	}
 
@@ -31,7 +31,7 @@ namespace win
 
 		HWND window = FindWindowW(classNameW.c_str(), nullptr);
 		if (window == nullptr)
-			THROW_BASE_EXCEPTION("Class not found: " + className);
+			BASE_THROW_EXCEPTION(Exception("Class not found: " + className));
 		return Window(window);
 	}
 
@@ -41,7 +41,7 @@ namespace win
 
 		HWND window = FindWindowW(nullptr, nameW.c_str());
 		if (window == nullptr)
-			THROW_BASE_EXCEPTION("Window not found: " + name);
+			BASE_THROW_EXCEPTION(Exception("Window not found: " + name));
 		return Window(window);
 	}
 
@@ -82,7 +82,7 @@ namespace win
 
 		HWND window = FindWindowExW(m_window, nullptr, classNameW.c_str(), nullptr);
 		if (window == nullptr)
-			THROW_BASE_EXCEPTION("Class not found: " + className);
+			BASE_THROW_EXCEPTION(Exception("Class not found: " + className));
 		return Window(window);
 	}
 
@@ -92,26 +92,26 @@ namespace win
 
 		HWND window = FindWindowExW(m_window, nullptr, nullptr, nameW.c_str());
 		if (window == nullptr)
-			THROW_BASE_EXCEPTION("Window not found: " + name);
+			BASE_THROW_EXCEPTION(Exception("Window not found: " + name));
 		return Window(window);
 	}
 
 	void Window::minimize()
 	{
 		if (!ShowWindow(m_window, SW_MINIMIZE))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 	}
 
 	void Window::maximize()
 	{
 		if (!ShowWindow(m_window, SW_MAXIMIZE))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 	}
 
 	void Window::restore()
 	{
 		if (!ShowWindow(m_window, SW_RESTORE))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 	}
 
 	bool Window::isMinimized() const
@@ -127,7 +127,7 @@ namespace win
 	void Window::activate()
 	{
 		if (!SetForegroundWindow(m_window))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 	}
 
 	std::string Window::getName() const
@@ -141,7 +141,7 @@ namespace win
 	{
 		RECT rect = {};
 		if (!GetWindowRect(m_window, &rect))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		return Size(rect.right - rect.left, rect.bottom - rect.top);
 	}
 
@@ -149,14 +149,14 @@ namespace win
 	{
 		if (!SetWindowPos(m_window, nullptr, 0, 0, static_cast<int>(size.width),
 			static_cast<int>(size.height), SWP_NOMOVE | SWP_NOZORDER))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 	}
 
 	Rect Window::getRect() const
 	{
 		RECT rect = {};
 		if (!GetWindowRect(m_window, &rect))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		return Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 	}
 
@@ -164,13 +164,13 @@ namespace win
 	{
 		RECT rect = {};
 		if (!GetClientRect(m_window, &rect))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		POINT leftTop = { rect.left, rect.top };
 		if (!ClientToScreen(m_window, &leftTop))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		POINT rightBottom = { rect.right, rect.bottom };
 		if (!ClientToScreen(m_window, &rightBottom))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		return Rect(leftTop.x, leftTop.y, rightBottom.x - leftTop.x, rightBottom.y - leftTop.y);
 	}
 

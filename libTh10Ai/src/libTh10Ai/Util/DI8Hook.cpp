@@ -20,22 +20,22 @@ namespace th
 
 		HMODULE dinput8Dll = GetModuleHandle(_T("dinput8.dll"));
 		if (dinput8Dll == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		DirectInput8Create_t directInput8Create = reinterpret_cast<DirectInput8Create_t>(
 			GetProcAddress(dinput8Dll, "DirectInput8Create"));
 		if (directInput8Create == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 
 		CComPtr<IDirectInput8W> dinput8W;
 		HRESULT hr = directInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION,
 			IID_IDirectInput8W, reinterpret_cast<LPVOID*>(&dinput8W), nullptr);
 		if (FAILED(hr))
-			THROW_DIRECTX_RESULT(hr);
+			BASE_THROW_EXCEPTION(DirectXResult(hr));
 
 		CComPtr<IDirectInputDevice8W> deviceW;
 		hr = dinput8W->CreateDevice(GUID_SysKeyboard, &deviceW, nullptr);
 		if (FAILED(hr))
-			THROW_DIRECTX_RESULT(hr);
+			BASE_THROW_EXCEPTION(DirectXResult(hr));
 
 		uint_t* vTableW = reinterpret_cast<uint_t*>(*(reinterpret_cast<uint_t*>(deviceW.p)));
 		m_getDeviceStateW = reinterpret_cast<GetDeviceStateW_t>(vTableW[9]);

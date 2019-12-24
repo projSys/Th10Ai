@@ -5,9 +5,8 @@
 
 namespace win
 {
-	WindowsError::WindowsError(DWORD error,
-		const char* func, const char* file, uint_t line) :
-		Exception(Util::GetErrorMessage(error), func, file, line, 4),
+	WindowsError::WindowsError(DWORD error) :
+		Exception(Util::GetErrorMessage(error)),
 		m_error(error)
 	{
 	}
@@ -16,10 +15,5 @@ namespace win
 	{
 		os << '[' << m_error << ']';
 		Exception::print(os);
-	}
-
-	DWORD WindowsError::getError() const
-	{
-		return m_error;
 	}
 }

@@ -14,20 +14,20 @@ namespace base
 		public std::runtime_error
 	{
 	public:
-		Exception(const std::string& whatArg,
-			const char* func, const char* file, uint_t line,
-			uint_t skip = 3);
-		Exception(const char* whatArg,
-			const char* func, const char* file, uint_t line,
-			uint_t skip = 3);
+		Exception(const std::string& whatArg);
+		Exception(const char* whatArg);
 
 		virtual void print(std::ostream& os) const;
+	};
 
-		const char* getFunc() const;
-		const char* getFile() const;
-		uint_t getLine() const;
+	class ExceptionExtra
+	{
+	public:
+		ExceptionExtra(const char* func, const char* file, uint_t line);
 
-	protected:
+		void print(std::ostream& os) const;
+
+	private:
 		const char* m_func;
 		const char* m_file;
 		uint_t m_line;
@@ -36,8 +36,38 @@ namespace base
 #endif
 	};
 
-#define THROW_BASE_EXCEPTION(what) \
-	throw base::Exception(what, __FUNCTION__, __FILE__, __LINE__)
+	template <typename T>
+	class ExceptionPackage :
+		public T
+	{
+	public:
+		ExceptionPackage(T&& ex,
+			const char* func, const char* file, uint_t line) :
+			T(std::forward<T>(ex)),
+			m_extra(func, file, line)
+		{
+		}
+
+		virtual void print(std::ostream& os) const override
+		{
+			T::print(os);
+			m_extra.print(os);
+		}
+
+	private:
+		ExceptionExtra m_extra;
+	};
+
+	template <typename T,
+		typename = std::enable_if_t<std::is_base_of<Exception, T>::value>>
+		inline void ThrowException(T&& ex,
+			const char* func, const char* file, uint_t line)
+	{
+		throw ExceptionPackage<T>(std::forward<T>(ex), func, file, line);
+	}
+
+#define BASE_THROW_EXCEPTION(ex) \
+	base::ThrowException(ex, __FUNCTION__, __FILE__, __LINE__)
 
 	inline std::ostream& operator <<(std::ostream& os, const Exception& ex)
 	{

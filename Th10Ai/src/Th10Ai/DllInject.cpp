@@ -14,7 +14,7 @@ namespace th
 	{
 		HANDLE token = nullptr;
 		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
 		{
 			CloseHandle(token);
@@ -22,16 +22,16 @@ namespace th
 
 		LUID luid = {};
 		if (!LookupPrivilegeValue(nullptr, SE_DEBUG_NAME, &luid))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 
 		TOKEN_PRIVILEGES tp = {};
 		tp.PrivilegeCount = 1;
 		tp.Privileges[0].Luid = luid;
 		tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 		if (!AdjustTokenPrivileges(token, FALSE, &tp, sizeof(tp), nullptr, nullptr))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
-			THROW_BASE_EXCEPTION("Please run as administrator.");
+			BASE_THROW_EXCEPTION(Exception("Please run as administrator."));
 	}
 
 	void DllInject::Inject(Process& target, const std::string& dllName)
@@ -40,32 +40,32 @@ namespace th
 		uint_t size = (dllNameW.length() + 1) * sizeof(wchar_t);
 
 		if (!bfs::exists(dllNameW))
-			THROW_BASE_EXCEPTION("File not found: " + dllName);
+			BASE_THROW_EXCEPTION(Exception("File not found: " + dllName));
 
 		LPVOID remoteMemory = VirtualAllocEx(target, nullptr, size, MEM_COMMIT | MEM_RESERVE,
 			PAGE_READWRITE);
 		if (remoteMemory == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
 		{
 			VirtualFreeEx(target, remoteMemory, 0, MEM_RELEASE);
 		});
 
 		if (!WriteProcessMemory(target, remoteMemory, dllNameW.c_str(), size, nullptr))
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 
 		HMODULE kernel32Dll = GetModuleHandle(_T("kernel32.dll"));
 		if (kernel32Dll == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		FARPROC loadLibrary = GetProcAddress(kernel32Dll, "LoadLibraryW");
 		if (loadLibrary == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 
 		DWORD threadId = 0;
 		HANDLE thread = CreateRemoteThread(target, nullptr, 0,
 			reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibrary), remoteMemory, 0, &threadId);
 		if (thread == nullptr)
-			THROW_WINDOWS_ERROR(GetLastError());
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
 		{
 			CloseHandle(thread);

@@ -8,17 +8,11 @@ namespace win
 		public Exception
 	{
 	public:
-		DirectXResult(HRESULT result,
-			const char* func, const char* file, uint_t line);
+		DirectXResult(HRESULT result);
 
 		virtual void print(std::ostream& os) const override;
-
-		HRESULT getResult() const;
 
 	private:
 		HRESULT m_result;
 	};
-
-#define THROW_DIRECTX_RESULT(result) \
-	throw win::DirectXResult(result, __FUNCTION__, __FILE__, __LINE__)
 }
