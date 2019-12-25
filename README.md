@@ -10,7 +10,7 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
 ## 待改进 Todo
 
-* 碰撞检测有问题<br />
+* 高速弹的碰撞检测有问题<br />
 * 搜索写得太烂了<br />
 * 背板（历史表<br />
 
