@@ -6,14 +6,13 @@
 namespace win
 {
 	WindowsError::WindowsError(DWORD error) :
-		Exception(Util::GetErrorMessage(error)),
+		Exception(nullptr),
 		m_error(error)
 	{
 	}
 
 	void WindowsError::print(std::ostream& os) const
 	{
-		os << '[' << m_error << ']';
-		Exception::print(os);
+		os << '[' << m_error << ']' << Util::GetErrorMessage(m_error) << '\n';
 	}
 }

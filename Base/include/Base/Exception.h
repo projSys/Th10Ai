@@ -36,13 +36,12 @@ namespace base
 #endif
 	};
 
-	template <typename T>
+	template <typename T, typename = std::enable_if_t<std::is_base_of_v<Exception, T>>>
 	class ExceptionPackage :
 		public T
 	{
 	public:
-		ExceptionPackage(T&& ex,
-			const char* func, const char* file, uint_t line) :
+		ExceptionPackage(T&& ex, const char* func, const char* file, uint_t line) :
 			T(std::forward<T>(ex)),
 			m_extra(func, file, line)
 		{
@@ -58,16 +57,13 @@ namespace base
 		ExceptionExtra m_extra;
 	};
 
-	template <typename T,
-		typename = std::enable_if_t<std::is_base_of_v<Exception, T>>>
-	void ThrowException(T&& ex,
-		const char* func, const char* file, uint_t line)
+	template <typename T>
+	void ThrowException(T&& ex, const char* func, const char* file, uint_t line)
 	{
 		throw ExceptionPackage<T>(std::forward<T>(ex), func, file, line);
 	}
 
-#define BASE_THROW_EXCEPTION(ex) \
-	base::ThrowException(ex, __FUNCTION__, __FILE__, __LINE__)
+#define BASE_THROW_EXCEPTION(ex) base::ThrowException(ex, __FUNCTION__, __FILE__, __LINE__)
 
 	inline std::ostream& operator <<(std::ostream& os, const Exception& ex)
 	{

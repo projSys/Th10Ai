@@ -7,9 +7,8 @@
 
 namespace win
 {
-	// DX的错误信息有问题
 	DirectXResult::DirectXResult(HRESULT result) :
-		Exception(Util::GetErrorMessage(result)),
+		Exception(nullptr),
 		m_result(result)
 	{
 	}
@@ -21,6 +20,7 @@ namespace win
 		os << "[0x" << std::hex << std::uppercase << std::setw(8)
 			<< std::setfill('0') << m_result << ']';
 		os.copyfmt(oldState);
-		Exception::print(os);
+		// DX的错误信息有问题
+		os << Util::GetErrorMessage(m_result) << '\n';
 	}
 }
