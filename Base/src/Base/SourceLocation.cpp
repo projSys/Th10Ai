@@ -5,7 +5,8 @@ namespace base
 {
 	thread_local SourceLocation SourceLocation::tls_current;
 
-	void SourceLocation::SetCurrent(const char* func, const char* file, uint_t line)
+	void SourceLocation::SetCurrent(
+		const char* func, const char* file, uint_t line)
 	{
 		tls_current.m_func = func;
 		tls_current.m_file = file;

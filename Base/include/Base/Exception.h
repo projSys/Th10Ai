@@ -29,7 +29,7 @@ namespace base
 #endif
 	};
 
-#define BASE_THROW_EXCEPTION(ex) { UPDATE_SOURCE_LOCATION; throw ex; }
+#define BASE_THROW_EXCEPTION(ex) { STORE_SOURCE_LOCATION; throw ex; }
 
 	inline std::ostream& operator <<(std::ostream& os, const Exception& ex)
 	{

@@ -9,7 +9,8 @@ namespace base
 	class SourceLocation
 	{
 	public:
-		static void SetCurrent(const char* func, const char* file, uint_t line);
+		static void SetCurrent(
+			const char* func, const char* file, uint_t line);
 		static const SourceLocation& GetCurrent();
 
 		SourceLocation();
@@ -26,6 +27,6 @@ namespace base
 		uint_t m_line;
 	};
 
-#define UPDATE_SOURCE_LOCATION \
+#define STORE_SOURCE_LOCATION \
 	SourceLocation::SetCurrent(__FUNCTION__, __FILE__, __LINE__)
 }
