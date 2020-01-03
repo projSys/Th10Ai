@@ -6,7 +6,7 @@
 #include <boost/stacktrace.hpp>
 #endif
 
-#include "Base/Type.h"
+#include "Base/SourceLocation.h"
 
 namespace base
 {
@@ -18,52 +18,18 @@ namespace base
 		Exception(const char* whatArg);
 
 		virtual void print(std::ostream& os) const;
-	};
 
-	class ExceptionExtra
-	{
-	public:
-		ExceptionExtra(const char* func, const char* file, uint_t line);
+	protected:
+		void printSourceLocation(std::ostream& os) const;
+		void printStackTrace(std::ostream& os) const;
 
-		void print(std::ostream& os) const;
-
-	private:
-		const char* m_func;
-		const char* m_file;
-		uint_t m_line;
+		SourceLocation m_sourceLocation;
 #ifdef _DEBUG
 		boost::stacktrace::stacktrace m_stackTrace;
 #endif
 	};
 
-	template <typename T, typename = std::enable_if_t<std::is_base_of_v<Exception, T>>>
-	class ExceptionPackage :
-		public T
-	{
-	public:
-		ExceptionPackage(T&& ex, const char* func, const char* file, uint_t line) :
-			T(std::forward<T>(ex)),
-			m_extra(func, file, line)
-		{
-		}
-
-		virtual void print(std::ostream& os) const override
-		{
-			T::print(os);
-			m_extra.print(os);
-		}
-
-	private:
-		ExceptionExtra m_extra;
-	};
-
-	template <typename T>
-	void ThrowException(T&& ex, const char* func, const char* file, uint_t line)
-	{
-		throw ExceptionPackage<T>(std::forward<T>(ex), func, file, line);
-	}
-
-#define BASE_THROW_EXCEPTION(ex) base::ThrowException(ex, __FUNCTION__, __FILE__, __LINE__)
+#define BASE_THROW_EXCEPTION(ex) { UPDATE_SOURCE_LOCATION; throw ex; }
 
 	inline std::ostream& operator <<(std::ostream& os, const Exception& ex)
 	{

@@ -6,33 +6,39 @@
 namespace base
 {
 	Exception::Exception(const std::string& whatArg) :
-		std::runtime_error(whatArg)
+		std::runtime_error(whatArg),
+		m_sourceLocation(SourceLocation::GetCurrent())
+#ifdef _DEBUG
+		, m_stackTrace(3, std::numeric_limits<uint_t>::max() - 3)
+#endif
 	{
 	}
 
 	Exception::Exception(const char* whatArg) :
-		std::runtime_error(whatArg)
+		std::runtime_error(whatArg),
+		m_sourceLocation(SourceLocation::GetCurrent())
+#ifdef _DEBUG
+		, m_stackTrace(3, std::numeric_limits<uint_t>::max() - 3)
+#endif
 	{
 	}
 
 	void Exception::print(std::ostream& os) const
 	{
 		os << what() << '\n';
+		printSourceLocation(os);
+		printStackTrace(os);
 	}
 
-	ExceptionExtra::ExceptionExtra(const char* func, const char* file, uint_t line) :
-		m_func(func),
-		m_file(file),
-		m_line(line)
-#ifdef _DEBUG
-		, m_stackTrace(5, std::numeric_limits<uint_t>::max() - 5)
-#endif
+	void Exception::printSourceLocation(std::ostream& os) const
 	{
+		os << " in " << m_sourceLocation.getFunc()
+			<< " at " << m_sourceLocation.getFile()
+			<< ':' << m_sourceLocation.getLine() << '\n';
 	}
 
-	void ExceptionExtra::print(std::ostream& os) const
+	void Exception::printStackTrace(std::ostream& os) const
 	{
-		os << " in " << m_func << " at " << m_file << ':' << m_line << '\n';
 #ifdef _DEBUG
 		os << "StackTrace:\n" << m_stackTrace;
 #endif
@@ -40,6 +46,7 @@ namespace base
 
 	void PrintAllException(std::ostream& os)
 	{
+		// no safe
 		try
 		{
 			throw;

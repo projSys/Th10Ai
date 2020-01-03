@@ -14,5 +14,7 @@ namespace win
 	void WindowsError::print(std::ostream& os) const
 	{
 		os << '[' << m_error << ']' << Util::GetErrorMessage(m_error) << '\n';
+		printSourceLocation(os);
+		printStackTrace(os);
 	}
 }

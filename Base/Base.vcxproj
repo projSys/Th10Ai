@@ -93,6 +93,7 @@
     <ClInclude Include="include\Base\RefCounted\wp.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\Singleton.h" />
+    <ClInclude Include="include\Base\SourceLocation.h" />
     <ClInclude Include="include\Base\Type.h" />
     <ClInclude Include="include\Windows\Common.h" />
     <ClInclude Include="include\Windows\DirectXResult.h" />
@@ -108,6 +109,7 @@
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\RefCounted\RefCountedObject.cpp" />
+    <ClCompile Include="src\Base\SourceLocation.cpp" />
     <ClCompile Include="src\Windows\DirectXResult.cpp" />
     <ClCompile Include="src\Windows\Process.cpp" />
     <ClCompile Include="src\Windows\Thread.cpp" />

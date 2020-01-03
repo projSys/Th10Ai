@@ -93,6 +93,9 @@
     <ClInclude Include="include\Windows\DirectXResult.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\SourceLocation.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="src\Windows\DirectXResult.cpp">
       <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\SourceLocation.cpp">
+      <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

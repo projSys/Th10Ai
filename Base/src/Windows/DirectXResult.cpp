@@ -22,5 +22,7 @@ namespace win
 		os.copyfmt(oldState);
 		// DX的错误信息有问题
 		os << Util::GetErrorMessage(m_result) << '\n';
+		printSourceLocation(os);
+		printStackTrace(os);
 	}
 }
