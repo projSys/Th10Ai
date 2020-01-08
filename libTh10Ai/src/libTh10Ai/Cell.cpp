@@ -119,9 +119,7 @@ namespace th
 
 	CellCollideResult Cell::collideAll(const Player& player, float_t frame) const
 	{
-		CellCollideResult result;
-		result.collided = false;
-		result.willCollideCount = 0;
+		CellCollideResult result = {};
 		result.minCollideFrame = std::numeric_limits<float_t>::max();
 
 		if (!collide(player))
@@ -132,9 +130,7 @@ namespace th
 		{
 			for (const Enemy& enemy : m_enemies)
 			{
-				Enemy temp = enemy;
-				temp.advance(frame);
-				if (temp.collide(player))
+				if (enemy.collide(player, frame))
 				{
 					result.collided = true;
 					break;
@@ -145,46 +141,44 @@ namespace th
 			}
 
 			if (!result.collided)
-			for (const Bullet& bullet : m_bullets)
-			{
-				Bullet temp = bullet;
-				temp.advance(frame);
-				if (temp.collide(player))
+				for (const Bullet& bullet : m_bullets)
 				{
-					result.collided = true;
-					break;
+					if (bullet.collide(player, frame))
+					{
+						result.collided = true;
+						break;
+					}
+					else
+					{
+						//std::pair<bool, float_t> ret = temp.willCollideWith(player);
+						//if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
+						//{
+						//	result.collided = true;
+						//	break;
+						//}
+						//if (ret.first && ret.second > 0.0f && ret.second < 10.0f)
+						//{
+						//	result.willCollideCount += 1;
+						//	if (ret.second < result.minCollideFrame)
+						//		result.minCollideFrame = ret.second;
+						//}
+					}
 				}
-				else
+
+			if (!result.collided)
+				for (const Laser& laser : m_lasers)
 				{
+					Laser temp = laser;
+					temp.advance(frame);
+					if (temp.collide(player))
+					{
+						result.collided = true;
+						break;
+					}
 					//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-					//if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
-					//{
-					//	result.collided = true;
-					//	break;
-					//}
-					//if (ret.first && ret.second > 0.0f && ret.second < 10.0f)
-					//{
-					//	result.willCollideCount += 1;
-					//	if (ret.second < result.minCollideFrame)
-					//		result.minCollideFrame = ret.second;
-					//}
+					//if (ret.first && ret.second < 2.0f)
+					//	return true;
 				}
-			}
-
-			if (!result.collided)
-			for (const Laser& laser : m_lasers)
-			{
-				Laser temp = laser;
-				temp.advance(frame);
-				if (temp.collide(player))
-				{
-					result.collided = true;
-					break;
-				}
-				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-				//if (ret.first && ret.second < 2.0f)
-				//	return true;
-			}
 		}
 
 		if (m_first != nullptr)

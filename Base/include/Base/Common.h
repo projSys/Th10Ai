@@ -1,13 +1,5 @@
 #pragma once
 
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
-#ifndef _SCL_SECURE_NO_WARNINGS
-#define _SCL_SECURE_NO_WARNINGS
-#endif
-
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -16,13 +8,13 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 
-#ifndef BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
-#define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
-#endif
+//#ifndef BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
+//#define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
+//#endif
 
-#ifndef _SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING
-#define _SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING
-#endif
+//#ifndef _SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING
+//#define _SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING
+//#endif
 
 // https://stackoverflow.com/questions/5919996/how-to-detect-reliably-mac-os-x-ios-linux-windows-in-c-preprocessor
 // http://nadeausoftware.com/articles/2012/01/c_c_tip_how_use_compiler_predefined_macros_detect_operating_system

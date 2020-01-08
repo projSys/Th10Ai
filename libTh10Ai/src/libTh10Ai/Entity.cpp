@@ -44,7 +44,8 @@ namespace th
 		float_t AB = CalcDistance(A, B);
 		float_t AC = CalcDistance(A, C);
 		float_t BC = CalcDistance(B, C);
-		if (AB == 0.0f || AC == 0.0f)
+		if (TypeTraits<float_t>::Equals(AB, 0.0f)
+			|| TypeTraits<float_t>::Equals(AC, 0.0f))
 			return -1.0f;
 
 		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
@@ -56,6 +57,31 @@ namespace th
 		float_t radianA = std::acos(cosA);
 		// 角度 = 弧度 * 180 / PI
 		return radianA * 180.0f / static_cast<float_t>(M_PI);
+	}
+
+	// 首先，求一系数k：设直线的起点和终点分别为A（x1， y1）、B（x2， y2），直线外一点为C（x0， y0），垂足为D；并设 k = |AD| / |AB|。
+	// 则 k * AB = AD = AC + CD，又 AB * CD = 0；所以 k * AB * AB = AC * AB，故 k = AC * AB / （AB * AB）。
+	// 带入坐标，即得 k = ((x0 - x1) * (x2 - x1) + (y0 - y1) * (y2 - y1)) / ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	// 则 x = x1 + k * (x2 - x1); y = y1 + k * (y2 - y1);
+	FootPoint Entity::CalcFootPoint(const Pointf& A, const Pointf& B, const Pointf& C)
+	{
+		FootPoint footPoint = {};
+
+		float_t dxBA = B.x - A.x;
+		float_t dyBA = B.y - A.y;
+		if (TypeTraits<float_t>::Equals(dxBA, 0.0f)
+			&& TypeTraits<float_t>::Equals(dyBA, 0.0f))
+		{
+			footPoint.pos = A;
+			return footPoint;
+		}
+
+		float_t dxCA = C.x - A.x;
+		float_t dyCA = C.y - A.y;
+		footPoint.k = (dxCA * dxBA + dyCA * dyBA) / (dxBA * dxBA + dyBA * dyBA);
+		footPoint.pos.x = A.x + footPoint.k * dxBA;
+		footPoint.pos.y = A.y + footPoint.k * dyBA;
+		return footPoint;
 	}
 
 	Entity::Entity() :
@@ -73,23 +99,14 @@ namespace th
 		return CalcDistance(getPosition(), pos);
 	}
 
-	// 点与前进方向的垂足
-	std::pair<Pointf, float_t> Entity::calcFootPoint(const Pointf& pos) const
-	{
-		if (isHolding())
-			return std::make_pair(Pointf(x, y), 0.0f);
-
-		// 到达垂足的帧数
-		float_t frame = ((pos.x - x) * dx + (pos.y - y) * dy) / (dx * dx + dy * dy);
-		return std::make_pair(Pointf(x + dx * frame, y + dy * frame), frame);
-	}
-
 	float_t Entity::calcAngle(const Pointf& pos) const
 	{
-		if (isHolding() || getPosition() == pos)
-			return -1.0f;
-
 		return CalcAngle(getPosition(), getNextPos(), pos);
+	}
+
+	FootPoint Entity::calcFootPoint(const Pointf& pos) const
+	{
+		return CalcFootPoint(getPosition(), getNextPos(), pos);
 	}
 
 	Direction Entity::calcDirection() const
@@ -124,10 +141,11 @@ namespace th
 		return SECTOR_TO_DIR[sector];
 	}
 
-	void Entity::advance(float_t frame)
+	Pointf Entity::advance(float_t frame)
 	{
 		x += (dx * frame);
 		y += (dy * frame);
+		return Pointf(x, y);
 	}
 
 	bool Entity::collide(const Entity& other) const
@@ -136,20 +154,34 @@ namespace th
 			&& std::abs(y - other.y) < (height + other.height) / 2.0f;
 	}
 
+	bool Entity::collide(const Entity& other, float_t frame) const
+	{
+		if (isHighSpeedWith(other))
+		{
+			Entity temp = *this;
+			temp.advance(frame);
+			return temp.collide(other);
+		}
+		else
+		{
+			Entity temp = *this;
+			temp.advance(frame);
+			return temp.collide(other);
+		}
+	}
+
 	std::pair<bool, float_t> Entity::willCollideWith(const Entity& other) const
 	{
-		std::pair<Pointf, float_t> footPoint = calcFootPoint(other.getPosition());
-		Entity temp = *this;
-		temp.setPosition(footPoint.first);
-		if (temp.collide(other))
-			return std::make_pair(true, footPoint.second);
+		FootPoint footPoint = calcFootPoint(other.getPosition());
+		if (collide(other, footPoint.k))
+			return std::make_pair(true, footPoint.k);
 		else
 			return std::make_pair(false, 0.0f);
 	}
 
-	bool Entity::isHighSpeed() const
+	bool Entity::isHighSpeedWith(const Entity& other) const
 	{
-		return dx > 4.5f || dy > 4.5f;
+		return dx > other.width || dy > other.height;
 	}
 
 	Pointf Entity::getPosition() const

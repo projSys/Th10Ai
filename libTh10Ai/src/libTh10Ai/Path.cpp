@@ -51,7 +51,7 @@ namespace th
 		//m_slowFirst = (!m_itemTarget.found && m_underEnemy);
 		m_slowFirst = false;
 
-		Action action;
+		Action action = {};
 		action.fromPos = m_data.getPlayer().getPosition();
 		action.fromDir = m_dir;
 		action.frame = 1.0f;
@@ -64,11 +64,7 @@ namespace th
 
 	Result Path::dfs(const Action& action)
 	{
-		Result result;
-		result.valid = false;
-		result.slow = false;
-		result.score = 0.0f;
-		//result.ttd = 0;
+		Result result = {};
 
 		// 超过搜索节点限制
 		++m_count;
@@ -83,13 +79,13 @@ namespace th
 		temp.setPosition(action.fromPos);
 		temp.advance(action.fromDir, m_slowFirst);
 		result.slow = m_slowFirst;
-		CellCollideResult ccResult = {};
-		if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccResult = m_scene.collideAll(temp, action.frame)).collided)
+		CellCollideResult ccr = {};
+		if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccr = m_scene.collideAll(temp, action.frame)).collided)
 		{
 			temp.setPosition(action.fromPos);
 			temp.advance(action.fromDir, !m_slowFirst);
 			result.slow = !m_slowFirst;
-			if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccResult = m_scene.collideAll(temp, action.frame)).collided)
+			if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccr = m_scene.collideAll(temp, action.frame)).collided)
 			{
 				//result.ttd = 10;
 				return result;
@@ -120,11 +116,12 @@ namespace th
 			m_bestScore = result.score;
 		}
 
+		int_t nextValidCount = FIND_SIZES[m_dir];
 		for (int_t i = 0; i < FIND_SIZES[m_dir]; ++i)
 		{
 			Direction dir = FIND_DIRS[m_dir][i];
 
-			Action nextAct;
+			Action nextAct = {};
 			nextAct.fromPos = temp.getPosition();
 			nextAct.fromDir = dir;
 			nextAct.frame = action.frame + 1.0f;
@@ -148,10 +145,14 @@ namespace th
 			//	if (ttd > result.ttd)
 			//		result.ttd = ttd;
 			//}
+			if (!nextRes.valid)
+				nextValidCount -= 1;
 		}
 		// 没气了，当前节点也无效
 		//if (result.ttd > 0)
 		//	result.valid = false;
+		if (nextValidCount == 0)
+			result.valid = false;
 
 		return result;
 	}

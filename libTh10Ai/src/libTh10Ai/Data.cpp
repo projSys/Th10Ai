@@ -31,14 +31,23 @@ namespace th
 
 	void Data::print()
 	{
+		float_t maxDx = std::numeric_limits<float_t>::lowest();
+		float_t maxDy = std::numeric_limits<float_t>::lowest();
+		for (const Bullet& bullet : m_bullets)
+		{
+			if (bullet.dx > maxDx)
+				maxDx = bullet.dx;
+
+			if (bullet.dy > maxDy)
+				maxDy = bullet.dy;
+		}
+		std::cout << maxDx << " " << maxDy << std::endl;
 	}
 
 	// 查找道具
 	ItemTarget Data::findItem()
 	{
-		ItemTarget target;
-		target.found = false;
-		target.item = Item();
+		ItemTarget target = {};
 
 		if (m_items.empty())
 			return target;
@@ -147,9 +156,7 @@ namespace th
 	// 查找敌人
 	EnemyTarget Data::findEnemy()
 	{
-		EnemyTarget target;
-		target.found = false;
-		target.enemy = Enemy();
+		EnemyTarget target = {};
 
 		if (m_enemies.empty())
 			return target;
