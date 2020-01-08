@@ -154,6 +154,7 @@ namespace th
 			&& std::abs(y - other.y) < (height + other.height) / 2.0f;
 	}
 
+	// ¿çÖ¡¹ì¼£Åö×²¼ì²â
 	bool Entity::collide(const Entity& other, float_t frame) const
 	{
 		if (isHighSpeedWith(other))
@@ -162,7 +163,7 @@ namespace th
 			//temp.advance(frame);
 			//return temp.collide(other);
 			Pointf A = temp.advance(frame - 1.0);
-			Pointf B = temp.advance(frame);
+			Pointf B = temp.advance(1.0);
 			FootPoint footPoint = CalcFootPoint(A, B, other.getPosition());
 			if (footPoint.k < 0.0)
 				footPoint.k = 0.0;
