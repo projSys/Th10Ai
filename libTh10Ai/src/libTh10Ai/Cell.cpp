@@ -148,8 +148,15 @@ namespace th
 						result.collided = true;
 						break;
 					}
-					else
+					Bullet temp = bullet;
+					temp.advance(frame);
+					if (player.collide(temp, 0.0))
 					{
+						result.collided = true;
+						break;
+					}
+					//else
+					//{
 						//std::pair<bool, float_t> ret = temp.willCollideWith(player);
 						//if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
 						//{
@@ -162,7 +169,7 @@ namespace th
 						//	if (ret.second < result.minCollideFrame)
 						//		result.minCollideFrame = ret.second;
 						//}
-					}
+					//}
 				}
 
 			if (!result.collided)

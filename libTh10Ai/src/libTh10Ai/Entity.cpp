@@ -159,7 +159,17 @@ namespace th
 		if (isHighSpeedWith(other))
 		{
 			Entity temp = *this;
-			temp.advance(frame);
+			//temp.advance(frame);
+			//return temp.collide(other);
+			Pointf A = temp.advance(frame - 1.0);
+			Pointf B = temp.advance(frame);
+			FootPoint footPoint = CalcFootPoint(A, B, other.getPosition());
+			if (footPoint.k < 0.0)
+				footPoint.k = 0.0;
+			if (footPoint.k > 1.0)
+				footPoint.k = 1.0;
+			temp.setPosition(A);
+			temp.advance(footPoint.k);
 			return temp.collide(other);
 		}
 		else
