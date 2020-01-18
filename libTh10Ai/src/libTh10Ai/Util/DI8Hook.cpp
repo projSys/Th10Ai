@@ -1,8 +1,7 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/Util/DI8Hook.h"
 
-#include <detours.h>
-
+#include "libTh10Ai/Util/Detour.h"
 #include "libTh10Ai/Util/D3D9Hook.h"
 
 namespace th
@@ -40,18 +39,14 @@ namespace th
 		uint_t* vTableW = reinterpret_cast<uint_t*>(*(reinterpret_cast<uint_t*>(deviceW.p)));
 		m_getDeviceStateW = reinterpret_cast<GetDeviceStateW_t>(vTableW[9]);
 
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
-		DetourTransactionCommit();
+		Detour detour;
+		detour.attach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
 	}
 
 	DI8Hook::~DI8Hook()
 	{
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourDetach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
-		DetourTransactionCommit();
+		Detour detour;
+		detour.detach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
 	}
 
 	void DI8Hook::enable(bool enabled)

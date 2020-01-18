@@ -1,8 +1,9 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/Util/D3D9Hook.h"
 
-#include <detours.h>
 #include <Base/ScopeGuard.h>
+
+#include "libTh10Ai/Util/Detour.h"
 
 namespace th
 {
@@ -67,18 +68,14 @@ namespace th
 		uint_t* vTable = reinterpret_cast<uint_t*>(*(reinterpret_cast<uint_t*>(device.p)));
 		m_present = reinterpret_cast<Present_t>(vTable[17]);
 
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
-		DetourTransactionCommit();
+		Detour detour;
+		detour.attach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 	}
 
 	D3D9Hook::~D3D9Hook()
 	{
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourDetach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
-		DetourTransactionCommit();
+		Detour detour;
+		detour.detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 	}
 
 	void D3D9Hook::enable(bool enabled)

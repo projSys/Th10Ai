@@ -46,7 +46,6 @@ namespace base
 
 	void PrintAllException(std::ostream& os)
 	{
-		// no safe
 		try
 		{
 			throw;
@@ -55,13 +54,13 @@ namespace base
 		{
 			ex.print(os);
 		}
-		catch (const boost::exception& be)
+		catch (const boost::exception& bex)
 		{
-			os << boost::diagnostic_information(be);
+			os << boost::diagnostic_information(bex);
 		}
-		catch (const std::exception& se)
+		catch (const std::exception& sex)
 		{
-			os << se.what();
+			os << sex.what();
 		}
 		catch (...)
 		{
