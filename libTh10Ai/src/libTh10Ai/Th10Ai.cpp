@@ -292,66 +292,66 @@ namespace th
 		switch (dir)
 		{
 		case DIR_HOLD:
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
 			m_di8Hook.keyRelease(DIK_UP);
 			m_di8Hook.keyRelease(DIK_DOWN);
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
-			break;
-
-		case DIR_UP:
-			m_di8Hook.keyPress(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
-			break;
-
-		case DIR_DOWN:
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyPress(DIK_DOWN);
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
 			break;
 
 		case DIR_LEFT:
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
 			m_di8Hook.keyPress(DIK_LEFT);
 			m_di8Hook.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_RIGHT:
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
 			m_di8Hook.keyRelease(DIK_LEFT);
 			m_di8Hook.keyPress(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			break;
+
+		case DIR_UP:
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
+			break;
+
+		case DIR_DOWN:
+			m_di8Hook.keyRelease(DIK_LEFT);
+			m_di8Hook.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
 			break;
 
 		case DIR_LEFTUP:
-			m_di8Hook.keyPress(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
 			m_di8Hook.keyPress(DIK_LEFT);
 			m_di8Hook.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_RIGHTUP:
-			m_di8Hook.keyPress(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
 			m_di8Hook.keyRelease(DIK_LEFT);
 			m_di8Hook.keyPress(DIK_RIGHT);
+			m_di8Hook.keyPress(DIK_UP);
+			m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_LEFTDOWN:
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyPress(DIK_DOWN);
 			m_di8Hook.keyPress(DIK_LEFT);
 			m_di8Hook.keyRelease(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
 			break;
 
 		case DIR_RIGHTDOWN:
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyPress(DIK_DOWN);
 			m_di8Hook.keyRelease(DIK_LEFT);
 			m_di8Hook.keyPress(DIK_RIGHT);
+			m_di8Hook.keyRelease(DIK_UP);
+			m_di8Hook.keyPress(DIK_DOWN);
 			break;
 		}
 

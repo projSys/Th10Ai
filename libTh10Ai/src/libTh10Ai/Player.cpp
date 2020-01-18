@@ -10,10 +10,10 @@ namespace th
 	const Pointf Player::MOVE_SPEED_MARISA[DIR_MAXCOUNT] =
 	{
 		{ 0.0f, 0.0f },
-		{ 0.0f, -5.0f },
-		{ 0.0f, 5.0f },
 		{ -5.0f, 0.0f },
 		{ 5.0f, 0.0f },
+		{ 0.0f, -5.0f },
+		{ 0.0f, 5.0f },
 		{ -3.53f, -3.53f },
 		{ 3.53f, -3.53f },
 		{ -3.53f, 3.53f },
@@ -24,10 +24,10 @@ namespace th
 	const Pointf Player::MOVE_SPEED_HIGH[DIR_MAXCOUNT] =
 	{
 		{ 0.0f, 0.0f },
-		{ 0.0f, -4.5f },
-		{ 0.0f, 4.5f },
 		{ -4.5f, 0.0f },
 		{ 4.5f, 0.0f },
+		{ 0.0f, -4.5f },
+		{ 0.0f, 4.5f },
 		{ -3.18f, -3.18f },
 		{ 3.18f, -3.18f },
 		{ -3.18f, 3.18f },
@@ -38,10 +38,10 @@ namespace th
 	const Pointf Player::MOVE_SPEED_LOW[DIR_MAXCOUNT] =
 	{
 		{ 0.0f, 0.0f },
-		{ 0.0f, -2.0f },
-		{ 0.0f, 2.0f },
 		{ -2.0f, 0.0f },
 		{ 2.0f, 0.0f },
+		{ 0.0f, -2.0f },
+		{ 0.0f, 2.0f },
 		{ -1.41f, -1.41f },
 		{ 1.41f, -1.41f },
 		{ -1.41f, 1.41f },

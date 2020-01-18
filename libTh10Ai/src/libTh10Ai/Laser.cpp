@@ -37,22 +37,22 @@ namespace th
 			return std::make_pair(false, 0.0f);
 	}
 
-	Pointf Laser::getTopLeft() const
+	Pointf Laser::getLeftTop() const
 	{
 		return Pointf(x - width / 2.0f, y);
 	}
 
-	Pointf Laser::getTopRight() const
+	Pointf Laser::getRightTop() const
 	{
 		return Pointf(x + width / 2.0f, y);
 	}
 
-	Pointf Laser::getBottomLeft() const
+	Pointf Laser::getLeftBottom() const
 	{
 		return Pointf(x - width / 2.0f, y + height);
 	}
 
-	Pointf Laser::getBottomRight() const
+	Pointf Laser::getRightBottom() const
 	{
 		return Pointf(x + width / 2.0f, y + height);
 	}
@@ -84,25 +84,25 @@ namespace th
 		Pointf C = laser.getPosition();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		topLeft = Rotate(laser.getTopLeft(), C, radianC);
-		topRight = Rotate(laser.getTopRight(), C, radianC);
-		bottomLeft = Rotate(laser.getBottomLeft(), C, radianC);
-		bottomRight = Rotate(laser.getBottomRight(), C, radianC);
+		leftTop = Rotate(laser.getLeftTop(), C, radianC);
+		rightTop = Rotate(laser.getRightTop(), C, radianC);
+		leftBottom = Rotate(laser.getLeftBottom(), C, radianC);
+		rightBottom = Rotate(laser.getRightBottom(), C, radianC);
 	}
 
 	// 分离轴定理
 	bool LaserBox::collide(const Entity& other) const
 	{
 		// 投影到X轴
-		float_t minX = std::min(std::min(topLeft.x, topRight.x), std::min(bottomLeft.x, bottomRight.x));
-		float_t maxX = std::max(std::max(topLeft.x, topRight.x), std::max(bottomLeft.x, bottomRight.x));
+		float_t minX = std::min(std::min(leftTop.x, rightTop.x), std::min(leftBottom.x, rightBottom.x));
+		float_t maxX = std::max(std::max(leftTop.x, rightTop.x), std::max(leftBottom.x, rightBottom.x));
 		// 检测2条线段是否重叠
 		if (!Collide(minX + (maxX - minX) / 2.0f, maxX - minX, other.x, other.width))
 			return false;
 
 		// 投影到Y轴
-		float_t minY = std::min(std::min(topLeft.y, topRight.y), std::min(bottomLeft.y, bottomRight.y));
-		float_t maxY = std::max(std::max(topLeft.y, topRight.y), std::max(bottomLeft.y, bottomRight.y));
+		float_t minY = std::min(std::min(leftTop.y, rightTop.y), std::min(leftBottom.y, rightBottom.y));
+		float_t maxY = std::max(std::max(leftTop.y, rightTop.y), std::max(leftBottom.y, rightBottom.y));
 		// 检测2条线段是否重叠
 		if (!Collide(minY + (maxY - minY) / 2.0f, maxY - minY, other.y, other.height))
 			return false;
@@ -116,25 +116,25 @@ namespace th
 		Pointf C = laser.getPosition();
 		// emmm...你说这个谁懂啊？
 		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		topLeft = Rotate(entity.getTopLeft(), C, -radianC);
-		topRight = Rotate(entity.getTopRight(), C, -radianC);
-		bottomLeft = Rotate(entity.getBottomLeft(), C, -radianC);
-		bottomRight = Rotate(entity.getBottomRight(), C, -radianC);
+		leftTop = Rotate(entity.getLeftTop(), C, -radianC);
+		rightTop = Rotate(entity.getRightTop(), C, -radianC);
+		leftBottom = Rotate(entity.getLeftBottom(), C, -radianC);
+		rightBottom = Rotate(entity.getRightBottom(), C, -radianC);
 	}
 
 	// 分离轴定理
 	bool EntityBox::collide(const Laser& other) const
 	{
 		// 投影到X轴
-		float_t minX = std::min(std::min(topLeft.x, topRight.x), std::min(bottomLeft.x, bottomRight.x));
-		float_t maxX = std::max(std::max(topLeft.x, topRight.x), std::max(bottomLeft.x, bottomRight.x));
+		float_t minX = std::min(std::min(leftTop.x, rightTop.x), std::min(leftBottom.x, rightBottom.x));
+		float_t maxX = std::max(std::max(leftTop.x, rightTop.x), std::max(leftBottom.x, rightBottom.x));
 		// 检测2条线段是否重叠
 		if (!Collide(minX + (maxX - minX) / 2.0f, maxX - minX, other.x, other.width))
 			return false;
 
 		// 投影到Y轴
-		float_t minY = std::min(std::min(topLeft.y, topRight.y), std::min(bottomLeft.y, bottomRight.y));
-		float_t maxY = std::max(std::max(topLeft.y, topRight.y), std::max(bottomLeft.y, bottomRight.y));
+		float_t minY = std::min(std::min(leftTop.y, rightTop.y), std::min(leftBottom.y, rightBottom.y));
+		float_t maxY = std::max(std::max(leftTop.y, rightTop.y), std::max(leftBottom.y, rightBottom.y));
 		// 检测2条线段是否重叠
 		if (!Collide(minY + (maxY - minY) / 2.0f, maxY - minY, other.y + other.height / 2.0f, other.height))
 			return false;

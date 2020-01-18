@@ -41,10 +41,10 @@ namespace th
 
 		Pointf getPosition() const;
 		void setPosition(const Pointf& pos);
-		Pointf getTopLeft() const;
-		Pointf getTopRight() const;
-		Pointf getBottomLeft() const;
-		Pointf getBottomRight() const;
+		Pointf getLeftTop() const;
+		Pointf getRightTop() const;
+		Pointf getLeftBottom() const;
+		Pointf getRightBottom() const;
 		bool isHolding() const;
 		Pointf getDelta() const;
 		Pointf getNextPos() const;

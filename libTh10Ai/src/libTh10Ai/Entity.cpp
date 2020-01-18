@@ -206,22 +206,22 @@ namespace th
 		y = pos.y;
 	}
 
-	Pointf Entity::getTopLeft() const
+	Pointf Entity::getLeftTop() const
 	{
 		return Pointf(x - width / 2.0f, y - height / 2.0f);
 	}
 
-	Pointf Entity::getTopRight() const
+	Pointf Entity::getRightTop() const
 	{
 		return Pointf(x + width / 2.0f, y - height / 2.0f);
 	}
 
-	Pointf Entity::getBottomLeft() const
+	Pointf Entity::getLeftBottom() const
 	{
 		return Pointf(x - width / 2.0f, y + height / 2.0f);
 	}
 
-	Pointf Entity::getBottomRight() const
+	Pointf Entity::getRightBottom() const
 	{
 		return Pointf(x + width / 2.0f, y + height / 2.0f);
 	}
@@ -249,6 +249,6 @@ namespace th
 
 	Rectf Entity::getRect() const
 	{
-		return Rectf(getTopLeft(), getSize());
+		return Rectf(getLeftTop(), getSize());
 	}
 }
