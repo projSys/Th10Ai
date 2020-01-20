@@ -2,11 +2,11 @@
 
 namespace th
 {
-	class Detour
+	class libDetours
 	{
 	public:
-		Detour();
-		~Detour();
+		libDetours();
+		~libDetours();
 
 		void attach(PVOID* pointer, PVOID detour);
 		void detach(PVOID* pointer, PVOID detour);

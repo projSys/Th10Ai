@@ -1,27 +1,27 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/Util/Detour.h"
+#include "libTh10Ai/libDetours.h"
 
 #include <detours.h>
 
 namespace th
 {
-	Detour::Detour()
+	libDetours::libDetours()
 	{
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 	}
 
-	Detour::~Detour()
+	libDetours::~libDetours()
 	{
 		DetourTransactionCommit();
 	}
 
-	void Detour::attach(PVOID* pointer, PVOID detour)
+	void libDetours::attach(PVOID* pointer, PVOID detour)
 	{
 		DetourAttach(pointer, detour);
 	}
 
-	void Detour::detach(PVOID* pointer, PVOID detour)
+	void libDetours::detach(PVOID* pointer, PVOID detour)
 	{
 		DetourDetach(pointer, detour);
 	}

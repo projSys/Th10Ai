@@ -1,8 +1,8 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/Util/DI8Hook.h"
+#include "libTh10Ai/DI8Hook.h"
 
-#include "libTh10Ai/Util/Detour.h"
-#include "libTh10Ai/Util/D3D9Hook.h"
+#include "libTh10Ai/libDetours.h"
+#include "libTh10Ai/D3D9Hook.h"
 
 namespace th
 {
@@ -36,17 +36,17 @@ namespace th
 		if (FAILED(hr))
 			BASE_THROW_EXCEPTION(DirectXResult(hr));
 
-		uint_t* vTableW = reinterpret_cast<uint_t*>(*(reinterpret_cast<uint_t*>(deviceW.p)));
+		uint_t* vTableW = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(deviceW.p));
 		m_getDeviceStateW = reinterpret_cast<GetDeviceStateW_t>(vTableW[9]);
 
-		Detour detour;
-		detour.attach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
+		libDetours detours;
+		detours.attach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
 	}
 
 	DI8Hook::~DI8Hook()
 	{
-		Detour detour;
-		detour.detach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
+		libDetours detours;
+		detours.detach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
 	}
 
 	void DI8Hook::enable(bool enabled)

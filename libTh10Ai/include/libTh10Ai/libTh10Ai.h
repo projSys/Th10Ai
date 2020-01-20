@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "libTh10Ai/Util/DllInject.h"
+#include "libTh10Ai/DllInject.h"
 
 namespace th
 {

@@ -1,9 +1,9 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/Util/D3D9Hook.h"
+#include "libTh10Ai/D3D9Hook.h"
 
 #include <Base/ScopeGuard.h>
 
-#include "libTh10Ai/Util/Detour.h"
+#include "libTh10Ai/libDetours.h"
 
 namespace th
 {
@@ -65,17 +65,17 @@ namespace th
 		if (FAILED(hr))
 			BASE_THROW_EXCEPTION(DirectXResult(hr));
 
-		uint_t* vTable = reinterpret_cast<uint_t*>(*(reinterpret_cast<uint_t*>(device.p)));
+		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
 		m_present = reinterpret_cast<Present_t>(vTable[17]);
 
-		Detour detour;
-		detour.attach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+		libDetours detours;
+		detours.attach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 	}
 
 	D3D9Hook::~D3D9Hook()
 	{
-		Detour detour;
-		detour.detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+		libDetours detours;
+		detours.detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 	}
 
 	void D3D9Hook::enable(bool enabled)

@@ -22,7 +22,7 @@ namespace th
 		//template <typename T>
 		//inline T readMemory(uint_t address) noexcept
 		//{
-		//	T data = T();
+		//	T data = {};
 		//	ReadProcessMemory(m_process, reinterpret_cast<LPCVOID>(address), &data, sizeof(data), nullptr);
 		//	return data;
 		//}

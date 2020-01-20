@@ -19,12 +19,6 @@
     <Filter Include="源文件\libTh10Ai">
       <UniqueIdentifier>{a361e8ab-5aec-4181-9503-ebd49a9c8bc8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\libTh10Ai\Util">
-      <UniqueIdentifier>{34ab0fe0-6a0e-4810-8f45-97ab3b6559c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\libTh10Ai\Util">
-      <UniqueIdentifier>{82dfaf28-efff-4015-9ede-fc7a8a979156}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\libTh10Ai\Common.h">
@@ -75,17 +69,17 @@
     <ClInclude Include="include\libTh10Ai\DllMain.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTh10Ai\Util\D3D9Hook.h">
-      <Filter>头文件\libTh10Ai\Util</Filter>
+    <ClInclude Include="include\libTh10Ai\D3D9Hook.h">
+      <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTh10Ai\Util\DI8Hook.h">
-      <Filter>头文件\libTh10Ai\Util</Filter>
+    <ClInclude Include="include\libTh10Ai\DI8Hook.h">
+      <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTh10Ai\Util\DllInject.h">
-      <Filter>头文件\libTh10Ai\Util</Filter>
+    <ClInclude Include="include\libTh10Ai\DllInject.h">
+      <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTh10Ai\Util\Detour.h">
-      <Filter>头文件\libTh10Ai\Util</Filter>
+    <ClInclude Include="include\libTh10Ai\libDetours.h">
+      <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -131,17 +125,17 @@
     <ClCompile Include="src\libTh10Ai\DllMain.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTh10Ai\Util\D3D9Hook.cpp">
-      <Filter>源文件\libTh10Ai\Util</Filter>
+    <ClCompile Include="src\libTh10Ai\D3D9Hook.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTh10Ai\Util\DI8Hook.cpp">
-      <Filter>源文件\libTh10Ai\Util</Filter>
+    <ClCompile Include="src\libTh10Ai\DI8Hook.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTh10Ai\Util\DllInject.cpp">
-      <Filter>源文件\libTh10Ai\Util</Filter>
+    <ClCompile Include="src\libTh10Ai\DllInject.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTh10Ai\Util\Detour.cpp">
-      <Filter>源文件\libTh10Ai\Util</Filter>
+    <ClCompile Include="src\libTh10Ai\libDetours.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

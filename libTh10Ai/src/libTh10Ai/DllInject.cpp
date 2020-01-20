@@ -1,5 +1,5 @@
 #include "libTh10Ai/Common.h"
-#include "libTh10Ai/Util/DllInject.h"
+#include "libTh10Ai/DllInject.h"
 
 #include <sstream>
 #include <boost/log/trivial.hpp>

@@ -216,7 +216,7 @@ namespace th
 			score += 0.5f * (1.0f - (player.x - enemy.x) / (Scene::SIZE.width - enemy.x));
 
 		// 距离越远得分越高
-		if (player.y <= enemy.y)
+		if (player.y < enemy.y)
 			score = -1.0f;
 		else
 			score += 0.5f * ((player.y - enemy.y) / (Scene::SIZE.height - enemy.y));

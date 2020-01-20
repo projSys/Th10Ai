@@ -3,8 +3,8 @@
 #include <thread>
 #include <atomic>
 
-#include "libTh10Ai/Util/D3D9Hook.h"
-#include "libTh10Ai/Util/DI8Hook.h"
+#include "libTh10Ai/D3D9Hook.h"
+#include "libTh10Ai/DI8Hook.h"
 #include "libTh10Ai/Reader.h"
 #include "libTh10Ai/Data.h"
 #include "libTh10Ai/Scene.h"

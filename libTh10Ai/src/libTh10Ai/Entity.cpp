@@ -157,28 +157,28 @@ namespace th
 	// ¿çÖ¡¹ì¼£Åö×²¼ì²â
 	bool Entity::collide(const Entity& other, float_t frame) const
 	{
-		if (isHighSpeedWith(other))
-		{
-			Entity temp = *this;
-			//temp.advance(frame);
-			//return temp.collide(other);
-			Pointf A = temp.advance(frame - 1.0);
-			Pointf B = temp.advance(1.0);
-			FootPoint footPoint = CalcFootPoint(A, B, other.getPosition());
-			if (footPoint.k < 0.0)
-				footPoint.k = 0.0;
-			if (footPoint.k > 1.0)
-				footPoint.k = 1.0;
-			temp.setPosition(A);
-			temp.advance(footPoint.k);
-			return temp.collide(other);
-		}
-		else
-		{
+		//if (isHighSpeedWith(other))
+		//{
+		//	Entity temp = *this;
+		//	//temp.advance(frame);
+		//	//return temp.collide(other);
+		//	Pointf A = temp.advance(frame - 1.0);
+		//	Pointf B = temp.advance(1.0);
+		//	FootPoint footPoint = CalcFootPoint(A, B, other.getPosition());
+		//	if (footPoint.k < 0.0)
+		//		footPoint.k = 0.0;
+		//	if (footPoint.k > 1.0)
+		//		footPoint.k = 1.0;
+		//	temp.setPosition(A);
+		//	temp.advance(footPoint.k);
+		//	return temp.collide(other);
+		//}
+		//else
+		//{
 			Entity temp = *this;
 			temp.advance(frame);
 			return temp.collide(other);
-		}
+		//}
 	}
 
 	std::pair<bool, float_t> Entity::willCollideWith(const Entity& other) const
