@@ -58,6 +58,7 @@ namespace th
 
 		//action.willCollideCount = 0;
 		//action.minCollideFrame = 0.0f;
+		action.score = 0.0;
 
 		return dfs(action);
 	}
@@ -101,19 +102,28 @@ namespace th
 
 		if (m_itemTarget.found)
 		{
-			result.score += CalcNearScore(temp.getPosition(), m_itemTarget.item.getPosition()) * 300.0f;
+			result.score += CalcNearScore(temp.getPosition(), m_itemTarget.item.getPosition()) * 100.0f;
 		}
 		else if (m_enemyTarget.found)
 		{
-			result.score += CalcShootScore(temp.getPosition(), m_enemyTarget.enemy.getPosition()) * 200.0f;
+			result.score += CalcShootScore(temp.getPosition(), m_enemyTarget.enemy.getPosition()) * 100.0f;
 		}
-
-		result.score += CalcNearScore(temp.getPosition(), RESET_POS) * 50.0f;
+		else
+		{
+			result.score += CalcNearScore(temp.getPosition(), RESET_POS) * 100.0f;
+		}
 		//result.score += CalcDepthScore(action.frame) * 100.0f;
 
-		if (result.score > m_bestScore)
+		if (ccr.minDistance > 20.0)
+			result.score += 250.0;
+		else
+			result.score += ccr.minDistance / 20.0 * 250.0;
+
+		float64_t total = action.score + result.score;
+		float64_t avg = total / action.frame;
+		if (avg > m_bestScore)
 		{
-			m_bestScore = result.score;
+			m_bestScore = avg;
 		}
 
 		int_t nextValidCount = FIND_SIZES[m_dir];
@@ -125,6 +135,7 @@ namespace th
 			nextAct.fromPos = temp.getPosition();
 			nextAct.fromDir = dir;
 			nextAct.frame = action.frame + 1.0f;
+			nextAct.score = total;
 
 			//nextAct.willCollideCount = action.willCollideCount;
 			//nextAct.minCollideFrame = action.minCollideFrame;

@@ -56,7 +56,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = enemy.willCollideWith(*this);
-				if (ret.first /*&& ret.second >= -60.0f && ret.second <= 600.0f*/)
+				if (ret.first && ret.second >= -120.0f && ret.second <= 300.0f)
 					m_enemies.push_back(enemy);
 			}
 		}
@@ -80,7 +80,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = bullet.willCollideWith(*this);
-				if (ret.first /*&& ret.second >= -60.0f && ret.second <= 600.0f*/)
+				if (ret.first && ret.second >= -120.0f && ret.second <= 300.0f)
 					m_bullets.push_back(bullet);
 			}
 		}
@@ -104,7 +104,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = laser.willCollideWith(*this);
-				if (ret.first /*&& ret.second >= -60.0f && ret.second <= 600.0f*/)
+				if (ret.first && ret.second >= -120.0f && ret.second <= 300.0f)
 					m_lasers.push_back(laser);
 			}
 		}
@@ -121,6 +121,7 @@ namespace th
 	{
 		CellCollideResult result = {};
 		result.minCollideFrame = std::numeric_limits<float_t>::max();
+		result.minDistance = std::numeric_limits<float_t>::max();
 
 		if (!collide(player))
 			return result;
@@ -128,64 +129,70 @@ namespace th
 		// 只检测叶子节点
 		if (m_first == nullptr && m_second == nullptr)
 		{
-			for (const Enemy& enemy : m_enemies)
+			for (Enemy enemy : m_enemies)
 			{
-				if (enemy.collide(player, frame))
+				enemy.advance(frame);
+				if (enemy.collide(player))
 				{
 					result.collided = true;
-					break;
+					//break;
 				}
+				float_t distance = enemy.calcDistance(player.getPosition());
+				if (distance < result.minDistance)
+					result.minDistance = distance;
 				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
 				//if (ret.first && ret.second < 2.0f)
 				//	return true;
 			}
 
-			if (!result.collided)
-				for (const Bullet& bullet : m_bullets)
+			for (Bullet bullet : m_bullets)
+			{
+				bullet.advance(frame);
+				if (bullet.collide(player))
 				{
-					if (bullet.collide(player, frame))
-					{
-						result.collided = true;
-						break;
-					}
-					Bullet temp = bullet;
-					temp.advance(frame);
-					if (player.collide(temp, 0.0))
-					{
-						result.collided = true;
-						break;
-					}
-					//else
-					//{
-						//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-						//if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
-						//{
-						//	result.collided = true;
-						//	break;
-						//}
-						//if (ret.first && ret.second > 0.0f && ret.second < 10.0f)
-						//{
-						//	result.willCollideCount += 1;
-						//	if (ret.second < result.minCollideFrame)
-						//		result.minCollideFrame = ret.second;
-						//}
-					//}
+					result.collided = true;
+					//break;
 				}
-
-			if (!result.collided)
-				for (const Laser& laser : m_lasers)
-				{
-					Laser temp = laser;
-					temp.advance(frame);
-					if (temp.collide(player))
-					{
-						result.collided = true;
-						break;
-					}
+				float_t distance = bullet.calcDistance(player.getPosition());
+				if (distance < result.minDistance)
+					result.minDistance = distance;
+				//if (player.collide(temp, 0.0))
+				//{
+				//	result.collided = true;
+				//	break;
+				//}
+				//else
+				//{
 					//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-					//if (ret.first && ret.second < 2.0f)
-					//	return true;
+					//if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
+					//{
+					//	result.collided = true;
+					//	break;
+					//}
+					//if (ret.first && ret.second > 0.0f && ret.second < 10.0f)
+					//{
+					//	result.willCollideCount += 1;
+					//	if (ret.second < result.minCollideFrame)
+					//		result.minCollideFrame = ret.second;
+					//}
+				//}
+			}
+
+			for (Laser laser : m_lasers)
+			{
+				laser.advance(frame);
+				if (laser.collide(player))
+				{
+					result.collided = true;
+					//break;
 				}
+				float_t distance = laser.calcDistance(player.getPosition());
+				if (distance < result.minDistance)
+					result.minDistance = distance;
+				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
+				//if (ret.first && ret.second < 2.0f)
+				//	return true;
+			}
 		}
 
 		if (m_first != nullptr)
@@ -199,6 +206,8 @@ namespace th
 				if (firstResult.minCollideFrame < result.minCollideFrame)
 					result.minCollideFrame = firstResult.minCollideFrame;
 			}
+			if (firstResult.minDistance < result.minDistance)
+				result.minDistance = firstResult.minDistance;
 		}
 
 		if (m_second != nullptr)
@@ -212,6 +221,8 @@ namespace th
 				if (secondResult.minCollideFrame < result.minCollideFrame)
 					result.minCollideFrame = secondResult.minCollideFrame;
 			}
+			if (secondResult.minDistance < result.minDistance)
+				result.minDistance = secondResult.minDistance;
 		}
 
 		return result;

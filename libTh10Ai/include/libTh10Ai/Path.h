@@ -13,6 +13,7 @@ namespace th
 
 		//int_t willCollideCount;
 		//float_t minCollideFrame;
+		float64_t score;
 	};
 
 	struct Result

@@ -32,8 +32,6 @@ namespace th
 		if (player.slow)
 			player.itemObtainRange *= 2.5f;
 
-		player.id = 0;
-
 		return true;
 	}
 

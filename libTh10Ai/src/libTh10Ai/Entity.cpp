@@ -141,11 +141,10 @@ namespace th
 		return SECTOR_TO_DIR[sector];
 	}
 
-	Pointf Entity::advance(float_t frame)
+	void Entity::advance(float_t frame)
 	{
 		x += (dx * frame);
 		y += (dy * frame);
-		return Pointf(x, y);
 	}
 
 	bool Entity::collide(const Entity& other) const

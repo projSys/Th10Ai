@@ -11,6 +11,7 @@ namespace th
 		bool collided;
 		int_t willCollideCount;
 		float_t minCollideFrame;
+		float_t minDistance;
 	};
 
 	class Cell :
