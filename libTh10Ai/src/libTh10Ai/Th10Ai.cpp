@@ -195,8 +195,11 @@ namespace th
 	{
 		if (m_data.getPlayer().isColliding())
 		{
-			p = false;
-			m_data.print();
+			//p = false;
+			//m_data.print();
+
+			//CellCollideResult ccr = m_scene.collideAll(m_data.getPlayer(), 0.0f);
+			//std::cout << ccr.collided << std::endl;
 
 			m_di8Hook.keyPress(DIK_X);
 			++m_bombCount;

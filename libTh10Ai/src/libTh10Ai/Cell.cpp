@@ -152,6 +152,11 @@ namespace th
 				{
 					result.collided = true;
 					//break;
+					//if (frame == 0.0)
+					//{
+					//	std::cout << player.x << " " << player.y << " " << player.width << " " << player.height << std::endl;
+					//	std::cout << bullet.x << " " << bullet.y << " " << bullet.width << " " << bullet.height << std::endl;
+					//}
 				}
 				float_t distance = bullet.calcDistance(player.getPosition());
 				if (distance < result.minDistance)
