@@ -137,19 +137,19 @@ namespace win
 		return blc::utf_to_utf<char>(buffer);
 	}
 
+	void Window::setSize(const Size& size)
+	{
+		if (!SetWindowPos(m_window, nullptr, 0, 0, static_cast<int>(size.width),
+			static_cast<int>(size.height), SWP_NOMOVE | SWP_NOZORDER))
+			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+	}
+
 	Size Window::getSize() const
 	{
 		RECT rect = {};
 		if (!GetWindowRect(m_window, &rect))
 			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 		return Size(rect.right - rect.left, rect.bottom - rect.top);
-	}
-
-	void Window::setSize(const Size& size)
-	{
-		if (!SetWindowPos(m_window, nullptr, 0, 0, static_cast<int>(size.width),
-			static_cast<int>(size.height), SWP_NOMOVE | SWP_NOZORDER))
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
 	}
 
 	Rect Window::getRect() const

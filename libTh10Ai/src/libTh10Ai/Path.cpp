@@ -114,10 +114,10 @@ namespace th
 		}
 		//result.score += CalcDepthScore(action.frame) * 100.0f;
 
-		if (ccr.minDistance > 20.0)
-			result.score += 250.0;
+		if (ccr.minDistance > 16.0)
+			result.score += 200.0;
 		else
-			result.score += ccr.minDistance / 20.0 * 250.0;
+			result.score += ccr.minDistance / 16.0 * 200.0;
 
 		float64_t total = action.score + result.score;
 		float64_t avg = total / action.frame;

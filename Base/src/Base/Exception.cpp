@@ -60,11 +60,11 @@ namespace base
 		}
 		catch (const std::exception& sex)
 		{
-			os << sex.what();
+			os << sex.what() << '\n';
 		}
 		catch (...)
 		{
-			os << "Unclassified exception.";
+			os << "Unclassified exception.\n";
 		}
 	}
 }

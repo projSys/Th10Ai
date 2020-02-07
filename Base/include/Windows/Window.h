@@ -35,8 +35,8 @@ namespace win
 		void activate();
 
 		std::string getName() const;
-		Size getSize() const;
 		void setSize(const Size& size);
+		Size getSize() const;
 		Rect getRect() const;
 		Rect getClientRect() const;
 		DWORD getThreadId() const;

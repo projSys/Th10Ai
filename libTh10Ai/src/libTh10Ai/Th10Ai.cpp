@@ -119,7 +119,7 @@ namespace th
 
 			m_active = false;
 			std::cout << "停止AI。" << std::endl;
-			std::cout << "决死次数：" << m_bombCount << std::endl;
+			std::cout << "决死总数：" << m_bombCount << std::endl;
 		}
 	}
 
@@ -257,10 +257,8 @@ namespace th
 		Direction bestDir = DIR_NONE;
 		bool bestSlow = false;
 
-		for (int_t i = DIR_HOLD; i < DIR_MAXCOUNT; ++i)
+		for (Direction dir : DIRECTIONS)
 		{
-			Direction dir = static_cast<Direction>(i);
-
 			Path path(m_data, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
 

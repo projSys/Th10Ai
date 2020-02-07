@@ -8,6 +8,12 @@ namespace base
 	class Singleton
 	{
 	public:
+		static T& GetInstance()
+		{
+			assert(s_instance != nullptr);
+			return *s_instance;
+		}
+
 		explicit Singleton(T* instance)
 		{
 			assert(s_instance == nullptr);
@@ -23,12 +29,6 @@ namespace base
 		Singleton(Singleton&&) = delete;
 		Singleton& operator =(const Singleton&) = delete;
 		Singleton& operator =(Singleton&&) = delete;
-
-		static T& GetInstance()
-		{
-			assert(s_instance != nullptr);
-			return *s_instance;
-		}
 
 	private:
 		static T* s_instance;

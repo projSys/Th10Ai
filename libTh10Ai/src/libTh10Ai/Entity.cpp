@@ -149,8 +149,8 @@ namespace th
 
 	bool Entity::collide(const Entity& other) const
 	{
-		return std::abs(x - other.x) < (width + other.width) / 2.0f
-			&& std::abs(y - other.y) < (height + other.height) / 2.0f;
+		return std::abs(x - other.x) < (width + other.width) / 2.0f + 0.05f
+			&& std::abs(y - other.y) < (height + other.height) / 2.0f + 0.05f;
 	}
 
 	// ¿çÖ¡¹ì¼£Åö×²¼ì²â
