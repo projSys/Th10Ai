@@ -19,17 +19,11 @@
     <Filter Include="源文件\Base">
       <UniqueIdentifier>{c0f7e5e2-a050-4faa-bede-93bb18e5a718}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Base\RefCounted">
-      <UniqueIdentifier>{d2f3bab7-3a9b-43e7-9341-69ff1684f383}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\Windows">
       <UniqueIdentifier>{a2aa18e0-6c4c-4cda-9743-cfd342bf11e4}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Windows">
       <UniqueIdentifier>{071a9ab7-e3e3-4d9d-bf26-3589bd8a7b83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\Base\RefCounted">
-      <UniqueIdentifier>{94b29b7c-861a-4dd6-83a2-24a2eeed024b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -47,21 +41,6 @@
     </ClInclude>
     <ClInclude Include="include\Base\Type.h">
       <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\RefCounted\RefCountedObject.h">
-      <Filter>头文件\Base\RefCounted</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\RefCounted\RefCounted.h">
-      <Filter>头文件\Base\RefCounted</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\RefCounted\rp.h">
-      <Filter>头文件\Base\RefCounted</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\RefCounted\sp.h">
-      <Filter>头文件\Base\RefCounted</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\RefCounted\wp.h">
-      <Filter>头文件\Base\RefCounted</Filter>
     </ClInclude>
     <ClInclude Include="include\Windows\Common.h">
       <Filter>头文件\Windows</Filter>
@@ -96,6 +75,18 @@
     <ClInclude Include="include\Base\SourceLocation.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Object.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\RefCounted.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\StrongPtr.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\WeakPtr.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -110,9 +101,6 @@
     <ClCompile Include="src\Windows\Util.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\RefCounted\RefCountedObject.cpp">
-      <Filter>源文件\Base\RefCounted</Filter>
-    </ClCompile>
     <ClCompile Include="src\Windows\Thread.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
@@ -123,6 +111,12 @@
       <Filter>源文件\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\SourceLocation.cpp">
+      <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Object.cpp">
+      <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\RefCounted.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>

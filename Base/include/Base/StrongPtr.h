@@ -4,6 +4,10 @@
 
 namespace base
 {
+#ifdef GetObject
+#undef GetObject
+#endif
+
 	// сп╢М
 	template <typename T>
 	class sp
@@ -171,16 +175,22 @@ namespace base
 
 	private:
 		T* m_object;
+
+		template <typename T>
+		friend void SetObject(sp<T>& sp, T* object);
+
+		template <typename T>
+		friend T* GetObject(sp<T>& sp);
 	};
 
 	template <typename T>
-	inline void SetObject(sp<T>& sp, T* object)
+	void SetObject(sp<T>& sp, T* object)
 	{
 		sp.m_object = object;
 	}
 
 	template <typename T>
-	inline T* GetObject(sp<T>& sp)
+	T* GetObject(sp<T>& sp)
 	{
 		return sp.m_object;
 	}

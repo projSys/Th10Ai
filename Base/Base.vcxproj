@@ -86,15 +86,14 @@
   <ItemGroup>
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Exception.h" />
-    <ClInclude Include="include\Base\RefCounted\RefCounted.h" />
-    <ClInclude Include="include\Base\RefCounted\RefCountedObject.h" />
-    <ClInclude Include="include\Base\RefCounted\rp.h" />
-    <ClInclude Include="include\Base\RefCounted\sp.h" />
-    <ClInclude Include="include\Base\RefCounted\wp.h" />
+    <ClInclude Include="include\Base\Object.h" />
+    <ClInclude Include="include\Base\RefCounted.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\Singleton.h" />
     <ClInclude Include="include\Base\SourceLocation.h" />
+    <ClInclude Include="include\Base\StrongPtr.h" />
     <ClInclude Include="include\Base\Type.h" />
+    <ClInclude Include="include\Base\WeakPtr.h" />
     <ClInclude Include="include\Windows\Common.h" />
     <ClInclude Include="include\Windows\DirectXResult.h" />
     <ClInclude Include="include\Windows\Point.h" />
@@ -108,7 +107,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp" />
-    <ClCompile Include="src\Base\RefCounted\RefCountedObject.cpp" />
+    <ClCompile Include="src\Base\Object.cpp" />
+    <ClCompile Include="src\Base\RefCounted.cpp" />
     <ClCompile Include="src\Base\SourceLocation.cpp" />
     <ClCompile Include="src\Windows\DirectXResult.cpp" />
     <ClCompile Include="src\Windows\Process.cpp" />

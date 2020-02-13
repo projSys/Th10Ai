@@ -14,7 +14,7 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
 ## 环境要求 Requirements
 
-安装[VC++2017可再发行软件包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。<br />
+安装[VC++2019可再发行软件包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。<br />
 由于使用了dll注入和api hook，需要杀毒软件放行。<br />
 
 ## 依赖 Dependencies

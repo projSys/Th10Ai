@@ -7,6 +7,8 @@
 #include "libTh10Ai/libTh10Ai.h"
 #include "libTh10Ai/Path.h"
 
+#include "Base/Object.h"
+
 namespace th
 {
 	Th10Ai::Th10Ai() :
@@ -29,6 +31,8 @@ namespace th
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
 		m_thread = std::thread(&Th10Ai::run, this);
+
+		sp<Object> obj = MakeObject<Object>();
 	}
 
 	Th10Ai::~Th10Ai()
@@ -145,6 +149,13 @@ namespace th
 		//	fps = 0;
 		//	begin += std::chrono::milliseconds(1000);
 		//}
+
+		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+		//std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+		//time_t interval = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+		//if (interval > 17)
+		//	std::cout << "µôÖ¡£º" << interval << std::endl;
+		//begin = end;
 
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 

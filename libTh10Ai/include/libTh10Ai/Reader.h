@@ -20,15 +20,15 @@ namespace th
 
 	private:
 		//template <typename T>
-		//inline T readMemory(uint_t address) noexcept
+		//T readMemory(uint_t address) noexcept
 		//{
-		//	T data = {};
+		//	T data();
 		//	ReadProcessMemory(m_process, reinterpret_cast<LPCVOID>(address), &data, sizeof(data), nullptr);
 		//	return data;
 		//}
 
 		template <typename T>
-		inline T readMemory(uint_t address) noexcept
+		T readMemory(uint_t address) noexcept
 		{
 			return *reinterpret_cast<T*>(address);
 		}
