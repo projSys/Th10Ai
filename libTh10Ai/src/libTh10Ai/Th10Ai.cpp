@@ -17,7 +17,8 @@ namespace th
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
 		m_prevSlow(false),
-		m_data(m_reader), p(true)
+		m_data(m_reader),
+		p(true)
 	{
 		m_scene.split(6);
 

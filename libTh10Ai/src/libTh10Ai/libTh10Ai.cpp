@@ -42,7 +42,7 @@ namespace th
 		try
 		{
 			if (m_th10Ai != nullptr)
-				BASE_THROW_EXCEPTION(Exception(u8"Th10Ai已创建。"));
+				BASE_THROW(Exception(u8"Th10Ai已创建。"));
 
 			m_th10Ai = std::make_shared<Th10Ai>();
 			return true;

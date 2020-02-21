@@ -20,7 +20,7 @@ namespace th
 		wc.hInstance = GetModuleHandle(nullptr);
 		wc.lpszClassName = _T("D3D9WndClass");
 		if (RegisterClassEx(&wc) == 0)
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
 		{
 			UnregisterClass(wc.lpszClassName, wc.hInstance);
@@ -29,7 +29,7 @@ namespace th
 		HWND window = CreateWindowEx(0, wc.lpszClassName, _T("D3D9Wnd"), WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, wc.hInstance, nullptr);
 		if (window == nullptr)
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
 		{
 			DestroyWindow(window);
@@ -37,21 +37,21 @@ namespace th
 
 		HMODULE d3d9Dll = GetModuleHandle(_T("d3d9.dll"));
 		if (d3d9Dll == nullptr)
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 		Direct3DCreate9_t direct3DCreate9 = reinterpret_cast<Direct3DCreate9_t>(
 			GetProcAddress(d3d9Dll, "Direct3DCreate9"));
 		if (direct3DCreate9 == nullptr)
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 
 		CComPtr<IDirect3D9> d3d9;
 		d3d9.p = direct3DCreate9(D3D_SDK_VERSION);
 		if (d3d9 == nullptr)
-			BASE_THROW_EXCEPTION(Exception("Direct3DCreate9() failed."));
+			BASE_THROW(Exception("Direct3DCreate9() failed."));
 
 		D3DDISPLAYMODE d3ddm = {};
 		HRESULT hr = d3d9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
 		if (FAILED(hr))
-			BASE_THROW_EXCEPTION(DirectXResult(hr));
+			BASE_THROW(DirectXResult(hr));
 
 		D3DPRESENT_PARAMETERS d3dpp = {};
 		d3dpp.Windowed = TRUE;
@@ -63,7 +63,7 @@ namespace th
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_DISABLE_DRIVER_MANAGEMENT,
 			&d3dpp, &device);
 		if (FAILED(hr))
-			BASE_THROW_EXCEPTION(DirectXResult(hr));
+			BASE_THROW(DirectXResult(hr));
 
 		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
 		m_present = reinterpret_cast<Present_t>(vTable[17]);

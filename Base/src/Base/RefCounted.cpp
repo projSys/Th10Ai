@@ -20,7 +20,7 @@ namespace base
 		if (m_strongCount.fetch_sub(1, std::memory_order_release) == 1)
 		{
 			std::atomic_thread_fence(std::memory_order_acquire);
-			destruct();
+			destroy();
 		}
 	}
 
@@ -39,7 +39,7 @@ namespace base
 		if (m_weakCount.fetch_sub(1, std::memory_order_release) == 1)
 		{
 			std::atomic_thread_fence(std::memory_order_acquire);
-			deallocate();
+			release();
 		}
 	}
 

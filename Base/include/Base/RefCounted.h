@@ -20,8 +20,8 @@ namespace base
 		uint_t getWeakCount() const;
 
 	private:
-		virtual void destruct() noexcept = 0;
-		virtual void deallocate() noexcept = 0;
+		virtual void destroy() noexcept = 0;
+		virtual void release() noexcept = 0;
 
 		std::atomic<uint_t> m_strongCount;
 		std::atomic<uint_t> m_weakCount;
@@ -43,12 +43,12 @@ namespace base
 		}
 
 	private:
-		virtual void destruct() noexcept override
+		virtual void destroy() noexcept override
 		{
 			m_object->~T();
 		}
 
-		virtual void deallocate() noexcept override
+		virtual void release() noexcept override
 		{
 			this->~RefCounted();
 			delete[] this;

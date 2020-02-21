@@ -18,7 +18,7 @@ namespace win
 	{
 		m_thread = OpenThread(desiredAccess, inheritHandle, id);
 		if (m_thread == nullptr)
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 	}
 
 	Thread::~Thread()

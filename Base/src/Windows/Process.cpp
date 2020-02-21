@@ -19,7 +19,7 @@ namespace win
 
 		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 		if (snapshot == INVALID_HANDLE_VALUE)
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
 		{
 			CloseHandle(snapshot);
@@ -38,7 +38,7 @@ namespace win
 			}
 		}
 		if (id == INVALID_ID)
-			BASE_THROW_EXCEPTION(Exception("Process not found: " + name));
+			BASE_THROW(Exception("Process not found: " + name));
 		return Process(id, desiredAccess, inheritHandle);
 	}
 
@@ -54,7 +54,7 @@ namespace win
 	{
 		m_process = OpenProcess(desiredAccess, inheritHandle, id);
 		if (m_process == nullptr)
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 	}
 
 	Process::~Process()
@@ -89,7 +89,7 @@ namespace win
 
 		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, m_id);
 		if (snapshot == INVALID_HANDLE_VALUE)
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
 		{
 			CloseHandle(snapshot);
@@ -114,7 +114,7 @@ namespace win
 	{
 		BOOL ret = FALSE;
 		if (!IsWow64Process(m_process, &ret))
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 		return ret;
 	}
 
@@ -122,7 +122,7 @@ namespace win
 	{
 		DWORD exitCode = 0;
 		if (!GetExitCodeProcess(m_process, &exitCode))
-			BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError(GetLastError()));
 		return exitCode == STILL_ACTIVE;
 	}
 

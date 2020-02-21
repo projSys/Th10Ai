@@ -36,16 +36,16 @@ namespace th
 		try
 		{
 			if (g_hook != nullptr)
-				BASE_THROW_EXCEPTION(Exception("Dll injected."));
+				BASE_THROW(Exception("Dll injected."));
 
 			g_window = FindWindow(className, windowName);
 			if (g_window == nullptr)
-				BASE_THROW_EXCEPTION(Exception("Window not found."));
+				BASE_THROW(Exception("Window not found."));
 			DWORD wndThreadId = GetWindowThreadProcessId(g_window, nullptr);
 
 			g_hook = SetWindowsHookEx(WH_CALLWNDPROC, &DllInject::CallWndProc, g_module, wndThreadId);
 			if (g_hook == nullptr)
-				BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+				BASE_THROW(WindowsError(GetLastError()));
 			ON_SCOPE_EXIT([&]()
 			{
 				UnhookWindowsHookEx(g_hook);
@@ -53,7 +53,7 @@ namespace th
 
 			SendMessage(g_window, DI_ATTACH, 0, 0);
 			if (!g_attached)
-				BASE_THROW_EXCEPTION(Exception("Dll inject failed."));
+				BASE_THROW(Exception("Dll inject failed."));
 			ON_SCOPE_EXIT([&]()
 			{
 				if (g_detach)
@@ -79,7 +79,7 @@ namespace th
 		{
 			// 发送消息退出
 			if (!PostThreadMessage(g_exeThreadId, WM_QUIT, 0, 0))
-				BASE_THROW_EXCEPTION(WindowsError(GetLastError()));
+				BASE_THROW(WindowsError(GetLastError()));
 		}
 		catch (...)
 		{
