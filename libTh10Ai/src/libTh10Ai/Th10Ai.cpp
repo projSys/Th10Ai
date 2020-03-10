@@ -7,8 +7,6 @@
 #include "libTh10Ai/libTh10Ai.h"
 #include "libTh10Ai/Path.h"
 
-#include "Base/Object.h"
-
 namespace th
 {
 	Th10Ai::Th10Ai() :
@@ -32,8 +30,6 @@ namespace th
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
 		m_thread = std::thread(&Th10Ai::run, this);
-
-		sp<Object> obj = MakeObject<Object>();
 	}
 
 	Th10Ai::~Th10Ai()
@@ -83,7 +79,7 @@ namespace th
 		catch (...)
 		{
 			std::ostringstream oss;
-			PrintAllException(oss);
+			PrintException(oss);
 			BOOST_LOG_TRIVIAL(error) << oss.str() << std::endl;
 		}
 

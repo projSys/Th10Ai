@@ -44,7 +44,7 @@ namespace base
 #endif
 	}
 
-	void PrintAllException(std::ostream& os)
+	void PrintException(std::ostream& os)
 	{
 		try
 		{
@@ -54,13 +54,13 @@ namespace base
 		{
 			ex.print(os);
 		}
-		catch (const boost::exception& bex)
+		catch (const boost::exception& be)
 		{
-			os << boost::diagnostic_information(bex);
+			os << boost::diagnostic_information(be);
 		}
-		catch (const std::exception& sex)
+		catch (const std::exception& se)
 		{
-			os << sex.what() << '\n';
+			os << se.what() << '\n';
 		}
 		catch (...)
 		{

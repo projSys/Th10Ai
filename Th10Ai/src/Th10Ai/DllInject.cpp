@@ -16,12 +16,12 @@ namespace th
 		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
 			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
-		{
-			CloseHandle(token);
-		});
+			{
+				CloseHandle(token);
+			});
 
 		LUID luid = {};
-		if (!LookupPrivilegeValue(nullptr, SE_DEBUG_NAME, &luid))
+		if (!LookupPrivilegeValueW(nullptr, SE_DEBUG_NAME, &luid))
 			BASE_THROW(WindowsError(GetLastError()));
 
 		TOKEN_PRIVILEGES tp = {};
@@ -47,14 +47,14 @@ namespace th
 		if (remoteMemory == nullptr)
 			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
-		{
-			VirtualFreeEx(target, remoteMemory, 0, MEM_RELEASE);
-		});
+			{
+				VirtualFreeEx(target, remoteMemory, 0, MEM_RELEASE);
+			});
 
 		if (!WriteProcessMemory(target, remoteMemory, dllNameW.c_str(), size, nullptr))
 			BASE_THROW(WindowsError(GetLastError()));
 
-		HMODULE kernel32Dll = GetModuleHandle(_T("kernel32.dll"));
+		HMODULE kernel32Dll = GetModuleHandleW(L"kernel32.dll");
 		if (kernel32Dll == nullptr)
 			BASE_THROW(WindowsError(GetLastError()));
 		FARPROC loadLibrary = GetProcAddress(kernel32Dll, "LoadLibraryW");
@@ -67,9 +67,9 @@ namespace th
 		if (thread == nullptr)
 			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
-		{
-			CloseHandle(thread);
-		});
+			{
+				CloseHandle(thread);
+			});
 		WaitForSingleObject(thread, INFINITE);
 	}
 }

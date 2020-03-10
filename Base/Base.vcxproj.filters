@@ -87,6 +87,9 @@
     <ClInclude Include="include\Base\WeakPtr.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Windows\dxerr.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="src\Base\RefCounted.cpp">
       <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\dxerr.cpp">
+      <Filter>源文件\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,27 +11,27 @@ namespace win
 	namespace bfs = boost::filesystem;
 	namespace blc = boost::locale::conv;
 
-	std::string Util::GetErrorMessage(DWORD messageId)
+	std::string Util::GetErrorDescription(DWORD errorId)
 	{
-		TCHAR buffer[4096] = {};
-		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-			nullptr, messageId, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			buffer, 4095, nullptr);
+		WCHAR buffer[4096] = {};
+		if (FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			nullptr, errorId, 0, buffer, 4095, nullptr) == 0)
+			return "FormatMessage() failed.";
 		return blc::utf_to_utf<char>(buffer);
 	}
 
 	std::string Util::GetModuleName(HMODULE module)
 	{
-		TCHAR buffer[4096] = {};
-		if (GetModuleFileName(module, buffer, 4095) == 0)
+		WCHAR buffer[4096] = {};
+		if (GetModuleFileNameW(module, buffer, 4095) == 0)
 			BASE_THROW(WindowsError(GetLastError()));
 		return blc::utf_to_utf<char>(buffer);
 	}
 
 	std::string Util::GetModuleDir(HMODULE module)
 	{
-		TCHAR buffer[4096] = {};
-		if (GetModuleFileName(module, buffer, 4095) == 0)
+		WCHAR buffer[4096] = {};
+		if (GetModuleFileNameW(module, buffer, 4095) == 0)
 			BASE_THROW(WindowsError(GetLastError()));
 		bfs::path path(buffer);
 		return blc::utf_to_utf<char>(path.remove_filename().wstring());

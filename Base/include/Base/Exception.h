@@ -31,5 +31,5 @@ namespace base
 
 #define BASE_THROW(ex) { STORE_SOURCE_LOCATION; throw ex; }
 
-	void PrintAllException(std::ostream& os);
+	void PrintException(std::ostream& os);
 }

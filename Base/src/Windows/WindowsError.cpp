@@ -5,15 +5,16 @@
 
 namespace win
 {
-	WindowsError::WindowsError(DWORD error) :
+	WindowsError::WindowsError(DWORD errorId) :
 		Exception(nullptr),
-		m_error(error)
+		m_errorId(errorId)
 	{
 	}
 
 	void WindowsError::print(std::ostream& os) const
 	{
-		os << '[' << m_error << ']' << Util::GetErrorMessage(m_error) << '\n';
+		os << '[' << m_errorId << ']'
+			<< Util::GetErrorDescription(m_errorId) << '\n';
 		printSourceLocation(os);
 		printStackTrace(os);
 	}

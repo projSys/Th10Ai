@@ -132,8 +132,8 @@ namespace win
 
 	std::string Window::getName() const
 	{
-		TCHAR buffer[1024] = {};
-		GetWindowText(m_window, buffer, 1023);
+		WCHAR buffer[1024] = {};
+		GetWindowTextW(m_window, buffer, 1023);
 		return blc::utf_to_utf<char>(buffer);
 	}
 

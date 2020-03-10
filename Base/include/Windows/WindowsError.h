@@ -8,11 +8,11 @@ namespace win
 		public Exception
 	{
 	public:
-		WindowsError(DWORD error);
+		WindowsError(DWORD errorId);
 
 		virtual void print(std::ostream& os) const override;
 
 	private:
-		DWORD m_error;
+		DWORD m_errorId;
 	};
 }

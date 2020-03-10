@@ -50,7 +50,7 @@ namespace th
 		catch (...)
 		{
 			std::ostringstream oss;
-			PrintAllException(oss);
+			PrintException(oss);
 			BOOST_LOG_TRIVIAL(error) << oss.str() << std::endl;
 			return false;
 		}

@@ -23,7 +23,6 @@
 #include <sdkddkver.h>
 #include <WinSock2.h>
 #include <Windows.h>
-#include <tchar.h>
 #define BASE_WINDOWS 1
 #ifdef _WIN64
 //define something for Windows (64-bit only)

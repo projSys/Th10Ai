@@ -21,9 +21,9 @@ namespace win
 		if (snapshot == INVALID_HANDLE_VALUE)
 			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
-		{
-			CloseHandle(snapshot);
-		});
+			{
+				CloseHandle(snapshot);
+			});
 
 		DWORD id = INVALID_ID;
 		PROCESSENTRY32W pe = {};
@@ -91,9 +91,9 @@ namespace win
 		if (snapshot == INVALID_HANDLE_VALUE)
 			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
-		{
-			CloseHandle(snapshot);
-		});
+			{
+				CloseHandle(snapshot);
+			});
 
 		HMODULE module = nullptr;
 		MODULEENTRY32W me = {};

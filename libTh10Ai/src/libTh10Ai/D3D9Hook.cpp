@@ -51,7 +51,7 @@ namespace th
 		D3DDISPLAYMODE d3ddm = {};
 		HRESULT hr = d3d9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
 		if (FAILED(hr))
-			BASE_THROW(DirectXResult(hr));
+			BASE_THROW(DirectXResult(hr, DXVER::D3D9));
 
 		D3DPRESENT_PARAMETERS d3dpp = {};
 		d3dpp.Windowed = TRUE;
@@ -63,7 +63,7 @@ namespace th
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_DISABLE_DRIVER_MANAGEMENT,
 			&d3dpp, &device);
 		if (FAILED(hr))
-			BASE_THROW(DirectXResult(hr));
+			BASE_THROW(DirectXResult(hr, DXVER::D3D9));
 
 		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
 		m_present = reinterpret_cast<Present_t>(vTable[17]);
