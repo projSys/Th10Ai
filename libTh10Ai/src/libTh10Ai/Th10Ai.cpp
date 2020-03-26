@@ -10,14 +10,23 @@
 namespace th
 {
 	Th10Ai::Th10Ai() :
-		m_done(false),
-		m_active(false),
+		m_controlDone(false),
+		m_controlActive(false),
+		m_readDone(false),
+		m_readActive(false),
+		m_handleDone(false),
+		m_handleActive(false),
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
 		m_prevSlow(false),
-		m_data(m_reader),
+		//m_data(m_reader),
+		m_dataUpdated(false),
 		p(true)
 	{
+		m_readData = std::make_shared<Data>(m_reader);
+		m_middleData = std::make_shared<Data>(m_reader);
+		m_writeData = std::make_shared<Data>(m_reader);
+
 		m_scene.split(6);
 
 		AllocConsole();
@@ -29,15 +38,25 @@ namespace th
 		HMENU menu = GetSystemMenu(window, FALSE);
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
-		m_thread = std::thread(&Th10Ai::run, this);
+		m_controlThread = std::thread(&Th10Ai::controlProc, this);
+		m_readThread = std::thread(&Th10Ai::readProc, this);
+		m_handleThread = std::thread(&Th10Ai::handleProc, this);
 	}
 
 	Th10Ai::~Th10Ai()
 	{
-		m_done = true;
+		m_handleDone = true;
+		if (m_handleThread.joinable())
+			m_handleThread.join();
+
+		m_readDone = true;
 		m_d3d9Hook.notifyPresent();
-		if (m_thread.joinable())
-			m_thread.join();
+		if (m_readThread.joinable())
+			m_readThread.join();
+
+		m_controlDone = true;
+		if (m_controlThread.joinable())
+			m_controlThread.join();
 	}
 
 	bool Th10Ai::IsKeyPressed(int vKey)
@@ -45,13 +64,13 @@ namespace th
 		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
 	}
 
-	void Th10Ai::run()
+	void Th10Ai::controlProc()
 	{
 		try
 		{
-			std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A开启AI，按S停止AI，按D退出AI。" << std::endl;
+			std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A启动AI，按S停止AI，按D退出AI。" << std::endl;
 
-			while (!m_done)
+			while (!m_controlDone)
 			{
 				if (IsKeyPressed('A'))
 				{
@@ -69,8 +88,10 @@ namespace th
 				{
 					print();
 				}
-
-				update();
+				else
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(16));
+				}
 			}
 
 			stop();
@@ -86,54 +107,110 @@ namespace th
 		g_libTh10Ai.exit();
 	}
 
-	void Th10Ai::print()
-	{
-		p = true;
-
-		m_data.print();
-	}
-
 	void Th10Ai::start()
 	{
-		if (!m_active)
+		if (!m_controlActive)
 		{
+			m_controlActive = true;
+			m_readActive = true;
+			m_handleActive = true;
+
 			m_di8Hook.clear();
 			m_di8Hook.commit();
-
 			m_d3d9Hook.enable(true);
 			m_di8Hook.enable(true);
 
-			m_active = true;
-			std::cout << "开启AI。" << std::endl;
+			std::cout << "启动AI。" << std::endl;
 		}
 	}
 
 	void Th10Ai::stop()
 	{
-		if (m_active)
+		if (m_controlActive)
 		{
-			m_di8Hook.clear();
-			m_di8Hook.commit();
+			m_controlActive = false;
+			m_readActive = false;
+			m_handleActive = false;
 
 			m_di8Hook.enable(false);
 			m_d3d9Hook.enable(false);
+			m_di8Hook.clear();
+			m_di8Hook.commit();
 
-			m_active = false;
 			std::cout << "停止AI。" << std::endl;
 			std::cout << "决死总数：" << m_bombCount << std::endl;
 		}
 	}
 
-	void Th10Ai::update()
+	void Th10Ai::print()
 	{
-		if (!m_active)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(16));
-			return;
-		}
+		p = true;
+		//m_data.print();
+	}
 
-		if (!m_d3d9Hook.waitPresent())
-			std::cout << "读取不及时。" << std::endl;
+	void Th10Ai::readProc()
+	{
+		try
+		{
+			while (!m_readDone)
+			{
+				if (m_readActive)
+				{
+					if (!m_d3d9Hook.waitPresent())
+						std::cout << "读取不及时。" << std::endl;
+
+					//m_data.update();
+					//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
+					m_readData->update();
+
+					std::lock_guard<std::mutex> lock(m_dataMutex);
+					std::swap(m_readData, m_middleData);
+					m_dataUpdated = true;
+				}
+				else
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(16));
+				}
+			}
+		}
+		catch (...)
+		{
+			std::ostringstream oss;
+			PrintException(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str() << std::endl;
+			m_controlDone = true;
+		}
+	}
+
+	void Th10Ai::handleProc()
+	{
+		try
+		{
+			while (!m_handleDone)
+			{
+				if (m_handleActive)
+				{
+					handle();
+				}
+				else
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(16));
+				}
+			}
+		}
+		catch (...)
+		{
+			std::ostringstream oss;
+			PrintException(oss);
+			BOOST_LOG_TRIVIAL(error) << oss.str() << std::endl;
+			m_controlDone = true;
+		}
+	}
+
+	void Th10Ai::handle()
+	{
+		//if (!m_d3d9Hook.waitPresent())
+		//	std::cout << "读取不及时。" << std::endl;
 
 		//static int_t fps = 0;
 		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
@@ -156,17 +233,28 @@ namespace th
 
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
-		m_data.update();
-		m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
+		//m_data.update();
+		//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
 
 		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 		//std::cout << "e1: " << e1 << std::endl;
 
+		if (m_dataUpdated)
+		{
+			std::lock_guard<std::mutex> lock(m_dataMutex);
+			std::swap(m_writeData, m_middleData);
+			m_dataUpdated = false;
+		}
+		else
+		{
+			return;
+		}
+
 		m_scene.clearAll();
-		m_scene.splitEnemies(m_data.getEnemies());
-		m_scene.splitBullets(m_data.getBullets());
-		m_scene.splitLasers(m_data.getLasers());
+		m_scene.splitEnemies(m_writeData->getEnemies());
+		m_scene.splitBullets(m_writeData->getBullets());
+		m_scene.splitLasers(m_writeData->getLasers());
 
 		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -201,7 +289,7 @@ namespace th
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_data.getPlayer().isColliding())
+		if (m_writeData->getPlayer().isColliding())
 		{
 			//p = false;
 			//m_data.print();
@@ -224,7 +312,7 @@ namespace th
 	// 处理对话
 	bool Th10Ai::handleTalk()
 	{
-		if (m_data.isTalking())
+		if (m_writeData->isTalking())
 		{
 			m_di8Hook.keyPress(DIK_LCONTROL);
 			return true;
@@ -239,7 +327,7 @@ namespace th
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_data.hasEnemy())
+		if (m_writeData->hasEnemy())
 		{
 			m_di8Hook.keyPress(DIK_Z);
 			return true;
@@ -254,12 +342,12 @@ namespace th
 	// 处理移动
 	bool Th10Ai::handleMove()
 	{
-		if (!m_data.getPlayer().isNormalStatus())
+		if (!m_writeData->getPlayer().isNormalStatus())
 			return false;
 
-		ItemTarget itemTarget = m_data.findItem();
-		EnemyTarget enemyTarget = m_data.findEnemy();
-		bool underEnemy = m_data.isUnderEnemy();
+		ItemTarget itemTarget = m_writeData->findItem();
+		EnemyTarget enemyTarget = m_writeData->findEnemy();
+		bool underEnemy = m_writeData->isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
@@ -267,7 +355,7 @@ namespace th
 
 		for (Direction dir : DIRECTIONS)
 		{
-			Path path(m_data, m_scene, itemTarget, enemyTarget, underEnemy);
+			Path path(*m_writeData, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
 
 			if (result.valid && path.m_bestScore > bestScore)

@@ -27,7 +27,7 @@ namespace th
 
 	const int_t Path::FIND_SIZES[DIR_MAXCOUNT] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
-	const int_t Path::FIND_LIMIT = 500;
+	const int_t Path::FIND_LIMIT = 320;
 	const float_t Path::FIND_DEPTH = 30.0f;
 	const Pointf Path::RESET_POS = { 0.0f, 432.0f };
 
@@ -76,17 +76,19 @@ namespace th
 			return result;
 
 		// 前进到下一个坐标
-		Player temp = m_data.getPlayer();
-		temp.setPosition(action.fromPos);
-		temp.advance(action.fromDir, m_slowFirst);
+		Player player = m_data.getPlayer();
+		player.setPosition(action.fromPos);
+		player.advance(action.fromDir, m_slowFirst);
 		result.slow = m_slowFirst;
 		CellCollideResult ccr = {};
-		if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccr = m_scene.collideAll(temp, action.frame)).collided)
+		if (!Scene::IsInPlayerArea(player.getPosition())
+			|| (ccr = m_scene.collideAll(player, action.frame)).collided)
 		{
-			temp.setPosition(action.fromPos);
-			temp.advance(action.fromDir, !m_slowFirst);
+			player.setPosition(action.fromPos);
+			player.advance(action.fromDir, !m_slowFirst);
 			result.slow = !m_slowFirst;
-			if (!Scene::IsInPlayerArea(temp.getPosition()) || (ccr = m_scene.collideAll(temp, action.frame)).collided)
+			if (!Scene::IsInPlayerArea(player.getPosition())
+				|| (ccr = m_scene.collideAll(player, action.frame)).collided)
 			{
 				//result.ttd = 10;
 				return result;
@@ -102,22 +104,21 @@ namespace th
 
 		if (m_itemTarget.found)
 		{
-			result.score += CalcNearScore(temp.getPosition(), m_itemTarget.item.getPosition()) * 100.0f;
+			result.score += CalcNearScore(player.getPosition(), m_itemTarget.item.getPosition()) * 100.0f;
 		}
 		else if (m_enemyTarget.found)
 		{
-			result.score += CalcShootScore(temp.getPosition(), m_enemyTarget.enemy.getPosition()) * 100.0f;
+			result.score += CalcShootScore(player.getPosition(), m_enemyTarget.enemy.getPosition()) * 100.0f;
 		}
 		else
 		{
-			result.score += CalcNearScore(temp.getPosition(), RESET_POS) * 100.0f;
+			result.score += CalcNearScore(player.getPosition(), RESET_POS) * 100.0f;
 		}
-		//result.score += CalcDepthScore(action.frame) * 100.0f;
 
-		if (ccr.minDistance > 16.0)
-			result.score += 200.0;
-		else
-			result.score += ccr.minDistance / 16.0 * 200.0;
+		//if (ccr.minDistance > 8.0)
+		//	result.score += 150.0;
+		//else
+		//	result.score += ccr.minDistance / 8.0 * 150.0;
 
 		float64_t total = action.score + result.score;
 		float64_t avg = total / action.frame;
@@ -132,7 +133,7 @@ namespace th
 			Direction dir = FIND_DIRS[m_dir][i];
 
 			Action nextAct = {};
-			nextAct.fromPos = temp.getPosition();
+			nextAct.fromPos = player.getPosition();
 			nextAct.fromDir = dir;
 			nextAct.frame = action.frame + 1.0f;
 			nextAct.score = total;
@@ -162,8 +163,8 @@ namespace th
 		// 没气了，当前节点也无效
 		//if (result.ttd > 0)
 		//	result.valid = false;
-		if (nextValidCount == 0)
-			result.valid = false;
+		//if (nextValidCount == 0)
+		//	result.valid = false;
 
 		return result;
 	}
@@ -231,15 +232,6 @@ namespace th
 			score = -1.0f;
 		else
 			score += 0.5f * ((player.y - enemy.y) / (Scene::SIZE.height - enemy.y));
-
-		return score;
-	}
-
-	float_t Path::CalcDepthScore(float_t frame)
-	{
-		float_t score = 0.0f;
-
-		score = frame / FIND_DEPTH;
 
 		return score;
 	}

@@ -21,7 +21,7 @@ namespace th
 			});
 
 		LUID luid = {};
-		if (!LookupPrivilegeValueW(nullptr, SE_DEBUG_NAME, &luid))
+		if (!LookupPrivilegeValue(nullptr, SE_DEBUG_NAME, &luid))
 			BASE_THROW(WindowsError(GetLastError()));
 
 		TOKEN_PRIVILEGES tp = {};

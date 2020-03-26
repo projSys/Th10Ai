@@ -37,7 +37,6 @@ namespace th
 		static float_t CalcFarScore(Pointf player, Pointf target);
 		static float_t CalcNearScore(Pointf player, Pointf target);
 		static float_t CalcShootScore(Pointf player, Pointf enemy);
-		static float_t CalcDepthScore(float_t frame);
 
 		static const Direction FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT];
 		static const int_t FIND_SIZES[DIR_MAXCOUNT];

@@ -20,8 +20,8 @@ namespace th
 		public DllInject
 	{
 	private:
-		virtual bool onAttach();
-		virtual void onDetach();
+		virtual bool onAttach() override;
+		virtual void onDetach() override;
 
 		std::shared_ptr<Th10Ai> m_th10Ai;
 	};

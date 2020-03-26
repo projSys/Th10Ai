@@ -33,7 +33,6 @@
 #define BASE_32BIT 1
 #define BASE_BITS 32
 #endif
-
 #elif __APPLE__
 #if TARGET_IPHONE_SIMULATOR
 // iOS Simulator

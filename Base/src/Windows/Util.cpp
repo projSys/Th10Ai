@@ -16,7 +16,7 @@ namespace win
 		WCHAR buffer[4096] = {};
 		if (FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 			nullptr, errorId, 0, buffer, 4095, nullptr) == 0)
-			return "FormatMessage() failed.";
+			return "FormatMessageW() failed.";
 		return blc::utf_to_utf<char>(buffer);
 	}
 

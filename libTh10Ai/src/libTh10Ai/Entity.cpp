@@ -72,6 +72,7 @@ namespace th
 		if (TypeTraits<float_t>::Equals(dxBA, 0.0f)
 			&& TypeTraits<float_t>::Equals(dyBA, 0.0f))
 		{
+			footPoint.k = 0.0f;
 			footPoint.pos = A;
 			return footPoint;
 		}
@@ -156,28 +157,29 @@ namespace th
 	// 跨帧轨迹碰撞检测
 	bool Entity::collide(const Entity& other, float_t frame) const
 	{
-		//if (isHighSpeedWith(other))
-		//{
-		//	Entity temp = *this;
-		//	//temp.advance(frame);
-		//	//return temp.collide(other);
-		//	Pointf A = temp.advance(frame - 1.0);
-		//	Pointf B = temp.advance(1.0);
-		//	FootPoint footPoint = CalcFootPoint(A, B, other.getPosition());
-		//	if (footPoint.k < 0.0)
-		//		footPoint.k = 0.0;
-		//	if (footPoint.k > 1.0)
-		//		footPoint.k = 1.0;
-		//	temp.setPosition(A);
-		//	temp.advance(footPoint.k);
-		//	return temp.collide(other);
-		//}
-		//else
-		//{
-		Entity temp = *this;
-		temp.advance(frame);
-		return temp.collide(other);
-		//}
+		if (isHighSpeedWith(other))
+		{
+			// 计算到当前帧与前一帧之间线段的最近点
+			Entity temp = *this;
+			temp.advance(frame - 1.0);
+			Pointf prevPos = temp.getPosition();	// 以前一帧坐标作为基准
+			temp.advance(1.0);
+			Pointf curPos = temp.getPosition();
+			FootPoint footPoint = CalcFootPoint(prevPos, curPos, other.getPosition());
+			if (footPoint.k > 1.0)	// 还未到达当前帧
+				footPoint.k = 1.0;
+			if (footPoint.k < 0.0)	// 已经远离一帧以上
+				footPoint.k = 1.0;
+			temp.setPosition(prevPos);
+			temp.advance(footPoint.k);
+			return temp.collide(other);
+		}
+		else
+		{
+			Entity temp = *this;
+			temp.advance(frame);
+			return temp.collide(other);
+		}
 	}
 
 	std::pair<bool, float_t> Entity::willCollideWith(const Entity& other) const

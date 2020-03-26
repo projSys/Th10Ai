@@ -56,7 +56,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = enemy.willCollideWith(*this);
-				if (ret.first && ret.second >= -120.0f && ret.second <= 300.0f)
+				if (ret.first)
 					m_enemies.push_back(enemy);
 			}
 		}
@@ -80,7 +80,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = bullet.willCollideWith(*this);
-				if (ret.first && ret.second >= -120.0f && ret.second <= 300.0f)
+				if (ret.first)
 					m_bullets.push_back(bullet);
 			}
 		}
@@ -104,7 +104,7 @@ namespace th
 			else
 			{
 				std::pair<bool, float_t> ret = laser.willCollideWith(*this);
-				if (ret.first && ret.second >= -120.0f && ret.second <= 300.0f)
+				if (ret.first)
 					m_lasers.push_back(laser);
 			}
 		}
@@ -145,22 +145,22 @@ namespace th
 				//	return true;
 			}
 
-			for (Bullet bullet : m_bullets)
+			for (const Bullet& bullet : m_bullets)
 			{
-				bullet.advance(frame);
-				if (bullet.collide(player))
+				//bullet.advance(frame);
+				if (bullet.collide(player, frame))
 				{
 					result.collided = true;
-					//break;
+					break;
 					//if (frame == 0.0)
 					//{
 					//	std::cout << player.x << " " << player.y << " " << player.width << " " << player.height << std::endl;
 					//	std::cout << bullet.x << " " << bullet.y << " " << bullet.width << " " << bullet.height << std::endl;
 					//}
 				}
-				float_t distance = bullet.calcDistance(player.getPosition());
-				if (distance < result.minDistance)
-					result.minDistance = distance;
+				//float_t distance = bullet.calcDistance(player.getPosition());
+				//if (distance < result.minDistance)
+				//	result.minDistance = distance;
 				//if (player.collide(temp, 0.0))
 				//{
 				//	result.collided = true;

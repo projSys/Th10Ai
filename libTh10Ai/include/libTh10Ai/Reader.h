@@ -19,6 +19,7 @@ namespace th
 		bool readLasers(std::vector<Laser>& lasers) noexcept;
 
 	private:
+		// 读内存太慢了
 		//template <typename T>
 		//T readMemory(uint_t address) noexcept
 		//{
@@ -27,6 +28,7 @@ namespace th
 		//	return data;
 		//}
 
+		// DLL注入后直接撸地址吧
 		template <typename T>
 		T readMemory(uint_t address) noexcept
 		{
