@@ -23,9 +23,9 @@ namespace th
 		m_dataUpdated(false),
 		p(true)
 	{
-		m_readData = std::make_shared<Data>(m_reader);
-		m_middleData = std::make_shared<Data>(m_reader);
 		m_writeData = std::make_shared<Data>(m_reader);
+		m_middleData = std::make_shared<Data>(m_reader);
+		m_readData = std::make_shared<Data>(m_reader);
 
 		m_scene.split(6);
 
@@ -88,10 +88,8 @@ namespace th
 				{
 					print();
 				}
-				else
-				{
-					std::this_thread::sleep_for(std::chrono::milliseconds(16));
-				}
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(16));
 			}
 
 			stop();
@@ -144,7 +142,7 @@ namespace th
 
 	void Th10Ai::print()
 	{
-		p = true;
+		//p = true;
 		//m_data.print();
 	}
 
@@ -157,14 +155,14 @@ namespace th
 				if (m_readActive)
 				{
 					if (!m_d3d9Hook.waitPresent())
-						std::cout << "读取不及时。" << std::endl;
+						std::cout << "CPU太慢了，数据读取不及时。" << std::endl;
 
 					//m_data.update();
 					//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
-					m_readData->update();
+					m_writeData->update();
 
 					std::lock_guard<std::mutex> lock(m_dataMutex);
-					std::swap(m_readData, m_middleData);
+					std::swap(m_writeData, m_middleData);
 					m_dataUpdated = true;
 				}
 				else
@@ -243,7 +241,7 @@ namespace th
 		if (m_dataUpdated)
 		{
 			std::lock_guard<std::mutex> lock(m_dataMutex);
-			std::swap(m_writeData, m_middleData);
+			std::swap(m_readData, m_middleData);
 			m_dataUpdated = false;
 		}
 		else
@@ -252,9 +250,9 @@ namespace th
 		}
 
 		m_scene.clearAll();
-		m_scene.splitEnemies(m_writeData->getEnemies());
-		m_scene.splitBullets(m_writeData->getBullets());
-		m_scene.splitLasers(m_writeData->getLasers());
+		m_scene.splitEnemies(m_readData->getEnemies());
+		m_scene.splitBullets(m_readData->getBullets());
+		m_scene.splitLasers(m_readData->getLasers());
 
 		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -289,7 +287,7 @@ namespace th
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_writeData->getPlayer().isColliding())
+		if (m_readData->getPlayer().isColliding())
 		{
 			//p = false;
 			//m_data.print();
@@ -312,7 +310,7 @@ namespace th
 	// 处理对话
 	bool Th10Ai::handleTalk()
 	{
-		if (m_writeData->isTalking())
+		if (m_readData->isTalking())
 		{
 			m_di8Hook.keyPress(DIK_LCONTROL);
 			return true;
@@ -327,7 +325,7 @@ namespace th
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_writeData->hasEnemy())
+		if (m_readData->hasEnemy())
 		{
 			m_di8Hook.keyPress(DIK_Z);
 			return true;
@@ -342,12 +340,12 @@ namespace th
 	// 处理移动
 	bool Th10Ai::handleMove()
 	{
-		if (!m_writeData->getPlayer().isNormalStatus())
+		if (!m_readData->getPlayer().isNormalStatus())
 			return false;
 
-		ItemTarget itemTarget = m_writeData->findItem();
-		EnemyTarget enemyTarget = m_writeData->findEnemy();
-		bool underEnemy = m_writeData->isUnderEnemy();
+		ItemTarget itemTarget = m_readData->findItem();
+		EnemyTarget enemyTarget = m_readData->findEnemy();
+		bool underEnemy = m_readData->isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
@@ -355,7 +353,7 @@ namespace th
 
 		for (Direction dir : DIRECTIONS)
 		{
-			Path path(*m_writeData, m_scene, itemTarget, enemyTarget, underEnemy);
+			Path path(*m_readData, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
 
 			if (result.valid && path.m_bestScore > bestScore)

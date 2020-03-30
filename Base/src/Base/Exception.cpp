@@ -5,27 +5,44 @@
 
 namespace base
 {
-	Exception::Exception(const std::string& whatArg) :
-		std::runtime_error(whatArg),
+	Exception::Exception() :
+		std::runtime_error(nullptr),
+		m_id(0),
 		m_sourceLocation(SourceLocation::GetCurrent())
-#ifdef _DEBUG
-		, m_stackTrace(3, std::numeric_limits<uint_t>::max() - 3)
-#endif
 	{
 	}
 
-	Exception::Exception(const char* whatArg) :
-		std::runtime_error(whatArg),
+	Exception::Exception(const std::string& desc) :
+		std::runtime_error(desc),
+		m_id(0),
 		m_sourceLocation(SourceLocation::GetCurrent())
-#ifdef _DEBUG
-		, m_stackTrace(3, std::numeric_limits<uint_t>::max() - 3)
-#endif
+	{
+	}
+
+	Exception::Exception(const char* desc) :
+		std::runtime_error(desc),
+		m_id(0),
+		m_sourceLocation(SourceLocation::GetCurrent())
+	{
+	}
+
+	Exception::Exception(int_t id, const std::string& desc) :
+		std::runtime_error(desc),
+		m_id(id),
+		m_sourceLocation(SourceLocation::GetCurrent())
+	{
+	}
+
+	Exception::Exception(int_t id, const char* desc) :
+		std::runtime_error(desc),
+		m_id(id),
+		m_sourceLocation(SourceLocation::GetCurrent())
 	{
 	}
 
 	void Exception::print(std::ostream& os) const
 	{
-		os << what() << '\n';
+		os << '[' << m_id << ']' << what() << '\n';
 		printSourceLocation(os);
 		printStackTrace(os);
 	}

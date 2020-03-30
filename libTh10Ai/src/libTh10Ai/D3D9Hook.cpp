@@ -3,7 +3,7 @@
 
 #include <Base/ScopeGuard.h>
 
-#include "libTh10Ai/libDetours.h"
+#include "libTh10Ai/MyDetours.h"
 
 namespace th
 {
@@ -22,18 +22,18 @@ namespace th
 		if (RegisterClassEx(&wc) == 0)
 			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
-		{
-			UnregisterClass(wc.lpszClassName, wc.hInstance);
-		});
+			{
+				UnregisterClass(wc.lpszClassName, wc.hInstance);
+			});
 
 		HWND window = CreateWindowEx(0, wc.lpszClassName, _T("D3D9Wnd"), WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, wc.hInstance, nullptr);
 		if (window == nullptr)
 			BASE_THROW(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
-		{
-			DestroyWindow(window);
-		});
+			{
+				DestroyWindow(window);
+			});
 
 		HMODULE d3d9Dll = GetModuleHandle(_T("d3d9.dll"));
 		if (d3d9Dll == nullptr)
@@ -68,13 +68,13 @@ namespace th
 		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
 		m_present = reinterpret_cast<Present_t>(vTable[17]);
 
-		libDetours detours;
+		MyDetours detours;
 		detours.attach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 	}
 
 	D3D9Hook::~D3D9Hook()
 	{
-		libDetours detours;
+		MyDetours detours;
 		detours.detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 	}
 

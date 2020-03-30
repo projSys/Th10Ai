@@ -98,7 +98,7 @@
     <ClInclude Include="include\libTh10Ai\Entity.h" />
     <ClInclude Include="include\libTh10Ai\Item.h" />
     <ClInclude Include="include\libTh10Ai\Laser.h" />
-    <ClInclude Include="include\libTh10Ai\libDetours.h" />
+    <ClInclude Include="include\libTh10Ai\MyDetours.h" />
     <ClInclude Include="include\libTh10Ai\libTh10Ai.h" />
     <ClInclude Include="include\libTh10Ai\Path.h" />
     <ClInclude Include="include\libTh10Ai\Player.h" />
@@ -118,7 +118,7 @@
     <ClCompile Include="src\libTh10Ai\Entity.cpp" />
     <ClCompile Include="src\libTh10Ai\Item.cpp" />
     <ClCompile Include="src\libTh10Ai\Laser.cpp" />
-    <ClCompile Include="src\libTh10Ai\libDetours.cpp" />
+    <ClCompile Include="src\libTh10Ai\MyDetours.cpp" />
     <ClCompile Include="src\libTh10Ai\libTh10Ai.cpp" />
     <ClCompile Include="src\libTh10Ai\Path.cpp" />
     <ClCompile Include="src\libTh10Ai\Player.cpp" />

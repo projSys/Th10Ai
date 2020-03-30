@@ -39,9 +39,6 @@
     <ClInclude Include="include\Base\Singleton.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Type.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Windows\Common.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
@@ -89,6 +86,12 @@
     </ClInclude>
     <ClInclude Include="include\Windows\dxerr.h">
       <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Types.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\TypeTraits.h">
+      <Filter>头文件\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

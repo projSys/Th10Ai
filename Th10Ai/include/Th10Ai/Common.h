@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Base/Common.h>
-#include <Base/Type.h>
+#include <Base/Types.h>
 #include <Base/Exception.h>
 #include <Windows/Common.h>
 #include <Windows/WindowsError.h>

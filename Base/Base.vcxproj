@@ -92,7 +92,8 @@
     <ClInclude Include="include\Base\Singleton.h" />
     <ClInclude Include="include\Base\SourceLocation.h" />
     <ClInclude Include="include\Base\StrongPtr.h" />
-    <ClInclude Include="include\Base\Type.h" />
+    <ClInclude Include="include\Base\Types.h" />
+    <ClInclude Include="include\Base\TypeTraits.h" />
     <ClInclude Include="include\Base\WeakPtr.h" />
     <ClInclude Include="include\Windows\Common.h" />
     <ClInclude Include="include\Windows\DirectXResult.h" />

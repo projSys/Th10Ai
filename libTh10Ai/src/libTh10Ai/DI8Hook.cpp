@@ -1,7 +1,7 @@
 #include "libTh10Ai/Common.h"
 #include "libTh10Ai/DI8Hook.h"
 
-#include "libTh10Ai/libDetours.h"
+#include "libTh10Ai/MyDetours.h"
 #include "libTh10Ai/D3D9Hook.h"
 
 namespace th
@@ -39,13 +39,13 @@ namespace th
 		uint_t* vTableW = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(deviceW.p));
 		m_getDeviceStateW = reinterpret_cast<GetDeviceStateW_t>(vTableW[9]);
 
-		libDetours detours;
+		MyDetours detours;
 		detours.attach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
 	}
 
 	DI8Hook::~DI8Hook()
 	{
-		libDetours detours;
+		MyDetours detours;
 		detours.detach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
 	}
 

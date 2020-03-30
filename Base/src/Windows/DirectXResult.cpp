@@ -13,7 +13,6 @@ namespace win
 	namespace blc = boost::locale::conv;
 
 	DirectXResult::DirectXResult(HRESULT hr, DXVER version) :
-		Exception(nullptr),
 		m_hr(hr),
 		m_version(version)
 	{
@@ -23,7 +22,6 @@ namespace win
 	{
 		if (m_version < DXVER::D3D10)
 		{
-			// https://walbourn.github.io/wheres-dxerr-lib/
 			WCHAR buffer[4096] = {};
 			DXGetErrorDescriptionW(m_hr, buffer, 4095);
 			os << '[' << blc::utf_to_utf<char>(DXGetErrorStringW(m_hr)) << ']'

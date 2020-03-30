@@ -78,7 +78,7 @@
     <ClInclude Include="include\libTh10Ai\DllInject.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\libTh10Ai\libDetours.h">
+    <ClInclude Include="include\libTh10Ai\MyDetours.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
   </ItemGroup>
@@ -134,7 +134,7 @@
     <ClCompile Include="src\libTh10Ai\DllInject.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\libTh10Ai\libDetours.cpp">
+    <ClCompile Include="src\libTh10Ai\MyDetours.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
   </ItemGroup>

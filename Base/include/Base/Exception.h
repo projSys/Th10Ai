@@ -6,6 +6,7 @@
 #include <boost/stacktrace.hpp>
 #endif
 
+#include "Base/Types.h"
 #include "Base/SourceLocation.h"
 
 namespace base
@@ -14,8 +15,11 @@ namespace base
 		public std::runtime_error
 	{
 	public:
-		Exception(const std::string& whatArg);
-		Exception(const char* whatArg);
+		Exception();
+		explicit Exception(const std::string& desc);
+		explicit Exception(const char* desc);
+		Exception(int_t id, const std::string& desc);
+		Exception(int_t id, const char* desc);
 
 		virtual void print(std::ostream& os) const;
 
@@ -23,6 +27,7 @@ namespace base
 		void printSourceLocation(std::ostream& os) const;
 		void printStackTrace(std::ostream& os) const;
 
+		int_t m_id;
 		SourceLocation m_sourceLocation;
 #ifdef _DEBUG
 		boost::stacktrace::stacktrace m_stackTrace;

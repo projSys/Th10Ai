@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Windows/Common.h"
+
+#include "Base/TypeTraits.h"
+
 #include "Windows/Point.h"
 #include "Windows/Size.h"
 

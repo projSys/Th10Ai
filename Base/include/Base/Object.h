@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Base/Type.h"
+#include "Base/Types.h"
 #include "Base/RefCounted.h"
 #include "Base/StrongPtr.h"
 #include "Base/WeakPtr.h"

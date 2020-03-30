@@ -2,6 +2,8 @@
 
 #include "Windows/Common.h"
 
+#include "Base/TypeTraits.h"
+
 namespace win
 {
 	template <typename T, typename Traits = TypeTraits<T>>

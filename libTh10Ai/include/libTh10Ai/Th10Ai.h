@@ -57,9 +57,9 @@ namespace th
 		Reader m_reader;
 		//Data m_data;
 		std::mutex m_dataMutex;
-		std::shared_ptr<Data> m_readData;
-		std::shared_ptr<Data> m_middleData;
 		std::shared_ptr<Data> m_writeData;
+		std::shared_ptr<Data> m_middleData;
+		std::shared_ptr<Data> m_readData;
 		std::atomic_bool m_dataUpdated;
 		Scene m_scene;
 

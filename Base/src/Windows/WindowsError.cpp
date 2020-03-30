@@ -6,7 +6,6 @@
 namespace win
 {
 	WindowsError::WindowsError(DWORD errorId) :
-		Exception(nullptr),
 		m_errorId(errorId)
 	{
 	}

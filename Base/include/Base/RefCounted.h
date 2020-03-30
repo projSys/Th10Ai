@@ -2,7 +2,7 @@
 
 #include <atomic>
 
-#include "Base/Type.h"
+#include "Base/Types.h"
 
 namespace base
 {
