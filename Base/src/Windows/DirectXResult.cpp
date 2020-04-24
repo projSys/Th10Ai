@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <boost/locale.hpp>
 
-#include "Windows/Util.h"
+#include "Windows/Utils.h"
 // https://walbourn.github.io/wheres-dxerr-lib/
 #include "Windows/dxerr.h"
 
@@ -34,7 +34,7 @@ namespace win
 			os << "[0x" << std::hex << std::uppercase << std::setw(8)
 				<< std::setfill('0') << m_hr << ']';
 			os.copyfmt(oldState);
-			os << Util::GetErrorDescription(m_hr) << '\n';
+			os << Utils::GetErrorDescription(m_hr) << '\n';
 		}
 		printSourceLocation(os);
 		printStackTrace(os);

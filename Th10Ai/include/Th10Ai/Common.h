@@ -5,7 +5,7 @@
 #include <Base/Exception.h>
 #include <Windows/Common.h>
 #include <Windows/WindowsError.h>
-#include <Windows/Util.h>
+#include <Windows/Utils.h>
 #include <libTh10Ai/Common.h>
 
 namespace th

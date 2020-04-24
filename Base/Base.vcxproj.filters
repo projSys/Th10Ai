@@ -3,27 +3,27 @@
   <ItemGroup>
     <Filter Include="源文件">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="头文件">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="头文件\Base">
-      <UniqueIdentifier>{77e965ac-c52d-4e39-ad85-790dbf8aa24a}</UniqueIdentifier>
+      <UniqueIdentifier>{396e1344-9791-45aa-a425-a7cc38b0b9ed}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Base">
-      <UniqueIdentifier>{c0f7e5e2-a050-4faa-bede-93bb18e5a718}</UniqueIdentifier>
+      <UniqueIdentifier>{b09cd9e5-b15e-4f38-8263-eac9cbfb716a}</UniqueIdentifier>
     </Filter>
     <Filter Include="头文件\Windows">
-      <UniqueIdentifier>{a2aa18e0-6c4c-4cda-9743-cfd342bf11e4}</UniqueIdentifier>
+      <UniqueIdentifier>{a1d94271-bd49-409b-a94c-ea7cc77a65c8}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Windows">
-      <UniqueIdentifier>{071a9ab7-e3e3-4d9d-bf26-3589bd8a7b83}</UniqueIdentifier>
+      <UniqueIdentifier>{27e5f571-77c9-4fac-8a3b-3ce012b3f5c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,28 +33,46 @@
     <ClInclude Include="include\Base\Exception.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Object.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\RefCounted.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
     <ClInclude Include="include\Base\ScopeGuard.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Singleton.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\SourceLocation.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\StrongPtr.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Types.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\TypeTraits.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\WeakPtr.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
     <ClInclude Include="include\Windows\Common.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\Process.h">
+    <ClInclude Include="include\Windows\DirectXResult.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\Window.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\Util.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\Thread.h">
+    <ClInclude Include="include\Windows\dxerr.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Windows\Point.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\Process.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Windows\Rect.h">
@@ -63,60 +81,18 @@
     <ClInclude Include="include\Windows\Size.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Windows\Window.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="include\Windows\WindowsError.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\DirectXResult.h">
+    <ClInclude Include="include\Windows\Utils.h">
       <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\SourceLocation.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Object.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\RefCounted.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\StrongPtr.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\WeakPtr.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\dxerr.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Types.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\TypeTraits.h">
-      <Filter>头文件\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\Process.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\Window.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\Util.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\Thread.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\WindowsError.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\DirectXResult.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\SourceLocation.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Object.cpp">
@@ -125,7 +101,25 @@
     <ClCompile Include="src\Base\RefCounted.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
+    <ClCompile Include="src\Base\SourceLocation.cpp">
+      <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\DirectXResult.cpp">
+      <Filter>源文件\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\Windows\dxerr.cpp">
+      <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\Process.cpp">
+      <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\Window.cpp">
+      <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\WindowsError.cpp">
+      <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\Utils.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
   </ItemGroup>

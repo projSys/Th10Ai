@@ -1,7 +1,7 @@
 #include "Windows/Common.h"
 #include "Windows/WindowsError.h"
 
-#include "Windows/Util.h"
+#include "Windows/Utils.h"
 
 namespace win
 {
@@ -13,7 +13,7 @@ namespace win
 	void WindowsError::print(std::ostream& os) const
 	{
 		os << '[' << m_errorId << ']'
-			<< Util::GetErrorDescription(m_errorId) << '\n';
+			<< Utils::GetErrorDescription(m_errorId) << '\n';
 		printSourceLocation(os);
 		printStackTrace(os);
 	}

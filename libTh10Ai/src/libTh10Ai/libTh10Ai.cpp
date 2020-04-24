@@ -16,7 +16,7 @@ namespace th
 
 	void WINAPI Th10AiMain()
 	{
-		std::string logName = Util::GetModuleDir(g_module) + "/Th10Ai_%N.log";
+		std::string logName = Utils::GetModuleDir(g_module) + "/Th10Ai_%N.log";
 		bl::add_file_log
 		(
 			bl::keywords::file_name = logName,
@@ -30,7 +30,7 @@ namespace th
 
 	bool libTh10Ai::onAttach()
 	{
-		std::string logName = Util::GetModuleDir(g_module) + "/libTh10Ai_%N.log";
+		std::string logName = Utils::GetModuleDir(g_module) + "/libTh10Ai_%N.log";
 		bl::add_file_log
 		(
 			bl::keywords::file_name = logName,

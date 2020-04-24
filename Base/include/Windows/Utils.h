@@ -2,7 +2,7 @@
 
 namespace win
 {
-	class Util
+	class Utils
 	{
 	public:
 		static std::string GetErrorDescription(DWORD errorId);

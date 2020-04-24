@@ -4,7 +4,6 @@
 #include <boost/locale.hpp>
 
 #include "Windows/WindowsError.h"
-#include "Windows/Util.h"
 
 namespace win
 {

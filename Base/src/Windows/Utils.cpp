@@ -1,5 +1,5 @@
 #include "Windows/Common.h"
-#include "Windows/Util.h"
+#include "Windows/Utils.h"
 
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
@@ -11,7 +11,7 @@ namespace win
 	namespace bfs = boost::filesystem;
 	namespace blc = boost::locale::conv;
 
-	std::string Util::GetErrorDescription(DWORD errorId)
+	std::string Utils::GetErrorDescription(DWORD errorId)
 	{
 		WCHAR buffer[4096] = {};
 		if (FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -20,7 +20,7 @@ namespace win
 		return blc::utf_to_utf<char>(buffer);
 	}
 
-	std::string Util::GetModuleName(HMODULE module)
+	std::string Utils::GetModuleName(HMODULE module)
 	{
 		WCHAR buffer[4096] = {};
 		if (GetModuleFileNameW(module, buffer, 4095) == 0)
@@ -28,7 +28,7 @@ namespace win
 		return blc::utf_to_utf<char>(buffer);
 	}
 
-	std::string Util::GetModuleDir(HMODULE module)
+	std::string Utils::GetModuleDir(HMODULE module)
 	{
 		WCHAR buffer[4096] = {};
 		if (GetModuleFileNameW(module, buffer, 4095) == 0)

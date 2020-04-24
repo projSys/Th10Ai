@@ -6,7 +6,6 @@
 
 #include "Base/ScopeGuard.h"
 #include "Windows/WindowsError.h"
-#include "Windows/Util.h"
 
 namespace win
 {
