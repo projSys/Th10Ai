@@ -2,19 +2,16 @@
 #include "Windows/Process.h"
 
 #include <TlHelp32.h>
-#include <boost/locale.hpp>
 
 #include "Base/ScopeGuard.h"
 #include "Windows/WindowsError.h"
 
 namespace win
 {
-	namespace blc = boost::locale::conv;
-
 	Process Process::FindByName(const std::string& name,
 		DWORD desiredAccess, BOOL inheritHandle)
 	{
-		std::wstring nameW = blc::utf_to_utf<wchar_t>(name);
+		std::wstring nameW = String::Utf8ToWide(name);
 
 		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 		if (snapshot == INVALID_HANDLE_VALUE)
@@ -84,7 +81,7 @@ namespace win
 
 	HMODULE Process::findModuleByName(const std::string& moduleName) const
 	{
-		std::wstring moduleNameW = blc::utf_to_utf<wchar_t>(moduleName);
+		std::wstring moduleNameW = String::Utf8ToWide(moduleName);
 
 		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, m_id);
 		if (snapshot == INVALID_HANDLE_VALUE)

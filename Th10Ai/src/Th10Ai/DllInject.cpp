@@ -2,13 +2,11 @@
 #include "Th10Ai/DllInject.h"
 
 #include <boost/filesystem.hpp>
-#include <boost/locale.hpp>
 #include <Base/ScopeGuard.h>
 
 namespace th
 {
 	namespace bfs = boost::filesystem;
-	namespace blc = boost::locale::conv;
 
 	void DllInject::EnableDebugPrivilege()
 	{
@@ -36,7 +34,7 @@ namespace th
 
 	void DllInject::Inject(Process& target, const std::string& dllName)
 	{
-		std::wstring dllNameW = blc::utf_to_utf<wchar_t>(dllName);
+		std::wstring dllNameW = String::Utf8ToWide(dllName);
 		uint_t size = (dllNameW.length() + 1) * sizeof(wchar_t);
 
 		if (!bfs::exists(dllNameW))

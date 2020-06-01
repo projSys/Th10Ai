@@ -8,12 +8,16 @@ namespace th
 	MyDetours::MyDetours()
 	{
 		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
 	}
 
 	MyDetours::~MyDetours()
 	{
 		DetourTransactionCommit();
+	}
+
+	void MyDetours::updateThread(HANDLE thread)
+	{
+		DetourUpdateThread(thread);
 	}
 
 	void MyDetours::attach(PVOID* pointer, PVOID detour)

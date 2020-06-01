@@ -90,6 +90,9 @@
     <ClInclude Include="include\Windows\Utils.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\String.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="src\Windows\Utils.cpp">
       <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\String.cpp">
+      <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

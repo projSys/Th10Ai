@@ -38,7 +38,7 @@ namespace th
 		HMODULE d3d9Dll = GetModuleHandle(_T("d3d9.dll"));
 		if (d3d9Dll == nullptr)
 			BASE_THROW(WindowsError(GetLastError()));
-		Direct3DCreate9_t direct3DCreate9 = reinterpret_cast<Direct3DCreate9_t>(
+		Direct3DCreate9_t* direct3DCreate9 = reinterpret_cast<Direct3DCreate9_t*>(
 			GetProcAddress(d3d9Dll, "Direct3DCreate9"));
 		if (direct3DCreate9 == nullptr)
 			BASE_THROW(WindowsError(GetLastError()));
@@ -66,7 +66,7 @@ namespace th
 			BASE_THROW(DirectXResult(hr, DXVER::D3D9));
 
 		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
-		m_present = reinterpret_cast<Present_t>(vTable[17]);
+		m_present = reinterpret_cast<Present_t*>(vTable[17]);
 
 		MyDetours detours;
 		detours.attach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);

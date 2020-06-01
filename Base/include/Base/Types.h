@@ -3,7 +3,6 @@
 #include "Base/Common.h"
 
 #include <cstdint>
-#include <string>
 
 namespace base
 {

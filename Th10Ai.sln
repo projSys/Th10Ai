@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Base", "Base\Base.vcxproj", "{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Base", "Base\Base.vcxproj", "{172F50A8-14E9-4B4E-A569-308E6C64690C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Th10Ai", "Th10Ai\Th10Ai.vcxproj", "{534016B9-FDC7-44FF-AF70-16CD8467BD2D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DC6C4B81-B19B-4589-8510-14A7A4E7C34F} = {DC6C4B81-B19B-4589-8510-14A7A4E7C34F}
-		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2} = {B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}
+		{172F50A8-14E9-4B4E-A569-308E6C64690C} = {172F50A8-14E9-4B4E-A569-308E6C64690C}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libTh10Ai", "libTh10Ai\libTh10Ai.vcxproj", "{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}"
 	ProjectSection(ProjectDependencies) = postProject
-		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2} = {B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}
+		{172F50A8-14E9-4B4E-A569-308E6C64690C} = {172F50A8-14E9-4B4E-A569-308E6C64690C}
 	EndProjectSection
 EndProject
 Global
@@ -22,10 +22,10 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}.Debug|x86.ActiveCfg = Debug|Win32
-		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}.Debug|x86.Build.0 = Debug|Win32
-		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}.Release|x86.ActiveCfg = Release|Win32
-		{B8FC8BAA-EFDE-4EF1-828F-4CFE1D2A04C2}.Release|x86.Build.0 = Release|Win32
+		{172F50A8-14E9-4B4E-A569-308E6C64690C}.Debug|x86.ActiveCfg = Debug|Win32
+		{172F50A8-14E9-4B4E-A569-308E6C64690C}.Debug|x86.Build.0 = Debug|Win32
+		{172F50A8-14E9-4B4E-A569-308E6C64690C}.Release|x86.ActiveCfg = Release|Win32
+		{172F50A8-14E9-4B4E-A569-308E6C64690C}.Release|x86.Build.0 = Release|Win32
 		{534016B9-FDC7-44FF-AF70-16CD8467BD2D}.Debug|x86.ActiveCfg = Debug|Win32
 		{534016B9-FDC7-44FF-AF70-16CD8467BD2D}.Debug|x86.Build.0 = Debug|Win32
 		{534016B9-FDC7-44FF-AF70-16CD8467BD2D}.Release|x86.ActiveCfg = Release|Win32

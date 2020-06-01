@@ -23,9 +23,9 @@ namespace th
 
 	private:
 		// IDirect3D9
-		typedef IDirect3D9* (WINAPI *Direct3DCreate9_t)(UINT);
+		typedef decltype(Direct3DCreate9) Direct3DCreate9_t;
 		// IDirect3DDevice9
-		typedef HRESULT(STDMETHODCALLTYPE *Present_t)(IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA*);
+		typedef HRESULT STDMETHODCALLTYPE Present_t(IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA*);
 
 		static HRESULT STDMETHODCALLTYPE PresentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 			HWND destWindowOverride, CONST RGNDATA* dirtyRegion);
@@ -34,7 +34,7 @@ namespace th
 			HWND destWindowOverride, CONST RGNDATA* dirtyRegion);
 
 		std::atomic_bool m_enabled;
-		Present_t m_present;
+		Present_t* m_present;
 
 		std::mutex m_presentMutex;
 		std::condition_variable m_presentCond;

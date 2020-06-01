@@ -2,7 +2,6 @@
 #include "Windows/DirectXResult.h"
 
 #include <iomanip>
-#include <boost/locale.hpp>
 
 #include "Windows/Utils.h"
 // https://walbourn.github.io/wheres-dxerr-lib/
@@ -10,8 +9,6 @@
 
 namespace win
 {
-	namespace blc = boost::locale::conv;
-
 	DirectXResult::DirectXResult(HRESULT hr, DXVER version) :
 		m_hr(hr),
 		m_version(version)
@@ -24,8 +21,8 @@ namespace win
 		{
 			WCHAR buffer[4096] = {};
 			DXGetErrorDescriptionW(m_hr, buffer, 4095);
-			os << '[' << blc::utf_to_utf<char>(DXGetErrorStringW(m_hr)) << ']'
-				<< blc::utf_to_utf<char>(buffer) << '\n';
+			os << '[' << String::WideToUtf8(DXGetErrorStringW(m_hr)) << ']'
+				<< String::WideToUtf8(buffer) << '\n';
 		}
 		else
 		{

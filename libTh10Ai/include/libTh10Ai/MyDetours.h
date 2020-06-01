@@ -8,6 +8,9 @@ namespace th
 		MyDetours();
 		~MyDetours();
 
+		// GetCurrentThread()
+		void updateThread(HANDLE thread);
+
 		void attach(PVOID* pointer, PVOID detour);
 		void detach(PVOID* pointer, PVOID detour);
 	};

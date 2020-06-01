@@ -1,14 +1,10 @@
 #include "Windows/Common.h"
 #include "Windows/Window.h"
 
-#include <boost/locale.hpp>
-
 #include "Windows/WindowsError.h"
 
 namespace win
 {
-	namespace blc = boost::locale::conv;
-
 	std::vector<Window> Window::EnumWindows()
 	{
 		std::vector<Window> windows;
@@ -26,7 +22,7 @@ namespace win
 
 	Window Window::FindByClassName(const std::string& className)
 	{
-		std::wstring classNameW = blc::utf_to_utf<wchar_t>(className);
+		std::wstring classNameW = String::Utf8ToWide(className);
 
 		HWND window = FindWindowW(classNameW.c_str(), nullptr);
 		if (window == nullptr)
@@ -36,7 +32,7 @@ namespace win
 
 	Window Window::FindByName(const std::string& name)
 	{
-		std::wstring nameW = blc::utf_to_utf<wchar_t>(name);
+		std::wstring nameW = String::Utf8ToWide(name);
 
 		HWND window = FindWindowW(nullptr, nameW.c_str());
 		if (window == nullptr)
@@ -77,7 +73,7 @@ namespace win
 
 	Window Window::findChildByClassName(const std::string& className)
 	{
-		std::wstring classNameW = blc::utf_to_utf<wchar_t>(className);
+		std::wstring classNameW = String::Utf8ToWide(className);
 
 		HWND window = FindWindowExW(m_window, nullptr, classNameW.c_str(), nullptr);
 		if (window == nullptr)
@@ -87,7 +83,7 @@ namespace win
 
 	Window Window::findChildByName(const std::string& name)
 	{
-		std::wstring nameW = blc::utf_to_utf<wchar_t>(name);
+		std::wstring nameW = String::Utf8ToWide(name);
 
 		HWND window = FindWindowExW(m_window, nullptr, nullptr, nameW.c_str());
 		if (window == nullptr)
@@ -133,7 +129,7 @@ namespace win
 	{
 		WCHAR buffer[1024] = {};
 		GetWindowTextW(m_window, buffer, 1023);
-		return blc::utf_to_utf<char>(buffer);
+		return String::WideToUtf8(buffer);
 	}
 
 	void Window::setSize(const Size& size)
