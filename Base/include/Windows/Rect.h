@@ -13,7 +13,7 @@ namespace win
 	class RectBase
 	{
 	public:
-		typedef T value_t;
+		using value_t = T;
 
 		RectBase() :
 			x(), y(), width(), height()
@@ -74,7 +74,7 @@ namespace win
 		T height;
 	};
 
-	typedef RectBase<int_t> Recti;
-	typedef RectBase<float_t> Rectf;
-	typedef Recti Rect;
+	using Recti = RectBase<int_t>;
+	using Rectf = RectBase<float_t>;
+	using Rect = Recti;
 }

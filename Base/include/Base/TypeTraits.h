@@ -20,7 +20,7 @@ namespace base
 	class TypeTraits<T, std::enable_if_t<std::is_integral_v<T>>>
 	{
 	public:
-		typedef T value_t;
+		using value_t = T;
 
 		static bool Equals(T left, T right)
 		{
@@ -32,7 +32,7 @@ namespace base
 	class TypeTraits<T, std::enable_if_t<std::is_floating_point_v<T>>>
 	{
 	public:
-		typedef T value_t;
+		using value_t = T;
 
 		// https://stackoverflow.com/questions/17333/what-is-the-most-effective-way-for-float-and-double-comparison
 		// https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/

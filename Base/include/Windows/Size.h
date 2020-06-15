@@ -10,7 +10,7 @@ namespace win
 	class SizeBase
 	{
 	public:
-		typedef T value_t;
+		using value_t = T;
 
 		SizeBase() :
 			width(), height()
@@ -66,7 +66,7 @@ namespace win
 		T height;
 	};
 
-	typedef SizeBase<int_t> Sizei;
-	typedef SizeBase<float_t> Sizef;
-	typedef Sizei Size;
+	using Sizei = SizeBase<int_t>;
+	using Sizef = SizeBase<float_t>;
+	using Size = Sizei;
 }

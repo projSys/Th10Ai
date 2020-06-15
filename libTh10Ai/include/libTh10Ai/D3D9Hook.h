@@ -23,9 +23,9 @@ namespace th
 
 	private:
 		// IDirect3D9
-		typedef decltype(Direct3DCreate9) Direct3DCreate9_t;
+		using Direct3DCreate9_t = decltype(Direct3DCreate9);
 		// IDirect3DDevice9
-		typedef HRESULT STDMETHODCALLTYPE Present_t(IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA*);
+		using Present_t = HRESULT STDMETHODCALLTYPE(IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA*);
 
 		static HRESULT STDMETHODCALLTYPE PresentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 			HWND destWindowOverride, CONST RGNDATA* dirtyRegion);

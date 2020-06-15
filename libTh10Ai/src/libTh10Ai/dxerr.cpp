@@ -13,7 +13,7 @@
 
 // This version only supports UNICODE.
 
-#include "Windows/dxerr.h"
+#include "libTh10Ai/dxerr.h"
 
 #include <stdio.h>
 #include <algorithm>

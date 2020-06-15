@@ -148,6 +148,7 @@ namespace th
 		y += (dy * frame);
 	}
 
+	// https://thwiki.cc/%E6%B8%B8%E6%88%8F%E6%94%BB%E7%95%A5/STG%E5%88%A4%E5%AE%9A%E6%95%B0%E6%8D%AE
 	bool Entity::collide(const Entity& other) const
 	{
 		return std::abs(x - other.x) < (width + other.width) / 2.0f

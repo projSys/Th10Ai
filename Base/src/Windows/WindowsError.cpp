@@ -14,6 +14,7 @@ namespace win
 	{
 		os << '[' << m_errorId << ']'
 			<< Utils::GetErrorDescription(m_errorId) << '\n';
+
 		printSourceLocation(os);
 		printStackTrace(os);
 	}

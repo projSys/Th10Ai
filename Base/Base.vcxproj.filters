@@ -63,12 +63,6 @@
     <ClInclude Include="include\Windows\Common.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\DirectXResult.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\dxerr.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Windows\Point.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
@@ -93,6 +87,9 @@
     <ClInclude Include="include\Base\String.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Windows\DxResult.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -106,12 +103,6 @@
     </ClCompile>
     <ClCompile Include="src\Base\SourceLocation.cpp">
       <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\DirectXResult.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\dxerr.cpp">
-      <Filter>源文件\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Windows\Process.cpp">
       <Filter>源文件\Windows</Filter>
@@ -127,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="src\Base\String.cpp">
       <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\DxResult.cpp">
+      <Filter>源文件\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

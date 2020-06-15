@@ -10,7 +10,7 @@ namespace win
 	class PointBase
 	{
 	public:
-		typedef T value_t;
+		using value_t = T;
 
 		PointBase() :
 			x(), y()
@@ -61,7 +61,7 @@ namespace win
 		T y;
 	};
 
-	typedef PointBase<int_t> Pointi;
-	typedef PointBase<float_t> Pointf;
-	typedef Pointi Point;
+	using Pointi = PointBase<int_t>;
+	using Pointf = PointBase<float_t>;
+	using Point = Pointi;
 }

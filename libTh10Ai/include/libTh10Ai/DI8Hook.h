@@ -37,9 +37,9 @@ namespace th
 
 	private:
 		// IDirectInput8
-		typedef decltype(DirectInput8Create) DirectInput8Create_t;
+		using DirectInput8Create_t = decltype(DirectInput8Create);
 		// IDirectInputDevice8
-		typedef HRESULT STDMETHODCALLTYPE GetDeviceStateW_t(IDirectInputDevice8W*, DWORD, LPVOID);
+		using GetDeviceStateW_t = HRESULT STDMETHODCALLTYPE(IDirectInputDevice8W*, DWORD, LPVOID);
 
 		static HRESULT STDMETHODCALLTYPE GetDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data);
 

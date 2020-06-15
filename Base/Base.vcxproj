@@ -156,8 +156,7 @@
     <ClInclude Include="include\Base\TypeTraits.h" />
     <ClInclude Include="include\Base\WeakPtr.h" />
     <ClInclude Include="include\Windows\Common.h" />
-    <ClInclude Include="include\Windows\DirectXResult.h" />
-    <ClInclude Include="include\Windows\dxerr.h" />
+    <ClInclude Include="include\Windows\DxResult.h" />
     <ClInclude Include="include\Windows\Point.h" />
     <ClInclude Include="include\Windows\Process.h" />
     <ClInclude Include="include\Windows\Rect.h" />
@@ -172,8 +171,7 @@
     <ClCompile Include="src\Base\RefCounted.cpp" />
     <ClCompile Include="src\Base\SourceLocation.cpp" />
     <ClCompile Include="src\Base\String.cpp" />
-    <ClCompile Include="src\Windows\DirectXResult.cpp" />
-    <ClCompile Include="src\Windows\dxerr.cpp" />
+    <ClCompile Include="src\Windows\DxResult.cpp" />
     <ClCompile Include="src\Windows\Process.cpp" />
     <ClCompile Include="src\Windows\Utils.cpp" />
     <ClCompile Include="src\Windows\Window.cpp" />

@@ -81,6 +81,12 @@
     <ClInclude Include="include\libTh10Ai\MyDetours.h">
       <Filter>头文件\libTh10Ai</Filter>
     </ClInclude>
+    <ClInclude Include="include\libTh10Ai\dxerr.h">
+      <Filter>头文件\libTh10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\libTh10Ai\OldDxResult.h">
+      <Filter>头文件\libTh10Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\libTh10Ai\Data.cpp">
@@ -135,6 +141,12 @@
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\libTh10Ai\MyDetours.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTh10Ai\dxerr.cpp">
+      <Filter>源文件\libTh10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\libTh10Ai\OldDxResult.cpp">
       <Filter>源文件\libTh10Ai</Filter>
     </ClCompile>
   </ItemGroup>
