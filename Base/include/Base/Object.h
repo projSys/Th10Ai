@@ -38,7 +38,7 @@ namespace base
 			buffer = new byte_t[sizeof(RefCounted<T>) + sizeof(T)];
 			refCounted = new (buffer) RefCounted<T>();
 			Object::tls_refCounted = refCounted;
-			object = new (buffer + sizeof(RefCounted<T>)) T(std::forward<Args>(args)...);
+			object = new (buffer + sizeof(RefCounted<T>)) T(forward<Args>(args)...);
 			Object::tls_refCounted = nullptr;
 			refCounted->setObject(object);
 			// 引用计数已经默认为1，不需要调用sp的构造函数再加1

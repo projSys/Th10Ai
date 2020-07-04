@@ -5,24 +5,24 @@
 
 namespace win
 {
-	std::vector<Window> Window::EnumWindows()
+	vector<Window> Window::EnumWindows()
 	{
-		std::vector<Window> windows;
+		vector<Window> windows;
 		auto enumFunc = [](HWND window, LPARAM lParam)->BOOL
 		{
-			std::vector<Window>* windows = reinterpret_cast<std::vector<Window>*>(lParam);
+			vector<Window>* windows = reinterpret_cast<vector<Window>*>(lParam);
 			if (IsWindowVisible(window))
 				windows->push_back(Window(window));
 			return TRUE;
 		};
 		if (!::EnumWindows(enumFunc, reinterpret_cast<LPARAM>(&windows)))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		return windows;
 	}
 
-	Window Window::FindByClassName(const std::string& className)
+	Window Window::FindByClassName(const string& className)
 	{
-		std::wstring classNameW = String::Utf8ToWide(className);
+		wstring classNameW = String::Utf8ToWide(className);
 
 		HWND window = FindWindowW(classNameW.c_str(), nullptr);
 		if (window == nullptr)
@@ -30,9 +30,9 @@ namespace win
 		return Window(window);
 	}
 
-	Window Window::FindByName(const std::string& name)
+	Window Window::FindByName(const string& name)
 	{
-		std::wstring nameW = String::Utf8ToWide(name);
+		wstring nameW = String::Utf8ToWide(name);
 
 		HWND window = FindWindowW(nullptr, nameW.c_str());
 		if (window == nullptr)
@@ -62,7 +62,7 @@ namespace win
 
 	Window& Window::operator =(Window&& other)
 	{
-		Window(std::move(other)).swap(*this);
+		Window(move(other)).swap(*this);
 		return *this;
 	}
 
@@ -71,9 +71,9 @@ namespace win
 		std::swap(m_window, other.m_window);
 	}
 
-	Window Window::findChildByClassName(const std::string& className)
+	Window Window::findChildByClassName(const string& className)
 	{
-		std::wstring classNameW = String::Utf8ToWide(className);
+		wstring classNameW = String::Utf8ToWide(className);
 
 		HWND window = FindWindowExW(m_window, nullptr, classNameW.c_str(), nullptr);
 		if (window == nullptr)
@@ -81,9 +81,9 @@ namespace win
 		return Window(window);
 	}
 
-	Window Window::findChildByName(const std::string& name)
+	Window Window::findChildByName(const string& name)
 	{
-		std::wstring nameW = String::Utf8ToWide(name);
+		wstring nameW = String::Utf8ToWide(name);
 
 		HWND window = FindWindowExW(m_window, nullptr, nullptr, nameW.c_str());
 		if (window == nullptr)
@@ -94,19 +94,19 @@ namespace win
 	void Window::minimize()
 	{
 		if (!ShowWindow(m_window, SW_MINIMIZE))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 	}
 
 	void Window::maximize()
 	{
 		if (!ShowWindow(m_window, SW_MAXIMIZE))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 	}
 
 	void Window::restore()
 	{
 		if (!ShowWindow(m_window, SW_RESTORE))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 	}
 
 	bool Window::isMinimized() const
@@ -122,10 +122,10 @@ namespace win
 	void Window::activate()
 	{
 		if (!SetForegroundWindow(m_window))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 	}
 
-	std::string Window::getName() const
+	string Window::getName() const
 	{
 		WCHAR buffer[1024] = {};
 		GetWindowTextW(m_window, buffer, 1023);
@@ -136,14 +136,14 @@ namespace win
 	{
 		if (!SetWindowPos(m_window, nullptr, 0, 0, static_cast<int>(size.width),
 			static_cast<int>(size.height), SWP_NOMOVE | SWP_NOZORDER))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 	}
 
 	Size Window::getSize() const
 	{
 		RECT rect = {};
 		if (!GetWindowRect(m_window, &rect))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		return Size(rect.right - rect.left, rect.bottom - rect.top);
 	}
 
@@ -151,7 +151,7 @@ namespace win
 	{
 		RECT rect = {};
 		if (!GetWindowRect(m_window, &rect))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		return Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 	}
 
@@ -159,13 +159,13 @@ namespace win
 	{
 		RECT rect = {};
 		if (!GetClientRect(m_window, &rect))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		POINT leftTop = { rect.left, rect.top };
 		if (!ClientToScreen(m_window, &leftTop))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		POINT rightBottom = { rect.right, rect.bottom };
 		if (!ClientToScreen(m_window, &rightBottom))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		return Rect(leftTop.x, leftTop.y, rightBottom.x - leftTop.x, rightBottom.y - leftTop.y);
 	}
 

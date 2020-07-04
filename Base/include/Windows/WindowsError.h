@@ -8,9 +8,9 @@ namespace win
 		public Exception
 	{
 	public:
-		WindowsError(DWORD errorId);
+		explicit WindowsError(DWORD errorId = GetLastError());
 
-		virtual void print(std::ostream& os) const override;
+		virtual void print(ostream& os) const override;
 
 	private:
 		DWORD m_errorId;

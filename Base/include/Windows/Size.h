@@ -49,7 +49,7 @@ namespace win
 
 		bool operator ==(const SizeBase& other) const
 		{
-			return Traits::Equals(width, other.width) && Traits::Equals(height, other.height);
+			return Traits::IsEqual(width, other.width) && Traits::IsEqual(height, other.height);
 		}
 
 		bool operator !=(const SizeBase& other) const

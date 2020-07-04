@@ -7,7 +7,7 @@ namespace win
 	public:
 		static const DWORD INVALID_ID = 0xFFFFFFFF;
 
-		static Process FindByName(const std::string& name,
+		static Process FindByName(const string& name,
 			DWORD desiredAccess = PROCESS_ALL_ACCESS, BOOL inheritHandle = FALSE);
 
 		Process();
@@ -20,7 +20,7 @@ namespace win
 		Process& operator =(Process&& other);
 		void swap(Process& other);
 
-		HMODULE findModuleByName(const std::string& moduleName) const;
+		HMODULE findModuleByName(const string& moduleName) const;
 
 		// 判断进程是不是运行在WOW64虚拟环境下
 		// 64-bit process on 64-bit Windows : FALSE

@@ -12,20 +12,20 @@
 namespace base
 {
 	class Exception :
-		public std::runtime_error
+		public runtime_error
 	{
 	public:
 		Exception();
-		explicit Exception(const std::string& desc);
+		explicit Exception(const string& desc);
 		explicit Exception(const char* desc);
-		Exception(int_t id, const std::string& desc);
+		Exception(int_t id, const string& desc);
 		Exception(int_t id, const char* desc);
 
-		virtual void print(std::ostream& os) const;
+		virtual void print(ostream& os) const;
 
 	protected:
-		void printSourceLocation(std::ostream& os) const;
-		void printStackTrace(std::ostream& os) const;
+		void printSourceLocation(ostream& os) const;
+		void printStackTrace(ostream& os) const;
 
 		int_t m_id;
 		SourceLocation m_sourceLocation;
@@ -36,5 +36,5 @@ namespace base
 
 #define BASE_THROW(ex) { STORE_SOURCE_LOCATION; throw ex; }
 
-	void PrintException(std::ostream& os);
+	void PrintException(ostream& os);
 }

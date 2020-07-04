@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Base/Common.h"
+
+#include <type_traits>
+
 namespace base
 {
 	template <typename T>
@@ -7,24 +11,24 @@ namespace base
 	{
 	public:
 		explicit ScopeGuard(T&& functor) :
-			m_functor(std::forward<T>(functor)),
-			m_dismissed(false)
+			m_functor(forward<T>(functor)),
+			m_isDismissed(false)
 		{
 		}
 
 		~ScopeGuard()
 		{
-			if (!m_dismissed)
+			if (!m_isDismissed)
 				m_functor();
 		}
 
 		ScopeGuard(const ScopeGuard&) = delete;
 
 		ScopeGuard(ScopeGuard&& other) :
-			m_functor(std::move(other.m_functor)),
-			m_dismissed(other.m_dismissed)
+			m_functor(move(other.m_functor)),
+			m_isDismissed(other.m_isDismissed)
 		{
-			other.m_dismissed = true;
+			other.m_isDismissed = true;
 		}
 
 		ScopeGuard& operator =(const ScopeGuard&) = delete;
@@ -32,13 +36,13 @@ namespace base
 
 	private:
 		T m_functor;
-		bool m_dismissed;
+		bool m_isDismissed;
 	};
 
 	template <typename T>
 	ScopeGuard<T> MakeScopeGuard(T&& functor)
 	{
-		return ScopeGuard<T>(std::forward<T>(functor));
+		return ScopeGuard<T>(forward<T>(functor));
 	}
 
 #define SCOPEGUARD_LINENAME_CAT(name, line) name##line

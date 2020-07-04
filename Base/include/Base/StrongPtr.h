@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Base/Common.h"
+
 #include <cassert>
 
 namespace base
@@ -101,14 +103,14 @@ namespace base
 
 		sp& operator =(sp&& other)
 		{
-			sp(std::move(other)).swap(*this);
+			sp(move(other)).swap(*this);
 			return *this;
 		}
 
 		template <typename U>
 		sp& operator =(sp<U>&& other)
 		{
-			sp(std::move(other)).swap(*this);
+			sp(move(other)).swap(*this);
 			return *this;
 		}
 

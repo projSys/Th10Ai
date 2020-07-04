@@ -8,14 +8,14 @@
 
 namespace win
 {
-	Process Process::FindByName(const std::string& name,
+	Process Process::FindByName(const string& name,
 		DWORD desiredAccess, BOOL inheritHandle)
 	{
-		std::wstring nameW = String::Utf8ToWide(name);
+		wstring nameW = String::Utf8ToWide(name);
 
 		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 		if (snapshot == INVALID_HANDLE_VALUE)
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		ON_SCOPE_EXIT([&]()
 			{
 				CloseHandle(snapshot);
@@ -50,7 +50,7 @@ namespace win
 	{
 		m_process = OpenProcess(desiredAccess, inheritHandle, id);
 		if (m_process == nullptr)
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 	}
 
 	Process::~Process()
@@ -69,7 +69,7 @@ namespace win
 
 	Process& Process::operator =(Process&& other)
 	{
-		Process(std::move(other)).swap(*this);
+		Process(move(other)).swap(*this);
 		return *this;
 	}
 
@@ -79,13 +79,13 @@ namespace win
 		std::swap(m_id, other.m_id);
 	}
 
-	HMODULE Process::findModuleByName(const std::string& moduleName) const
+	HMODULE Process::findModuleByName(const string& moduleName) const
 	{
-		std::wstring moduleNameW = String::Utf8ToWide(moduleName);
+		wstring moduleNameW = String::Utf8ToWide(moduleName);
 
 		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, m_id);
 		if (snapshot == INVALID_HANDLE_VALUE)
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		ON_SCOPE_EXIT([&]()
 			{
 				CloseHandle(snapshot);
@@ -110,7 +110,7 @@ namespace win
 	{
 		BOOL ret = FALSE;
 		if (!IsWow64Process(m_process, &ret))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		return ret;
 	}
 
@@ -118,7 +118,7 @@ namespace win
 	{
 		DWORD exitCode = 0;
 		if (!GetExitCodeProcess(m_process, &exitCode))
-			BASE_THROW(WindowsError(GetLastError()));
+			BASE_THROW(WindowsError());
 		return exitCode == STILL_ACTIVE;
 	}
 

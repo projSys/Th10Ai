@@ -10,10 +10,9 @@ namespace win
 	{
 	}
 
-	void WindowsError::print(std::ostream& os) const
+	void WindowsError::print(ostream& os) const
 	{
-		os << '[' << m_errorId << ']'
-			<< Utils::GetErrorDescription(m_errorId) << '\n';
+		os << '[' << m_errorId << ']' << Utils::GetErrorDescription(m_errorId) << '\n';
 
 		printSourceLocation(os);
 		printStackTrace(os);

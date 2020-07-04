@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Base/Common.h"
+
 #include <cassert>
 
 namespace base
@@ -95,14 +97,14 @@ namespace base
 
 		wp& operator =(wp&& other)
 		{
-			wp(std::move(other)).swap(*this);
+			wp(move(other)).swap(*this);
 			return *this;
 		}
 
 		template <typename U>
 		wp& operator =(wp<U>&& other)
 		{
-			wp(std::move(other)).swap(*this);
+			wp(move(other)).swap(*this);
 			return *this;
 		}
 

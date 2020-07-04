@@ -49,7 +49,7 @@ namespace win
 
 		bool operator ==(const PointBase& other) const
 		{
-			return Traits::Equals(x, other.x) && Traits::Equals(y, other.y);
+			return Traits::IsEqual(x, other.x) && Traits::IsEqual(y, other.y);
 		}
 
 		bool operator !=(const PointBase& other) const

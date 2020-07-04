@@ -5,25 +5,25 @@
 
 namespace base
 {
-	namespace blc = boost::locale::conv;
+	using namespace boost::locale::conv;
 
-	std::wstring String::Utf8ToWide(const char* str)
+	wstring String::Utf8ToWide(const char* str)
 	{
-		return blc::utf_to_utf<wchar_t>(str);
+		return utf_to_utf<wchar_t>(str);
 	}
 
-	std::wstring String::Utf8ToWide(const std::string& str)
+	wstring String::Utf8ToWide(const string& str)
 	{
-		return blc::utf_to_utf<wchar_t>(str);
+		return utf_to_utf<wchar_t>(str);
 	}
 
-	std::string String::WideToUtf8(const wchar_t* str)
+	string String::WideToUtf8(const wchar_t* str)
 	{
-		return blc::utf_to_utf<char>(str);
+		return utf_to_utf<char>(str);
 	}
 
-	std::string String::WideToUtf8(const std::wstring& str)
+	string String::WideToUtf8(const wstring& str)
 	{
-		return blc::utf_to_utf<char>(str);
+		return utf_to_utf<char>(str);
 	}
 }

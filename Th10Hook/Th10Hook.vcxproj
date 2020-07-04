@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{DC6C4B81-B19B-4589-8510-14A7A4E7C34F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Th10Hook</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;TH10HOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_73_0;D:\Develop\Touhou\Detours-master\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_73_0\lib32-msvc-14.2;D:\Develop\Touhou\Detours-master\lib.X86;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;TH10HOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_73_0;D:\Develop\Touhou\Detours-master\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_73_0\lib32-msvc-14.2;D:\Develop\Touhou\Detours-master\lib.X86;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Th10Hook\Bullet.h" />
+    <ClInclude Include="include\Th10Hook\Cell.h" />
+    <ClInclude Include="include\Th10Hook\Common.h" />
+    <ClInclude Include="include\Th10Hook\D3D9Hook.h" />
+    <ClInclude Include="include\Th10Hook\Data.h" />
+    <ClInclude Include="include\Th10Hook\DI8Hook.h" />
+    <ClInclude Include="include\Th10Hook\Direction.h" />
+    <ClInclude Include="include\Th10Hook\DllApp.h" />
+    <ClInclude Include="include\Th10Hook\DllMain.h" />
+    <ClInclude Include="include\Th10Hook\dxerr.h" />
+    <ClInclude Include="include\Th10Hook\Enemy.h" />
+    <ClInclude Include="include\Th10Hook\Entity.h" />
+    <ClInclude Include="include\Th10Hook\Item.h" />
+    <ClInclude Include="include\Th10Hook\Laser.h" />
+    <ClInclude Include="include\Th10Hook\MyDetours.h" />
+    <ClInclude Include="include\Th10Hook\Th10Context.h" />
+    <ClInclude Include="include\Th10Hook\Th10Hook.h" />
+    <ClInclude Include="include\Th10Hook\OldDxResult.h" />
+    <ClInclude Include="include\Th10Hook\Path.h" />
+    <ClInclude Include="include\Th10Hook\Player.h" />
+    <ClInclude Include="include\Th10Hook\Reader.h" />
+    <ClInclude Include="include\Th10Hook\Scene.h" />
+    <ClInclude Include="include\Th10Hook\Th10Ai.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Th10Hook\Bullet.cpp" />
+    <ClCompile Include="src\Th10Hook\Cell.cpp" />
+    <ClCompile Include="src\Th10Hook\D3D9Hook.cpp" />
+    <ClCompile Include="src\Th10Hook\Data.cpp" />
+    <ClCompile Include="src\Th10Hook\DI8Hook.cpp" />
+    <ClCompile Include="src\Th10Hook\DllApp.cpp" />
+    <ClCompile Include="src\Th10Hook\DllMain.cpp" />
+    <ClCompile Include="src\Th10Hook\dxerr.cpp" />
+    <ClCompile Include="src\Th10Hook\Enemy.cpp" />
+    <ClCompile Include="src\Th10Hook\Entity.cpp" />
+    <ClCompile Include="src\Th10Hook\Item.cpp" />
+    <ClCompile Include="src\Th10Hook\Laser.cpp" />
+    <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
+    <ClCompile Include="src\Th10Hook\Th10Context.cpp" />
+    <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />
+    <ClCompile Include="src\Th10Hook\OldDxResult.cpp" />
+    <ClCompile Include="src\Th10Hook\Path.cpp" />
+    <ClCompile Include="src\Th10Hook\Player.cpp" />
+    <ClCompile Include="src\Th10Hook\Reader.cpp" />
+    <ClCompile Include="src\Th10Hook\Scene.cpp" />
+    <ClCompile Include="src\Th10Hook\Th10Ai.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
