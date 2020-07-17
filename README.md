@@ -12,13 +12,12 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
 * 碰撞检测不是100%准确，高速弹尤其明显<br />
 
-## 环境要求 Requirements
+## 运行要求 Requirements
 
 安装[VC++2019可再发行软件包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。<br />
-由于使用了dll注入和api hook，需要杀毒软件放行。<br />
 i7 CPU，越快越好。<br />
 
-## 依赖 Dependencies
+## 编译依赖 Dependencies
 
 [boost](https://www.boost.org)<br />
 [Detours](https://github.com/microsoft/detours)<br />

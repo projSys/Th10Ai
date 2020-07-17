@@ -34,7 +34,7 @@ namespace th
 		wstring dllNameW = String::Utf8ToWide(dllName);
 		uint_t size = (dllNameW.length() + 1) * sizeof(wchar_t);
 
-		HANDLE_ptr process = HANDLE_ptr(OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId),
+		HANDLE_ptr process(OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId),
 			&CloseHandle);
 		if (process == nullptr)
 			BASE_THROW(WindowsError());
@@ -58,7 +58,7 @@ namespace th
 		if (loadLibraryW == nullptr)
 			BASE_THROW(WindowsError());
 
-		HANDLE_ptr thread = HANDLE_ptr(CreateRemoteThread(process.get(), nullptr, 0,
+		HANDLE_ptr thread(CreateRemoteThread(process.get(), nullptr, 0,
 			reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibraryW), remoteMemory, 0, nullptr),
 			&CloseHandle);
 		if (thread == nullptr)

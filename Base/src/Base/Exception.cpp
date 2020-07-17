@@ -1,6 +1,7 @@
 #include "Base/Common.h"
 #include "Base/Exception.h"
 
+#include <sstream>
 #include <boost/exception/all.hpp>
 
 namespace base
@@ -62,27 +63,29 @@ namespace base
 #endif
 	}
 
-	void PrintException(ostream& os)
+	string PrintException()
 	{
+		ostringstream oss;
 		try
 		{
 			throw;
 		}
 		catch (const Exception& ex)
 		{
-			ex.print(os);
+			ex.print(oss);
 		}
 		catch (const boost::exception& be)
 		{
-			os << boost::diagnostic_information(be);
+			oss << boost::diagnostic_information(be);
 		}
 		catch (const exception& se)
 		{
-			os << se.what() << '\n';
+			oss << se.what() << '\n';
 		}
 		catch (...)
 		{
-			os << "Unclassified exception.\n";
+			oss << "Unclassified exception.\n";
 		}
+		return oss.str();
 	}
 }

@@ -18,7 +18,7 @@ namespace win
 		oldState.copyfmt(os);
 		os << "[0x" << hex << uppercase << setw(8) << setfill('0') << m_result << ']';
 		os.copyfmt(oldState);
-		os << Utils::GetErrorDescription(m_result) << '\n';
+		os << Utils::GetErrorDesc(m_result) << '\n';
 
 		printSourceLocation(os);
 		printStackTrace(os);

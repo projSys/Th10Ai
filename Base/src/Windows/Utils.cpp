@@ -9,7 +9,7 @@ namespace win
 {
 	using namespace boost::filesystem;
 
-	string Utils::GetErrorDescription(DWORD errorId)
+	string Utils::GetErrorDesc(DWORD errorId)
 	{
 		WCHAR buffer[4096] = {};
 		if (FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -31,7 +31,7 @@ namespace win
 		WCHAR buffer[4096] = {};
 		if (GetModuleFileNameW(module, buffer, 4095) == 0)
 			BASE_THROW(WindowsError());
-		path path(buffer);
-		return String::WideToUtf8(path.remove_filename().wstring());
+		wpath fullPath(buffer);
+		return String::WideToUtf8(fullPath.remove_filename().wstring());
 	}
 }

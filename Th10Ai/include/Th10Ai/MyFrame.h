@@ -1,26 +1,12 @@
 #pragma once
 
-#include <boost/interprocess/managed_windows_shared_memory.hpp>
-#include <boost/interprocess/sync/interprocess_mutex.hpp>
-#include <boost/interprocess/sync/interprocess_condition.hpp>
-#include <boost/interprocess/sync/scoped_lock.hpp>
+#include <memory>
 #include <wx/wx.h>
+
+#include "Th10Ai/Th10Context.h"
 
 namespace th
 {
-	struct Th10HookData
-	{
-		HWND window;
-
-		boost::interprocess::interprocess_mutex hookMutex;
-		boost::interprocess::interprocess_condition hookCond;
-		bool isHooked;
-
-		boost::interprocess::interprocess_mutex unhookMutex;
-		boost::interprocess::interprocess_condition unhookCond;
-		bool isUnhook;
-	};
-
 	class MyFrame :
 		public wxFrame
 	{
@@ -31,8 +17,8 @@ namespace th
 	private:
 		void onClose(wxCloseEvent& event);
 
-		boost::interprocess::managed_windows_shared_memory m_sharedMemory;
-		Th10HookData* m_data;
+		Logger m_logger;
+		unique_ptr<Th10Context> m_th10Context;
 
 		wxDECLARE_EVENT_TABLE();
 	};

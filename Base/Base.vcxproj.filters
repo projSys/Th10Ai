@@ -66,9 +66,6 @@
     <ClInclude Include="include\Windows\Point.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\Process.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Windows\Rect.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
@@ -93,6 +90,9 @@
     <ClInclude Include="include\Windows\Types.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Logger.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -106,9 +106,6 @@
     </ClCompile>
     <ClCompile Include="src\Base\SourceLocation.cpp">
       <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\Process.cpp">
-      <Filter>源文件\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Windows\Window.cpp">
       <Filter>源文件\Windows</Filter>
@@ -124,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="src\Windows\DxResult.cpp">
       <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Logger.cpp">
+      <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

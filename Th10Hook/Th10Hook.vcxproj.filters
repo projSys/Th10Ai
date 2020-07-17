@@ -54,9 +54,6 @@
     <ClInclude Include="include\Th10Hook\Player.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Reader.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\Cell.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
@@ -81,13 +78,31 @@
     <ClInclude Include="include\Th10Hook\OldDxResult.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Th10Hook.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\Th10Context.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\DllApp.h">
+    <ClInclude Include="include\Th10Hook\Status.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Action.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Th10Hook.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Th10HookLoader.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\DllLoader.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\WindowHook.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Reader.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Reader2.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,9 +134,6 @@
     <ClCompile Include="src\Th10Hook\Player.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\Reader.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
     <ClCompile Include="src\Th10Hook\Cell.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
@@ -146,13 +158,25 @@
     <ClCompile Include="src\Th10Hook\OldDxResult.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\Th10Hook.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
     <ClCompile Include="src\Th10Hook\Th10Context.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\DllApp.cpp">
+    <ClCompile Include="src\Th10Hook\Th10Hook.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Th10HookLoader.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DllLoader.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\WindowHook.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Reader.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Reader2.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>

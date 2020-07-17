@@ -10,8 +10,6 @@
 
 namespace th
 {
-	class Reader;
-
 	struct ItemTarget
 	{
 		bool found;
@@ -27,7 +25,7 @@ namespace th
 	class Data
 	{
 	public:
-		Data(Reader& reader);
+		Data();
 
 		void update();
 		void print();
@@ -51,8 +49,6 @@ namespace th
 		const vector<Laser>& getLasers() const;
 
 	private:
-		Reader& m_reader;
-
 		Player m_player;
 		vector<Item> m_items;
 		vector<Enemy> m_enemies;

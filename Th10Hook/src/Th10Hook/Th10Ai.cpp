@@ -1,9 +1,6 @@
 #include "Th10Hook/Common.h"
 #include "Th10Hook/Th10Ai.h"
 
-#include <sstream>
-#include <boost/log/trivial.hpp>
-
 #include "Th10Hook/Path.h"
 
 namespace th
@@ -18,13 +15,12 @@ namespace th
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
 		m_prevSlow(false),
-		//m_data(m_reader),
 		m_dataUpdated(false),
 		p(true)
 	{
-		m_writeData = make_shared<Data>(m_reader);
-		m_middleData = make_shared<Data>(m_reader);
-		m_readData = make_shared<Data>(m_reader);
+		m_writeData = make_shared<Data>();
+		m_middleData = make_shared<Data>();
+		m_readData = make_shared<Data>();
 
 		m_scene.split(6);
 
@@ -96,9 +92,7 @@ namespace th
 		}
 		catch (...)
 		{
-			ostringstream oss;
-			PrintException(oss);
-			BOOST_LOG_TRIVIAL(error) << oss.str() << endl;
+			BASE_LOG_ERROR(PrintException());
 		}
 	}
 
@@ -170,9 +164,7 @@ namespace th
 		}
 		catch (...)
 		{
-			ostringstream oss;
-			PrintException(oss);
-			BOOST_LOG_TRIVIAL(error) << oss.str() << endl;
+			BASE_LOG_ERROR(PrintException());
 			m_controlDone = true;
 		}
 	}
@@ -195,9 +187,7 @@ namespace th
 		}
 		catch (...)
 		{
-			ostringstream oss;
-			PrintException(oss);
-			BOOST_LOG_TRIVIAL(error) << oss.str() << endl;
+			BASE_LOG_ERROR(PrintException());
 			m_controlDone = true;
 		}
 	}

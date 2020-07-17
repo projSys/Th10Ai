@@ -1,11 +1,13 @@
 #pragma once
 
+#include <thread>
+#include <atomic>
 #include <boost/interprocess/managed_windows_shared_memory.hpp>
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 #include <boost/interprocess/sync/interprocess_condition.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
 
-#include "Th10Hook/Status.h"
+#include "Th10Ai/Status.h"
 
 namespace th
 {
@@ -34,15 +36,12 @@ namespace th
 		Th10Context();
 		~Th10Context();
 
-		HWND getWindow() const;
-
-		void notifyHook();
-		void waitHook();
-
-		void notifyUnhook();
-		void waitUnhook();
-
 	private:
+		void threadProc();
+
+		thread m_thread;
+		atomic_bool m_isDone;
+
 		boost::interprocess::managed_windows_shared_memory m_memory;
 		Th10SharedData* m_data;
 	};

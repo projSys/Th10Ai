@@ -6,8 +6,7 @@
 
 namespace th
 {
-	Data::Data(Reader& reader) :
-		m_reader(reader)
+	Data::Data()
 	{
 		m_items.reserve(2000);
 		m_enemies.reserve(200);
@@ -17,11 +16,12 @@ namespace th
 
 	void Data::update()
 	{
-		m_reader.readPlayer(m_player);
-		m_reader.readItems(m_items);
-		m_reader.readEnemies(m_enemies);
-		m_reader.readBullets(m_bullets);
-		m_reader.readLasers(m_lasers);
+		Reader reader;
+		reader.readPlayer(m_player);
+		reader.readItems(m_items);
+		reader.readEnemies(m_enemies);
+		reader.readBullets(m_bullets);
+		reader.readLasers(m_lasers);
 	}
 
 	void Data::print()

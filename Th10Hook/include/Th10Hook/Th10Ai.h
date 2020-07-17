@@ -7,7 +7,6 @@
 
 #include "Th10Hook/D3D9Hook.h"
 #include "Th10Hook/DI8Hook.h"
-#include "Th10Hook/Reader.h"
 #include "Th10Hook/Data.h"
 #include "Th10Hook/Scene.h"
 
@@ -19,11 +18,10 @@ namespace th
 		Th10Ai();
 		~Th10Ai();
 
-		void controlProc();
-
 	private:
 		static bool IsKeyPressed(int vKey);
 
+		void controlProc();
 		void start();
 		void stop();
 		void print();
@@ -55,7 +53,6 @@ namespace th
 
 		D3D9Hook m_d3d9Hook;
 		DI8Hook m_di8Hook;
-		Reader m_reader;
 		//Data m_data;
 		mutex m_dataMutex;
 		shared_ptr<Data> m_writeData;

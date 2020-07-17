@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Exception.h" />
+    <ClInclude Include="include\Base\Logger.h" />
     <ClInclude Include="include\Base\Object.h" />
     <ClInclude Include="include\Base\RefCounted.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
@@ -162,7 +163,6 @@
     <ClInclude Include="include\Windows\Common.h" />
     <ClInclude Include="include\Windows\DxResult.h" />
     <ClInclude Include="include\Windows\Point.h" />
-    <ClInclude Include="include\Windows\Process.h" />
     <ClInclude Include="include\Windows\Rect.h" />
     <ClInclude Include="include\Windows\Size.h" />
     <ClInclude Include="include\Windows\Types.h" />
@@ -172,12 +172,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp" />
+    <ClCompile Include="src\Base\Logger.cpp" />
     <ClCompile Include="src\Base\Object.cpp" />
     <ClCompile Include="src\Base\RefCounted.cpp" />
     <ClCompile Include="src\Base\SourceLocation.cpp" />
     <ClCompile Include="src\Base\String.cpp" />
     <ClCompile Include="src\Windows\DxResult.cpp" />
-    <ClCompile Include="src\Windows\Process.cpp" />
     <ClCompile Include="src\Windows\Utils.cpp" />
     <ClCompile Include="src\Windows\Window.cpp" />
     <ClCompile Include="src\Windows\WindowsError.cpp" />

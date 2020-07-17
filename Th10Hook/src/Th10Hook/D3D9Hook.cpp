@@ -27,7 +27,7 @@ namespace th
 				UnregisterClassW(wc.lpszClassName, wc.hInstance);
 			});
 
-		HWND_ptr window = HWND_ptr(CreateWindowExW(0, wc.lpszClassName, L"D3D9HookWindow",
+		HWND_ptr window(CreateWindowExW(0, wc.lpszClassName, L"D3D9HookWindow",
 			WS_OVERLAPPEDWINDOW, 0, 0, 640, 480, nullptr, nullptr, wc.hInstance, nullptr),
 			&DestroyWindow);
 		if (window == nullptr)
@@ -118,7 +118,7 @@ namespace th
 	{
 		bool waited = false;
 		unique_lock<mutex> lock(m_presentMutex);
-		while (!m_isPresentReadied)
+		if (!m_isPresentReadied)
 		{
 			m_presentCond.wait(lock);
 			waited = true;

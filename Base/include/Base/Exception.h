@@ -36,5 +36,6 @@ namespace base
 
 #define BASE_THROW(ex) { STORE_SOURCE_LOCATION; throw ex; }
 
-	void PrintException(ostream& os);
+	// 只能在catch块里调用
+	string PrintException();
 }

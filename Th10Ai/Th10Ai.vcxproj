@@ -91,17 +91,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Th10Ai\Action.h" />
     <ClInclude Include="include\Th10Ai\Common.h" />
     <ClInclude Include="include\Th10Ai\DllInject.h" />
     <ClInclude Include="include\Th10Ai\MainWindow.h" />
     <ClInclude Include="include\Th10Ai\MyApp.h" />
     <ClInclude Include="include\Th10Ai\MyFrame.h" />
+    <ClInclude Include="include\Th10Ai\Status.h" />
+    <ClInclude Include="include\Th10Ai\Th10Context.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Ai\DllInject.cpp" />
     <ClCompile Include="src\Th10Ai\MainWindow.cpp" />
     <ClCompile Include="src\Th10Ai\MyApp.cpp" />
     <ClCompile Include="src\Th10Ai\MyFrame.cpp" />
+    <ClCompile Include="src\Th10Ai\Th10Context.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
