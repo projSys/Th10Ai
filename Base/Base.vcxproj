@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Base\Clock.h" />
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Exception.h" />
     <ClInclude Include="include\Base\Logger.h" />
@@ -160,25 +161,26 @@
     <ClInclude Include="include\Base\Types.h" />
     <ClInclude Include="include\Base\TypeTraits.h" />
     <ClInclude Include="include\Base\WeakPtr.h" />
+    <ClInclude Include="include\Windows\Apis.h" />
     <ClInclude Include="include\Windows\Common.h" />
     <ClInclude Include="include\Windows\DxResult.h" />
     <ClInclude Include="include\Windows\Point.h" />
     <ClInclude Include="include\Windows\Rect.h" />
     <ClInclude Include="include\Windows\Size.h" />
     <ClInclude Include="include\Windows\Types.h" />
-    <ClInclude Include="include\Windows\Utils.h" />
     <ClInclude Include="include\Windows\Window.h" />
     <ClInclude Include="include\Windows\WindowsError.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Base\Clock.cpp" />
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Logger.cpp" />
     <ClCompile Include="src\Base\Object.cpp" />
     <ClCompile Include="src\Base\RefCounted.cpp" />
     <ClCompile Include="src\Base\SourceLocation.cpp" />
     <ClCompile Include="src\Base\String.cpp" />
+    <ClCompile Include="src\Windows\Apis.cpp" />
     <ClCompile Include="src\Windows\DxResult.cpp" />
-    <ClCompile Include="src\Windows\Utils.cpp" />
     <ClCompile Include="src\Windows\Window.cpp" />
     <ClCompile Include="src\Windows\WindowsError.cpp" />
   </ItemGroup>

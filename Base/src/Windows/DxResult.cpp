@@ -3,7 +3,7 @@
 
 #include <iomanip>
 
-#include "Windows/Utils.h"
+#include "Windows/Apis.h"
 
 namespace win
 {
@@ -18,7 +18,7 @@ namespace win
 		oldState.copyfmt(os);
 		os << "[0x" << hex << uppercase << setw(8) << setfill('0') << m_result << ']';
 		os.copyfmt(oldState);
-		os << Utils::GetErrorDesc(m_result) << '\n';
+		os << Apis::GetErrorDesc(m_result) << '\n';
 
 		printSourceLocation(os);
 		printStackTrace(os);

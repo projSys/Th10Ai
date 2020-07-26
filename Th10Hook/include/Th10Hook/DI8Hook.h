@@ -1,39 +1,28 @@
 #pragma once
 
+#ifndef DIRECTINPUT_VERSION
 #define DIRECTINPUT_VERSION 0x0800
+#endif
+
 #include <dinput.h>
 #include <atlbase.h>
-#include <atomic>
-#include <mutex>
 #include <Base/Singleton.h>
 
 namespace th
 {
-	enum KeyState
+	class DI8Listener
 	{
-		KS_NONE = -1,
-
-		KS_RELEASE,
-		KS_PRESS,
-
-		KS_MAXCOUNT
+	public:
+		virtual ~DI8Listener() = default;
+		virtual void onGetDeviceStateW(IDirectInputDevice8W* device, DWORD size, LPVOID data) = 0;
 	};
 
 	class DI8Hook :
 		private Singleton<DI8Hook>
 	{
 	public:
-		DI8Hook();
+		DI8Hook(DI8Listener* listener);
 		~DI8Hook();
-
-		void enable(bool enabled);
-
-		void clear();
-		void keyClear(uint8_t key);
-		void keyPress(uint8_t key);
-		void keyRelease(uint8_t key);
-		bool isKeyPressed(uint8_t key) const;
-		void commit();
 
 	private:
 		// IDirectInput8
@@ -45,12 +34,7 @@ namespace th
 
 		HRESULT getDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data);
 
-		atomic_bool m_enabled;
+		DI8Listener* m_listener;
 		GetDeviceStateW_t* m_getDeviceStateW;
-
-		mutex m_keyMutex;
-		KeyState m_writeState[256];
-		KeyState m_readState[256];
-		bool m_isKeyReadied;
 	};
 }

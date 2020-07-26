@@ -5,18 +5,22 @@
 #include <atomic>
 #include <mutex>
 
-#include "Th10Hook/D3D9Hook.h"
-#include "Th10Hook/DI8Hook.h"
-#include "Th10Hook/Data.h"
-#include "Th10Hook/Scene.h"
+#include "Th10Ai/Th10Context.h"
+#include "Th10Ai/Data.h"
+#include "Th10Ai/Scene.h"
 
 namespace th
 {
+	class MyWindow;
+
 	class Th10Ai
 	{
 	public:
-		Th10Ai();
+		Th10Ai(MyWindow* window);
 		~Th10Ai();
+
+		Status_t& getStatus();
+		MyWindow* m_window;
 
 	private:
 		static bool IsKeyPressed(int vKey);
@@ -36,6 +40,8 @@ namespace th
 		bool handleMove();
 		void move(Direction dir, bool slow);
 
+		Th10Context m_context;
+
 		thread m_controlThread;
 		atomic_bool m_controlDone;
 		atomic_bool m_controlActive;
@@ -51,8 +57,6 @@ namespace th
 		Direction m_prevDir;
 		bool m_prevSlow;
 
-		D3D9Hook m_d3d9Hook;
-		DI8Hook m_di8Hook;
 		//Data m_data;
 		mutex m_dataMutex;
 		shared_ptr<Data> m_writeData;

@@ -33,9 +33,6 @@
     <ClInclude Include="include\Th10Ai\MyFrame.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Ai\MainWindow.h">
-      <Filter>头文件\Th10Ai</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Ai\Status.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
@@ -43,6 +40,48 @@
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Ai\Th10Context.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Bullet.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Cell.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Data.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Direction.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Enemy.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Entity.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Item.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Laser.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Path.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Player.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Scene.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Th10Ai.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Utils.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\MyWindow.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,10 +95,46 @@
     <ClCompile Include="src\Th10Ai\MyFrame.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Ai\MainWindow.cpp">
+    <ClCompile Include="src\Th10Ai\Th10Context.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Ai\Th10Context.cpp">
+    <ClCompile Include="src\Th10Ai\Bullet.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Cell.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Data.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Enemy.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Entity.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Item.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Laser.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Path.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Player.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Scene.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Th10Ai.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Utils.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\MyWindow.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
   </ItemGroup>

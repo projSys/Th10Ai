@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include "Th10Hook/Player.h"
-#include "Th10Hook/Item.h"
-#include "Th10Hook/Enemy.h"
-#include "Th10Hook/Bullet.h"
-#include "Th10Hook/Laser.h"
+#include "Th10Ai/Player.h"
+#include "Th10Ai/Item.h"
+#include "Th10Ai/Enemy.h"
+#include "Th10Ai/Bullet.h"
+#include "Th10Ai/Laser.h"
 
 namespace th
 {

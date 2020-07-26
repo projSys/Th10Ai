@@ -1,5 +1,5 @@
-#include "Th10Hook/Common.h"
-#include "Th10Hook/Player.h"
+#include "Th10Ai/Common.h"
+#include "Th10Ai/Player.h"
 
 namespace th
 {

@@ -1,7 +1,7 @@
 #include "Th10Ai/Common.h"
 #include "Th10Ai/MyFrame.h"
 
-#include "Th10Ai/MainWindow.h"
+#include "Th10Ai/MyWindow.h"
 
 namespace th
 {
@@ -17,9 +17,11 @@ namespace th
 
 		wxPanel* panel = new wxPanel(this, wxID_ANY);
 
+		MyWindow* window = new MyWindow(panel);
+
 		wxBoxSizer* hSizer = new wxBoxSizer(wxHORIZONTAL);
 		hSizer->AddSpacer(32);
-		hSizer->Add(new MainWindow(panel), wxSizerFlags().CentreVertical());
+		hSizer->Add(window, wxSizerFlags().CentreVertical());
 		hSizer->AddSpacer(32);
 
 		wxBoxSizer* vSizer = new wxBoxSizer(wxVERTICAL);
@@ -29,10 +31,10 @@ namespace th
 
 		panel->SetSizer(hSizer);
 
-		string logName = Utils::GetModuleDir() + "/Th10Ai_%N.log";
+		string logName = Apis::GetModuleDir() + "/Th10Ai_%N.log";
 		m_logger.addFileLog(logName);
 
-		m_th10Context = make_unique<Th10Context>();
+		m_th10Ai = make_unique<Th10Ai>(window);
 	}
 
 	MyFrame::~MyFrame()
@@ -41,7 +43,7 @@ namespace th
 
 	void MyFrame::onClose(wxCloseEvent& event)
 	{
-		m_th10Context = nullptr;
+		m_th10Ai = nullptr;
 
 		event.Skip();
 	}

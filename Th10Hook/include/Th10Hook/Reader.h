@@ -1,8 +1,6 @@
 #pragma once
 
-//#include <Windows/Process.h>
-
-#include "Th10Hook/Data.h"
+#include "Th10Hook/Status.h"
 
 namespace th
 {
@@ -10,31 +8,17 @@ namespace th
 	class Reader
 	{
 	public:
-		//Reader(Process& process);
-
-		bool readPlayer(Player& player) noexcept;
-		bool readItems(vector<Item>& items) noexcept;
-		bool readEnemies(vector<Enemy>& enemies) noexcept;
-		bool readBullets(vector<Bullet>& bullets) noexcept;
-		bool readLasers(vector<Laser>& lasers) noexcept;
+		static int_t ReadPlayer(Player_t& player);
+		static int_t ReadItems(Item_t items[]);
+		static int_t ReadEnemies(Enemy_t enemies[]);
+		static int_t ReadBullets(Bullet_t bullets[]);
+		static int_t ReadLasers(Laser_t lasers[]);
 
 	private:
-		// 读内存太慢了
-		//template <typename T>
-		//T readMemory(uint_t address) noexcept
-		//{
-		//	T data();
-		//	ReadProcessMemory(m_process, reinterpret_cast<LPCVOID>(address), &data, sizeof(data), nullptr);
-		//	return data;
-		//}
-
-		// DLL注入后直接撸地址吧
 		template <typename T>
-		T readMemory(uint_t address) noexcept
+		static T ReadMemory(uint_t address)
 		{
 			return *reinterpret_cast<T*>(address);
 		}
-
-		//Process& m_process;
 	};
 }

@@ -1,5 +1,5 @@
-#include "Th10Hook/Common.h"
-#include "Th10Hook/Laser.h"
+#include "Th10Ai/Common.h"
+#include "Th10Ai/Laser.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>

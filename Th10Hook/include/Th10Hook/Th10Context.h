@@ -4,6 +4,7 @@
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 #include <boost/interprocess/sync/interprocess_condition.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
+#include <Base/Clock.h>
 
 #include "Th10Hook/Status.h"
 
@@ -21,11 +22,13 @@ namespace th
 		boost::interprocess::interprocess_condition unhookCond;
 		bool isUnhook;
 
-		Status_t status;
-
 		boost::interprocess::interprocess_mutex updateMutex;
 		boost::interprocess::interprocess_condition updateCond;
 		bool isUpdated;
+		bool isDestroy;
+
+		time_t updateTime;
+		Status_t status;
 	};
 
 	class Th10Context
@@ -37,13 +40,15 @@ namespace th
 		HWND getWindow() const;
 
 		void notifyHook();
-		void waitHook();
-
 		void notifyUnhook();
 		void waitUnhook();
+		void notifyUpdate();
+
+		void update();
 
 	private:
 		boost::interprocess::managed_windows_shared_memory m_memory;
 		Th10SharedData* m_data;
+		Clock m_clock;
 	};
 }

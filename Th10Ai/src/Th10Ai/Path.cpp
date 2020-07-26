@@ -1,5 +1,5 @@
-#include "Th10Hook/Common.h"
-#include "Th10Hook/Path.h"
+#include "Th10Ai/Common.h"
+#include "Th10Ai/Path.h"
 
 namespace th
 {

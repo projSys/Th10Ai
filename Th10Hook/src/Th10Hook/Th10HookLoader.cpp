@@ -4,7 +4,6 @@
 #include <Base/ScopeGuard.h>
 
 #include "Th10Hook/DllMain.h"
-#include "Th10Hook/Th10Ai.h"
 
 namespace th
 {
@@ -20,7 +19,7 @@ namespace th
 
 	void Th10HookLoader::run()
 	{
-		string logName = Utils::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
+		string logName = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
 		m_logger.addFileLog(logName);
 
 		m_context = make_unique<Th10Context>();
@@ -43,24 +42,7 @@ namespace th
 			});
 
 		m_context->notifyHook();
-
 		m_context->waitUnhook();
-
-		//while (true)
-		//{
-		//	if (!m_d3d9Hook->waitPresent())
-		//		cout << "CPU太慢了，数据读取不及时。" << endl;
-
-		//	Reader2::ReadPlayer(m_data->status.player);
-		//	m_data->status.itemCount = Reader2::ReadItems(m_data->status.items);
-		//	m_data->status.enemyCount = Reader2::ReadEnemies(m_data->status.enemies);
-		//	m_data->status.bulletCount = Reader2::ReadBullets(m_data->status.bullets);
-		//	m_data->status.laserCount = Reader2::ReadLasers(m_data->status.lasers);
-
-		//	scoped_lock<interprocess_mutex> lock(m_data->updateMutex);
-		//	m_data->isUpdated = true;
-		//	m_data->updateCond.notify_one();
-		//}
 	}
 
 	void Th10HookLoader::onWindowProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
@@ -83,16 +65,14 @@ namespace th
 
 	void Th10HookLoader::onLoad()
 	{
-		m_th10Ai = make_unique<Th10Ai>();
-		//m_d3d9Hook = make_unique<D3D9Hook>();
-		//m_di8Hook = make_unique<DI8Hook>();
+		m_d3d9Hook = make_unique<D3D9Hook>(this);
+		m_di8Hook = make_unique<DI8Hook>(this);
 	}
 
 	void Th10HookLoader::onUnload()
 	{
-		//m_di8Hook = nullptr;
-		//m_d3d9Hook = nullptr;
-		m_th10Ai = nullptr;
+		m_di8Hook = nullptr;
+		m_d3d9Hook = nullptr;
 	}
 
 	void Th10HookLoader::onDestroy()
@@ -103,5 +83,17 @@ namespace th
 		m_context->notifyUnhook();
 
 		join();
+	}
+
+	void Th10HookLoader::onPresent(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
+		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
+	{
+		m_context->update();
+		m_context->notifyUpdate();
+	}
+
+	void Th10HookLoader::onGetDeviceStateW(IDirectInputDevice8W* device, DWORD size, LPVOID data)
+	{
+
 	}
 }

@@ -1,11 +1,13 @@
-#include "Th10Hook/Common.h"
-#include "Th10Hook/Th10Ai.h"
+#include "Th10Ai/Common.h"
+#include "Th10Ai/Th10Ai.h"
 
-#include "Th10Hook/Path.h"
+#include "Th10Ai/MyWindow.h"
+#include "Th10Ai/Path.h"
 
 namespace th
 {
-	Th10Ai::Th10Ai() :
+	Th10Ai::Th10Ai(MyWindow* window) :
+		m_window(window),
 		m_controlDone(false),
 		m_controlActive(false),
 		m_readDone(false),
@@ -29,8 +31,8 @@ namespace th
 		freopen("conout$", "w", stdout);
 		freopen("conout$", "w", stderr);
 
-		HWND window = GetConsoleWindow();
-		HMENU menu = GetSystemMenu(window, FALSE);
+		HWND console = GetConsoleWindow();
+		HMENU menu = GetSystemMenu(console, FALSE);
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
 		m_controlThread = thread(&Th10Ai::controlProc, this);
@@ -45,7 +47,8 @@ namespace th
 			m_handleThread.join();
 
 		m_readDone = true;
-		m_d3d9Hook.notifyPresent();
+		//m_d3d9Hook.notifyPresent();
+		m_context.notifyUpdate();
 		if (m_readThread.joinable())
 			m_readThread.join();
 
@@ -104,10 +107,10 @@ namespace th
 			m_readActive = true;
 			m_handleActive = true;
 
-			m_di8Hook.clear();
-			m_di8Hook.commit();
-			m_d3d9Hook.enable(true);
-			m_di8Hook.enable(true);
+			//m_di8Hook.clear();
+			//m_di8Hook.commit();
+			//m_d3d9Hook.enable(true);
+			//m_di8Hook.enable(true);
 
 			cout << "启动AI。" << endl;
 		}
@@ -121,10 +124,10 @@ namespace th
 			m_readActive = false;
 			m_handleActive = false;
 
-			m_di8Hook.enable(false);
-			m_d3d9Hook.enable(false);
-			m_di8Hook.clear();
-			m_di8Hook.commit();
+			//m_di8Hook.enable(false);
+			//m_d3d9Hook.enable(false);
+			//m_di8Hook.clear();
+			//m_di8Hook.commit();
 
 			cout << "停止AI。" << endl;
 			cout << "决死总数：" << m_bombCount << endl;
@@ -145,12 +148,15 @@ namespace th
 			{
 				if (m_readActive)
 				{
-					if (!m_d3d9Hook.waitPresent())
-						cout << "CPU太慢了，数据读取不及时。" << endl;
+					//if (!m_d3d9Hook.waitPresent())
+					//	cout << "CPU太慢了，数据读取不及时。" << endl;
 
 					//m_data.update();
 					//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
-					m_writeData->update();
+					//m_writeData->update();
+					m_context.waitUpdate();
+					m_window->update(m_context.getStatus());
+					//cout << m_context.getStatus().player.width << endl;
 
 					lock_guard<mutex> lock(m_dataMutex);
 					std::swap(m_writeData, m_middleData);
@@ -167,6 +173,11 @@ namespace th
 			BASE_LOG_ERROR(PrintException());
 			m_controlDone = true;
 		}
+	}
+
+	Status_t& Th10Ai::getStatus()
+	{
+		return m_context.getStatus();
 	}
 
 	void Th10Ai::handleProc()
@@ -268,7 +279,7 @@ namespace th
 		//time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
 		//cout << "e3: " << e3 << endl;
 
-		m_di8Hook.commit();
+		//m_di8Hook.commit();
 	}
 
 	// 处理炸弹
@@ -282,14 +293,14 @@ namespace th
 			//CellCollideResult ccr = m_scene.collideAll(m_data.getPlayer(), 0.0f);
 			//cout << ccr.collided << endl;
 
-			m_di8Hook.keyPress(DIK_X);
+			//m_di8Hook.keyPress(DIK_X);
 			++m_bombCount;
 			cout << "决死：" << m_bombCount << endl;
 			return true;
 		}
 		else
 		{
-			m_di8Hook.keyRelease(DIK_X);
+			//m_di8Hook.keyRelease(DIK_X);
 			return false;
 		}
 	}
@@ -299,12 +310,12 @@ namespace th
 	{
 		if (m_readData->isTalking())
 		{
-			m_di8Hook.keyPress(DIK_LCONTROL);
+			//m_di8Hook.keyPress(DIK_LCONTROL);
 			return true;
 		}
 		else
 		{
-			m_di8Hook.keyRelease(DIK_LCONTROL);
+			//m_di8Hook.keyRelease(DIK_LCONTROL);
 			return false;
 		}
 	}
@@ -314,12 +325,12 @@ namespace th
 	{
 		if (m_readData->hasEnemy())
 		{
-			m_di8Hook.keyPress(DIK_Z);
+			//m_di8Hook.keyPress(DIK_Z);
 			return true;
 		}
 		else
 		{
-			m_di8Hook.keyRelease(DIK_Z);
+			//m_di8Hook.keyRelease(DIK_Z);
 			return false;
 		}
 	}
@@ -366,74 +377,74 @@ namespace th
 
 	void Th10Ai::move(Direction dir, bool slow)
 	{
-		if (slow)
-			m_di8Hook.keyPress(DIK_LSHIFT);
-		else
-			m_di8Hook.keyRelease(DIK_LSHIFT);
+		//if (slow)
+		//	m_di8Hook.keyPress(DIK_LSHIFT);
+		//else
+		//	m_di8Hook.keyRelease(DIK_LSHIFT);
 
 		switch (dir)
 		{
 		case DIR_HOLD:
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
+			//m_di8Hook.keyRelease(DIK_LEFT);
+			//m_di8Hook.keyRelease(DIK_RIGHT);
+			//m_di8Hook.keyRelease(DIK_UP);
+			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_LEFT:
-			m_di8Hook.keyPress(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
+			//m_di8Hook.keyPress(DIK_LEFT);
+			//m_di8Hook.keyRelease(DIK_RIGHT);
+			//m_di8Hook.keyRelease(DIK_UP);
+			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_RIGHT:
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyPress(DIK_RIGHT);
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
+			//m_di8Hook.keyRelease(DIK_LEFT);
+			//m_di8Hook.keyPress(DIK_RIGHT);
+			//m_di8Hook.keyRelease(DIK_UP);
+			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_UP:
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
-			m_di8Hook.keyPress(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
+			//m_di8Hook.keyRelease(DIK_LEFT);
+			//m_di8Hook.keyRelease(DIK_RIGHT);
+			//m_di8Hook.keyPress(DIK_UP);
+			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_DOWN:
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyPress(DIK_DOWN);
+			//m_di8Hook.keyRelease(DIK_LEFT);
+			//m_di8Hook.keyRelease(DIK_RIGHT);
+			//m_di8Hook.keyRelease(DIK_UP);
+			//m_di8Hook.keyPress(DIK_DOWN);
 			break;
 
 		case DIR_LEFTUP:
-			m_di8Hook.keyPress(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
-			m_di8Hook.keyPress(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
+			//m_di8Hook.keyPress(DIK_LEFT);
+			//m_di8Hook.keyRelease(DIK_RIGHT);
+			//m_di8Hook.keyPress(DIK_UP);
+			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_RIGHTUP:
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyPress(DIK_RIGHT);
-			m_di8Hook.keyPress(DIK_UP);
-			m_di8Hook.keyRelease(DIK_DOWN);
+			//m_di8Hook.keyRelease(DIK_LEFT);
+			//m_di8Hook.keyPress(DIK_RIGHT);
+			//m_di8Hook.keyPress(DIK_UP);
+			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
 		case DIR_LEFTDOWN:
-			m_di8Hook.keyPress(DIK_LEFT);
-			m_di8Hook.keyRelease(DIK_RIGHT);
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyPress(DIK_DOWN);
+			//m_di8Hook.keyPress(DIK_LEFT);
+			//m_di8Hook.keyRelease(DIK_RIGHT);
+			//m_di8Hook.keyRelease(DIK_UP);
+			//m_di8Hook.keyPress(DIK_DOWN);
 			break;
 
 		case DIR_RIGHTDOWN:
-			m_di8Hook.keyRelease(DIK_LEFT);
-			m_di8Hook.keyPress(DIK_RIGHT);
-			m_di8Hook.keyRelease(DIK_UP);
-			m_di8Hook.keyPress(DIK_DOWN);
+			//m_di8Hook.keyRelease(DIK_LEFT);
+			//m_di8Hook.keyPress(DIK_RIGHT);
+			//m_di8Hook.keyRelease(DIK_UP);
+			//m_di8Hook.keyPress(DIK_DOWN);
 			break;
 		}
 

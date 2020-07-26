@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Th10Hook/Data.h"
-#include "Th10Hook/Scene.h"
+#include "Th10Ai/Data.h"
+#include "Th10Ai/Scene.h"
 
 namespace th
 {

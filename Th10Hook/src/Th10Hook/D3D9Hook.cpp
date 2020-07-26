@@ -8,11 +8,10 @@
 
 namespace th
 {
-	D3D9Hook::D3D9Hook() :
+	D3D9Hook::D3D9Hook(D3D9Listener* listener) :
 		Singleton(this),
-		m_enabled(false),
-		m_present(nullptr),
-		m_isPresentReadied(false)
+		m_listener(listener),
+		m_present(nullptr)
 	{
 		WNDCLASSEXW wc = {};
 		wc.cbSize = sizeof(wc);
@@ -58,8 +57,7 @@ namespace th
 
 		CComPtr<IDirect3DDevice9> device;
 		hr = d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window.get(),
-			D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_DISABLE_DRIVER_MANAGEMENT,
-			&d3dpp, &device);
+			D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &device);
 		if (FAILED(hr))
 			BASE_THROW(OldDxResult(hr));
 
@@ -76,11 +74,6 @@ namespace th
 		detours.detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
 	}
 
-	void D3D9Hook::enable(bool enabled)
-	{
-		m_enabled = enabled;
-	}
-
 	HRESULT D3D9Hook::PresentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
@@ -88,42 +81,18 @@ namespace th
 		return d3d9Hook.presentHook(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 	}
 
-	std::chrono::steady_clock::time_point g_presentBeginTime;
-	std::chrono::steady_clock::time_point g_presentEndTime;
-
 	HRESULT D3D9Hook::presentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
-		if (!m_enabled)
-			return m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
-
-		g_presentBeginTime = std::chrono::steady_clock::now();
-
-		notifyPresent();
-		HRESULT hr = m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
-
-		g_presentEndTime = std::chrono::steady_clock::now();
-
-		return hr;
-	}
-
-	void D3D9Hook::notifyPresent()
-	{
-		unique_lock<mutex> lock(m_presentMutex);
-		m_isPresentReadied = true;
-		m_presentCond.notify_one();
-	}
-
-	bool D3D9Hook::waitPresent()
-	{
-		bool waited = false;
-		unique_lock<mutex> lock(m_presentMutex);
-		if (!m_isPresentReadied)
+		try
 		{
-			m_presentCond.wait(lock);
-			waited = true;
+			m_listener->onPresent(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 		}
-		m_isPresentReadied = false;
-		return waited;
+		catch (...)
+		{
+			BASE_LOG_ERROR(PrintException());
+		}
+
+		return m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 	}
 }

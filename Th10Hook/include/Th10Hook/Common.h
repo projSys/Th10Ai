@@ -8,10 +8,7 @@
 #include <Windows/Common.h>
 #include <Windows/Types.h>
 #include <Windows/WindowsError.h>
-#include <Windows/Utils.h>
-#include <Windows/Point.h>
-#include <Windows/Size.h>
-#include <Windows/Rect.h>
+#include <Windows/Apis.h>
 
 namespace th
 {
@@ -19,8 +16,3 @@ namespace th
 	using base::float_t;
 	using namespace win;
 }
-
-#include <chrono>
-#include <iostream>
-
-#include "Th10Hook/Direction.h"

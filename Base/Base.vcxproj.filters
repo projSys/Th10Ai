@@ -78,9 +78,6 @@
     <ClInclude Include="include\Windows\WindowsError.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\Utils.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\String.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -91,6 +88,12 @@
       <Filter>头文件\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Logger.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Windows\Apis.h">
+      <Filter>头文件\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Clock.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,9 +116,6 @@
     <ClCompile Include="src\Windows\WindowsError.cpp">
       <Filter>源文件\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Windows\Utils.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\String.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
@@ -123,6 +123,12 @@
       <Filter>源文件\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Logger.cpp">
+      <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\Apis.cpp">
+      <Filter>源文件\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Clock.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>

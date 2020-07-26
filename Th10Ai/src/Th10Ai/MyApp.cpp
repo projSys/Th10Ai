@@ -13,7 +13,7 @@ namespace th
 			return false;
 
 		MyFrame* frame = new MyFrame();
-		frame->Show(true);
+		frame->Show();
 
 		return true;
 	}

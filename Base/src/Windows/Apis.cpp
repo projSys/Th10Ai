@@ -1,5 +1,5 @@
 #include "Windows/Common.h"
-#include "Windows/Utils.h"
+#include "Windows/Apis.h"
 
 #include <boost/filesystem.hpp>
 
@@ -9,7 +9,7 @@ namespace win
 {
 	using namespace boost::filesystem;
 
-	string Utils::GetErrorDesc(DWORD errorId)
+	string Apis::GetErrorDesc(DWORD errorId)
 	{
 		WCHAR buffer[4096] = {};
 		if (FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -18,7 +18,7 @@ namespace win
 		return String::WideToUtf8(buffer);
 	}
 
-	string Utils::GetModuleName(HMODULE module)
+	string Apis::GetModuleName(HMODULE module)
 	{
 		WCHAR buffer[4096] = {};
 		if (GetModuleFileNameW(module, buffer, 4095) == 0)
@@ -26,7 +26,7 @@ namespace win
 		return String::WideToUtf8(buffer);
 	}
 
-	string Utils::GetModuleDir(HMODULE module)
+	string Apis::GetModuleDir(HMODULE module)
 	{
 		WCHAR buffer[4096] = {};
 		if (GetModuleFileNameW(module, buffer, 4095) == 0)

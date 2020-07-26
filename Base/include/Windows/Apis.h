@@ -2,7 +2,7 @@
 
 namespace win
 {
-	class Utils
+	class Apis
 	{
 	public:
 		static string GetErrorDesc(DWORD errorId);

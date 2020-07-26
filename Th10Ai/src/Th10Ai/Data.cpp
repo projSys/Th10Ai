@@ -1,8 +1,8 @@
-#include "Th10Hook/Common.h"
-#include "Th10Hook/Data.h"
+#include "Th10Ai/Common.h"
+#include "Th10Ai/Data.h"
 
-#include "Th10Hook/Reader.h"
-#include "Th10Hook/Scene.h"
+//#include "Th10Ai/Reader.h"
+#include "Th10Ai/Scene.h"
 
 namespace th
 {
@@ -16,12 +16,12 @@ namespace th
 
 	void Data::update()
 	{
-		Reader reader;
-		reader.readPlayer(m_player);
-		reader.readItems(m_items);
-		reader.readEnemies(m_enemies);
-		reader.readBullets(m_bullets);
-		reader.readLasers(m_lasers);
+		//Reader reader;
+		//reader.readPlayer(m_player);
+		//reader.readItems(m_items);
+		//reader.readEnemies(m_enemies);
+		//reader.readBullets(m_bullets);
+		//reader.readLasers(m_lasers);
 	}
 
 	void Data::print()

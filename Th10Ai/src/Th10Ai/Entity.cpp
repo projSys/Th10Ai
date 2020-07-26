@@ -1,5 +1,5 @@
-#include "Th10Hook/Common.h"
-#include "Th10Hook/Entity.h"
+#include "Th10Ai/Common.h"
+#include "Th10Ai/Entity.h"
 
 #include <cassert>
 #define _USE_MATH_DEFINES
