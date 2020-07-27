@@ -55,7 +55,7 @@ namespace th
 
 	void Th10Context::update()
 	{
-		m_data->updateTime = m_clock.update();
+		//m_data->updateTime = m_clock.update();
 
 		Reader::ReadPlayer(m_data->status.player);
 		m_data->status.itemCount = Reader::ReadItems(m_data->status.items);

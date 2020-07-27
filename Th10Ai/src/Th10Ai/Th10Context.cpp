@@ -86,7 +86,7 @@ namespace th
 			m_data->updateCond.wait(lock);
 		m_data->isUpdated = false;
 
-		cout << m_clock.update() - m_data->updateTime << endl;
+		//cout << m_clock.update() - m_data->updateTime << endl;
 	}
 
 	Status_t& Th10Context::getStatus()

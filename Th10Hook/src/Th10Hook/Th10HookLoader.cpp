@@ -41,7 +41,6 @@ namespace th
 					m_windowHook.sendMessage(TH10HL_UNLOAD, 0, 0);
 			});
 
-		m_context->notifyHook();
 		m_context->waitUnhook();
 	}
 
@@ -67,6 +66,7 @@ namespace th
 	{
 		m_d3d9Hook = make_unique<D3D9Hook>(this);
 		m_di8Hook = make_unique<DI8Hook>(this);
+		m_context->notifyHook();
 	}
 
 	void Th10HookLoader::onUnload()

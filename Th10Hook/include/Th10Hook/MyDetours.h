@@ -13,5 +13,14 @@ namespace th
 
 		void attach(PVOID* pointer, PVOID detour);
 		void detach(PVOID* pointer, PVOID detour);
+
+	private:
+		void transactionBegin();
+		void transactionCommit();
+		void transactionAbort();
+
+		const char* getErrorDesc(LONG errorId);
+
+		bool m_isCommit;
 	};
 }

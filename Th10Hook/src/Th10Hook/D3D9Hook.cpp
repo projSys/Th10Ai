@@ -70,8 +70,15 @@ namespace th
 
 	D3D9Hook::~D3D9Hook()
 	{
-		MyDetours detours;
-		detours.detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+		try
+		{
+			MyDetours detours;
+			detours.detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+		}
+		catch (...)
+		{
+			BASE_LOG_ERROR(PrintException());
+		}
 	}
 
 	HRESULT D3D9Hook::PresentHook(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,

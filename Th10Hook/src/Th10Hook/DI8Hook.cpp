@@ -39,8 +39,15 @@ namespace th
 
 	DI8Hook::~DI8Hook()
 	{
-		MyDetours detours;
-		detours.detach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
+		try
+		{
+			MyDetours detours;
+			detours.detach(reinterpret_cast<PVOID*>(&m_getDeviceStateW), &DI8Hook::GetDeviceStateHookW);
+		}
+		catch (...)
+		{
+			BASE_LOG_ERROR(PrintException());
+		}
 	}
 
 	HRESULT DI8Hook::GetDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data)
