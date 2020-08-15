@@ -7,7 +7,7 @@ namespace th
 		Singleton(this),
 		m_listener(listener),
 		m_window(nullptr),
-		m_isUnicode(true),
+		m_unicode(true),
 		m_prevWndProc(nullptr)
 	{
 	}
@@ -15,8 +15,8 @@ namespace th
 	void WindowHook::attach(HWND window)
 	{
 		m_window = window;
-		m_isUnicode = IsWindowUnicode(m_window);
-		if (m_isUnicode)
+		m_unicode = IsWindowUnicode(m_window);
+		if (m_unicode)
 			m_prevWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(m_window, GWLP_WNDPROC,
 				reinterpret_cast<LONG_PTR>(&WindowHook::WindowProc)));
 		else
@@ -28,7 +28,7 @@ namespace th
 
 	void WindowHook::detach()
 	{
-		if (m_isUnicode)
+		if (m_unicode)
 			SetWindowLongPtrW(m_window, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_prevWndProc));
 		else
 			SetWindowLongPtrA(m_window, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_prevWndProc));
@@ -36,7 +36,7 @@ namespace th
 
 	void WindowHook::sendMessage(UINT message, WPARAM wparam, LPARAM lparam)
 	{
-		if (m_isUnicode)
+		if (m_unicode)
 			SendMessageW(m_window, message, wparam, lparam);
 		else
 			SendMessageA(m_window, message, wparam, lparam);
@@ -44,7 +44,7 @@ namespace th
 
 	void WindowHook::postMessage(UINT message, WPARAM wparam, LPARAM lparam)
 	{
-		if (m_isUnicode)
+		if (m_unicode)
 			PostMessageW(m_window, message, wparam, lparam);
 		else
 			PostMessageA(m_window, message, wparam, lparam);
@@ -67,7 +67,7 @@ namespace th
 			BASE_LOG_ERROR(PrintException());
 		}
 
-		if (m_isUnicode)
+		if (m_unicode)
 			return CallWindowProcW(m_prevWndProc, window, message, wparam, lparam);
 		else
 			return CallWindowProcA(m_prevWndProc, window, message, wparam, lparam);

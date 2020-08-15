@@ -16,7 +16,7 @@ namespace th
 		void start();
 		void join();
 
-		void setSelfExit(bool isSelfExit);
+		void setSelfExit(bool selfExit);
 		bool isSelfExit() const;
 
 	private:
@@ -26,6 +26,6 @@ namespace th
 		static DWORD WINAPI ExitProc(LPVOID param);
 
 		thread m_mainThread;
-		atomic_bool m_isSelfExit;
+		atomic_bool m_selfExit;
 	};
 }

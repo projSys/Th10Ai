@@ -21,6 +21,6 @@ namespace th
 
 		const char* getErrorDesc(LONG errorId);
 
-		bool m_isCommit;
+		bool m_commit;
 	};
 }

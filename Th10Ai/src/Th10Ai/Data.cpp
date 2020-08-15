@@ -1,7 +1,6 @@
 #include "Th10Ai/Common.h"
 #include "Th10Ai/Data.h"
 
-//#include "Th10Ai/Reader.h"
 #include "Th10Ai/Scene.h"
 
 namespace th
@@ -14,14 +13,9 @@ namespace th
 		m_lasers.reserve(200);
 	}
 
-	void Data::update()
+	void Data::update(const RawStatus& status)
 	{
-		//Reader reader;
-		//reader.readPlayer(m_player);
-		//reader.readItems(m_items);
-		//reader.readEnemies(m_enemies);
-		//reader.readBullets(m_bullets);
-		//reader.readLasers(m_lasers);
+		m_player = Player(status.player);
 	}
 
 	void Data::print()

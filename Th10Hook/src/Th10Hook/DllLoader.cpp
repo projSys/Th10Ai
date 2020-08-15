@@ -7,7 +7,7 @@ namespace th
 {
 	DllLoader::DllLoader() :
 		Singleton(this),
-		m_isSelfExit(true)
+		m_selfExit(true)
 	{
 	}
 
@@ -22,14 +22,14 @@ namespace th
 			m_mainThread.join();
 	}
 
-	void DllLoader::setSelfExit(bool isSelfExit)
+	void DllLoader::setSelfExit(bool selfExit)
 	{
-		m_isSelfExit = isSelfExit;
+		m_selfExit = selfExit;
 	}
 
 	bool DllLoader::isSelfExit() const
 	{
-		return m_isSelfExit;
+		return m_selfExit;
 	}
 
 	void DllLoader::mainProc()
@@ -43,7 +43,7 @@ namespace th
 			BASE_LOG_ERROR(PrintException());
 		}
 
-		if (m_isSelfExit)
+		if (m_selfExit)
 		{
 			HANDLE_ptr exitThread(
 				CreateThread(nullptr, 0, &DllLoader::ExitProc, this, 0, nullptr),

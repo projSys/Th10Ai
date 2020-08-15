@@ -19,7 +19,6 @@ namespace th
 		Th10Ai(MyWindow* window);
 		~Th10Ai();
 
-		Status_t& getStatus();
 		MyWindow* m_window;
 
 	private:
@@ -28,7 +27,6 @@ namespace th
 		void controlProc();
 		void start();
 		void stop();
-		void print();
 
 		void readProc();
 
@@ -57,14 +55,12 @@ namespace th
 		Direction m_prevDir;
 		bool m_prevSlow;
 
-		//Data m_data;
-		mutex m_dataMutex;
-		shared_ptr<Data> m_writeData;
-		shared_ptr<Data> m_middleData;
-		shared_ptr<Data> m_readData;
-		atomic_bool m_dataUpdated;
+		Data m_data;
+		//mutex m_dataMutex;
+		//shared_ptr<Data> m_writeData;
+		//shared_ptr<Data> m_middleData;
+		//shared_ptr<Data> m_readData;
+		//atomic_bool m_dataUpdated;
 		Scene m_scene;
-
-		bool p;
 	};
 }

@@ -13,10 +13,9 @@ namespace th
 	Th10Context::Th10Context() :
 		m_data(nullptr)
 	{
-		HWND window = FindWindowW(L"BASE", nullptr);
+		HWND window = FindWindowW(L"BASE", L"搶曽晽恄榐丂乣 Mountain of Faith. ver 1.00a");
 		if (window == nullptr)
 			BASE_THROW(Exception(u8"东方风神录未运行。"));
-
 		DWORD processId = 0;
 		DWORD threadId = GetWindowThreadProcessId(window, &processId);
 
@@ -24,15 +23,12 @@ namespace th
 		m_data = m_memory.construct<Th10SharedData>("Th10SharedData")();
 		if (m_data == nullptr)
 			BASE_THROW(Exception(u8"Th10SharedData名称已被使用。"));
-		//ON_SCOPE_EXIT([&]()
-		//	{
-		//		m_memory.destroy_ptr(m_data);
-		//	});
 
 		m_data->window = window;
-		m_data->isHooked = false;
-		m_data->isUnhook = false;
-		m_data->isUpdated = false;
+		m_data->hooked = false;
+		m_data->unhooked = false;
+		m_data->updated = false;
+		m_data->exited = false;
 		m_data->updateTime = 0;
 
 		string dllName = Apis::GetModuleDir() + "/Th10Hook.dll";
@@ -45,6 +41,8 @@ namespace th
 
 	Th10Context::~Th10Context()
 	{
+		if (m_data != nullptr)
+			m_memory.destroy_ptr(m_data);
 	}
 
 	void Th10Context::activate()
@@ -55,41 +53,35 @@ namespace th
 
 	bool Th10Context::timedWaitHook(time_t ms)
 	{
-		bool isNotTimeout = true;
+		bool notTimeout = true;
 		scoped_lock<interprocess_mutex> lock(m_data->hookMutex);
-		if (!m_data->isHooked)
+		if (!m_data->hooked)
 		{
 			ptime absTime = microsec_clock::universal_time() + milliseconds(ms);
-			isNotTimeout = m_data->hookCond.timed_wait(lock, absTime);
+			notTimeout = m_data->hookCond.timed_wait(lock, absTime);
 		}
-		return isNotTimeout;
+		return notTimeout;
 	}
 
 	void Th10Context::notifyUnhook()
 	{
 		scoped_lock<interprocess_mutex> lock(m_data->unhookMutex);
-		m_data->isUnhook = true;
+		m_data->unhooked = true;
 		m_data->unhookCond.notify_one();
 	}
 
-	void Th10Context::notifyUpdate()
+	bool Th10Context::waitUpdate()
 	{
 		scoped_lock<interprocess_mutex> lock(m_data->updateMutex);
-		m_data->isUpdated = true;
-		m_data->updateCond.notify_one();
-	}
-
-	void Th10Context::waitUpdate()
-	{
-		scoped_lock<interprocess_mutex> lock(m_data->updateMutex);
-		if (!m_data->isUpdated)
+		if (!m_data->updated)
 			m_data->updateCond.wait(lock);
-		m_data->isUpdated = false;
-
-		//cout << m_clock.update() - m_data->updateTime << endl;
+		m_data->updated = false;
+		//m_clock.update();
+		//cout << m_clock.getTime() - m_data->updateTime << endl;
+		return !m_data->exited;
 	}
 
-	Status_t& Th10Context::getStatus()
+	const RawStatus& Th10Context::getStatus() const
 	{
 		return m_data->status;
 	}

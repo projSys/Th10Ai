@@ -14,6 +14,7 @@ namespace th
 		float_t minDistance;
 	};
 
+	// Region
 	class Cell :
 		private Entity
 	{

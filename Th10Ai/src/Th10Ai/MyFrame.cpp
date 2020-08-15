@@ -34,7 +34,14 @@ namespace th
 		string logName = Apis::GetModuleDir() + "/Th10Ai_%N.log";
 		m_logger.addFileLog(logName);
 
-		m_th10Ai = make_unique<Th10Ai>(window);
+		try
+		{
+			m_th10Ai = make_unique<Th10Ai>(window);
+		}
+		catch (...)
+		{
+			BASE_LOG_ERROR(PrintException());
+		}
 	}
 
 	MyFrame::~MyFrame()

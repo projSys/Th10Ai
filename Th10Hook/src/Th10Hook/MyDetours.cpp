@@ -6,7 +6,7 @@
 namespace th
 {
 	MyDetours::MyDetours() :
-		m_isCommit(true)
+		m_commit(true)
 	{
 		transactionBegin();
 	}
@@ -15,7 +15,7 @@ namespace th
 	{
 		try
 		{
-			if (m_isCommit)
+			if (m_commit)
 				transactionCommit();
 			else
 				transactionAbort();
@@ -52,7 +52,7 @@ namespace th
 		LONG errorId = DetourUpdateThread(thread);
 		if (errorId != NO_ERROR)
 		{
-			m_isCommit = false;
+			m_commit = false;
 			BASE_THROW(Exception(getErrorDesc(errorId + 40000)));
 		}
 	}
@@ -62,7 +62,7 @@ namespace th
 		LONG errorId = DetourAttach(pointer, detour);
 		if (errorId != NO_ERROR)
 		{
-			m_isCommit = false;
+			m_commit = false;
 			BASE_THROW(Exception(getErrorDesc(errorId + 50000)));
 		}
 	}
@@ -72,7 +72,7 @@ namespace th
 		LONG errorId = DetourDetach(pointer, detour);
 		if (errorId != NO_ERROR)
 		{
-			m_isCommit = false;
+			m_commit = false;
 			BASE_THROW(Exception(getErrorDesc(errorId + 60000)));
 		}
 	}

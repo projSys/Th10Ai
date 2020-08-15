@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Th10Ai/RawStatus.h"
 #include "Th10Ai/Entity.h"
 
 namespace th
@@ -11,6 +12,7 @@ namespace th
 		static const Pointf INIT_POS;
 
 		Player();
+		explicit Player(const RawPlayer& raw);
 
 		void advance(Direction dir, bool slow);
 		void checkPrevMove(Direction prevDir, bool prevSlow) const;

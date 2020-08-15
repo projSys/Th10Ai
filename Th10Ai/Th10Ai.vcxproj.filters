@@ -33,9 +33,6 @@
     <ClInclude Include="include\Th10Ai\MyFrame.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Ai\Status.h">
-      <Filter>头文件\Th10Ai</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Ai\Action.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
@@ -82,6 +79,9 @@
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Ai\MyWindow.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\RawStatus.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
   </ItemGroup>

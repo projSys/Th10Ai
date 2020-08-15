@@ -7,7 +7,7 @@ namespace base
 	public:
 		Clock();
 
-		time_t update();
+		void update();
 		time_t getTime() const;
 
 	private:

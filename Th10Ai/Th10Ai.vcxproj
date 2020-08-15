@@ -57,12 +57,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_73_0;D:\Develop\wxWidgets\wxWidgets-3.1.3\include;D:\Develop\wxWidgets\wxWidgets-3.1.3\include\msvc;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Develop\Boost\boost_1_74_0;C:\Develop\wxWidgets\wxWidgets-3.1.4\include;C:\Develop\wxWidgets\wxWidgets-3.1.4\include\msvc;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_73_0\lib32-msvc-14.2;D:\Develop\wxWidgets\wxWidgets-3.1.3\lib\vc_dll;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Develop\Boost\boost_1_74_0\lib32-msvc-14.2;C:\Develop\wxWidgets\wxWidgets-3.1.4\lib\vc_dll;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
@@ -77,14 +77,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_73_0;D:\Develop\wxWidgets\wxWidgets-3.1.3\include;D:\Develop\wxWidgets\wxWidgets-3.1.3\include\msvc;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Develop\Boost\boost_1_74_0;C:\Develop\wxWidgets\wxWidgets-3.1.4\include;C:\Develop\wxWidgets\wxWidgets-3.1.4\include\msvc;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_73_0\lib32-msvc-14.2;D:\Develop\wxWidgets\wxWidgets-3.1.3\lib\vc_dll;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Develop\Boost\boost_1_74_0\lib32-msvc-14.2;C:\Develop\wxWidgets\wxWidgets-3.1.4\lib\vc_dll;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
@@ -107,8 +107,8 @@
     <ClInclude Include="include\Th10Ai\MyWindow.h" />
     <ClInclude Include="include\Th10Ai\Path.h" />
     <ClInclude Include="include\Th10Ai\Player.h" />
+    <ClInclude Include="include\Th10Ai\RawStatus.h" />
     <ClInclude Include="include\Th10Ai\Scene.h" />
-    <ClInclude Include="include\Th10Ai\Status.h" />
     <ClInclude Include="include\Th10Ai\Th10Ai.h" />
     <ClInclude Include="include\Th10Ai\Th10Context.h" />
     <ClInclude Include="include\Th10Ai\Utils.h" />

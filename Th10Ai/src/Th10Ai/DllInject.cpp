@@ -16,7 +16,7 @@ namespace th
 			});
 
 		LUID luid = {};
-		if (!LookupPrivilegeValueW(nullptr, SE_DEBUG_NAME, &luid))
+		if (!LookupPrivilegeValue(nullptr, SE_DEBUG_NAME, &luid))
 			BASE_THROW(WindowsError());
 
 		TOKEN_PRIVILEGES tp = {};
@@ -70,6 +70,6 @@ namespace th
 		DWORD exitCode = 0;
 		GetExitCodeThread(thread.get(), &exitCode);
 		if (exitCode == 0)
-			BASE_THROW(Exception("LoadLibraryW() failed."));
+			BASE_THROW(Exception("LoadLibrary() failed."));
 	}
 }

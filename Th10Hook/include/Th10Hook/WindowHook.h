@@ -29,7 +29,7 @@ namespace th
 
 		WindowListener* m_listener;
 		HWND m_window;
-		bool m_isUnicode;
+		bool m_unicode;
 		WNDPROC m_prevWndProc;
 	};
 }

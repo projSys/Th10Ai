@@ -53,6 +53,17 @@ namespace th
 	{
 	}
 
+	Player::Player(const RawPlayer& raw) :
+		status(raw.status),
+		invincibleTime(raw.invincibleTime),
+		slow(raw.slow),
+		powers(raw.powers),
+		/*type(),*/
+		life(raw.lives),
+		itemObtainRange(raw.itemObtainRange)
+	{
+	}
+
 	void Player::advance(Direction dir, bool slow)
 	{
 		if (slow)

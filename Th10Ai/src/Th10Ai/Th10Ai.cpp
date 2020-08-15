@@ -16,13 +16,12 @@ namespace th
 		m_handleActive(false),
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
-		m_prevSlow(false),
-		m_dataUpdated(false),
-		p(true)
+		m_prevSlow(false)/*,
+		m_dataUpdated(false)*/
 	{
-		m_writeData = make_shared<Data>();
-		m_middleData = make_shared<Data>();
-		m_readData = make_shared<Data>();
+		//m_writeData = make_shared<Data>();
+		//m_middleData = make_shared<Data>();
+		//m_readData = make_shared<Data>();
 
 		m_scene.split(6);
 
@@ -36,7 +35,7 @@ namespace th
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
 		m_controlThread = thread(&Th10Ai::controlProc, this);
-		m_readThread = thread(&Th10Ai::readProc, this);
+		//m_readThread = thread(&Th10Ai::readProc, this);
 		m_handleThread = thread(&Th10Ai::handleProc, this);
 	}
 
@@ -47,8 +46,7 @@ namespace th
 			m_handleThread.join();
 
 		m_readDone = true;
-		//m_d3d9Hook.notifyPresent();
-		m_context.notifyUpdate();
+		m_context.notifyUnhook();
 		if (m_readThread.joinable())
 			m_readThread.join();
 
@@ -82,10 +80,6 @@ namespace th
 				{
 					break;
 				}
-				else if (IsKeyPressed('F'))
-				{
-					print();
-				}
 
 				this_thread::sleep_for(std::chrono::milliseconds(16));
 			}
@@ -97,6 +91,8 @@ namespace th
 		{
 			BASE_LOG_ERROR(PrintException());
 		}
+
+		//g_th10Hook.exit();
 	}
 
 	void Th10Ai::start()
@@ -106,11 +102,6 @@ namespace th
 			m_controlActive = true;
 			m_readActive = true;
 			m_handleActive = true;
-
-			//m_di8Hook.clear();
-			//m_di8Hook.commit();
-			//m_d3d9Hook.enable(true);
-			//m_di8Hook.enable(true);
 
 			cout << "启动AI。" << endl;
 		}
@@ -124,20 +115,9 @@ namespace th
 			m_readActive = false;
 			m_handleActive = false;
 
-			//m_di8Hook.enable(false);
-			//m_d3d9Hook.enable(false);
-			//m_di8Hook.clear();
-			//m_di8Hook.commit();
-
 			cout << "停止AI。" << endl;
 			cout << "决死总数：" << m_bombCount << endl;
 		}
-	}
-
-	void Th10Ai::print()
-	{
-		//p = true;
-		//m_data.print();
 	}
 
 	void Th10Ai::readProc()
@@ -148,19 +128,21 @@ namespace th
 			{
 				if (m_readActive)
 				{
-					//if (!m_d3d9Hook.waitPresent())
-					//	cout << "CPU太慢了，数据读取不及时。" << endl;
-
 					//m_data.update();
 					//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
 					//m_writeData->update();
-					m_context.waitUpdate();
-					m_window->update(m_context.getStatus());
-					//cout << m_context.getStatus().player.width << endl;
+					//if (!m_context.waitUpdate())
+					//{
+					//	m_handleDone = true;
+					//	m_readDone = true;
+					//	m_controlDone = true;
+					//	break;
+					//}
+					//m_window->update(m_context.getStatus());
 
-					lock_guard<mutex> lock(m_dataMutex);
-					std::swap(m_writeData, m_middleData);
-					m_dataUpdated = true;
+					//lock_guard<mutex> lock(m_dataMutex);
+					//std::swap(m_writeData, m_middleData);
+					//m_dataUpdated = true;
 				}
 				else
 				{
@@ -173,11 +155,6 @@ namespace th
 			BASE_LOG_ERROR(PrintException());
 			m_controlDone = true;
 		}
-	}
-
-	Status_t& Th10Ai::getStatus()
-	{
-		return m_context.getStatus();
 	}
 
 	void Th10Ai::handleProc()
@@ -205,75 +182,49 @@ namespace th
 
 	void Th10Ai::handle()
 	{
-		//if (!m_d3d9Hook.waitPresent())
-		//	cout << "读取不及时。" << endl;
+		if (!m_context.waitUpdate())
+		{
+			m_handleDone = true;
+			m_readDone = true;
+			m_controlDone = true;
+			return;
+		}
 
-		//static int_t fps = 0;
-		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-		//++fps;
-		//std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-		//std::chrono::milliseconds interval = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-		//if (interval.count() >= 1000)
-		//{
-		//	cout << "fps: " << fps << endl;
-		//	fps = 0;
-		//	begin += std::chrono::milliseconds(1000);
-		//}
-
-		//static std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-		//std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-		//time_t interval = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-		//if (interval > 17)
-		//	cout << "掉帧：" << interval << endl;
-		//begin = end;
+		m_window->update(m_context.getStatus());
 
 		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 
-		//m_data.update();
+		m_data.update(m_context.getStatus());
 		//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
 
 		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
 		//cout << "e1: " << e1 << endl;
 
-		if (m_dataUpdated)
-		{
-			lock_guard<mutex> lock(m_dataMutex);
-			std::swap(m_readData, m_middleData);
-			m_dataUpdated = false;
-		}
-		else
-		{
-			return;
-		}
+		//if (m_dataUpdated)
+		//{
+		//	lock_guard<mutex> lock(m_dataMutex);
+		//	std::swap(m_readData, m_middleData);
+		//	m_dataUpdated = false;
+		//}
+		//else
+		//{
+		//	return;
+		//}
 
 		m_scene.clearAll();
-		m_scene.splitEnemies(m_readData->getEnemies());
-		m_scene.splitBullets(m_readData->getBullets());
-		m_scene.splitLasers(m_readData->getLasers());
+		m_scene.splitEnemies(m_data.getEnemies());
+		m_scene.splitBullets(m_data.getBullets());
+		m_scene.splitLasers(m_data.getLasers());
 
 		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
 		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 		//cout << "e2: " << e2 << endl;
 
-		//if (p)
-		//{
-		//	CellCollideResult ccResult = m_scene.collideAll(m_data.getPlayer(), 0.0f);
-		//	cout << ccResult.collided;
-		//}
-
 		handleBomb();
 		handleTalk();
 		handleShoot();
 		handleMove();
-
-		//if (p)
-		//{
-		//	Player temp = m_data.getPlayer();
-		//	temp.advance(m_prevDir, m_prevSlow);
-		//	CellCollideResult ccResult1 = m_scene.collideAll(temp, 1.0f);
-		//	cout << " " << ccResult1.collided << endl;
-		//}
 
 		//std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
 		//time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
@@ -285,11 +236,8 @@ namespace th
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_readData->getPlayer().isColliding())
+		if (m_data.getPlayer().isColliding())
 		{
-			//p = false;
-			//m_data.print();
-
 			//CellCollideResult ccr = m_scene.collideAll(m_data.getPlayer(), 0.0f);
 			//cout << ccr.collided << endl;
 
@@ -308,7 +256,7 @@ namespace th
 	// 处理对话
 	bool Th10Ai::handleTalk()
 	{
-		if (m_readData->isTalking())
+		if (m_data.isTalking())
 		{
 			//m_di8Hook.keyPress(DIK_LCONTROL);
 			return true;
@@ -323,7 +271,7 @@ namespace th
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_readData->hasEnemy())
+		if (m_data.hasEnemy())
 		{
 			//m_di8Hook.keyPress(DIK_Z);
 			return true;
@@ -338,12 +286,12 @@ namespace th
 	// 处理移动
 	bool Th10Ai::handleMove()
 	{
-		if (!m_readData->getPlayer().isNormalStatus())
+		if (!m_data.getPlayer().isNormalStatus())
 			return false;
 
-		ItemTarget itemTarget = m_readData->findItem();
-		EnemyTarget enemyTarget = m_readData->findEnemy();
-		bool underEnemy = m_readData->isUnderEnemy();
+		ItemTarget itemTarget = m_data.findItem();
+		EnemyTarget enemyTarget = m_data.findEnemy();
+		bool underEnemy = m_data.isUnderEnemy();
 
 		float_t bestScore = numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
@@ -351,7 +299,7 @@ namespace th
 
 		for (Direction dir : DIRECTIONS)
 		{
-			Path path(*m_readData, m_scene, itemTarget, enemyTarget, underEnemy);
+			Path path(m_data, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
 
 			if (result.valid && path.m_bestScore > bestScore)

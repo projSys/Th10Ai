@@ -10,14 +10,14 @@
 
 namespace th
 {
-	class Th10HookLoader :
+	class HookLoader :
 		public DllLoader,
 		public WindowListener,
 		public D3D9Listener,
 		public DI8Listener
 	{
 	public:
-		Th10HookLoader();
+		HookLoader();
 
 	private:
 		virtual void run() override;
@@ -34,5 +34,6 @@ namespace th
 		WindowHook m_windowHook;
 		unique_ptr<D3D9Hook> m_d3d9Hook;
 		unique_ptr<DI8Hook> m_di8Hook;
+		bool m_hooked;
 	};
 }

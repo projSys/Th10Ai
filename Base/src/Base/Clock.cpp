@@ -12,12 +12,11 @@ namespace base
 	{
 	}
 
-	time_t Clock::update()
+	void Clock::update()
 	{
 		steady_clock::time_point tp = steady_clock::now();
 		steady_clock::duration d = tp.time_since_epoch();
 		m_time = duration_cast<milliseconds>(d).count();
-		return m_time;
 	}
 
 	time_t Clock::getTime() const

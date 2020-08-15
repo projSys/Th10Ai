@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Th10Hook/Status.h"
+#include "Th10Hook/RawStatus.h"
 
 namespace th
 {
@@ -8,11 +8,11 @@ namespace th
 	class Reader
 	{
 	public:
-		static int_t ReadPlayer(Player_t& player);
-		static int_t ReadItems(Item_t items[]);
-		static int_t ReadEnemies(Enemy_t enemies[]);
-		static int_t ReadBullets(Bullet_t bullets[]);
-		static int_t ReadLasers(Laser_t lasers[]);
+		static int_t ReadPlayer(RawPlayer& player);
+		static int_t ReadItems(RawItem items[]);
+		static int_t ReadEnemies(RawEnemy enemies[]);
+		static int_t ReadBullets(RawBullet bullets[]);
+		static int_t ReadLasers(RawLaser lasers[]);
 
 	private:
 		template <typename T>

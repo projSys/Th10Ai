@@ -12,13 +12,13 @@ namespace base
 	public:
 		explicit ScopeGuard(T&& functor) :
 			m_functor(forward<T>(functor)),
-			m_isDismissed(false)
+			m_dismissed(false)
 		{
 		}
 
 		~ScopeGuard()
 		{
-			if (!m_isDismissed)
+			if (!m_dismissed)
 				m_functor();
 		}
 
@@ -26,9 +26,9 @@ namespace base
 
 		ScopeGuard(ScopeGuard&& other) :
 			m_functor(move(other.m_functor)),
-			m_isDismissed(other.m_isDismissed)
+			m_dismissed(other.m_dismissed)
 		{
-			other.m_isDismissed = true;
+			other.m_dismissed = true;
 		}
 
 		ScopeGuard& operator =(const ScopeGuard&) = delete;
@@ -36,7 +36,7 @@ namespace base
 
 	private:
 		T m_functor;
-		bool m_isDismissed;
+		bool m_dismissed;
 	};
 
 	template <typename T>

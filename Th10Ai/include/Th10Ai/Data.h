@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "Th10Ai/RawStatus.h"
 #include "Th10Ai/Player.h"
 #include "Th10Ai/Item.h"
 #include "Th10Ai/Enemy.h"
@@ -27,7 +28,7 @@ namespace th
 	public:
 		Data();
 
-		void update();
+		void update(const RawStatus& status);
 		void print();
 
 		// Player

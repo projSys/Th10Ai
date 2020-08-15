@@ -2,7 +2,7 @@
 
 #include <wx/wx.h>
 
-#include "Th10Ai/Status.h"
+#include "Th10Ai/RawStatus.h"
 
 namespace th
 {
@@ -13,7 +13,7 @@ namespace th
 		MyWindow(wxWindow* parent);
 		virtual ~MyWindow();
 
-		void update(Status_t& status);
+		void update(const RawStatus& status);
 
 	private:
 		void onPaint(wxPaintEvent& event);
@@ -22,7 +22,7 @@ namespace th
 		wxSize m_size;
 		wxBitmap m_buffer;
 
-		Status_t m_status;
+		RawStatus m_status;
 
 		wxDECLARE_EVENT_TABLE();
 	};

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Ai/RawStatus.h"
+
 namespace th
 {
 	struct FootPoint

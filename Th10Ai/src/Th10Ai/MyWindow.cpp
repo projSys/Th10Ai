@@ -20,7 +20,7 @@ namespace th
 		SetBackgroundColour(*wxWHITE);
 		SetBackgroundStyle(wxBG_STYLE_PAINT);
 
-		memset(&m_status, 0, sizeof(Status_t));
+		memset(&m_status, 0, sizeof(RawStatus));
 	}
 
 	MyWindow::~MyWindow()
@@ -81,9 +81,9 @@ namespace th
 		// 空函数，只为了防止闪烁
 	}
 
-	void MyWindow::update(Status_t& status)
+	void MyWindow::update(const RawStatus& status)
 	{
-		memcpy(&m_status, &status, sizeof(Status_t));
+		memcpy(&m_status, &status, sizeof(RawStatus));
 		Refresh();
 		//Update();
 	}

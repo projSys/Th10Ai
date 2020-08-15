@@ -11,7 +11,7 @@ namespace th
 	// |       |
 	// +-------+
 	//     w
-	struct Entity_t
+	struct RawEntity
 	{
 		//int_t id;
 		//int_t type;
@@ -24,8 +24,8 @@ namespace th
 		float_t height;
 	};
 
-	struct Player_t :
-		public Entity_t
+	struct RawPlayer :
+		public RawEntity
 	{
 		// status == 0 重生状态，此时无敌
 		// status == 1 正常状态
@@ -46,8 +46,8 @@ namespace th
 		float_t itemObtainRange;
 	};
 
-	struct Item_t :
-		public Entity_t
+	struct RawItem :
+		public RawEntity
 	{
 		// 正常点分为以下几种
 		// type == 1 Power Items P点（红点）
@@ -63,13 +63,13 @@ namespace th
 		int_t type;
 	};
 
-	struct Enemy_t :
-		public Entity_t
+	struct RawEnemy :
+		public RawEntity
 	{
 	};
 
-	struct Bullet_t :
-		public Entity_t
+	struct RawBullet :
+		public RawEntity
 	{
 	};
 
@@ -85,22 +85,26 @@ namespace th
 	// |   |
 	// +---+
 	//   w
-	struct Laser_t :
-		public Entity_t
+	struct RawLaser :
+		public RawEntity
 	{
 		float_t arc;
 	};
 
-	struct Status_t
+	struct RawStatus
 	{
-		Player_t player;
-		Item_t items[2000];
+		RawPlayer player;
+		RawItem items[2000];
 		uint_t itemCount;
-		Enemy_t enemies[2000];
+		RawEnemy enemies[2000];
 		uint_t enemyCount;
-		Bullet_t bullets[2000];
+		RawBullet bullets[2000];
 		uint_t bulletCount;
-		Laser_t lasers[2000];
+		RawLaser lasers[2000];
 		uint_t laserCount;
 	};
+
+	static_assert(is_trivial_v<RawStatus>, "");
+	//static_assert(is_standard_layout_v<RawStatus>, "");
+	//static_assert(is_pod_v<RawStatus>, "");
 }

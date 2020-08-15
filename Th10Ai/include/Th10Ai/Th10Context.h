@@ -6,7 +6,7 @@
 #include <boost/interprocess/sync/scoped_lock.hpp>
 #include <Base/Clock.h>
 
-#include "Th10Ai/Status.h"
+#include "Th10Ai/RawStatus.h"
 
 namespace th
 {
@@ -16,19 +16,19 @@ namespace th
 
 		boost::interprocess::interprocess_mutex hookMutex;
 		boost::interprocess::interprocess_condition hookCond;
-		bool isHooked;
+		bool hooked;
 
 		boost::interprocess::interprocess_mutex unhookMutex;
 		boost::interprocess::interprocess_condition unhookCond;
-		bool isUnhook;
+		bool unhooked;
 
 		boost::interprocess::interprocess_mutex updateMutex;
 		boost::interprocess::interprocess_condition updateCond;
-		bool isUpdated;
-		bool isDestroy;
+		bool updated;
+		bool exited;
 
 		time_t updateTime;
-		Status_t status;
+		RawStatus status;
 	};
 
 	class Th10Context
@@ -41,10 +41,9 @@ namespace th
 
 		bool timedWaitHook(time_t ms);
 		void notifyUnhook();
-		void notifyUpdate();
-		void waitUpdate();
+		bool waitUpdate();
 
-		Status_t& getStatus();
+		const RawStatus& getStatus() const;
 
 	private:
 		boost::interprocess::managed_windows_shared_memory m_memory;
