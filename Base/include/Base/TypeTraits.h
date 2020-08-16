@@ -17,7 +17,7 @@ namespace base
 	};
 
 	template <typename T>
-	class TypeTraits<T, enable_if_t<is_integral_v<T>>>
+	class TypeTraits<T, std::enable_if_t<std::is_integral_v<T>>>
 	{
 	public:
 		using value_t = T;
@@ -29,7 +29,7 @@ namespace base
 	};
 
 	template <typename T>
-	class TypeTraits<T, enable_if_t<is_floating_point_v<T>>>
+	class TypeTraits<T, std::enable_if_t<std::is_floating_point_v<T>>>
 	{
 	public:
 		using value_t = T;
@@ -41,10 +41,10 @@ namespace base
 		static bool IsEqual(T left, T right)
 		{
 			T diff = std::abs(left - right);
-			if (diff <= numeric_limits<T>::epsilon())
+			if (diff <= std::numeric_limits<T>::epsilon())
 				return true;
 			T largest = std::max(std::abs(left), std::abs(right));
-			if (diff <= largest * numeric_limits<T>::epsilon())
+			if (diff <= largest * std::numeric_limits<T>::epsilon())
 				return true;
 			return false;
 		}

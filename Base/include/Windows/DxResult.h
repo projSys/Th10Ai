@@ -10,7 +10,7 @@ namespace win
 	public:
 		explicit DxResult(HRESULT result);
 
-		virtual void print(ostream& os) const override;
+		virtual void print(std::ostream& os) const override;
 
 	private:
 		HRESULT m_result;

@@ -7,9 +7,9 @@
 
 namespace win
 {
-	using namespace boost::filesystem;
+	namespace filesystem = boost::filesystem;
 
-	string Apis::GetErrorDesc(DWORD errorId)
+	std::string Apis::GetErrorDesc(DWORD errorId)
 	{
 		WCHAR buffer[4096] = {};
 		if (FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -18,7 +18,7 @@ namespace win
 		return String::WideToUtf8(buffer);
 	}
 
-	string Apis::GetModuleName(HMODULE module)
+	std::string Apis::GetModuleName(HMODULE module)
 	{
 		WCHAR buffer[4096] = {};
 		if (GetModuleFileNameW(module, buffer, 4095) == 0)
@@ -26,12 +26,12 @@ namespace win
 		return String::WideToUtf8(buffer);
 	}
 
-	string Apis::GetModuleDir(HMODULE module)
+	std::string Apis::GetModuleDir(HMODULE module)
 	{
 		WCHAR buffer[4096] = {};
 		if (GetModuleFileNameW(module, buffer, 4095) == 0)
 			BASE_THROW(WindowsError());
-		wpath fullPath(buffer);
+		filesystem::wpath fullPath(buffer);
 		return String::WideToUtf8(fullPath.remove_filename().wstring());
 	}
 }

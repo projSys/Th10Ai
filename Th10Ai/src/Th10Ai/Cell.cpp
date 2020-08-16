@@ -20,13 +20,13 @@ namespace th
 
 		if (width > height)
 		{
-			m_first = make_shared<Cell>(x - width / 4.0f, y, width / 2.0f, height);
-			m_second = make_shared<Cell>(x + width / 4.0f, y, width / 2.0f, height);
+			m_first = std::make_shared<Cell>(x - width / 4.0f, y, width / 2.0f, height);
+			m_second = std::make_shared<Cell>(x + width / 4.0f, y, width / 2.0f, height);
 		}
 		else
 		{
-			m_first = make_shared<Cell>(x, y - height / 4.0f, width, height / 2.0f);
-			m_second = make_shared<Cell>(x, y + height / 4.0f, width, height / 2.0f);
+			m_first = std::make_shared<Cell>(x, y - height / 4.0f, width, height / 2.0f);
+			m_second = std::make_shared<Cell>(x, y + height / 4.0f, width, height / 2.0f);
 		}
 
 		m_first->split(times - 1);
@@ -45,7 +45,7 @@ namespace th
 			m_second->clearAll();
 	}
 
-	void Cell::splitEnemies(const vector<Enemy>& enemies)
+	void Cell::splitEnemies(const std::vector<Enemy>& enemies)
 	{
 		for (const Enemy& enemy : enemies)
 		{
@@ -55,7 +55,7 @@ namespace th
 			}
 			else
 			{
-				pair<bool, float_t> ret = enemy.willCollideWith(*this);
+				std::pair<bool, float_t> ret = enemy.willCollideWith(*this);
 				if (ret.first)
 					m_enemies.push_back(enemy);
 			}
@@ -69,7 +69,7 @@ namespace th
 			m_second->splitEnemies(m_enemies);
 	}
 
-	void Cell::splitBullets(const vector<Bullet>& bullets)
+	void Cell::splitBullets(const std::vector<Bullet>& bullets)
 	{
 		for (const Bullet& bullet : bullets)
 		{
@@ -79,7 +79,7 @@ namespace th
 			}
 			else
 			{
-				pair<bool, float_t> ret = bullet.willCollideWith(*this);
+				std::pair<bool, float_t> ret = bullet.willCollideWith(*this);
 				if (ret.first)
 					m_bullets.push_back(bullet);
 			}
@@ -93,7 +93,7 @@ namespace th
 			m_second->splitBullets(m_bullets);
 	}
 
-	void Cell::splitLasers(const vector<Laser>& lasers)
+	void Cell::splitLasers(const std::vector<Laser>& lasers)
 	{
 		for (const Laser& laser : lasers)
 		{
@@ -103,7 +103,7 @@ namespace th
 			}
 			else
 			{
-				pair<bool, float_t> ret = laser.willCollideWith(*this);
+				std::pair<bool, float_t> ret = laser.willCollideWith(*this);
 				if (ret.first)
 					m_lasers.push_back(laser);
 			}
@@ -120,8 +120,8 @@ namespace th
 	CellCollideResult Cell::collideAll(const Player& player, float_t frame) const
 	{
 		CellCollideResult result = {};
-		result.minCollideFrame = numeric_limits<float_t>::max();
-		result.minDistance = numeric_limits<float_t>::max();
+		result.minCollideFrame = std::numeric_limits<float_t>::max();
+		result.minDistance = std::numeric_limits<float_t>::max();
 
 		if (!collide(player))
 			return result;
@@ -140,7 +140,7 @@ namespace th
 				float_t distance = enemy.calcDistance(player.getPosition());
 				if (distance < result.minDistance)
 					result.minDistance = distance;
-				//pair<bool, float_t> ret = temp.willCollideWith(player);
+				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
 				//if (ret.first && ret.second < 2.0f)
 				//	return true;
 			}
@@ -168,7 +168,7 @@ namespace th
 				//}
 				//else
 				//{
-					//pair<bool, float_t> ret = temp.willCollideWith(player);
+					//std::pair<bool, float_t> ret = temp.willCollideWith(player);
 					//if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
 					//{
 					//	result.collided = true;
@@ -194,7 +194,7 @@ namespace th
 				float_t distance = laser.calcDistance(player.getPosition());
 				if (distance < result.minDistance)
 					result.minDistance = distance;
-				//pair<bool, float_t> ret = temp.willCollideWith(player);
+				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
 				//if (ret.first && ret.second < 2.0f)
 				//	return true;
 			}

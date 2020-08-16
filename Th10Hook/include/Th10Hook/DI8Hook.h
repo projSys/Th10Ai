@@ -14,7 +14,7 @@ namespace th
 	{
 	public:
 		virtual ~DI8Listener() = default;
-		virtual void onGetDeviceStateW(IDirectInputDevice8W* device, DWORD size, LPVOID data) = 0;
+		virtual void onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data) = 0;
 	};
 
 	class DI8Hook :
@@ -28,13 +28,13 @@ namespace th
 		// IDirectInput8
 		using DirectInput8Create_t = decltype(DirectInput8Create);
 		// IDirectInputDevice8
-		using GetDeviceStateW_t = HRESULT STDMETHODCALLTYPE(IDirectInputDevice8W*, DWORD, LPVOID);
+		using GetDeviceStateA_t = HRESULT STDMETHODCALLTYPE(IDirectInputDevice8A*, DWORD, LPVOID);
 
-		static HRESULT STDMETHODCALLTYPE GetDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data);
+		static HRESULT STDMETHODCALLTYPE GetDeviceStateHookA(IDirectInputDevice8A* device, DWORD size, LPVOID data);
 
-		HRESULT getDeviceStateHookW(IDirectInputDevice8W* device, DWORD size, LPVOID data);
+		HRESULT getDeviceStateHookA(IDirectInputDevice8A* device, DWORD size, LPVOID data);
 
 		DI8Listener* m_listener;
-		GetDeviceStateW_t* m_getDeviceStateW;
+		GetDeviceStateA_t* m_getDeviceStateA;
 	};
 }

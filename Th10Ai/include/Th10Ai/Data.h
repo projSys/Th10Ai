@@ -44,18 +44,18 @@ namespace th
 		EnemyTarget findEnemy();
 
 		const Player& getPlayer() const;
-		const vector<Item>& getItems() const;
-		const vector<Enemy>& getEnemies() const;
-		const vector<Bullet>& getBullets() const;
-		const vector<Laser>& getLasers() const;
+		const std::vector<Item>& getItems() const;
+		const std::vector<Enemy>& getEnemies() const;
+		const std::vector<Bullet>& getBullets() const;
+		const std::vector<Laser>& getLasers() const;
 
 	private:
 		Player m_player;
-		vector<Item> m_items;
-		vector<Enemy> m_enemies;
-		vector<Bullet> m_bullets;
-		vector<Laser> m_lasers;
+		std::vector<Item> m_items;
+		std::vector<Enemy> m_enemies;
+		std::vector<Bullet> m_bullets;
+		std::vector<Laser> m_lasers;
 
-		std::chrono::steady_clock::time_point m_findItemTime;
+		time_t m_findItemTime;
 	};
 }

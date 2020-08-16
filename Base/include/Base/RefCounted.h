@@ -23,8 +23,8 @@ namespace base
 		virtual void destroy() noexcept = 0;
 		virtual void release() noexcept = 0;
 
-		atomic<uint_t> m_strongCount;
-		atomic<uint_t> m_weakCount;
+		std::atomic<uint_t> m_strongCount;
+		std::atomic<uint_t> m_weakCount;
 	};
 
 	template <typename T>

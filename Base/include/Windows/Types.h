@@ -6,7 +6,7 @@
 
 namespace win
 {
-	using HANDLE_ptr = unique_ptr<remove_pointer_t<HANDLE>, decltype(&CloseHandle)>;
-	using HMODULE_ptr = unique_ptr<remove_pointer_t<HMODULE>, decltype(&FreeLibrary)>;
-	using HWND_ptr = unique_ptr<remove_pointer_t<HWND>, decltype(&DestroyWindow)>;
+	using HANDLE_ptr = std::unique_ptr<std::remove_pointer_t<HANDLE>, decltype(&CloseHandle)>;
+	using HMODULE_ptr = std::unique_ptr<std::remove_pointer_t<HMODULE>, decltype(&FreeLibrary)>;
+	using HWND_ptr = std::unique_ptr<std::remove_pointer_t<HWND>, decltype(&DestroyWindow)>;
 }

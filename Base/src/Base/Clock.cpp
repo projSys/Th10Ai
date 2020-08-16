@@ -5,7 +5,7 @@
 
 namespace base
 {
-	using namespace std::chrono;
+	namespace chrono = std::chrono;
 
 	Clock::Clock() :
 		m_time(0)
@@ -14,9 +14,9 @@ namespace base
 
 	void Clock::update()
 	{
-		steady_clock::time_point tp = steady_clock::now();
-		steady_clock::duration d = tp.time_since_epoch();
-		m_time = duration_cast<milliseconds>(d).count();
+		chrono::steady_clock::time_point tp = chrono::steady_clock::now();
+		chrono::steady_clock::duration d = tp.time_since_epoch();
+		m_time = chrono::duration_cast<chrono::milliseconds>(d).count();
 	}
 
 	time_t Clock::getTime() const

@@ -19,9 +19,9 @@ namespace th
 		m_prevSlow(false)/*,
 		m_dataUpdated(false)*/
 	{
-		//m_writeData = make_shared<Data>();
-		//m_middleData = make_shared<Data>();
-		//m_readData = make_shared<Data>();
+		//m_writeData = std::make_shared<Data>();
+		//m_middleData = std::make_shared<Data>();
+		//m_readData = std::make_shared<Data>();
 
 		m_scene.split(6);
 
@@ -34,9 +34,9 @@ namespace th
 		HMENU menu = GetSystemMenu(console, FALSE);
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
-		m_controlThread = thread(&Th10Ai::controlProc, this);
-		//m_readThread = thread(&Th10Ai::readProc, this);
-		m_handleThread = thread(&Th10Ai::handleProc, this);
+		m_controlThread = std::thread(&Th10Ai::controlProc, this);
+		//m_readThread = std::thread(&Th10Ai::readProc, this);
+		m_handleThread = std::thread(&Th10Ai::handleProc, this);
 	}
 
 	Th10Ai::~Th10Ai()
@@ -64,7 +64,7 @@ namespace th
 	{
 		try
 		{
-			cout << "请将焦点放在风神录窗口上，开始游戏，然后按A启动AI，按S停止AI，按D退出AI。" << endl;
+			std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A启动AI，按S停止AI，按D退出AI。" << std::endl;
 
 			while (!m_controlDone)
 			{
@@ -81,11 +81,11 @@ namespace th
 					break;
 				}
 
-				this_thread::sleep_for(std::chrono::milliseconds(16));
+				std::this_thread::sleep_for(std::chrono::milliseconds(16));
 			}
 
 			stop();
-			cout << "退出AI。" << endl;
+			std::cout << "退出AI。" << std::endl;
 		}
 		catch (...)
 		{
@@ -103,7 +103,7 @@ namespace th
 			m_readActive = true;
 			m_handleActive = true;
 
-			cout << "启动AI。" << endl;
+			std::cout << "启动AI。" << std::endl;
 		}
 	}
 
@@ -115,8 +115,8 @@ namespace th
 			m_readActive = false;
 			m_handleActive = false;
 
-			cout << "停止AI。" << endl;
-			cout << "决死总数：" << m_bombCount << endl;
+			std::cout << "停止AI。" << std::endl;
+			std::cout << "决死总数：" << m_bombCount << std::endl;
 		}
 	}
 
@@ -146,7 +146,7 @@ namespace th
 				}
 				else
 				{
-					this_thread::sleep_for(std::chrono::milliseconds(16));
+					std::this_thread::sleep_for(std::chrono::milliseconds(16));
 				}
 			}
 		}
@@ -169,7 +169,7 @@ namespace th
 				}
 				else
 				{
-					this_thread::sleep_for(std::chrono::milliseconds(16));
+					std::this_thread::sleep_for(std::chrono::milliseconds(16));
 				}
 			}
 		}
@@ -192,14 +192,8 @@ namespace th
 
 		m_window->update(m_context.getStatus());
 
-		//std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
-
 		m_data.update(m_context.getStatus());
 		//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
-
-		//std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		//time_t e1 = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count();
-		//cout << "e1: " << e1 << endl;
 
 		//if (m_dataUpdated)
 		//{
@@ -217,18 +211,10 @@ namespace th
 		m_scene.splitBullets(m_data.getBullets());
 		m_scene.splitLasers(m_data.getLasers());
 
-		//std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-		//time_t e2 = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-		//cout << "e2: " << e2 << endl;
-
 		handleBomb();
 		handleTalk();
 		handleShoot();
 		handleMove();
-
-		//std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
-		//time_t e3 = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
-		//cout << "e3: " << e3 << endl;
 
 		//m_di8Hook.commit();
 	}
@@ -243,7 +229,7 @@ namespace th
 
 			//m_di8Hook.keyPress(DIK_X);
 			++m_bombCount;
-			cout << "决死：" << m_bombCount << endl;
+			std::cout << "决死：" << m_bombCount << std::endl;
 			return true;
 		}
 		else
@@ -293,7 +279,7 @@ namespace th
 		EnemyTarget enemyTarget = m_data.findEnemy();
 		bool underEnemy = m_data.isUnderEnemy();
 
-		float_t bestScore = numeric_limits<float_t>::lowest();
+		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
 		bool bestSlow = false;
 
@@ -317,7 +303,7 @@ namespace th
 		else
 		{
 			move(DIR_HOLD, false);
-			cout << "无路可走。" << endl;
+			std::cout << "无路可走。" << std::endl;
 		}
 
 		return true;

@@ -6,50 +6,50 @@
 
 namespace base
 {
-	using namespace boost::log;
+	namespace log = boost::log;
 
 	Logger::Logger() :
 		Singleton(this)
 	{
 	}
 
-	void Logger::addFileLog(const string& filename)
+	void Logger::addFileLog(const std::string& filename)
 	{
-		add_file_log
+		log::add_file_log
 		(
-			keywords::file_name = filename,
-			keywords::rotation_size = 8 * 1024 * 1024,
-			keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
-			keywords::format = "%Message%"
+			log::keywords::file_name = filename,
+			log::keywords::rotation_size = 8 * 1024 * 1024,
+			log::keywords::time_based_rotation = log::sinks::file::rotation_at_time_point(0, 0, 0),
+			log::keywords::format = "%Message%"
 		);
 	}
 
-	void Logger::trace(const string& str)
+	void Logger::trace(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(trace) << str;
 	}
 
-	void Logger::debug(const string& str)
+	void Logger::debug(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(debug) << str;
 	}
 
-	void Logger::info(const string& str)
+	void Logger::info(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(info) << str;
 	}
 
-	void Logger::warning(const string& str)
+	void Logger::warning(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(warning) << str;
 	}
 
-	void Logger::error(const string& str)
+	void Logger::error(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(error) << str;
 	}
 
-	void Logger::fatal(const string& str)
+	void Logger::fatal(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(fatal) << str;
 	}

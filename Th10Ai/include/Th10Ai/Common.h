@@ -20,7 +20,6 @@ namespace th
 	using namespace win;
 }
 
-#include <chrono>
 #include <iostream>
 
 #include "Th10Ai/Direction.h"

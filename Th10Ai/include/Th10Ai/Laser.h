@@ -5,17 +5,17 @@
 namespace th
 {
 	// ¼¤¹â½á¹¹
-	//   (x,y)
-	// +---+---+
-	// |       |
-	// |       |
-	// |       |
-	// |       | h
-	// |       |
-	// |       |
-	// |       |
-	// +-------+
-	//     w
+	// (x,y)
+	// +-*-+
+	// |   |
+	// |   |
+	// |   |
+	// |   | h
+	// |   |
+	// |   |
+	// |   |
+	// +---+
+	//   w
 	class Laser :
 		public Entity
 	{
@@ -23,7 +23,7 @@ namespace th
 		Laser();
 
 		bool collide(const Entity& other) const;
-		pair<bool, float_t> willCollideWith(const Entity& other) const;
+		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 
 		Pointf getLeftTop() const;
 		Pointf getRightTop() const;

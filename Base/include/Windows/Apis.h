@@ -5,8 +5,8 @@ namespace win
 	class Apis
 	{
 	public:
-		static string GetErrorDesc(DWORD errorId);
-		static string GetModuleName(HMODULE module = nullptr);
-		static string GetModuleDir(HMODULE module = nullptr);
+		static std::string GetErrorDesc(DWORD errorId);
+		static std::string GetModuleName(HMODULE module = nullptr);
+		static std::string GetModuleDir(HMODULE module = nullptr);
 	};
 }

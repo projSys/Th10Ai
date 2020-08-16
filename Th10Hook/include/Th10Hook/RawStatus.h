@@ -104,7 +104,7 @@ namespace th
 		uint_t laserCount;
 	};
 
-	static_assert(is_trivial_v<RawStatus>, "");
-	//static_assert(is_standard_layout_v<RawStatus>, "");
-	//static_assert(is_pod_v<RawStatus>, "");
+	static_assert(std::is_trivial_v<RawStatus>, "");
+	//static_assert(std::is_standard_layout_v<RawStatus>, "");
+	//static_assert(std::is_pod_v<RawStatus>, "");
 }

@@ -49,9 +49,9 @@ namespace th
 		void split(int_t times);
 
 		void clearAll();
-		void splitEnemies(const vector<Enemy>& enemies);
-		void splitBullets(const vector<Bullet>& bullets);
-		void splitLasers(const vector<Laser>& lasers);
+		void splitEnemies(const std::vector<Enemy>& enemies);
+		void splitBullets(const std::vector<Bullet>& bullets);
+		void splitLasers(const std::vector<Laser>& lasers);
 		CellCollideResult collideAll(const Player& player, float_t frame) const;
 
 	private:

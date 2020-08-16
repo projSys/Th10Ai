@@ -26,15 +26,15 @@ namespace th
 	}
 
 	// 大概应该没有问题吧？
-	pair<bool, float_t> Laser::willCollideWith(const Entity& other) const
+	std::pair<bool, float_t> Laser::willCollideWith(const Entity& other) const
 	{
 		FootPoint footPoint = calcFootPoint(other.getPosition());
 		Laser temp = *this;
 		temp.setPosition(footPoint.pos);
 		if (temp.collide(other))
-			return make_pair(true, footPoint.k);
+			return std::make_pair(true, footPoint.k);
 		else
-			return make_pair(false, 0.0f);
+			return std::make_pair(false, 0.0f);
 	}
 
 	Pointf Laser::getLeftTop() const

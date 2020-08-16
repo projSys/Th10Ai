@@ -40,27 +40,27 @@ namespace th
 
 		Th10Context m_context;
 
-		thread m_controlThread;
-		atomic_bool m_controlDone;
-		atomic_bool m_controlActive;
+		std::thread m_controlThread;
+		std::atomic_bool m_controlDone;
+		std::atomic_bool m_controlActive;
 
-		thread m_readThread;
-		atomic_bool m_readDone;
-		atomic_bool m_readActive;
+		std::thread m_readThread;
+		std::atomic_bool m_readDone;
+		std::atomic_bool m_readActive;
 
-		thread m_handleThread;
-		atomic_bool m_handleDone;
-		atomic_bool m_handleActive;
+		std::thread m_handleThread;
+		std::atomic_bool m_handleDone;
+		std::atomic_bool m_handleActive;
 		int_t m_bombCount;
 		Direction m_prevDir;
 		bool m_prevSlow;
 
 		Data m_data;
-		//mutex m_dataMutex;
-		//shared_ptr<Data> m_writeData;
-		//shared_ptr<Data> m_middleData;
-		//shared_ptr<Data> m_readData;
-		//atomic_bool m_dataUpdated;
+		//std::mutex m_dataMutex;
+		//std::shared_ptr<Data> m_writeData;
+		//std::shared_ptr<Data> m_middleData;
+		//std::shared_ptr<Data> m_readData;
+		//std::atomic_bool m_dataUpdated;
 		Scene m_scene;
 	};
 }

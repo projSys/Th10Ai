@@ -5,12 +5,12 @@
 
 namespace win
 {
-	vector<Window> Window::EnumWindows()
+	std::vector<Window> Window::EnumWindows()
 	{
-		vector<Window> windows;
+		std::vector<Window> windows;
 		auto enumFunc = [](HWND window, LPARAM lParam)->BOOL
 		{
-			vector<Window>* windows = reinterpret_cast<vector<Window>*>(lParam);
+			std::vector<Window>* windows = reinterpret_cast<std::vector<Window>*>(lParam);
 			if (IsWindowVisible(window))
 				windows->push_back(Window(window));
 			return TRUE;
@@ -20,9 +20,9 @@ namespace win
 		return windows;
 	}
 
-	Window Window::FindByClassName(const string& className)
+	Window Window::FindByClassName(const std::string& className)
 	{
-		wstring classNameW = String::Utf8ToWide(className);
+		std::wstring classNameW = String::Utf8ToWide(className);
 
 		HWND window = FindWindowW(classNameW.c_str(), nullptr);
 		if (window == nullptr)
@@ -30,9 +30,9 @@ namespace win
 		return Window(window);
 	}
 
-	Window Window::FindByName(const string& name)
+	Window Window::FindByName(const std::string& name)
 	{
-		wstring nameW = String::Utf8ToWide(name);
+		std::wstring nameW = String::Utf8ToWide(name);
 
 		HWND window = FindWindowW(nullptr, nameW.c_str());
 		if (window == nullptr)
@@ -62,7 +62,7 @@ namespace win
 
 	Window& Window::operator =(Window&& other)
 	{
-		Window(move(other)).swap(*this);
+		Window(std::move(other)).swap(*this);
 		return *this;
 	}
 
@@ -71,9 +71,9 @@ namespace win
 		std::swap(m_window, other.m_window);
 	}
 
-	Window Window::findChildByClassName(const string& className)
+	Window Window::findChildByClassName(const std::string& className)
 	{
-		wstring classNameW = String::Utf8ToWide(className);
+		std::wstring classNameW = String::Utf8ToWide(className);
 
 		HWND window = FindWindowExW(m_window, nullptr, classNameW.c_str(), nullptr);
 		if (window == nullptr)
@@ -81,9 +81,9 @@ namespace win
 		return Window(window);
 	}
 
-	Window Window::findChildByName(const string& name)
+	Window Window::findChildByName(const std::string& name)
 	{
-		wstring nameW = String::Utf8ToWide(name);
+		std::wstring nameW = String::Utf8ToWide(name);
 
 		HWND window = FindWindowExW(m_window, nullptr, nullptr, nameW.c_str());
 		if (window == nullptr)
@@ -125,7 +125,7 @@ namespace win
 			BASE_THROW(WindowsError());
 	}
 
-	string Window::getName() const
+	std::string Window::getName() const
 	{
 		WCHAR buffer[1024] = {};
 		GetWindowTextW(m_window, buffer, 1023);

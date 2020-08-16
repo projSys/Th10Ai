@@ -10,7 +10,7 @@ namespace win
 	{
 	}
 
-	void WindowsError::print(ostream& os) const
+	void WindowsError::print(std::ostream& os) const
 	{
 		os << '[' << m_errorId << ']' << Apis::GetErrorDesc(m_errorId) << '\n';
 

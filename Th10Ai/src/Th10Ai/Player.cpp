@@ -105,7 +105,7 @@ namespace th
 			}
 		}
 		if (getDelta() != prevDelta)
-			cout << "移动结果错误。" << endl;
+			std::cout << "移动结果错误。" << std::endl;
 	}
 
 	bool Player::isRebirthStatus() const

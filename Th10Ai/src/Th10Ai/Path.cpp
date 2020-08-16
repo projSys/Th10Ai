@@ -40,7 +40,7 @@ namespace th
 		m_underEnemy(underEnemy),
 		m_dir(DIR_NONE),
 		m_slowFirst(false),
-		m_bestScore(numeric_limits<float_t>::lowest()),
+		m_bestScore(std::numeric_limits<float_t>::lowest()),
 		m_count(0)
 	{
 	}

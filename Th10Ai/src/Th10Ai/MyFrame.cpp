@@ -31,12 +31,12 @@ namespace th
 
 		panel->SetSizer(hSizer);
 
-		string logName = Apis::GetModuleDir() + "/Th10Ai_%N.log";
+		std::string logName = Apis::GetModuleDir() + "/Th10Ai_%N.log";
 		m_logger.addFileLog(logName);
 
 		try
 		{
-			m_th10Ai = make_unique<Th10Ai>(window);
+			m_th10Ai = std::make_unique<Th10Ai>(window);
 		}
 		catch (...)
 		{

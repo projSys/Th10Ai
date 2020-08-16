@@ -4,26 +4,27 @@
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 #include <boost/interprocess/sync/interprocess_condition.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
-#include <Base/Clock.h>
 
 #include "Th10Ai/RawStatus.h"
 
 namespace th
 {
+	namespace interprocess = boost::interprocess;
+
 	struct Th10SharedData
 	{
 		HWND window;
 
-		boost::interprocess::interprocess_mutex hookMutex;
-		boost::interprocess::interprocess_condition hookCond;
+		interprocess::interprocess_mutex hookMutex;
+		interprocess::interprocess_condition hookCond;
 		bool hooked;
 
-		boost::interprocess::interprocess_mutex unhookMutex;
-		boost::interprocess::interprocess_condition unhookCond;
+		interprocess::interprocess_mutex unhookMutex;
+		interprocess::interprocess_condition unhookCond;
 		bool unhooked;
 
-		boost::interprocess::interprocess_mutex updateMutex;
-		boost::interprocess::interprocess_condition updateCond;
+		interprocess::interprocess_mutex updateMutex;
+		interprocess::interprocess_condition updateCond;
 		bool updated;
 		bool exited;
 
@@ -46,8 +47,7 @@ namespace th
 		const RawStatus& getStatus() const;
 
 	private:
-		boost::interprocess::managed_windows_shared_memory m_memory;
+		interprocess::managed_windows_shared_memory m_memory;
 		Th10SharedData* m_data;
-		Clock m_clock;
 	};
 }

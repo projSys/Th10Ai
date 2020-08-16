@@ -29,9 +29,9 @@ namespace th
 			BASE_THROW(Exception("Please run as administrator."));
 	}
 
-	void DllInject::Inject(DWORD processId, const string& dllName)
+	void DllInject::Inject(DWORD processId, const std::string& dllName)
 	{
-		wstring dllNameW = String::Utf8ToWide(dllName);
+		std::wstring dllNameW = String::Utf8ToWide(dllName);
 		uint_t size = (dllNameW.length() + 1) * sizeof(wchar_t);
 
 		HANDLE_ptr process(OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId),

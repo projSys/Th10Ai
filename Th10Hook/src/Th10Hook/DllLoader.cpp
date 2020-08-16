@@ -13,7 +13,7 @@ namespace th
 
 	void DllLoader::start()
 	{
-		m_mainThread = thread(&DllLoader::mainProc, this);
+		m_mainThread = std::thread(&DllLoader::mainProc, this);
 	}
 
 	void DllLoader::join()

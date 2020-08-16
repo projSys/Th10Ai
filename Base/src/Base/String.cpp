@@ -5,25 +5,25 @@
 
 namespace base
 {
-	using namespace boost::locale::conv;
+	namespace conv = boost::locale::conv;
 
-	wstring String::Utf8ToWide(const char* str)
+	std::wstring String::Utf8ToWide(const char* str)
 	{
-		return utf_to_utf<wchar_t>(str);
+		return conv::utf_to_utf<wchar_t>(str);
 	}
 
-	wstring String::Utf8ToWide(const string& str)
+	std::wstring String::Utf8ToWide(const std::string& str)
 	{
-		return utf_to_utf<wchar_t>(str);
+		return conv::utf_to_utf<wchar_t>(str);
 	}
 
-	string String::WideToUtf8(const wchar_t* str)
+	std::string String::WideToUtf8(const wchar_t* str)
 	{
-		return utf_to_utf<char>(str);
+		return conv::utf_to_utf<char>(str);
 	}
 
-	string String::WideToUtf8(const wstring& str)
+	std::string String::WideToUtf8(const std::wstring& str)
 	{
-		return utf_to_utf<char>(str);
+		return conv::utf_to_utf<char>(str);
 	}
 }

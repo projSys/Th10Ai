@@ -11,9 +11,9 @@ namespace win
 	class Window
 	{
 	public:
-		static vector<Window> EnumWindows();
-		static Window FindByClassName(const string& className);
-		static Window FindByName(const string& name);
+		static std::vector<Window> EnumWindows();
+		static Window FindByClassName(const std::string& className);
+		static Window FindByName(const std::string& name);
 
 		Window();
 		explicit Window(HWND window);
@@ -24,8 +24,8 @@ namespace win
 		Window& operator =(Window&& other);
 		void swap(Window& other);
 
-		Window findChildByClassName(const string& className);
-		Window findChildByName(const string& name);
+		Window findChildByClassName(const std::string& className);
+		Window findChildByName(const std::string& name);
 
 		void minimize();
 		void maximize();
@@ -34,7 +34,7 @@ namespace win
 		bool isMaximized() const;
 		void activate();
 
-		string getName() const;
+		std::string getName() const;
 		void setSize(const Size& size);
 		Size getSize() const;
 		Rect getRect() const;

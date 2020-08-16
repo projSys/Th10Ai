@@ -60,17 +60,17 @@ namespace th
 		m_cell.clearAll();
 	}
 
-	void Scene::splitEnemies(const vector<Enemy>& enemies)
+	void Scene::splitEnemies(const std::vector<Enemy>& enemies)
 	{
 		m_cell.splitEnemies(enemies);
 	}
 
-	void Scene::splitBullets(const vector<Bullet>& bullets)
+	void Scene::splitBullets(const std::vector<Bullet>& bullets)
 	{
 		m_cell.splitBullets(bullets);
 	}
 
-	void Scene::splitLasers(const vector<Laser>& lasers)
+	void Scene::splitLasers(const std::vector<Laser>& lasers)
 	{
 		m_cell.splitLasers(lasers);
 	}

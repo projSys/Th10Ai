@@ -12,11 +12,11 @@ namespace win
 	{
 	}
 
-	void DxResult::print(ostream& os) const
+	void DxResult::print(std::ostream& os) const
 	{
-		ios oldState(nullptr);
+		std::ios oldState(nullptr);
 		oldState.copyfmt(os);
-		os << "[0x" << hex << uppercase << setw(8) << setfill('0') << m_result << ']';
+		os << "[0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << m_result << ']';
 		os.copyfmt(oldState);
 		os << Apis::GetErrorDesc(m_result) << '\n';
 

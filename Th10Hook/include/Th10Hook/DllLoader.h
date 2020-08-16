@@ -25,7 +25,7 @@ namespace th
 
 		static DWORD WINAPI ExitProc(LPVOID param);
 
-		thread m_mainThread;
-		atomic_bool m_selfExit;
+		std::thread m_mainThread;
+		std::atomic_bool m_selfExit;
 	};
 }

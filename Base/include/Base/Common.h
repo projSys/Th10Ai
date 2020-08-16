@@ -62,5 +62,4 @@
 
 namespace base
 {
-	using namespace std;
 }

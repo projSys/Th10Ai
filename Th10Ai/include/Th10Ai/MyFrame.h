@@ -18,7 +18,7 @@ namespace th
 		void onClose(wxCloseEvent& event);
 
 		Logger m_logger;
-		unique_ptr<Th10Ai> m_th10Ai;
+		std::unique_ptr<Th10Ai> m_th10Ai;
 
 		wxDECLARE_EVENT_TABLE();
 	};

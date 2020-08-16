@@ -12,14 +12,14 @@ namespace base
 	public:
 		Logger();
 
-		void addFileLog(const string& filename);
+		void addFileLog(const std::string& filename);
 
-		void trace(const string& str);
-		void debug(const string& str);
-		void info(const string& str);
-		void warning(const string& str);
-		void error(const string& str);
-		void fatal(const string& str);
+		void trace(const std::string& str);
+		void debug(const std::string& str);
+		void info(const std::string& str);
+		void warning(const std::string& str);
+		void error(const std::string& str);
+		void fatal(const std::string& str);
 	};
 
 #define BASE_LOG_TRACE(str) base::Logger::GetInstance().trace(str)

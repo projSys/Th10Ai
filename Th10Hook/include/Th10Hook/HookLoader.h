@@ -27,13 +27,13 @@ namespace th
 		void onDestroy();
 		virtual void onPresent(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 			HWND destWindowOverride, CONST RGNDATA* dirtyRegion) override;
-		virtual void onGetDeviceStateW(IDirectInputDevice8W* device, DWORD size, LPVOID data) override;
+		virtual void onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data) override;
 
 		Logger m_logger;
-		unique_ptr<Th10Context> m_context;
+		std::unique_ptr<Th10Context> m_context;
 		WindowHook m_windowHook;
-		unique_ptr<D3D9Hook> m_d3d9Hook;
-		unique_ptr<DI8Hook> m_di8Hook;
+		std::unique_ptr<D3D9Hook> m_d3d9Hook;
+		std::unique_ptr<DI8Hook> m_di8Hook;
 		bool m_hooked;
 	};
 }

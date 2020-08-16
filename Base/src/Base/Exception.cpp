@@ -13,7 +13,7 @@ namespace base
 	{
 	}
 
-	Exception::Exception(const string& desc) :
+	Exception::Exception(const std::string& desc) :
 		runtime_error(desc),
 		m_id(0),
 		m_sourceLocation(SourceLocation::GetCurrent())
@@ -27,7 +27,7 @@ namespace base
 	{
 	}
 
-	Exception::Exception(int_t id, const string& desc) :
+	Exception::Exception(int_t id, const std::string& desc) :
 		runtime_error(desc),
 		m_id(id),
 		m_sourceLocation(SourceLocation::GetCurrent())
@@ -41,7 +41,7 @@ namespace base
 	{
 	}
 
-	void Exception::print(ostream& os) const
+	void Exception::print(std::ostream& os) const
 	{
 		os << '[' << m_id << ']' << what() << '\n';
 
@@ -49,23 +49,23 @@ namespace base
 		printStackTrace(os);
 	}
 
-	void Exception::printSourceLocation(ostream& os) const
+	void Exception::printSourceLocation(std::ostream& os) const
 	{
 		os << " in " << m_sourceLocation.getFunc()
 			<< " at " << m_sourceLocation.getFile()
 			<< ':' << m_sourceLocation.getLine() << '\n';
 	}
 
-	void Exception::printStackTrace(ostream& os) const
+	void Exception::printStackTrace(std::ostream& os) const
 	{
 #ifdef _DEBUG
 		os << "StackTrace:\n" << m_stackTrace;
 #endif
 	}
 
-	string PrintException()
+	std::string PrintException()
 	{
-		ostringstream oss;
+		std::ostringstream oss;
 		try
 		{
 			throw;
@@ -78,7 +78,7 @@ namespace base
 		{
 			oss << boost::diagnostic_information(be);
 		}
-		catch (const exception& se)
+		catch (const std::exception& se)
 		{
 			oss << se.what() << '\n';
 		}

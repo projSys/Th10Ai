@@ -20,10 +20,10 @@ namespace th
 
 	void HookLoader::run()
 	{
-		string logName = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
+		std::string logName = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
 		m_logger.addFileLog(logName);
 
-		m_context = make_unique<Th10Context>();
+		m_context = std::make_unique<Th10Context>();
 		ON_SCOPE_EXIT([&]()
 			{
 				m_context = nullptr;
@@ -69,8 +69,8 @@ namespace th
 
 	void HookLoader::onLoad()
 	{
-		m_d3d9Hook = make_unique<D3D9Hook>(this);
-		m_di8Hook = make_unique<DI8Hook>(this);
+		m_d3d9Hook = std::make_unique<D3D9Hook>(this);
+		m_di8Hook = std::make_unique<DI8Hook>(this);
 		m_hooked = true;
 	}
 
@@ -95,7 +95,7 @@ namespace th
 		m_context->notifyUpdate();
 	}
 
-	void HookLoader::onGetDeviceStateW(IDirectInputDevice8W* device, DWORD size, LPVOID data)
+	void HookLoader::onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data)
 	{
 
 	}

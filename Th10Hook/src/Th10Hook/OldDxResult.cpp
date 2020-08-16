@@ -13,7 +13,7 @@ namespace th
 	{
 	}
 
-	void OldDxResult::print(ostream& os) const
+	void OldDxResult::print(std::ostream& os) const
 	{
 		WCHAR buffer[4096] = {};
 		DXGetErrorDescriptionW(m_result, buffer, 4095);

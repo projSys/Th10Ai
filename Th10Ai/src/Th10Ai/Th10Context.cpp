@@ -2,13 +2,13 @@
 #include "Th10Ai/Th10Context.h"
 
 #include <Base/ScopeGuard.h>
+#include <Base/Clock.h>
 
 #include "Th10Ai/DllInject.h"
 
 namespace th
 {
-	using namespace boost::interprocess;
-	using namespace boost::posix_time;
+	namespace posix_time = boost::posix_time;
 
 	Th10Context::Th10Context() :
 		m_data(nullptr)
@@ -19,7 +19,8 @@ namespace th
 		DWORD processId = 0;
 		DWORD threadId = GetWindowThreadProcessId(window, &processId);
 
-		m_memory = managed_windows_shared_memory(create_only, "Th10SharedMemory", 8 * 1024 * 1024);
+		m_memory = interprocess::managed_windows_shared_memory(interprocess::create_only,
+			"Th10SharedMemory", 8 * 1024 * 1024);
 		m_data = m_memory.construct<Th10SharedData>("Th10SharedData")();
 		if (m_data == nullptr)
 			BASE_THROW(Exception(u8"Th10SharedData名称已被使用。"));
@@ -31,7 +32,7 @@ namespace th
 		m_data->exited = false;
 		m_data->updateTime = 0;
 
-		string dllName = Apis::GetModuleDir() + "/Th10Hook.dll";
+		std::string dllName = Apis::GetModuleDir() + "/Th10Hook.dll";
 		DllInject::EnableDebugPrivilege();
 		DllInject::Inject(processId, dllName);
 
@@ -54,10 +55,11 @@ namespace th
 	bool Th10Context::timedWaitHook(time_t ms)
 	{
 		bool notTimeout = true;
-		scoped_lock<interprocess_mutex> lock(m_data->hookMutex);
+		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->hookMutex);
 		if (!m_data->hooked)
 		{
-			ptime absTime = microsec_clock::universal_time() + milliseconds(ms);
+			posix_time::ptime absTime = interprocess::microsec_clock::universal_time()
+				+ posix_time::milliseconds(ms);
 			notTimeout = m_data->hookCond.timed_wait(lock, absTime);
 		}
 		return notTimeout;
@@ -65,19 +67,22 @@ namespace th
 
 	void Th10Context::notifyUnhook()
 	{
-		scoped_lock<interprocess_mutex> lock(m_data->unhookMutex);
+		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->unhookMutex);
 		m_data->unhooked = true;
 		m_data->unhookCond.notify_one();
 	}
 
 	bool Th10Context::waitUpdate()
 	{
-		scoped_lock<interprocess_mutex> lock(m_data->updateMutex);
+		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->updateMutex);
 		if (!m_data->updated)
 			m_data->updateCond.wait(lock);
 		m_data->updated = false;
-		//m_clock.update();
-		//cout << m_clock.getTime() - m_data->updateTime << endl;
+
+		//Clock clock;
+		//clock.update();
+		//std::cout << clock.getTime() - m_data->updateTime << std::endl;
+
 		return !m_data->exited;
 	}
 
