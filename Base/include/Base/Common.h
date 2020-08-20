@@ -1,15 +1,9 @@
 #pragma once
 
-//#ifndef BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
-//#define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
-//#endif
-
-//#ifndef _SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING
-//#define _SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING
-//#endif
-
-#ifdef _WIN32
-//define something for Windows (32-bit and 64-bit, this part is common)
+// https://stackoverflow.com/questions/5919996/how-to-detect-reliably-mac-os-x-ios-linux-windows-in-c-preprocessor
+// https://stackoverflow.com/questions/142508/how-do-i-check-os-with-a-preprocessor-directive
+#if defined(_WIN32) //|| defined(WIN32) || defined(__WIN32__) || defined(__NT__)
+// define something for Windows (32-bit and 64-bit, this part is common)
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -28,13 +22,13 @@
 
 #define BASE_WINDOWS 1
 
-#ifdef _WIN64
-//define something for Windows (64-bit only)
+#if defined(_WIN64)
+// define something for Windows (64-bit only)
 #define BASE_64BIT 1
 #define BASE_BITS 64
 
 #else
-//define something for Windows (32-bit only)
+// define something for Windows (32-bit only)
 #define BASE_32BIT 1
 #define BASE_BITS 32
 
@@ -48,7 +42,7 @@
 #elif TARGET_OS_MAC
 // Other kinds of Mac OS
 #else
-#error "Unknown Apple platform"
+#error "Unknown Apple platform."
 #endif
 #elif __linux__
 // linux
@@ -57,7 +51,7 @@
 #elif defined(_POSIX_VERSION)
 // POSIX
 #else
-#error "Unknown compiler"
+#error "Unknown compiler."
 #endif
 
 namespace base

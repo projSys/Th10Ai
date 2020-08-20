@@ -19,8 +19,6 @@ namespace th
 		void transactionCommit();
 		void transactionAbort();
 
-		const char* getErrorDesc(LONG errorId);
-
 		bool m_commit;
 	};
 }

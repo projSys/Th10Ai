@@ -14,7 +14,8 @@ namespace th
 
 	HookLoader::HookLoader() :
 		m_windowHook(this),
-		m_hooked(false)
+		m_hooked(false),
+		m_th10Hook(this)
 	{
 	}
 

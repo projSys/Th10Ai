@@ -2,8 +2,8 @@
 #include "Th10Hook/D3D9Hook.h"
 
 #include <Base/ScopeGuard.h>
+#include <Windows/DxResult.h>
 
-#include "Th10Hook/OldDxResult.h"
 #include "Th10Hook/MyDetours.h"
 
 namespace th
@@ -48,7 +48,7 @@ namespace th
 		D3DDISPLAYMODE d3ddm = {};
 		HRESULT hr = d3d9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
 		if (FAILED(hr))
-			BASE_THROW(OldDxResult(hr));
+			BASE_THROW(DxResult(hr, "GetAdapterDisplayMode() failed."));
 
 		D3DPRESENT_PARAMETERS d3dpp = {};
 		d3dpp.Windowed = TRUE;
@@ -59,7 +59,7 @@ namespace th
 		hr = d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window.get(),
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &device);
 		if (FAILED(hr))
-			BASE_THROW(OldDxResult(hr));
+			BASE_THROW(DxResult(hr, "CreateDevice() failed."));
 
 		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
 		m_present = reinterpret_cast<Present_t*>(vTable[17]);

@@ -1,7 +1,8 @@
 #include "Th10Hook/Common.h"
 #include "Th10Hook/DI8Hook.h"
 
-#include "Th10Hook/OldDxResult.h"
+#include <Windows/DxResult.h>
+
 #include "Th10Hook/MyDetours.h"
 
 namespace th
@@ -23,12 +24,12 @@ namespace th
 		HRESULT hr = directInput8Create(GetModuleHandleW(nullptr), DIRECTINPUT_VERSION,
 			IID_IDirectInput8A, reinterpret_cast<LPVOID*>(&dinput8A), nullptr);
 		if (FAILED(hr))
-			BASE_THROW(OldDxResult(hr));
+			BASE_THROW(DxResult(hr, "DirectInput8Create() failed."));
 
 		CComPtr<IDirectInputDevice8A> deviceA;
 		hr = dinput8A->CreateDevice(GUID_SysKeyboard, &deviceA, nullptr);
 		if (FAILED(hr))
-			BASE_THROW(OldDxResult(hr));
+			BASE_THROW(DxResult(hr, "CreateDevice() failed."));
 
 		uint_t* vTableA = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(deviceA.p));
 		m_getDeviceStateA = reinterpret_cast<GetDeviceStateA_t*>(vTableA[9]);

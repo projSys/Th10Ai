@@ -7,6 +7,7 @@
 #include "Th10Hook/WindowHook.h"
 #include "Th10Hook/D3D9Hook.h"
 #include "Th10Hook/DI8Hook.h"
+#include "Th10Hook/Th10Hook.h"
 
 namespace th
 {
@@ -14,7 +15,8 @@ namespace th
 		public DllLoader,
 		public WindowListener,
 		public D3D9Listener,
-		public DI8Listener
+		public DI8Listener,
+		public Th10Listener
 	{
 	public:
 		HookLoader();
@@ -35,5 +37,6 @@ namespace th
 		std::unique_ptr<D3D9Hook> m_d3d9Hook;
 		std::unique_ptr<DI8Hook> m_di8Hook;
 		bool m_hooked;
+		Th10Hook m_th10Hook;
 	};
 }

@@ -2,7 +2,7 @@
 
 #include <wx/wx.h>
 
-#include "Th10Ai/RawStatus.h"
+#include "Th10Ai/Th10Data.h"
 
 namespace th
 {

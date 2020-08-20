@@ -1,15 +1,10 @@
 #pragma once
 
-#include "Th10Ai/RawStatus.h"
+#include "Th10Ai/Th10Data.h"
+#include "Th10Ai/Utils.h"
 
 namespace th
 {
-	struct FootPoint
-	{
-		float_t k;
-		Pointf pos;
-	};
-
 	// 实体结构
 	// +-------+
 	// | (x,y) |
@@ -20,13 +15,8 @@ namespace th
 	class Entity
 	{
 	public:
-		static float_t CalcDistance(const Pointf& A, const Pointf& B);
-		// AB与AC的夹角
-		static float_t CalcAngle(const Pointf& A, const Pointf& B, const Pointf& C);
-		// 点C到线段AB的垂足
-		static FootPoint CalcFootPoint(const Pointf& A, const Pointf& B, const Pointf& C);
-
-		Entity();
+		Entity() = default;
+		Entity(const Entity&) = default;
 		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
 
 		float_t calcDistance(const Pointf& pos) const;

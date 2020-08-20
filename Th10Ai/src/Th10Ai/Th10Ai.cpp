@@ -224,9 +224,6 @@ namespace th
 	{
 		if (m_data.getPlayer().isColliding())
 		{
-			//CellCollideResult ccr = m_scene.collideAll(m_data.getPlayer(), 0.0f);
-			//cout << ccr.collided << endl;
-
 			//m_di8Hook.keyPress(DIK_X);
 			++m_bombCount;
 			std::cout << "¾öËÀ£º" << m_bombCount << std::endl;

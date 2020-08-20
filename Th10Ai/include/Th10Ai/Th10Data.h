@@ -2,6 +2,8 @@
 
 #include "Th10Ai/Common.h"
 
+#include <type_traits>
+
 namespace th
 {
 	// 实体结构
@@ -107,4 +109,20 @@ namespace th
 	static_assert(std::is_trivial_v<RawStatus>, "");
 	//static_assert(std::is_standard_layout_v<RawStatus>, "");
 	//static_assert(std::is_pod_v<RawStatus>, "");
+
+	struct ActionData
+	{
+		bool left;
+		bool right;
+		bool up;
+		bool down;
+		bool shoot;
+		bool bomb;
+		bool slow;
+		bool skip;
+	};
+
+	static_assert(std::is_trivial_v<ActionData>, "ActionData is not trivial.");
+	static_assert(std::is_standard_layout_v<ActionData>, "ActionData is not standard layout.");
+	static_assert(std::is_pod_v<ActionData>, "ActionData is not POD.");
 }

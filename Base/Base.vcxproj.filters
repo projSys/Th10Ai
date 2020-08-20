@@ -63,18 +63,6 @@
     <ClInclude Include="include\Windows\Common.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\Point.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\Rect.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\Size.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\Window.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Windows\WindowsError.h">
       <Filter>头文件\Windows</Filter>
     </ClInclude>
@@ -96,6 +84,15 @@
     <ClInclude Include="include\Base\Clock.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Point.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Rect.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Size.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -109,9 +106,6 @@
     </ClCompile>
     <ClCompile Include="src\Base\SourceLocation.cpp">
       <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\Window.cpp">
-      <Filter>源文件\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Windows\WindowsError.cpp">
       <Filter>源文件\Windows</Filter>

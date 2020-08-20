@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Th10Ai/RawStatus.h"
+#include "Th10Ai/Th10Data.h"
 #include "Th10Ai/Entity.h"
 
 namespace th
@@ -11,7 +11,8 @@ namespace th
 	public:
 		static const Pointf INIT_POS;
 
-		Player();
+		Player() = default;
+		Player(const Player&) = default;
 		explicit Player(const RawPlayer& raw);
 
 		void advance(Direction dir, bool slow);
@@ -40,8 +41,12 @@ namespace th
 		float_t powers;
 		// type == 0 Reimu
 		// type == 1 Marisa
-		//int_t type;
-		int_t life;
+		int_t type;
+		int_t lives;
 		float_t itemObtainRange;
 	};
+
+	static_assert(std::is_trivial_v<Player>, "");
+	//static_assert(std::is_standard_layout_v<Player>, "");
+	//static_assert(std::is_pod_v<Player>, "");
 }

@@ -8,42 +8,25 @@ namespace base
 {
 	Exception::Exception() :
 		runtime_error(nullptr),
-		m_id(0),
 		m_sourceLocation(SourceLocation::GetCurrent())
 	{
 	}
 
-	Exception::Exception(const std::string& desc) :
-		runtime_error(desc),
-		m_id(0),
+	Exception::Exception(const char* str) :
+		runtime_error(str),
 		m_sourceLocation(SourceLocation::GetCurrent())
 	{
 	}
 
-	Exception::Exception(const char* desc) :
-		runtime_error(desc),
-		m_id(0),
-		m_sourceLocation(SourceLocation::GetCurrent())
-	{
-	}
-
-	Exception::Exception(int_t id, const std::string& desc) :
-		runtime_error(desc),
-		m_id(id),
-		m_sourceLocation(SourceLocation::GetCurrent())
-	{
-	}
-
-	Exception::Exception(int_t id, const char* desc) :
-		runtime_error(desc),
-		m_id(id),
+	Exception::Exception(const std::string& str) :
+		runtime_error(str),
 		m_sourceLocation(SourceLocation::GetCurrent())
 	{
 	}
 
 	void Exception::print(std::ostream& os) const
 	{
-		os << '[' << m_id << ']' << what() << '\n';
+		os << what() << '\n';
 
 		printSourceLocation(os);
 		printStackTrace(os);

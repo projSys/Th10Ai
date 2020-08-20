@@ -5,7 +5,7 @@
 #include <boost/interprocess/sync/interprocess_condition.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
 
-#include "Th10Hook/RawStatus.h"
+#include "Th10Hook/Th10Data.h"
 
 namespace th
 {
@@ -30,6 +30,7 @@ namespace th
 
 		time_t updateTime;
 		RawStatus status;
+		ActionData action;
 	};
 
 	class Th10Context

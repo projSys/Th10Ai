@@ -85,20 +85,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Th10Hook\Action.h" />
     <ClInclude Include="include\Th10Hook\Common.h" />
     <ClInclude Include="include\Th10Hook\D3D9Hook.h" />
     <ClInclude Include="include\Th10Hook\DI8Hook.h" />
     <ClInclude Include="include\Th10Hook\DllLoader.h" />
     <ClInclude Include="include\Th10Hook\DllMain.h" />
-    <ClInclude Include="include\Th10Hook\dxerr.h" />
     <ClInclude Include="include\Th10Hook\HookLoader.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
-    <ClInclude Include="include\Th10Hook\RawStatus.h" />
     <ClInclude Include="include\Th10Hook\Reader.h" />
     <ClInclude Include="include\Th10Hook\Th10Context.h" />
+    <ClInclude Include="include\Th10Hook\Th10Data.h" />
     <ClInclude Include="include\Th10Hook\Th10Hook.h" />
-    <ClInclude Include="include\Th10Hook\OldDxResult.h" />
     <ClInclude Include="include\Th10Hook\WindowHook.h" />
   </ItemGroup>
   <ItemGroup>
@@ -106,13 +103,11 @@
     <ClCompile Include="src\Th10Hook\DI8Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DllLoader.cpp" />
     <ClCompile Include="src\Th10Hook\DllMain.cpp" />
-    <ClCompile Include="src\Th10Hook\dxerr.cpp" />
     <ClCompile Include="src\Th10Hook\HookLoader.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
     <ClCompile Include="src\Th10Hook\Reader.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Context.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />
-    <ClCompile Include="src\Th10Hook\OldDxResult.cpp" />
     <ClCompile Include="src\Th10Hook\WindowHook.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

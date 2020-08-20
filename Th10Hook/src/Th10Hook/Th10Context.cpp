@@ -56,7 +56,6 @@ namespace th
 	void Th10Context::notifyExit()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->updateMutex);
-		m_data->updated = true;
 		m_data->exited = true;
 		m_data->updateCond.notify_one();
 	}

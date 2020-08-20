@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Th10Hook/RawStatus.h"
+#include "Th10Hook/Th10Data.h"
 
 namespace th
 {

@@ -31,6 +31,8 @@ namespace th
 		m_data->updated = false;
 		m_data->exited = false;
 		m_data->updateTime = 0;
+		//m_data->status = {};
+		//m_data->action = {};
 
 		std::string dllName = Apis::GetModuleDir() + "/Th10Hook.dll";
 		DllInject::EnableDebugPrivilege();
@@ -75,7 +77,7 @@ namespace th
 	bool Th10Context::waitUpdate()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->updateMutex);
-		if (!m_data->updated)
+		if (!m_data->updated && !m_data->exited)
 			m_data->updateCond.wait(lock);
 		m_data->updated = false;
 
