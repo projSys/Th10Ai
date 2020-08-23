@@ -15,8 +15,9 @@ namespace th
 	class Entity
 	{
 	public:
-		Entity() = default;
-		Entity(const Entity&) = default;
+		static const Direction SECTOR_TO_DIR[17];
+
+		Entity();
 		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
 
 		float_t calcDistance(const Pointf& pos) const;
@@ -43,7 +44,8 @@ namespace th
 		Sizef getSize() const;
 		Rectf getRect() const;
 
-		static const Direction SECTOR_TO_DIR[17];
+		//int_t id;
+		//int_t type;
 
 		float_t x;			// 坐标在中心点
 		float_t y;
@@ -51,8 +53,5 @@ namespace th
 		float_t dy;
 		float_t width;
 		float_t height;
-
-		int_t id;
-		int_t type;
 	};
 }

@@ -6,7 +6,7 @@
 #include <mutex>
 
 #include "Th10Ai/Th10Context.h"
-#include "Th10Ai/Data.h"
+#include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
 
 namespace th
@@ -55,12 +55,12 @@ namespace th
 		Direction m_prevDir;
 		bool m_prevSlow;
 
-		Data m_data;
-		//std::mutex m_dataMutex;
-		//std::shared_ptr<Data> m_writeData;
-		//std::shared_ptr<Data> m_middleData;
-		//std::shared_ptr<Data> m_readData;
-		//std::atomic_bool m_dataUpdated;
+		Status m_status;
+		//std::mutex m_statusMutex;
+		//std::shared_ptr<Status> m_writeStatus;
+		//std::shared_ptr<Status> m_middleStatus;
+		//std::shared_ptr<Status> m_readStatus;
+		//std::atomic_bool m_statusUpdated;
 		Scene m_scene;
 	};
 }

@@ -46,37 +46,37 @@ namespace th
 	}
 
 	Scene::Scene() :
-		m_cell(0.0f, 224.0f, 384.0f, 448.0f)
+		m_region(0.0f, 224.0f, 384.0f, 448.0f)
 	{
 	}
 
 	void Scene::split(int_t times)
 	{
-		m_cell.split(times);
+		m_region.split(times);
 	}
 
 	void Scene::clearAll()
 	{
-		m_cell.clearAll();
+		m_region.clearAll();
 	}
 
 	void Scene::splitEnemies(const std::vector<Enemy>& enemies)
 	{
-		m_cell.splitEnemies(enemies);
+		m_region.splitEnemies(enemies);
 	}
 
 	void Scene::splitBullets(const std::vector<Bullet>& bullets)
 	{
-		m_cell.splitBullets(bullets);
+		m_region.splitBullets(bullets);
 	}
 
 	void Scene::splitLasers(const std::vector<Laser>& lasers)
 	{
-		m_cell.splitLasers(lasers);
+		m_region.splitLasers(lasers);
 	}
 
-	CellCollideResult Scene::collideAll(const Player& player, float_t frame) const
+	RegionCollideResult Scene::collideAll(const Player& player, float_t frame) const
 	{
-		return m_cell.collideAll(player, frame);
+		return m_region.collideAll(player, frame);
 	}
 }

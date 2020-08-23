@@ -31,9 +31,9 @@ namespace th
 	const float_t Path::FIND_DEPTH = 30.0f;
 	const Pointf Path::RESET_POS = { 0.0f, 432.0f };
 
-	Path::Path(Data& data, Scene& scene,
+	Path::Path(Status& status, Scene& scene,
 		ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy) :
-		m_data(data),
+		m_status(status),
 		m_scene(scene),
 		m_itemTarget(itemTarget),
 		m_enemyTarget(enemyTarget),
@@ -52,7 +52,7 @@ namespace th
 		m_slowFirst = false;
 
 		Action action = {};
-		action.fromPos = m_data.getPlayer().getPosition();
+		action.fromPos = m_status.getPlayer().getPosition();
 		action.fromDir = m_dir;
 		action.frame = 1.0f;
 
@@ -76,19 +76,19 @@ namespace th
 			return result;
 
 		// 前进到下一个坐标
-		Player player = m_data.getPlayer();
+		Player player = m_status.getPlayer();
 		player.setPosition(action.fromPos);
 		player.advance(action.fromDir, m_slowFirst);
 		result.slow = m_slowFirst;
-		CellCollideResult ccr = {};
+		RegionCollideResult rcr = {};
 		if (!Scene::IsInPlayerArea(player.getPosition())
-			|| (ccr = m_scene.collideAll(player, action.frame)).collided)
+			|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 		{
 			player.setPosition(action.fromPos);
 			player.advance(action.fromDir, !m_slowFirst);
 			result.slow = !m_slowFirst;
 			if (!Scene::IsInPlayerArea(player.getPosition())
-				|| (ccr = m_scene.collideAll(player, action.frame)).collided)
+				|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 			{
 				//result.ttd = 10;
 				return result;

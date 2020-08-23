@@ -1,6 +1,8 @@
 #pragma once
 
-namespace th
+#include <Base/Enum.h>
+
+namespace comm
 {
 	// ÒÆ¶¯·½Ïò
 	enum Direction
@@ -32,4 +34,26 @@ namespace th
 		DIR_LEFTDOWN,
 		DIR_RIGHTDOWN
 	};
+
+	template <>
+	class EnumTraits<Direction>
+	{
+	public:
+		static constexpr Direction ENUMERATORS[] =
+		{
+			DIR_HOLD,
+			DIR_LEFT,
+			DIR_RIGHT,
+			DIR_UP,
+			DIR_DOWN,
+			DIR_LEFTUP,
+			DIR_RIGHTUP,
+			DIR_LEFTDOWN,
+			DIR_RIGHTDOWN
+		};
+
+		static constexpr Direction NONE = DIR_NONE;
+	};
+
+	using Dir = Enum<Direction>;
 }

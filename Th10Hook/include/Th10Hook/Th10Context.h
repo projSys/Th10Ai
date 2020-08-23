@@ -29,7 +29,7 @@ namespace th
 		bool exited;
 
 		time_t updateTime;
-		RawStatus status;
+		StatusData status;
 		ActionData action;
 	};
 

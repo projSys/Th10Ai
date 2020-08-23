@@ -8,23 +8,26 @@
 
 namespace base
 {
-	template <typename T, typename Traits = TypeTraits<T>>
+	template <typename T>
 	class RectBase
 	{
 	public:
 		using value_t = T;
+		using Traits = TypeTraits<value_t>;
+		using Point = PointBase<value_t>;
+		using Size = SizeBase<value_t>;
 
 		RectBase() :
 			x(), y(), width(), height()
 		{
 		}
 
-		RectBase(T x0, T y0, T width0, T height0) :
+		RectBase(value_t x0, value_t y0, value_t width0, value_t height0) :
 			x(x0), y(y0), width(width0), height(height0)
 		{
 		}
 
-		RectBase(const PointBase<T>& point, const SizeBase<T>& size) :
+		RectBase(const Point& point, const Size& size) :
 			x(point.x), y(point.y), width(size.width), height(size.height)
 		{
 		}
@@ -54,23 +57,23 @@ namespace base
 
 		bool isEmpty() const
 		{
-			return width <= T() || height <= T();
+			return width <= value_t() || height <= value_t();
 		}
 
-		PointBase<T> getPoint() const
+		Point getPoint() const
 		{
-			return PointBase<T>(x, y);
+			return Point(x, y);
 		}
 
-		SizeBase<T> getSize() const
+		Size getSize() const
 		{
-			return SizeBase<T>(width, height);
+			return Size(width, height);
 		}
 
-		T x;
-		T y;
-		T width;
-		T height;
+		value_t x;
+		value_t y;
+		value_t width;
+		value_t height;
 	};
 
 	using Recti = RectBase<int_t>;

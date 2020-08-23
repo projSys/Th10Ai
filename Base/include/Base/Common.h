@@ -57,3 +57,7 @@
 namespace base
 {
 }
+
+namespace comm
+{
+}

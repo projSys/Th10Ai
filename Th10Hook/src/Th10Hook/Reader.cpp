@@ -3,7 +3,7 @@
 
 namespace th
 {
-	int_t Reader::ReadPlayer(RawPlayer& player)
+	int_t Reader::ReadPlayer(PlayerData& player)
 	{
 		player = {};
 
@@ -30,7 +30,7 @@ namespace th
 		return 1;
 	}
 
-	int_t Reader::ReadItems(RawItem items[])
+	int_t Reader::ReadItems(ItemData items[])
 	{
 		int_t count = 0;
 
@@ -69,7 +69,7 @@ namespace th
 		return count;
 	}
 
-	int_t Reader::ReadEnemies(RawEnemy enemies[])
+	int_t Reader::ReadEnemies(EnemyData enemies[])
 	{
 		int_t count = 0;
 
@@ -108,7 +108,7 @@ namespace th
 		return count;
 	}
 
-	int_t Reader::ReadBullets(RawBullet bullets[])
+	int_t Reader::ReadBullets(BulletData bullets[])
 	{
 		int_t count = 0;
 
@@ -148,7 +148,7 @@ namespace th
 		return count;
 	}
 
-	int_t Reader::ReadLasers(RawLaser lasers[])
+	int_t Reader::ReadLasers(LaserData lasers[])
 	{
 		int_t count = 0;
 

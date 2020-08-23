@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Th10Ai/Data.h"
+#include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
 
 namespace th
@@ -27,7 +27,7 @@ namespace th
 	class Path
 	{
 	public:
-		Path(Data& data, Scene& scene,
+		Path(Status& status, Scene& scene,
 			ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy);
 
 		Result find(Direction dir);
@@ -44,7 +44,7 @@ namespace th
 		static const float_t FIND_DEPTH;
 		static const Pointf RESET_POS;
 
-		Data& m_data;
+		Status& m_status;
 		Scene& m_scene;
 		ItemTarget& m_itemTarget;
 		EnemyTarget& m_enemyTarget;

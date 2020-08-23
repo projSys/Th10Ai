@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Th10Ai/Cell.h"
+#include "Th10Ai/Region.h"
 
 namespace th
 {
@@ -52,12 +52,12 @@ namespace th
 		void splitEnemies(const std::vector<Enemy>& enemies);
 		void splitBullets(const std::vector<Bullet>& bullets);
 		void splitLasers(const std::vector<Laser>& lasers);
-		CellCollideResult collideAll(const Player& player, float_t frame) const;
+		RegionCollideResult collideAll(const Player& player, float_t frame) const;
 
 	private:
 		static const Sizef OFFSET;
 		static const Sizef ORIGIN_POINT_OFFSET;
 
-		Cell m_cell;
+		Region m_region;
 	};
 }

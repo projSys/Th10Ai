@@ -8,11 +8,11 @@ namespace th
 	class Reader
 	{
 	public:
-		static int_t ReadPlayer(RawPlayer& player);
-		static int_t ReadItems(RawItem items[]);
-		static int_t ReadEnemies(RawEnemy enemies[]);
-		static int_t ReadBullets(RawBullet bullets[]);
-		static int_t ReadLasers(RawLaser lasers[]);
+		static int_t ReadPlayer(PlayerData& player);
+		static int_t ReadItems(ItemData items[]);
+		static int_t ReadEnemies(EnemyData enemies[]);
+		static int_t ReadBullets(BulletData bullets[]);
+		static int_t ReadLasers(LaserData lasers[]);
 
 	private:
 		template <typename T>

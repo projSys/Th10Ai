@@ -1,5 +1,5 @@
 #include "Th10Ai/Common.h"
-#include "Th10Ai/Data.h"
+#include "Th10Ai/Status.h"
 
 #include <Base/Clock.h>
 
@@ -7,7 +7,7 @@
 
 namespace th
 {
-	Data::Data() :
+	Status::Status() :
 		m_findItemTime(0)
 	{
 		m_items.reserve(2000);
@@ -16,12 +16,12 @@ namespace th
 		m_lasers.reserve(200);
 	}
 
-	void Data::update(const RawStatus& status)
+	void Status::update(const StatusData& data)
 	{
-		m_player = Player(status.player);
+		m_player = Player(data.player);
 	}
 
-	void Data::print()
+	void Status::print()
 	{
 		float_t maxDx = std::numeric_limits<float_t>::lowest();
 		float_t maxDy = std::numeric_limits<float_t>::lowest();
@@ -37,7 +37,7 @@ namespace th
 	}
 
 	// 查找道具
-	ItemTarget Data::findItem()
+	ItemTarget Status::findItem()
 	{
 		ItemTarget target = {};
 
@@ -116,22 +116,22 @@ namespace th
 		return target;
 	}
 
-	bool Data::hasEnemy() const
+	bool Status::hasEnemy() const
 	{
 		return !m_enemies.empty();
 	}
 
-	bool Data::isBoss() const
+	bool Status::isBoss() const
 	{
 		return m_enemies.size() == 1 && m_enemies[0].isBoss();
 	}
 
-	bool Data::isTalking() const
+	bool Status::isTalking() const
 	{
 		return (m_enemies.empty() || isBoss()) && m_bullets.empty() && m_lasers.empty();
 	}
 
-	bool Data::isUnderEnemy() const
+	bool Status::isUnderEnemy() const
 	{
 		bool underEnemy = false;
 
@@ -148,7 +148,7 @@ namespace th
 	}
 
 	// 查找敌人
-	EnemyTarget Data::findEnemy()
+	EnemyTarget Status::findEnemy()
 	{
 		EnemyTarget target = {};
 
@@ -181,27 +181,27 @@ namespace th
 		return target;
 	}
 
-	const Player& Data::getPlayer() const
+	const Player& Status::getPlayer() const
 	{
 		return m_player;
 	}
 
-	const std::vector<Item>& Data::getItems() const
+	const std::vector<Item>& Status::getItems() const
 	{
 		return m_items;
 	}
 
-	const std::vector<Enemy>& Data::getEnemies() const
+	const std::vector<Enemy>& Status::getEnemies() const
 	{
 		return m_enemies;
 	}
 
-	const std::vector<Bullet>& Data::getBullets() const
+	const std::vector<Bullet>& Status::getBullets() const
 	{
 		return m_bullets;
 	}
 
-	const std::vector<Laser>& Data::getLasers() const
+	const std::vector<Laser>& Status::getLasers() const
 	{
 		return m_lasers;
 	}

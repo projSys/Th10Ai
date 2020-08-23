@@ -33,6 +33,8 @@ namespace th
 		m_data->updateTime = 0;
 		//m_data->status = {};
 		//m_data->action = {};
+		memset(&m_data->status, 0, sizeof(StatusData));
+		memset(&m_data->action, 0, sizeof(ActionData));
 
 		std::string dllName = Apis::GetModuleDir() + "/Th10Hook.dll";
 		DllInject::EnableDebugPrivilege();
@@ -88,7 +90,7 @@ namespace th
 		return !m_data->exited;
 	}
 
-	const RawStatus& Th10Context::getStatus() const
+	const StatusData& Th10Context::getStatus() const
 	{
 		return m_data->status;
 	}

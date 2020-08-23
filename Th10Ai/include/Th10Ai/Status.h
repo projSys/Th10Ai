@@ -23,12 +23,12 @@ namespace th
 		Enemy enemy;
 	};
 
-	class Data
+	class Status
 	{
 	public:
-		Data();
+		Status();
 
-		void update(const RawStatus& status);
+		void update(const StatusData& data);
 		void print();
 
 		// Player

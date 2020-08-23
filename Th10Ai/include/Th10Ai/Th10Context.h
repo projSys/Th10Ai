@@ -29,7 +29,7 @@ namespace th
 		bool exited;
 
 		time_t updateTime;
-		RawStatus status;
+		StatusData status;
 		ActionData action;
 	};
 
@@ -45,7 +45,7 @@ namespace th
 		void notifyUnhook();
 		bool waitUpdate();
 
-		const RawStatus& getStatus() const;
+		const StatusData& getStatus() const;
 
 	private:
 		interprocess::managed_windows_shared_memory m_memory;

@@ -27,10 +27,15 @@ namespace th
 		DIR_RIGHT		// 360
 	};
 
-	//Entity::Entity() :
-	//	x(), y(), dx(), dy(), width(), height(), id(), type()
-	//{
-	//}
+	Entity::Entity() :
+		x(),
+		y(),
+		dx(),
+		dy(),
+		width(),
+		height()
+	{
+	}
 
 	Entity::Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
 		x(x0), y(y0), dx(dx0), dy(dy0), width(width0), height(height0)

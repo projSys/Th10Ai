@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="include\Base\Clock.h" />
     <ClInclude Include="include\Base\Common.h" />
+    <ClInclude Include="include\Base\Enum.h" />
     <ClInclude Include="include\Base\Exception.h" />
     <ClInclude Include="include\Base\Logger.h" />
     <ClInclude Include="include\Base\Object.h" />

@@ -17,6 +17,7 @@ namespace th
 {
 	using namespace base;
 	using base::float_t;
+	using namespace comm;
 	using namespace win;
 }
 

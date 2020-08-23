@@ -6,18 +6,19 @@
 
 namespace base
 {
-	template <typename T, typename Traits = TypeTraits<T>>
+	template <typename T>
 	class SizeBase
 	{
 	public:
 		using value_t = T;
+		using Traits = TypeTraits<value_t>;
 
 		SizeBase() :
 			width(), height()
 		{
 		}
 
-		SizeBase(T width0, T height0) :
+		SizeBase(value_t width0, value_t height0) :
 			width(width0), height(height0)
 		{
 		}
@@ -59,11 +60,11 @@ namespace base
 
 		bool isEmpty() const
 		{
-			return width <= T() || height <= T();
+			return width <= value_t() || height <= value_t();
 		}
 
-		T width;
-		T height;
+		value_t width;
+		value_t height;
 	};
 
 	using Sizei = SizeBase<int_t>;

@@ -6,18 +6,19 @@
 
 namespace base
 {
-	template <typename T, typename Traits = TypeTraits<T>>
+	template <typename T>
 	class PointBase
 	{
 	public:
 		using value_t = T;
+		using Traits = TypeTraits<value_t>;
 
 		PointBase() :
 			x(), y()
 		{
 		}
 
-		PointBase(T x0, T y0) :
+		PointBase(value_t x0, value_t y0) :
 			x(x0), y(y0)
 		{
 		}
@@ -57,8 +58,8 @@ namespace base
 			return !(*this == other);
 		}
 
-		T x;
-		T y;
+		value_t x;
+		value_t y;
 	};
 
 	using Pointi = PointBase<int_t>;

@@ -13,7 +13,7 @@ namespace th
 		MyWindow(wxWindow* parent);
 		virtual ~MyWindow();
 
-		void update(const RawStatus& status);
+		void update(const StatusData& status);
 
 	private:
 		void onPaint(wxPaintEvent& event);
@@ -22,7 +22,7 @@ namespace th
 		wxSize m_size;
 		wxBitmap m_buffer;
 
-		RawStatus m_status;
+		StatusData m_status;
 
 		wxDECLARE_EVENT_TABLE();
 	};

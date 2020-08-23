@@ -1,11 +1,11 @@
 #include "Th10Ai/Common.h"
-#include "Th10Ai/Cell.h"
+#include "Th10Ai/Region.h"
 
 #include "Th10Ai/Scene.h"
 
 namespace th
 {
-	Cell::Cell(float_t x0, float_t y0, float_t width0, float_t height0) :
+	Region::Region(float_t x0, float_t y0, float_t width0, float_t height0) :
 		Entity(x0, y0, 0.0f, 0.0f, width0, height0)
 	{
 		m_enemies.reserve(200);
@@ -13,27 +13,27 @@ namespace th
 		m_lasers.reserve(200);
 	}
 
-	void Cell::split(int_t times)
+	void Region::split(int_t times)
 	{
 		if (times <= 0)
 			return;
 
 		if (width > height)
 		{
-			m_first = std::make_shared<Cell>(x - width / 4.0f, y, width / 2.0f, height);
-			m_second = std::make_shared<Cell>(x + width / 4.0f, y, width / 2.0f, height);
+			m_first = std::make_shared<Region>(x - width / 4.0f, y, width / 2.0f, height);
+			m_second = std::make_shared<Region>(x + width / 4.0f, y, width / 2.0f, height);
 		}
 		else
 		{
-			m_first = std::make_shared<Cell>(x, y - height / 4.0f, width, height / 2.0f);
-			m_second = std::make_shared<Cell>(x, y + height / 4.0f, width, height / 2.0f);
+			m_first = std::make_shared<Region>(x, y - height / 4.0f, width, height / 2.0f);
+			m_second = std::make_shared<Region>(x, y + height / 4.0f, width, height / 2.0f);
 		}
 
 		m_first->split(times - 1);
 		m_second->split(times - 1);
 	}
 
-	void Cell::clearAll()
+	void Region::clearAll()
 	{
 		m_enemies.clear();
 		m_bullets.clear();
@@ -45,7 +45,7 @@ namespace th
 			m_second->clearAll();
 	}
 
-	void Cell::splitEnemies(const std::vector<Enemy>& enemies)
+	void Region::splitEnemies(const std::vector<Enemy>& enemies)
 	{
 		for (const Enemy& enemy : enemies)
 		{
@@ -69,7 +69,7 @@ namespace th
 			m_second->splitEnemies(m_enemies);
 	}
 
-	void Cell::splitBullets(const std::vector<Bullet>& bullets)
+	void Region::splitBullets(const std::vector<Bullet>& bullets)
 	{
 		for (const Bullet& bullet : bullets)
 		{
@@ -93,7 +93,7 @@ namespace th
 			m_second->splitBullets(m_bullets);
 	}
 
-	void Cell::splitLasers(const std::vector<Laser>& lasers)
+	void Region::splitLasers(const std::vector<Laser>& lasers)
 	{
 		for (const Laser& laser : lasers)
 		{
@@ -117,9 +117,9 @@ namespace th
 			m_second->splitLasers(m_lasers);
 	}
 
-	CellCollideResult Cell::collideAll(const Player& player, float_t frame) const
+	RegionCollideResult Region::collideAll(const Player& player, float_t frame) const
 	{
-		CellCollideResult result = {};
+		RegionCollideResult result = {};
 		result.minCollideFrame = std::numeric_limits<float_t>::max();
 		result.minDistance = std::numeric_limits<float_t>::max();
 
@@ -202,7 +202,7 @@ namespace th
 
 		if (m_first != nullptr)
 		{
-			CellCollideResult firstResult = m_first->collideAll(player, frame);
+			RegionCollideResult firstResult = m_first->collideAll(player, frame);
 			if (firstResult.collided)
 				result.collided = true;
 			if (firstResult.willCollideCount > 0)
@@ -217,7 +217,7 @@ namespace th
 
 		if (m_second != nullptr)
 		{
-			CellCollideResult secondResult = m_second->collideAll(player, frame);
+			RegionCollideResult secondResult = m_second->collideAll(player, frame);
 			if (secondResult.collided)
 				result.collided = true;
 			if (secondResult.willCollideCount > 0)

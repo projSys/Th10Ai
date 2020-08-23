@@ -39,12 +39,6 @@
     <ClInclude Include="include\Th10Ai\Bullet.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Ai\Cell.h">
-      <Filter>头文件\Th10Ai</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Ai\Data.h">
-      <Filter>头文件\Th10Ai</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Ai\Direction.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
@@ -81,6 +75,12 @@
     <ClInclude Include="include\Th10Ai\Th10Data.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Ai\Status.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Region.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Ai\DllInject.cpp">
@@ -96,12 +96,6 @@
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Ai\Bullet.cpp">
-      <Filter>源文件\Th10Ai</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Ai\Cell.cpp">
-      <Filter>源文件\Th10Ai</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Ai\Data.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Ai\Enemy.cpp">
@@ -132,6 +126,12 @@
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Ai\MyWindow.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Status.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Region.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
   </ItemGroup>

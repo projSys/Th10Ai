@@ -48,19 +48,25 @@ namespace th
 		{ 1.41f, 1.41f }
 	};
 
-	//Player::Player() :
-	//	status(), invincibleTime(), slow(), powers(), /*type(),*/ life(), itemObtainRange()
-	//{
-	//}
+	Player::Player() :
+		status(),
+		invincibleTime(),
+		slow(),
+		powers(),
+		type(),
+		lives(),
+		itemObtainRange()
+	{
+	}
 
-	Player::Player(const RawPlayer& raw) :
-		status(raw.status),
-		invincibleTime(raw.invincibleTime),
-		slow(raw.slow),
-		powers(raw.powers),
-		type(raw.type),
-		lives(raw.lives),
-		itemObtainRange(raw.itemObtainRange)
+	Player::Player(const PlayerData& data) :
+		status(data.status),
+		invincibleTime(data.invincibleTime),
+		slow(data.slow),
+		powers(data.powers),
+		type(data.type),
+		lives(data.lives),
+		itemObtainRange(data.itemObtainRange)
 	{
 	}
 

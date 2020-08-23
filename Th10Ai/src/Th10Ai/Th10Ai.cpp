@@ -17,11 +17,11 @@ namespace th
 		m_bombCount(0),
 		m_prevDir(DIR_HOLD),
 		m_prevSlow(false)/*,
-		m_dataUpdated(false)*/
+		m_statusUpdated(false)*/
 	{
-		//m_writeData = std::make_shared<Data>();
-		//m_middleData = std::make_shared<Data>();
-		//m_readData = std::make_shared<Data>();
+		//m_writeStatus = std::make_shared<Status>();
+		//m_middleStatus = std::make_shared<Status>();
+		//m_readStatus = std::make_shared<Status>();
 
 		m_scene.split(6);
 
@@ -37,6 +37,12 @@ namespace th
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
 		//m_readThread = std::thread(&Th10Ai::readProc, this);
 		m_handleThread = std::thread(&Th10Ai::handleProc, this);
+
+		Dir dir = DIR_NONE;
+		//Dir dir2(12);
+		Dir dirs[Dir::MAXCOUNT];
+
+		std::cout << dirs[0] << std::endl;
 	}
 
 	Th10Ai::~Th10Ai()
@@ -128,9 +134,9 @@ namespace th
 			{
 				if (m_readActive)
 				{
-					//m_data.update();
-					//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
-					//m_writeData->update();
+					//m_status.update();
+					//m_status.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
+					//m_writeStatus->update();
 					//if (!m_context.waitUpdate())
 					//{
 					//	m_handleDone = true;
@@ -140,9 +146,9 @@ namespace th
 					//}
 					//m_window->update(m_context.getStatus());
 
-					//lock_guard<mutex> lock(m_dataMutex);
-					//std::swap(m_writeData, m_middleData);
-					//m_dataUpdated = true;
+					//lock_guard<mutex> lock(m_statusMutex);
+					//std::swap(m_writeStatus, m_middleStatus);
+					//m_statusUpdated = true;
 				}
 				else
 				{
@@ -192,14 +198,14 @@ namespace th
 
 		m_window->update(m_context.getStatus());
 
-		m_data.update(m_context.getStatus());
-		//m_data.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
+		m_status.update(m_context.getStatus());
+		//m_status.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
 
-		//if (m_dataUpdated)
+		//if (m_statusUpdated)
 		//{
-		//	lock_guard<mutex> lock(m_dataMutex);
-		//	std::swap(m_readData, m_middleData);
-		//	m_dataUpdated = false;
+		//	lock_guard<mutex> lock(m_statusMutex);
+		//	std::swap(m_readStatus, m_middleStatus);
+		//	m_statusUpdated = false;
 		//}
 		//else
 		//{
@@ -207,9 +213,9 @@ namespace th
 		//}
 
 		m_scene.clearAll();
-		m_scene.splitEnemies(m_data.getEnemies());
-		m_scene.splitBullets(m_data.getBullets());
-		m_scene.splitLasers(m_data.getLasers());
+		m_scene.splitEnemies(m_status.getEnemies());
+		m_scene.splitBullets(m_status.getBullets());
+		m_scene.splitLasers(m_status.getLasers());
 
 		handleBomb();
 		handleTalk();
@@ -222,7 +228,7 @@ namespace th
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_data.getPlayer().isColliding())
+		if (m_status.getPlayer().isColliding())
 		{
 			//m_di8Hook.keyPress(DIK_X);
 			++m_bombCount;
@@ -239,7 +245,7 @@ namespace th
 	// 处理对话
 	bool Th10Ai::handleTalk()
 	{
-		if (m_data.isTalking())
+		if (m_status.isTalking())
 		{
 			//m_di8Hook.keyPress(DIK_LCONTROL);
 			return true;
@@ -254,7 +260,7 @@ namespace th
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_data.hasEnemy())
+		if (m_status.hasEnemy())
 		{
 			//m_di8Hook.keyPress(DIK_Z);
 			return true;
@@ -269,12 +275,12 @@ namespace th
 	// 处理移动
 	bool Th10Ai::handleMove()
 	{
-		if (!m_data.getPlayer().isNormalStatus())
+		if (!m_status.getPlayer().isNormalStatus())
 			return false;
 
-		ItemTarget itemTarget = m_data.findItem();
-		EnemyTarget enemyTarget = m_data.findEnemy();
-		bool underEnemy = m_data.isUnderEnemy();
+		ItemTarget itemTarget = m_status.findItem();
+		EnemyTarget enemyTarget = m_status.findEnemy();
+		bool underEnemy = m_status.isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		Direction bestDir = DIR_NONE;
@@ -282,7 +288,7 @@ namespace th
 
 		for (Direction dir : DIRECTIONS)
 		{
-			Path path(m_data, m_scene, itemTarget, enemyTarget, underEnemy);
+			Path path(m_status, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
 
 			if (result.valid && path.m_bestScore > bestScore)
