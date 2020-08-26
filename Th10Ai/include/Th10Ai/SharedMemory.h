@@ -13,7 +13,7 @@ namespace th
 {
 	namespace interprocess = boost::interprocess;
 
-	struct Th10SharedData
+	struct SharedData
 	{
 		HWND window;
 
@@ -35,11 +35,11 @@ namespace th
 		ActionData action;
 	};
 
-	class Th10Context
+	class SharedMemory
 	{
 	public:
-		Th10Context();
-		~Th10Context();
+		SharedMemory();
+		~SharedMemory();
 
 		void activate();
 
@@ -51,6 +51,6 @@ namespace th
 
 	private:
 		interprocess::managed_windows_shared_memory m_memory;
-		Th10SharedData* m_data;
+		SharedData* m_data;
 	};
 }

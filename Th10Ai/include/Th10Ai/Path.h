@@ -30,7 +30,8 @@ namespace th
 	{
 	public:
 		Path(Status& status, Scene& scene,
-			ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy);
+			const boost::optional<Item>& itemTarget,
+			const boost::optional<Enemy>& enemyTarget, bool underEnemy);
 
 		Result find(DIR dir);
 		Result dfs(const Action& action);
@@ -38,7 +39,7 @@ namespace th
 	//private:
 		static float_t CalcFarScore(Pointf player, Pointf target);
 		static float_t CalcNearScore(Pointf player, Pointf target);
-		static float_t CalcShootScore(Pointf player, Pointf enemy);
+		static float_t CalcShootScore(Pointf player, Pointf target);
 
 		static const DIR FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT];
 		static const int_t FIND_DIR_COUNTS[DIR_MAXCOUNT];
@@ -48,8 +49,8 @@ namespace th
 
 		Status& m_status;
 		Scene& m_scene;
-		ItemTarget& m_itemTarget;
-		EnemyTarget& m_enemyTarget;
+		const boost::optional<Item>& m_itemTarget;
+		const boost::optional<Enemy>& m_enemyTarget;
 		bool m_underEnemy;
 
 		DIR m_dir;

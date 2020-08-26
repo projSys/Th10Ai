@@ -20,25 +20,10 @@ namespace th
 		m_player = Player(data.player);
 	}
 
-	void Status::print()
-	{
-		float_t maxDx = std::numeric_limits<float_t>::lowest();
-		float_t maxDy = std::numeric_limits<float_t>::lowest();
-		for (const Bullet& bullet : m_bullets)
-		{
-			if (bullet.dx > maxDx)
-				maxDx = bullet.dx;
-
-			if (bullet.dy > maxDy)
-				maxDy = bullet.dy;
-		}
-		std::cout << maxDx << " " << maxDy << std::endl;
-	}
-
 	// 查找道具
-	ItemTarget Status::findItem()
+	boost::optional<Item> Status::findItem()
 	{
-		ItemTarget target = {};
+		boost::optional<Item> target;
 
 		if (m_items.empty())
 			return target;
@@ -100,15 +85,13 @@ namespace th
 			if (dist < minDist)
 			{
 				minDist = dist;
-				target.found = true;
-				target.item = item;
+				target = item;
 			}
 
 			//if (item.y > maxY)
 			//{
 			//	maxY = item.y;
-			//	target.found = true;
-			//	target.item = item;
+			//	target = item;
 			//}
 		}
 
@@ -133,7 +116,6 @@ namespace th
 	bool Status::isUnderEnemy() const
 	{
 		bool underEnemy = false;
-
 		for (const Enemy& enemy : m_enemies)
 		{
 			if (std::abs(m_player.x - enemy.x) < 16.0f && m_player.y > enemy.y)
@@ -142,14 +124,13 @@ namespace th
 				break;
 			}
 		}
-
 		return underEnemy;
 	}
 
 	// 查找敌人
-	EnemyTarget Status::findEnemy()
+	boost::optional<Enemy> Status::findEnemy()
 	{
-		EnemyTarget target = {};
+		boost::optional<Enemy> target;
 
 		if (m_enemies.empty())
 			return target;
@@ -172,8 +153,7 @@ namespace th
 			if (dx < minDist)
 			{
 				minDist = dx;
-				target.found = true;
-				target.enemy = enemy;
+				target = enemy;
 			}
 		}
 

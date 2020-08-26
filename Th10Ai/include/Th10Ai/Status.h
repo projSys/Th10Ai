@@ -3,6 +3,7 @@
 #include "Th10Ai/Common.h"
 
 #include <vector>
+#include <boost/optional.hpp>
 
 #include "Th10Ai/Th10Data.h"
 #include "Th10Ai/Player.h"
@@ -13,37 +14,24 @@
 
 namespace th
 {
-	struct ItemTarget
-	{
-		bool found;
-		Item item;
-	};
-
-	struct EnemyTarget
-	{
-		bool found;
-		Enemy enemy;
-	};
-
 	class Status
 	{
 	public:
 		Status();
 
 		void update(const StatusData& data);
-		void print();
 
 		// Player
 
 		// Item
-		ItemTarget findItem();
+		boost::optional<Item> findItem();
 
 		// Enemy
 		bool hasEnemy() const;
 		bool isBoss() const;
 		bool isTalking() const;
 		bool isUnderEnemy() const;
-		EnemyTarget findEnemy();
+		boost::optional<Enemy> findEnemy();
 
 		const Player& getPlayer() const;
 		const std::vector<Item>& getItems() const;

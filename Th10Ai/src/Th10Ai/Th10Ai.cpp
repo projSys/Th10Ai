@@ -47,7 +47,7 @@ namespace th
 			m_handleThread.join();
 
 		m_readDone = true;
-		m_context.notifyUnhook();
+		m_shared.notifyUnhook();
 		if (m_readThread.joinable())
 			m_readThread.join();
 
@@ -183,7 +183,7 @@ namespace th
 
 	void Th10Ai::handle()
 	{
-		if (!m_context.waitUpdate())
+		if (!m_shared.waitUpdate())
 		{
 			m_handleDone = true;
 			m_readDone = true;
@@ -191,9 +191,9 @@ namespace th
 			return;
 		}
 
-		m_window->update(m_context.getStatus());
+		m_window->update(m_shared.getStatus());
 
-		m_status.update(m_context.getStatus());
+		m_status.update(m_shared.getStatus());
 		//m_status.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
 
 		//if (m_statusUpdated)
@@ -273,8 +273,8 @@ namespace th
 		if (!m_status.getPlayer().isNormalStatus())
 			return false;
 
-		ItemTarget itemTarget = m_status.findItem();
-		EnemyTarget enemyTarget = m_status.findEnemy();
+		boost::optional<Item> itemTarget = m_status.findItem();
+		boost::optional<Enemy> enemyTarget = m_status.findEnemy();
 		bool underEnemy = m_status.isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();

@@ -1,4 +1,4 @@
-#include "Th10Ai/Th10Context.h"
+#include "Th10Ai/SharedMemory.h"
 
 #include <Base/ScopeGuard.h>
 #include <Base/Clock.h>
@@ -11,7 +11,7 @@ namespace th
 {
 	namespace posix_time = boost::posix_time;
 
-	Th10Context::Th10Context() :
+	SharedMemory::SharedMemory() :
 		m_data(nullptr)
 	{
 		HWND window = FindWindowW(L"BASE", L"搶曽晽恄榐丂乣 Mountain of Faith. ver 1.00a");
@@ -21,10 +21,10 @@ namespace th
 		DWORD threadId = GetWindowThreadProcessId(window, &processId);
 
 		m_memory = interprocess::managed_windows_shared_memory(interprocess::create_only,
-			"Th10SharedMemory", 8 * 1024 * 1024);
-		m_data = m_memory.construct<Th10SharedData>("Th10SharedData")();
+			"Th10-SharedMemory", 8 * 1024 * 1024);
+		m_data = m_memory.construct<SharedData>("Th10-SharedData")();
 		if (m_data == nullptr)
-			BASE_THROW(Exception(u8"Th10SharedData名称已被使用。"));
+			BASE_THROW(Exception(u8"Th10-SharedData名称已被使用。"));
 
 		m_data->window = window;
 		m_data->hooked = false;
@@ -45,19 +45,19 @@ namespace th
 			BASE_THROW(Exception(u8"Th10Hook初始化失败，详细信息请查看Th10Hook.log。"));
 	}
 
-	Th10Context::~Th10Context()
+	SharedMemory::~SharedMemory()
 	{
 		if (m_data != nullptr)
 			m_memory.destroy_ptr(m_data);
 	}
 
-	void Th10Context::activate()
+	void SharedMemory::activate()
 	{
 		if (!SetForegroundWindow(m_data->window))
 			BASE_THROW(WindowsError());
 	}
 
-	bool Th10Context::timedWaitHook(int64_t ms)
+	bool SharedMemory::timedWaitHook(int64_t ms)
 	{
 		bool notTimeout = true;
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->hookMutex);
@@ -70,14 +70,14 @@ namespace th
 		return notTimeout;
 	}
 
-	void Th10Context::notifyUnhook()
+	void SharedMemory::notifyUnhook()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->unhookMutex);
 		m_data->unhooked = true;
 		m_data->unhookCond.notify_one();
 	}
 
-	bool Th10Context::waitUpdate()
+	bool SharedMemory::waitUpdate()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->updateMutex);
 		if (!m_data->updated && !m_data->exited)
@@ -91,7 +91,7 @@ namespace th
 		return !m_data->exited;
 	}
 
-	const StatusData& Th10Context::getStatus() const
+	const StatusData& SharedMemory::getStatus() const
 	{
 		return m_data->status;
 	}

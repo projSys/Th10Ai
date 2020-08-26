@@ -7,7 +7,7 @@
 #include <atomic>
 #include <mutex>
 
-#include "Th10Ai/Th10Context.h"
+#include "Th10Ai/SharedMemory.h"
 #include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
 
@@ -40,7 +40,7 @@ namespace th
 		bool handleMove();
 		void move(DIR dir, bool slow);
 
-		Th10Context m_context;
+		SharedMemory m_shared;
 
 		std::thread m_controlThread;
 		std::atomic_bool m_controlDone;

@@ -33,9 +33,6 @@
     <ClInclude Include="include\Th10Ai\MyFrame.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Ai\Th10Context.h">
-      <Filter>头文件\Th10Ai</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Ai\Bullet.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
@@ -81,6 +78,9 @@
     <ClInclude Include="include\Th10Ai\Region.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Ai\SharedMemory.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Ai\DllInject.cpp">
@@ -90,9 +90,6 @@
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Ai\MyFrame.cpp">
-      <Filter>源文件\Th10Ai</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Ai\Th10Context.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Ai\Bullet.cpp">
@@ -132,6 +129,9 @@
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Ai\Region.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\SharedMemory.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
   </ItemGroup>

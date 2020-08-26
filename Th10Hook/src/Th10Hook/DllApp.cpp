@@ -1,37 +1,37 @@
-#include "Th10Hook/DllLoader.h"
+#include "Th10Hook/DllApp.h"
 
 #include "Th10Hook/DllMain.h"
 
 namespace th
 {
-	DllLoader::DllLoader() :
+	DllApp::DllApp() :
 		Singleton(this),
 		m_selfExit(true)
 	{
 	}
 
-	void DllLoader::start()
+	void DllApp::start()
 	{
-		m_mainThread = std::thread(&DllLoader::mainProc, this);
+		m_mainThread = std::thread(&DllApp::mainProc, this);
 	}
 
-	void DllLoader::join()
+	void DllApp::join()
 	{
 		if (m_mainThread.joinable())
 			m_mainThread.join();
 	}
 
-	void DllLoader::setSelfExit(bool selfExit)
+	void DllApp::setSelfExit(bool selfExit)
 	{
 		m_selfExit = selfExit;
 	}
 
-	bool DllLoader::isSelfExit() const
+	bool DllApp::isSelfExit() const
 	{
 		return m_selfExit;
 	}
 
-	void DllLoader::mainProc()
+	void DllApp::mainProc()
 	{
 		try
 		{
@@ -45,15 +45,15 @@ namespace th
 		if (m_selfExit)
 		{
 			HANDLE_ptr exitThread(
-				CreateThread(nullptr, 0, &DllLoader::ExitProc, this, 0, nullptr),
+				CreateThread(nullptr, 0, &DllApp::ExitProc, this, 0, nullptr),
 				&CloseHandle);
 		}
 	}
 
-	DWORD DllLoader::ExitProc(LPVOID param)
+	DWORD DllApp::ExitProc(LPVOID param)
 	{
-		DllLoader* dllLoader = reinterpret_cast<DllLoader*>(param);
-		dllLoader->join();
+		DllApp* dllApp = reinterpret_cast<DllApp*>(param);
+		dllApp->join();
 
 		// 只在CreateThread创建的线程里有效
 		FreeLibraryAndExitThread(g_dll, 0);

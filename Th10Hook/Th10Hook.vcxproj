@@ -88,12 +88,12 @@
     <ClInclude Include="include\Th10Hook\Common.h" />
     <ClInclude Include="include\Th10Hook\D3D9Hook.h" />
     <ClInclude Include="include\Th10Hook\DI8Hook.h" />
-    <ClInclude Include="include\Th10Hook\DllLoader.h" />
+    <ClInclude Include="include\Th10Hook\DllApp.h" />
     <ClInclude Include="include\Th10Hook\DllMain.h" />
-    <ClInclude Include="include\Th10Hook\HookLoader.h" />
+    <ClInclude Include="include\Th10Hook\HookApp.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
     <ClInclude Include="include\Th10Hook\Reader.h" />
-    <ClInclude Include="include\Th10Hook\Th10Context.h" />
+    <ClInclude Include="include\Th10Hook\SharedMemory.h" />
     <ClInclude Include="include\Th10Hook\Th10Data.h" />
     <ClInclude Include="include\Th10Hook\Th10Hook.h" />
     <ClInclude Include="include\Th10Hook\WindowHook.h" />
@@ -101,12 +101,12 @@
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\D3D9Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DI8Hook.cpp" />
-    <ClCompile Include="src\Th10Hook\DllLoader.cpp" />
+    <ClCompile Include="src\Th10Hook\DllApp.cpp" />
     <ClCompile Include="src\Th10Hook\DllMain.cpp" />
-    <ClCompile Include="src\Th10Hook\HookLoader.cpp" />
+    <ClCompile Include="src\Th10Hook\HookApp.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
     <ClCompile Include="src\Th10Hook\Reader.cpp" />
-    <ClCompile Include="src\Th10Hook\Th10Context.cpp" />
+    <ClCompile Include="src\Th10Hook\SharedMemory.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />
     <ClCompile Include="src\Th10Hook\WindowHook.cpp" />
   </ItemGroup>

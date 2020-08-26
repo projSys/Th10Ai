@@ -8,12 +8,12 @@
 
 namespace th
 {
-	class DllLoader :
-		public Singleton<DllLoader>
+	class DllApp :
+		public Singleton<DllApp>
 	{
 	public:
-		DllLoader();
-		virtual ~DllLoader() = default;
+		DllApp();
+		virtual ~DllApp() = default;
 
 		void start();
 		void join();

@@ -36,13 +36,7 @@
     <ClInclude Include="include\Th10Hook\MyDetours.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Th10Context.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\Th10Hook.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\DllLoader.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\WindowHook.h">
@@ -51,10 +45,16 @@
     <ClInclude Include="include\Th10Hook\Reader.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\HookLoader.h">
+    <ClInclude Include="include\Th10Hook\Th10Data.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Th10Data.h">
+    <ClInclude Include="include\Th10Hook\SharedMemory.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\DllApp.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\HookApp.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,13 +71,7 @@
     <ClCompile Include="src\Th10Hook\MyDetours.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\Th10Context.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\DllLoader.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\WindowHook.cpp">
@@ -86,7 +80,13 @@
     <ClCompile Include="src\Th10Hook\Reader.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\HookLoader.cpp">
+    <ClCompile Include="src\Th10Hook\SharedMemory.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DllApp.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\HookApp.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>

@@ -31,7 +31,8 @@ namespace th
 	const Pointf Path::RESET_POS = { 0.0f, 432.0f };
 
 	Path::Path(Status& status, Scene& scene,
-		ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy) :
+		const boost::optional<Item>& itemTarget,
+		const boost::optional<Enemy>& enemyTarget, bool underEnemy) :
 		m_status(status),
 		m_scene(scene),
 		m_itemTarget(itemTarget),
@@ -47,8 +48,7 @@ namespace th
 	Result Path::find(DIR dir)
 	{
 		m_dir = dir;
-		//m_slowFirst = (!m_itemTarget.found && m_underEnemy);
-		m_slowFirst = false;
+		//m_slowFirst = (!m_itemTarget.has_value() && m_underEnemy);
 
 		Action action = {};
 		action.fromPos = m_status.getPlayer().getPosition();
@@ -101,13 +101,13 @@ namespace th
 		//	result.score += ccResult.minCollideFrame;
 		//result.score /= action.frame;
 
-		if (m_itemTarget.found)
+		if (m_itemTarget.has_value())
 		{
-			result.score += CalcNearScore(player.getPosition(), m_itemTarget.item.getPosition()) * 100.0f;
+			result.score += CalcNearScore(player.getPosition(), m_itemTarget.value().getPosition()) * 100.0f;
 		}
-		else if (m_enemyTarget.found)
+		else if (m_enemyTarget.has_value())
 		{
-			result.score += CalcShootScore(player.getPosition(), m_enemyTarget.enemy.getPosition()) * 100.0f;
+			result.score += CalcShootScore(player.getPosition(), m_enemyTarget.value().getPosition()) * 100.0f;
 		}
 		else
 		{
@@ -212,25 +212,25 @@ namespace th
 		return score;
 	}
 
-	float_t Path::CalcShootScore(Pointf player, Pointf enemy)
+	float_t Path::CalcShootScore(Pointf player, Pointf target)
 	{
 		float_t score = 0.0f;
 
 		// 坐标原点移到左上角
 		player.x += (Scene::SIZE.width / 2.0f);
-		enemy.x += (Scene::SIZE.width / 2.0f);
+		target.x += (Scene::SIZE.width / 2.0f);
 
 		// 距离越近得分越高
-		if (player.x < enemy.x)
-			score += 0.5f * (1.0f - (enemy.x - player.x) / enemy.x);
+		if (player.x < target.x)
+			score += 0.5f * (1.0f - (target.x - player.x) / target.x);
 		else
-			score += 0.5f * (1.0f - (player.x - enemy.x) / (Scene::SIZE.width - enemy.x));
+			score += 0.5f * (1.0f - (player.x - target.x) / (Scene::SIZE.width - target.x));
 
 		// 距离越远得分越高
-		if (player.y < enemy.y)
+		if (player.y < target.y)
 			score = -1.0f;
 		else
-			score += 0.5f * ((player.y - enemy.y) / (Scene::SIZE.height - enemy.y));
+			score += 0.5f * ((player.y - target.y) / (Scene::SIZE.height - target.y));
 
 		return score;
 	}

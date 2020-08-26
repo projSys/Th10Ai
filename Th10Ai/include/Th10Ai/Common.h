@@ -9,13 +9,13 @@
 #include <Base/Rect.h>
 #include <Windows/Common.h>
 
-#include <iostream>
-
 namespace th
 {
 	using namespace base;
 	using base::float_t;
 	using namespace win;
 }
+
+#include <iostream>
 
 #include "Th10Ai/Direction.h"

@@ -1,6 +1,6 @@
 #include "Th10Hook/DllMain.h"
 
-#include "Th10Hook/DllLoader.h"
+#include "Th10Hook/DllApp.h"
 
 HMODULE g_dll = nullptr;
 
@@ -11,8 +11,8 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 	case DLL_PROCESS_ATTACH:
 	{
 		g_dll = module;
-		th::DllLoader& dllLoader = th::DllLoader::GetInstance();
-		dllLoader.start();
+		th::DllApp& dllApp = th::DllApp::GetInstance();
+		dllApp.start();
 		break;
 	}
 

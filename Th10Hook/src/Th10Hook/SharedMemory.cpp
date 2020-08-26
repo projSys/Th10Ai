@@ -1,4 +1,4 @@
-#include "Th10Hook/Th10Context.h"
+#include "Th10Hook/SharedMemory.h"
 
 #include <Base/Clock.h>
 
@@ -6,60 +6,60 @@
 
 namespace th
 {
-	Th10Context::Th10Context() :
-		m_memory(interprocess::open_only, "Th10SharedMemory"),
+	SharedMemory::SharedMemory() :
+		m_memory(interprocess::open_only, "Th10-SharedMemory"),
 		m_data(nullptr)
 	{
-		m_data = m_memory.find<Th10SharedData>("Th10SharedData").first;
+		m_data = m_memory.find<SharedData>("Th10-SharedData").first;
 		if (m_data == nullptr)
-			BASE_THROW(Exception(u8"Th10SharedDataÎ´ÕÒµ½¡£"));
+			BASE_THROW(Exception(u8"Th10-SharedDataÎ´ÕÒµ½¡£"));
 	}
 
-	Th10Context::~Th10Context()
+	SharedMemory::~SharedMemory()
 	{
 	}
 
-	HWND Th10Context::getWindow() const
+	HWND SharedMemory::getWindow() const
 	{
 		return m_data->window;
 	}
 
-	void Th10Context::notifyHook()
+	void SharedMemory::notifyHook()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->hookMutex);
 		m_data->hooked = true;
 		m_data->hookCond.notify_one();
 	}
 
-	void Th10Context::notifyUnhook()
+	void SharedMemory::notifyUnhook()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->unhookMutex);
 		m_data->unhooked = true;
 		m_data->unhookCond.notify_one();
 	}
 
-	void Th10Context::waitUnhook()
+	void SharedMemory::waitUnhook()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->unhookMutex);
 		if (!m_data->unhooked)
 			m_data->unhookCond.wait(lock);
 	}
 
-	void Th10Context::notifyUpdate()
+	void SharedMemory::notifyUpdate()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->updateMutex);
 		m_data->updated = true;
 		m_data->updateCond.notify_one();
 	}
 
-	void Th10Context::notifyExit()
+	void SharedMemory::notifyExit()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->updateMutex);
 		m_data->exited = true;
 		m_data->updateCond.notify_one();
 	}
 
-	void Th10Context::update()
+	void SharedMemory::update()
 	{
 		//Clock clock;
 		//clock.update();
