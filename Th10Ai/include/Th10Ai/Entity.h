@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Ai/Common.h"
+
 #include "Th10Ai/Th10Data.h"
 #include "Th10Ai/Utils.h"
 
@@ -15,7 +17,7 @@ namespace th
 	class Entity
 	{
 	public:
-		static const Direction SECTOR_TO_DIR[17];
+		static const DIR SECTOR_TO_DIR[17];
 
 		Entity();
 		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
@@ -23,8 +25,8 @@ namespace th
 		float_t calcDistance(const Pointf& pos) const;
 		float_t calcAngle(const Pointf& pos) const;
 		FootPoint calcFootPoint(const Pointf& pos) const;
-		Direction calcDirection() const;
-		Direction calcDirection(const Pointf& pos) const;
+		DIR calcDirection() const;
+		DIR calcDirection(const Pointf& pos) const;
 
 		void advance(float_t frame);
 		bool collide(const Entity& other) const;

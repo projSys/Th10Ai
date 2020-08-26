@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Hook/Common.h"
+
 #include <memory>
 
 #include "Th10Hook/DllLoader.h"

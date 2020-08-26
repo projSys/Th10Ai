@@ -1,4 +1,3 @@
-#include "Windows/Common.h"
 #include "Windows/DxResult.h"
 
 #include <iomanip>

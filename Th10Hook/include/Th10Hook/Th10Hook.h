@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Hook/Common.h"
+
 namespace th
 {
 	class Th10Listener

@@ -1,14 +1,11 @@
 #pragma once
 
-#include <Base/Common.h>
 #include <Base/Types.h>
 #include <Base/String.h>
 #include <Base/Exception.h>
 #include <Base/Logger.h>
-#include <Windows/Common.h>
 #include <Windows/Types.h>
 #include <Windows/WindowsError.h>
-#include <Windows/Apis.h>
 
 namespace th
 {

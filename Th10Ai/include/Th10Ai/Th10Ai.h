@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Ai/Common.h"
+
 #include <memory>
 #include <thread>
 #include <atomic>
@@ -36,7 +38,7 @@ namespace th
 		bool handleTalk();
 		bool handleShoot();
 		bool handleMove();
-		void move(Direction dir, bool slow);
+		void move(DIR dir, bool slow);
 
 		Th10Context m_context;
 
@@ -52,7 +54,7 @@ namespace th
 		std::atomic_bool m_handleDone;
 		std::atomic_bool m_handleActive;
 		int_t m_bombCount;
-		Direction m_prevDir;
+		DIR m_prevDir;
 		bool m_prevSlow;
 
 		Status m_status;

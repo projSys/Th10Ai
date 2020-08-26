@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Hook/Common.h"
+
 #include <boost/interprocess/managed_windows_shared_memory.hpp>
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 #include <boost/interprocess/sync/interprocess_condition.hpp>
@@ -28,7 +30,7 @@ namespace th
 		bool updated;
 		bool exited;
 
-		time_t updateTime;
+		int64_t updateTime;
 		StatusData status;
 		ActionData action;
 	};

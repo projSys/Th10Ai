@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Ai/Common.h"
+
 #include "Th10Ai/Region.h"
 
 namespace th

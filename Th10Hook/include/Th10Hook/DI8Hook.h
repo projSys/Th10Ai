@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Hook/Common.h"
+
 #ifndef DIRECTINPUT_VERSION
 #define DIRECTINPUT_VERSION 0x0800
 #endif

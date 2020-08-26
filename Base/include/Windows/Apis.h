@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Windows/Common.h"
+
 namespace win
 {
 	class Apis

@@ -1,4 +1,3 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/Player.h"
 
 namespace th
@@ -70,44 +69,44 @@ namespace th
 	{
 	}
 
-	void Player::advance(Direction dir, bool slow)
+	void Player::advance(DIR dir, bool slow)
 	{
 		if (slow)
 		{
-			x += MOVE_SPEED_LOW[dir].x;
-			y += MOVE_SPEED_LOW[dir].y;
+			x += MOVE_SPEED_LOW[enum_cast(dir)].x;
+			y += MOVE_SPEED_LOW[enum_cast(dir)].y;
 		}
 		else
 		{
 			if (type == 1)
 			{
-				x += MOVE_SPEED_MARISA[dir].x;
-				y += MOVE_SPEED_MARISA[dir].y;
+				x += MOVE_SPEED_MARISA[enum_cast(dir)].x;
+				y += MOVE_SPEED_MARISA[enum_cast(dir)].y;
 			}
 			else
 			{
-				x += MOVE_SPEED_HIGH[dir].x;
-				y += MOVE_SPEED_HIGH[dir].y;
+				x += MOVE_SPEED_HIGH[enum_cast(dir)].x;
+				y += MOVE_SPEED_HIGH[enum_cast(dir)].y;
 			}
 		}
 	}
 
-	void Player::checkPrevMove(Direction prevDir, bool prevSlow) const
+	void Player::checkPrevMove(DIR prevDir, bool prevSlow) const
 	{
 		Pointf prevDelta;
 		if (prevSlow)
 		{
-			prevDelta = MOVE_SPEED_LOW[prevDir];
+			prevDelta = MOVE_SPEED_LOW[enum_cast(prevDir)];
 		}
 		else
 		{
 			if (type == 1)
 			{
-				prevDelta = MOVE_SPEED_MARISA[prevDir];
+				prevDelta = MOVE_SPEED_MARISA[enum_cast(prevDir)];
 			}
 			else
 			{
-				prevDelta = MOVE_SPEED_HIGH[prevDir];
+				prevDelta = MOVE_SPEED_HIGH[enum_cast(prevDir)];
 			}
 		}
 		if (getDelta() != prevDelta)

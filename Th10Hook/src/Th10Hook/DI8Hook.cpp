@@ -1,4 +1,3 @@
-#include "Th10Hook/Common.h"
 #include "Th10Hook/DI8Hook.h"
 
 #include <Windows/DxResult.h>

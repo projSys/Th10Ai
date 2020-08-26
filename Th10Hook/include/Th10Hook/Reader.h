@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Hook/Common.h"
+
 #include "Th10Hook/Th10Data.h"
 
 namespace th

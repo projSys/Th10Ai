@@ -1,4 +1,3 @@
-#include "Th10Hook/Common.h"
 #include "Th10Hook/DllLoader.h"
 
 #include "Th10Hook/DllMain.h"

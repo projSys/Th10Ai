@@ -1,5 +1,6 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/MyFrame.h"
+
+#include <Windows/Apis.h>
 
 #include "Th10Ai/MyWindow.h"
 

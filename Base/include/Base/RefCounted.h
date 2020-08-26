@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Base/Common.h"
+
 #include <atomic>
 
 #include "Base/Types.h"

@@ -1,4 +1,3 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/MyWindow.h"
 
 #include <wx/dcbuffer.h>

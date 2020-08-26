@@ -1,7 +1,7 @@
-#include "Th10Hook/Common.h"
 #include "Th10Hook/HookLoader.h"
 
 #include <Base/ScopeGuard.h>
+#include <Windows/Apis.h>
 
 #include "Th10Hook/DllMain.h"
 

@@ -1,5 +1,6 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/Th10Ai.h"
+
+#include <boost/optional.hpp>
 
 #include "Th10Ai/MyWindow.h"
 #include "Th10Ai/Path.h"
@@ -15,7 +16,7 @@ namespace th
 		m_handleDone(false),
 		m_handleActive(false),
 		m_bombCount(0),
-		m_prevDir(DIR_HOLD),
+		m_prevDir(DIR::HOLD),
 		m_prevSlow(false)/*,
 		m_statusUpdated(false)*/
 	{
@@ -37,12 +38,6 @@ namespace th
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
 		//m_readThread = std::thread(&Th10Ai::readProc, this);
 		m_handleThread = std::thread(&Th10Ai::handleProc, this);
-
-		Dir dir = DIR_NONE;
-		//Dir dir2(12);
-		Dir dirs[Dir::MAXCOUNT];
-
-		std::cout << dirs[0] << std::endl;
 	}
 
 	Th10Ai::~Th10Ai()
@@ -283,10 +278,10 @@ namespace th
 		bool underEnemy = m_status.isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
-		Direction bestDir = DIR_NONE;
-		bool bestSlow = false;
+		boost::optional<DIR> bestDir;
+		boost::optional<bool> bestSlow;
 
-		for (Direction dir : DIRECTIONS)
+		for (DIR dir : DIR_ENTRIES)
 		{
 			Path path(m_status, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
@@ -299,20 +294,20 @@ namespace th
 			}
 		}
 
-		if (bestDir != DIR_NONE)
+		if (bestDir.has_value() && bestSlow.has_value())
 		{
-			move(bestDir, bestSlow);
+			move(bestDir.value(), bestSlow.value());
 		}
 		else
 		{
-			move(DIR_HOLD, false);
+			move(DIR::HOLD, false);
 			std::cout << "无路可走。" << std::endl;
 		}
 
 		return true;
 	}
 
-	void Th10Ai::move(Direction dir, bool slow)
+	void Th10Ai::move(DIR dir, bool slow)
 	{
 		//if (slow)
 		//	m_di8Hook.keyPress(DIK_LSHIFT);
@@ -321,63 +316,63 @@ namespace th
 
 		switch (dir)
 		{
-		case DIR_HOLD:
+		case DIR::HOLD:
 			//m_di8Hook.keyRelease(DIK_LEFT);
 			//m_di8Hook.keyRelease(DIK_RIGHT);
 			//m_di8Hook.keyRelease(DIK_UP);
 			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
-		case DIR_LEFT:
+		case DIR::LEFT:
 			//m_di8Hook.keyPress(DIK_LEFT);
 			//m_di8Hook.keyRelease(DIK_RIGHT);
 			//m_di8Hook.keyRelease(DIK_UP);
 			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
-		case DIR_RIGHT:
+		case DIR::RIGHT:
 			//m_di8Hook.keyRelease(DIK_LEFT);
 			//m_di8Hook.keyPress(DIK_RIGHT);
 			//m_di8Hook.keyRelease(DIK_UP);
 			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
-		case DIR_UP:
+		case DIR::UP:
 			//m_di8Hook.keyRelease(DIK_LEFT);
 			//m_di8Hook.keyRelease(DIK_RIGHT);
 			//m_di8Hook.keyPress(DIK_UP);
 			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
-		case DIR_DOWN:
+		case DIR::DOWN:
 			//m_di8Hook.keyRelease(DIK_LEFT);
 			//m_di8Hook.keyRelease(DIK_RIGHT);
 			//m_di8Hook.keyRelease(DIK_UP);
 			//m_di8Hook.keyPress(DIK_DOWN);
 			break;
 
-		case DIR_LEFTUP:
+		case DIR::LEFTUP:
 			//m_di8Hook.keyPress(DIK_LEFT);
 			//m_di8Hook.keyRelease(DIK_RIGHT);
 			//m_di8Hook.keyPress(DIK_UP);
 			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
-		case DIR_RIGHTUP:
+		case DIR::RIGHTUP:
 			//m_di8Hook.keyRelease(DIK_LEFT);
 			//m_di8Hook.keyPress(DIK_RIGHT);
 			//m_di8Hook.keyPress(DIK_UP);
 			//m_di8Hook.keyRelease(DIK_DOWN);
 			break;
 
-		case DIR_LEFTDOWN:
+		case DIR::LEFTDOWN:
 			//m_di8Hook.keyPress(DIK_LEFT);
 			//m_di8Hook.keyRelease(DIK_RIGHT);
 			//m_di8Hook.keyRelease(DIK_UP);
 			//m_di8Hook.keyPress(DIK_DOWN);
 			break;
 
-		case DIR_RIGHTDOWN:
+		case DIR::RIGHTDOWN:
 			//m_di8Hook.keyRelease(DIK_LEFT);
 			//m_di8Hook.keyPress(DIK_RIGHT);
 			//m_di8Hook.keyRelease(DIK_UP);

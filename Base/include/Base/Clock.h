@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Base/Common.h"
+
+#include "Base/Types.h"
+
 namespace base
 {
 	class Clock
@@ -8,9 +12,9 @@ namespace base
 		Clock();
 
 		void update();
-		time_t getTime() const;
+		int64_t getTime() const;
 
 	private:
-		time_t m_time;
+		int64_t m_time;
 	};
 }

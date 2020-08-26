@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Ai/Common.h"
+
 #include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
 
@@ -8,7 +10,7 @@ namespace th
 	struct Action
 	{
 		Pointf fromPos;
-		Direction fromDir;
+		DIR fromDir;
 		float_t frame;
 
 		//int_t willCollideCount;
@@ -30,7 +32,7 @@ namespace th
 		Path(Status& status, Scene& scene,
 			ItemTarget& itemTarget, EnemyTarget& enemyTarget, bool underEnemy);
 
-		Result find(Direction dir);
+		Result find(DIR dir);
 		Result dfs(const Action& action);
 
 	//private:
@@ -38,8 +40,8 @@ namespace th
 		static float_t CalcNearScore(Pointf player, Pointf target);
 		static float_t CalcShootScore(Pointf player, Pointf enemy);
 
-		static const Direction FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT];
-		static const int_t FIND_SIZES[DIR_MAXCOUNT];
+		static const DIR FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT];
+		static const int_t FIND_DIR_COUNTS[DIR_MAXCOUNT];
 		static const int_t FIND_LIMIT;
 		static const float_t FIND_DEPTH;
 		static const Pointf RESET_POS;
@@ -50,7 +52,7 @@ namespace th
 		EnemyTarget& m_enemyTarget;
 		bool m_underEnemy;
 
-		Direction m_dir;
+		DIR m_dir;
 		bool m_slowFirst;			// 是否慢速优先
 
 		float_t m_bestScore;

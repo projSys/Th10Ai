@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Base/Common.h"
+
 //#include <experimental/source_location>
 
 #include "Base/Types.h"

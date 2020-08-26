@@ -1,4 +1,3 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/Utils.h"
 
 #ifndef _USE_MATH_DEFINES

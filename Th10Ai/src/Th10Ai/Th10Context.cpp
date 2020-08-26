@@ -1,8 +1,9 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/Th10Context.h"
 
 #include <Base/ScopeGuard.h>
 #include <Base/Clock.h>
+#include <Windows/WindowsError.h>
+#include <Windows/Apis.h>
 
 #include "Th10Ai/DllInject.h"
 
@@ -56,7 +57,7 @@ namespace th
 			BASE_THROW(WindowsError());
 	}
 
-	bool Th10Context::timedWaitHook(time_t ms)
+	bool Th10Context::timedWaitHook(int64_t ms)
 	{
 		bool notTimeout = true;
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->hookMutex);

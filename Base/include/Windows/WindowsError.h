@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Windows/Common.h"
+
 #include "Base/Exception.h"
 
 namespace win

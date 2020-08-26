@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Hook/Common.h"
+
 #include <d3d9.h>
 #include <atlbase.h>
 #include <Base/Singleton.h>

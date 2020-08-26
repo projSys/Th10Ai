@@ -1,4 +1,3 @@
-#include "Base/Common.h"
 #include "Base/Logger.h"
 
 #include <boost/log/trivial.hpp>

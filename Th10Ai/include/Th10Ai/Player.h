@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Ai/Common.h"
+
 #include "Th10Ai/Th10Data.h"
 #include "Th10Ai/Entity.h"
 
@@ -17,8 +19,8 @@ namespace th
 		Player();
 		explicit Player(const PlayerData& data);
 
-		void advance(Direction dir, bool slow);
-		void checkPrevMove(Direction prevDir, bool prevSlow) const;
+		void advance(DIR dir, bool slow);
+		void checkPrevMove(DIR prevDir, bool prevSlow) const;
 
 		bool isRebirthStatus() const;
 		bool isNormalStatus() const;

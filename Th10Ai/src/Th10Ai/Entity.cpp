@@ -1,4 +1,3 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/Entity.h"
 
 #include <cassert>
@@ -6,25 +5,25 @@
 namespace th
 {
 	// 与X轴正方向的角度扇区转换成移动方向
-	const Direction Entity::SECTOR_TO_DIR[17] =
+	const DIR Entity::SECTOR_TO_DIR[17] =
 	{
-		DIR_RIGHT,		// 0
-		DIR_RIGHTUP,
-		DIR_RIGHTUP,
-		DIR_UP,
-		DIR_UP,
-		DIR_LEFTUP,
-		DIR_LEFTUP,
-		DIR_LEFT,
-		DIR_LEFT,
-		DIR_LEFTDOWN,
-		DIR_LEFTDOWN,
-		DIR_DOWN,
-		DIR_DOWN,
-		DIR_RIGHTDOWN,
-		DIR_RIGHTDOWN,
-		DIR_RIGHT,
-		DIR_RIGHT		// 360
+		DIR::RIGHT,		// 0
+		DIR::RIGHTUP,
+		DIR::RIGHTUP,
+		DIR::UP,
+		DIR::UP,
+		DIR::LEFTUP,
+		DIR::LEFTUP,
+		DIR::LEFT,
+		DIR::LEFT,
+		DIR::LEFTDOWN,
+		DIR::LEFTDOWN,
+		DIR::DOWN,
+		DIR::DOWN,
+		DIR::RIGHTDOWN,
+		DIR::RIGHTDOWN,
+		DIR::RIGHT,
+		DIR::RIGHT		// 360
 	};
 
 	Entity::Entity() :
@@ -57,10 +56,10 @@ namespace th
 		return Utils::CalcFootPoint(getPosition(), getNextPos(), pos);
 	}
 
-	Direction Entity::calcDirection() const
+	DIR Entity::calcDirection() const
 	{
 		if (isHolding())
-			return DIR_HOLD;
+			return DIR::HOLD;
 
 		// 前进方向与X轴正方向的角度
 		float_t angle = Utils::CalcAngle(getPosition(), getNextPos(), Pointf(x + 100.0f, y));
@@ -73,10 +72,10 @@ namespace th
 		return SECTOR_TO_DIR[sector];
 	}
 
-	Direction Entity::calcDirection(const Pointf& pos) const
+	DIR Entity::calcDirection(const Pointf& pos) const
 	{
 		if (getPosition() == pos)
-			return DIR_HOLD;
+			return DIR::HOLD;
 
 		// pos与X轴正方向的角度
 		float_t angle = Utils::CalcAngle(getPosition(), pos, Pointf(x + 100.0f, y));

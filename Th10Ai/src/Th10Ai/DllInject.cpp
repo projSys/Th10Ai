@@ -1,7 +1,8 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/DllInject.h"
 
 #include <Base/ScopeGuard.h>
+#include <Windows/Types.h>
+#include <Windows/WindowsError.h>
 
 namespace th
 {

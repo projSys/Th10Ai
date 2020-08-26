@@ -1,4 +1,3 @@
-#include "Base/Common.h"
 #include "Base/Object.h"
 
 #include <cassert>

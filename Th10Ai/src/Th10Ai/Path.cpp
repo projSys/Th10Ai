@@ -1,31 +1,30 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/Path.h"
 
 namespace th
 {
-	const Direction Path::FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT] =
+	const DIR Path::FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT] =
 	{
-		// DIR_HOLD
-		{ DIR_HOLD,      DIR_UP,       DIR_DOWN,      DIR_LEFT,      DIR_RIGHT,     DIR_LEFTUP,  DIR_RIGHTUP,  DIR_LEFTDOWN,  DIR_RIGHTDOWN },
-		// DIR_LEFT
-		{ DIR_LEFT,      DIR_LEFTUP,   DIR_LEFTDOWN,  DIR_UP,        DIR_DOWN,      DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_RIGHT
-		{ DIR_RIGHT,     DIR_RIGHTUP,  DIR_RIGHTDOWN, DIR_UP,        DIR_DOWN,      DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_UP
-		{ DIR_UP,        DIR_LEFTUP,   DIR_RIGHTUP,   DIR_LEFT,      DIR_RIGHT,     DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_DOWN
-		{ DIR_DOWN,      DIR_LEFTDOWN, DIR_RIGHTDOWN, DIR_LEFT,      DIR_RIGHT,     DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_LEFTUP
-		{ DIR_LEFTUP,    DIR_LEFT,     DIR_UP,        DIR_LEFTDOWN,  DIR_RIGHTUP,   DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_RIGHTUP
-		{ DIR_RIGHTUP,   DIR_RIGHT,    DIR_UP,        DIR_RIGHTDOWN, DIR_LEFTUP,    DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_LEFTDOWN
-		{ DIR_LEFTDOWN,  DIR_LEFT,     DIR_DOWN,      DIR_LEFTUP,    DIR_RIGHTDOWN, DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      },
-		// DIR_RIGHTDOWN
-		{ DIR_RIGHTDOWN, DIR_RIGHT,    DIR_DOWN,      DIR_RIGHTUP,   DIR_LEFTDOWN,  DIR_NONE,    DIR_NONE,     DIR_NONE,      DIR_NONE      }
+		// DIR::HOLD
+		{ DIR::HOLD,      DIR::UP,       DIR::DOWN,      DIR::LEFT,      DIR::RIGHT,     DIR::LEFTUP,  DIR::RIGHTUP,  DIR::LEFTDOWN,  DIR::RIGHTDOWN },
+		// DIR::LEFT
+		{ DIR::LEFT,      DIR::LEFTUP,   DIR::LEFTDOWN,  DIR::UP,        DIR::DOWN,      DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::RIGHT
+		{ DIR::RIGHT,     DIR::RIGHTUP,  DIR::RIGHTDOWN, DIR::UP,        DIR::DOWN,      DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::UP
+		{ DIR::UP,        DIR::LEFTUP,   DIR::RIGHTUP,   DIR::LEFT,      DIR::RIGHT,     DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::DOWN
+		{ DIR::DOWN,      DIR::LEFTDOWN, DIR::RIGHTDOWN, DIR::LEFT,      DIR::RIGHT,     DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::LEFTUP
+		{ DIR::LEFTUP,    DIR::LEFT,     DIR::UP,        DIR::LEFTDOWN,  DIR::RIGHTUP,   DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::RIGHTUP
+		{ DIR::RIGHTUP,   DIR::RIGHT,    DIR::UP,        DIR::RIGHTDOWN, DIR::LEFTUP,    DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::LEFTDOWN
+		{ DIR::LEFTDOWN,  DIR::LEFT,     DIR::DOWN,      DIR::LEFTUP,    DIR::RIGHTDOWN, DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::RIGHTDOWN
+		{ DIR::RIGHTDOWN, DIR::RIGHT,    DIR::DOWN,      DIR::RIGHTUP,   DIR::LEFTDOWN,  DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      }
 	};
 
-	const int_t Path::FIND_SIZES[DIR_MAXCOUNT] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
+	const int_t Path::FIND_DIR_COUNTS[DIR_MAXCOUNT] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
 	const int_t Path::FIND_LIMIT = 320;
 	const float_t Path::FIND_DEPTH = 30.0f;
@@ -38,14 +37,14 @@ namespace th
 		m_itemTarget(itemTarget),
 		m_enemyTarget(enemyTarget),
 		m_underEnemy(underEnemy),
-		m_dir(DIR_NONE),
+		m_dir(DIR::HOLD),
 		m_slowFirst(false),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
 		m_count(0)
 	{
 	}
 
-	Result Path::find(Direction dir)
+	Result Path::find(DIR dir)
 	{
 		m_dir = dir;
 		//m_slowFirst = (!m_itemTarget.found && m_underEnemy);
@@ -127,10 +126,10 @@ namespace th
 			m_bestScore = avg;
 		}
 
-		int_t nextValidCount = FIND_SIZES[m_dir];
-		for (int_t i = 0; i < FIND_SIZES[m_dir]; ++i)
+		int_t nextValidCount = FIND_DIR_COUNTS[enum_cast(m_dir)];
+		for (int_t i = 0; i < FIND_DIR_COUNTS[enum_cast(m_dir)]; ++i)
 		{
-			Direction dir = FIND_DIRS[m_dir][i];
+			DIR dir = FIND_DIRS[enum_cast(m_dir)][i];
 
 			Action nextAct = {};
 			nextAct.fromPos = player.getPosition();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Base/Common.h"
+
 #include "Base/Types.h"
 #include "Base/RefCounted.h"
 #include "Base/StrongPtr.h"

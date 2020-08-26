@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Hook/Common.h"
+
 #include <thread>
 #include <atomic>
 #include <Base/Singleton.h>

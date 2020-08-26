@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Th10Ai/Common.h"
+
 #include <vector>
 
 #include "Th10Ai/Th10Data.h"
@@ -56,6 +58,6 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		time_t m_findItemTime;
+		int64_t m_findItemTime;
 	};
 }

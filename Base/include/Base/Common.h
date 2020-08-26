@@ -57,7 +57,3 @@
 namespace base
 {
 }
-
-namespace comm
-{
-}

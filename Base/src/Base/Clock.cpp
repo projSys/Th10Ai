@@ -1,4 +1,3 @@
-#include "Base/Common.h"
 #include "Base/Clock.h"
 
 #include <chrono>
@@ -19,7 +18,7 @@ namespace base
 		m_time = chrono::duration_cast<chrono::milliseconds>(d).count();
 	}
 
-	time_t Clock::getTime() const
+	int64_t Clock::getTime() const
 	{
 		return m_time;
 	}

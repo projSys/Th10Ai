@@ -1,4 +1,3 @@
-#include "Th10Hook/Common.h"
 #include "Th10Hook/Th10Context.h"
 
 #include <Base/Clock.h>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Base/Common.h"
+
 #include <stdexcept>
 #include <ostream>
 #ifdef _DEBUG

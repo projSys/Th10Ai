@@ -1,4 +1,3 @@
-#include "Th10Ai/Common.h"
 #include "Th10Ai/MyApp.h"
 
 #include "Th10Ai/MyFrame.h"
