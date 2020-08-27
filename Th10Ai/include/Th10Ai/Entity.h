@@ -20,6 +20,11 @@ namespace th
 		static const DIR SECTOR_TO_DIR[17];
 
 		Entity();
+		Entity(const PlayerData& data);
+		Entity(const ItemData& data);
+		Entity(const EnemyData& data);
+		Entity(const BulletData& data);
+		Entity(const LaserData& data);
 		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
 
 		float_t calcDistance(const Pointf& pos) const;

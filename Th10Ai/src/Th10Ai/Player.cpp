@@ -59,6 +59,7 @@ namespace th
 	}
 
 	Player::Player(const PlayerData& data) :
+		Entity(data),
 		status(data.status),
 		invincibleTime(data.invincibleTime),
 		slow(data.slow),

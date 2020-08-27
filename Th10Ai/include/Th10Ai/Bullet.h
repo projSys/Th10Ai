@@ -9,5 +9,8 @@ namespace th
 	class Bullet :
 		public Entity
 	{
+	public:
+		Bullet();
+		explicit Bullet(const BulletData& data);
 	};
 }

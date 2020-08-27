@@ -98,6 +98,68 @@ namespace th
 
 	void HookApp::onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data)
 	{
+		// c_dfDIKeyboard
+		if (size == 256 && data != nullptr)
+		{
+			//lock_guard<mutex> lock(m_keyMutex);
+			if (m_shared->isActionUpdate())
+			{
+				BYTE* keyState = reinterpret_cast<BYTE*>(data);
 
+				if (m_shared->getAction().left)
+					keyState[DIK_LEFT] = 0x80;
+				else
+					keyState[DIK_LEFT] = 0x00;
+
+				if (m_shared->getAction().right)
+					keyState[DIK_RIGHT] = 0x80;
+				else
+					keyState[DIK_RIGHT] = 0x00;
+
+				if (m_shared->getAction().up)
+					keyState[DIK_UP] = 0x80;
+				else
+					keyState[DIK_UP] = 0x00;
+
+				if (m_shared->getAction().down)
+					keyState[DIK_DOWN] = 0x80;
+				else
+					keyState[DIK_DOWN] = 0x00;
+
+				if (m_shared->getAction().shoot)
+					keyState[DIK_Z] = 0x80;
+				else
+					keyState[DIK_Z] = 0x00;
+
+				if (m_shared->getAction().bomb)
+					keyState[DIK_X] = 0x80;
+				else
+					keyState[DIK_X] = 0x00;
+
+				if (m_shared->getAction().slow)
+					keyState[DIK_LSHIFT] = 0x80;
+				else
+					keyState[DIK_LSHIFT] = 0x00;
+
+				if (m_shared->getAction().skip)
+					keyState[DIK_LCONTROL] = 0x80;
+				else
+					keyState[DIK_LCONTROL] = 0x00;
+
+				//m_isKeyReadied = false;
+			}
+			else
+			{
+				//cout << "输入不及时。" << endl;
+			}
+		}
+		// c_dfDIMouse
+		//sizeof(DIMOUSESTATE);
+		// c_dfDIMouse2
+		//sizeof(DIMOUSESTATE2);
+		// c_dfDIJoystick
+		//sizeof(DIJOYSTATE);
+		// c_dfDIJoystick2
+		//sizeof(DIJOYSTATE2);
 	}
 }

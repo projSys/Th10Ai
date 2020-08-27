@@ -36,6 +36,56 @@ namespace th
 	{
 	}
 
+	Entity::Entity(const PlayerData& data) :
+		x(data.x),
+		y(data.y),
+		dx(data.dx),
+		dy(data.dy),
+		width(data.width),
+		height(data.height)
+	{
+	}
+
+	Entity::Entity(const ItemData& data) :
+		x(data.x),
+		y(data.y),
+		dx(data.dx),
+		dy(data.dy),
+		width(data.width),
+		height(data.height)
+	{
+	}
+
+	Entity::Entity(const EnemyData& data) :
+		x(data.x),
+		y(data.y),
+		dx(data.dx),
+		dy(data.dy),
+		width(data.width),
+		height(data.height)
+	{
+	}
+
+	Entity::Entity(const BulletData& data) :
+		x(data.x),
+		y(data.y),
+		dx(data.dx),
+		dy(data.dy),
+		width(data.width),
+		height(data.height)
+	{
+	}
+
+	Entity::Entity(const LaserData& data) :
+		x(data.x),
+		y(data.y),
+		dx(data.dx),
+		dy(data.dy),
+		width(data.width),
+		height(data.height)
+	{
+	}
+
 	Entity::Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0) :
 		x(x0), y(y0), dx(dx0), dy(dy0), width(width0), height(height0)
 	{

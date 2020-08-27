@@ -34,6 +34,7 @@ namespace th
 		m_data->updateTime = 0;
 		//m_data->status = {};
 		//m_data->action = {};
+		m_data->actionUpdated = false;
 		memset(&m_data->status, 0, sizeof(StatusData));
 		memset(&m_data->action, 0, sizeof(ActionData));
 
@@ -94,5 +95,15 @@ namespace th
 	const StatusData& SharedMemory::getStatus() const
 	{
 		return m_data->status;
+	}
+
+	ActionData& SharedMemory::getAction()
+	{
+		return m_data->action;
+	}
+
+	void SharedMemory::commit()
+	{
+		m_data->actionUpdated = true;
 	}
 }

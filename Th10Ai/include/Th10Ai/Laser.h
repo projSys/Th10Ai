@@ -2,6 +2,7 @@
 
 #include "Th10Ai/Common.h"
 
+#include "Th10Ai/Th10Data.h"
 #include "Th10Ai/Entity.h"
 
 namespace th
@@ -23,6 +24,7 @@ namespace th
 	{
 	public:
 		Laser();
+		explicit Laser(const LaserData& data);
 
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;

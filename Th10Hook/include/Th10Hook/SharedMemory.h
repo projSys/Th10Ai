@@ -33,6 +33,7 @@ namespace th
 		int64_t updateTime;
 		StatusData status;
 		ActionData action;
+		bool actionUpdated;
 	};
 
 	class SharedMemory
@@ -50,6 +51,8 @@ namespace th
 		void notifyExit();
 
 		void update();
+		ActionData& getAction();
+		bool isActionUpdate() const;
 
 	private:
 		interprocess::managed_windows_shared_memory m_memory;

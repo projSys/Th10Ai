@@ -71,4 +71,16 @@ namespace th
 		m_data->status.bulletCount = Reader::ReadBullets(m_data->status.bullets);
 		m_data->status.laserCount = Reader::ReadLasers(m_data->status.lasers);
 	}
+
+	ActionData& SharedMemory::getAction()
+	{
+		return m_data->action;
+	}
+
+	bool SharedMemory::isActionUpdate() const
+	{
+		bool ret = m_data->actionUpdated;
+		m_data->actionUpdated = false;
+		return ret;
+	}
 }

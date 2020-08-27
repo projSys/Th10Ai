@@ -18,6 +18,18 @@ namespace th
 	void Status::update(const StatusData& data)
 	{
 		m_player = Player(data.player);
+		m_items.clear();
+		for (uint_t i = 0; i < data.itemCount; ++i)
+			m_items.emplace_back(data.items[i]);
+		m_enemies.clear();
+		for (uint_t i = 0; i < data.enemyCount; ++i)
+			m_enemies.emplace_back(data.enemies[i]);
+		m_bullets.clear();
+		for (uint_t i = 0; i < data.bulletCount; ++i)
+			m_bullets.emplace_back(data.bullets[i]);
+		m_lasers.clear();
+		for (uint_t i = 0; i < data.laserCount; ++i)
+			m_lasers.emplace_back(data.lasers[i]);
 	}
 
 	// ²éÕÒµÀ¾ß

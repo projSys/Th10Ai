@@ -217,7 +217,7 @@ namespace th
 		handleShoot();
 		handleMove();
 
-		//m_di8Hook.commit();
+		m_shared.commit();
 	}
 
 	// ¥¶¿Ì’®µØ
@@ -225,14 +225,14 @@ namespace th
 	{
 		if (m_status.getPlayer().isColliding())
 		{
-			//m_di8Hook.keyPress(DIK_X);
+			m_shared.getAction().bomb = true;
 			++m_bombCount;
 			std::cout << "æˆÀ¿£∫" << m_bombCount << std::endl;
 			return true;
 		}
 		else
 		{
-			//m_di8Hook.keyRelease(DIK_X);
+			m_shared.getAction().bomb = false;
 			return false;
 		}
 	}
@@ -242,12 +242,12 @@ namespace th
 	{
 		if (m_status.isTalking())
 		{
-			//m_di8Hook.keyPress(DIK_LCONTROL);
+			m_shared.getAction().skip = true;
 			return true;
 		}
 		else
 		{
-			//m_di8Hook.keyRelease(DIK_LCONTROL);
+			m_shared.getAction().skip = false;
 			return false;
 		}
 	}
@@ -257,12 +257,12 @@ namespace th
 	{
 		if (m_status.hasEnemy())
 		{
-			//m_di8Hook.keyPress(DIK_Z);
+			m_shared.getAction().shoot = true;
 			return true;
 		}
 		else
 		{
-			//m_di8Hook.keyRelease(DIK_Z);
+			m_shared.getAction().shoot = false;
 			return false;
 		}
 	}
@@ -309,74 +309,74 @@ namespace th
 
 	void Th10Ai::move(DIR dir, bool slow)
 	{
-		//if (slow)
-		//	m_di8Hook.keyPress(DIK_LSHIFT);
-		//else
-		//	m_di8Hook.keyRelease(DIK_LSHIFT);
+		if (slow)
+			m_shared.getAction().slow = true;
+		else
+			m_shared.getAction().slow = false;
 
 		switch (dir)
 		{
 		case DIR::HOLD:
-			//m_di8Hook.keyRelease(DIK_LEFT);
-			//m_di8Hook.keyRelease(DIK_RIGHT);
-			//m_di8Hook.keyRelease(DIK_UP);
-			//m_di8Hook.keyRelease(DIK_DOWN);
+			m_shared.getAction().left = false;
+			m_shared.getAction().right = false;
+			m_shared.getAction().up = false;
+			m_shared.getAction().down = false;
 			break;
 
 		case DIR::LEFT:
-			//m_di8Hook.keyPress(DIK_LEFT);
-			//m_di8Hook.keyRelease(DIK_RIGHT);
-			//m_di8Hook.keyRelease(DIK_UP);
-			//m_di8Hook.keyRelease(DIK_DOWN);
+			m_shared.getAction().left = true;
+			m_shared.getAction().right = false;
+			m_shared.getAction().up = false;
+			m_shared.getAction().down = false;
 			break;
 
 		case DIR::RIGHT:
-			//m_di8Hook.keyRelease(DIK_LEFT);
-			//m_di8Hook.keyPress(DIK_RIGHT);
-			//m_di8Hook.keyRelease(DIK_UP);
-			//m_di8Hook.keyRelease(DIK_DOWN);
+			m_shared.getAction().left = false;
+			m_shared.getAction().right = true;
+			m_shared.getAction().up = false;
+			m_shared.getAction().down = false;
 			break;
 
 		case DIR::UP:
-			//m_di8Hook.keyRelease(DIK_LEFT);
-			//m_di8Hook.keyRelease(DIK_RIGHT);
-			//m_di8Hook.keyPress(DIK_UP);
-			//m_di8Hook.keyRelease(DIK_DOWN);
+			m_shared.getAction().left = false;
+			m_shared.getAction().right = false;
+			m_shared.getAction().up = true;
+			m_shared.getAction().down = false;
 			break;
 
 		case DIR::DOWN:
-			//m_di8Hook.keyRelease(DIK_LEFT);
-			//m_di8Hook.keyRelease(DIK_RIGHT);
-			//m_di8Hook.keyRelease(DIK_UP);
-			//m_di8Hook.keyPress(DIK_DOWN);
+			m_shared.getAction().left = false;
+			m_shared.getAction().right = false;
+			m_shared.getAction().up = false;
+			m_shared.getAction().down = true;
 			break;
 
 		case DIR::LEFTUP:
-			//m_di8Hook.keyPress(DIK_LEFT);
-			//m_di8Hook.keyRelease(DIK_RIGHT);
-			//m_di8Hook.keyPress(DIK_UP);
-			//m_di8Hook.keyRelease(DIK_DOWN);
+			m_shared.getAction().left = true;
+			m_shared.getAction().right = false;
+			m_shared.getAction().up = true;
+			m_shared.getAction().down = false;
 			break;
 
 		case DIR::RIGHTUP:
-			//m_di8Hook.keyRelease(DIK_LEFT);
-			//m_di8Hook.keyPress(DIK_RIGHT);
-			//m_di8Hook.keyPress(DIK_UP);
-			//m_di8Hook.keyRelease(DIK_DOWN);
+			m_shared.getAction().left = false;
+			m_shared.getAction().right = true;
+			m_shared.getAction().up = true;
+			m_shared.getAction().down = false;
 			break;
 
 		case DIR::LEFTDOWN:
-			//m_di8Hook.keyPress(DIK_LEFT);
-			//m_di8Hook.keyRelease(DIK_RIGHT);
-			//m_di8Hook.keyRelease(DIK_UP);
-			//m_di8Hook.keyPress(DIK_DOWN);
+			m_shared.getAction().left = true;
+			m_shared.getAction().right = false;
+			m_shared.getAction().up = false;
+			m_shared.getAction().down = true;
 			break;
 
 		case DIR::RIGHTDOWN:
-			//m_di8Hook.keyRelease(DIK_LEFT);
-			//m_di8Hook.keyPress(DIK_RIGHT);
-			//m_di8Hook.keyRelease(DIK_UP);
-			//m_di8Hook.keyPress(DIK_DOWN);
+			m_shared.getAction().left = false;
+			m_shared.getAction().right = true;
+			m_shared.getAction().up = false;
+			m_shared.getAction().down = true;
 			break;
 		}
 
