@@ -13,12 +13,12 @@ namespace base
 		using value_t = T;
 		using Traits = TypeTraits<value_t>;
 
-		SizeBase() :
+		constexpr SizeBase() :
 			width(), height()
 		{
 		}
 
-		SizeBase(value_t width0, value_t height0) :
+		constexpr SizeBase(value_t width0, value_t height0) :
 			width(width0), height(height0)
 		{
 		}

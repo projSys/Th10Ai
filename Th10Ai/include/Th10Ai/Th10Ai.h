@@ -57,6 +57,8 @@ namespace th
 		DIR m_prevDir;
 		bool m_prevSlow;
 
+		Status m_status2;
+		Status m_status1;
 		Status m_status;
 		//std::mutex m_statusMutex;
 		//std::shared_ptr<Status> m_writeStatus;
@@ -64,5 +66,7 @@ namespace th
 		//std::shared_ptr<Status> m_readStatus;
 		//std::atomic_bool m_statusUpdated;
 		Scene m_scene;
+
+		int64_t m_bombTime;
 	};
 }

@@ -1,6 +1,7 @@
 #include "Th10Ai/Th10Ai.h"
 
 #include <boost/optional.hpp>
+#include <Base/Clock.h>
 
 #include "Th10Ai/MyWindow.h"
 #include "Th10Ai/Path.h"
@@ -17,8 +18,9 @@ namespace th
 		m_handleActive(false),
 		m_bombCount(0),
 		m_prevDir(DIR::HOLD),
-		m_prevSlow(false)/*,
-		m_statusUpdated(false)*/
+		m_prevSlow(false),
+		//m_statusUpdated(false)
+		m_bombTime(0)
 	{
 		//m_writeStatus = std::make_shared<Status>();
 		//m_middleStatus = std::make_shared<Status>();
@@ -193,6 +195,8 @@ namespace th
 
 		m_window->update(m_shared.getStatus());
 
+		m_status2.update(m_status1);
+		m_status1.update(m_status);
 		m_status.update(m_shared.getStatus());
 		//m_status.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
 
@@ -225,10 +229,28 @@ namespace th
 	{
 		if (m_status.getPlayer().isColliding())
 		{
-			m_shared.getAction().bomb = true;
-			++m_bombCount;
-			std::cout << "¾öËÀ£º" << m_bombCount << std::endl;
-			return true;
+			Clock clock;
+			clock.update();
+			if (clock.getTime() - m_bombTime > 1000)
+			{
+				m_bombTime = clock.getTime();
+
+				int_t id = m_status.collide(m_status.getPlayer(), 0.0);
+				m_status1.collide(m_status.getPlayer(), 1.0);
+				m_status2.collide(m_status.getPlayer(), 2.0);
+				m_status1.collide(m_status.getPlayer(), 1.0, id);
+				m_status2.collide(m_status.getPlayer(), 2.0, id);
+
+				m_shared.getAction().bomb = true;
+				++m_bombCount;
+				std::cout << "¾öËÀ£º" << m_bombCount << std::endl;
+				return true;
+			}
+			else
+			{
+				m_shared.getAction().bomb = false;
+				return false;
+			}
 		}
 		else
 		{
@@ -281,7 +303,7 @@ namespace th
 		boost::optional<DIR> bestDir;
 		boost::optional<bool> bestSlow;
 
-		for (DIR dir : DIR_ENTRIES)
+		for (DIR dir : g_dirs)
 		{
 			Path path(m_status, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);

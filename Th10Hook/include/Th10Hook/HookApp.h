@@ -34,8 +34,8 @@ namespace th
 		virtual void onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data) override;
 
 		Logger m_logger;
-		std::unique_ptr<SharedMemory> m_shared;
 		WindowHook m_windowHook;
+		std::unique_ptr<SharedMemory> m_shared;
 		std::unique_ptr<D3D9Hook> m_d3d9Hook;
 		std::unique_ptr<DI8Hook> m_di8Hook;
 		bool m_hooked;

@@ -3,6 +3,7 @@
 #include "Th10Ai/Common.h"
 
 #include "Th10Ai/Th10Data.h"
+#include "Th10Ai/Direction.h"
 #include "Th10Ai/Utils.h"
 
 namespace th
@@ -54,7 +55,7 @@ namespace th
 		//int_t id;
 		//int_t type;
 
-		float_t x;			// 坐标在中心点
+		float_t x;
 		float_t y;
 		float_t dx;
 		float_t dy;

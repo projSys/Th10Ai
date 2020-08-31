@@ -2,12 +2,14 @@
 
 namespace th
 {
-	Bullet::Bullet()
+	Bullet::Bullet() :
+		id(0)
 	{
 	}
 
 	Bullet::Bullet(const BulletData& data) :
-		Entity(data)
+		Entity(data),
+		id(data.id)
 	{
 	}
 }

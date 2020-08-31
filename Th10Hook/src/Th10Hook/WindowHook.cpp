@@ -11,7 +11,7 @@ namespace th
 	{
 	}
 
-	void WindowHook::attach(HWND window)
+	void WindowHook::hook(HWND window)
 	{
 		m_window = window;
 		m_unicode = IsWindowUnicode(m_window);
@@ -25,7 +25,7 @@ namespace th
 			BASE_THROW(WindowsError());
 	}
 
-	void WindowHook::detach()
+	void WindowHook::unhook()
 	{
 		if (m_unicode)
 			SetWindowLongPtrW(m_window, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_prevWndProc));

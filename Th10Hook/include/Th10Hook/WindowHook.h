@@ -19,8 +19,8 @@ namespace th
 	public:
 		WindowHook(WindowListener* listener);
 
-		void attach(HWND window);
-		void detach();
+		void hook(HWND window);
+		void unhook();
 
 		void sendMessage(UINT message, WPARAM wparam, LPARAM lparam);
 		void postMessage(UINT message, WPARAM wparam, LPARAM lparam);

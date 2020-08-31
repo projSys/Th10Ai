@@ -2,29 +2,29 @@
 
 namespace th
 {
-	const DIR Path::FIND_DIRS[DIR_MAXCOUNT][DIR_MAXCOUNT] =
+	const DIR Path::FIND_DIRS[g_dirs.size()][5] =
 	{
 		// DIR::HOLD
-		{ DIR::HOLD,      DIR::UP,       DIR::DOWN,      DIR::LEFT,      DIR::RIGHT,     DIR::LEFTUP,  DIR::RIGHTUP,  DIR::LEFTDOWN,  DIR::RIGHTDOWN },
+		{ DIR::HOLD,      DIR::UP,       DIR::DOWN,      DIR::LEFT,      DIR::RIGHT,     },//DIR::LEFTUP,  DIR::RIGHTUP,  DIR::LEFTDOWN,  DIR::RIGHTDOWN },
 		// DIR::LEFT
-		{ DIR::LEFT,      DIR::LEFTUP,   DIR::LEFTDOWN,  DIR::UP,        DIR::DOWN,      DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::LEFT,      DIR::LEFTUP,   DIR::LEFTDOWN,  DIR::UP,        DIR::DOWN,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::RIGHT
-		{ DIR::RIGHT,     DIR::RIGHTUP,  DIR::RIGHTDOWN, DIR::UP,        DIR::DOWN,      DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::RIGHT,     DIR::RIGHTUP,  DIR::RIGHTDOWN, DIR::UP,        DIR::DOWN,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::UP
-		{ DIR::UP,        DIR::LEFTUP,   DIR::RIGHTUP,   DIR::LEFT,      DIR::RIGHT,     DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::UP,        DIR::LEFTUP,   DIR::RIGHTUP,   DIR::LEFT,      DIR::RIGHT,     },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::DOWN
-		{ DIR::DOWN,      DIR::LEFTDOWN, DIR::RIGHTDOWN, DIR::LEFT,      DIR::RIGHT,     DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::DOWN,      DIR::LEFTDOWN, DIR::RIGHTDOWN, DIR::LEFT,      DIR::RIGHT,     },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::LEFTUP
-		{ DIR::LEFTUP,    DIR::LEFT,     DIR::UP,        DIR::LEFTDOWN,  DIR::RIGHTUP,   DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::LEFTUP,    DIR::LEFT,     DIR::UP,        DIR::LEFTDOWN,  DIR::RIGHTUP,   },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::RIGHTUP
-		{ DIR::RIGHTUP,   DIR::RIGHT,    DIR::UP,        DIR::RIGHTDOWN, DIR::LEFTUP,    DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::RIGHTUP,   DIR::RIGHT,    DIR::UP,        DIR::RIGHTDOWN, DIR::LEFTUP,    },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::LEFTDOWN
-		{ DIR::LEFTDOWN,  DIR::LEFT,     DIR::DOWN,      DIR::LEFTUP,    DIR::RIGHTDOWN, DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::LEFTDOWN,  DIR::LEFT,     DIR::DOWN,      DIR::LEFTUP,    DIR::RIGHTDOWN, },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::RIGHTDOWN
-		{ DIR::RIGHTDOWN, DIR::RIGHT,    DIR::DOWN,      DIR::RIGHTUP,   DIR::LEFTDOWN,  DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      }
+		{ DIR::RIGHTDOWN, DIR::RIGHT,    DIR::DOWN,      DIR::RIGHTUP,   DIR::LEFTDOWN,  },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      }
 	};
 
-	const int_t Path::FIND_DIR_COUNTS[DIR_MAXCOUNT] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
+	const int_t Path::FIND_DIR_COUNTS[g_dirs.size()] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
 	const int_t Path::FIND_LIMIT = 320;
 	const float_t Path::FIND_DEPTH = 30.0f;
@@ -126,10 +126,10 @@ namespace th
 			m_bestScore = avg;
 		}
 
-		int_t nextValidCount = FIND_DIR_COUNTS[enum_cast(m_dir)];
-		for (int_t i = 0; i < FIND_DIR_COUNTS[enum_cast(m_dir)]; ++i)
+		int_t nextValidCount = FIND_DIR_COUNTS[enum_value(m_dir)];
+		for (int_t i = 0; i < FIND_DIR_COUNTS[enum_value(m_dir)]; ++i)
 		{
-			DIR dir = FIND_DIRS[enum_cast(m_dir)][i];
+			DIR dir = FIND_DIRS[enum_value(m_dir)][i];
 
 			Action nextAct = {};
 			nextAct.fromPos = player.getPosition();

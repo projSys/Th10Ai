@@ -2,6 +2,7 @@
 
 #include "Th10Ai/Common.h"
 
+#include <array>
 #include <Base/Enum.h>
 
 namespace th
@@ -20,7 +21,7 @@ namespace th
 		RIGHTDOWN		// сроб
 	};
 
-	constexpr DIR DIR_ENTRIES[] =
+	constexpr std::array<DIR, 9> g_dirs =
 	{
 		DIR::HOLD,
 		DIR::LEFT,
@@ -32,6 +33,4 @@ namespace th
 		DIR::LEFTDOWN,
 		DIR::RIGHTDOWN
 	};
-
-	constexpr uint_t DIR_MAXCOUNT = sizeof(DIR_ENTRIES) / sizeof(DIR_ENTRIES[0]);
 }

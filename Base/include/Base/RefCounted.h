@@ -53,7 +53,7 @@ namespace base
 		virtual void release() noexcept override
 		{
 			this->~RefCounted();
-			delete[] this;
+			delete[] reinterpret_cast<byte_t*>(this);
 		}
 
 		T* m_object;

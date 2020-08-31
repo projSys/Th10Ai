@@ -134,7 +134,7 @@ namespace th
 						bullets[count].width = ReadMemory<float32_t>(ebx + 0x3F0);
 						bullets[count].height = ReadMemory<float32_t>(ebx + 0x3F4);
 
-						//bullets[count].id = i;
+						bullets[count].id = static_cast<int_t>(ebx);
 						//bullets[count].type = static_cast<int_t>(std::round(bullets[count].width));
 
 						++count;

@@ -30,11 +30,11 @@ namespace th
 				m_shared = nullptr;
 			});
 
-		m_windowHook.attach(m_shared->getWindow());
+		m_windowHook.hook(m_shared->getWindow());
 		ON_SCOPE_EXIT([&]()
 			{
 				if (isSelfExit())
-					m_windowHook.detach();
+					m_windowHook.unhook();
 			});
 		m_windowHook.sendMessage(HA_HOOK, 0, 0);
 		ON_SCOPE_EXIT([&]()
@@ -70,6 +70,9 @@ namespace th
 
 	void HookApp::onHook()
 	{
+		if (m_hooked)
+			return;
+
 		m_d3d9Hook = std::make_unique<D3D9Hook>(this);
 		m_di8Hook = std::make_unique<DI8Hook>(this);
 		m_hooked = true;
@@ -77,14 +80,15 @@ namespace th
 
 	void HookApp::onUnhook()
 	{
+		m_hooked = false;
 		m_di8Hook = nullptr;
 		m_d3d9Hook = nullptr;
 	}
 
 	void HookApp::onDestroy()
 	{
-		setSelfExit(false);
 		onUnhook();
+		setSelfExit(false);
 		m_shared->notifyUnhook();
 		join();
 	}
@@ -102,7 +106,7 @@ namespace th
 		if (size == 256 && data != nullptr)
 		{
 			//lock_guard<mutex> lock(m_keyMutex);
-			if (m_shared->isActionUpdate())
+			if (m_shared->isActionUpdated())
 			{
 				BYTE* keyState = reinterpret_cast<BYTE*>(data);
 

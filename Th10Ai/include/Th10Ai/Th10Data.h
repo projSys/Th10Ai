@@ -89,6 +89,8 @@ namespace th
 
 	struct BulletData
 	{
+		int32_t id;
+
 		float32_t x;
 		float32_t y;
 		float32_t dx;

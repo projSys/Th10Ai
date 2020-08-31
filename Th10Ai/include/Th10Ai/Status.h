@@ -20,6 +20,7 @@ namespace th
 		Status();
 
 		void update(const StatusData& data);
+		void update(const Status& other);
 
 		// Player
 
@@ -32,6 +33,10 @@ namespace th
 		bool isTalking() const;
 		bool isUnderEnemy() const;
 		boost::optional<Enemy> findEnemy();
+
+		// Bullet
+		int_t collide(const Player& player, float_t frame) const;
+		int_t collide(const Player& player, float_t frame, int_t id) const;
 
 		const Player& getPlayer() const;
 		const std::vector<Item>& getItems() const;

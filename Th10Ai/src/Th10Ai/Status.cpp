@@ -32,6 +32,23 @@ namespace th
 			m_lasers.emplace_back(data.lasers[i]);
 	}
 
+	void Status::update(const Status& other)
+	{
+		m_player = other.m_player;
+		m_items.clear();
+		for (const Item& item : other.m_items)
+			m_items.push_back(item);
+		m_enemies.clear();
+		for (const Enemy& enemy : other.m_enemies)
+			m_enemies.push_back(enemy);
+		m_bullets.clear();
+		for (const Bullet& bullet : other.m_bullets)
+			m_bullets.push_back(bullet);
+		m_lasers.clear();
+		for (const Laser& laser : other.m_lasers)
+			m_lasers.push_back(laser);
+	}
+
 	// 查找道具
 	boost::optional<Item> Status::findItem()
 	{
@@ -170,6 +187,45 @@ namespace th
 		}
 
 		return target;
+	}
+
+	int_t Status::collide(const Player& player, float_t frame) const
+	{
+		for (const Bullet& org : m_bullets)
+		{
+			Bullet bullet = org;
+			bullet.advance(frame);
+			if (bullet.collide(player))
+			{
+				std::cout << -frame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
+					<< "org(" << org.id << " " << org.x << " " << org.y << " " << org.dx << " " << org.dy << ") "
+					<< "now(" << bullet.id << " " << bullet.x << " " << bullet.y << " " << bullet.dx << " " << bullet.dy << ") " << std::endl;
+				return bullet.id;
+			}
+		}
+		std::cout << -frame << "帧 不碰撞" << " 总数：" << m_bullets.size() << std::endl;
+		return -1;
+	}
+
+	int_t Status::collide(const Player& player, float_t frame, int_t id) const
+	{
+		for (const Bullet& org : m_bullets)
+		{
+			if (org.id == id)
+			{
+				Bullet bullet = org;
+				bullet.advance(frame);
+				if (bullet.collide(player))
+				{
+					std::cout << -frame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
+						<< "org(" << org.id << " " << org.x << " " << org.y << " " << org.dx << " " << org.dy << ") "
+						<< "now(" << bullet.id << " " << bullet.x << " " << bullet.y << " " << bullet.dx << " " << bullet.dy << ") " << std::endl;
+					return bullet.id;
+				}
+			}
+		}
+		std::cout << -frame << "帧" << "  找不到子弹：" << id << " 总数：" << m_bullets.size() << std::endl;
+		return -1;
 	}
 
 	const Player& Status::getPlayer() const

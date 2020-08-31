@@ -52,7 +52,7 @@ namespace th
 
 		void update();
 		ActionData& getAction();
-		bool isActionUpdate() const;
+		bool isActionUpdated() const;
 
 	private:
 		interprocess::managed_windows_shared_memory m_memory;

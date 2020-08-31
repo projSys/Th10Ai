@@ -17,5 +17,3 @@ namespace th
 }
 
 #include <iostream>
-
-#include "Th10Ai/Direction.h"

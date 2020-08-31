@@ -13,12 +13,12 @@ namespace base
 		using value_t = T;
 		using Traits = TypeTraits<value_t>;
 
-		PointBase() :
+		constexpr PointBase() :
 			x(), y()
 		{
 		}
 
-		PointBase(value_t x0, value_t y0) :
+		constexpr PointBase(value_t x0, value_t y0) :
 			x(x0), y(y0)
 		{
 		}

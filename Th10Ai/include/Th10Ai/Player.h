@@ -2,6 +2,8 @@
 
 #include "Th10Ai/Common.h"
 
+#include <array>
+
 #include "Th10Ai/Th10Data.h"
 #include "Th10Ai/Entity.h"
 
@@ -11,10 +13,49 @@ namespace th
 		public Entity
 	{
 	public:
-		static const Pointf INIT_POS;
-		static const Pointf MOVE_SPEED_MARISA[DIR_MAXCOUNT];
-		static const Pointf MOVE_SPEED_HIGH[DIR_MAXCOUNT];
-		static const Pointf MOVE_SPEED_LOW[DIR_MAXCOUNT];
+		static constexpr Pointf INIT_POS = { 0.0f, 400.0f };
+
+		// 3.53 = 5.0 * sqrt(0.5)
+		static constexpr std::array<Pointf, g_dirs.size()> MOVE_SPEED_MARISA =
+		{ {
+			{ 0.0f, 0.0f },
+			{ -5.0f, 0.0f },
+			{ 5.0f, 0.0f },
+			{ 0.0f, -5.0f },
+			{ 0.0f, 5.0f },
+			{ -3.53f, -3.53f },
+			{ 3.53f, -3.53f },
+			{ -3.53f, 3.53f },
+			{ 3.53f, 3.53f }
+		} };
+
+		// 3.18 = 4.5 * sqrt(0.5)
+		static constexpr std::array<Pointf, g_dirs.size()> MOVE_SPEED_HIGH =
+		{ {
+			{ 0.0f, 0.0f },
+			{ -4.5f, 0.0f },
+			{ 4.5f, 0.0f },
+			{ 0.0f, -4.5f },
+			{ 0.0f, 4.5f },
+			{ -3.18f, -3.18f },
+			{ 3.18f, -3.18f },
+			{ -3.18f, 3.18f },
+			{ 3.18f, 3.18f }
+		} };
+
+		// 1.41 = 2.0 * sqrt(0.5)
+		static constexpr std::array<Pointf, g_dirs.size()> MOVE_SPEED_LOW =
+		{ {
+			{ 0.0f, 0.0f },
+			{ -2.0f, 0.0f },
+			{ 2.0f, 0.0f },
+			{ 0.0f, -2.0f },
+			{ 0.0f, 2.0f },
+			{ -1.41f, -1.41f },
+			{ 1.41f, -1.41f },
+			{ -1.41f, 1.41f },
+			{ 1.41f, 1.41f }
+		} };
 
 		Player();
 		explicit Player(const PlayerData& data);

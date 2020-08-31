@@ -77,7 +77,7 @@ namespace th
 		return m_data->action;
 	}
 
-	bool SharedMemory::isActionUpdate() const
+	bool SharedMemory::isActionUpdated() const
 	{
 		bool ret = m_data->actionUpdated;
 		m_data->actionUpdated = false;

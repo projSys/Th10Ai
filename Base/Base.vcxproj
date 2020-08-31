@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Base\Class.h" />
     <ClInclude Include="include\Base\Clock.h" />
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Enum.h" />

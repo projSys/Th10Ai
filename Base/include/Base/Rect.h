@@ -17,17 +17,17 @@ namespace base
 		using Point = PointBase<value_t>;
 		using Size = SizeBase<value_t>;
 
-		RectBase() :
+		constexpr RectBase() :
 			x(), y(), width(), height()
 		{
 		}
 
-		RectBase(value_t x0, value_t y0, value_t width0, value_t height0) :
+		constexpr RectBase(value_t x0, value_t y0, value_t width0, value_t height0) :
 			x(x0), y(y0), width(width0), height(height0)
 		{
 		}
 
-		RectBase(const Point& point, const Size& size) :
+		constexpr RectBase(const Point& point, const Size& size) :
 			x(point.x), y(point.y), width(size.width), height(size.height)
 		{
 		}
