@@ -36,6 +36,7 @@ namespace th
 
 		void advance(float_t frame);
 		bool collide(const Entity& other) const;
+		bool collide2(const Entity& other) const;
 		bool collide(const Entity& other, float_t frame) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 		bool isHighSpeedWith(const Entity& other) const;

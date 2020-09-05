@@ -33,16 +33,18 @@ namespace th
 		uint_t* vTableA = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(deviceA.p));
 		m_getDeviceStateA = reinterpret_cast<GetDeviceStateA_t*>(vTableA[9]);
 
-		MyDetours detours;
-		detours.attach(reinterpret_cast<PVOID*>(&m_getDeviceStateA), &DI8Hook::GetDeviceStateHookA);
+		MyDetours::TransactionBegin();
+		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_getDeviceStateA), &DI8Hook::GetDeviceStateHookA);
+		MyDetours::TransactionCommit();
 	}
 
 	DI8Hook::~DI8Hook()
 	{
 		try
 		{
-			MyDetours detours;
-			detours.detach(reinterpret_cast<PVOID*>(&m_getDeviceStateA), &DI8Hook::GetDeviceStateHookA);
+			MyDetours::TransactionBegin();
+			MyDetours::Detach(reinterpret_cast<PVOID*>(&m_getDeviceStateA), &DI8Hook::GetDeviceStateHookA);
+			MyDetours::TransactionCommit();
 		}
 		catch (...)
 		{

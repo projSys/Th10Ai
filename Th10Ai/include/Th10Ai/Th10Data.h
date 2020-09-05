@@ -125,6 +125,7 @@ namespace th
 
 	struct StatusData
 	{
+		int64_t frame;
 		PlayerData player;
 		ItemData items[2000];
 		uint_t itemCount;

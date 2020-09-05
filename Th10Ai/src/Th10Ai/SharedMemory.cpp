@@ -81,8 +81,13 @@ namespace th
 	bool SharedMemory::waitUpdate()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_data->updateMutex);
+
+		if (m_data->updated)
+			std::cout << "¶ÁÈ¡Ì«ÂýÁË¡£" << std::endl;
+
 		if (!m_data->updated && !m_data->exited)
 			m_data->updateCond.wait(lock);
+
 		m_data->updated = false;
 
 		//Clock clock;

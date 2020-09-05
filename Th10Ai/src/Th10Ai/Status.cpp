@@ -7,6 +7,7 @@
 namespace th
 {
 	Status::Status() :
+		m_frame(0),
 		m_findItemTime(0)
 	{
 		m_items.reserve(2000);
@@ -17,6 +18,7 @@ namespace th
 
 	void Status::update(const StatusData& data)
 	{
+		m_frame = data.frame;
 		m_player = Player(data.player);
 		m_items.clear();
 		for (uint_t i = 0; i < data.itemCount; ++i)
@@ -34,6 +36,7 @@ namespace th
 
 	void Status::update(const Status& other)
 	{
+		m_frame = other.m_frame;
 		m_player = other.m_player;
 		m_items.clear();
 		for (const Item& item : other.m_items)
@@ -197,13 +200,13 @@ namespace th
 			bullet.advance(frame);
 			if (bullet.collide(player))
 			{
-				std::cout << -frame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
+				std::cout << m_frame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
 					<< "org(" << org.id << " " << org.x << " " << org.y << " " << org.dx << " " << org.dy << ") "
 					<< "now(" << bullet.id << " " << bullet.x << " " << bullet.y << " " << bullet.dx << " " << bullet.dy << ") " << std::endl;
 				return bullet.id;
 			}
 		}
-		std::cout << -frame << "帧 不碰撞" << " 总数：" << m_bullets.size() << std::endl;
+		std::cout << m_frame << "帧 不碰撞" << " 总数：" << m_bullets.size() << std::endl;
 		return -1;
 	}
 
@@ -217,14 +220,14 @@ namespace th
 				bullet.advance(frame);
 				if (bullet.collide(player))
 				{
-					std::cout << -frame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
+					std::cout << m_frame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
 						<< "org(" << org.id << " " << org.x << " " << org.y << " " << org.dx << " " << org.dy << ") "
 						<< "now(" << bullet.id << " " << bullet.x << " " << bullet.y << " " << bullet.dx << " " << bullet.dy << ") " << std::endl;
 					return bullet.id;
 				}
 			}
 		}
-		std::cout << -frame << "帧" << "  找不到子弹：" << id << " 总数：" << m_bullets.size() << std::endl;
+		std::cout << m_frame << "帧" << " 找不到子弹：" << id << " 总数：" << m_bullets.size() << std::endl;
 		return -1;
 	}
 

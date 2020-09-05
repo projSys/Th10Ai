@@ -7,20 +7,13 @@ namespace th
 	class MyDetours
 	{
 	public:
-		MyDetours();
-		~MyDetours();
+		static void TransactionBegin();
+		static void TransactionCommit();
 
 		// GetCurrentThread()
-		void updateThread(HANDLE thread);
+		static void UpdateThread(HANDLE thread);
 
-		void attach(PVOID* pointer, PVOID detour);
-		void detach(PVOID* pointer, PVOID detour);
-
-	private:
-		void transactionBegin();
-		void transactionCommit();
-		void transactionAbort();
-
-		bool m_commit;
+		static void Attach(PVOID* pointer, PVOID detour);
+		static void Detach(PVOID* pointer, PVOID detour);
 	};
 }

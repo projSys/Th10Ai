@@ -63,16 +63,18 @@ namespace th
 		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
 		m_present = reinterpret_cast<Present_t*>(vTable[17]);
 
-		MyDetours detours;
-		detours.attach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+		MyDetours::TransactionBegin();
+		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+		MyDetours::TransactionCommit();
 	}
 
 	D3D9Hook::~D3D9Hook()
 	{
 		try
 		{
-			MyDetours detours;
-			detours.detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+			MyDetours::TransactionBegin();
+			MyDetours::Detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+			MyDetours::TransactionCommit();
 		}
 		catch (...)
 		{

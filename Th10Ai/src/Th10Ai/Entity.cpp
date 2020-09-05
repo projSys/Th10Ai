@@ -151,6 +151,20 @@ namespace th
 			&& std::abs(y - other.y) < (height + other.height) / 2.0f;
 	}
 
+	bool Entity::collide2(const Entity& other) const
+	{
+		// 计算到当前帧与前一帧之间线段的最近点
+		Entity prev = *this;
+		prev.advance(-1.0);
+		FootPoint footPoint = Utils::CalcFootPoint(prev.getPosition(), getPosition(), other.getPosition());
+		if (footPoint.k > 1.0)	// 还未到达当前帧
+			footPoint.k = 1.0;
+		if (footPoint.k < 0.0)	// 已经远离一帧以上
+			footPoint.k = 0.0;
+		prev.advance(footPoint.k);
+		return prev.collide(other);
+	}
+
 	// 跨帧轨迹碰撞检测
 	bool Entity::collide(const Entity& other, float_t frame) const
 	{
@@ -166,7 +180,7 @@ namespace th
 			if (footPoint.k > 1.0)	// 还未到达当前帧
 				footPoint.k = 1.0;
 			if (footPoint.k < 0.0)	// 已经远离一帧以上
-				footPoint.k = 1.0;
+				footPoint.k = 0.0;
 			temp.setPosition(prevPos);
 			temp.advance(footPoint.k);
 			return temp.collide(other);

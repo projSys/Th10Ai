@@ -65,6 +65,7 @@ namespace th
 		//clock.update();
 		//m_data->updateTime = clock.getTime();
 
+		m_data->status.frame += 1;
 		Reader::ReadPlayer(m_data->status.player);
 		m_data->status.itemCount = Reader::ReadItems(m_data->status.items);
 		m_data->status.enemyCount = Reader::ReadEnemies(m_data->status.enemies);

@@ -144,10 +144,10 @@ namespace th
 				//	return true;
 			}
 
-			for (const Bullet& bullet : m_bullets)
+			for (Bullet bullet : m_bullets)
 			{
-				//bullet.advance(frame);
-				if (bullet.collide(player, frame))
+				bullet.advance(frame);
+				if (bullet.collide(player))
 				{
 					result.collided = true;
 					break;

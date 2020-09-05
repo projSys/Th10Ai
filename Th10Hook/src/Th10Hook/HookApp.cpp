@@ -1,5 +1,6 @@
 #include "Th10Hook/HookApp.h"
 
+#include <iostream>
 #include <Base/ScopeGuard.h>
 #include <Windows/Apis.h>
 
@@ -21,6 +22,15 @@ namespace th
 
 	void HookApp::run()
 	{
+		AllocConsole();
+		freopen("conin$", "r", stdin);
+		freopen("conout$", "w", stdout);
+		freopen("conout$", "w", stderr);
+
+		HWND console = GetConsoleWindow();
+		HMENU menu = GetSystemMenu(console, FALSE);
+		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
+
 		std::string logName = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
 		m_logger.addFileLog(logName);
 
@@ -154,7 +164,7 @@ namespace th
 			}
 			else
 			{
-				//cout << "输入不及时。" << endl;
+				std::cout << "输入太慢了。" << std::endl;
 			}
 		}
 		// c_dfDIMouse

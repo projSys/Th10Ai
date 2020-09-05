@@ -45,6 +45,7 @@ namespace th
 		const std::vector<Laser>& getLasers() const;
 
 	private:
+		int64_t m_frame;
 		Player m_player;
 		std::vector<Item> m_items;
 		std::vector<Enemy> m_enemies;
