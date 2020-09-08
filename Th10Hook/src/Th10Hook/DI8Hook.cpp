@@ -9,7 +9,7 @@ namespace th
 	DI8Hook::DI8Hook(DI8Listener* listener) :
 		Singleton(this),
 		m_listener(listener),
-		m_getDeviceStateA(nullptr)
+		m_getDeviceStateOrigA(nullptr)
 	{
 		HMODULE dinput8Dll = GetModuleHandleW(L"dinput8.dll");
 		if (dinput8Dll == nullptr)
@@ -31,10 +31,10 @@ namespace th
 			BASE_THROW(DxResult(hr, "CreateDevice() failed."));
 
 		uint_t* vTableA = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(deviceA.p));
-		m_getDeviceStateA = reinterpret_cast<GetDeviceStateA_t*>(vTableA[9]);
+		m_getDeviceStateOrigA = reinterpret_cast<GetDeviceStateA_t*>(vTableA[9]);
 
 		MyDetours::TransactionBegin();
-		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_getDeviceStateA), &DI8Hook::GetDeviceStateHookA);
+		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_getDeviceStateOrigA), &DI8Hook::GetDeviceStateHookA);
 		MyDetours::TransactionCommit();
 	}
 
@@ -43,7 +43,7 @@ namespace th
 		try
 		{
 			MyDetours::TransactionBegin();
-			MyDetours::Detach(reinterpret_cast<PVOID*>(&m_getDeviceStateA), &DI8Hook::GetDeviceStateHookA);
+			MyDetours::Detach(reinterpret_cast<PVOID*>(&m_getDeviceStateOrigA), &DI8Hook::GetDeviceStateHookA);
 			MyDetours::TransactionCommit();
 		}
 		catch (...)
@@ -60,7 +60,7 @@ namespace th
 
 	HRESULT DI8Hook::getDeviceStateHookA(IDirectInputDevice8A* device, DWORD size, LPVOID data)
 	{
-		HRESULT hr = m_getDeviceStateA(device, size, data);
+		HRESULT hr = m_getDeviceStateOrigA(device, size, data);
 
 		try
 		{

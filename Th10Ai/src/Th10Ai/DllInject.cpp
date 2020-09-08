@@ -1,8 +1,6 @@
 #include "Th10Ai/DllInject.h"
 
 #include <Base/ScopeGuard.h>
-#include <Windows/Types.h>
-#include <Windows/WindowsError.h>
 
 namespace th
 {
@@ -27,7 +25,7 @@ namespace th
 		if (!AdjustTokenPrivileges(token, FALSE, &tp, sizeof(tp), nullptr, nullptr))
 			BASE_THROW(WindowsError());
 		if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
-			BASE_THROW(Exception("Please run as administrator."));
+			BASE_THROW(Exception(u8"请以管理员身份运行。"));
 	}
 
 	void DllInject::Inject(DWORD processId, const std::string& dllName)

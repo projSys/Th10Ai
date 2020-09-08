@@ -2,8 +2,6 @@
 
 #include <Base/ScopeGuard.h>
 #include <Base/Clock.h>
-#include <Windows/WindowsError.h>
-#include <Windows/Apis.h>
 
 #include "Th10Ai/DllInject.h"
 

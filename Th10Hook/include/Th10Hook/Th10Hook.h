@@ -17,6 +17,12 @@ namespace th
 		Th10Hook(Th10Listener* listener);
 
 	private:
+		template <typename T>
+		static T ReadMemory(uint_t address)
+		{
+			return *reinterpret_cast<T*>(address);
+		}
+
 		Th10Listener* m_listener;
 	};
 }

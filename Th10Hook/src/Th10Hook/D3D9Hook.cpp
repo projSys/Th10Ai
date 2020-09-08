@@ -10,7 +10,7 @@ namespace th
 	D3D9Hook::D3D9Hook(D3D9Listener* listener) :
 		Singleton(this),
 		m_listener(listener),
-		m_present(nullptr)
+		m_presentOrig(nullptr)
 	{
 		WNDCLASSEXW wc = {};
 		wc.cbSize = sizeof(wc);
@@ -61,10 +61,10 @@ namespace th
 			BASE_THROW(DxResult(hr, "CreateDevice() failed."));
 
 		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
-		m_present = reinterpret_cast<Present_t*>(vTable[17]);
+		m_presentOrig = reinterpret_cast<Present_t*>(vTable[17]);
 
 		MyDetours::TransactionBegin();
-		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_presentOrig), &D3D9Hook::PresentHook);
 		MyDetours::TransactionCommit();
 	}
 
@@ -73,7 +73,7 @@ namespace th
 		try
 		{
 			MyDetours::TransactionBegin();
-			MyDetours::Detach(reinterpret_cast<PVOID*>(&m_present), &D3D9Hook::PresentHook);
+			MyDetours::Detach(reinterpret_cast<PVOID*>(&m_presentOrig), &D3D9Hook::PresentHook);
 			MyDetours::TransactionCommit();
 		}
 		catch (...)
@@ -101,6 +101,6 @@ namespace th
 			BASE_LOG_ERROR(PrintException());
 		}
 
-		return m_present(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
+		return m_presentOrig(device, sourceRect, destRect, destWindowOverride, dirtyRegion);
 	}
 }

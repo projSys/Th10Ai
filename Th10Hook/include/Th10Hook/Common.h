@@ -6,6 +6,7 @@
 #include <Base/Logger.h>
 #include <Windows/Types.h>
 #include <Windows/WindowsError.h>
+#include <Windows/Apis.h>
 
 namespace th
 {

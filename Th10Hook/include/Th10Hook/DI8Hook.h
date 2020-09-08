@@ -37,6 +37,6 @@ namespace th
 		HRESULT getDeviceStateHookA(IDirectInputDevice8A* device, DWORD size, LPVOID data);
 
 		DI8Listener* m_listener;
-		GetDeviceStateA_t* m_getDeviceStateA;
+		GetDeviceStateA_t* m_getDeviceStateOrigA;
 	};
 }

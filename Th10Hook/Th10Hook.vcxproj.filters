@@ -51,10 +51,13 @@
     <ClInclude Include="include\Th10Hook\SharedMemory.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\DllApp.h">
+    <ClInclude Include="include\Th10Hook\SelfFree.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\HookApp.h">
+    <ClInclude Include="include\Th10Hook\HookLoader.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\HookDll.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,10 +86,13 @@
     <ClCompile Include="src\Th10Hook\SharedMemory.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\DllApp.cpp">
+    <ClCompile Include="src\Th10Hook\SelfFree.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\HookApp.cpp">
+    <ClCompile Include="src\Th10Hook\HookLoader.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\HookDll.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>

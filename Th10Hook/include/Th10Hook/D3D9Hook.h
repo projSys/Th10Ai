@@ -36,6 +36,6 @@ namespace th
 			HWND destWindowOverride, CONST RGNDATA* dirtyRegion);
 
 		D3D9Listener* m_listener;
-		Present_t* m_present;
+		Present_t* m_presentOrig;
 	};
 }

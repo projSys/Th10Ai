@@ -2,6 +2,7 @@
 
 #include "Th10Hook/Common.h"
 
+#include <atomic>
 #include <Base/Singleton.h>
 
 namespace th
@@ -10,22 +11,23 @@ namespace th
 	{
 	public:
 		virtual ~WindowListener() = default;
-		virtual void onWindowProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam) = 0;
+		virtual void onHook() = 0;
+		virtual void onUnhook() = 0;
+		virtual void onDestroy() = 0;
 	};
 
 	class WindowHook :
 		public Singleton<WindowHook>
 	{
 	public:
-		WindowHook(WindowListener* listener);
+		WindowHook();
 
-		void hook(HWND window);
+		void hook(HWND window, WindowListener* listener);
 		void unhook();
 
-		void sendMessage(UINT message, WPARAM wparam, LPARAM lparam);
-		void postMessage(UINT message, WPARAM wparam, LPARAM lparam);
+		bool isDestroyed() const;
 
-	protected:
+	private:
 		static LRESULT CALLBACK WindowProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam);
 		LRESULT windowProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam);
 
@@ -33,5 +35,8 @@ namespace th
 		HWND m_window;
 		bool m_unicode;
 		WNDPROC m_prevWndProc;
+		bool m_hooked;
+		bool m_unhooked;
+		std::atomic_bool m_destroyed;
 	};
 }

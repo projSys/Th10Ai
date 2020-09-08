@@ -1,7 +1,5 @@
 #include "Th10Ai/MyFrame.h"
 
-#include <Windows/Apis.h>
-
 #include "Th10Ai/MyWindow.h"
 
 namespace th
