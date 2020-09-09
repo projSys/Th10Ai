@@ -29,20 +29,20 @@ namespace th
 	{
 		if (slow)
 		{
-			x += MOVE_SPEED_LOW[enum_value(dir)].x;
-			y += MOVE_SPEED_LOW[enum_value(dir)].y;
+			x += MOVE_SPEED_LOW[enum_cast(dir)].x;
+			y += MOVE_SPEED_LOW[enum_cast(dir)].y;
 		}
 		else
 		{
 			if (type == 1)
 			{
-				x += MOVE_SPEED_MARISA[enum_value(dir)].x;
-				y += MOVE_SPEED_MARISA[enum_value(dir)].y;
+				x += MOVE_SPEED_MARISA[enum_cast(dir)].x;
+				y += MOVE_SPEED_MARISA[enum_cast(dir)].y;
 			}
 			else
 			{
-				x += MOVE_SPEED_HIGH[enum_value(dir)].x;
-				y += MOVE_SPEED_HIGH[enum_value(dir)].y;
+				x += MOVE_SPEED_HIGH[enum_cast(dir)].x;
+				y += MOVE_SPEED_HIGH[enum_cast(dir)].y;
 			}
 		}
 	}
@@ -52,17 +52,17 @@ namespace th
 		Pointf prevDelta;
 		if (prevSlow)
 		{
-			prevDelta = MOVE_SPEED_LOW[enum_value(prevDir)];
+			prevDelta = MOVE_SPEED_LOW[enum_cast(prevDir)];
 		}
 		else
 		{
 			if (type == 1)
 			{
-				prevDelta = MOVE_SPEED_MARISA[enum_value(prevDir)];
+				prevDelta = MOVE_SPEED_MARISA[enum_cast(prevDir)];
 			}
 			else
 			{
-				prevDelta = MOVE_SPEED_HIGH[enum_value(prevDir)];
+				prevDelta = MOVE_SPEED_HIGH[enum_cast(prevDir)];
 			}
 		}
 		if (getDelta() != prevDelta)

@@ -7,7 +7,7 @@
 namespace base
 {
 	template <typename T>
-	auto enum_value(T enumerator)
+	constexpr auto enum_cast(T enumerator)
 	{
 		return static_cast<std::underlying_type_t<T>>(enumerator);
 	}

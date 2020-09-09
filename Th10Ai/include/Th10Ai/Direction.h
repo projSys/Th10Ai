@@ -18,11 +18,13 @@ namespace th
 		LEFTUP,			// 左上
 		RIGHTUP,		// 右上
 		LEFTDOWN,		// 左下
-		RIGHTDOWN		// 右下
+		RIGHTDOWN,		// 右下
+
+		MAX_COUNT
 	};
 
-	constexpr std::array<DIR, 9> g_dirs =
-	{
+	constexpr std::array<DIR, enum_cast(DIR::MAX_COUNT)> g_dirs =
+	{ {
 		DIR::HOLD,
 		DIR::LEFT,
 		DIR::RIGHT,
@@ -32,5 +34,5 @@ namespace th
 		DIR::RIGHTUP,
 		DIR::LEFTDOWN,
 		DIR::RIGHTDOWN
-	};
+	} };
 }

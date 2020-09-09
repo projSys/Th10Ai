@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Th10Hook/HookDll.h"
+#include "Th10Hook/HookMain.h"
 #include "Th10Hook/DllMain.h"
 #include "Th10Hook/WindowHook.h"
 #include "Th10Hook/SelfFree.h"
@@ -34,8 +34,8 @@ namespace th
 			std::string logName = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
 			m_logger.addFileLog(logName);
 
-			std::unique_ptr<HookDll> hookDll = std::make_unique<HookDll>();
-			hookDll->run();
+			std::unique_ptr<HookMain> hookMain = std::make_unique<HookMain>();
+			hookMain->run();
 		}
 		catch (...)
 		{

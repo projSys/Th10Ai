@@ -1,19 +1,11 @@
-#include "Th10Hook/HookDll.h"
+#include "Th10Hook/HookMain.h"
 
 #include <iostream>
 #include <Base/ScopeGuard.h>
 
 namespace th
 {
-	HookDll::HookDll()
-	{
-	}
-
-	HookDll::~HookDll()
-	{
-	}
-
-	void HookDll::run()
+	HookMain::HookMain()
 	{
 		//AllocConsole();
 		//freopen("conin$", "r", stdin);
@@ -24,96 +16,104 @@ namespace th
 		//HMENU menu = GetSystemMenu(console, FALSE);
 		//EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
-		m_shared = std::make_unique<SharedMemory>();
-		ON_SCOPE_EXIT([&]()
-			{
-				m_shared = nullptr;
-			});
+		m_sharedMemory = interprocess::managed_windows_shared_memory(
+			interprocess::open_only, "Th10-SharedMemory");
+		m_sharedData = m_sharedMemory.find<SharedData>("Th10-SharedData").first;
+		if (m_sharedData == nullptr)
+			BASE_THROW(Exception(u8"Th10-SharedData未找到。"));
+	}
 
+	HookMain::~HookMain()
+	{
+	}
+
+	void HookMain::run()
+	{
+		// 会触发监听器的虚函数回调，不要放在构造函数
 		WindowHook& windowHook = WindowHook::GetInstance();
-		windowHook.hook(m_shared->getWindow(), this);
+		windowHook.hook(m_sharedData->getWindow(), this);
 		ON_SCOPE_EXIT([&]()
 			{
 				windowHook.unhook();
 			});
 
-		m_shared->notifyHook();
-		m_shared->waitUnhook();
-		m_shared->notifyExit();
+		m_sharedData->notifyHook();
+		m_sharedData->waitUnhook();
+		m_sharedData->notifyExit();
 	}
 
-	void HookDll::onHook()
+	void HookMain::onHook()
 	{
 		m_d3d9Hook = std::make_unique<D3D9Hook>(this);
 		m_di8Hook = std::make_unique<DI8Hook>(this);
 		m_th10Hook = std::make_unique<Th10Hook>(this);
 	}
 
-	void HookDll::onUnhook()
+	void HookMain::onUnhook()
 	{
 		m_th10Hook = nullptr;
 		m_di8Hook = nullptr;
 		m_d3d9Hook = nullptr;
 	}
 
-	void HookDll::onDestroy()
+	void HookMain::onDestroy()
 	{
-		m_shared->notifyUnhook();
+		m_sharedData->notifyUnhook();
 	}
 
-	void HookDll::onPresent(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
+	void HookMain::onPresent(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
-		m_shared->update();
-		m_shared->notifyUpdate();
+		m_sharedData->update();
+		m_sharedData->notifyUpdate();
 	}
 
-	void HookDll::onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data)
+	void HookMain::onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data)
 	{
 		// c_dfDIKeyboard
 		if (size == 256 && data != nullptr)
 		{
 			//lock_guard<mutex> lock(m_keyMutex);
-			if (m_shared->isActionUpdated())
+			if (m_sharedData->isActionUpdated())
 			{
 				BYTE* keyState = reinterpret_cast<BYTE*>(data);
 
-				if (m_shared->getAction().left)
+				if (m_sharedData->getAction().left)
 					keyState[DIK_LEFT] = 0x80;
 				else
 					keyState[DIK_LEFT] = 0x00;
 
-				if (m_shared->getAction().right)
+				if (m_sharedData->getAction().right)
 					keyState[DIK_RIGHT] = 0x80;
 				else
 					keyState[DIK_RIGHT] = 0x00;
 
-				if (m_shared->getAction().up)
+				if (m_sharedData->getAction().up)
 					keyState[DIK_UP] = 0x80;
 				else
 					keyState[DIK_UP] = 0x00;
 
-				if (m_shared->getAction().down)
+				if (m_sharedData->getAction().down)
 					keyState[DIK_DOWN] = 0x80;
 				else
 					keyState[DIK_DOWN] = 0x00;
 
-				if (m_shared->getAction().shoot)
+				if (m_sharedData->getAction().shoot)
 					keyState[DIK_Z] = 0x80;
 				else
 					keyState[DIK_Z] = 0x00;
 
-				if (m_shared->getAction().bomb)
+				if (m_sharedData->getAction().bomb)
 					keyState[DIK_X] = 0x80;
 				else
 					keyState[DIK_X] = 0x00;
 
-				if (m_shared->getAction().slow)
+				if (m_sharedData->getAction().slow)
 					keyState[DIK_LSHIFT] = 0x80;
 				else
 					keyState[DIK_LSHIFT] = 0x00;
 
-				if (m_shared->getAction().skip)
+				if (m_sharedData->getAction().skip)
 					keyState[DIK_LCONTROL] = 0x80;
 				else
 					keyState[DIK_LCONTROL] = 0x00;

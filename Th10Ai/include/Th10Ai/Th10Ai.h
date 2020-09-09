@@ -6,22 +6,25 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
+#include <boost/interprocess/managed_windows_shared_memory.hpp>
 
-#include "Th10Ai/SharedMemory.h"
+#include "Th10Ai/SharedData.h"
 #include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
 
 namespace th
 {
+	namespace interprocess = boost::interprocess;
+
 	class MyWindow;
 
 	class Th10Ai
 	{
 	public:
-		Th10Ai(MyWindow* window);
+		Th10Ai(MyWindow* myWindow);
 		~Th10Ai();
 
-		MyWindow* m_window;
+		MyWindow* m_myWindow;
 
 	private:
 		static bool IsKeyPressed(int vKey);
@@ -40,7 +43,8 @@ namespace th
 		bool handleMove();
 		void move(DIR dir, bool slow);
 
-		SharedMemory m_shared;
+		interprocess::managed_windows_shared_memory m_sharedMemory;
+		SharedData* m_sharedData;
 
 		std::thread m_controlThread;
 		std::atomic_bool m_controlDone;

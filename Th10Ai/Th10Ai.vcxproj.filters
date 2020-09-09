@@ -78,7 +78,7 @@
     <ClInclude Include="include\Th10Ai\Region.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Ai\SharedMemory.h">
+    <ClInclude Include="include\Th10Ai\SharedData.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,7 +131,7 @@
     <ClCompile Include="src\Th10Ai\Region.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Ai\SharedMemory.cpp">
+    <ClCompile Include="src\Th10Ai\SharedData.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
   </ItemGroup>

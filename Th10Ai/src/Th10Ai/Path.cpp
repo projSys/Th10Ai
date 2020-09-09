@@ -126,10 +126,10 @@ namespace th
 			m_bestScore = avg;
 		}
 
-		int_t nextValidCount = FIND_DIR_COUNTS[enum_value(m_dir)];
-		for (int_t i = 0; i < FIND_DIR_COUNTS[enum_value(m_dir)]; ++i)
+		int_t nextValidCount = FIND_DIR_COUNTS[enum_cast(m_dir)];
+		for (int_t i = 0; i < FIND_DIR_COUNTS[enum_cast(m_dir)]; ++i)
 		{
-			DIR dir = FIND_DIRS[enum_value(m_dir)][i];
+			DIR dir = FIND_DIRS[enum_cast(m_dir)][i];
 
 			Action nextAct = {};
 			nextAct.fromPos = player.getPosition();

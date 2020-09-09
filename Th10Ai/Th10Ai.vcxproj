@@ -106,7 +106,7 @@
     <ClInclude Include="include\Th10Ai\Player.h" />
     <ClInclude Include="include\Th10Ai\Region.h" />
     <ClInclude Include="include\Th10Ai\Scene.h" />
-    <ClInclude Include="include\Th10Ai\SharedMemory.h" />
+    <ClInclude Include="include\Th10Ai\SharedData.h" />
     <ClInclude Include="include\Th10Ai\Status.h" />
     <ClInclude Include="include\Th10Ai\Th10Ai.h" />
     <ClInclude Include="include\Th10Ai\Th10Data.h" />
@@ -126,7 +126,7 @@
     <ClCompile Include="src\Th10Ai\Player.cpp" />
     <ClCompile Include="src\Th10Ai\Region.cpp" />
     <ClCompile Include="src\Th10Ai\Scene.cpp" />
-    <ClCompile Include="src\Th10Ai\SharedMemory.cpp" />
+    <ClCompile Include="src\Th10Ai\SharedData.cpp" />
     <ClCompile Include="src\Th10Ai\Status.cpp" />
     <ClCompile Include="src\Th10Ai\Th10Ai.cpp" />
     <ClCompile Include="src\Th10Ai\Utils.cpp" />

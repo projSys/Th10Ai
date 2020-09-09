@@ -3,13 +3,14 @@
 #include <boost/optional.hpp>
 #include <Base/Clock.h>
 
+#include "Th10Ai/DllInject.h"
 #include "Th10Ai/MyWindow.h"
 #include "Th10Ai/Path.h"
 
 namespace th
 {
-	Th10Ai::Th10Ai(MyWindow* window) :
-		m_window(window),
+	Th10Ai::Th10Ai(MyWindow* myWindow) :
+		m_myWindow(myWindow),
 		m_controlDone(false),
 		m_controlActive(false),
 		m_readDone(false),
@@ -22,20 +23,41 @@ namespace th
 		//m_statusUpdated(false)
 		m_bombTime(0)
 	{
+		//AllocConsole();
+		//freopen("conin$", "r", stdin);
+		//freopen("conout$", "w", stdout);
+		//freopen("conout$", "w", stderr);
+
+		//HWND console = GetConsoleWindow();
+		//HMENU menu = GetSystemMenu(console, FALSE);
+		//EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
+
+		m_sharedMemory = interprocess::managed_windows_shared_memory(
+			interprocess::create_only, "Th10-SharedMemory", 8 * 1024 * 1024);
+		m_sharedData = m_sharedMemory.construct<SharedData>("Th10-SharedData")();
+		if (m_sharedData == nullptr)
+			BASE_THROW(Exception(u8"Th10-SharedData名称已被使用。"));
+
+		HWND window = FindWindowW(L"BASE", nullptr);//L"搶曽晽恄榐丂乣 Mountain of Faith. ver 1.00a");
+		if (window == nullptr)
+			BASE_THROW(Exception(u8"东方风神录未运行。"));
+		DWORD processId = 0;
+		DWORD threadId = GetWindowThreadProcessId(window, &processId);
+
+		m_sharedData->setWindow(window);
+
+		std::string dllName = Apis::GetModuleDir() + "/Th10Hook.dll";
+		DllInject::EnableDebugPrivilege();
+		DllInject::Inject(processId, dllName);
+
+		if (!m_sharedData->timedWaitHook(3000))
+			BASE_THROW(Exception(u8"Th10Hook初始化失败，详细信息请查看Th10Hook.log。"));
+
 		//m_writeStatus = std::make_shared<Status>();
 		//m_middleStatus = std::make_shared<Status>();
 		//m_readStatus = std::make_shared<Status>();
 
 		m_scene.split(6);
-
-		AllocConsole();
-		freopen("conin$", "r", stdin);
-		freopen("conout$", "w", stdout);
-		freopen("conout$", "w", stderr);
-
-		HWND console = GetConsoleWindow();
-		HMENU menu = GetSystemMenu(console, FALSE);
-		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
 		//m_readThread = std::thread(&Th10Ai::readProc, this);
@@ -49,13 +71,15 @@ namespace th
 			m_handleThread.join();
 
 		m_readDone = true;
-		m_shared.notifyUnhook();
+		m_sharedData->notifyUnhook();
 		if (m_readThread.joinable())
 			m_readThread.join();
 
 		m_controlDone = true;
 		if (m_controlThread.joinable())
 			m_controlThread.join();
+
+		m_sharedMemory.destroy_ptr(m_sharedData);
 	}
 
 	bool Th10Ai::IsKeyPressed(int vKey)
@@ -185,7 +209,7 @@ namespace th
 
 	void Th10Ai::handle()
 	{
-		if (!m_shared.waitUpdate())
+		if (!m_sharedData->waitUpdate())
 		{
 			m_handleDone = true;
 			m_readDone = true;
@@ -193,11 +217,11 @@ namespace th
 			return;
 		}
 
-		m_window->update(m_shared.getStatus());
+		m_myWindow->update(m_sharedData->getStatus());
 
 		m_status2.update(m_status1);
 		m_status1.update(m_status);
-		m_status.update(m_shared.getStatus());
+		m_status.update(m_sharedData->getStatus());
 		//m_status.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
 
 		//if (m_statusUpdated)
@@ -221,7 +245,7 @@ namespace th
 		handleShoot();
 		handleMove();
 
-		m_shared.commit();
+		m_sharedData->commit();
 	}
 
 	// 处理炸弹
@@ -241,20 +265,20 @@ namespace th
 				m_status1.collide(m_status.getPlayer(), 1.0, id);
 				m_status2.collide(m_status.getPlayer(), 2.0, id);
 
-				m_shared.getAction().bomb = true;
+				m_sharedData->getAction().bomb = true;
 				++m_bombCount;
 				std::cout << "决死：" << m_bombCount << std::endl;
 				return true;
 			}
 			else
 			{
-				m_shared.getAction().bomb = false;
+				m_sharedData->getAction().bomb = false;
 				return false;
 			}
 		}
 		else
 		{
-			m_shared.getAction().bomb = false;
+			m_sharedData->getAction().bomb = false;
 			return false;
 		}
 	}
@@ -264,12 +288,12 @@ namespace th
 	{
 		if (m_status.isTalking())
 		{
-			m_shared.getAction().skip = true;
+			m_sharedData->getAction().skip = true;
 			return true;
 		}
 		else
 		{
-			m_shared.getAction().skip = false;
+			m_sharedData->getAction().skip = false;
 			return false;
 		}
 	}
@@ -279,12 +303,12 @@ namespace th
 	{
 		if (m_status.hasEnemy())
 		{
-			m_shared.getAction().shoot = true;
+			m_sharedData->getAction().shoot = true;
 			return true;
 		}
 		else
 		{
-			m_shared.getAction().shoot = false;
+			m_sharedData->getAction().shoot = false;
 			return false;
 		}
 	}
@@ -332,73 +356,73 @@ namespace th
 	void Th10Ai::move(DIR dir, bool slow)
 	{
 		if (slow)
-			m_shared.getAction().slow = true;
+			m_sharedData->getAction().slow = true;
 		else
-			m_shared.getAction().slow = false;
+			m_sharedData->getAction().slow = false;
 
 		switch (dir)
 		{
 		case DIR::HOLD:
-			m_shared.getAction().left = false;
-			m_shared.getAction().right = false;
-			m_shared.getAction().up = false;
-			m_shared.getAction().down = false;
+			m_sharedData->getAction().left = false;
+			m_sharedData->getAction().right = false;
+			m_sharedData->getAction().up = false;
+			m_sharedData->getAction().down = false;
 			break;
 
 		case DIR::LEFT:
-			m_shared.getAction().left = true;
-			m_shared.getAction().right = false;
-			m_shared.getAction().up = false;
-			m_shared.getAction().down = false;
+			m_sharedData->getAction().left = true;
+			m_sharedData->getAction().right = false;
+			m_sharedData->getAction().up = false;
+			m_sharedData->getAction().down = false;
 			break;
 
 		case DIR::RIGHT:
-			m_shared.getAction().left = false;
-			m_shared.getAction().right = true;
-			m_shared.getAction().up = false;
-			m_shared.getAction().down = false;
+			m_sharedData->getAction().left = false;
+			m_sharedData->getAction().right = true;
+			m_sharedData->getAction().up = false;
+			m_sharedData->getAction().down = false;
 			break;
 
 		case DIR::UP:
-			m_shared.getAction().left = false;
-			m_shared.getAction().right = false;
-			m_shared.getAction().up = true;
-			m_shared.getAction().down = false;
+			m_sharedData->getAction().left = false;
+			m_sharedData->getAction().right = false;
+			m_sharedData->getAction().up = true;
+			m_sharedData->getAction().down = false;
 			break;
 
 		case DIR::DOWN:
-			m_shared.getAction().left = false;
-			m_shared.getAction().right = false;
-			m_shared.getAction().up = false;
-			m_shared.getAction().down = true;
+			m_sharedData->getAction().left = false;
+			m_sharedData->getAction().right = false;
+			m_sharedData->getAction().up = false;
+			m_sharedData->getAction().down = true;
 			break;
 
 		case DIR::LEFTUP:
-			m_shared.getAction().left = true;
-			m_shared.getAction().right = false;
-			m_shared.getAction().up = true;
-			m_shared.getAction().down = false;
+			m_sharedData->getAction().left = true;
+			m_sharedData->getAction().right = false;
+			m_sharedData->getAction().up = true;
+			m_sharedData->getAction().down = false;
 			break;
 
 		case DIR::RIGHTUP:
-			m_shared.getAction().left = false;
-			m_shared.getAction().right = true;
-			m_shared.getAction().up = true;
-			m_shared.getAction().down = false;
+			m_sharedData->getAction().left = false;
+			m_sharedData->getAction().right = true;
+			m_sharedData->getAction().up = true;
+			m_sharedData->getAction().down = false;
 			break;
 
 		case DIR::LEFTDOWN:
-			m_shared.getAction().left = true;
-			m_shared.getAction().right = false;
-			m_shared.getAction().up = false;
-			m_shared.getAction().down = true;
+			m_sharedData->getAction().left = true;
+			m_sharedData->getAction().right = false;
+			m_sharedData->getAction().up = false;
+			m_sharedData->getAction().down = true;
 			break;
 
 		case DIR::RIGHTDOWN:
-			m_shared.getAction().left = false;
-			m_shared.getAction().right = true;
-			m_shared.getAction().up = false;
-			m_shared.getAction().down = true;
+			m_sharedData->getAction().left = false;
+			m_sharedData->getAction().right = true;
+			m_sharedData->getAction().up = false;
+			m_sharedData->getAction().down = true;
 			break;
 		}
 
