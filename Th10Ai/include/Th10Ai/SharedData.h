@@ -21,24 +21,24 @@ namespace th
 		HWND getWindow() const;
 		void activate();
 
-		bool timedWaitHook(int64_t ms);
-		void notifyUnhook();
+		bool waitInit(int64_t ms);
+		void notifyUninit();
 		bool waitUpdate();
 
-		const StatusData& getStatus() const;
+		StatusData& getStatus();
 		ActionData& getAction();
 		void commit();
 
 	private:
 		HWND m_window;
 
-		interprocess::interprocess_mutex m_hookMutex;
-		interprocess::interprocess_condition m_hookCond;
-		bool m_hooked;
+		interprocess::interprocess_mutex m_initMutex;
+		interprocess::interprocess_condition m_initCond;
+		bool m_inited;
 
-		interprocess::interprocess_mutex m_unhookMutex;
-		interprocess::interprocess_condition m_unhookCond;
-		bool m_unhooked;
+		interprocess::interprocess_mutex m_uninitMutex;
+		interprocess::interprocess_condition m_uninitCond;
+		bool m_uninited;
 
 		interprocess::interprocess_mutex m_updateMutex;
 		interprocess::interprocess_condition m_updateCond;

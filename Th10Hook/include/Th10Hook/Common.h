@@ -14,3 +14,5 @@ namespace th
 	using base::float_t;
 	using namespace win;
 }
+
+#include <iostream>

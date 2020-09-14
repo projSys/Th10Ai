@@ -8,8 +8,8 @@ namespace th
 
 	SharedData::SharedData() :
 		m_window(nullptr),
-		m_hooked(false),
-		m_unhooked(false),
+		m_inited(false),
+		m_uninited(false),
 		m_updated(false),
 		m_exited(false),
 		m_updateTime(0),
@@ -35,35 +35,33 @@ namespace th
 			BASE_THROW(WindowsError());
 	}
 
-	bool SharedData::timedWaitHook(int64_t ms)
+	bool SharedData::waitInit(int64_t ms)
 	{
 		bool notTimeout = true;
-		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_hookMutex);
-		if (!m_hooked)
+		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_initMutex);
+		if (!m_inited)
 		{
 			posix_time::ptime absTime = interprocess::microsec_clock::universal_time()
 				+ posix_time::milliseconds(ms);
-			notTimeout = m_hookCond.timed_wait(lock, absTime);
+			notTimeout = m_initCond.timed_wait(lock, absTime);
 		}
 		return notTimeout;
 	}
 
-	void SharedData::notifyUnhook()
+	void SharedData::notifyUninit()
 	{
-		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_unhookMutex);
-		m_unhooked = true;
-		m_unhookCond.notify_one();
+		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_uninitMutex);
+		m_uninited = true;
+		m_uninitCond.notify_one();
 	}
 
 	bool SharedData::waitUpdate()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_updateMutex);
-
-		if (m_updated)
-			std::cout << "读取太慢了。" << std::endl;
-
-		if (!m_updated && !m_exited)
+		if (!m_updated)
 			m_updateCond.wait(lock);
+		else
+			std::cout << "读取太慢了。" << std::endl;
 
 		m_updated = false;
 
@@ -74,7 +72,7 @@ namespace th
 		return !m_exited;
 	}
 
-	const StatusData& SharedData::getStatus() const
+	StatusData& SharedData::getStatus()
 	{
 		return m_status;
 	}

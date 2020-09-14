@@ -1,7 +1,7 @@
 #include "Th10Hook/HookMain.h"
 
-#include <iostream>
 #include <Base/ScopeGuard.h>
+#include <Base/Clock.h>
 
 namespace th
 {
@@ -37,34 +37,46 @@ namespace th
 				windowHook.unhook();
 			});
 
-		m_sharedData->notifyHook();
-		m_sharedData->waitUnhook();
+		m_sharedData->notifyInit();
+		m_sharedData->waitUninit();
 		m_sharedData->notifyExit();
 	}
 
 	void HookMain::onHook()
 	{
+		m_th10Hook = std::make_unique<Th10Hook>(this);
 		m_d3d9Hook = std::make_unique<D3D9Hook>(this);
 		m_di8Hook = std::make_unique<DI8Hook>(this);
-		m_th10Hook = std::make_unique<Th10Hook>(this);
 	}
 
 	void HookMain::onUnhook()
 	{
-		m_th10Hook = nullptr;
 		m_di8Hook = nullptr;
 		m_d3d9Hook = nullptr;
+		m_th10Hook = nullptr;
 	}
 
 	void HookMain::onDestroy()
 	{
-		m_sharedData->notifyUnhook();
+		m_sharedData->notifyUninit();
 	}
 
 	void HookMain::onPresent(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
-		m_sharedData->update();
+		//Clock clock;
+		//clock.update();
+		//m_updateTime = clock.getTime();
+
+		StatusData& status = m_sharedData->getStatus();
+
+		status.frame += 1;
+		m_th10Hook->readPlayer(status.player);
+		status.itemCount = m_th10Hook->readItems(status.items);
+		status.enemyCount = m_th10Hook->readEnemies(status.enemies);
+		status.bulletCount = m_th10Hook->readBullets(status.bullets);
+		status.laserCount = m_th10Hook->readLasers(status.lasers);
+
 		m_sharedData->notifyUpdate();
 	}
 

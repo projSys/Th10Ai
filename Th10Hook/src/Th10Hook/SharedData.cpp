@@ -1,9 +1,5 @@
 #include "Th10Hook/SharedData.h"
 
-#include <Base/Clock.h>
-
-#include "Th10Hook/Reader.h"
-
 namespace th
 {
 	SharedData::SharedData()
@@ -15,25 +11,25 @@ namespace th
 		return m_window;
 	}
 
-	void SharedData::notifyHook()
+	void SharedData::notifyInit()
 	{
-		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_hookMutex);
-		m_hooked = true;
-		m_hookCond.notify_one();
+		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_initMutex);
+		m_inited = true;
+		m_initCond.notify_one();
 	}
 
-	void SharedData::notifyUnhook()
+	void SharedData::notifyUninit()
 	{
-		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_unhookMutex);
-		m_unhooked = true;
-		m_unhookCond.notify_one();
+		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_uninitMutex);
+		m_uninited = true;
+		m_uninitCond.notify_one();
 	}
 
-	void SharedData::waitUnhook()
+	void SharedData::waitUninit()
 	{
-		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_unhookMutex);
-		if (!m_unhooked)
-			m_unhookCond.wait(lock);
+		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_uninitMutex);
+		if (!m_uninited)
+			m_uninitCond.wait(lock);
 	}
 
 	void SharedData::notifyUpdate()
@@ -46,22 +42,14 @@ namespace th
 	void SharedData::notifyExit()
 	{
 		interprocess::scoped_lock<interprocess::interprocess_mutex> lock(m_updateMutex);
+		m_updated = true;
 		m_exited = true;
 		m_updateCond.notify_one();
 	}
 
-	void SharedData::update()
+	StatusData& SharedData::getStatus()
 	{
-		//Clock clock;
-		//clock.update();
-		//m_updateTime = clock.getTime();
-
-		m_status.frame += 1;
-		Reader::ReadPlayer(m_status.player);
-		m_status.itemCount = Reader::ReadItems(m_status.items);
-		m_status.enemyCount = Reader::ReadEnemies(m_status.enemies);
-		m_status.bulletCount = Reader::ReadBullets(m_status.bullets);
-		m_status.laserCount = Reader::ReadLasers(m_status.lasers);
+		return m_status;
 	}
 
 	ActionData& SharedData::getAction()

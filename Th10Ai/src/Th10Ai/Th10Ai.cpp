@@ -23,14 +23,14 @@ namespace th
 		//m_statusUpdated(false)
 		m_bombTime(0)
 	{
-		//AllocConsole();
-		//freopen("conin$", "r", stdin);
-		//freopen("conout$", "w", stdout);
-		//freopen("conout$", "w", stderr);
+		AllocConsole();
+		freopen("conin$", "r", stdin);
+		freopen("conout$", "w", stdout);
+		freopen("conout$", "w", stderr);
 
-		//HWND console = GetConsoleWindow();
-		//HMENU menu = GetSystemMenu(console, FALSE);
-		//EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
+		HWND console = GetConsoleWindow();
+		HMENU menu = GetSystemMenu(console, FALSE);
+		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
 		m_sharedMemory = interprocess::managed_windows_shared_memory(
 			interprocess::create_only, "Th10-SharedMemory", 8 * 1024 * 1024);
@@ -50,7 +50,7 @@ namespace th
 		DllInject::EnableDebugPrivilege();
 		DllInject::Inject(processId, dllName);
 
-		if (!m_sharedData->timedWaitHook(3000))
+		if (!m_sharedData->waitInit(3000))
 			BASE_THROW(Exception(u8"Th10Hook初始化失败，详细信息请查看Th10Hook.log。"));
 
 		//m_writeStatus = std::make_shared<Status>();
@@ -71,7 +71,7 @@ namespace th
 			m_handleThread.join();
 
 		m_readDone = true;
-		m_sharedData->notifyUnhook();
+		m_sharedData->notifyUninit();
 		if (m_readThread.joinable())
 			m_readThread.join();
 

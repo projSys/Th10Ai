@@ -2,6 +2,8 @@
 
 #include "Th10Hook/Common.h"
 
+#include "Th10Hook/Th10Data.h"
+
 namespace th
 {
 	class Th10Listener
@@ -15,6 +17,12 @@ namespace th
 	{
 	public:
 		Th10Hook(Th10Listener* listener);
+
+		int_t readPlayer(PlayerData& player);
+		int_t readItems(ItemData items[]);
+		int_t readEnemies(EnemyData enemies[]);
+		int_t readBullets(BulletData bullets[]);
+		int_t readLasers(LaserData lasers[]);
 
 	private:
 		template <typename T>

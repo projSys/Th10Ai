@@ -92,7 +92,6 @@
     <ClInclude Include="include\Th10Hook\HookLoader.h" />
     <ClInclude Include="include\Th10Hook\HookMain.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
-    <ClInclude Include="include\Th10Hook\Reader.h" />
     <ClInclude Include="include\Th10Hook\SelfFree.h" />
     <ClInclude Include="include\Th10Hook\SharedData.h" />
     <ClInclude Include="include\Th10Hook\Th10Data.h" />
@@ -106,7 +105,6 @@
     <ClCompile Include="src\Th10Hook\HookLoader.cpp" />
     <ClCompile Include="src\Th10Hook\HookMain.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
-    <ClCompile Include="src\Th10Hook\Reader.cpp" />
     <ClCompile Include="src\Th10Hook\SelfFree.cpp" />
     <ClCompile Include="src\Th10Hook\SharedData.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />

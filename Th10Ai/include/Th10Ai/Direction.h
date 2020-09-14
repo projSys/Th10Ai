@@ -16,8 +16,8 @@ namespace th
 		UP,				// 上
 		DOWN,			// 下
 		LEFTUP,			// 左上
-		RIGHTUP,		// 右上
 		LEFTDOWN,		// 左下
+		RIGHTUP,		// 右上
 		RIGHTDOWN,		// 右下
 
 		MAX_COUNT
@@ -31,8 +31,8 @@ namespace th
 		DIR::UP,
 		DIR::DOWN,
 		DIR::LEFTUP,
-		DIR::RIGHTUP,
 		DIR::LEFTDOWN,
+		DIR::RIGHTUP,
 		DIR::RIGHTDOWN
 	} };
 }

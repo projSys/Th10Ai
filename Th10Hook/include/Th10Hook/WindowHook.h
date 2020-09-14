@@ -37,6 +37,6 @@ namespace th
 		WNDPROC m_prevWndProc;
 		bool m_hooked;
 		bool m_unhooked;
-		std::atomic_bool m_destroyed;
+		std::atomic<bool> m_destroyed;
 	};
 }

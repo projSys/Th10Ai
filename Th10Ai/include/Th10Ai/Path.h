@@ -41,8 +41,8 @@ namespace th
 		static float_t CalcNearScore(Pointf player, Pointf target);
 		static float_t CalcShootScore(Pointf player, Pointf target);
 
-		static const DIR FIND_DIRS[g_dirs.size()][5];
-		static const int_t FIND_DIR_COUNTS[g_dirs.size()];
+		static const DIR FIND_DIRS[enum_cast(DIR::MAX_COUNT)][5];
+		static const int_t FIND_DIR_COUNTS[enum_cast(DIR::MAX_COUNT)];
 		static const int_t FIND_LIMIT;
 		static const float_t FIND_DEPTH;
 		static const Pointf RESET_POS;

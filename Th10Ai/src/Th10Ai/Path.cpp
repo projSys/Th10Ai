@@ -2,7 +2,7 @@
 
 namespace th
 {
-	const DIR Path::FIND_DIRS[g_dirs.size()][5] =
+	const DIR Path::FIND_DIRS[enum_cast(DIR::MAX_COUNT)][5] =
 	{
 		// DIR::HOLD
 		{ DIR::HOLD,      DIR::UP,       DIR::DOWN,      DIR::LEFT,      DIR::RIGHT,     },//DIR::LEFTUP,  DIR::RIGHTUP,  DIR::LEFTDOWN,  DIR::RIGHTDOWN },
@@ -16,15 +16,15 @@ namespace th
 		{ DIR::DOWN,      DIR::LEFTDOWN, DIR::RIGHTDOWN, DIR::LEFT,      DIR::RIGHT,     },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::LEFTUP
 		{ DIR::LEFTUP,    DIR::LEFT,     DIR::UP,        DIR::LEFTDOWN,  DIR::RIGHTUP,   },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
-		// DIR::RIGHTUP
-		{ DIR::RIGHTUP,   DIR::RIGHT,    DIR::UP,        DIR::RIGHTDOWN, DIR::LEFTUP,    },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::LEFTDOWN
 		{ DIR::LEFTDOWN,  DIR::LEFT,     DIR::DOWN,      DIR::LEFTUP,    DIR::RIGHTDOWN, },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::RIGHTUP
+		{ DIR::RIGHTUP,   DIR::RIGHT,    DIR::UP,        DIR::RIGHTDOWN, DIR::LEFTUP,    },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::RIGHTDOWN
 		{ DIR::RIGHTDOWN, DIR::RIGHT,    DIR::DOWN,      DIR::RIGHTUP,   DIR::LEFTDOWN,  },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      }
 	};
 
-	const int_t Path::FIND_DIR_COUNTS[g_dirs.size()] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
+	const int_t Path::FIND_DIR_COUNTS[enum_cast(DIR::MAX_COUNT)] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
 	const int_t Path::FIND_LIMIT = 320;
 	const float_t Path::FIND_DEPTH = 30.0f;

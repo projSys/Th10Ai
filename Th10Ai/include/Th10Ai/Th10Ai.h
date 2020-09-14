@@ -47,16 +47,16 @@ namespace th
 		SharedData* m_sharedData;
 
 		std::thread m_controlThread;
-		std::atomic_bool m_controlDone;
-		std::atomic_bool m_controlActive;
+		std::atomic<bool> m_controlDone;
+		std::atomic<bool> m_controlActive;
 
 		std::thread m_readThread;
-		std::atomic_bool m_readDone;
-		std::atomic_bool m_readActive;
+		std::atomic<bool> m_readDone;
+		std::atomic<bool> m_readActive;
 
 		std::thread m_handleThread;
-		std::atomic_bool m_handleDone;
-		std::atomic_bool m_handleActive;
+		std::atomic<bool> m_handleDone;
+		std::atomic<bool> m_handleActive;
 		int_t m_bombCount;
 		DIR m_prevDir;
 		bool m_prevSlow;
@@ -68,7 +68,7 @@ namespace th
 		//std::shared_ptr<Status> m_writeStatus;
 		//std::shared_ptr<Status> m_middleStatus;
 		//std::shared_ptr<Status> m_readStatus;
-		//std::atomic_bool m_statusUpdated;
+		//std::atomic<bool> m_statusUpdated;
 		Scene m_scene;
 
 		int64_t m_bombTime;

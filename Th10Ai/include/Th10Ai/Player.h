@@ -16,7 +16,7 @@ namespace th
 		static constexpr Pointf INIT_POS = { 0.0f, 400.0f };
 
 		// 3.53 = 5.0 * sqrt(0.5)
-		static constexpr std::array<Pointf, g_dirs.size()> MOVE_SPEED_MARISA =
+		static constexpr std::array<Pointf, enum_cast(DIR::MAX_COUNT)> MOVE_SPEED_MARISA =
 		{ {
 			{ 0.0f, 0.0f },
 			{ -5.0f, 0.0f },
@@ -24,13 +24,13 @@ namespace th
 			{ 0.0f, -5.0f },
 			{ 0.0f, 5.0f },
 			{ -3.53f, -3.53f },
-			{ 3.53f, -3.53f },
 			{ -3.53f, 3.53f },
+			{ 3.53f, -3.53f },
 			{ 3.53f, 3.53f }
 		} };
 
 		// 3.18 = 4.5 * sqrt(0.5)
-		static constexpr std::array<Pointf, g_dirs.size()> MOVE_SPEED_HIGH =
+		static constexpr std::array<Pointf, enum_cast(DIR::MAX_COUNT)> MOVE_SPEED_HIGH =
 		{ {
 			{ 0.0f, 0.0f },
 			{ -4.5f, 0.0f },
@@ -38,13 +38,13 @@ namespace th
 			{ 0.0f, -4.5f },
 			{ 0.0f, 4.5f },
 			{ -3.18f, -3.18f },
-			{ 3.18f, -3.18f },
 			{ -3.18f, 3.18f },
+			{ 3.18f, -3.18f },
 			{ 3.18f, 3.18f }
 		} };
 
 		// 1.41 = 2.0 * sqrt(0.5)
-		static constexpr std::array<Pointf, g_dirs.size()> MOVE_SPEED_LOW =
+		static constexpr std::array<Pointf, enum_cast(DIR::MAX_COUNT)> MOVE_SPEED_LOW =
 		{ {
 			{ 0.0f, 0.0f },
 			{ -2.0f, 0.0f },
@@ -52,8 +52,8 @@ namespace th
 			{ 0.0f, -2.0f },
 			{ 0.0f, 2.0f },
 			{ -1.41f, -1.41f },
-			{ 1.41f, -1.41f },
 			{ -1.41f, 1.41f },
+			{ 1.41f, -1.41f },
 			{ 1.41f, 1.41f }
 		} };
 

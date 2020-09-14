@@ -36,13 +36,14 @@ namespace th
 		if (m_prevWndProc == nullptr)
 			BASE_THROW(WindowsError());
 
+		//todo ”–Œ Ã‚
 		m_hooked = false;
 		if (m_unicode)
 			SendMessageW(m_window, WH_HOOK, 0, 0);
 		else
 			SendMessageA(m_window, WH_HOOK, 0, 0);
-		if (!m_hooked)
-			BASE_THROW(Exception(u8"π“‘ÿπ≥◊” ß∞‹°£"));
+		//if (!m_hooked)
+		//	BASE_THROW(Exception(u8"π“‘ÿπ≥◊” ß∞‹°£"));
 	}
 
 	void WindowHook::unhook()
