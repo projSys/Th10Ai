@@ -17,6 +17,7 @@ namespace th
 	{
 		memset(&m_status, 0, sizeof(StatusData));
 		memset(&m_action, 0, sizeof(ActionData));
+		m_status.inputFrame = 1;
 	}
 
 	void SharedData::setWindow(HWND window)

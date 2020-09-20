@@ -70,7 +70,7 @@ namespace th
 
 		StatusData& status = m_sharedData->getStatus();
 
-		status.frame += 1;
+		status.presentFrame += 1;
 		m_th10Hook->readPlayer(status.player);
 		status.itemCount = m_th10Hook->readItems(status.items);
 		status.enemyCount = m_th10Hook->readEnemies(status.enemies);
@@ -82,6 +82,10 @@ namespace th
 
 	void HookMain::onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data)
 	{
+		StatusData& status = m_sharedData->getStatus();
+
+		status.inputFrame += 1;
+
 		// c_dfDIKeyboard
 		if (size == 256 && data != nullptr)
 		{
