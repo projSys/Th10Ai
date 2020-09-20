@@ -7,9 +7,11 @@ namespace th
 {
 	void SelfFree::Free()
 	{
-		HANDLE_ptr freeThread(
-			CreateThread(nullptr, 0, &SelfFree::FreeProc, nullptr, 0, nullptr),
-			&CloseHandle);
+		HANDLE freeThread = CreateThread(nullptr, 0,
+			&SelfFree::FreeProc, nullptr, 0, nullptr);
+		if (freeThread == nullptr)
+			BASE_THROW(WindowsError());
+		CloseHandle(freeThread);
 	}
 
 	DWORD SelfFree::FreeProc(LPVOID)

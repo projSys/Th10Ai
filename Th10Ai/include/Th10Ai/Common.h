@@ -7,7 +7,6 @@
 #include <Base/Point.h>
 #include <Base/Size.h>
 #include <Base/Rect.h>
-#include <Windows/Types.h>
 #include <Windows/WindowsError.h>
 #include <Windows/Apis.h>
 

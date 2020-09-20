@@ -4,7 +4,7 @@
 
 #include <wx/wx.h>
 
-#include "Th10Ai/Th10Data.h"
+#include "Th10Ai/Th10Types.h"
 
 namespace th
 {

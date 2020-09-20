@@ -6,7 +6,7 @@
 #include <boost/interprocess/sync/interprocess_condition.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
 
-#include "Th10Hook/Th10Data.h"
+#include "Th10Hook/Th10Types.h"
 
 namespace th
 {

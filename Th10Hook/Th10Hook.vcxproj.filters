@@ -42,9 +42,6 @@
     <ClInclude Include="include\Th10Hook\WindowHook.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Th10Data.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\SelfFree.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
@@ -55,6 +52,9 @@
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\HookMain.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Th10Types.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
   </ItemGroup>

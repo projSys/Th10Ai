@@ -6,6 +6,13 @@
 
 namespace th
 {
+	struct PlayerRaw
+	{
+		byte_t unknown[0x4478];
+	};
+
+	static_assert(sizeof(PlayerRaw) == 0x4478, "Size is not correct.");
+
 	// 实体结构
 	// +-------+
 	// | (x,y) |

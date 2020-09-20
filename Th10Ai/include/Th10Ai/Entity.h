@@ -2,7 +2,7 @@
 
 #include "Th10Ai/Common.h"
 
-#include "Th10Ai/Th10Data.h"
+#include "Th10Ai/Th10Types.h"
 #include "Th10Ai/Direction.h"
 #include "Th10Ai/Utils.h"
 

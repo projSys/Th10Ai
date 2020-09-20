@@ -69,9 +69,6 @@
     <ClInclude Include="include\Th10Ai\MyWindow.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Ai\Th10Data.h">
-      <Filter>头文件\Th10Ai</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Ai\Status.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
@@ -79,6 +76,9 @@
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Ai\SharedData.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Th10Types.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
   </ItemGroup>

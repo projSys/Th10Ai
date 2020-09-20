@@ -109,7 +109,7 @@
     <ClInclude Include="include\Th10Ai\SharedData.h" />
     <ClInclude Include="include\Th10Ai\Status.h" />
     <ClInclude Include="include\Th10Ai\Th10Ai.h" />
-    <ClInclude Include="include\Th10Ai\Th10Data.h" />
+    <ClInclude Include="include\Th10Ai\Th10Types.h" />
     <ClInclude Include="include\Th10Ai\Utils.h" />
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@
 #include <vector>
 #include <boost/optional.hpp>
 
-#include "Th10Ai/Th10Data.h"
+#include "Th10Ai/Th10Types.h"
 #include "Th10Ai/Player.h"
 #include "Th10Ai/Item.h"
 #include "Th10Ai/Enemy.h"

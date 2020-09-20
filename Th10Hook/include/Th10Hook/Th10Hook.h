@@ -2,7 +2,7 @@
 
 #include "Th10Hook/Common.h"
 
-#include "Th10Hook/Th10Data.h"
+#include "Th10Hook/Th10Types.h"
 
 namespace th
 {

@@ -70,13 +70,13 @@ namespace th
 		return m_destroyed;
 	}
 
-	LRESULT WindowHook::WindowProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
+	LRESULT WindowHook::WindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		WindowHook& windowHook = WindowHook::GetInstance();
-		return windowHook.windowProc(window, message, wparam, lparam);
+		return windowHook.windowProc(window, message, wParam, lParam);
 	}
 
-	LRESULT WindowHook::windowProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
+	LRESULT WindowHook::windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		try
 		{
@@ -115,8 +115,8 @@ namespace th
 		}
 
 		if (m_unicode)
-			return CallWindowProcW(m_prevWndProc, window, message, wparam, lparam);
+			return CallWindowProcW(m_prevWndProc, window, message, wParam, lParam);
 		else
-			return CallWindowProcA(m_prevWndProc, window, message, wparam, lparam);
+			return CallWindowProcA(m_prevWndProc, window, message, wParam, lParam);
 	}
 }

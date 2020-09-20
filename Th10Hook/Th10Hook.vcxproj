@@ -94,8 +94,8 @@
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
     <ClInclude Include="include\Th10Hook\SelfFree.h" />
     <ClInclude Include="include\Th10Hook\SharedData.h" />
-    <ClInclude Include="include\Th10Hook\Th10Data.h" />
     <ClInclude Include="include\Th10Hook\Th10Hook.h" />
+    <ClInclude Include="include\Th10Hook\Th10Types.h" />
     <ClInclude Include="include\Th10Hook\WindowHook.h" />
   </ItemGroup>
   <ItemGroup>

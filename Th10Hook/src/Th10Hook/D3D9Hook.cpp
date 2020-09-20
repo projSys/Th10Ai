@@ -25,11 +25,14 @@ namespace th
 				UnregisterClassW(wc.lpszClassName, wc.hInstance);
 			});
 
-		HWND_ptr window(CreateWindowExW(0, wc.lpszClassName, L"D3D9HookWindow",
-			WS_OVERLAPPEDWINDOW, 0, 0, 640, 480, nullptr, nullptr, wc.hInstance, nullptr),
-			&DestroyWindow);
+		HWND window = CreateWindowExW(0, wc.lpszClassName, L"D3D9HookWindow",
+			WS_OVERLAPPEDWINDOW, 0, 0, 640, 480, nullptr, nullptr, wc.hInstance, nullptr);
 		if (window == nullptr)
 			BASE_THROW(WindowsError());
+		ON_SCOPE_EXIT([&]()
+			{
+				DestroyWindow(window);
+			});
 
 		HMODULE d3d9Dll = GetModuleHandleW(L"d3d9.dll");
 		if (d3d9Dll == nullptr)
@@ -42,12 +45,12 @@ namespace th
 		CComPtr<IDirect3D9> d3d9;
 		d3d9.p = direct3DCreate9(D3D_SDK_VERSION);
 		if (d3d9 == nullptr)
-			BASE_THROW(Exception("Direct3DCreate9() failed."));
+			BASE_THROW(Exception(u8"Direct3DCreate9()调用失败。"));
 
 		D3DDISPLAYMODE d3ddm = {};
 		HRESULT hr = d3d9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
 		if (FAILED(hr))
-			BASE_THROW(DxResult(hr, "GetAdapterDisplayMode() failed."));
+			BASE_THROW(DxResult(hr, u8"GetAdapterDisplayMode()调用失败。"));
 
 		D3DPRESENT_PARAMETERS d3dpp = {};
 		d3dpp.Windowed = TRUE;
@@ -55,10 +58,10 @@ namespace th
 		d3dpp.BackBufferFormat = d3ddm.Format;
 
 		CComPtr<IDirect3DDevice9> device;
-		hr = d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window.get(),
+		hr = d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, window,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &device);
 		if (FAILED(hr))
-			BASE_THROW(DxResult(hr, "CreateDevice() failed."));
+			BASE_THROW(DxResult(hr, u8"CreateDevice()调用失败。"));
 
 		uint_t* vTable = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(device.p));
 		m_presentOrig = reinterpret_cast<Present_t*>(vTable[17]);

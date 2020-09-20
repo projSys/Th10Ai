@@ -28,8 +28,8 @@ namespace th
 		bool isDestroyed() const;
 
 	private:
-		static LRESULT CALLBACK WindowProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam);
-		LRESULT windowProc(HWND window, UINT message, WPARAM wparam, LPARAM lparam);
+		static LRESULT CALLBACK WindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
+		LRESULT windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 
 		WindowListener* m_listener;
 		HWND m_window;

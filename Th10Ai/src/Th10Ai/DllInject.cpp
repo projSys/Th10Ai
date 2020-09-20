@@ -33,22 +33,28 @@ namespace th
 		std::wstring dllNameW = String::Utf8ToWide(dllName);
 		uint_t size = (dllNameW.length() + 1) * sizeof(wchar_t);
 
-		HANDLE_ptr process(OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId),
-			&CloseHandle);
+		HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
 		if (process == nullptr)
-			BASE_THROW(WindowsError());
-
-		LPVOID remoteMemory = VirtualAllocEx(process.get(), nullptr, size, MEM_COMMIT | MEM_RESERVE,
-			PAGE_READWRITE);
-		if (remoteMemory == nullptr)
 			BASE_THROW(WindowsError());
 		ON_SCOPE_EXIT([&]()
 			{
-				VirtualFreeEx(process.get(), remoteMemory, 0, MEM_RELEASE);
+				CloseHandle(process);
 			});
 
-		if (!WriteProcessMemory(process.get(), remoteMemory, dllNameW.c_str(), size, nullptr))
+		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT | MEM_RESERVE,
+			PAGE_READWRITE);
+		if (memory == nullptr)
 			BASE_THROW(WindowsError());
+		ON_SCOPE_EXIT([&]()
+			{
+				VirtualFreeEx(process, memory, 0, MEM_RELEASE);
+			});
+
+		SIZE_T written = 0;
+		if (!WriteProcessMemory(process, memory, dllNameW.c_str(), size, &written))
+			BASE_THROW(WindowsError());
+		if (written != size)
+			BASE_THROW(Exception("written != size."));
 
 		HMODULE kernel32Dll = GetModuleHandleW(L"kernel32.dll");
 		if (kernel32Dll == nullptr)
@@ -57,18 +63,26 @@ namespace th
 		if (loadLibraryW == nullptr)
 			BASE_THROW(WindowsError());
 
-		HANDLE_ptr thread(CreateRemoteThread(process.get(), nullptr, 0,
-			reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibraryW), remoteMemory, 0, nullptr),
-			&CloseHandle);
+		HANDLE thread = CreateRemoteThread(process, nullptr, 0,
+			reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibraryW), memory, 0, nullptr);
 		if (thread == nullptr)
 			BASE_THROW(WindowsError());
+		ON_SCOPE_EXIT([&]()
+			{
+				CloseHandle(thread);
+			});
 
-		WaitForSingleObject(thread.get(), INFINITE);
+		DWORD ret = WaitForSingleObject(thread, 5000);
+		if (ret == WAIT_FAILED)
+			BASE_THROW(WindowsError());
+		if (ret == WAIT_TIMEOUT)
+			BASE_THROW(Exception(u8"远线程执行超时。"));
 
 		// 获取线程退出码，即LoadLibraryW的返回值dll句柄
 		DWORD exitCode = 0;
-		GetExitCodeThread(thread.get(), &exitCode);
+		if (!GetExitCodeThread(thread, &exitCode))
+			BASE_THROW(WindowsError());
 		if (exitCode == 0)
-			BASE_THROW(Exception("LoadLibrary() failed."));
+			BASE_THROW(Exception(u8"LoadLibraryW()调用失败。"));
 	}
 }
