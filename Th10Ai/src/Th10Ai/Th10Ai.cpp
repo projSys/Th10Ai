@@ -32,17 +32,17 @@ namespace th
 		HMENU menu = GetSystemMenu(console, FALSE);
 		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
-		m_sharedMemory = interprocess::managed_windows_shared_memory(
-			interprocess::create_only, "Th10-SharedMemory", 8 * 1024 * 1024);
-		m_sharedData = m_sharedMemory.construct<SharedData>("Th10-SharedData")();
-		if (m_sharedData == nullptr)
-			BASE_THROW(Exception(u8"Th10-SharedData名称已被使用。"));
-
 		HWND window = FindWindowW(L"BASE", nullptr);//L"搶曽晽恄榐丂乣 Mountain of Faith. ver 1.00a");
 		if (window == nullptr)
 			BASE_THROW(Exception(u8"东方风神录未运行。"));
 		DWORD processId = 0;
 		DWORD threadId = GetWindowThreadProcessId(window, &processId);
+
+		m_sharedMemory = interprocess::managed_windows_shared_memory(
+			interprocess::create_only, "Th10-SharedMemory", 8 * 1024 * 1024);
+		m_sharedData = m_sharedMemory.construct<SharedData>("Th10-SharedData")();
+		if (m_sharedData == nullptr)
+			BASE_THROW(Exception(u8"Th10-SharedData名称已被使用。"));
 
 		m_sharedData->setWindow(window);
 

@@ -7,7 +7,7 @@ namespace th
 	{
 	}
 
-	int_t Th10Hook::readPlayer(PlayerData& player)
+	uint_t Th10Hook::readPlayer(PlayerData& player)
 	{
 		player = {};
 
@@ -34,9 +34,9 @@ namespace th
 		return 1;
 	}
 
-	int_t Th10Hook::readItems(ItemData items[])
+	uint_t Th10Hook::readItems(ItemData items[])
 	{
-		int_t count = 0;
+		uint_t count = 0;
 
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477818);
 		if (baseAddr == 0)
@@ -73,9 +73,9 @@ namespace th
 		return count;
 	}
 
-	int_t Th10Hook::readEnemies(EnemyData enemies[])
+	uint_t Th10Hook::readEnemies(EnemyData enemies[])
 	{
-		int_t count = 0;
+		uint_t count = 0;
 
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477704);
 		if (baseAddr == 0)
@@ -112,9 +112,9 @@ namespace th
 		return count;
 	}
 
-	int_t Th10Hook::readBullets(BulletData bullets[])
+	uint_t Th10Hook::readBullets(BulletData bullets[])
 	{
-		int_t count = 0;
+		uint_t count = 0;
 
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x004776F0);
 		if (baseAddr == 0)
@@ -152,9 +152,9 @@ namespace th
 		return count;
 	}
 
-	int_t Th10Hook::readLasers(LaserData lasers[])
+	uint_t Th10Hook::readLasers(LaserData lasers[])
 	{
-		int_t count = 0;
+		uint_t count = 0;
 
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x0047781C);
 		if (baseAddr == 0)

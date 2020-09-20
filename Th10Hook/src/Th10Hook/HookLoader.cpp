@@ -18,7 +18,7 @@ namespace th
 
 	void HookLoader::start()
 	{
-		m_thread = std::thread(&HookLoader::proc, this);
+		m_thread = boost::thread(&HookLoader::proc, this);
 	}
 
 	void HookLoader::join()

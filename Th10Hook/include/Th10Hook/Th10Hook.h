@@ -18,11 +18,11 @@ namespace th
 	public:
 		Th10Hook(Th10Listener* listener);
 
-		int_t readPlayer(PlayerData& player);
-		int_t readItems(ItemData items[]);
-		int_t readEnemies(EnemyData enemies[]);
-		int_t readBullets(BulletData bullets[]);
-		int_t readLasers(LaserData lasers[]);
+		uint_t readPlayer(PlayerData& player);
+		uint_t readItems(ItemData items[]);
+		uint_t readEnemies(EnemyData enemies[]);
+		uint_t readBullets(BulletData bullets[]);
+		uint_t readLasers(LaserData lasers[]);
 
 	private:
 		template <typename T>
