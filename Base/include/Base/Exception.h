@@ -4,11 +4,12 @@
 
 #include <stdexcept>
 #include <ostream>
-#ifdef _DEBUG
-#include <boost/stacktrace.hpp>
-#endif
 
+#include "Base/Types.h"
 #include "Base/SourceLocation.h"
+#ifdef BASE_WINDOWS
+#include "Base/Windows/StackTrace.h"
+#endif
 
 namespace base
 {
@@ -16,24 +17,22 @@ namespace base
 		public std::runtime_error
 	{
 	public:
-		Exception();
-		explicit Exception(const char* str);
-		explicit Exception(const std::string& str);
+		explicit Exception(uint_t framesToSkip = 0);
+		explicit Exception(const char* str, uint_t framesToSkip = 0);
+		explicit Exception(const std::string& str, uint_t framesToSkip = 0);
+		virtual ~Exception() = default;
 
-		virtual void print(std::ostream& os) const;
+		virtual void printTo(std::ostream& os) const;
 
 	protected:
-		void printSourceLocation(std::ostream& os) const;
-		void printStackTrace(std::ostream& os) const;
-
 		SourceLocation m_sourceLocation;
-#ifdef _DEBUG
-		boost::stacktrace::stacktrace m_stackTrace;
+#ifdef BASE_WINDOWS
+		win::StackTrace m_stackTrace;
 #endif
 	};
 
 #define BASE_THROW(ex) { STORE_SOURCE_LOCATION; throw ex; }
 
-	// 只能在catch块里调用
+	// 只能在catch里调用
 	std::string PrintException();
 }

@@ -1,6 +1,6 @@
 #include "Th10Hook/DI8Hook.h"
 
-#include <Windows/DxResult.h>
+#include <Base/Windows/DxResult.h>
 
 #include "Th10Hook/MyDetours.h"
 

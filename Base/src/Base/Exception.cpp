@@ -5,44 +5,33 @@
 
 namespace base
 {
-	Exception::Exception() :
+	Exception::Exception(uint_t framesToSkip) :
 		runtime_error(nullptr),
-		m_sourceLocation(SourceLocation::GetCurrent())
+		m_sourceLocation(SourceLocation::GetCurrent()),
+		m_stackTrace(framesToSkip + 1)
 	{
 	}
 
-	Exception::Exception(const char* str) :
+	Exception::Exception(const char* str, uint_t framesToSkip) :
 		runtime_error(str),
-		m_sourceLocation(SourceLocation::GetCurrent())
+		m_sourceLocation(SourceLocation::GetCurrent()),
+		m_stackTrace(framesToSkip + 1)
 	{
 	}
 
-	Exception::Exception(const std::string& str) :
+	Exception::Exception(const std::string& str, uint_t framesToSkip) :
 		runtime_error(str),
-		m_sourceLocation(SourceLocation::GetCurrent())
+		m_sourceLocation(SourceLocation::GetCurrent()),
+		m_stackTrace(framesToSkip + 1)
 	{
 	}
 
-	void Exception::print(std::ostream& os) const
+	void Exception::printTo(std::ostream& os) const
 	{
 		os << what() << '\n';
 
-		printSourceLocation(os);
-		printStackTrace(os);
-	}
-
-	void Exception::printSourceLocation(std::ostream& os) const
-	{
-		os << " in " << m_sourceLocation.getFunc()
-			<< " at " << m_sourceLocation.getFile()
-			<< ':' << m_sourceLocation.getLine() << '\n';
-	}
-
-	void Exception::printStackTrace(std::ostream& os) const
-	{
-#ifdef _DEBUG
-		os << "StackTrace:\n" << m_stackTrace;
-#endif
+		m_sourceLocation.printTo(os);
+		m_stackTrace.printTo(os);
 	}
 
 	std::string PrintException()
@@ -54,7 +43,7 @@ namespace base
 		}
 		catch (const Exception& ex)
 		{
-			ex.print(oss);
+			ex.printTo(oss);
 		}
 		catch (const boost::exception& be)
 		{

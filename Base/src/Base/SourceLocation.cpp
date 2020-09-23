@@ -24,6 +24,13 @@ namespace base
 	{
 	}
 
+	void SourceLocation::printTo(std::ostream& os) const
+	{
+		os << " in " << m_func
+			<< " at " << m_file
+			<< " : " << m_line << '\n';
+	}
+
 	const char* SourceLocation::getFunc() const
 	{
 		return m_func;

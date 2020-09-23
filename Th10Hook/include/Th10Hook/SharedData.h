@@ -20,8 +20,10 @@ namespace th
 		HWND getWindow() const;
 
 		void notifyInit();
+
 		void notifyUninit();
 		void waitUninit();
+
 		void notifyUpdate();
 		void notifyExit();
 

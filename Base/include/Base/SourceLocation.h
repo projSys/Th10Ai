@@ -2,7 +2,7 @@
 
 #include "Base/Common.h"
 
-//#include <experimental/source_location>
+#include <ostream>
 
 #include "Base/Types.h"
 
@@ -16,6 +16,8 @@ namespace base
 		static const SourceLocation& GetCurrent();
 
 		SourceLocation();
+
+		void printTo(std::ostream& os) const;
 
 		const char* getFunc() const;
 		const char* getFile() const;

@@ -22,7 +22,9 @@ namespace th
 		void activate();
 
 		bool waitInit(int64_t ms);
+
 		void notifyUninit();
+
 		bool waitUpdate();
 
 		StatusData& getStatus();

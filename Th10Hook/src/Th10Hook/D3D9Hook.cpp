@@ -1,7 +1,7 @@
 #include "Th10Hook/D3D9Hook.h"
 
 #include <Base/ScopeGuard.h>
-#include <Windows/DxResult.h>
+#include <Base/Windows/DxResult.h>
 
 #include "Th10Hook/MyDetours.h"
 

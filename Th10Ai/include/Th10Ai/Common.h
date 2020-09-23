@@ -7,14 +7,14 @@
 #include <Base/Point.h>
 #include <Base/Size.h>
 #include <Base/Rect.h>
-#include <Windows/WindowsError.h>
-#include <Windows/Apis.h>
+#include <Base/Windows/WindowsError.h>
+#include <Base/Windows/Apis.h>
 
 namespace th
 {
 	using namespace base;
 	using base::float_t;
-	using namespace win;
+	using namespace base::win;
 }
 
 #include <iostream>

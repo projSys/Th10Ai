@@ -19,11 +19,11 @@
     <Filter Include="源文件\Base">
       <UniqueIdentifier>{b09cd9e5-b15e-4f38-8263-eac9cbfb716a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Windows">
-      <UniqueIdentifier>{a1d94271-bd49-409b-a94c-ea7cc77a65c8}</UniqueIdentifier>
+    <Filter Include="头文件\Base\Windows">
+      <UniqueIdentifier>{c2ad25b0-1b13-4ceb-8cb9-58a1af89a974}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Windows">
-      <UniqueIdentifier>{27e5f571-77c9-4fac-8a3b-3ce012b3f5c9}</UniqueIdentifier>
+    <Filter Include="源文件\Base\Windows">
+      <UniqueIdentifier>{8b4229d8-79b0-4a7d-8965-6a708e232e02}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,26 +60,11 @@
     <ClInclude Include="include\Base\WeakPtr.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\Common.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\WindowsError.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\String.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Windows\DxResult.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\Types.h">
-      <Filter>头文件\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Logger.h">
       <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Windows\Apis.h">
-      <Filter>头文件\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Clock.h">
       <Filter>头文件\Base</Filter>
@@ -99,6 +84,30 @@
     <ClInclude Include="include\Base\Class.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Windows\Apis.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Windows\Common.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Windows\CrashHandler.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Windows\DxResult.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Windows\Types.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Windows\WindowsError.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Windows\StackTrace.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Windows\MiniDump.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -113,23 +122,32 @@
     <ClCompile Include="src\Base\SourceLocation.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Windows\WindowsError.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\String.cpp">
       <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Windows\DxResult.cpp">
-      <Filter>源文件\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Logger.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Windows\Apis.cpp">
-      <Filter>源文件\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\Clock.cpp">
       <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Windows\Apis.cpp">
+      <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Windows\CrashHandler.cpp">
+      <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Windows\DxResult.cpp">
+      <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Windows\WindowsError.cpp">
+      <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Windows\StackTrace.cpp">
+      <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Windows\MiniDump.cpp">
+      <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

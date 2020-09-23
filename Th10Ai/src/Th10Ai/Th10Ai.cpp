@@ -179,8 +179,8 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG_ERROR(PrintException());
 			m_controlDone = true;
+			BASE_LOG_ERROR(PrintException());
 		}
 	}
 
@@ -202,8 +202,8 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG_ERROR(PrintException());
 			m_controlDone = true;
+			BASE_LOG_ERROR(PrintException());
 		}
 	}
 
