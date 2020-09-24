@@ -3,7 +3,6 @@
 #include "Th10Ai/Common.h"
 
 #include <array>
-#include <Base/Enum.h>
 
 namespace th
 {

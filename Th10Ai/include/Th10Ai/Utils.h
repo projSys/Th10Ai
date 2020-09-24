@@ -2,6 +2,10 @@
 
 #include "Th10Ai/Common.h"
 
+#include "Th10Ai/Point.h"
+#include "Th10Ai/Size.h"
+#include "Th10Ai/Rect.h"
+
 namespace th
 {
 	struct FootPoint

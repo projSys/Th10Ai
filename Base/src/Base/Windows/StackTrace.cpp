@@ -10,7 +10,11 @@ namespace base
 	{
 		StackTrace::StackTrace(DWORD framesToSkip)
 		{
+#ifdef _DEBUG
 			m_frameCount = CaptureStackBackTrace(framesToSkip + 1, FRAME_MAX_COUNT, m_frames, nullptr);
+#else
+			m_frameCount = CaptureStackBackTrace(0, FRAME_MAX_COUNT, m_frames, nullptr);
+#endif
 		}
 
 		void StackTrace::printTo(std::ostream& os) const

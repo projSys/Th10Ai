@@ -81,6 +81,15 @@
     <ClInclude Include="include\Th10Ai\Th10Types.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Ai\Point.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Rect.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Size.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Ai\DllInject.cpp">

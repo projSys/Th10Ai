@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Base/Common.h"
+#include "Th10Ai/Common.h"
 
-#include "Base/TypeTraits.h"
+#include <Base/TypeTraits.h>
 
 namespace base
 {

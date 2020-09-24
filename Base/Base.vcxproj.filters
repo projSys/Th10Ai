@@ -69,21 +69,6 @@
     <ClInclude Include="include\Base\Clock.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Point.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Rect.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Size.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Enum.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Class.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Windows\Apis.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
@@ -94,9 +79,6 @@
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Windows\DxResult.h">
-      <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Windows\Types.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Windows\WindowsError.h">

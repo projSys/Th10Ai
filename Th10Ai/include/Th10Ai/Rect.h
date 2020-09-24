@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Base/Common.h"
+#include "Th10Ai/Common.h"
 
-#include "Base/TypeTraits.h"
-#include "Base/Point.h"
-#include "Base/Size.h"
+#include <Base/TypeTraits.h>
+
+#include "Th10Ai/Point.h"
+#include "Th10Ai/Size.h"
 
 namespace base
 {

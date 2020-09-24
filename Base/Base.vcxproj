@@ -147,19 +147,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Base\Class.h" />
     <ClInclude Include="include\Base\Clock.h" />
     <ClInclude Include="include\Base\Common.h" />
-    <ClInclude Include="include\Base\Enum.h" />
     <ClInclude Include="include\Base\Exception.h" />
     <ClInclude Include="include\Base\Logger.h" />
     <ClInclude Include="include\Base\Object.h" />
-    <ClInclude Include="include\Base\Point.h" />
-    <ClInclude Include="include\Base\Rect.h" />
     <ClInclude Include="include\Base\RefCounted.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\Singleton.h" />
-    <ClInclude Include="include\Base\Size.h" />
     <ClInclude Include="include\Base\SourceLocation.h" />
     <ClInclude Include="include\Base\String.h" />
     <ClInclude Include="include\Base\StrongPtr.h" />
@@ -172,7 +167,6 @@
     <ClInclude Include="include\Base\Windows\DxResult.h" />
     <ClInclude Include="include\Base\Windows\MiniDump.h" />
     <ClInclude Include="include\Base\Windows\StackTrace.h" />
-    <ClInclude Include="include\Base\Windows\Types.h" />
     <ClInclude Include="include\Base\Windows\WindowsError.h" />
   </ItemGroup>
   <ItemGroup>

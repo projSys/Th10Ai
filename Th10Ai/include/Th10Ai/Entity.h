@@ -2,6 +2,9 @@
 
 #include "Th10Ai/Common.h"
 
+#include "Th10Ai/Point.h"
+#include "Th10Ai/Size.h"
+#include "Th10Ai/Rect.h"
 #include "Th10Ai/Th10Types.h"
 #include "Th10Ai/Direction.h"
 #include "Th10Ai/Utils.h"

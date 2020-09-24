@@ -4,9 +4,6 @@
 #include <Base/String.h>
 #include <Base/Exception.h>
 #include <Base/Logger.h>
-#include <Base/Point.h>
-#include <Base/Size.h>
-#include <Base/Rect.h>
 #include <Base/Windows/WindowsError.h>
 #include <Base/Windows/Apis.h>
 
