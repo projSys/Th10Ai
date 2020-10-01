@@ -18,7 +18,7 @@ namespace base
 		public std::runtime_error
 	{
 	public:
-		explicit Exception(const char* ptr = nullptr, uint_t framesToSkip = 0);
+		explicit Exception(const char* str = nullptr, uint_t framesToSkip = 0);
 		explicit Exception(const std::string& str, uint_t framesToSkip = 0);
 		virtual ~Exception() = default;
 

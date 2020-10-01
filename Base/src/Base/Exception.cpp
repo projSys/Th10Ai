@@ -5,8 +5,8 @@
 
 namespace base
 {
-	Exception::Exception(const char* ptr, uint_t framesToSkip) :
-		runtime_error(ptr),
+	Exception::Exception(const char* str, uint_t framesToSkip) :
+		runtime_error(str),
 		m_sourceLocation(SourceLocation::GetCurrent()),
 		m_stackTrace(framesToSkip + 1)
 	{

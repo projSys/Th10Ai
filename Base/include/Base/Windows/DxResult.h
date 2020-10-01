@@ -12,7 +12,7 @@ namespace base
 			public Exception
 		{
 		public:
-			explicit DxResult(HRESULT result, const char* ptr = nullptr);
+			explicit DxResult(HRESULT result, const char* str = nullptr);
 			DxResult(HRESULT result, const std::string& str);
 
 			virtual void printTo(std::ostream& os) const override;

@@ -7,8 +7,6 @@
 #include <algorithm>
 #include <limits>
 
-#include "Base/Types.h"
-
 namespace base
 {
 	template <typename T, typename Enable = void>

@@ -11,12 +11,17 @@ namespace base
 		public:
 			static constexpr DWORD BUFFER_SIZE = 1024;
 
-			static std::wstring Utf8ToWide(const char* ptr);
+			static std::wstring Utf8ToWide(const char* str);
 			static std::wstring Utf8ToWide(const std::string& str);
-			static std::string WideToUtf8(const wchar_t* wptr);
+			static std::string WideToUtf8(const wchar_t* wstr);
 			static std::string WideToUtf8(const std::wstring& wstr);
 
-			static std::string GetErrorDesc(DWORD errorId);
+			static std::wstring AnsiToWide(const char* str);
+			static std::wstring AnsiToWide(const std::string& str);
+			static std::string WideToAnsi(const wchar_t* wstr);
+			static std::string WideToAnsi(const std::wstring& wstr);
+
+			static std::string GetErrorDesc(DWORD errorCode);
 
 			static std::string GetModuleName(HMODULE module = nullptr);
 			static std::string GetModuleDir(HMODULE module = nullptr);

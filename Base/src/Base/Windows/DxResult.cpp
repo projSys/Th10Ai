@@ -8,17 +8,17 @@ namespace base
 {
 	namespace win
 	{
-		DxResult::DxResult(HRESULT result, const char* ptr) :
-			Exception(ptr, 1),
+		DxResult::DxResult(HRESULT result, const char* str) :
+			Exception(str, 1),
 			m_result(result),
-			m_customized(true)
+			m_customized(!String::IsEmpty(str))
 		{
 		}
 
 		DxResult::DxResult(HRESULT result, const std::string& str) :
 			Exception(str, 1),
 			m_result(result),
-			m_customized(true)
+			m_customized(!str.empty())
 		{
 		}
 
