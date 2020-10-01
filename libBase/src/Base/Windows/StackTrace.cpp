@@ -11,8 +11,8 @@ namespace base
 		StackTrace::StackTrace(uint_t framesToSkip)
 		{
 #ifdef _DEBUG
-			m_frameCount = CaptureStackBackTrace(static_cast<DWORD>(framesToSkip + 1),
-				FRAME_MAX_COUNT, m_frames, nullptr);
+			m_frameCount = CaptureStackBackTrace(framesToSkip + 1, FRAME_MAX_COUNT,
+				m_frames, nullptr);
 #else
 			m_frameCount = CaptureStackBackTrace(0, FRAME_MAX_COUNT, m_frames, nullptr);
 #endif
