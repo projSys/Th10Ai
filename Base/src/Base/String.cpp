@@ -1,28 +1,32 @@
 #include "Base/String.h"
 
-#include <boost/locale.hpp>
+#include <locale>
+#include <codecvt>
 
 namespace base
 {
-	namespace conv = boost::locale::conv;
-
-	std::wstring String::Utf8ToWide(const char* str)
+	// deprecated in C++17
+	std::wstring String::Utf8ToWide(const char* ptr)
 	{
-		return conv::utf_to_utf<wchar_t>(str);
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		return converter.from_bytes(ptr);
 	}
 
 	std::wstring String::Utf8ToWide(const std::string& str)
 	{
-		return conv::utf_to_utf<wchar_t>(str);
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		return converter.from_bytes(str);
 	}
 
-	std::string String::WideToUtf8(const wchar_t* str)
+	std::string String::WideToUtf8(const wchar_t* wptr)
 	{
-		return conv::utf_to_utf<char>(str);
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		return converter.to_bytes(wptr);
 	}
 
-	std::string String::WideToUtf8(const std::wstring& str)
+	std::string String::WideToUtf8(const std::wstring& wstr)
 	{
-		return conv::utf_to_utf<char>(str);
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		return converter.to_bytes(wstr);
 	}
 }

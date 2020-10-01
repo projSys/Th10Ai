@@ -6,6 +6,7 @@
 #include <ostream>
 
 #include "Base/Types.h"
+#include "Base/String.h"
 #include "Base/SourceLocation.h"
 #ifdef BASE_WINDOWS
 #include "Base/Windows/StackTrace.h"
@@ -17,8 +18,7 @@ namespace base
 		public std::runtime_error
 	{
 	public:
-		explicit Exception(uint_t framesToSkip = 0);
-		explicit Exception(const char* str, uint_t framesToSkip = 0);
+		explicit Exception(const char* ptr = nullptr, uint_t framesToSkip = 0);
 		explicit Exception(const std::string& str, uint_t framesToSkip = 0);
 		virtual ~Exception() = default;
 

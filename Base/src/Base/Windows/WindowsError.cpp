@@ -6,15 +6,15 @@ namespace base
 {
 	namespace win
 	{
-		WindowsError::WindowsError(DWORD errorId) :
-			Exception(1),
-			m_errorId(errorId)
+		WindowsError::WindowsError(DWORD errorCode) :
+			Exception(nullptr, 1),
+			m_errorCode(errorCode)
 		{
 		}
 
 		void WindowsError::printTo(std::ostream& os) const
 		{
-			os << '[' << m_errorId << ']' << Apis::GetErrorDesc(m_errorId);
+			os << '[' << m_errorCode << ']' << Apis::GetErrorDesc(m_errorCode);
 
 			m_sourceLocation.printTo(os);
 			m_stackTrace.printTo(os);

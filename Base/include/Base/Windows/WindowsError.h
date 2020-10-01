@@ -12,12 +12,12 @@ namespace base
 			public Exception
 		{
 		public:
-			explicit WindowsError(DWORD errorId = GetLastError());
+			explicit WindowsError(DWORD errorCode = GetLastError());
 
 			virtual void printTo(std::ostream& os) const override;
 
 		private:
-			DWORD m_errorId;
+			DWORD m_errorCode;
 		};
 	}
 }

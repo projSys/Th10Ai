@@ -8,19 +8,11 @@ namespace base
 {
 	namespace win
 	{
-		DxResult::DxResult(HRESULT result) :
-			Exception(1),
-			m_result(result),
-			m_customized(false)
-		{
-		}
-
-		DxResult::DxResult(HRESULT result, const char* str) :
-			Exception(str, 1),
+		DxResult::DxResult(HRESULT result, const char* ptr) :
+			Exception(ptr, 1),
 			m_result(result),
 			m_customized(true)
 		{
-
 		}
 
 		DxResult::DxResult(HRESULT result, const std::string& str) :
@@ -28,7 +20,6 @@ namespace base
 			m_result(result),
 			m_customized(true)
 		{
-
 		}
 
 		void DxResult::printTo(std::ostream& os) const

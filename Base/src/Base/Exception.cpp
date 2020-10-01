@@ -5,15 +5,8 @@
 
 namespace base
 {
-	Exception::Exception(uint_t framesToSkip) :
-		runtime_error(nullptr),
-		m_sourceLocation(SourceLocation::GetCurrent()),
-		m_stackTrace(framesToSkip + 1)
-	{
-	}
-
-	Exception::Exception(const char* str, uint_t framesToSkip) :
-		runtime_error(str),
+	Exception::Exception(const char* ptr, uint_t framesToSkip) :
+		runtime_error(ptr),
 		m_sourceLocation(SourceLocation::GetCurrent()),
 		m_stackTrace(framesToSkip + 1)
 	{
@@ -36,27 +29,27 @@ namespace base
 
 	std::string PrintException()
 	{
-		std::ostringstream oss;
+		std::ostringstream sout;
 		try
 		{
 			throw;
 		}
 		catch (const Exception& ex)
 		{
-			ex.printTo(oss);
+			ex.printTo(sout);
 		}
 		catch (const boost::exception& be)
 		{
-			oss << boost::diagnostic_information(be);
+			sout << boost::diagnostic_information(be);
 		}
 		catch (const std::exception& se)
 		{
-			oss << se.what() << '\n';
+			sout << se.what() << '\n';
 		}
 		catch (...)
 		{
-			oss << "Unclassified exception.\n";
+			sout << "Unclassified exception.\n";
 		}
-		return oss.str();
+		return sout.str();
 	}
 }

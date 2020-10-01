@@ -45,9 +45,6 @@ namespace base
 		return ScopeGuard<T>(std::forward<T>(functor));
 	}
 
-#define SCOPEGUARD_LINENAME_CAT(name, line) name##line
-#define SCOPEGUARD_LINENAME(name, line) SCOPEGUARD_LINENAME_CAT(name, line)
-
 #define ON_SCOPE_EXIT(functor) \
-	auto SCOPEGUARD_LINENAME(scopeGuard, __LINE__) = base::MakeScopeGuard(functor)
+	auto MACRO_CONCAT(scopeGuard, __LINE__) = base::MakeScopeGuard(functor)
 }

@@ -60,9 +60,6 @@
     <ClInclude Include="include\Base\WeakPtr.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\String.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Logger.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -90,6 +87,9 @@
     <ClInclude Include="include\Base\Windows\MiniDump.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\String.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -102,9 +102,6 @@
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\SourceLocation.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\String.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Logger.cpp">
@@ -130,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="src\Base\Windows\MiniDump.cpp">
       <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\String.cpp">
+      <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -66,9 +66,8 @@ namespace th
 
 		m_updated = false;
 
-		//Clock clock;
-		//clock.update();
-		//std::cout << clock.getTime() - m_updateTime << std::endl;
+		//int64_t now = Clock::GetMilliseconds();
+		//std::cout << now - m_updateTime << std::endl;
 
 		return !m_exited;
 	}

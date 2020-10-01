@@ -2,8 +2,7 @@
 
 #include "Base/Common.h"
 
-#include <string>
-
+#include "Base/String.h"
 #include "Base/Singleton.h"
 
 namespace base
@@ -14,20 +13,20 @@ namespace base
 	public:
 		Logger();
 
-		void addFileLog(const std::string& filename);
+		void addFileLog(const std::string& fileName);
 
-		void trace(const std::string& str);
-		void debug(const std::string& str);
-		void info(const std::string& str);
-		void warning(const std::string& str);
-		void error(const std::string& str);
-		void fatal(const std::string& str);
+		void logTrace(const std::string& str);
+		void logDebug(const std::string& str);
+		void logInfo(const std::string& str);
+		void logWarning(const std::string& str);
+		void logError(const std::string& str);
+		void logFatal(const std::string& str);
 	};
 
-#define BASE_LOG_TRACE(str) base::Logger::GetInstance().trace(str)
-#define BASE_LOG_DEBUG(str) base::Logger::GetInstance().debug(str)
-#define BASE_LOG_INFO(str) base::Logger::GetInstance().info(str)
-#define BASE_LOG_WARNING(str) base::Logger::GetInstance().warning(str)
-#define BASE_LOG_ERROR(str) base::Logger::GetInstance().error(str)
-#define BASE_LOG_FATAL(str) base::Logger::GetInstance().fatal(str)
+#define BASE_LOG_TRACE(str) base::Logger::GetInstance().logTrace(str)
+#define BASE_LOG_DEBUG(str) base::Logger::GetInstance().logDebug(str)
+#define BASE_LOG_INFO(str) base::Logger::GetInstance().logInfo(str)
+#define BASE_LOG_WARNING(str) base::Logger::GetInstance().logWarning(str)
+#define BASE_LOG_ERROR(str) base::Logger::GetInstance().logError(str)
+#define BASE_LOG_FATAL(str) base::Logger::GetInstance().logFatal(str)
 }

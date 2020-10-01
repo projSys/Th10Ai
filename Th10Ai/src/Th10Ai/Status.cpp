@@ -63,18 +63,17 @@ namespace th
 		if (m_items.empty())
 			return target;
 
-		Clock clock;
-		clock.update();
+		int64_t now = Clock::GetMilliseconds();
 
 		// 拾取冷却中
-		if (clock.getTime() - m_findItemTime < 3000)
+		if (now - m_findItemTime < 3000)
 			return target;
 
 		// 自机高于1/4屏
 		if (m_player.y < Scene::SIZE.height / 4.0f)
 		{
 			// 进入冷却
-			m_findItemTime = clock.getTime();
+			m_findItemTime = now;
 			return target;
 		}
 
@@ -82,7 +81,7 @@ namespace th
 		if (m_player.y < Scene::SIZE.height / 2.0f && m_items.size() < 10 && m_enemies.size() > 5)
 		{
 			// 进入冷却
-			m_findItemTime = clock.getTime();
+			m_findItemTime = now;
 			return target;
 		}
 

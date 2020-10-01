@@ -4,22 +4,12 @@
 
 namespace base
 {
-	namespace chrono = std::chrono;
+	using namespace std::chrono;
 
-	Clock::Clock() :
-		m_time(0)
+	int64_t Clock::GetMilliseconds()
 	{
-	}
-
-	void Clock::update()
-	{
-		chrono::steady_clock::time_point tp = chrono::steady_clock::now();
-		chrono::steady_clock::duration d = tp.time_since_epoch();
-		m_time = chrono::duration_cast<chrono::milliseconds>(d).count();
-	}
-
-	int64_t Clock::getTime() const
-	{
-		return m_time;
+		steady_clock::time_point tp = steady_clock::now();
+		steady_clock::duration d = tp.time_since_epoch();
+		return duration_cast<milliseconds>(d).count();
 	}
 }

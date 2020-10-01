@@ -4,6 +4,14 @@
 // https://stackoverflow.com/questions/142508/how-do-i-check-os-with-a-preprocessor-directive
 #if defined(_WIN32) //|| defined(WIN32) || defined(__WIN32__) || defined(__NT__)
 // define something for Windows (32-bit and 64-bit, this part is common)
+#ifndef UNICODE
+#define UNICODE
+#endif
+
+#ifndef _UNICODE
+#define _UNICODE
+#endif
+
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -56,4 +64,11 @@
 
 namespace base
 {
+	// 带参数的宏，先对参数做展开，除非宏定义体中包含#或##
+	// #或##会阻止参数展开
+#define MACRO_STRINGIFY_INNER(a) #a
+#define MACRO_STRINGIFY(a) MACRO_STRINGIFY_INNER(a)
+
+#define MACRO_CONCAT_INNER(a, b) a ## b
+#define MACRO_CONCAT(a, b) MACRO_CONCAT_INNER(a, b)
 }

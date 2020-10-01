@@ -49,6 +49,7 @@ namespace th
 
 		int64_t m_updateTime;
 		StatusData m_status;
+
 		ActionData m_action;
 		bool m_actionUpdated;
 	};

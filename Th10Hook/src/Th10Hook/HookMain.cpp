@@ -64,9 +64,7 @@ namespace th
 	void HookMain::onPresent(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
 		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
 	{
-		//Clock clock;
-		//clock.update();
-		//m_updateTime = clock.getTime();
+		//m_updateTime = Clock::GetMilliseconds();
 
 		StatusData& status = m_sharedData->getStatus();
 

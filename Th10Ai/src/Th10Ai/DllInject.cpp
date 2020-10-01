@@ -30,9 +30,6 @@ namespace th
 
 	void DllInject::Inject(DWORD processId, const std::string& dllName)
 	{
-		std::wstring dllNameW = String::Utf8ToWide(dllName);
-		uint_t size = (dllNameW.length() + 1) * sizeof(wchar_t);
-
 		HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
 		if (process == nullptr)
 			BASE_THROW(WindowsError());
@@ -41,7 +38,10 @@ namespace th
 				CloseHandle(process);
 			});
 
-		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT | MEM_RESERVE,
+		std::wstring dllNameW = Apis::Utf8ToWide(dllName);
+		uint_t sizeW = sizeof(std::wstring::value_type) * (dllNameW.size() + 1);
+
+		LPVOID memory = VirtualAllocEx(process, nullptr, sizeW, MEM_COMMIT | MEM_RESERVE,
 			PAGE_READWRITE);
 		if (memory == nullptr)
 			BASE_THROW(WindowsError());
@@ -51,10 +51,10 @@ namespace th
 			});
 
 		SIZE_T written = 0;
-		if (!WriteProcessMemory(process, memory, dllNameW.c_str(), size, &written))
+		if (!WriteProcessMemory(process, memory, dllNameW.c_str(), sizeW, &written))
 			BASE_THROW(WindowsError());
-		if (written != size)
-			BASE_THROW(Exception("written != size."));
+		if (written != sizeW)
+			BASE_THROW(Exception("written != sizeW."));
 
 		HMODULE kernel32Dll = GetModuleHandleW(L"kernel32.dll");
 		if (kernel32Dll == nullptr)

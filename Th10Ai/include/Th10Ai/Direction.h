@@ -2,8 +2,6 @@
 
 #include "Th10Ai/Common.h"
 
-#include <array>
-
 namespace th
 {
 	// ÒÆ¶¯·½Ïò
@@ -22,8 +20,8 @@ namespace th
 		MAX_COUNT
 	};
 
-	constexpr std::array<DIR, enum_cast(DIR::MAX_COUNT)> g_dirs =
-	{ {
+	constexpr DIR DIRS[enum_cast(DIR::MAX_COUNT)] =
+	{
 		DIR::HOLD,
 		DIR::LEFT,
 		DIR::RIGHT,
@@ -33,5 +31,5 @@ namespace th
 		DIR::LEFTDOWN,
 		DIR::RIGHTUP,
 		DIR::RIGHTDOWN
-	} };
+	};
 }

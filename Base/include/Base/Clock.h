@@ -9,12 +9,6 @@ namespace base
 	class Clock
 	{
 	public:
-		Clock();
-
-		void update();
-		int64_t getTime() const;
-
-	private:
-		int64_t m_time;
+		static int64_t GetMilliseconds();
 	};
 }

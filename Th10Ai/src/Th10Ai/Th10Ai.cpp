@@ -24,6 +24,7 @@ namespace th
 		m_bombTime(0)
 	{
 		AllocConsole();
+		//system("chcp 65001");
 		freopen("conin$", "r", stdin);
 		freopen("conout$", "w", stdout);
 		freopen("conout$", "w", stderr);
@@ -253,11 +254,10 @@ namespace th
 	{
 		if (m_status.getPlayer().isColliding())
 		{
-			Clock clock;
-			clock.update();
-			if (clock.getTime() - m_bombTime > 1000)
+			int64_t now = Clock::GetMilliseconds();
+			if (now - m_bombTime > 1000)
 			{
-				m_bombTime = clock.getTime();
+				m_bombTime = now;
 
 				int_t id = m_status.collide(m_status.getPlayer(), 0.0);
 				m_status1.collide(m_status.getPlayer(), 1.0);
@@ -327,7 +327,7 @@ namespace th
 		boost::optional<DIR> bestDir;
 		boost::optional<bool> bestSlow;
 
-		for (DIR dir : g_dirs)
+		for (DIR dir : DIRS)
 		{
 			Path path(m_status, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
