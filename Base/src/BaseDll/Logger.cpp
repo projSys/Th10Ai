@@ -1,4 +1,4 @@
-#include "Base/Logger.h"
+#include "BaseDll/Logger.h"
 
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/file.hpp>
@@ -6,6 +6,8 @@
 namespace base
 {
 	namespace log = boost::log;
+
+	Logger g_logger;
 
 	Logger::Logger() :
 		Singleton(this)

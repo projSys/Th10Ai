@@ -47,9 +47,10 @@ namespace th
 
 		m_sharedData->setWindow(window);
 
-		std::string dllName = Apis::GetModuleDir() + "/Th10Hook.dll";
+		//std::string dllPath = Apis::GetModuleDir() + "/Th10Hook.dll";
 		DllInject::EnableDebugPrivilege();
-		DllInject::Inject(processId, dllName);
+		//DllInject::Inject(processId, dllPath);
+		DllInject::Inject(processId, Apis::GetModuleDir(), "Th10Hook.dll");
 
 		if (!m_sharedData->waitInit(3000))
 			BASE_THROW(Exception(u8"Th10Hook初始化失败，详细信息请查看Th10Hook.log。"));

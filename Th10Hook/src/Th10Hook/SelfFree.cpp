@@ -17,7 +17,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG_ERROR(PrintException());
+			BASE_LOG_FATAL(PrintException());
 		}
 	}
 

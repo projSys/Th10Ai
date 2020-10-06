@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Base/Common.h"
+#include "BaseDll/Common.h"
 
-#include "Base/String.h"
-#include "Base/Singleton.h"
+#include <Base/String.h>
+#include <Base/Singleton.h>
 
 namespace base
 {
-	class Logger :
+	class DLL_API Logger :
 		public Singleton<Logger>
 	{
 	public:

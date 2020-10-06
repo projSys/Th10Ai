@@ -3,9 +3,9 @@
 #include <Base/Types.h>
 #include <Base/String.h>
 #include <Base/Exception.h>
-#include <Base/Logger.h>
 #include <Base/Windows/WindowsError.h>
 #include <Base/Windows/Apis.h>
+#include <BaseDll/Logger.h>
 
 namespace th
 {

@@ -36,9 +36,6 @@
     <ClInclude Include="include\Base\Exception.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Logger.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Object.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -96,9 +93,6 @@
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Exception.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\Logger.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Object.cpp">

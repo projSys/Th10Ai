@@ -30,10 +30,19 @@
     <ClInclude Include="include\BaseDll\Windows\Common.h">
       <Filter>头文件\BaseDll\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\BaseDll\Common.h">
+      <Filter>头文件\BaseDll</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BaseDll\Logger.h">
+      <Filter>头文件\BaseDll</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BaseDll\Windows\DllMain.cpp">
       <Filter>源文件\BaseDll\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseDll\Logger.cpp">
+      <Filter>源文件\BaseDll</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ namespace base
 	{
 		namespace filesystem = boost::filesystem;
 
-		std::wstring MyMultiByteToWideChar(UINT codePage, const char* str, int strSize)
+		std::wstring _MultiByteToWideChar(UINT codePage, const char* str, int strSize)
 		{
 			int wstrSize = MultiByteToWideChar(codePage, MB_ERR_INVALID_CHARS,
 				str, strSize, nullptr, 0);
@@ -26,7 +26,7 @@ namespace base
 			return wstr;
 		}
 
-		std::string MyWideCharToMultiByte(UINT codePage, const wchar_t* wstr, int wstrSize)
+		std::string _WideCharToMultiByte(UINT codePage, const wchar_t* wstr, int wstrSize)
 		{
 			int strSize = WideCharToMultiByte(codePage, WC_ERR_INVALID_CHARS,
 				wstr, wstrSize, nullptr, 0, nullptr, nullptr);
@@ -47,7 +47,7 @@ namespace base
 			if (String::IsEmpty(str))
 				return std::wstring();
 
-			return MyMultiByteToWideChar(CP_UTF8, str, -1);
+			return _MultiByteToWideChar(CP_UTF8, str, -1);
 		}
 
 		std::wstring Apis::Utf8ToWide(const std::string& str)
@@ -55,7 +55,7 @@ namespace base
 			if (str.empty())
 				return std::wstring();
 
-			return MyMultiByteToWideChar(CP_UTF8, str.data(), str.size());
+			return _MultiByteToWideChar(CP_UTF8, str.data(), str.size());
 		}
 
 		std::string Apis::WideToUtf8(const wchar_t* wstr)
@@ -63,7 +63,7 @@ namespace base
 			if (String::IsEmpty(wstr))
 				return std::string();
 
-			return MyWideCharToMultiByte(CP_UTF8, wstr, -1);
+			return _WideCharToMultiByte(CP_UTF8, wstr, -1);
 		}
 
 		std::string Apis::WideToUtf8(const std::wstring& wstr)
@@ -71,7 +71,7 @@ namespace base
 			if (wstr.empty())
 				return std::string();
 
-			return MyWideCharToMultiByte(CP_UTF8, wstr.data(), wstr.size());
+			return _WideCharToMultiByte(CP_UTF8, wstr.data(), wstr.size());
 		}
 
 		std::wstring Apis::AnsiToWide(const char* str)
@@ -79,7 +79,7 @@ namespace base
 			if (String::IsEmpty(str))
 				return std::wstring();
 
-			return MyMultiByteToWideChar(CP_ACP, str, -1);
+			return _MultiByteToWideChar(CP_ACP, str, -1);
 		}
 
 		std::wstring Apis::AnsiToWide(const std::string& str)
@@ -87,7 +87,7 @@ namespace base
 			if (str.empty())
 				return std::wstring();
 
-			return MyMultiByteToWideChar(CP_ACP, str.data(), str.size());
+			return _MultiByteToWideChar(CP_ACP, str.data(), str.size());
 		}
 
 		std::string Apis::WideToAnsi(const wchar_t* wstr)
@@ -95,7 +95,7 @@ namespace base
 			if (String::IsEmpty(wstr))
 				return std::string();
 
-			return MyWideCharToMultiByte(CP_ACP, wstr, -1);
+			return _WideCharToMultiByte(CP_ACP, wstr, -1);
 		}
 
 		std::string Apis::WideToAnsi(const std::wstring& wstr)
@@ -103,7 +103,7 @@ namespace base
 			if (wstr.empty())
 				return std::string();
 
-			return MyWideCharToMultiByte(CP_ACP, wstr.data(), wstr.size());
+			return _WideCharToMultiByte(CP_ACP, wstr.data(), wstr.size());
 		}
 
 		std::string Apis::GetErrorDesc(DWORD errorCode)

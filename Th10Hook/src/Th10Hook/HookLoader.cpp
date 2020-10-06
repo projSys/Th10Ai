@@ -32,7 +32,8 @@ namespace th
 		try
 		{
 			std::string logName = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
-			m_logger.addFileLog(logName);
+			Logger& logger = Logger::GetInstance();
+			logger.addFileLog(logName);
 
 			std::unique_ptr<HookMain> hookMain = std::make_unique<HookMain>();
 			hookMain->run();

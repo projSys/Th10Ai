@@ -155,9 +155,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\BaseDll\Common.h" />
+    <ClInclude Include="include\BaseDll\Logger.h" />
     <ClInclude Include="include\BaseDll\Windows\Common.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\BaseDll\Logger.cpp" />
     <ClCompile Include="src\BaseDll\Windows\DllMain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

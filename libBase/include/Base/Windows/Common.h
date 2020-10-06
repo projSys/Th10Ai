@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Base/Types.h"
-#include "Base/String.h"
+#include "Base/Common.h"
 
 namespace base
 {

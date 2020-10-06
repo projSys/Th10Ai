@@ -2,6 +2,8 @@
 
 #include "Base/Windows/Common.h"
 
+#include "Base/String.h"
+
 namespace base
 {
 	namespace win

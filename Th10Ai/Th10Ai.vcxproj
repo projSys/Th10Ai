@@ -57,13 +57,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Develop\Boost\boost_1_74_0;C:\Develop\wxWidgets\wxWidgets-3.1.4\include;C:\Develop\wxWidgets\wxWidgets-3.1.4\include\msvc;..\libBase\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Develop\Boost\boost_1_74_0;C:\Develop\wxWidgets\wxWidgets-3.1.4\include;C:\Develop\wxWidgets\wxWidgets-3.1.4\include\msvc;..\libBase\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Develop\Boost\boost_1_74_0\lib32-msvc-14.2;C:\Develop\wxWidgets\wxWidgets-3.1.4\lib\vc_dll;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libBase.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libBase.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
@@ -77,7 +77,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Develop\Boost\boost_1_74_0;C:\Develop\wxWidgets\wxWidgets-3.1.4\include;C:\Develop\wxWidgets\wxWidgets-3.1.4\include\msvc;..\libBase\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Develop\Boost\boost_1_74_0;C:\Develop\wxWidgets\wxWidgets-3.1.4\include;C:\Develop\wxWidgets\wxWidgets-3.1.4\include\msvc;..\libBase\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -85,7 +85,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Develop\Boost\boost_1_74_0\lib32-msvc-14.2;C:\Develop\wxWidgets\wxWidgets-3.1.4\lib\vc_dll;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libBase.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libBase.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>

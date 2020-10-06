@@ -31,7 +31,8 @@ namespace th
 		panel->SetSizer(hSizer);
 
 		std::string logName = Apis::GetModuleDir() + "/Th10Ai_%N.log";
-		m_logger.addFileLog(logName);
+		Logger& logger = Logger::GetInstance();
+		logger.addFileLog(logName);
 
 		try
 		{

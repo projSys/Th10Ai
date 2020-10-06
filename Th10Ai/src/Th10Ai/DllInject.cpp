@@ -28,18 +28,10 @@ namespace th
 			BASE_THROW(Exception(u8"请以管理员身份运行。"));
 	}
 
-	void DllInject::Inject(DWORD processId, const std::string& dllName)
+	void _Inject(HANDLE process, const std::string& funcName, const std::string& param)
 	{
-		HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
-		if (process == nullptr)
-			BASE_THROW(WindowsError());
-		ON_SCOPE_EXIT([&]()
-			{
-				CloseHandle(process);
-			});
-
-		std::wstring dllNameW = Apis::Utf8ToWide(dllName);
-		uint_t sizeW = sizeof(std::wstring::value_type) * (dllNameW.size() + 1);
+		std::wstring paramW = Apis::Utf8ToWide(param);
+		uint_t sizeW = sizeof(std::wstring::value_type) * (paramW.size() + 1);
 
 		LPVOID memory = VirtualAllocEx(process, nullptr, sizeW, MEM_COMMIT | MEM_RESERVE,
 			PAGE_READWRITE);
@@ -51,7 +43,7 @@ namespace th
 			});
 
 		SIZE_T written = 0;
-		if (!WriteProcessMemory(process, memory, dllNameW.c_str(), sizeW, &written))
+		if (!WriteProcessMemory(process, memory, paramW.c_str(), sizeW, &written))
 			BASE_THROW(WindowsError());
 		if (written != sizeW)
 			BASE_THROW(Exception("written != sizeW."));
@@ -59,12 +51,12 @@ namespace th
 		HMODULE kernel32Dll = GetModuleHandleW(L"kernel32.dll");
 		if (kernel32Dll == nullptr)
 			BASE_THROW(WindowsError());
-		FARPROC loadLibraryW = GetProcAddress(kernel32Dll, "LoadLibraryW");
-		if (loadLibraryW == nullptr)
+		FARPROC func = GetProcAddress(kernel32Dll, funcName.c_str());
+		if (SetDllDirectoryW == nullptr)
 			BASE_THROW(WindowsError());
 
 		HANDLE thread = CreateRemoteThread(process, nullptr, 0,
-			reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibraryW), memory, 0, nullptr);
+			reinterpret_cast<LPTHREAD_START_ROUTINE>(func), memory, 0, nullptr);
 		if (thread == nullptr)
 			BASE_THROW(WindowsError());
 		ON_SCOPE_EXIT([&]()
@@ -78,11 +70,38 @@ namespace th
 		if (ret == WAIT_TIMEOUT)
 			BASE_THROW(Exception(u8"远线程执行超时。"));
 
-		// 获取线程退出码，即LoadLibraryW的返回值dll句柄
 		DWORD exitCode = 0;
 		if (!GetExitCodeThread(thread, &exitCode))
 			BASE_THROW(WindowsError());
 		if (exitCode == 0)
-			BASE_THROW(Exception(u8"LoadLibraryW()调用失败。"));
+			BASE_THROW(Exception(u8"远函数调用失败。"));
+	}
+
+	void DllInject::Inject(DWORD processId, const std::string& dllPath)
+	{
+		HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
+		if (process == nullptr)
+			BASE_THROW(WindowsError());
+		ON_SCOPE_EXIT([&]()
+			{
+				CloseHandle(process);
+			});
+
+		_Inject(process, "LoadLibraryW", dllPath);
+	}
+
+	void DllInject::Inject(DWORD processId, const std::string& dllDir,
+		const std::string& dllName)
+	{
+		HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
+		if (process == nullptr)
+			BASE_THROW(WindowsError());
+		ON_SCOPE_EXIT([&]()
+			{
+				CloseHandle(process);
+			});
+
+		_Inject(process, "SetDllDirectoryW", dllDir);
+		_Inject(process, "LoadLibraryW", dllName);
 	}
 }

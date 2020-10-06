@@ -15,7 +15,6 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 		hookLoader.start();
 		break;
 	}
-
 	case DLL_THREAD_ATTACH:
 		break;
 	case DLL_THREAD_DETACH:
