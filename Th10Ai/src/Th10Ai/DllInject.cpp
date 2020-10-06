@@ -52,7 +52,7 @@ namespace th
 		if (kernel32Dll == nullptr)
 			BASE_THROW(WindowsError());
 		FARPROC func = GetProcAddress(kernel32Dll, funcName.c_str());
-		if (SetDllDirectoryW == nullptr)
+		if (func == nullptr)
 			BASE_THROW(WindowsError());
 
 		HANDLE thread = CreateRemoteThread(process, nullptr, 0,
