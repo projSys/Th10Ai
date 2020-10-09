@@ -1,6 +1,6 @@
 #include "Th10Hook/WindowHook.h"
 
-#include "Th10Hook/HookLoader.h"
+#include "Th10Hook/DllLoader.h"
 
 namespace th
 {
@@ -103,8 +103,8 @@ namespace th
 				m_destroyed = true;
 				m_listener->onUnhook();
 				m_listener->onDestroy();
-				HookLoader& hookLoader = HookLoader::GetInstance();
-				hookLoader.join();
+				DllLoader& dllLoader = DllLoader::GetInstance();
+				dllLoader.join();
 				break;
 			}
 			}

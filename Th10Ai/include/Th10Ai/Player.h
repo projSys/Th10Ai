@@ -59,7 +59,6 @@ namespace th
 		explicit Player(const PlayerData& data);
 
 		void advance(DIR dir, bool slow);
-		void checkPrevMove(DIR prevDir, bool prevSlow) const;
 
 		bool isRebirthStatus() const;
 		bool isNormalStatus() const;

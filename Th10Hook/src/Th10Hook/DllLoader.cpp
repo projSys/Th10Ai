@@ -1,39 +1,39 @@
-#include "Th10Hook/HookLoader.h"
+#include "Th10Hook/DllLoader.h"
 
 #include <memory>
 
-#include "Th10Hook/HookMain.h"
 #include "Th10Hook/DllMain.h"
+#include "Th10Hook/DllFree.h"
+#include "Th10Hook/HookMain.h"
 #include "Th10Hook/WindowHook.h"
-#include "Th10Hook/SelfFree.h"
 
 namespace th
 {
-	HookLoader g_hookLoader;
+	DllLoader g_dllLoader;
 
-	HookLoader::HookLoader() :
+	DllLoader::DllLoader() :
 		Singleton(this)
 	{
 	}
 
-	void HookLoader::start()
+	void DllLoader::start()
 	{
-		m_thread = boost::thread(&HookLoader::proc, this);
+		m_thread = boost::thread(&DllLoader::proc, this);
 	}
 
-	void HookLoader::join()
+	void DllLoader::join()
 	{
 		if (m_thread.joinable())
 			m_thread.join();
 	}
 
-	void HookLoader::proc()
+	void DllLoader::proc()
 	{
 		try
 		{
-			std::string logName = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
+			std::string logPath = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
 			Logger& logger = Logger::GetInstance();
-			logger.addFileLog(logName);
+			logger.addFileLog(logPath);
 
 			std::unique_ptr<HookMain> hookMain = std::make_unique<HookMain>();
 			hookMain->run();
@@ -45,6 +45,6 @@ namespace th
 
 		WindowHook& windowHook = WindowHook::GetInstance();
 		if (!windowHook.isDestroyed())
-			SelfFree::Free();
+			DllFree::SelfFree();
 	}
 }

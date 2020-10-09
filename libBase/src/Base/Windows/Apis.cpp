@@ -117,11 +117,13 @@ namespace base
 			return WideToUtf8(buffer);
 		}
 
-		std::string Apis::GetModuleName(HMODULE module)
+		std::string Apis::GetModulePath(HMODULE module)
 		{
 			WCHAR buffer[BUFFER_SIZE] = {};
 			DWORD ret = GetModuleFileNameW(module, buffer, BUFFER_SIZE - 1);
 			if (ret == 0)
+				BASE_THROW(WindowsError());
+			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 				BASE_THROW(WindowsError());
 
 			return WideToUtf8(buffer);
@@ -132,6 +134,8 @@ namespace base
 			WCHAR buffer[BUFFER_SIZE] = {};
 			DWORD ret = GetModuleFileNameW(module, buffer, BUFFER_SIZE - 1);
 			if (ret == 0)
+				BASE_THROW(WindowsError());
+			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 				BASE_THROW(WindowsError());
 
 			filesystem::wpath p(buffer);

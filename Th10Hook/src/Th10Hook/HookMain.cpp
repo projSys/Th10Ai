@@ -11,6 +11,7 @@ namespace th
 		//freopen("conin$", "r", stdin);
 		//freopen("conout$", "w", stdout);
 		//freopen("conout$", "w", stderr);
+		//system("chcp 65001");
 
 		//HWND console = GetConsoleWindow();
 		//HMENU menu = GetSystemMenu(console, FALSE);

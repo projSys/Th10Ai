@@ -47,28 +47,6 @@ namespace th
 		}
 	}
 
-	void Player::checkPrevMove(DIR prevDir, bool prevSlow) const
-	{
-		Pointf prevDelta;
-		if (prevSlow)
-		{
-			prevDelta = MOVE_SPEED_LOW[enum_cast(prevDir)];
-		}
-		else
-		{
-			if (type == 1)
-			{
-				prevDelta = MOVE_SPEED_MARISA[enum_cast(prevDir)];
-			}
-			else
-			{
-				prevDelta = MOVE_SPEED_HIGH[enum_cast(prevDir)];
-			}
-		}
-		if (getDelta() != prevDelta)
-			std::cout << "ÒÆ¶¯½á¹û´íÎó¡£" << std::endl;
-	}
-
 	bool Player::isRebirthStatus() const
 	{
 		return status == 0;

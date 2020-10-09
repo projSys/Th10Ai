@@ -4,10 +4,10 @@
 
 namespace th
 {
-	class SelfFree
+	class DllFree
 	{
 	public:
-		static void Free();
+		static void SelfFree();
 
 	private:
 		static DWORD WINAPI FreeProc(LPVOID);

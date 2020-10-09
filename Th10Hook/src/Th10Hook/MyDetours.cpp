@@ -6,48 +6,48 @@ namespace th
 {
 	void MyDetours::TransactionBegin()
 	{
-		LONG errorId = DetourTransactionBegin();
-		if (errorId != NO_ERROR)
-			BASE_THROW(WindowsError(errorId));
+		LONG errorCode = DetourTransactionBegin();
+		if (errorCode != NO_ERROR)
+			BASE_THROW(WindowsError(errorCode));
 	}
 
 	void MyDetours::TransactionCommit()
 	{
-		LONG errorId = DetourTransactionCommit();
-		if (errorId != NO_ERROR)
+		LONG errorCode = DetourTransactionCommit();
+		if (errorCode != NO_ERROR)
 		{
 			DetourTransactionAbort();
-			BASE_THROW(WindowsError(errorId));
+			BASE_THROW(WindowsError(errorCode));
 		}
 	}
 
 	void MyDetours::UpdateThread(HANDLE thread)
 	{
-		LONG errorId = DetourUpdateThread(thread);
-		if (errorId != NO_ERROR)
+		LONG errorCode = DetourUpdateThread(thread);
+		if (errorCode != NO_ERROR)
 		{
 			DetourTransactionAbort();
-			BASE_THROW(WindowsError(errorId));
+			BASE_THROW(WindowsError(errorCode));
 		}
 	}
 
 	void MyDetours::Attach(PVOID* pointer, PVOID detour)
 	{
-		LONG errorId = DetourAttach(pointer, detour);
-		if (errorId != NO_ERROR)
+		LONG errorCode = DetourAttach(pointer, detour);
+		if (errorCode != NO_ERROR)
 		{
 			DetourTransactionAbort();
-			BASE_THROW(WindowsError(errorId));
+			BASE_THROW(WindowsError(errorCode));
 		}
 	}
 
 	void MyDetours::Detach(PVOID* pointer, PVOID detour)
 	{
-		LONG errorId = DetourDetach(pointer, detour);
-		if (errorId != NO_ERROR)
+		LONG errorCode = DetourDetach(pointer, detour);
+		if (errorCode != NO_ERROR)
 		{
 			DetourTransactionAbort();
-			BASE_THROW(WindowsError(errorId));
+			BASE_THROW(WindowsError(errorCode));
 		}
 	}
 }

@@ -7,11 +7,11 @@
 
 namespace th
 {
-	class HookLoader :
-		public Singleton<HookLoader>
+	class DllLoader :
+		public Singleton<DllLoader>
 	{
 	public:
-		HookLoader();
+		DllLoader();
 
 		void start();
 		void join();

@@ -4,35 +4,15 @@
 #include <Base/Clock.h>
 
 #include "Th10Ai/DllInject.h"
-#include "Th10Ai/MyWindow.h"
 #include "Th10Ai/Path.h"
 
 namespace th
 {
-	Th10Ai::Th10Ai(MyWindow* myWindow) :
-		m_myWindow(myWindow),
-		m_controlDone(false),
-		m_controlActive(false),
-		m_readDone(false),
-		m_readActive(false),
-		m_handleDone(false),
-		m_handleActive(false),
-		m_bombCount(0),
-		m_prevDir(DIR::HOLD),
-		m_prevSlow(false),
-		//m_statusUpdated(false)
-		m_bombTime(0)
+	Th10Ai::Th10Ai() :
+		m_active(false),
+		m_bombTime(0),
+		m_bombCount(0)
 	{
-		AllocConsole();
-		//system("chcp 65001");
-		freopen("conin$", "r", stdin);
-		freopen("conout$", "w", stdout);
-		freopen("conout$", "w", stderr);
-
-		HWND console = GetConsoleWindow();
-		HMENU menu = GetSystemMenu(console, FALSE);
-		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
-
 		HWND window = FindWindowW(L"BASE", nullptr);//L"搶曽晽恄榐丂乣 Mountain of Faith. ver 1.00a");
 		if (window == nullptr)
 			BASE_THROW(Exception(u8"东方风神录未运行。"));
@@ -47,195 +27,88 @@ namespace th
 
 		m_sharedData->setWindow(window);
 
-		//std::string dllPath = Apis::GetModuleDir() + "/Th10Hook.dll";
 		DllInject::EnableDebugPrivilege();
-		//DllInject::Inject(processId, dllPath);
 		DllInject::Inject(processId, Apis::GetModuleDir(), "Th10Hook.dll");
 
 		if (!m_sharedData->waitInit(3000))
 			BASE_THROW(Exception(u8"Th10Hook初始化失败，详细信息请查看Th10Hook.log。"));
 
-		//m_writeStatus = std::make_shared<Status>();
-		//m_middleStatus = std::make_shared<Status>();
-		//m_readStatus = std::make_shared<Status>();
-
 		m_scene.split(6);
-
-		m_controlThread = std::thread(&Th10Ai::controlProc, this);
-		//m_readThread = std::thread(&Th10Ai::readProc, this);
-		m_handleThread = std::thread(&Th10Ai::handleProc, this);
 	}
 
 	Th10Ai::~Th10Ai()
 	{
-		m_handleDone = true;
-		if (m_handleThread.joinable())
-			m_handleThread.join();
-
-		m_readDone = true;
 		m_sharedData->notifyUninit();
-		if (m_readThread.joinable())
-			m_readThread.join();
-
-		m_controlDone = true;
-		if (m_controlThread.joinable())
-			m_controlThread.join();
-
 		m_sharedMemory.destroy_ptr(m_sharedData);
 	}
 
-	bool Th10Ai::IsKeyPressed(int vKey)
+	bool IsKeyPressed(int vKey)
 	{
 		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
 	}
 
-	void Th10Ai::controlProc()
+	void Th10Ai::run()
 	{
-		try
+		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A启动AI，按S停止AI，按D退出AI。" << std::endl;
+		while (true)
 		{
-			std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A启动AI，按S停止AI，按D退出AI。" << std::endl;
-
-			while (!m_controlDone)
+			if (IsKeyPressed('A'))
 			{
-				if (IsKeyPressed('A'))
-				{
-					start();
-				}
-				else if (IsKeyPressed('S'))
-				{
-					stop();
-				}
-				else if (IsKeyPressed('D'))
-				{
-					break;
-				}
-
-				std::this_thread::sleep_for(std::chrono::milliseconds(16));
+				start();
 			}
-
-			stop();
-			std::cout << "退出AI。" << std::endl;
+			else if (IsKeyPressed('S'))
+			{
+				stop();
+			}
+			else if (IsKeyPressed('D'))
+			{
+				stop();
+				break;
+			}
+			else if (!handle())
+			{
+				stop();
+				break;
+			}
 		}
-		catch (...)
-		{
-			BASE_LOG_ERROR(PrintException());
-		}
-
-		//g_th10Hook.exit();
+		std::cout << "退出AI。" << std::endl;
 	}
 
 	void Th10Ai::start()
 	{
-		if (!m_controlActive)
+		if (!m_active)
 		{
-			m_controlActive = true;
-			m_readActive = true;
-			m_handleActive = true;
-
+			m_active = true;
 			std::cout << "启动AI。" << std::endl;
 		}
 	}
 
 	void Th10Ai::stop()
 	{
-		if (m_controlActive)
+		if (m_active)
 		{
-			m_controlActive = false;
-			m_readActive = false;
-			m_handleActive = false;
-
+			m_active = false;
 			std::cout << "停止AI。" << std::endl;
 			std::cout << "决死总数：" << m_bombCount << std::endl;
 		}
 	}
 
-	void Th10Ai::readProc()
+	bool Th10Ai::handle()
 	{
-		try
+		if (!m_active)
 		{
-			while (!m_readDone)
-			{
-				if (m_readActive)
-				{
-					//m_status.update();
-					//m_status.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
-					//m_writeStatus->update();
-					//if (!m_context.waitUpdate())
-					//{
-					//	m_handleDone = true;
-					//	m_readDone = true;
-					//	m_controlDone = true;
-					//	break;
-					//}
-					//m_window->update(m_context.getStatus());
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+			return true;
+		}
 
-					//lock_guard<mutex> lock(m_statusMutex);
-					//std::swap(m_writeStatus, m_middleStatus);
-					//m_statusUpdated = true;
-				}
-				else
-				{
-					std::this_thread::sleep_for(std::chrono::milliseconds(16));
-				}
-			}
-		}
-		catch (...)
-		{
-			m_controlDone = true;
-			BASE_LOG_ERROR(PrintException());
-		}
-	}
-
-	void Th10Ai::handleProc()
-	{
-		try
-		{
-			while (!m_handleDone)
-			{
-				if (m_handleActive)
-				{
-					handle();
-				}
-				else
-				{
-					std::this_thread::sleep_for(std::chrono::milliseconds(16));
-				}
-			}
-		}
-		catch (...)
-		{
-			m_controlDone = true;
-			BASE_LOG_ERROR(PrintException());
-		}
-	}
-
-	void Th10Ai::handle()
-	{
 		if (!m_sharedData->waitUpdate())
 		{
-			m_handleDone = true;
-			m_readDone = true;
-			m_controlDone = true;
-			return;
+			return false;
 		}
-
-		m_myWindow->update(m_sharedData->getStatus());
 
 		m_status2.update(m_status1);
 		m_status1.update(m_status);
 		m_status.update(m_sharedData->getStatus());
-		//m_status.getPlayer().checkPrevMove(m_prevDir, m_prevSlow);
-
-		//if (m_statusUpdated)
-		//{
-		//	lock_guard<mutex> lock(m_statusMutex);
-		//	std::swap(m_readStatus, m_middleStatus);
-		//	m_statusUpdated = false;
-		//}
-		//else
-		//{
-		//	return;
-		//}
 
 		m_scene.clearAll();
 		m_scene.splitEnemies(m_status.getEnemies());
@@ -248,6 +121,8 @@ namespace th
 		handleMove();
 
 		m_sharedData->commit();
+
+		return true;
 	}
 
 	// 处理炸弹
@@ -267,7 +142,7 @@ namespace th
 				m_status2.collide(m_status.getPlayer(), 2.0, id);
 
 				m_sharedData->getAction().bomb = true;
-				++m_bombCount;
+				m_bombCount += 1;
 				std::cout << "决死：" << m_bombCount << std::endl;
 				return true;
 			}
@@ -426,8 +301,5 @@ namespace th
 			m_sharedData->getAction().down = true;
 			break;
 		}
-
-		m_prevDir = dir;
-		m_prevSlow = slow;
 	}
 }

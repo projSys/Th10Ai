@@ -25,7 +25,7 @@ namespace base
 
 			static std::string GetErrorDesc(DWORD errorCode);
 
-			static std::string GetModuleName(HMODULE module = nullptr);
+			static std::string GetModulePath(HMODULE module = nullptr);
 			static std::string GetModuleDir(HMODULE module = nullptr);
 		};
 	}
