@@ -10,17 +10,15 @@
 namespace base
 {
 	template <typename T, typename Enable = void>
-	class TypeTraits
-	{
-	};
+	class TypeTraits;
 
 	template <typename T>
 	class TypeTraits<T, std::enable_if_t<std::is_integral_v<T>>>
 	{
 	public:
-		using value_t = T;
+		using Value_t = T;
 
-		static bool IsEqual(value_t left, value_t right)
+		static bool Equal(T left, T right)
 		{
 			return left == right;
 		}
@@ -30,21 +28,38 @@ namespace base
 	class TypeTraits<T, std::enable_if_t<std::is_floating_point_v<T>>>
 	{
 	public:
-		using value_t = T;
+		using Value_t = T;
 
 		// https://stackoverflow.com/questions/17333/what-is-the-most-effective-way-for-float-and-double-comparison
 		// https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
 		// https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
 		// https://www.boost.org/doc/libs/1_73_0/libs/math/doc/html/math_toolkit/float_comparison.html
-		static bool IsEqual(value_t left, value_t right)
+		static bool Equal(T left, T right)
 		{
-			value_t diff = std::abs(left - right);
-			if (diff <= std::numeric_limits<value_t>::epsilon())
+			T diff = std::abs(left - right);
+			if (diff <= std::numeric_limits<T>::epsilon())
 				return true;
-			value_t largest = std::max(std::abs(left), std::abs(right));
-			if (diff <= largest * std::numeric_limits<value_t>::epsilon())
+			T largest = std::max(std::abs(left), std::abs(right));
+			if (diff <= largest * std::numeric_limits<T>::epsilon())
 				return true;
 			return false;
 		}
+	};
+
+	template <typename T>
+	class FuncTraits;
+
+	template <typename R, typename... Args>
+	class FuncTraits<R(__stdcall *)(Args...)>
+	{
+	public:
+		using Raw_t = R(__stdcall *)(Args...);
+	};
+
+	template <typename C, typename R, typename... Args>
+	class FuncTraits<R(__stdcall C::*)(Args...)>
+	{
+	public:
+		using Raw_t = R(__stdcall *)(C*, Args...);
 	};
 }

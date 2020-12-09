@@ -14,7 +14,7 @@ namespace th
 		HMODULE dinput8Dll = GetModuleHandleW(L"dinput8.dll");
 		if (dinput8Dll == nullptr)
 			BASE_THROW(WindowsError());
-		DirectInput8Create_t* directInput8Create = reinterpret_cast<DirectInput8Create_t*>(
+		DirectInput8Create_t directInput8Create = reinterpret_cast<DirectInput8Create_t>(
 			GetProcAddress(dinput8Dll, "DirectInput8Create"));
 		if (directInput8Create == nullptr)
 			BASE_THROW(WindowsError());
@@ -31,7 +31,7 @@ namespace th
 			BASE_THROW(DxResult(hr, u8"CreateDevice()µ÷ÓÃÊ§°Ü¡£"));
 
 		uint_t* vTableA = reinterpret_cast<uint_t*>(*reinterpret_cast<uint_t*>(deviceA.p));
-		m_getDeviceStateOrigA = reinterpret_cast<GetDeviceStateA_t*>(vTableA[9]);
+		m_getDeviceStateOrigA = reinterpret_cast<GetDeviceStateA_t>(vTableA[9]);
 
 		MyDetours::TransactionBegin();
 		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_getDeviceStateOrigA), &DI8Hook::GetDeviceStateHookA);

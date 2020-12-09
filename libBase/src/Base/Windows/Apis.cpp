@@ -10,7 +10,7 @@ namespace base
 	{
 		namespace filesystem = boost::filesystem;
 
-		std::wstring _MultiByteToWideChar(UINT codePage, const char* str, int strSize)
+		std::wstring _MultiByteToWideChar(UINT codePage, LPCCH str, int strSize)
 		{
 			int wstrSize = MultiByteToWideChar(codePage, MB_ERR_INVALID_CHARS,
 				str, strSize, nullptr, 0);
@@ -26,7 +26,7 @@ namespace base
 			return wstr;
 		}
 
-		std::string _WideCharToMultiByte(UINT codePage, const wchar_t* wstr, int wstrSize)
+		std::string _WideCharToMultiByte(UINT codePage, LPCWCH wstr, int wstrSize)
 		{
 			int strSize = WideCharToMultiByte(codePage, WC_ERR_INVALID_CHARS,
 				wstr, wstrSize, nullptr, 0, nullptr, nullptr);

@@ -8,7 +8,7 @@ namespace base
 {
 	namespace win
 	{
-		StackTrace::StackTrace(uint_t framesToSkip)
+		StackTrace::StackTrace(DWORD framesToSkip)
 		{
 #ifdef _DEBUG
 			m_frameCount = CaptureStackBackTrace(framesToSkip + 1, FRAME_MAX_COUNT,
@@ -26,7 +26,7 @@ namespace base
 			SymSetOptions(SYMOPT_LOAD_LINES);
 			SymInitialize(process, nullptr, TRUE);
 
-			byte_t buffer[sizeof(SYMBOL_INFO) + sizeof(CHAR) * (MAX_SYM_NAME + 1)] = {};
+			BYTE buffer[sizeof(SYMBOL_INFO) + sizeof(CHAR) * (MAX_SYM_NAME + 1)] = {};
 			PSYMBOL_INFO symbol = reinterpret_cast<PSYMBOL_INFO>(buffer);
 			symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
 			symbol->MaxNameLen = MAX_SYM_NAME;

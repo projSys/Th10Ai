@@ -23,8 +23,8 @@ namespace th
 		float_t AB = CalcDistance(A, B);
 		float_t AC = CalcDistance(A, C);
 		float_t BC = CalcDistance(B, C);
-		if (TypeTraits<float_t>::IsEqual(AB, 0.0f)
-			|| TypeTraits<float_t>::IsEqual(AC, 0.0f))
+		if (TypeTraits<float_t>::Equal(AB, 0.0f)
+			|| TypeTraits<float_t>::Equal(AC, 0.0f))
 			return -1.0f;
 
 		float_t cosA = (AB * AB + AC * AC - BC * BC) / (2.0f * AB * AC);
@@ -48,8 +48,8 @@ namespace th
 
 		float_t dxBA = B.x - A.x;
 		float_t dyBA = B.y - A.y;
-		if (TypeTraits<float_t>::IsEqual(dxBA, 0.0f)
-			&& TypeTraits<float_t>::IsEqual(dyBA, 0.0f))
+		if (TypeTraits<float_t>::Equal(dxBA, 0.0f)
+			&& TypeTraits<float_t>::Equal(dyBA, 0.0f))
 		{
 			footPoint.k = 0.0f;
 			footPoint.pos = A;

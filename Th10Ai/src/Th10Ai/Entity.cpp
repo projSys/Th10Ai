@@ -240,8 +240,8 @@ namespace th
 
 	bool Entity::isHolding() const
 	{
-		return TypeTraits<float_t>::IsEqual(dx, 0.0f)
-			&& TypeTraits<float_t>::IsEqual(dy, 0.0f);
+		return TypeTraits<float_t>::Equal(dx, 0.0f)
+			&& TypeTraits<float_t>::Equal(dy, 0.0f);
 	}
 
 	Pointf Entity::getDelta() const

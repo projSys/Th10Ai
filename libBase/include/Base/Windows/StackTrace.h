@@ -4,8 +4,6 @@
 
 #include <ostream>
 
-#include "Base/Types.h"
-
 namespace base
 {
 	namespace win
@@ -13,7 +11,7 @@ namespace base
 		class StackTrace
 		{
 		public:
-			explicit StackTrace(uint_t framesToSkip = 0);
+			explicit StackTrace(DWORD framesToSkip = 0);
 
 			void printTo(std::ostream& os) const;
 

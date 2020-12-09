@@ -10,15 +10,15 @@ namespace base
 	class SizeBase
 	{
 	public:
-		using value_t = T;
-		using Traits = TypeTraits<value_t>;
+		using Value_t = T;
+		using Traits = TypeTraits<Value_t>;
 
 		constexpr SizeBase() :
 			width(), height()
 		{
 		}
 
-		constexpr SizeBase(value_t width0, value_t height0) :
+		constexpr SizeBase(Value_t width0, Value_t height0) :
 			width(width0), height(height0)
 		{
 		}
@@ -50,7 +50,7 @@ namespace base
 
 		bool operator ==(const SizeBase& other) const
 		{
-			return Traits::IsEqual(width, other.width) && Traits::IsEqual(height, other.height);
+			return Traits::Equal(width, other.width) && Traits::Equal(height, other.height);
 		}
 
 		bool operator !=(const SizeBase& other) const
@@ -60,11 +60,11 @@ namespace base
 
 		bool isEmpty() const
 		{
-			return width <= value_t() || height <= value_t();
+			return width <= Value_t() || height <= Value_t();
 		}
 
-		value_t width;
-		value_t height;
+		Value_t width;
+		Value_t height;
 	};
 
 	using Sizei = SizeBase<int_t>;

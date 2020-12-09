@@ -10,15 +10,15 @@ namespace base
 	class PointBase
 	{
 	public:
-		using value_t = T;
-		using Traits = TypeTraits<value_t>;
+		using Value_t = T;
+		using Traits = TypeTraits<Value_t>;
 
 		constexpr PointBase() :
 			x(), y()
 		{
 		}
 
-		constexpr PointBase(value_t x0, value_t y0) :
+		constexpr PointBase(Value_t x0, Value_t y0) :
 			x(x0), y(y0)
 		{
 		}
@@ -50,7 +50,7 @@ namespace base
 
 		bool operator ==(const PointBase& other) const
 		{
-			return Traits::IsEqual(x, other.x) && Traits::IsEqual(y, other.y);
+			return Traits::Equal(x, other.x) && Traits::Equal(y, other.y);
 		}
 
 		bool operator !=(const PointBase& other) const
@@ -58,8 +58,8 @@ namespace base
 			return !(*this == other);
 		}
 
-		value_t x;
-		value_t y;
+		Value_t x;
+		Value_t y;
 	};
 
 	using Pointi = PointBase<int_t>;

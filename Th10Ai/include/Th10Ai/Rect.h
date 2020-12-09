@@ -13,17 +13,17 @@ namespace base
 	class RectBase
 	{
 	public:
-		using value_t = T;
-		using Traits = TypeTraits<value_t>;
-		using Point = PointBase<value_t>;
-		using Size = SizeBase<value_t>;
+		using Value_t = T;
+		using Traits = TypeTraits<Value_t>;
+		using Point = PointBase<Value_t>;
+		using Size = SizeBase<Value_t>;
 
 		constexpr RectBase() :
 			x(), y(), width(), height()
 		{
 		}
 
-		constexpr RectBase(value_t x0, value_t y0, value_t width0, value_t height0) :
+		constexpr RectBase(Value_t x0, Value_t y0, Value_t width0, Value_t height0) :
 			x(x0), y(y0), width(width0), height(height0)
 		{
 		}
@@ -47,8 +47,8 @@ namespace base
 
 		bool operator ==(const RectBase& other) const
 		{
-			return Traits::IsEqual(x, other.x) && Traits::IsEqual(y, other.y)
-				&& Traits::IsEqual(width, other.width) && Traits::IsEqual(height, other.height);
+			return Traits::Equal(x, other.x) && Traits::Equal(y, other.y)
+				&& Traits::Equal(width, other.width) && Traits::Equal(height, other.height);
 		}
 
 		bool operator !=(const RectBase& other) const
@@ -58,7 +58,7 @@ namespace base
 
 		bool isEmpty() const
 		{
-			return width <= value_t() || height <= value_t();
+			return width <= Value_t() || height <= Value_t();
 		}
 
 		Point getPoint() const
@@ -71,10 +71,10 @@ namespace base
 			return Size(width, height);
 		}
 
-		value_t x;
-		value_t y;
-		value_t width;
-		value_t height;
+		Value_t x;
+		Value_t y;
+		Value_t width;
+		Value_t height;
 	};
 
 	using Recti = RectBase<int_t>;

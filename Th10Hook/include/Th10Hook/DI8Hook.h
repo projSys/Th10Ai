@@ -8,6 +8,7 @@
 
 #include <dinput.h>
 #include <atlbase.h>
+#include <Base/TypeTraits.h>
 #include <Base/Singleton.h>
 
 namespace th
@@ -28,15 +29,15 @@ namespace th
 
 	private:
 		// IDirectInput8
-		using DirectInput8Create_t = decltype(DirectInput8Create);
+		using DirectInput8Create_t = decltype(&DirectInput8Create);
 		// IDirectInputDevice8
-		using GetDeviceStateA_t = HRESULT STDMETHODCALLTYPE(IDirectInputDevice8A*, DWORD, LPVOID);
+		using GetDeviceStateA_t = FuncTraits<decltype(&IDirectInputDevice8A::GetDeviceState)>::Raw_t;
 
 		static HRESULT STDMETHODCALLTYPE GetDeviceStateHookA(IDirectInputDevice8A* device, DWORD size, LPVOID data);
 
 		HRESULT getDeviceStateHookA(IDirectInputDevice8A* device, DWORD size, LPVOID data);
 
 		DI8Listener* m_listener;
-		GetDeviceStateA_t* m_getDeviceStateOrigA;
+		GetDeviceStateA_t m_getDeviceStateOrigA;
 	};
 }
