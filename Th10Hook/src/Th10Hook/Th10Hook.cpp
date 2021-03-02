@@ -24,6 +24,7 @@ namespace th
 		player.status = ReadMemory<int32_t>(baseAddr + 0x458);
 		player.invincibleTime = ReadMemory<int32_t>(baseAddr + 0x4310);
 		player.slow = ReadMemory<int32_t>(baseAddr + 0x4474);
+
 		player.powers = ReadMemory<int32_t>(0x00474C48) / 20.0f;
 		player.type = ReadMemory<int32_t>(0x00474C68);
 		player.lives = ReadMemory<int32_t>(0x00474C70) + 1;
@@ -43,6 +44,7 @@ namespace th
 			return 0;
 
 		uint32_t ebp = baseAddr + 0x3C0;
+
 		for (int_t i = 0; i < 2000; ++i)
 		{
 			uint32_t eax = ReadMemory<uint32_t>(ebp + 0x30);
@@ -121,17 +123,18 @@ namespace th
 			return 0;
 
 		uint32_t ebx = baseAddr + 0x60;
+
 		for (int_t i = 0; i < 2000; ++i)
 		{
 			uint32_t bp = ReadMemory<uint32_t>(ebx + 0x446);
 			if ((bp & 0x0000FFFF) != 0)
 			{
-				uint32_t eax = ReadMemory<uint32_t>(0x00477810);
-				if (eax != 0)
-				{
-					eax = ReadMemory<uint32_t>(eax + 0x58);
-					if ((eax & 0x00000400) == 0)
-					{
+				//uint32_t eax = ReadMemory<uint32_t>(0x00477810);
+				//if (eax != 0)
+				//{
+				//	eax = ReadMemory<uint32_t>(eax + 0x58);
+				//	if ((eax & 0x00000400) == 0)
+				//	{
 						bullets[count].x = ReadMemory<float32_t>(ebx + 0x3B4);
 						bullets[count].y = ReadMemory<float32_t>(ebx + 0x3B8);
 						bullets[count].dx = ReadMemory<float32_t>(ebx + 0x3C0);
@@ -143,8 +146,8 @@ namespace th
 						//bullets[count].type = static_cast<int_t>(std::round(bullets[count].width));
 
 						++count;
-					}
-				}
+				//	}
+				//}
 			}
 			ebx += 0x7F0;
 		}

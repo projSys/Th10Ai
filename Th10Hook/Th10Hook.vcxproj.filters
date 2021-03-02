@@ -19,18 +19,18 @@
     <Filter Include="源文件\Th10Hook">
       <UniqueIdentifier>{a361e8ab-5aec-4181-9503-ebd49a9c8bc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Th10Hook\DirectX">
+      <UniqueIdentifier>{ccd05575-0972-411c-9d73-ccaa1f2156f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Th10Hook\DirectX">
+      <UniqueIdentifier>{e6d17421-9c42-4fbc-b1bd-7c03e440c82b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Th10Hook\Common.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\DllMain.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\D3D9Hook.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\DI8Hook.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\MyDetours.h">
@@ -57,15 +57,18 @@
     <ClInclude Include="include\Th10Hook\DllFree.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\DI8Hook.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\DXResult.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\DllMain.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\D3D9Hook.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\DI8Hook.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\MyDetours.cpp">
@@ -88,6 +91,15 @@
     </ClCompile>
     <ClCompile Include="src\Th10Hook\DllFree.cpp">
       <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\DI8Hook.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\DXResult.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

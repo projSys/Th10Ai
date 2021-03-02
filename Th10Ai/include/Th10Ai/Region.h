@@ -35,7 +35,7 @@ namespace th
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;
 
-		std::shared_ptr<Region> m_first;
-		std::shared_ptr<Region> m_second;
+		std::unique_ptr<Region> m_first;
+		std::unique_ptr<Region> m_second;
 	};
 }

@@ -1,5 +1,7 @@
 #include "Th10Hook/WindowHook.h"
 
+#include <Base/Windows/WindowsError.h>
+
 #include "Th10Hook/DllLoader.h"
 
 namespace th

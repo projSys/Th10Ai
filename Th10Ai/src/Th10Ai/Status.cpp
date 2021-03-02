@@ -1,6 +1,6 @@
 #include "Th10Ai/Status.h"
 
-#include <Base/Clock.h>
+#include <Base/Time.h>
 
 #include "Th10Ai/Scene.h"
 
@@ -63,7 +63,8 @@ namespace th
 		if (m_items.empty())
 			return target;
 
-		int64_t now = Clock::GetMilliseconds();
+		Time time = Time::Now();
+		int64_t now = time.getMilliSeconds();
 
 		//  ∞»°¿‰»¥÷–
 		if (now - m_findItemTime < 3000)

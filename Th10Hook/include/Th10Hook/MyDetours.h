@@ -8,6 +8,7 @@ namespace th
 	{
 	public:
 		static void TransactionBegin();
+		static void TransactionAbort();
 		static void TransactionCommit();
 
 		// GetCurrentThread()

@@ -10,7 +10,7 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
 ## 待改进
 
-* 碰撞检测不是100%准确，高速弹尤其明显<br />
+* 碰撞预测不准确，高速弹尤其明显<br />
 
 ## 运行要求
 

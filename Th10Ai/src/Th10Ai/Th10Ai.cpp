@@ -1,7 +1,9 @@
 #include "Th10Ai/Th10Ai.h"
 
 #include <boost/optional.hpp>
-#include <Base/Clock.h>
+#include <Base/Time.h>
+#include <Base/Windows/Process.h>
+#include <Base/Windows/Module.h>
 
 #include "Th10Ai/DllInject.h"
 #include "Th10Ai/Path.h"
@@ -28,7 +30,9 @@ namespace th
 		m_sharedData->setWindow(window);
 
 		DllInject::EnableDebugPrivilege();
-		DllInject::Inject(processId, Apis::GetModuleDir(), "Th10Hook.dll");
+		Process target = Process::Open(PROCESS_ALL_ACCESS, FALSE, processId);
+		std::string dllPath = Module().getDir() + "/Th10Hook.dll";
+		DllInject::Inject(target, dllPath);
 
 		if (!m_sharedData->waitInit(3000))
 			BASE_THROW(Exception(u8"Th10Hook初始化失败，详细信息请查看Th10Hook.log。"));
@@ -130,16 +134,17 @@ namespace th
 	{
 		if (m_status.getPlayer().isColliding())
 		{
-			int64_t now = Clock::GetMilliseconds();
+			Time time = Time::Now();
+			int64_t now = time.getMilliSeconds();
 			if (now - m_bombTime > 1000)
 			{
 				m_bombTime = now;
 
 				int_t id = m_status.collide(m_status.getPlayer(), 0.0);
 				m_status1.collide(m_status.getPlayer(), 1.0);
-				m_status2.collide(m_status.getPlayer(), 2.0);
+				m_status1.collide(m_status.getPlayer(), 2.0);
 				m_status1.collide(m_status.getPlayer(), 1.0, id);
-				m_status2.collide(m_status.getPlayer(), 2.0, id);
+				m_status1.collide(m_status.getPlayer(), 2.0, id);
 
 				m_sharedData->getAction().bomb = true;
 				m_bombCount += 1;

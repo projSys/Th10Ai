@@ -1,7 +1,7 @@
 #include "Th10Hook/HookMain.h"
 
 #include <Base/ScopeGuard.h>
-#include <Base/Clock.h>
+#include <Base/Time.h>
 
 namespace th
 {
@@ -62,10 +62,11 @@ namespace th
 		m_sharedData->notifyUninit();
 	}
 
-	void HookMain::onPresent(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
-		HWND destWindowOverride, CONST RGNDATA* dirtyRegion)
+	void HookMain::onPresent(IDirect3DDevice9* device, const RECT* sourceRect, const RECT* destRect,
+		HWND destWindowOverride, const RGNDATA* dirtyRegion)
 	{
-		//m_updateTime = Clock::GetMilliseconds();
+		//Time time = Time::Now();
+		//m_updateTime = time.getMilliSeconds();
 
 		StatusData& status = m_sharedData->getStatus();
 

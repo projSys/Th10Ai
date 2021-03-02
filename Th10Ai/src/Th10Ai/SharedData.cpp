@@ -1,6 +1,7 @@
 #include "Th10Ai/SharedData.h"
 
-#include <Base/Clock.h>
+#include <Base/Time.h>
+#include <Base/Windows/WindowsError.h>
 
 namespace th
 {
@@ -66,7 +67,8 @@ namespace th
 
 		m_updated = false;
 
-		//int64_t now = Clock::GetMilliseconds();
+		//Time time = Time::Now();
+		//int64_t now = time.getMilliSeconds();
 		//std::cout << now - m_updateTime << std::endl;
 
 		return !m_exited;

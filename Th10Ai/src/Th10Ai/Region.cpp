@@ -19,13 +19,13 @@ namespace th
 
 		if (width > height)
 		{
-			m_first = std::make_shared<Region>(x - width / 4.0f, y, width / 2.0f, height);
-			m_second = std::make_shared<Region>(x + width / 4.0f, y, width / 2.0f, height);
+			m_first = std::make_unique<Region>(x - width / 4.0f, y, width / 2.0f, height);
+			m_second = std::make_unique<Region>(x + width / 4.0f, y, width / 2.0f, height);
 		}
 		else
 		{
-			m_first = std::make_shared<Region>(x, y - height / 4.0f, width, height / 2.0f);
-			m_second = std::make_shared<Region>(x, y + height / 4.0f, width, height / 2.0f);
+			m_first = std::make_unique<Region>(x, y - height / 4.0f, width, height / 2.0f);
+			m_second = std::make_unique<Region>(x, y + height / 4.0f, width, height / 2.0f);
 		}
 
 		m_first->split(times - 1);

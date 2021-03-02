@@ -1,6 +1,7 @@
 #include "Th10Hook/DllLoader.h"
 
 #include <memory>
+#include <Base/Windows/Module.h>
 
 #include "Th10Hook/DllMain.h"
 #include "Th10Hook/DllFree.h"
@@ -31,9 +32,8 @@ namespace th
 	{
 		try
 		{
-			std::string logPath = Apis::GetModuleDir(g_dll) + "/Th10Hook_%N.log";
-			Logger& logger = Logger::GetInstance();
-			logger.addFileLog(logPath);
+			std::string logPath = Module(g_module).getDir() + "/Th10Hook_%N.log";
+			m_logger.addFileLog(logPath);
 
 			std::unique_ptr<HookMain> hookMain = std::make_unique<HookMain>();
 			hookMain->run();

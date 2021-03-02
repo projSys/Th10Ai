@@ -1,12 +1,20 @@
 #include "Th10Hook/MyDetours.h"
 
 #include <detours.h>
+#include <Base/Windows/WindowsError.h>
 
 namespace th
 {
 	void MyDetours::TransactionBegin()
 	{
 		LONG errorCode = DetourTransactionBegin();
+		if (errorCode != NO_ERROR)
+			BASE_THROW(WindowsError(errorCode));
+	}
+
+	void MyDetours::TransactionAbort()
+	{
+		LONG errorCode = DetourTransactionAbort();
 		if (errorCode != NO_ERROR)
 			BASE_THROW(WindowsError(errorCode));
 	}

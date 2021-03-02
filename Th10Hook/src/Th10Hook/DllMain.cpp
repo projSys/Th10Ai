@@ -2,7 +2,7 @@
 
 #include "Th10Hook/DllLoader.h"
 
-HMODULE g_dll = nullptr;
+HMODULE g_module = nullptr;
 
 BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 {
@@ -10,7 +10,7 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 	{
 	case DLL_PROCESS_ATTACH:
 	{
-		g_dll = module;
+		g_module = module;
 		th::DllLoader& dllLoader = th::DllLoader::GetInstance();
 		dllLoader.start();
 		break;

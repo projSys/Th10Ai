@@ -1,5 +1,7 @@
 #include "Th10Hook/DllFree.h"
 
+#include <Base/Windows/Thread.h>
+
 #include "Th10Hook/DllMain.h"
 #include "Th10Hook/DllLoader.h"
 
@@ -9,11 +11,8 @@ namespace th
 	{
 		try
 		{
-			HANDLE freeThread = CreateThread(nullptr, 0,
-				&DllFree::FreeProc, nullptr, 0, nullptr);
-			if (freeThread == nullptr)
-				BASE_THROW(WindowsError());
-			CloseHandle(freeThread);
+			Thread freeThread = Thread::Create(nullptr, 0,
+				&DllFree::FreeProc, nullptr, 0);
 		}
 		catch (...)
 		{
@@ -27,7 +26,7 @@ namespace th
 		dllLoader.join();
 
 		// 只在CreateThread创建的线程里有效
-		FreeLibraryAndExitThread(g_dll, 0);
+		FreeLibraryAndExitThread(g_module, 0);
 		return 0;
 	}
 }

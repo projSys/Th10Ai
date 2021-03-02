@@ -6,12 +6,18 @@
 
 namespace th
 {
-	struct PlayerRaw
+	struct RawPlayer
 	{
-		byte_t unknown[0x4478];
+		byte_t unknown[0x3C0];
+		float32_t x;
+		float32_t y;
+		float32_t dx;
+		float32_t dy;
+		byte_t unknown2[0x40A4];
+		int32_t slow;
 	};
 
-	static_assert(sizeof(PlayerRaw) == 0x4478, "Size is not correct.");
+	static_assert(sizeof(RawPlayer) == 0x4478, "Size is not correct.");
 
 	// 实体结构
 	// +-------+

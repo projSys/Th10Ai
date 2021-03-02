@@ -7,8 +7,8 @@
 
 #include "Th10Hook/SharedData.h"
 #include "Th10Hook/WindowHook.h"
-#include "Th10Hook/D3D9Hook.h"
-#include "Th10Hook/DI8Hook.h"
+#include "Th10Hook/DirectX/D3D9Hook.h"
+#include "Th10Hook/DirectX/DI8Hook.h"
 #include "Th10Hook/Th10Hook.h"
 
 namespace th
@@ -31,8 +31,8 @@ namespace th
 		virtual void onHook() override;
 		virtual void onUnhook() override;
 		virtual void onDestroy() override;
-		virtual void onPresent(IDirect3DDevice9* device, CONST RECT* sourceRect, CONST RECT* destRect,
-			HWND destWindowOverride, CONST RGNDATA* dirtyRegion) override;
+		virtual void onPresent(IDirect3DDevice9* device, const RECT* sourceRect, const RECT* destRect,
+			HWND destWindowOverride, const RGNDATA* dirtyRegion) override;
 		virtual void onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data) override;
 
 		interprocess::managed_windows_shared_memory m_sharedMemory;
