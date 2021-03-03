@@ -33,6 +33,8 @@ namespace base
 
 			bool operator ==(nullptr_t) const;
 			bool operator !=(nullptr_t) const;
+			bool operator !() const;
+			operator bool() const;
 			operator HMODULE() const;
 
 		protected:

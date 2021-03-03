@@ -5,31 +5,22 @@
 #include <ostream>
 
 #include "Base/Types.h"
+#include "Base/Singleton.h"
 
 namespace base
 {
-	class SourceLocation
+	class SourceLocation :
+		public ThreadLocal<SourceLocation>
 	{
 	public:
-		static void Set(const char* func, const char* file, uint_t line);
-		static const SourceLocation& Get();
-
-		SourceLocation();
+		SourceLocation(
+			const char* func, const char* file, uint_t line);
 
 		void printTo(std::ostream& os) const;
 
-		const char* getFunc() const;
-		const char* getFile() const;
-		uint_t getLine() const;
-
 	private:
-		static thread_local SourceLocation stl_current;
-
 		const char* m_func;
 		const char* m_file;
 		uint_t m_line;
 	};
-
-#define STORE_SOURCE_LOCATION \
-	SourceLocation::Set(__FUNCTION__, __FILE__, __LINE__)
 }

@@ -80,6 +80,16 @@ namespace base
 			return m_module != nullptr;
 		}
 
+		bool Module::operator !() const
+		{
+			return m_module == nullptr;
+		}
+
+		Module::operator bool() const
+		{
+			return m_module != nullptr;
+		}
+
 		Module::operator HMODULE() const
 		{
 			return m_module;

@@ -3,58 +3,106 @@
   <ItemGroup>
     <Filter Include="源文件">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="头文件">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="头文件\Th10Hook">
-      <UniqueIdentifier>{7794c356-1e0a-4ac7-bc77-bc8eb4029fea}</UniqueIdentifier>
+      <UniqueIdentifier>{d6465333-4e38-49c9-8c00-bda71983b8d4}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Th10Hook">
-      <UniqueIdentifier>{a361e8ab-5aec-4181-9503-ebd49a9c8bc8}</UniqueIdentifier>
+      <UniqueIdentifier>{6e1f796c-d01f-47a7-8d2d-927096d43f54}</UniqueIdentifier>
     </Filter>
     <Filter Include="头文件\Th10Hook\DirectX">
-      <UniqueIdentifier>{ccd05575-0972-411c-9d73-ccaa1f2156f9}</UniqueIdentifier>
+      <UniqueIdentifier>{deba2d63-1e8d-440c-9fbd-07faa97b4ca4}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Th10Hook\DirectX">
-      <UniqueIdentifier>{e6d17421-9c42-4fbc-b1bd-7c03e440c82b}</UniqueIdentifier>
+      <UniqueIdentifier>{c047154d-e1aa-41b0-bc19-badbbbcbf5d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Th10Hook\Bullet.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
     <ClInclude Include="include\Th10Hook\Common.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\DllMain.h">
+    <ClInclude Include="include\Th10Hook\Direction.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\MyDetours.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\Th10Hook.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\WindowHook.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\SharedData.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\HookMain.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\Th10Types.h">
+    <ClInclude Include="include\Th10Hook\DllFree.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\DllLoader.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\DllFree.h">
+    <ClInclude Include="include\Th10Hook\DllMain.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Enemy.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Entity.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\HookMain.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Item.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Laser.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\MyDetours.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Path.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Player.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Point.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Rect.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Region.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Scene.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\SharedData.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Size.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Status.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Th10Ai.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Th10Hook.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Th10Types.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Utils.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\WindowHook.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h">
@@ -68,28 +116,64 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Th10Hook\DllMain.cpp">
+    <ClCompile Include="src\Th10Hook\Bullet.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\MyDetours.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\Th10Hook.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\WindowHook.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\SharedData.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\HookMain.cpp">
+    <ClCompile Include="src\Th10Hook\DllFree.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\DllLoader.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\DllFree.cpp">
+    <ClCompile Include="src\Th10Hook\DllMain.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Enemy.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Entity.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\HookMain.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Item.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Laser.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\MyDetours.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Path.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Player.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Region.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Scene.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\SharedData.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Status.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Th10Ai.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Th10Hook.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Utils.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\WindowHook.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp">

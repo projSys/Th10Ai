@@ -48,6 +48,16 @@ namespace base
 			return m_handle != nullptr;
 		}
 
+		bool Handle::operator !() const
+		{
+			return m_handle == nullptr;
+		}
+
+		Handle::operator bool() const
+		{
+			return m_handle != nullptr;
+		}
+
 		Handle::operator HANDLE() const
 		{
 			return m_handle;

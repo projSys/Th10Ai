@@ -6,14 +6,14 @@
 namespace th
 {
 	DXResult::DXResult(HRESULT result, const char* str) :
-		Exception(str, 1),
+		Exception(str),
 		m_result(result),
 		m_customized(!String::IsEmpty(str))
 	{
 	}
 
 	DXResult::DXResult(HRESULT result, const std::string& str) :
-		Exception(str, 1),
+		Exception(str),
 		m_result(result),
 		m_customized(!str.empty())
 	{

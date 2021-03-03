@@ -1,7 +1,6 @@
 #include "Th10Hook/HookMain.h"
 
 #include <Base/ScopeGuard.h>
-#include <Base/Time.h>
 
 namespace th
 {
@@ -65,9 +64,6 @@ namespace th
 	void HookMain::onPresent(IDirect3DDevice9* device, const RECT* sourceRect, const RECT* destRect,
 		HWND destWindowOverride, const RGNDATA* dirtyRegion)
 	{
-		//Time time = Time::Now();
-		//m_updateTime = time.getMilliSeconds();
-
 		StatusData& status = m_sharedData->getStatus();
 
 		status.presentFrame += 1;

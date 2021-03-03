@@ -7,7 +7,7 @@ namespace base
 	namespace win
 	{
 		WindowsError::WindowsError(DWORD errorCode) :
-			Exception(nullptr, 1),
+			Exception(nullptr),
 			m_errorCode(errorCode)
 		{
 		}

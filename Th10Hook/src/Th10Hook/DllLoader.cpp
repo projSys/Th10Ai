@@ -5,8 +5,8 @@
 
 #include "Th10Hook/DllMain.h"
 #include "Th10Hook/DllFree.h"
-#include "Th10Hook/HookMain.h"
 #include "Th10Hook/WindowHook.h"
+#include "Th10Hook/Th10Ai.h"
 
 namespace th
 {
@@ -35,8 +35,8 @@ namespace th
 			std::string logPath = Module(g_module).getDir() + "/Th10Hook_%N.log";
 			m_logger.addFileLog(logPath);
 
-			std::unique_ptr<HookMain> hookMain = std::make_unique<HookMain>();
-			hookMain->run();
+			std::unique_ptr<Th10Ai> th10Ai = std::make_unique<Th10Ai>();
+			th10Ai->run();
 		}
 		catch (...)
 		{

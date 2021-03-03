@@ -5,17 +5,21 @@
 
 namespace base
 {
-	Exception::Exception(const char* str, uint_t framesToSkip) :
+	Exception::Exception(const char* str) :
 		runtime_error(str),
-		m_sourceLocation(SourceLocation::Get()),
-		m_stackTrace(framesToSkip + 1)
+		m_sourceLocation(SourceLocation::GetInstance())
+#ifdef BASE_WINDOWS
+		, m_stackTrace(win::StackTrace::GetInstance())
+#endif
 	{
 	}
 
-	Exception::Exception(const std::string& str, uint_t framesToSkip) :
+	Exception::Exception(const std::string& str) :
 		runtime_error(str),
-		m_sourceLocation(SourceLocation::Get()),
-		m_stackTrace(framesToSkip + 1)
+		m_sourceLocation(SourceLocation::GetInstance())
+#ifdef BASE_WINDOWS
+		, m_stackTrace(win::StackTrace::GetInstance())
+#endif
 	{
 	}
 
@@ -24,7 +28,9 @@ namespace base
 		os << what() << '\n';
 
 		m_sourceLocation.printTo(os);
+#ifdef BASE_WINDOWS
 		m_stackTrace.printTo(os);
+#endif
 	}
 
 	std::string PrintException()
