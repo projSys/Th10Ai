@@ -13,18 +13,6 @@ namespace th
 	{
 	}
 
-	Player::Player(const PlayerData& data) :
-		Entity(data),
-		status(data.status),
-		invincibleTime(data.invincibleTime),
-		slow(data.slow),
-		powers(data.powers),
-		type(data.type),
-		lives(data.lives),
-		itemObtainRange(data.itemObtainRange)
-	{
-	}
-
 	void Player::advance(DIR dir, bool slow)
 	{
 		if (slow)

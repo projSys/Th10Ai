@@ -7,6 +7,7 @@
 #include "Th10Hook/DllFree.h"
 #include "Th10Hook/WindowHook.h"
 #include "Th10Hook/Th10Ai.h"
+#include "Th10Hook/Console.h"
 
 namespace th
 {
@@ -32,6 +33,8 @@ namespace th
 	{
 		try
 		{
+			Console console;
+
 			std::string logPath = Module(g_module).getDir() + "/Th10Hook_%N.log";
 			m_logger.addFileLog(logPath);
 

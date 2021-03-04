@@ -56,7 +56,6 @@ namespace th
 		};
 
 		Player();
-		explicit Player(const PlayerData& data);
 
 		void advance(DIR dir, bool slow);
 
@@ -65,12 +64,22 @@ namespace th
 		bool isColliding() const;
 		bool isInvincible() const;
 
-		int_t status;
-		int_t invincibleTime;
-		int_t slow;
-		float_t powers;
-		int_t type;
-		int_t lives;
-		float_t itemObtainRange;
+		// status == 0 重生状态，此时无敌
+		// status == 1 正常状态
+		// status == 2 死亡
+		// status == 3 Unknown
+		// status == 4 被弹、决死，此时放B可以决死
+		int32_t status;
+		// 剩余无敌时间
+		int32_t invincibleTime;
+		// slow == 0 High Speed
+		// slow == 1 Low Speed
+		int32_t slow;
+		float32_t powers;
+		// type == 0 Reimu
+		// type == 1 Marisa
+		int32_t type;
+		int32_t lives;
+		float32_t itemObtainRange;
 	};
 }

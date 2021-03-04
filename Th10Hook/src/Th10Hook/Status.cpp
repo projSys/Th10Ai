@@ -2,6 +2,7 @@
 
 #include <Base/Time.h>
 
+#include "Th10Hook/Th10Hook.h"
 #include "Th10Hook/Scene.h"
 
 namespace th
@@ -17,29 +18,19 @@ namespace th
 		m_lasers.reserve(200);
 	}
 
-	void Status::update(const StatusData& data)
+	void Status::update()
 	{
-		m_inputFrame = data.inputFrame;
-		m_presentFrame = data.presentFrame;
-		m_player = Player(data.player);
-		m_items.clear();
-		for (uint_t i = 0; i < data.itemCount; ++i)
-			m_items.emplace_back(data.items[i]);
-		m_enemies.clear();
-		for (uint_t i = 0; i < data.enemyCount; ++i)
-			m_enemies.emplace_back(data.enemies[i]);
-		m_bullets.clear();
-		for (uint_t i = 0; i < data.bulletCount; ++i)
-			m_bullets.emplace_back(data.bullets[i]);
-		m_lasers.clear();
-		for (uint_t i = 0; i < data.laserCount; ++i)
-			m_lasers.emplace_back(data.lasers[i]);
+		Th10Hook::ReadPlayer(m_player);
+		Th10Hook::ReadItems(m_items);
+		Th10Hook::ReadEnemies(m_enemies);
+		Th10Hook::ReadBullets(m_bullets);
+		Th10Hook::ReadLasers(m_lasers);
+
+		m_presentFrame += 1;
 	}
 
-	void Status::update(const Status& other)
+	void Status::copy(const Status& other)
 	{
-		m_inputFrame = other.m_inputFrame;
-		m_presentFrame = other.m_presentFrame;
 		m_player = other.m_player;
 		m_items.clear();
 		for (const Item& item : other.m_items)
@@ -53,6 +44,9 @@ namespace th
 		m_lasers.clear();
 		for (const Laser& laser : other.m_lasers)
 			m_lasers.push_back(laser);
+
+		m_inputFrame = other.m_inputFrame;
+		m_presentFrame = other.m_presentFrame;
 	}
 
 	// ²éÕÒµÀ¾ß

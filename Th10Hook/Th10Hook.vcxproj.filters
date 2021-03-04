@@ -51,9 +51,6 @@
     <ClInclude Include="include\Th10Hook\Entity.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\HookMain.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\Item.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
@@ -79,9 +76,6 @@
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\Scene.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\SharedData.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\Size.h">
@@ -114,6 +108,9 @@
     <ClInclude Include="include\Th10Hook\DirectX\DXResult.h">
       <Filter>头文件\Th10Hook\DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Hook\Console.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp">
@@ -132,9 +129,6 @@
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Entity.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\HookMain.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Item.cpp">
@@ -156,9 +150,6 @@
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Scene.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\SharedData.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Status.cpp">
@@ -184,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="src\Th10Hook\DirectX\DXResult.cpp">
       <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Console.cpp">
+      <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

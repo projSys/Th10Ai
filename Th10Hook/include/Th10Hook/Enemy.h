@@ -11,7 +11,6 @@ namespace th
 	{
 	public:
 		Enemy();
-		explicit Enemy(const EnemyData& data);
 
 		bool isBoss() const;
 	};

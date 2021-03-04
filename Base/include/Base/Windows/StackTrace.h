@@ -19,10 +19,10 @@ namespace base
 			void printTo(std::ostream& os) const;
 
 		private:
-			static constexpr DWORD FRAME_MAX_COUNT = 128;
+			static constexpr DWORD BUFFER_SIZE = 128;
 
-			PVOID m_frames[FRAME_MAX_COUNT];
-			WORD m_frameCount;
+			PVOID m_frames[BUFFER_SIZE];
+			WORD m_size;
 		};
 	}
 }

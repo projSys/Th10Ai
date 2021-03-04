@@ -6,13 +6,8 @@ namespace th
 	{
 	}
 
-	Enemy::Enemy(const EnemyData& data) :
-		Entity(data)
-	{
-	}
-
 	bool Enemy::isBoss() const
 	{
-		return getSize() == Sizef(32.0f, 32.0f);
+		return getSize() == Sizef(32.0, 32.0);
 	}
 }

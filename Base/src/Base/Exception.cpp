@@ -54,7 +54,7 @@ namespace base
 		}
 		catch (...)
 		{
-			sout << "Unclassified exception.\n";
+			sout << "Unknown exception.\n";
 		}
 		return sout.str();
 	}

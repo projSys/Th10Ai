@@ -12,8 +12,6 @@ namespace base
 		class Module
 		{
 		public:
-			static constexpr DWORD BUFFER_SIZE = 1024;
-
 			static Module Get(const char* name);
 
 			Module();
@@ -38,6 +36,8 @@ namespace base
 			operator HMODULE() const;
 
 		protected:
+			static constexpr DWORD BUFFER_SIZE = 1024;
+
 			HMODULE m_module;
 		};
 	}

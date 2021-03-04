@@ -5,7 +5,6 @@
 #include <vector>
 #include <boost/optional.hpp>
 
-#include "Th10Hook/Th10Types.h"
 #include "Th10Hook/Player.h"
 #include "Th10Hook/Item.h"
 #include "Th10Hook/Enemy.h"
@@ -19,8 +18,8 @@ namespace th
 	public:
 		Status();
 
-		void update(const StatusData& data);
-		void update(const Status& other);
+		void update();
+		void copy(const Status& other);
 
 		// Player
 
@@ -44,9 +43,10 @@ namespace th
 		const std::vector<Bullet>& getBullets() const;
 		const std::vector<Laser>& getLasers() const;
 
-	private:
 		uint_t m_inputFrame;
 		uint_t m_presentFrame;
+
+	private:
 		Player m_player;
 		std::vector<Item> m_items;
 		std::vector<Enemy> m_enemies;

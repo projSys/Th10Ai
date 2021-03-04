@@ -6,10 +6,4 @@ namespace th
 		id(0)
 	{
 	}
-
-	Bullet::Bullet(const BulletData& data) :
-		Entity(data),
-		id(data.id)
-	{
-	}
 }

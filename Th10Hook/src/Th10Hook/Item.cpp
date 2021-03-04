@@ -6,10 +6,4 @@ namespace th
 		type()
 	{
 	}
-
-	Item::Item(const ItemData& data) :
-		Entity(data),
-		type(data.type)
-	{
-	}
 }

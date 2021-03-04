@@ -5,7 +5,6 @@
 #include "Th10Hook/Point.h"
 #include "Th10Hook/Size.h"
 #include "Th10Hook/Rect.h"
-#include "Th10Hook/Th10Types.h"
 #include "Th10Hook/Direction.h"
 #include "Th10Hook/Utils.h"
 
@@ -24,11 +23,6 @@ namespace th
 		static const DIR SECTOR_TO_DIR[17];
 
 		Entity();
-		Entity(const PlayerData& data);
-		Entity(const ItemData& data);
-		Entity(const EnemyData& data);
-		Entity(const BulletData& data);
-		Entity(const LaserData& data);
 		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
 
 		float_t calcDistance(const Pointf& pos) const;
@@ -59,7 +53,7 @@ namespace th
 		//int_t id;
 		//int_t type;
 
-		float_t x;
+		float_t x;			// 坐标在中心点
 		float_t y;
 		float_t dx;
 		float_t dy;

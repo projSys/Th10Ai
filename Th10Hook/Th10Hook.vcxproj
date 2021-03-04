@@ -85,7 +85,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>false</SDLCheck>
+      <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;TH10HOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_75_0;D:\Develop\Touhou\Detours-master\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -103,7 +103,7 @@
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>false</SDLCheck>
+      <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;TH10HOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_75_0;D:\Develop\Touhou\Detours-master\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="include\Th10Hook\Bullet.h" />
     <ClInclude Include="include\Th10Hook\Common.h" />
+    <ClInclude Include="include\Th10Hook\Console.h" />
     <ClInclude Include="include\Th10Hook\Direction.h" />
     <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h" />
     <ClInclude Include="include\Th10Hook\DirectX\DI8Hook.h" />
@@ -160,7 +161,6 @@
     <ClInclude Include="include\Th10Hook\DllMain.h" />
     <ClInclude Include="include\Th10Hook\Enemy.h" />
     <ClInclude Include="include\Th10Hook\Entity.h" />
-    <ClInclude Include="include\Th10Hook\HookMain.h" />
     <ClInclude Include="include\Th10Hook\Item.h" />
     <ClInclude Include="include\Th10Hook\Laser.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
@@ -170,7 +170,6 @@
     <ClInclude Include="include\Th10Hook\Rect.h" />
     <ClInclude Include="include\Th10Hook\Region.h" />
     <ClInclude Include="include\Th10Hook\Scene.h" />
-    <ClInclude Include="include\Th10Hook\SharedData.h" />
     <ClInclude Include="include\Th10Hook\Size.h" />
     <ClInclude Include="include\Th10Hook\Status.h" />
     <ClInclude Include="include\Th10Hook\Th10Ai.h" />
@@ -181,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp" />
+    <ClCompile Include="src\Th10Hook\Console.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\DI8Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\DXResult.cpp" />
@@ -189,7 +189,6 @@
     <ClCompile Include="src\Th10Hook\DllMain.cpp" />
     <ClCompile Include="src\Th10Hook\Enemy.cpp" />
     <ClCompile Include="src\Th10Hook\Entity.cpp" />
-    <ClCompile Include="src\Th10Hook\HookMain.cpp" />
     <ClCompile Include="src\Th10Hook\Item.cpp" />
     <ClCompile Include="src\Th10Hook\Laser.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
@@ -197,7 +196,6 @@
     <ClCompile Include="src\Th10Hook\Player.cpp" />
     <ClCompile Include="src\Th10Hook\Region.cpp" />
     <ClCompile Include="src\Th10Hook\Scene.cpp" />
-    <ClCompile Include="src\Th10Hook\SharedData.cpp" />
     <ClCompile Include="src\Th10Hook\Status.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Ai.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />

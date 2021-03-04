@@ -23,7 +23,6 @@ namespace th
 	{
 	public:
 		Laser();
-		explicit Laser(const LaserData& data);
 
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;

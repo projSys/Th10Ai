@@ -12,9 +12,9 @@ namespace base
 			ThreadLocal(this)
 		{
 #ifdef _DEBUG
-			m_frameCount = CaptureStackBackTrace(1, FRAME_MAX_COUNT, m_frames, nullptr);
+			m_size = CaptureStackBackTrace(1, BUFFER_SIZE, m_frames, nullptr);
 #else
-			m_frameCount = CaptureStackBackTrace(0, FRAME_MAX_COUNT, m_frames, nullptr);
+			m_size = CaptureStackBackTrace(0, BUFFER_SIZE, m_frames, nullptr);
 #endif
 		}
 
@@ -38,7 +38,7 @@ namespace base
 			DWORD lineDisplacement = 0;
 
 			os << "StackTrace:\n";
-			for (WORD i = 0; i < m_frameCount; ++i)
+			for (WORD i = 0; i < m_size; ++i)
 			{
 				DWORD64 address = reinterpret_cast<DWORD64>(m_frames[i]);
 

@@ -1,11 +1,8 @@
 #include "Th10Hook/Th10Ai.h"
 
-#include <thread>
 #include <boost/optional.hpp>
 #include <Base/ScopeGuard.h>
 #include <Base/Time.h>
-#include <Base/Windows/Process.h>
-#include <Base/Windows/Module.h>
 
 #include "Th10Hook/Path.h"
 
@@ -18,16 +15,6 @@ namespace th
 		m_bombCount(0),
 		m_actionUpdated(false)
 	{
-		AllocConsole();
-		freopen("conin$", "r", stdin);
-		freopen("conout$", "w", stdout);
-		freopen("conout$", "w", stderr);
-		//system("chcp 65001");
-
-		HWND console = GetConsoleWindow();
-		HMENU menu = GetSystemMenu(console, FALSE);
-		EnableMenuItem(menu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
-
 		m_scene.split(6);
 	}
 
@@ -46,7 +33,6 @@ namespace th
 		if (window == nullptr)
 			BASE_THROW(Exception(u8"东方风神录未运行。"));
 
-		// 会触发监听器的虚函数回调，不要放在构造函数
 		WindowHook& windowHook = WindowHook::GetInstance();
 		windowHook.hook(window, this);
 		ON_SCOPE_EXIT([&]()
@@ -81,16 +67,14 @@ namespace th
 
 	void Th10Ai::onHook()
 	{
-		m_th10Hook = std::make_unique<Th10Hook>(this);
 		m_d3d9Hook = std::make_unique<D3D9Hook>(this);
 		m_di8Hook = std::make_unique<DI8Hook>(this);
 	}
 
 	void Th10Ai::onUnhook()
 	{
-		m_di8Hook = nullptr;
 		m_d3d9Hook = nullptr;
-		m_th10Hook = nullptr;
+		m_di8Hook = nullptr;
 	}
 
 	void Th10Ai::onDestroy()
@@ -101,21 +85,16 @@ namespace th
 	void Th10Ai::onPresent(IDirect3DDevice9* device, const RECT* sourceRect, const RECT* destRect,
 		HWND destWindowOverride, const RGNDATA* dirtyRegion)
 	{
-		m_statusData.presentFrame += 1;
-		m_th10Hook->readPlayer(m_statusData.player);
-		m_statusData.itemCount = m_th10Hook->readItems(m_statusData.items);
-		m_statusData.enemyCount = m_th10Hook->readEnemies(m_statusData.enemies);
-		m_statusData.bulletCount = m_th10Hook->readBullets(m_statusData.bullets);
-		m_statusData.laserCount = m_th10Hook->readLasers(m_statusData.lasers);
+		m_status.update();
 
-		std::unique_lock<std::mutex> lock(m_updateMutex);
-		m_updated = true;
-		m_updateCond.notify_one();
+		std::unique_lock<std::mutex> lock(m_statusMutex);
+		m_statusUpdated = true;
+		m_statusCond.notify_one();
 	}
 
 	void Th10Ai::onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data)
 	{
-		m_statusData.inputFrame += 1;
+		m_status.m_inputFrame += 1;
 
 		// c_dfDIKeyboard
 		if (size == 256 && data != nullptr)
@@ -210,19 +189,19 @@ namespace th
 		}
 
 		{
-			std::unique_lock<std::mutex> lock(m_updateMutex);
-			if (!m_updated)
-				m_updateCond.wait(lock);
+			std::unique_lock<std::mutex> lock(m_statusMutex);
+			if (!m_statusUpdated)
+				m_statusCond.wait(lock);
+
+			m_status2.copy(m_status1);
+			m_status1.copy(m_status0);
+			m_status0.copy(m_status);
 		}
 
-		m_status2.update(m_status1);
-		m_status1.update(m_status);
-		m_status.update(m_statusData);
-
 		m_scene.clearAll();
-		m_scene.splitEnemies(m_status.getEnemies());
-		m_scene.splitBullets(m_status.getBullets());
-		m_scene.splitLasers(m_status.getLasers());
+		m_scene.splitEnemies(m_status0.getEnemies());
+		m_scene.splitBullets(m_status0.getBullets());
+		m_scene.splitLasers(m_status0.getLasers());
 
 		handleBomb();
 		handleTalk();
@@ -237,7 +216,7 @@ namespace th
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_status.getPlayer().isColliding())
+		if (m_status0.getPlayer().isColliding())
 		{
 			Time time = Time::Now();
 			int64_t now = time.getMilliSeconds();
@@ -245,11 +224,11 @@ namespace th
 			{
 				m_bombTime = now;
 
-				int_t id = m_status.collide(m_status.getPlayer(), 0.0);
-				m_status1.collide(m_status.getPlayer(), 1.0);
-				m_status1.collide(m_status.getPlayer(), 2.0);
-				m_status1.collide(m_status.getPlayer(), 1.0, id);
-				m_status1.collide(m_status.getPlayer(), 2.0, id);
+				int_t id = m_status0.collide(m_status0.getPlayer(), 0.0);
+				m_status1.collide(m_status0.getPlayer(), 1.0);
+				m_status1.collide(m_status0.getPlayer(), 2.0);
+				m_status1.collide(m_status0.getPlayer(), 1.0, id);
+				m_status1.collide(m_status0.getPlayer(), 2.0, id);
 
 				m_actionData.bomb = true;
 				m_bombCount += 1;
@@ -272,7 +251,7 @@ namespace th
 	// 处理对话
 	bool Th10Ai::handleTalk()
 	{
-		if (m_status.isTalking())
+		if (m_status0.isTalking())
 		{
 			m_actionData.skip = true;
 			return true;
@@ -287,7 +266,7 @@ namespace th
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_status.hasEnemy())
+		if (m_status0.hasEnemy())
 		{
 			m_actionData.shoot = true;
 			return true;
@@ -302,12 +281,12 @@ namespace th
 	// 处理移动
 	bool Th10Ai::handleMove()
 	{
-		if (!m_status.getPlayer().isNormalStatus())
+		if (!m_status0.getPlayer().isNormalStatus())
 			return false;
 
-		boost::optional<Item> itemTarget = m_status.findItem();
-		boost::optional<Enemy> enemyTarget = m_status.findEnemy();
-		bool underEnemy = m_status.isUnderEnemy();
+		boost::optional<Item> itemTarget = m_status0.findItem();
+		boost::optional<Enemy> enemyTarget = m_status0.findEnemy();
+		bool underEnemy = m_status0.isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		boost::optional<DIR> bestDir;
@@ -315,7 +294,7 @@ namespace th
 
 		for (DIR dir : DIRS)
 		{
-			Path path(m_status, m_scene, itemTarget, enemyTarget, underEnemy);
+			Path path(m_status0, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
 
 			if (result.valid && path.m_bestScore > bestScore)

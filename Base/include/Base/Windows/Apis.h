@@ -11,8 +11,6 @@ namespace base
 		class Apis
 		{
 		public:
-			static constexpr DWORD BUFFER_SIZE = 1024;
-
 			static std::string GetErrorDesc(DWORD errorCode);
 
 			static std::wstring Utf8ToWide(const char* str);
@@ -24,6 +22,9 @@ namespace base
 			static std::wstring AnsiToWide(const std::string& str);
 			static std::string WideToAnsi(const wchar_t* wstr);
 			static std::string WideToAnsi(const std::wstring& wstr);
+
+		private:
+			static constexpr DWORD BUFFER_SIZE = 1024;
 		};
 	}
 }

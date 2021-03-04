@@ -1,29 +1,58 @@
 #include "Th10Hook/Th10Hook.h"
 
+#include "Th10Hook/Th10Types.h"
+
 namespace th
 {
-	Th10Hook::Th10Hook(Th10Listener* listener) :
-		m_listener(listener)
+	template <typename T>
+	T ReadMemory(uint_t address)
 	{
+		return *reinterpret_cast<T*>(address);
 	}
 
-	uint_t Th10Hook::readPlayer(PlayerData& player)
+	bool Th10Hook::ReadPlayer(Player& player)
 	{
 		player = {};
 
-		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477834);
-		if (baseAddr == 0)
-			return 0;
+		RawPlayer* raw = ReadMemory<RawPlayer*>(0x00477834);
+		if (raw == nullptr)
+			return false;
 
-		player.x = ReadMemory<float32_t>(baseAddr + 0x3C0);
-		player.y = ReadMemory<float32_t>(baseAddr + 0x3C4);
-		player.dx = ReadMemory<int32_t>(baseAddr + 0x3F0) / 100.0f;
-		player.dy = ReadMemory<int32_t>(baseAddr + 0x3F4) / 100.0f;
-		player.width = ReadMemory<float32_t>(baseAddr + 0x41C) * 2.0f;
-		player.height = player.width;
-		player.status = ReadMemory<int32_t>(baseAddr + 0x458);
-		player.invincibleTime = ReadMemory<int32_t>(baseAddr + 0x4310);
-		player.slow = ReadMemory<int32_t>(baseAddr + 0x4474);
+		player.x = raw->x;
+		player.y = raw->y;
+		player.dx = raw->dx / 100.0;
+		player.dy = raw->dy / 100.0;
+		player.width = raw->width * 2.0;
+		player.height = raw->height * 2.0;
+		player.status = raw->status;
+		player.invincibleTime = raw->invincibleTime;
+		player.slow = raw->slow;
+
+		//std::cout
+		//	<< ' ' << player.x
+		//	<< ' ' << player.y
+		//	<< ' ' << player.dx
+		//	<< ' ' << player.dy
+		//	<< ' ' << player.width
+		//	<< ' ' << player.height
+		//	<< ' ' << player.status
+		//	<< ' ' << player.invincibleTime
+		//	<< ' ' << player.slow
+		//	<< std::endl;
+
+		//uint32_t baseAddr = ReadMemory<uint32_t>(0x00477834);
+		//if (baseAddr == 0)
+		//	return false;
+
+		//player.x = ReadMemory<float32_t>(baseAddr + 0x3C0);
+		//player.y = ReadMemory<float32_t>(baseAddr + 0x3C4);
+		//player.dx = ReadMemory<int32_t>(baseAddr + 0x3F0) / 100.0;
+		//player.dy = ReadMemory<int32_t>(baseAddr + 0x3F4) / 100.0;
+		//player.width = ReadMemory<float32_t>(baseAddr + 0x41C) * 2.0;
+		//player.height = player.width;
+		//player.status = ReadMemory<int32_t>(baseAddr + 0x458);
+		//player.invincibleTime = ReadMemory<int32_t>(baseAddr + 0x4310);
+		//player.slow = ReadMemory<int32_t>(baseAddr + 0x4474);
 
 		player.powers = ReadMemory<int32_t>(0x00474C48) / 20.0f;
 		player.type = ReadMemory<int32_t>(0x00474C68);
@@ -32,16 +61,16 @@ namespace th
 		if (player.slow)
 			player.itemObtainRange *= 2.5f;
 
-		return 1;
+		return true;
 	}
 
-	uint_t Th10Hook::readItems(ItemData items[])
+	bool Th10Hook::ReadItems(std::vector<Item>& items)
 	{
-		uint_t count = 0;
+		items.clear();
 
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477818);
 		if (baseAddr == 0)
-			return 0;
+			return false;
 
 		uint32_t ebp = baseAddr + 0x3C0;
 
@@ -56,36 +85,37 @@ namespace th
 			// eax == 4 到达点的收取范围，自动回收的点
 			if (eax == 1)
 			{
-				items[count].x = ReadMemory<float32_t>(ebp);
-				items[count].y = ReadMemory<float32_t>(ebp + 0x4);
-				items[count].dx = ReadMemory<float32_t>(ebp + 0xC);
-				items[count].dy = ReadMemory<float32_t>(ebp + 0x10);
+				Item item;
+				item.x = ReadMemory<float32_t>(ebp);
+				item.y = ReadMemory<float32_t>(ebp + 0x4);
+				item.dx = ReadMemory<float32_t>(ebp + 0xC);
+				item.dy = ReadMemory<float32_t>(ebp + 0x10);
 				// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
-				items[count].width = 6.0f;
-				items[count].height = items[count].width;
-				items[count].type = ReadMemory<int32_t>(ebp + 0x34);
+				item.width = 6.0f;
+				item.height = item.width;
+				item.type = ReadMemory<int32_t>(ebp + 0x34);
 
-				//items[count].id = i;
+				//item.id = i;
 
-				++count;
+				items.push_back(item);
 			}
 			ebp += 0x3F0;
 		}
 
-		return count;
+		return true;
 	}
 
-	uint_t Th10Hook::readEnemies(EnemyData enemies[])
+	bool Th10Hook::ReadEnemies(std::vector<Enemy>& enemies)
 	{
-		uint_t count = 0;
+		enemies.clear();
 
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477704);
 		if (baseAddr == 0)
-			return 0;
+			return false;
 
 		uint32_t objBase = ReadMemory<uint32_t>(baseAddr + 0x58);
 		if (objBase == 0)
-			return 0;
+			return false;
 
 		while (true)
 		{
@@ -94,33 +124,34 @@ namespace th
 			uint32_t t = ReadMemory<uint32_t>(objAddr + 0x1444);
 			if ((t & 0x40) == 0 && (t & 0x12) == 0)
 			{
-				enemies[count].x = ReadMemory<float32_t>(objAddr + 0x2C);
-				enemies[count].y = ReadMemory<float32_t>(objAddr + 0x30);
-				enemies[count].dx = ReadMemory<float32_t>(objAddr + 0x38);
-				enemies[count].dy = ReadMemory<float32_t>(objAddr + 0x3C);
-				enemies[count].width = ReadMemory<float32_t>(objAddr + 0xB8);
-				enemies[count].height = ReadMemory<float32_t>(objAddr + 0xBC);
+				Enemy enemy;
+				enemy.x = ReadMemory<float32_t>(objAddr + 0x2C);
+				enemy.y = ReadMemory<float32_t>(objAddr + 0x30);
+				enemy.dx = ReadMemory<float32_t>(objAddr + 0x38);
+				enemy.dy = ReadMemory<float32_t>(objAddr + 0x3C);
+				enemy.width = ReadMemory<float32_t>(objAddr + 0xB8);
+				enemy.height = ReadMemory<float32_t>(objAddr + 0xBC);
 
-				//enemies[count].id = static_cast<int_t>(objAddr);
-				//enemies[count].type = static_cast<int_t>(std::round(enemies[count].width));
+				//enemy.id = static_cast<int_t>(objAddr);
+				//enemy.type = static_cast<int_t>(std::round(enemy.width));
 
-				++count;
+				enemies.push_back(enemy);
 			}
 			if (objNext == 0)
 				break;
 			objBase = objNext;
 		}
 
-		return count;
+		return true;
 	}
 
-	uint_t Th10Hook::readBullets(BulletData bullets[])
+	bool Th10Hook::ReadBullets(std::vector<Bullet>& bullets)
 	{
-		uint_t count = 0;
+		bullets.clear();
 
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x004776F0);
 		if (baseAddr == 0)
-			return 0;
+			return false;
 
 		uint32_t ebx = baseAddr + 0x60;
 
@@ -129,66 +160,68 @@ namespace th
 			uint32_t bp = ReadMemory<uint32_t>(ebx + 0x446);
 			if ((bp & 0x0000FFFF) != 0)
 			{
-				//uint32_t eax = ReadMemory<uint32_t>(0x00477810);
-				//if (eax != 0)
-				//{
-				//	eax = ReadMemory<uint32_t>(eax + 0x58);
-				//	if ((eax & 0x00000400) == 0)
-				//	{
-						bullets[count].x = ReadMemory<float32_t>(ebx + 0x3B4);
-						bullets[count].y = ReadMemory<float32_t>(ebx + 0x3B8);
-						bullets[count].dx = ReadMemory<float32_t>(ebx + 0x3C0);
-						bullets[count].dy = ReadMemory<float32_t>(ebx + 0x3C4);
-						bullets[count].width = ReadMemory<float32_t>(ebx + 0x3F0);
-						bullets[count].height = ReadMemory<float32_t>(ebx + 0x3F4);
+				uint32_t eax = ReadMemory<uint32_t>(0x00477810);
+				if (eax != 0)
+				{
+					eax = ReadMemory<uint32_t>(eax + 0x58);
+					if ((eax & 0x00000400) == 0)
+					{
+						Bullet bullet;
+						bullet.x = ReadMemory<float32_t>(ebx + 0x3B4);
+						bullet.y = ReadMemory<float32_t>(ebx + 0x3B8);
+						bullet.dx = ReadMemory<float32_t>(ebx + 0x3C0);
+						bullet.dy = ReadMemory<float32_t>(ebx + 0x3C4);
+						bullet.width = ReadMemory<float32_t>(ebx + 0x3F0);
+						bullet.height = ReadMemory<float32_t>(ebx + 0x3F4);
 
-						bullets[count].id = static_cast<int_t>(ebx);
-						//bullets[count].type = static_cast<int_t>(std::round(bullets[count].width));
+						bullet.id = static_cast<int_t>(ebx);
+						//bullet.type = static_cast<int_t>(std::round(bullet.width));
 
-						++count;
-				//	}
-				//}
+						bullets.push_back(bullet);
+					}
+				}
 			}
 			ebx += 0x7F0;
 		}
 
-		return count;
+		return true;
 	}
 
-	uint_t Th10Hook::readLasers(LaserData lasers[])
+	bool Th10Hook::ReadLasers(std::vector<Laser>& lasers)
 	{
-		uint_t count = 0;
+		lasers.clear();
 
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x0047781C);
 		if (baseAddr == 0)
-			return 0;
+			return false;
 
 		uint32_t objAddr = ReadMemory<uint32_t>(baseAddr + 0x18);
 		if (objAddr == 0)
-			return 0;
+			return false;
 
 		while (true)
 		{
 			uint32_t objNext = ReadMemory<uint32_t>(objAddr + 0x8);
 
-			lasers[count].x = ReadMemory<float32_t>(objAddr + 0x24);
-			lasers[count].y = ReadMemory<float32_t>(objAddr + 0x28);
-			lasers[count].dx = ReadMemory<float32_t>(objAddr + 0x30);
-			lasers[count].dy = ReadMemory<float32_t>(objAddr + 0x34);
-			lasers[count].arc = ReadMemory<float32_t>(objAddr + 0x3C);
-			lasers[count].height = ReadMemory<float32_t>(objAddr + 0x40);
-			lasers[count].width = ReadMemory<float32_t>(objAddr + 0x44);
+			Laser laser;
+			laser.x = ReadMemory<float32_t>(objAddr + 0x24);
+			laser.y = ReadMemory<float32_t>(objAddr + 0x28);
+			laser.dx = ReadMemory<float32_t>(objAddr + 0x30);
+			laser.dy = ReadMemory<float32_t>(objAddr + 0x34);
+			laser.arc = ReadMemory<float32_t>(objAddr + 0x3C);
+			laser.height = ReadMemory<float32_t>(objAddr + 0x40);
+			laser.width = ReadMemory<float32_t>(objAddr + 0x44);
 
-			//lasers[count].id = static_cast<int_t>(objAddr);
-			//lasers[count].type = static_cast<int_t>(std::round(lasers[count].width));
+			//laser.id = static_cast<int_t>(objAddr);
+			//laser.type = static_cast<int_t>(std::round(laser.width));
 
-			++count;
+			lasers.push_back(laser);
 
 			if (objNext == 0)
 				break;
 			objAddr = objNext;
 		}
 
-		return count;
+		return true;
 	}
 }

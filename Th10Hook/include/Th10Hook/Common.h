@@ -15,3 +15,5 @@ namespace th
 }
 
 #include <iostream>
+
+#pragma warning(disable:4244)

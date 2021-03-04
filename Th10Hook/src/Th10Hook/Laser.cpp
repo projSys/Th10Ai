@@ -11,12 +11,6 @@ namespace th
 	{
 	}
 
-	Laser::Laser(const LaserData& data) :
-		Entity(data),
-		arc(data.arc)
-	{
-	}
-
 	bool Laser::collide(const Entity& other) const
 	{
 		LaserBox laserBox(*this);

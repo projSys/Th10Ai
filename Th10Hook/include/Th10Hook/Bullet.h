@@ -11,7 +11,6 @@ namespace th
 	{
 	public:
 		Bullet();
-		explicit Bullet(const BulletData& data);
 
 		int_t id;
 	};

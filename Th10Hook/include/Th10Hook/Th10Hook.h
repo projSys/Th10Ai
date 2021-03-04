@@ -2,35 +2,23 @@
 
 #include "Th10Hook/Common.h"
 
-#include "Th10Hook/Th10Types.h"
+#include <vector>
+
+#include "Th10Hook/Player.h"
+#include "Th10Hook/Item.h"
+#include "Th10Hook/Enemy.h"
+#include "Th10Hook/Bullet.h"
+#include "Th10Hook/Laser.h"
 
 namespace th
 {
-	class Th10Listener
-	{
-	public:
-		virtual ~Th10Listener() = default;
-	};
-
-	// https://github.com/binvec/TH10_DataReversing
 	class Th10Hook
 	{
 	public:
-		Th10Hook(Th10Listener* listener);
-
-		uint_t readPlayer(PlayerData& player);
-		uint_t readItems(ItemData items[]);
-		uint_t readEnemies(EnemyData enemies[]);
-		uint_t readBullets(BulletData bullets[]);
-		uint_t readLasers(LaserData lasers[]);
-
-	private:
-		template <typename T>
-		static T ReadMemory(uint_t address)
-		{
-			return *reinterpret_cast<T*>(address);
-		}
-
-		Th10Listener* m_listener;
+		static bool ReadPlayer(Player& player);
+		static bool ReadItems(std::vector<Item>& items);
+		static bool ReadEnemies(std::vector<Enemy>& enemies);
+		static bool ReadBullets(std::vector<Bullet>& bullets);
+		static bool ReadLasers(std::vector<Laser>& lasers);
 	};
 }
