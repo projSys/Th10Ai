@@ -13,6 +13,9 @@ namespace base
 		public:
 			static std::string GetErrorDesc(DWORD errorCode);
 
+			static std::wstring MultiByteToWideChar(UINT codePage, LPCCH str, int strSize);
+			static std::string WideCharToMultiByte(UINT codePage, LPCWCH wstr, int wstrSize);
+
 			static std::wstring Utf8ToWide(const char* str);
 			static std::wstring Utf8ToWide(const std::string& str);
 			static std::string WideToUtf8(const wchar_t* wstr);

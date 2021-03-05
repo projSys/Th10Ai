@@ -3,6 +3,7 @@
 #include <boost/optional.hpp>
 #include <Base/ScopeGuard.h>
 #include <Base/Time.h>
+#include <Base/Windows/Apis.h>
 
 #include "Th10Hook/Path.h"
 
@@ -32,6 +33,12 @@ namespace th
 		HWND window = FindWindowW(L"BASE", nullptr);//L"搶曽晽恄榐丂乣 Mountain of Faith. ver 1.00a");
 		if (window == nullptr)
 			BASE_THROW(Exception(u8"东方风神录未运行。"));
+
+		char buf1[1024] = {};
+		GetWindowTextA(window, buf1, 1023);
+		std::wstring buf2 = Apis::MultiByteToWideChar(932, buf1, -1);	// Shift-JIS
+		std::string buf3 = Apis::WideToAnsi(buf2);
+		SetWindowTextA(window, buf3.c_str());
 
 		WindowHook& windowHook = WindowHook::GetInstance();
 		windowHook.hook(window, this);
@@ -226,9 +233,9 @@ namespace th
 
 				int_t id = m_status0.collide(m_status0.getPlayer(), 0.0);
 				m_status1.collide(m_status0.getPlayer(), 1.0);
-				m_status1.collide(m_status0.getPlayer(), 2.0);
+				m_status2.collide(m_status0.getPlayer(), 2.0);
 				m_status1.collide(m_status0.getPlayer(), 1.0, id);
-				m_status1.collide(m_status0.getPlayer(), 2.0, id);
+				m_status2.collide(m_status0.getPlayer(), 2.0, id);
 
 				m_actionData.bomb = true;
 				m_bombCount += 1;
