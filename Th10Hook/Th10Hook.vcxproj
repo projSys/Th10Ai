@@ -156,6 +156,10 @@
     <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h" />
     <ClInclude Include="include\Th10Hook\DirectX\DI8Hook.h" />
     <ClInclude Include="include\Th10Hook\DirectX\DXResult.h" />
+    <ClInclude Include="include\Th10Hook\DirectX\MyDirect3D9.h" />
+    <ClInclude Include="include\Th10Hook\DirectX\MyDirect3DDevice9.h" />
+    <ClInclude Include="include\Th10Hook\DirectX\MyDirectInput8A.h" />
+    <ClInclude Include="include\Th10Hook\DirectX\MyDirectInputDevice8A.h" />
     <ClInclude Include="include\Th10Hook\DllFree.h" />
     <ClInclude Include="include\Th10Hook\DllLoader.h" />
     <ClInclude Include="include\Th10Hook\DllMain.h" />
@@ -184,6 +188,10 @@
     <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\DI8Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\DXResult.cpp" />
+    <ClCompile Include="src\Th10Hook\DirectX\MyDirect3D9.cpp" />
+    <ClCompile Include="src\Th10Hook\DirectX\MyDirect3DDevice9.cpp" />
+    <ClCompile Include="src\Th10Hook\DirectX\MyDirectInput8A.cpp" />
+    <ClCompile Include="src\Th10Hook\DirectX\MyDirectInputDevice8A.cpp" />
     <ClCompile Include="src\Th10Hook\DllFree.cpp" />
     <ClCompile Include="src\Th10Hook\DllLoader.cpp" />
     <ClCompile Include="src\Th10Hook\DllMain.cpp" />

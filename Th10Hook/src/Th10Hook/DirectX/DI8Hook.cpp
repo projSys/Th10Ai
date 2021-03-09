@@ -16,14 +16,14 @@ namespace th
 		DirectInput8Create_t directInput8Create =
 			dinput8Dll.getProcAddress<DirectInput8Create_t>("DirectInput8Create");
 
-		CComPtr<IDirectInput8A> dinput8A;
+		CComPtr<IDirectInput8A> di8A;
 		HRESULT hr = directInput8Create(GetModuleHandleW(nullptr), DIRECTINPUT_VERSION,
-			IID_IDirectInput8A, reinterpret_cast<LPVOID*>(&dinput8A), nullptr);
+			IID_IDirectInput8A, reinterpret_cast<LPVOID*>(&di8A), nullptr);
 		if (FAILED(hr))
 			BASE_THROW(DXResult(hr, u8"DirectInput8Create()调用失败。"));
 
 		CComPtr<IDirectInputDevice8A> deviceA;
-		hr = dinput8A->CreateDevice(GUID_SysKeyboard, &deviceA, nullptr);
+		hr = di8A->CreateDevice(GUID_SysKeyboard, &deviceA, nullptr);
 		if (FAILED(hr))
 			BASE_THROW(DXResult(hr, u8"CreateDevice()调用失败。"));
 

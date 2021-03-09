@@ -111,6 +111,18 @@
     <ClInclude Include="include\Th10Hook\Console.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\MyDirect3D9.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\MyDirect3DDevice9.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\MyDirectInput8A.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\MyDirectInputDevice8A.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp">
@@ -178,6 +190,18 @@
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Console.cpp">
       <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\MyDirect3D9.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\MyDirect3DDevice9.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\MyDirectInput8A.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\MyDirectInputDevice8A.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
