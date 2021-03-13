@@ -10,6 +10,6 @@ namespace th
 	{
 	public:
 		static void EnableDebugPrivilege();
-		static void Inject(Process& target, const std::string& dllPath);
+		static void Inject(Process& process, const std::string& dllPath);
 	};
 }

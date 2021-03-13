@@ -6,6 +6,7 @@
 #include <Base/Exception.h>
 #include <Base/Logger.h>
 #include <Base/Windows/Common.h>
+#include <Base/Windows/WindowsError.h>
 
 namespace th
 {

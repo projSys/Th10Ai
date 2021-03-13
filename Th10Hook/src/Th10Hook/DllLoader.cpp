@@ -35,8 +35,8 @@ namespace th
 		{
 			Console console;
 
-			std::string logPath = Module(g_module).getDir() + "/Th10Hook_%N.log";
-			m_logger.addFileLog(logPath);
+			//std::string logPath = Module(g_module).getDir() + "/Th10Hook_%N.log";
+			//m_logger.addFileLog(logPath);
 
 			std::unique_ptr<Th10Ai> th10Ai = std::make_unique<Th10Ai>();
 			th10Ai->run();

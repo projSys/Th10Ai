@@ -63,7 +63,11 @@ namespace th
 
 	HRESULT MyDirectInputDevice8A::GetDeviceState(DWORD cbData, LPVOID lpvData)
 	{
-		return m_device->GetDeviceState(cbData, lpvData);
+		HRESULT hr = m_device->GetDeviceState(cbData, lpvData);
+
+
+
+		return hr;
 	}
 
 	HRESULT MyDirectInputDevice8A::GetDeviceData(DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags)

@@ -19,7 +19,7 @@ namespace th
 	private:
 		void proc();
 
-		Logger m_logger;
+		//Logger m_logger;
 		// 兼容：VS2017的std::thread会在DllMain里死锁
 		boost::thread m_thread;
 	};

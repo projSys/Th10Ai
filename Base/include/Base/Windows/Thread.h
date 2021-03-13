@@ -18,6 +18,8 @@ namespace base
 
 			using Handle::Handle;
 
+			DWORD resume();
+
 			DWORD getId() const;
 			DWORD getExitCode() const;
 		};

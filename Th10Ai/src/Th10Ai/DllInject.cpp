@@ -1,7 +1,6 @@
 #include "Th10Ai/DllInject.h"
 
 #include <Base/ScopeGuard.h>
-#include <Base/Windows/WindowsError.h>
 #include <Base/Windows/Apis.h>
 #include <Base/Windows/Handle.h>
 #include <Base/Windows/Module.h>
@@ -29,22 +28,22 @@ namespace th
 			BASE_THROW(Exception(u8"请以管理员身份运行。"));
 	}
 
-	void DllInject::Inject(Process& target, const std::string& dllPath)
+	void DllInject::Inject(Process& process, const std::string& dllPath)
 	{
 		std::wstring dllPathW = Apis::Utf8ToWide(dllPath);
 		uint_t sizeW = sizeof(wchar_t) * (dllPathW.size() + 1);
 
-		LPVOID memory = VirtualAllocEx(target, nullptr, sizeW, MEM_COMMIT | MEM_RESERVE,
+		LPVOID memory = VirtualAllocEx(process, nullptr, sizeW, MEM_COMMIT | MEM_RESERVE,
 			PAGE_READWRITE);
 		if (memory == nullptr)
 			BASE_THROW(WindowsError());
 		ON_SCOPE_EXIT([&]()
 			{
-				VirtualFreeEx(target, memory, 0, MEM_RELEASE);
+				VirtualFreeEx(process, memory, 0, MEM_RELEASE);
 			});
 
 		SIZE_T written = 0;
-		if (!WriteProcessMemory(target, memory, dllPathW.c_str(), sizeW, &written))
+		if (!WriteProcessMemory(process, memory, dllPathW.c_str(), sizeW, &written))
 			BASE_THROW(WindowsError());
 		if (written != sizeW)
 			BASE_THROW(Exception("written != sizeW."));
@@ -53,7 +52,7 @@ namespace th
 		LPTHREAD_START_ROUTINE loadLibraryW =
 			kernel32Dll.getProcAddress<LPTHREAD_START_ROUTINE>("LoadLibraryW");
 
-		Thread thread = target.createRemoteThread(nullptr, 0, loadLibraryW, memory, 0);
+		Thread thread = process.createRemoteThread(nullptr, 0, loadLibraryW, memory, 0);
 		if (!thread.wait(3000))
 			BASE_THROW(Exception(u8"注入线程执行超时。"));
 		if (thread.getExitCode() == 0)

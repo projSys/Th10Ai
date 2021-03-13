@@ -25,6 +25,14 @@ namespace base
 			return thread;
 		}
 
+		DWORD Thread::resume()
+		{
+			DWORD count = ResumeThread(m_handle);
+			if (count == (DWORD)-1)
+				BASE_THROW(WindowsError());
+			return count;
+		}
+
 		DWORD Thread::getId() const
 		{
 			DWORD id = GetThreadId(m_handle);
