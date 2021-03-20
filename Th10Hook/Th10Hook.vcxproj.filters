@@ -123,6 +123,9 @@
     <ClInclude Include="include\Th10Hook\DirectX\MyDirectInputDevice8A.h">
       <Filter>头文件\Th10Hook\DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Hook\Action.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp">
@@ -202,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="src\Th10Hook\DirectX\MyDirectInputDevice8A.cpp">
       <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Action.cpp">
+      <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

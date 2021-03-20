@@ -1,15 +1,7 @@
 #include "Th10Hook/DllMain.h"
 
-#ifndef DIRECTINPUT_VERSION
-#define DIRECTINPUT_VERSION 0x0800
-#endif
-
-#include <d3d9.h>
-#include <dinput.h>
-#include <detours.h>
 #include <Base/Windows/Module.h>
 
-#include "Th10Hook/DllLoader.h"
 #include "Th10Hook/MyDetours.h"
 #include "Th10Hook/DirectX/MyDirect3D9.h"
 #include "Th10Hook/DirectX/MyDirectInput8A.h"
@@ -80,8 +72,6 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 	case DLL_PROCESS_ATTACH:
 	{
 		g_module = module;
-		//th::DllLoader& dllLoader = th::DllLoader::GetInstance();
-		//dllLoader.start();
 		Hook();
 		break;
 	}

@@ -99,7 +99,7 @@ namespace th
 	{
 		HRESULT hr = m_d3d9->CreateDevice(Adapter, DeviceType, hFocusWindow, BehaviorFlags, pPresentationParameters, ppReturnedDeviceInterface);
 		if (SUCCEEDED(hr))
-			*ppReturnedDeviceInterface = new MyDirect3DDevice9(*ppReturnedDeviceInterface, this);
+			*ppReturnedDeviceInterface = new MyDirect3DDevice9(*ppReturnedDeviceInterface, this, hFocusWindow);
 		return hr;
 	}
 }

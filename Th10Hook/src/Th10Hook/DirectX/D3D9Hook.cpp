@@ -79,7 +79,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG_FATAL(PrintException());
+			BASE_LOG_ERROR(PrintException());
 		}
 	}
 

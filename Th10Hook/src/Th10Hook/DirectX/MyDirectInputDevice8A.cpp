@@ -1,6 +1,7 @@
 #include "Th10Hook/DirectX/MyDirectInputDevice8A.h"
 
 #include "Th10Hook/DirectX/MyDirectInput8A.h"
+#include "Th10Hook/Th10Ai.h"
 
 namespace th
 {
@@ -65,7 +66,8 @@ namespace th
 	{
 		HRESULT hr = m_device->GetDeviceState(cbData, lpvData);
 
-
+		if (g_th10Ai != nullptr)
+			g_th10Ai->commitAction(cbData, lpvData);
 
 		return hr;
 	}

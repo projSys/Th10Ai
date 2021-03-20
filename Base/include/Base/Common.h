@@ -32,12 +32,12 @@
 // define something for Windows (64-bit only)
 #define BASE_64BIT 1
 #define BASE_BITS 64
-#else
+#else	// _WIN64
 // define something for Windows (32-bit only)
 #define BASE_32BIT 1
 #define BASE_BITS 32
-#endif // _WIN64
-#endif // _WIN32
+#endif	// _WIN64
+#endif	// _WIN32
 
 namespace base
 {

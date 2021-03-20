@@ -18,17 +18,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		std::string logPath = base::win::Module().getDir() + "/Th10Ai_%N.log";
 		logger.addFileLog(logPath);
 
-		//HWND window = FindWindowW(L"BASE", nullptr);//L"搶曽晽恄榐丂乣 Mountain of Faith. ver 1.00a");
-		//if (window == nullptr)
-		//	BASE_THROW(base::Exception(u8"东方风神录未运行。"));
-		//DWORD processId = 0;
-		//DWORD threadId = GetWindowThreadProcessId(window, &processId);
-
-		//base::win::Process target = base::win::Process::Open(PROCESS_ALL_ACCESS, FALSE, processId);
-
-		std::ifstream fin("Th10Ai.conf");
+		std::ifstream ifs("Th10Ai.conf");
 		std::string appPath;
-		std::getline(fin, appPath);
+		std::getline(ifs, appPath);
 		std::wstring appPathW = base::win::Apis::AnsiToWide(appPath);
 
 		boost::filesystem::path p(appPathW);

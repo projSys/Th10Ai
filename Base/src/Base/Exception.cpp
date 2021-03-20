@@ -35,27 +35,27 @@ namespace base
 
 	std::string PrintException()
 	{
-		std::ostringstream sout;
+		std::ostringstream oss;
 		try
 		{
 			throw;
 		}
 		catch (const Exception& ex)
 		{
-			ex.printTo(sout);
+			ex.printTo(oss);
 		}
 		catch (const boost::exception& be)
 		{
-			sout << boost::diagnostic_information(be);
+			oss << boost::diagnostic_information(be);
 		}
 		catch (const std::exception& se)
 		{
-			sout << se.what() << '\n';
+			oss << se.what() << '\n';
 		}
 		catch (...)
 		{
-			sout << "Unknown exception.\n";
+			oss << "Unknown exception.\n";
 		}
-		return sout.str();
+		return oss.str();
 	}
 }

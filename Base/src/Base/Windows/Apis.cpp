@@ -19,14 +19,12 @@ namespace base
 
 		std::wstring Apis::MultiByteToWideChar(UINT codePage, LPCCH str, int strSize)
 		{
-			int wstrSize = ::MultiByteToWideChar(codePage, 0,
-				str, strSize, nullptr, 0);
+			int wstrSize = ::MultiByteToWideChar(codePage, 0, str, strSize, nullptr, 0);
 			if (wstrSize == 0)
 				BASE_THROW(WindowsError());
 
 			std::wstring wstr(wstrSize, L'\0');
-			int ret = ::MultiByteToWideChar(codePage, 0,
-				str, strSize, &wstr[0], wstrSize);
+			int ret = ::MultiByteToWideChar(codePage, 0, str, strSize, &wstr[0], wstrSize);
 			if (ret == 0)
 				BASE_THROW(WindowsError());
 			return wstr;
@@ -34,15 +32,13 @@ namespace base
 
 		std::string Apis::WideCharToMultiByte(UINT codePage, LPCWCH wstr, int wstrSize)
 		{
-			int strSize = ::WideCharToMultiByte(codePage, 0,
-				wstr, wstrSize, nullptr, 0,
+			int strSize = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, nullptr, 0,
 				nullptr, nullptr);
 			if (strSize == 0)
 				BASE_THROW(WindowsError());
 
 			std::string str(strSize, '\0');
-			int ret = ::WideCharToMultiByte(codePage, 0,
-				wstr, wstrSize, &str[0], strSize,
+			int ret = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, &str[0], strSize,
 				nullptr, nullptr);
 			if (ret == 0)
 				BASE_THROW(WindowsError());

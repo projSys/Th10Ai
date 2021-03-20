@@ -12,7 +12,8 @@ namespace th
 		public IDirect3DDevice9
 	{
 	public:
-		MyDirect3DDevice9(IDirect3DDevice9* device, MyDirect3D9* d3d9);
+		MyDirect3DDevice9(IDirect3DDevice9* device, MyDirect3D9* d3d9, HWND window);
+		~MyDirect3DDevice9();
 
 		/*** IUnknown methods ***/
 		STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppvObj) override;

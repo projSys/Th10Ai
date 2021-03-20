@@ -14,6 +14,10 @@ namespace th
 	using namespace base::win;
 }
 
+#ifndef DIRECTINPUT_VERSION
+#define DIRECTINPUT_VERSION 0x0800
+#endif
+
 #include <iostream>
 
 #pragma warning(disable:4244)

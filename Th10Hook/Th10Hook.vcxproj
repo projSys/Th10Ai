@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Th10Hook\Action.h" />
     <ClInclude Include="include\Th10Hook\Bullet.h" />
     <ClInclude Include="include\Th10Hook\Common.h" />
     <ClInclude Include="include\Th10Hook\Console.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="include\Th10Hook\WindowHook.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Th10Hook\Action.cpp" />
     <ClCompile Include="src\Th10Hook\Bullet.cpp" />
     <ClCompile Include="src\Th10Hook\Console.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp" />

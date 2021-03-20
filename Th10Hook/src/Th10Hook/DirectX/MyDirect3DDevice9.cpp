@@ -1,13 +1,27 @@
 #include "Th10Hook/DirectX/MyDirect3DDevice9.h"
 
 #include "Th10Hook/DirectX/MyDirect3D9.h"
+#include "Th10Hook/Th10Ai.h"
 
 namespace th
 {
-	MyDirect3DDevice9::MyDirect3DDevice9(IDirect3DDevice9* device, MyDirect3D9* d3d9) :
+	MyDirect3DDevice9::MyDirect3DDevice9(IDirect3DDevice9* device, MyDirect3D9* d3d9, HWND window) :
 		m_device(device),
 		m_d3d9(d3d9)
 	{
+		try
+		{
+			g_th10Ai = std::make_unique<Th10Ai>(window);
+		}
+		catch (...)
+		{
+			BASE_LOG_ERROR(base::PrintException());
+		}
+	}
+
+	MyDirect3DDevice9::~MyDirect3DDevice9()
+	{
+		g_th10Ai = nullptr;
 	}
 
 	HRESULT MyDirect3DDevice9::QueryInterface(REFIID riid, void** ppvObj)
@@ -106,7 +120,8 @@ namespace th
 
 	HRESULT MyDirect3DDevice9::Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion)
 	{
-
+		if (g_th10Ai != nullptr)
+			g_th10Ai->updateStatus();
 
 		return m_device->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 	}

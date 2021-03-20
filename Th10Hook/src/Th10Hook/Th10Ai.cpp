@@ -1,7 +1,7 @@
 #include "Th10Hook/Th10Ai.h"
 
+#include <dinput.h>
 #include <boost/optional.hpp>
-#include <Base/ScopeGuard.h>
 #include <Base/Time.h>
 #include <Base/Windows/Apis.h>
 
@@ -9,30 +9,25 @@
 
 namespace th
 {
-	Th10Ai::Th10Ai() :
-		m_done(false),
+	std::unique_ptr<Th10Ai> g_th10Ai;
+
+	Th10Ai::Th10Ai(HWND window) :
+		m_controlDone(false),
+		m_handleDone(false),
 		m_active(false),
 		m_bombTime(0),
 		m_bombCount(0),
 		m_actionUpdated(false)
 	{
-		m_scene.split(6);
-	}
+		SetForegroundWindow(window);
 
-	Th10Ai::~Th10Ai()
-	{
-	}
-
-	bool IsKeyPressed(int vKey)
-	{
-		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
-	}
-
-	void Th10Ai::run()
-	{
-		HWND window = FindWindowW(L"BASE", nullptr);//L"搶曽晽恄榐丂乣 Mountain of Faith. ver 1.00a");
-		if (window == nullptr)
-			BASE_THROW(Exception(u8"东方风神录未运行。"));
+		RECT rect = {};
+		GetWindowRect(window, &rect);
+		int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+		int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+		int x = (screenWidth - (rect.right - rect.left)) / 2;
+		int y = (screenHeight - (rect.bottom - rect.top)) / 2;
+		SetWindowPos(window, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
 		char buf1[1024] = {};
 		GetWindowTextA(window, buf1, 1023);
@@ -40,15 +35,42 @@ namespace th
 		std::string buf3 = Apis::WideToAnsi(buf2);
 		SetWindowTextA(window, buf3.c_str());
 
-		WindowHook& windowHook = WindowHook::GetInstance();
-		windowHook.hook(window, this);
-		ON_SCOPE_EXIT([&]()
-			{
-				windowHook.unhook();
-			});
+		//ULONG_PTR icon = GetClassLongPtrA(window, GCLP_HICON);
+		HICON icon = LoadIconA(GetModuleHandleA(nullptr), "IDI_ICON3");
+		SendMessageA(window, WM_SETICON, ICON_SMALL, (LPARAM)icon);
 
-		std::cout << "请将焦点放在风神录窗口上，开始游戏，然后按A启动AI，按S停止AI，按D退出AI。" << std::endl;
-		while (!m_done)
+		m_scene.split(6);
+
+		m_controlThread = std::thread(&Th10Ai::controlProc, this);
+		m_handleThread = std::thread(&Th10Ai::handleProc, this);
+	}
+
+	Th10Ai::~Th10Ai()
+	{
+		m_handleDone = true;
+		m_active = false;
+		{
+			std::unique_lock<std::mutex> lock(m_statusMutex);
+			m_statusUpdated = true;
+			m_statusCond.notify_one();
+		}
+		if (m_handleThread.joinable())
+			m_handleThread.join();
+
+		m_controlDone = true;
+		if (m_controlThread.joinable())
+			m_controlThread.join();
+	}
+
+	bool IsKeyPressed(int vKey)
+	{
+		return (GetAsyncKeyState(vKey) & 0x8000) != 0;
+	}
+
+	void Th10Ai::controlProc()
+	{
+		std::cout << "保持焦点在游戏窗口上，开始游戏，然后按A开启AI，按S停止AI。" << std::endl;
+		while (!m_controlDone)
 		{
 			if (IsKeyPressed('A'))
 			{
@@ -58,40 +80,52 @@ namespace th
 			{
 				stop();
 			}
-			else if (IsKeyPressed('D'))
+			else
 			{
-				stop();
-				break;
-			}
-			else if (!handle())
-			{
-				stop();
-				break;
+				std::this_thread::sleep_for(std::chrono::milliseconds(16));
 			}
 		}
-		std::cout << "退出AI。" << std::endl;
 	}
 
-	void Th10Ai::onHook()
+	void Th10Ai::start()
 	{
-		m_d3d9Hook = std::make_unique<D3D9Hook>(this);
-		m_di8Hook = std::make_unique<DI8Hook>(this);
+		if (!m_active)
+		{
+			m_active = true;
+			std::cout << "开启AI。" << std::endl;
+		}
 	}
 
-	void Th10Ai::onUnhook()
+	void Th10Ai::stop()
 	{
-		m_d3d9Hook = nullptr;
-		m_di8Hook = nullptr;
+		if (m_active)
+		{
+			m_active = false;
+			std::cout << "停止AI。" << std::endl;
+			std::cout << "决死总数：" << m_bombCount << std::endl;
+		}
 	}
 
-	void Th10Ai::onDestroy()
+	void Th10Ai::handleProc()
 	{
-		m_done = true;
+		while (!m_handleDone)
+		{
+			if (m_active)
+			{
+				handle();
+			}
+			else
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(16));
+			}
+		}
 	}
 
-	void Th10Ai::onPresent(IDirect3DDevice9* device, const RECT* sourceRect, const RECT* destRect,
-		HWND destWindowOverride, const RGNDATA* dirtyRegion)
+	void Th10Ai::updateStatus()
 	{
+		if (!m_active)
+			return;
+
 		m_status.update();
 
 		std::unique_lock<std::mutex> lock(m_statusMutex);
@@ -99,8 +133,11 @@ namespace th
 		m_statusCond.notify_one();
 	}
 
-	void Th10Ai::onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data)
+	void Th10Ai::commitAction(DWORD size, LPVOID data)
 	{
+		if (!m_active)
+			return;
+
 		m_status.m_inputFrame += 1;
 
 		// c_dfDIKeyboard
@@ -109,6 +146,8 @@ namespace th
 			//lock_guard<mutex> lock(m_keyMutex);
 			if (m_actionUpdated)
 			{
+				m_actionUpdated = false;
+
 				BYTE* keyState = reinterpret_cast<BYTE*>(data);
 
 				if (m_actionData.left)
@@ -150,12 +189,10 @@ namespace th
 					keyState[DIK_LCONTROL] = 0x80;
 				else
 					keyState[DIK_LCONTROL] = 0x00;
-
-				m_actionUpdated = false;
 			}
 			else
 			{
-				std::cout << "输入太慢了。" << std::endl;
+				std::cout << "动作提交太慢了。" << std::endl;
 			}
 		}
 		// c_dfDIMouse
@@ -168,42 +205,23 @@ namespace th
 		//sizeof(DIJOYSTATE2);
 	}
 
-	void Th10Ai::start()
-	{
-		if (!m_active)
-		{
-			m_active = true;
-			std::cout << "启动AI。" << std::endl;
-		}
-	}
-
-	void Th10Ai::stop()
-	{
-		if (m_active)
-		{
-			m_active = false;
-			std::cout << "停止AI。" << std::endl;
-			std::cout << "决死总数：" << m_bombCount << std::endl;
-		}
-	}
-
 	bool Th10Ai::handle()
 	{
-		if (!m_active)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(16));
-			return true;
-		}
-
 		{
 			std::unique_lock<std::mutex> lock(m_statusMutex);
 			if (!m_statusUpdated)
 				m_statusCond.wait(lock);
+			else
+				std::cout << "状态更新太慢了。" << std::endl;
+			m_statusUpdated = false;
 
 			m_status2.copy(m_status1);
 			m_status1.copy(m_status0);
 			m_status0.copy(m_status);
 		}
+
+		if (!m_active)
+			return false;
 
 		m_scene.clearAll();
 		m_scene.splitEnemies(m_status0.getEnemies());

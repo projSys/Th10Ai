@@ -2,42 +2,34 @@
 
 #include "Th10Hook/Common.h"
 
+#include <memory>
 #include <thread>
 #include <atomic>
 #include <mutex>
 #include <condition_variable>
 
-#include "Th10Hook/WindowHook.h"
-#include "Th10Hook/DirectX/D3D9Hook.h"
-#include "Th10Hook/DirectX/DI8Hook.h"
+#include "Th10Hook/Console.h"
 #include "Th10Hook/Th10Types.h"
 #include "Th10Hook/Status.h"
 #include "Th10Hook/Scene.h"
 
 namespace th
 {
-	class Th10Ai :
-		public WindowListener,
-		public D3D9Listener,
-		public DI8Listener
+	class Th10Ai
 	{
 	public:
-		Th10Ai();
+		Th10Ai(HWND window);
 		~Th10Ai();
 
-		void run();
+		void updateStatus();
+		void commitAction(DWORD size, LPVOID data);
 
 	private:
-		virtual void onHook() override;
-		virtual void onUnhook() override;
-		virtual void onDestroy() override;
-		virtual void onPresent(IDirect3DDevice9* device, const RECT* sourceRect, const RECT* destRect,
-			HWND destWindowOverride, const RGNDATA* dirtyRegion) override;
-		virtual void onGetDeviceStateA(IDirectInputDevice8A* device, DWORD size, LPVOID data) override;
-
+		void controlProc();
 		void start();
 		void stop();
 
+		void handleProc();
 		bool handle();
 		bool handleBomb();
 		bool handleTalk();
@@ -45,11 +37,14 @@ namespace th
 		bool handleMove();
 		void move(DIR dir, bool slow);
 
-		std::unique_ptr<D3D9Hook> m_d3d9Hook;
-		std::unique_ptr<DI8Hook> m_di8Hook;
+		Console m_console;
 
-		std::atomic<bool> m_done;
-		bool m_active;
+		std::thread m_controlThread;
+		std::atomic<bool> m_controlDone;
+		std::thread m_handleThread;
+		std::atomic<bool> m_handleDone;
+
+		std::atomic<bool> m_active;
 		int64_t m_bombTime;
 		int_t m_bombCount;
 
@@ -66,4 +61,6 @@ namespace th
 		ActionData m_actionData;
 		std::atomic<bool> m_actionUpdated;
 	};
+
+	extern std::unique_ptr<Th10Ai> g_th10Ai;
 }
