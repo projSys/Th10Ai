@@ -1,16 +1,12 @@
 #include "Th10Hook/Status.h"
 
-#include <Base/Time.h>
-
 #include "Th10Hook/Th10Hook.h"
-#include "Th10Hook/Scene.h"
 
 namespace th
 {
 	Status::Status() :
-		m_inputFrame(1),
-		m_presentFrame(0),
-		m_findItemTime(0)
+		statusFrame(0),
+		inputFrame(0)
 	{
 		m_items.reserve(2000);
 		m_enemies.reserve(200);
@@ -25,8 +21,6 @@ namespace th
 		Th10Hook::ReadEnemies(m_enemies);
 		Th10Hook::ReadBullets(m_bullets);
 		Th10Hook::ReadLasers(m_lasers);
-
-		m_presentFrame += 1;
 	}
 
 	void Status::copy(const Status& other)
@@ -45,86 +39,8 @@ namespace th
 		for (const Laser& laser : other.m_lasers)
 			m_lasers.push_back(laser);
 
-		m_inputFrame = other.m_inputFrame;
-		m_presentFrame = other.m_presentFrame;
-	}
-
-	// 查找道具
-	boost::optional<Item> Status::findItem()
-	{
-		boost::optional<Item> target;
-
-		if (m_items.empty())
-			return target;
-
-		Time time = Time::Now();
-		int64_t now = time.getMilliSeconds();
-
-		// 拾取冷却中
-		if (now - m_findItemTime < 3000)
-			return target;
-
-		// 自机高于1/4屏
-		if (m_player.y < Scene::SIZE.height / 4.0f)
-		{
-			// 进入冷却
-			m_findItemTime = now;
-			return target;
-		}
-
-		// 自机高于1/2屏，道具少于10个，敌人多于5个
-		if (m_player.y < Scene::SIZE.height / 2.0f && m_items.size() < 10 && m_enemies.size() > 5)
-		{
-			// 进入冷却
-			m_findItemTime = now;
-			return target;
-		}
-
-		float_t minDist = std::numeric_limits<float_t>::max();
-		//float_t maxY = std::numeric_limits<float_t>::lowest();
-		for (const Item& item : m_items)
-		{
-			if (!Scene::IsInScene(item.getPosition()))
-				continue;
-
-			// 道具高于1/5屏
-			if (item.y < Scene::SIZE.height / 5.0f)
-				continue;
-
-			// 道具不在自机1/4屏内
-			float_t dy = std::abs(item.y - m_player.y);
-			if (dy > Scene::SIZE.height / 4.0f)
-				continue;
-
-			// 道具太靠近敌机
-			bool tooClose = false;
-			for (const Enemy& enemy : m_enemies)
-			{
-				if (item.calcDistance(enemy.getPosition()) < 100.0f)
-				{
-					tooClose = true;
-					break;
-				}
-			}
-			if (tooClose)
-				continue;
-
-			// 道具与自机距离最近
-			float_t dist = item.calcDistance(m_player.getPosition());
-			if (dist < minDist)
-			{
-				minDist = dist;
-				target = item;
-			}
-
-			//if (item.y > maxY)
-			//{
-			//	maxY = item.y;
-			//	target = item;
-			//}
-		}
-
-		return target;
+		statusFrame = other.statusFrame;
+		inputFrame = other.inputFrame;
 	}
 
 	bool Status::hasEnemy() const
@@ -156,39 +72,6 @@ namespace th
 		return underEnemy;
 	}
 
-	// 查找敌人
-	boost::optional<Enemy> Status::findEnemy()
-	{
-		boost::optional<Enemy> target;
-
-		if (m_enemies.empty())
-			return target;
-
-		// 自机高于1/4屏
-		if (m_player.y < Scene::SIZE.height / 4.0f)
-			return target;
-
-		float_t minDist = std::numeric_limits<float_t>::max();
-		for (const Enemy& enemy : m_enemies)
-		{
-			if (!Scene::IsInScene(enemy.getPosition()))
-				continue;
-
-			if (enemy.y > m_player.y)
-				continue;
-
-			// 与自机X轴距离最近
-			float_t dx = std::abs(enemy.x - m_player.x);
-			if (dx < minDist)
-			{
-				minDist = dx;
-				target = enemy;
-			}
-		}
-
-		return target;
-	}
-
 	int_t Status::collide(const Player& player, float_t frame) const
 	{
 		for (const Bullet& org : m_bullets)
@@ -197,13 +80,13 @@ namespace th
 			bullet.advance(frame);
 			if (bullet.collide(player))
 			{
-				std::cout << m_inputFrame << "/" << m_presentFrame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
+				std::cout << statusFrame << "/" << inputFrame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
 					<< "org(" << org.id << " " << org.x << " " << org.y << " " << org.dx << " " << org.dy << ") "
 					<< "now(" << bullet.id << " " << bullet.x << " " << bullet.y << " " << bullet.dx << " " << bullet.dy << ") " << std::endl;
 				return bullet.id;
 			}
 		}
-		std::cout << m_inputFrame << "/" << m_presentFrame << "帧 不碰撞" << " 总数：" << m_bullets.size() << std::endl;
+		std::cout << statusFrame << "/" << inputFrame << "帧 不碰撞" << " 总数：" << m_bullets.size() << std::endl;
 		return -1;
 	}
 
@@ -217,14 +100,14 @@ namespace th
 				bullet.advance(frame);
 				if (bullet.collide(player))
 				{
-					std::cout << m_inputFrame << "/" << m_presentFrame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
+					std::cout << statusFrame << "/" << inputFrame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
 						<< "org(" << org.id << " " << org.x << " " << org.y << " " << org.dx << " " << org.dy << ") "
 						<< "now(" << bullet.id << " " << bullet.x << " " << bullet.y << " " << bullet.dx << " " << bullet.dy << ") " << std::endl;
 					return bullet.id;
 				}
 			}
 		}
-		std::cout << m_inputFrame << "/" << m_presentFrame << "帧" << " 找不到子弹：" << id << " 总数：" << m_bullets.size() << std::endl;
+		std::cout << statusFrame << "/" << inputFrame << "帧" << " 找不到子弹：" << id << " 总数：" << m_bullets.size() << std::endl;
 		return -1;
 	}
 

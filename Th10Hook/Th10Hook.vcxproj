@@ -149,7 +149,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Th10Hook\Action.h" />
     <ClInclude Include="include\Th10Hook\Bullet.h" />
     <ClInclude Include="include\Th10Hook\Common.h" />
     <ClInclude Include="include\Th10Hook\Console.h" />
@@ -161,11 +160,10 @@
     <ClInclude Include="include\Th10Hook\DirectX\MyDirect3DDevice9.h" />
     <ClInclude Include="include\Th10Hook\DirectX\MyDirectInput8A.h" />
     <ClInclude Include="include\Th10Hook\DirectX\MyDirectInputDevice8A.h" />
-    <ClInclude Include="include\Th10Hook\DllFree.h" />
-    <ClInclude Include="include\Th10Hook\DllLoader.h" />
     <ClInclude Include="include\Th10Hook\DllMain.h" />
     <ClInclude Include="include\Th10Hook\Enemy.h" />
     <ClInclude Include="include\Th10Hook\Entity.h" />
+    <ClInclude Include="include\Th10Hook\Input.h" />
     <ClInclude Include="include\Th10Hook\Item.h" />
     <ClInclude Include="include\Th10Hook\Laser.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
@@ -181,10 +179,8 @@
     <ClInclude Include="include\Th10Hook\Th10Hook.h" />
     <ClInclude Include="include\Th10Hook\Th10Types.h" />
     <ClInclude Include="include\Th10Hook\Utils.h" />
-    <ClInclude Include="include\Th10Hook\WindowHook.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Th10Hook\Action.cpp" />
     <ClCompile Include="src\Th10Hook\Bullet.cpp" />
     <ClCompile Include="src\Th10Hook\Console.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp" />
@@ -194,11 +190,10 @@
     <ClCompile Include="src\Th10Hook\DirectX\MyDirect3DDevice9.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\MyDirectInput8A.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\MyDirectInputDevice8A.cpp" />
-    <ClCompile Include="src\Th10Hook\DllFree.cpp" />
-    <ClCompile Include="src\Th10Hook\DllLoader.cpp" />
     <ClCompile Include="src\Th10Hook\DllMain.cpp" />
     <ClCompile Include="src\Th10Hook\Enemy.cpp" />
     <ClCompile Include="src\Th10Hook\Entity.cpp" />
+    <ClCompile Include="src\Th10Hook\Input.cpp" />
     <ClCompile Include="src\Th10Hook\Item.cpp" />
     <ClCompile Include="src\Th10Hook\Laser.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
@@ -210,7 +205,6 @@
     <ClCompile Include="src\Th10Hook\Th10Ai.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />
     <ClCompile Include="src\Th10Hook\Utils.cpp" />
-    <ClCompile Include="src\Th10Hook\WindowHook.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

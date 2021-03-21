@@ -32,7 +32,8 @@ namespace th
 
 	Path::Path(Status& status, Scene& scene,
 		const boost::optional<Item>& itemTarget,
-		const boost::optional<Enemy>& enemyTarget, bool underEnemy) :
+		const boost::optional<Enemy>& enemyTarget,
+		bool underEnemy) :
 		m_status(status),
 		m_scene(scene),
 		m_itemTarget(itemTarget),
@@ -162,8 +163,8 @@ namespace th
 		// 没气了，当前节点也无效
 		//if (result.ttd > 0)
 		//	result.valid = false;
-		//if (nextValidCount == 0)
-		//	result.valid = false;
+		if (nextValidCount == 0)
+			result.valid = false;
 
 		return result;
 	}

@@ -1,7 +1,5 @@
 #include "Th10Hook/Th10Ai.h"
 
-#include <dinput.h>
-#include <boost/optional.hpp>
 #include <Base/Time.h>
 #include <Base/Windows/Apis.h>
 
@@ -15,9 +13,13 @@ namespace th
 		m_controlDone(false),
 		m_handleDone(false),
 		m_active(false),
+		m_statusUpdated(false),
 		m_bombTime(0),
 		m_bombCount(0),
-		m_actionUpdated(false)
+		m_findItemTime(0),
+		m_inputUpdated(false),
+		statusFrame(0),
+		inputFrame(0)
 	{
 		SetForegroundWindow(window);
 
@@ -38,6 +40,10 @@ namespace th
 		//ULONG_PTR icon = GetClassLongPtrA(window, GCLP_HICON);
 		HICON icon = LoadIconA(GetModuleHandleA(nullptr), "IDI_ICON3");
 		SendMessageA(window, WM_SETICON, ICON_SMALL, (LPARAM)icon);
+
+		m_writeStatus = std::make_unique<Status>();
+		m_middleStatus = std::make_unique<Status>();
+		m_readStatus = std::make_unique<Status>();
 
 		m_scene.split(6);
 
@@ -126,83 +132,16 @@ namespace th
 		if (!m_active)
 			return;
 
-		m_status.update();
+		statusFrame += 1;
+
+		m_writeStatus->update();
+		m_writeStatus->statusFrame = statusFrame;
+		m_writeStatus->inputFrame = inputFrame;
 
 		std::unique_lock<std::mutex> lock(m_statusMutex);
+		m_writeStatus.swap(m_middleStatus);
 		m_statusUpdated = true;
 		m_statusCond.notify_one();
-	}
-
-	void Th10Ai::commitAction(DWORD size, LPVOID data)
-	{
-		if (!m_active)
-			return;
-
-		m_status.m_inputFrame += 1;
-
-		// c_dfDIKeyboard
-		if (size == 256 && data != nullptr)
-		{
-			//lock_guard<mutex> lock(m_keyMutex);
-			if (m_actionUpdated)
-			{
-				m_actionUpdated = false;
-
-				BYTE* keyState = reinterpret_cast<BYTE*>(data);
-
-				if (m_actionData.left)
-					keyState[DIK_LEFT] = 0x80;
-				else
-					keyState[DIK_LEFT] = 0x00;
-
-				if (m_actionData.right)
-					keyState[DIK_RIGHT] = 0x80;
-				else
-					keyState[DIK_RIGHT] = 0x00;
-
-				if (m_actionData.up)
-					keyState[DIK_UP] = 0x80;
-				else
-					keyState[DIK_UP] = 0x00;
-
-				if (m_actionData.down)
-					keyState[DIK_DOWN] = 0x80;
-				else
-					keyState[DIK_DOWN] = 0x00;
-
-				if (m_actionData.shoot)
-					keyState[DIK_Z] = 0x80;
-				else
-					keyState[DIK_Z] = 0x00;
-
-				if (m_actionData.bomb)
-					keyState[DIK_X] = 0x80;
-				else
-					keyState[DIK_X] = 0x00;
-
-				if (m_actionData.slow)
-					keyState[DIK_LSHIFT] = 0x80;
-				else
-					keyState[DIK_LSHIFT] = 0x00;
-
-				if (m_actionData.skip)
-					keyState[DIK_LCONTROL] = 0x80;
-				else
-					keyState[DIK_LCONTROL] = 0x00;
-			}
-			else
-			{
-				std::cout << "动作提交太慢了。" << std::endl;
-			}
-		}
-		// c_dfDIMouse
-		//sizeof(DIMOUSESTATE);
-		// c_dfDIMouse2
-		//sizeof(DIMOUSESTATE2);
-		// c_dfDIJoystick
-		//sizeof(DIJOYSTATE);
-		// c_dfDIJoystick2
-		//sizeof(DIJOYSTATE2);
 	}
 
 	bool Th10Ai::handle()
@@ -213,35 +152,56 @@ namespace th
 				m_statusCond.wait(lock);
 			else
 				std::cout << "状态更新太慢了。" << std::endl;
+			m_readStatus.swap(m_middleStatus);
 			m_statusUpdated = false;
-
-			m_status2.copy(m_status1);
-			m_status1.copy(m_status0);
-			m_status0.copy(m_status);
 		}
 
 		if (!m_active)
 			return false;
 
+		m_status2.copy(m_status1);
+		m_status1.copy(m_status0);
+		m_status0.copy(*m_readStatus);
+
 		m_scene.clearAll();
-		m_scene.splitEnemies(m_status0.getEnemies());
-		m_scene.splitBullets(m_status0.getBullets());
-		m_scene.splitLasers(m_status0.getLasers());
+		m_scene.splitEnemies(m_readStatus->getEnemies());
+		m_scene.splitBullets(m_readStatus->getBullets());
+		m_scene.splitLasers(m_readStatus->getLasers());
+
+		m_input.clear();
 
 		handleBomb();
 		handleTalk();
 		handleShoot();
 		handleMove();
 
-		m_actionUpdated = true;
+		m_inputUpdated = true;
 
 		return true;
+	}
+
+	void Th10Ai::commitInput(DWORD size, LPVOID data)
+	{
+		if (!m_active)
+			return;
+
+		inputFrame += 1;
+
+		if (m_inputUpdated)
+		{
+			m_inputUpdated = false;
+			m_input.commit(size, data);
+		}
+		else
+		{
+			std::cout << "输入提交太慢了。" << std::endl;
+		}
 	}
 
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_status0.getPlayer().isColliding())
+		if (m_readStatus->getPlayer().isColliding())
 		{
 			Time time = Time::Now();
 			int64_t now = time.getMilliSeconds();
@@ -255,63 +215,46 @@ namespace th
 				m_status1.collide(m_status0.getPlayer(), 1.0, id);
 				m_status2.collide(m_status0.getPlayer(), 2.0, id);
 
-				m_actionData.bomb = true;
+				m_input.bomb();
 				m_bombCount += 1;
 				std::cout << "决死：" << m_bombCount << std::endl;
 				return true;
 			}
-			else
-			{
-				m_actionData.bomb = false;
-				return false;
-			}
 		}
-		else
-		{
-			m_actionData.bomb = false;
-			return false;
-		}
+		return false;
 	}
 
 	// 处理对话
 	bool Th10Ai::handleTalk()
 	{
-		if (m_status0.isTalking())
+		if (m_readStatus->isTalking())
 		{
-			m_actionData.skip = true;
+			m_input.skip();
 			return true;
 		}
-		else
-		{
-			m_actionData.skip = false;
-			return false;
-		}
+		return false;
 	}
 
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_status0.hasEnemy())
+		if (m_readStatus->hasEnemy())
 		{
-			m_actionData.shoot = true;
+			m_input.shoot();
 			return true;
 		}
-		else
-		{
-			m_actionData.shoot = false;
-			return false;
-		}
+		return false;
 	}
 
 	// 处理移动
 	bool Th10Ai::handleMove()
 	{
-		if (!m_status0.getPlayer().isNormalStatus())
+		if (!m_readStatus->getPlayer().isNormalStatus())
 			return false;
 
-		boost::optional<Item> itemTarget = m_status0.findItem();
-		boost::optional<Enemy> enemyTarget = m_status0.findEnemy();
-		bool underEnemy = m_status0.isUnderEnemy();
+		boost::optional<Item> itemTarget = findItem();
+		boost::optional<Enemy> enemyTarget = findEnemy();
+		bool underEnemy = m_readStatus->isUnderEnemy();
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		boost::optional<DIR> bestDir;
@@ -319,7 +262,7 @@ namespace th
 
 		for (DIR dir : DIRS)
 		{
-			Path path(m_status0, m_scene, itemTarget, enemyTarget, underEnemy);
+			Path path(*m_readStatus, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
 
 			if (result.valid && path.m_bestScore > bestScore)
@@ -332,88 +275,133 @@ namespace th
 
 		if (bestDir.has_value() && bestSlow.has_value())
 		{
-			move(bestDir.value(), bestSlow.value());
+			m_input.move(bestDir.value());
+			if (bestSlow.value())
+				m_input.slow();
 		}
 		else
 		{
-			move(DIR::HOLD, false);
 			std::cout << "无路可走。" << std::endl;
 		}
 
 		return true;
 	}
 
-	void Th10Ai::move(DIR dir, bool slow)
+	// 查找道具
+	boost::optional<Item> Th10Ai::findItem()
 	{
-		if (slow)
-			m_actionData.slow = true;
-		else
-			m_actionData.slow = false;
+		const Player& player = m_readStatus->getPlayer();
+		const std::vector<Item>& items = m_readStatus->getItems();
+		const std::vector<Enemy>& enemies = m_readStatus->getEnemies();
 
-		switch (dir)
+		boost::optional<Item> target;
+
+		if (items.empty())
+			return target;
+
+		Time time = Time::Now();
+		int64_t now = time.getMilliSeconds();
+
+		// 拾取冷却中
+		if (now - m_findItemTime < 3000)
+			return target;
+
+		// 自机高于1/4屏
+		if (player.y < Scene::SIZE.height / 4.0f)
 		{
-		case DIR::HOLD:
-			m_actionData.left = false;
-			m_actionData.right = false;
-			m_actionData.up = false;
-			m_actionData.down = false;
-			break;
-
-		case DIR::LEFT:
-			m_actionData.left = true;
-			m_actionData.right = false;
-			m_actionData.up = false;
-			m_actionData.down = false;
-			break;
-
-		case DIR::RIGHT:
-			m_actionData.left = false;
-			m_actionData.right = true;
-			m_actionData.up = false;
-			m_actionData.down = false;
-			break;
-
-		case DIR::UP:
-			m_actionData.left = false;
-			m_actionData.right = false;
-			m_actionData.up = true;
-			m_actionData.down = false;
-			break;
-
-		case DIR::DOWN:
-			m_actionData.left = false;
-			m_actionData.right = false;
-			m_actionData.up = false;
-			m_actionData.down = true;
-			break;
-
-		case DIR::LEFTUP:
-			m_actionData.left = true;
-			m_actionData.right = false;
-			m_actionData.up = true;
-			m_actionData.down = false;
-			break;
-
-		case DIR::RIGHTUP:
-			m_actionData.left = false;
-			m_actionData.right = true;
-			m_actionData.up = true;
-			m_actionData.down = false;
-			break;
-
-		case DIR::LEFTDOWN:
-			m_actionData.left = true;
-			m_actionData.right = false;
-			m_actionData.up = false;
-			m_actionData.down = true;
-			break;
-
-		case DIR::RIGHTDOWN:
-			m_actionData.left = false;
-			m_actionData.right = true;
-			m_actionData.up = false;
-			m_actionData.down = true;
-			break;
+			// 进入冷却
+			m_findItemTime = now;
+			return target;
 		}
+
+		// 自机高于1/2屏，道具少于10个，敌人多于5个
+		if (player.y < Scene::SIZE.height / 2.0f && items.size() < 10 && enemies.size() > 5)
+		{
+			// 进入冷却
+			m_findItemTime = now;
+			return target;
+		}
+
+		float_t minDist = std::numeric_limits<float_t>::max();
+		//float_t maxY = std::numeric_limits<float_t>::lowest();
+		for (const Item& item : items)
+		{
+			if (!Scene::IsInScene(item.getPosition()))
+				continue;
+
+			// 道具高于1/5屏
+			if (item.y < Scene::SIZE.height / 5.0f)
+				continue;
+
+			// 道具不在自机1/4屏内
+			float_t dy = std::abs(item.y - player.y);
+			if (dy > Scene::SIZE.height / 4.0f)
+				continue;
+
+			// 道具太靠近敌机
+			bool tooClose = false;
+			for (const Enemy& enemy : enemies)
+			{
+				if (item.calcDistance(enemy.getPosition()) < 100.0f)
+				{
+					tooClose = true;
+					break;
+				}
+			}
+			if (tooClose)
+				continue;
+
+			// 道具与自机距离最近
+			float_t dist = item.calcDistance(player.getPosition());
+			if (dist < minDist)
+			{
+				minDist = dist;
+				target = item;
+			}
+
+			//if (item.y > maxY)
+			//{
+			//	maxY = item.y;
+			//	target = item;
+			//}
+		}
+
+		return target;
+	}
+
+	// 查找敌人
+	boost::optional<Enemy> Th10Ai::findEnemy()
+	{
+		const Player& player = m_readStatus->getPlayer();
+		const std::vector<Enemy>& enemies = m_readStatus->getEnemies();
+
+		boost::optional<Enemy> target;
+
+		if (enemies.empty())
+			return target;
+
+		// 自机高于1/4屏
+		if (player.y < Scene::SIZE.height / 4.0f)
+			return target;
+
+		float_t minDist = std::numeric_limits<float_t>::max();
+		for (const Enemy& enemy : enemies)
+		{
+			if (!Scene::IsInScene(enemy.getPosition()))
+				continue;
+
+			if (enemy.y > player.y)
+				continue;
+
+			// 与自机X轴距离最近
+			float_t dx = std::abs(enemy.x - player.x);
+			if (dx < minDist)
+			{
+				minDist = dx;
+				target = enemy;
+			}
+		}
+
+		return target;
 	}
 }

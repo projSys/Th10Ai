@@ -36,12 +36,6 @@
     <ClInclude Include="include\Th10Hook\Direction.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\DllFree.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\DllLoader.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\DllMain.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
@@ -96,9 +90,6 @@
     <ClInclude Include="include\Th10Hook\Utils.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\WindowHook.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h">
       <Filter>头文件\Th10Hook\DirectX</Filter>
     </ClInclude>
@@ -123,18 +114,12 @@
     <ClInclude Include="include\Th10Hook\DirectX\MyDirectInputDevice8A.h">
       <Filter>头文件\Th10Hook\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Action.h">
+    <ClInclude Include="include\Th10Hook\Input.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\DllFree.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\DllLoader.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\DllMain.cpp">
@@ -179,9 +164,6 @@
     <ClCompile Include="src\Th10Hook\Utils.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\WindowHook.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
     <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp">
       <Filter>源文件\Th10Hook\DirectX</Filter>
     </ClCompile>
@@ -206,7 +188,7 @@
     <ClCompile Include="src\Th10Hook\DirectX\MyDirectInputDevice8A.cpp">
       <Filter>源文件\Th10Hook\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\Action.cpp">
+    <ClCompile Include="src\Th10Hook\Input.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>

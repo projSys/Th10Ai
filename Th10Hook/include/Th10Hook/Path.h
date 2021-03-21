@@ -2,6 +2,8 @@
 
 #include "Th10Hook/Common.h"
 
+#include <boost/optional.hpp>
+
 #include "Th10Hook/Status.h"
 #include "Th10Hook/Scene.h"
 
@@ -31,7 +33,8 @@ namespace th
 	public:
 		Path(Status& status, Scene& scene,
 			const boost::optional<Item>& itemTarget,
-			const boost::optional<Enemy>& enemyTarget, bool underEnemy);
+			const boost::optional<Enemy>& enemyTarget,
+			bool underEnemy);
 
 		Result find(DIR dir);
 		Result dfs(const Action& action);

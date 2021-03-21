@@ -67,7 +67,7 @@ namespace th
 		HRESULT hr = m_device->GetDeviceState(cbData, lpvData);
 
 		if (g_th10Ai != nullptr)
-			g_th10Ai->commitAction(cbData, lpvData);
+			g_th10Ai->commitInput(cbData, lpvData);
 
 		return hr;
 	}

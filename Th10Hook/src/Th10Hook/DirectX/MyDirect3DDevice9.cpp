@@ -15,7 +15,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG_ERROR(base::PrintException());
+			BASE_LOG_ERROR(PrintException());
 		}
 	}
 

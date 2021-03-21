@@ -9,8 +9,8 @@
 
 #include "Th10Ai/DllInject.h"
 
-int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
+int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
+	_In_ LPWSTR cmdLine, _In_ int cmdShow)
 {
 	base::Logger logger;
 	try

@@ -70,15 +70,16 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 	switch (reasonForCall)
 	{
 	case DLL_PROCESS_ATTACH:
-	{
 		g_module = module;
 		Hook();
 		break;
-	}
+
 	case DLL_THREAD_ATTACH:
 		break;
+
 	case DLL_THREAD_DETACH:
 		break;
+
 	case DLL_PROCESS_DETACH:
 		Unhook();
 		break;

@@ -24,16 +24,4 @@ namespace th
 	};
 
 	static_assert(sizeof(RawPlayer) == 0x4478, "Size is not correct.");
-
-	struct ActionData
-	{
-		bool left;
-		bool right;
-		bool up;
-		bool down;
-		bool shoot;
-		bool bomb;
-		bool slow;
-		bool skip;
-	};
 }

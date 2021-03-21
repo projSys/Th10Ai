@@ -7,11 +7,12 @@
 #include <atomic>
 #include <mutex>
 #include <condition_variable>
+#include <boost/optional.hpp>
 
 #include "Th10Hook/Console.h"
-#include "Th10Hook/Th10Types.h"
 #include "Th10Hook/Status.h"
 #include "Th10Hook/Scene.h"
+#include "Th10Hook/Input.h"
 
 namespace th
 {
@@ -22,7 +23,7 @@ namespace th
 		~Th10Ai();
 
 		void updateStatus();
-		void commitAction(DWORD size, LPVOID data);
+		void commitInput(DWORD size, LPVOID data);
 
 	private:
 		void controlProc();
@@ -35,7 +36,9 @@ namespace th
 		bool handleTalk();
 		bool handleShoot();
 		bool handleMove();
-		void move(DIR dir, bool slow);
+
+		boost::optional<Item> findItem();
+		boost::optional<Enemy> findEnemy();
 
 		Console m_console;
 
@@ -43,23 +46,30 @@ namespace th
 		std::atomic<bool> m_controlDone;
 		std::thread m_handleThread;
 		std::atomic<bool> m_handleDone;
-
 		std::atomic<bool> m_active;
-		int64_t m_bombTime;
-		int_t m_bombCount;
 
-		Status m_status2;
-		Status m_status1;
-		Status m_status0;
-		Status m_status;
+		std::unique_ptr<Status> m_writeStatus;
+		std::unique_ptr<Status> m_middleStatus;
+		std::unique_ptr<Status> m_readStatus;
 		std::mutex m_statusMutex;
 		std::condition_variable m_statusCond;
 		bool m_statusUpdated;
+		Status m_status2;
+		Status m_status1;
+		Status m_status0;
 
 		Scene m_scene;
 
-		ActionData m_actionData;
-		std::atomic<bool> m_actionUpdated;
+		int64_t m_bombTime;
+		int_t m_bombCount;
+
+		int64_t m_findItemTime;
+
+		Input m_input;
+		std::atomic<bool> m_inputUpdated;
+
+		uint_t statusFrame;
+		uint_t inputFrame;
 	};
 
 	extern std::unique_ptr<Th10Ai> g_th10Ai;
