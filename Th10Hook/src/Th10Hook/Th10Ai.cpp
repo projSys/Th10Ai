@@ -18,8 +18,9 @@ namespace th
 		m_bombCount(0),
 		m_findItemTime(0),
 		m_inputUpdated(false),
+		inputFrame(0),
 		statusFrame(0),
-		inputFrame(0)
+		handleFrame(0)
 	{
 		SetForegroundWindow(window);
 
@@ -75,7 +76,7 @@ namespace th
 
 	void Th10Ai::controlProc()
 	{
-		std::cout << "保持焦点在游戏窗口上，开始游戏，然后按A开启AI，按S停止AI。" << std::endl;
+		std::cout << "Keep the focus on the game window, start the game, then press \'A\' to start AI, and press \'S\' to stop AI." << std::endl;
 		while (!m_controlDone)
 		{
 			if (IsKeyPressed('A'))
@@ -98,7 +99,7 @@ namespace th
 		if (!m_active)
 		{
 			m_active = true;
-			std::cout << "开启AI。" << std::endl;
+			std::cout << "AI has started." << std::endl;
 		}
 	}
 
@@ -107,8 +108,8 @@ namespace th
 		if (m_active)
 		{
 			m_active = false;
-			std::cout << "停止AI。" << std::endl;
-			std::cout << "决死总数：" << m_bombCount << std::endl;
+			std::cout << "AI has stopped." << std::endl;
+			std::cout << "DeathBomb: " << m_bombCount << std::endl;
 		}
 	}
 
@@ -132,11 +133,9 @@ namespace th
 		if (!m_active)
 			return;
 
-		statusFrame += 1;
+		++statusFrame;
 
 		m_writeStatus->update();
-		m_writeStatus->statusFrame = statusFrame;
-		m_writeStatus->inputFrame = inputFrame;
 
 		std::unique_lock<std::mutex> lock(m_statusMutex);
 		m_writeStatus.swap(m_middleStatus);
@@ -151,7 +150,7 @@ namespace th
 			if (!m_statusUpdated)
 				m_statusCond.wait(lock);
 			else
-				std::cout << "状态更新太慢了。" << std::endl;
+				std::cout << "Processing is too slow." << std::endl;
 			m_readStatus.swap(m_middleStatus);
 			m_statusUpdated = false;
 		}
@@ -159,9 +158,24 @@ namespace th
 		if (!m_active)
 			return false;
 
-		m_status2.copy(m_status1);
-		m_status1.copy(m_status0);
-		m_status0.copy(*m_readStatus);
+		++handleFrame;
+		m_readStatus->inputFrame = inputFrame;
+		m_readStatus->statusFrame = statusFrame;
+		m_readStatus->handleFrame = handleFrame;
+
+		//m_status2.copy(m_status1);
+		//m_status1.copy(m_status0);
+		//m_status0.copy(*m_readStatus);
+
+		//m_scene2.clearAll();
+		//m_scene2.splitEnemies(m_status2.getEnemies());
+		//m_scene2.splitBullets(m_status2.getBullets());
+		//m_scene2.splitLasers(m_status2.getLasers());
+
+		//m_scene1.clearAll();
+		//m_scene1.splitEnemies(m_status1.getEnemies());
+		//m_scene1.splitBullets(m_status1.getBullets());
+		//m_scene1.splitLasers(m_status1.getLasers());
 
 		m_scene.clearAll();
 		m_scene.splitEnemies(m_readStatus->getEnemies());
@@ -185,16 +199,16 @@ namespace th
 		if (!m_active)
 			return;
 
-		inputFrame += 1;
+		++inputFrame;
 
 		if (m_inputUpdated)
 		{
+			m_input.commitTo(size, data);
 			m_inputUpdated = false;
-			m_input.commit(size, data);
 		}
 		else
 		{
-			std::cout << "输入提交太慢了。" << std::endl;
+			std::cout << handleFrame << " Input is too slow." << std::endl;
 		}
 	}
 
@@ -203,21 +217,27 @@ namespace th
 	{
 		if (m_readStatus->getPlayer().isColliding())
 		{
-			Time time = Time::Now();
-			int64_t now = time.getMilliSeconds();
+			int64_t now = Time::Now().getMilliSeconds();
 			if (now - m_bombTime > 1000)
 			{
 				m_bombTime = now;
 
-				int_t id = m_status0.collide(m_status0.getPlayer(), 0.0);
-				m_status1.collide(m_status0.getPlayer(), 1.0);
-				m_status2.collide(m_status0.getPlayer(), 2.0);
-				m_status1.collide(m_status0.getPlayer(), 1.0, id);
-				m_status2.collide(m_status0.getPlayer(), 2.0, id);
+				//int_t id = m_status0.collide(m_status0.getPlayer(), 0);
+				//m_status1.collide(m_status0.getPlayer(), 1);
+				//m_status2.collide(m_status0.getPlayer(), 2);
+				//m_status1.collide(m_status0.getPlayer(), 1, id);
+				//m_status2.collide(m_status0.getPlayer(), 2, id);
+
+				//RegionCollideResult rcr = m_scene.collideAll(m_status0.getPlayer(), 0);
+				//std::cout << rcr.collided << std::endl;
+				//RegionCollideResult rcr1 = m_scene1.collideAll(m_status0.getPlayer(), 1);
+				//std::cout << rcr1.collided << std::endl;
+				//RegionCollideResult rcr2 = m_scene2.collideAll(m_status0.getPlayer(), 2);
+				//std::cout << rcr2.collided << std::endl;
 
 				m_input.bomb();
-				m_bombCount += 1;
-				std::cout << "决死：" << m_bombCount << std::endl;
+				++m_bombCount;
+				std::cout << handleFrame << " DeathBomb: " << m_bombCount << std::endl;
 				return true;
 			}
 		}
@@ -238,7 +258,7 @@ namespace th
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_readStatus->hasEnemy())
+		if (m_readStatus->haveEnemies())
 		{
 			m_input.shoot();
 			return true;
@@ -281,7 +301,7 @@ namespace th
 		}
 		else
 		{
-			std::cout << "无路可走。" << std::endl;
+			std::cout << "No way to go." << std::endl;
 		}
 
 		return true;
@@ -299,15 +319,13 @@ namespace th
 		if (items.empty())
 			return target;
 
-		Time time = Time::Now();
-		int64_t now = time.getMilliSeconds();
-
+		int64_t now = Time::Now().getMilliSeconds();
 		// 拾取冷却中
 		if (now - m_findItemTime < 3000)
 			return target;
 
 		// 自机高于1/4屏
-		if (player.y < Scene::SIZE.height / 4.0f)
+		if (player.pos.y < Scene::SIZE.y / 4)
 		{
 			// 进入冷却
 			m_findItemTime = now;
@@ -315,7 +333,7 @@ namespace th
 		}
 
 		// 自机高于1/2屏，道具少于10个，敌人多于5个
-		if (player.y < Scene::SIZE.height / 2.0f && items.size() < 10 && enemies.size() > 5)
+		if ((player.pos.y < Scene::SIZE.y / 2) && (items.size() < 10) && (enemies.size() > 5))
 		{
 			// 进入冷却
 			m_findItemTime = now;
@@ -326,23 +344,23 @@ namespace th
 		//float_t maxY = std::numeric_limits<float_t>::lowest();
 		for (const Item& item : items)
 		{
-			if (!Scene::IsInScene(item.getPosition()))
+			if (!Scene::IsInScene(item.pos))
 				continue;
 
 			// 道具高于1/5屏
-			if (item.y < Scene::SIZE.height / 5.0f)
+			if (item.pos.y < Scene::SIZE.y / 5)
 				continue;
 
 			// 道具不在自机1/4屏内
-			float_t dy = std::abs(item.y - player.y);
-			if (dy > Scene::SIZE.height / 4.0f)
+			float_t dy = std::abs(item.pos.y - player.pos.y);
+			if (dy > Scene::SIZE.y / 4)
 				continue;
 
 			// 道具太靠近敌机
 			bool tooClose = false;
 			for (const Enemy& enemy : enemies)
 			{
-				if (item.calcDistance(enemy.getPosition()) < 100.0f)
+				if (item.distance(enemy) < 100)
 				{
 					tooClose = true;
 					break;
@@ -352,7 +370,7 @@ namespace th
 				continue;
 
 			// 道具与自机距离最近
-			float_t dist = item.calcDistance(player.getPosition());
+			float_t dist = item.distance(player);
 			if (dist < minDist)
 			{
 				minDist = dist;
@@ -381,20 +399,20 @@ namespace th
 			return target;
 
 		// 自机高于1/4屏
-		if (player.y < Scene::SIZE.height / 4.0f)
+		if (player.pos.y < Scene::SIZE.y / 4)
 			return target;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (const Enemy& enemy : enemies)
 		{
-			if (!Scene::IsInScene(enemy.getPosition()))
+			if (!Scene::IsInScene(enemy.pos))
 				continue;
 
-			if (enemy.y > player.y)
+			if (enemy.pos.y > player.pos.y)
 				continue;
 
 			// 与自机X轴距离最近
-			float_t dx = std::abs(enemy.x - player.x);
+			float_t dx = std::abs(enemy.pos.x - player.pos.x);
 			if (dx < minDist)
 			{
 				minDist = dx;

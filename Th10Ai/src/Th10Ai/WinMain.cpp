@@ -37,7 +37,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 
 		std::string dllPath = base::win::Module().getDir() + "/Th10Hook.dll";
 
-		th::DllInject::EnableDebugPrivilege();
+		//th::DllInject::EnableDebugPrivilege();
 		th::DllInject::Inject(process, dllPath);
 
 		thread.resume();

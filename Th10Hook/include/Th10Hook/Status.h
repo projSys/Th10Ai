@@ -25,7 +25,7 @@ namespace th
 		// Item
 
 		// Enemy
-		bool hasEnemy() const;
+		bool haveEnemies() const;
 		bool isBoss() const;
 		bool isTalking() const;
 		bool isUnderEnemy() const;
@@ -42,8 +42,10 @@ namespace th
 		const std::vector<Bullet>& getBullets() const;
 		const std::vector<Laser>& getLasers() const;
 
-		uint_t statusFrame;
 		uint_t inputFrame;
+		uint_t statusFrame;
+		uint_t handleFrame;
+		int_t frame1;
 
 	private:
 		Player m_player;

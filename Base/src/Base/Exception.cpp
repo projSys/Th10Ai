@@ -23,7 +23,7 @@ namespace base
 	{
 	}
 
-	void Exception::printTo(std::ostream& os) const
+	void Exception::print(std::ostream& os) const
 	{
 		os << what() << '\n';
 
@@ -42,7 +42,7 @@ namespace base
 		}
 		catch (const Exception& ex)
 		{
-			ex.printTo(oss);
+			ex.print(oss);
 		}
 		catch (const boost::exception& be)
 		{

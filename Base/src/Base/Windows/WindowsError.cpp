@@ -12,7 +12,7 @@ namespace base
 		{
 		}
 
-		void WindowsError::printTo(std::ostream& os) const
+		void WindowsError::print(std::ostream& os) const
 		{
 			os << '[' << m_errorCode << ']' << Apis::GetErrorDesc(m_errorCode);
 

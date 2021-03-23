@@ -17,20 +17,20 @@ namespace th
 	{
 		if (slow)
 		{
-			x += MOVE_SPEED_LOW[enum_cast(dir)].x;
-			y += MOVE_SPEED_LOW[enum_cast(dir)].y;
+			pos.x += MOVE_SPEED_LOW[enum_cast(dir)].x;
+			pos.y += MOVE_SPEED_LOW[enum_cast(dir)].y;
 		}
 		else
 		{
 			if (type == 1)
 			{
-				x += MOVE_SPEED_MARISA[enum_cast(dir)].x;
-				y += MOVE_SPEED_MARISA[enum_cast(dir)].y;
+				pos.x += MOVE_SPEED_MARISA[enum_cast(dir)].x;
+				pos.y += MOVE_SPEED_MARISA[enum_cast(dir)].y;
 			}
 			else
 			{
-				x += MOVE_SPEED_HIGH[enum_cast(dir)].x;
-				y += MOVE_SPEED_HIGH[enum_cast(dir)].y;
+				pos.x += MOVE_SPEED_HIGH[enum_cast(dir)].x;
+				pos.y += MOVE_SPEED_HIGH[enum_cast(dir)].y;
 			}
 		}
 	}

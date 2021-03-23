@@ -38,13 +38,15 @@ namespace th
 	class Scene
 	{
 	public:
-		static const Sizef SIZE;
+		static constexpr vec2 SIZE = { 384, 448 };
+		static constexpr vec2 OFFSET = { 32, 16 };
+		static constexpr vec2 ORIGIN_POINT_OFFSET = { 192, 0 };
 
-		static bool IsInScene(const Pointf& pos);
-		static bool IsInPlayerArea(const Pointf& pos);
-		static Pointf FixPlayerPos(const Pointf& pos);
-		static Pointi ToWindowPos(const Pointf& scenePos);
-		static Pointf ToScenePos(const Pointi& windowPos);
+		static bool IsInScene(const vec2& pos);
+		static bool IsInPlayerRegion(const vec2& pos);
+		static vec2 FixPlayerPos(const vec2& pos);
+		static vec2 ToWindowPos(const vec2& scenePos);
+		static vec2 ToScenePos(const vec2& windowPos);
 
 		Scene();
 
@@ -57,9 +59,6 @@ namespace th
 		RegionCollideResult collideAll(const Player& player, float_t frame) const;
 
 	private:
-		static const Sizef OFFSET;
-		static const Sizef ORIGIN_POINT_OFFSET;
-
 		Region m_region;
 	};
 }

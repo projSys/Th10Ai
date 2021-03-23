@@ -153,9 +153,6 @@
     <ClInclude Include="include\Th10Hook\Common.h" />
     <ClInclude Include="include\Th10Hook\Console.h" />
     <ClInclude Include="include\Th10Hook\Direction.h" />
-    <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h" />
-    <ClInclude Include="include\Th10Hook\DirectX\DI8Hook.h" />
-    <ClInclude Include="include\Th10Hook\DirectX\DXResult.h" />
     <ClInclude Include="include\Th10Hook\DirectX\MyDirect3D9.h" />
     <ClInclude Include="include\Th10Hook\DirectX\MyDirect3DDevice9.h" />
     <ClInclude Include="include\Th10Hook\DirectX\MyDirectInput8A.h" />
@@ -169,23 +166,17 @@
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
     <ClInclude Include="include\Th10Hook\Path.h" />
     <ClInclude Include="include\Th10Hook\Player.h" />
-    <ClInclude Include="include\Th10Hook\Point.h" />
-    <ClInclude Include="include\Th10Hook\Rect.h" />
     <ClInclude Include="include\Th10Hook\Region.h" />
     <ClInclude Include="include\Th10Hook\Scene.h" />
-    <ClInclude Include="include\Th10Hook\Size.h" />
     <ClInclude Include="include\Th10Hook\Status.h" />
     <ClInclude Include="include\Th10Hook\Th10Ai.h" />
     <ClInclude Include="include\Th10Hook\Th10Hook.h" />
     <ClInclude Include="include\Th10Hook\Th10Types.h" />
-    <ClInclude Include="include\Th10Hook\Utils.h" />
+    <ClInclude Include="include\Th10Hook\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp" />
     <ClCompile Include="src\Th10Hook\Console.cpp" />
-    <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp" />
-    <ClCompile Include="src\Th10Hook\DirectX\DI8Hook.cpp" />
-    <ClCompile Include="src\Th10Hook\DirectX\DXResult.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\MyDirect3D9.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\MyDirect3DDevice9.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\MyDirectInput8A.cpp" />
@@ -204,7 +195,7 @@
     <ClCompile Include="src\Th10Hook\Status.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Ai.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />
-    <ClCompile Include="src\Th10Hook\Utils.cpp" />
+    <ClCompile Include="src\Th10Hook\Vector2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

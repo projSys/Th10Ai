@@ -21,7 +21,7 @@ namespace base
 		explicit Exception(const std::string& str);
 		virtual ~Exception() = default;
 
-		virtual void printTo(std::ostream& os) const;
+		virtual void print(std::ostream& os) const;
 
 	protected:
 		SourceLocation m_sourceLocation;

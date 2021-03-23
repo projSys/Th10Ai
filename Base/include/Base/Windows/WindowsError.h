@@ -14,7 +14,7 @@ namespace base
 		public:
 			explicit WindowsError(DWORD errorCode = GetLastError());
 
-			virtual void printTo(std::ostream& os) const override;
+			virtual void print(std::ostream& os) const override;
 
 		private:
 			DWORD m_errorCode;

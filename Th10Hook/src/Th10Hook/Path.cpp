@@ -26,9 +26,9 @@ namespace th
 
 	const int_t Path::FIND_DIR_COUNTS[enum_cast(DIR::MAX_COUNT)] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
-	const int_t Path::FIND_LIMIT = 320;
-	const float_t Path::FIND_DEPTH = 30.0f;
-	const Pointf Path::RESET_POS = { 0.0f, 432.0f };
+	const int_t Path::FIND_LIMIT = 100;
+	const float_t Path::FIND_DEPTH = 30;
+	const vec2 Path::RESET_POS = { 0, 432 };
 
 	Path::Path(Status& status, Scene& scene,
 		const boost::optional<Item>& itemTarget,
@@ -52,13 +52,13 @@ namespace th
 		//m_slowFirst = (!m_itemTarget.has_value() && m_underEnemy);
 
 		Action action = {};
-		action.fromPos = m_status.getPlayer().getPosition();
+		action.fromPos = m_status.getPlayer().pos;
 		action.fromDir = m_dir;
-		action.frame = 1.0f;
+		action.frame = 1;
 
 		//action.willCollideCount = 0;
-		//action.minCollideFrame = 0.0f;
-		action.score = 0.0;
+		//action.minCollideFrame = 0;
+		action.score = 0;
 
 		return dfs(action);
 	}
@@ -77,17 +77,17 @@ namespace th
 
 		// 前进到下一个坐标
 		Player player = m_status.getPlayer();
-		player.setPosition(action.fromPos);
+		player.pos = action.fromPos;
 		player.advance(action.fromDir, m_slowFirst);
 		result.slow = m_slowFirst;
 		RegionCollideResult rcr = {};
-		if (!Scene::IsInPlayerArea(player.getPosition())
+		if (!Scene::IsInPlayerRegion(player.pos)
 			|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 		{
-			player.setPosition(action.fromPos);
+			player.pos = action.fromPos;
 			player.advance(action.fromDir, !m_slowFirst);
 			result.slow = !m_slowFirst;
-			if (!Scene::IsInPlayerArea(player.getPosition())
+			if (!Scene::IsInPlayerRegion(player.pos)
 				|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 			{
 				//result.ttd = 10;
@@ -104,28 +104,26 @@ namespace th
 
 		if (m_itemTarget.has_value())
 		{
-			result.score += CalcNearScore(player.getPosition(), m_itemTarget.value().getPosition()) * 100.0f;
+			result.score += CalcNearScore(player.pos, m_itemTarget.value().pos) * 100;
 		}
 		else if (m_enemyTarget.has_value())
 		{
-			result.score += CalcShootScore(player.getPosition(), m_enemyTarget.value().getPosition()) * 100.0f;
+			result.score += CalcShootScore(player.pos, m_enemyTarget.value().pos) * 100;
 		}
 		else
 		{
-			result.score += CalcNearScore(player.getPosition(), RESET_POS) * 100.0f;
+			result.score += CalcNearScore(player.pos, RESET_POS) * 100;
 		}
 
-		//if (ccr.minDistance > 8.0)
-		//	result.score += 150.0;
+		//if (ccr.minDistance > 8)
+		//	result.score += 150;
 		//else
-		//	result.score += ccr.minDistance / 8.0 * 150.0;
+		//	result.score += ccr.minDistance / 8 * 150;
 
-		float64_t total = action.score + result.score;
-		float64_t avg = total / action.frame;
+		float_t total = action.score + result.score;
+		float_t avg = total / action.frame;
 		if (avg > m_bestScore)
-		{
 			m_bestScore = avg;
-		}
 
 		int_t nextValidCount = FIND_DIR_COUNTS[enum_cast(m_dir)];
 		for (int_t i = 0; i < FIND_DIR_COUNTS[enum_cast(m_dir)]; ++i)
@@ -133,9 +131,9 @@ namespace th
 			DIR dir = FIND_DIRS[enum_cast(m_dir)][i];
 
 			Action nextAct = {};
-			nextAct.fromPos = player.getPosition();
+			nextAct.fromPos = player.pos;
 			nextAct.fromDir = dir;
-			nextAct.frame = action.frame + 1.0f;
+			nextAct.frame = action.frame + 1;
 			nextAct.score = total;
 
 			//nextAct.willCollideCount = action.willCollideCount;
@@ -169,69 +167,69 @@ namespace th
 		return result;
 	}
 
-	float_t Path::CalcFarScore(Pointf player, Pointf target)
+	float_t Path::CalcFarScore(vec2 player, vec2 target)
 	{
-		float_t score = 0.0f;
+		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += (Scene::SIZE.width / 2.0f);
-		target.x += (Scene::SIZE.width / 2.0f);
+		player.x += Scene::SIZE.x / 2;
+		target.x += Scene::SIZE.x / 2;
 
 		// 距离越远得分越高
 		if (player.x < target.x)
 			score += 0.5f * ((target.x - player.x) / target.x);
 		else
-			score += 0.5f * ((player.x - target.x) / (Scene::SIZE.width - target.x));
+			score += 0.5f * ((player.x - target.x) / (Scene::SIZE.x - target.x));
 
 		if (player.y < target.y)
 			score += 0.5f * ((target.y - player.y) / target.y);
 		else
-			score += 0.5f * ((player.y - target.y) / (Scene::SIZE.height - target.y));
+			score += 0.5f * ((player.y - target.y) / (Scene::SIZE.y - target.y));
 
 		return score;
 	}
 
-	float_t Path::CalcNearScore(Pointf player, Pointf target)
+	float_t Path::CalcNearScore(vec2 player, vec2 target)
 	{
-		float_t score = 0.0f;
+		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += (Scene::SIZE.width / 2.0f);
-		target.x += (Scene::SIZE.width / 2.0f);
+		player.x += Scene::SIZE.x / 2;
+		target.x += Scene::SIZE.x / 2;
 
 		// 距离越近得分越高
 		if (player.x < target.x)
-			score += 0.5f * (1.0f - (target.x - player.x) / target.x);
+			score += 0.5f * (1 - (target.x - player.x) / target.x);
 		else
-			score += 0.5f * (1.0f - (player.x - target.x) / (Scene::SIZE.width - target.x));
+			score += 0.5f * (1 - (player.x - target.x) / (Scene::SIZE.x - target.x));
 
 		if (player.y < target.y)
-			score += 0.5f * (1.0f - (target.y - player.y) / target.y);
+			score += 0.5f * (1 - (target.y - player.y) / target.y);
 		else
-			score += 0.5f * (1.0f - (player.y - target.y) / (Scene::SIZE.height - target.y));
+			score += 0.5f * (1 - (player.y - target.y) / (Scene::SIZE.y - target.y));
 
 		return score;
 	}
 
-	float_t Path::CalcShootScore(Pointf player, Pointf target)
+	float_t Path::CalcShootScore(vec2 player, vec2 target)
 	{
-		float_t score = 0.0f;
+		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += (Scene::SIZE.width / 2.0f);
-		target.x += (Scene::SIZE.width / 2.0f);
+		player.x += Scene::SIZE.x / 2;
+		target.x += Scene::SIZE.x / 2;
 
 		// 距离越近得分越高
 		if (player.x < target.x)
-			score += 0.5f * (1.0f - (target.x - player.x) / target.x);
+			score += 0.5f * (1 - (target.x - player.x) / target.x);
 		else
-			score += 0.5f * (1.0f - (player.x - target.x) / (Scene::SIZE.width - target.x));
+			score += 0.5f * (1 - (player.x - target.x) / (Scene::SIZE.x - target.x));
 
 		// 距离越远得分越高
 		if (player.y < target.y)
-			score = -1.0f;
+			score = -1;
 		else
-			score += 0.5f * ((player.y - target.y) / (Scene::SIZE.height - target.y));
+			score += 0.5f * ((player.y - target.y) / (Scene::SIZE.y - target.y));
 
 		return score;
 	}

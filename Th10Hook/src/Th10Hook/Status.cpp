@@ -5,8 +5,9 @@
 namespace th
 {
 	Status::Status() :
+		inputFrame(0),
 		statusFrame(0),
-		inputFrame(0)
+		handleFrame(0)
 	{
 		m_items.reserve(2000);
 		m_enemies.reserve(200);
@@ -16,11 +17,13 @@ namespace th
 
 	void Status::update()
 	{
-		Th10Hook::ReadPlayer(m_player);
-		Th10Hook::ReadItems(m_items);
-		Th10Hook::ReadEnemies(m_enemies);
-		Th10Hook::ReadBullets(m_bullets);
-		Th10Hook::ReadLasers(m_lasers);
+		Th10Hook::GetPlayer(m_player);
+		Th10Hook::GetItems(m_items);
+		Th10Hook::GetEnemies(m_enemies);
+		Th10Hook::GetBullets(m_bullets);
+		Th10Hook::GetLasers(m_lasers);
+
+		frame1 = m_player.frame;
 	}
 
 	void Status::copy(const Status& other)
@@ -39,11 +42,13 @@ namespace th
 		for (const Laser& laser : other.m_lasers)
 			m_lasers.push_back(laser);
 
-		statusFrame = other.statusFrame;
 		inputFrame = other.inputFrame;
+		statusFrame = other.statusFrame;
+		handleFrame = other.handleFrame;
+		frame1 = other.frame1;
 	}
 
-	bool Status::hasEnemy() const
+	bool Status::haveEnemies() const
 	{
 		return !m_enemies.empty();
 	}
@@ -63,7 +68,7 @@ namespace th
 		bool underEnemy = false;
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (std::abs(m_player.x - enemy.x) < 16.0f && m_player.y > enemy.y)
+			if (std::abs(m_player.pos.x - enemy.pos.x) < 16 && m_player.pos.y > enemy.pos.y)
 			{
 				underEnemy = true;
 				break;
@@ -80,13 +85,15 @@ namespace th
 			bullet.advance(frame);
 			if (bullet.collide(player))
 			{
-				std::cout << statusFrame << "/" << inputFrame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
-					<< "org(" << org.id << " " << org.x << " " << org.y << " " << org.dx << " " << org.dy << ") "
-					<< "now(" << bullet.id << " " << bullet.x << " " << bullet.y << " " << bullet.dx << " " << bullet.dy << ") " << std::endl;
+				std::cout << inputFrame << "/" << statusFrame << "/" << handleFrame << "/" << frame1 << "帧"
+					<< " 总数：" << m_bullets.size() << " 碰撞："
+					<< "org(" << org.id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
+					<< "now(" << bullet.id << " " << bullet.pos.x << " " << bullet.pos.y << " " << bullet.delta.x << " " << bullet.delta.y << ") " << std::endl;
 				return bullet.id;
 			}
 		}
-		std::cout << statusFrame << "/" << inputFrame << "帧 不碰撞" << " 总数：" << m_bullets.size() << std::endl;
+		std::cout << inputFrame << "/" << statusFrame << "/" << handleFrame << "/" << frame1 << "帧"
+			<< " 总数：" << m_bullets.size() << " 不碰撞" << std::endl;
 		return -1;
 	}
 
@@ -100,14 +107,16 @@ namespace th
 				bullet.advance(frame);
 				if (bullet.collide(player))
 				{
-					std::cout << statusFrame << "/" << inputFrame << "帧" << " 总数：" << m_bullets.size() << " 碰撞："
-						<< "org(" << org.id << " " << org.x << " " << org.y << " " << org.dx << " " << org.dy << ") "
-						<< "now(" << bullet.id << " " << bullet.x << " " << bullet.y << " " << bullet.dx << " " << bullet.dy << ") " << std::endl;
+					std::cout << inputFrame << "/" << statusFrame << "/" << handleFrame << "/" << frame1 << "帧"
+						<< " 总数：" << m_bullets.size() << " 碰撞："
+						<< "org(" << org.id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
+						<< "now(" << bullet.id << " " << bullet.pos.x << " " << bullet.pos.y << " " << bullet.delta.x << " " << bullet.delta.y << ") " << std::endl;
 					return bullet.id;
 				}
 			}
 		}
-		std::cout << statusFrame << "/" << inputFrame << "帧" << " 找不到子弹：" << id << " 总数：" << m_bullets.size() << std::endl;
+		std::cout << inputFrame << "/" << statusFrame << "/" << handleFrame << "/" << frame1 << "帧"
+			<< " 总数：" << m_bullets.size() << " 找不到子弹：" << id << std::endl;
 		return -1;
 	}
 

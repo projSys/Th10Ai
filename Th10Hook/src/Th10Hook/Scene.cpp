@@ -4,48 +4,45 @@
 
 namespace th
 {
-	const Sizef Scene::SIZE = { 384.0f, 448.0f };
-	const Sizef Scene::OFFSET = { 32.0f, 16.0f };
-	const Sizef Scene::ORIGIN_POINT_OFFSET = { 192.0f, 0.0f };
-
-	bool Scene::IsInScene(const Pointf& pos)
+	//todo 大玉有问题
+	bool Scene::IsInScene(const vec2& pos)
 	{
-		return pos.x >= -192.0f && pos.x <= 192.0f && pos.y >= 0.0f && pos.y <= 448.0f;
+		return pos.x >= -192 && pos.x <= 192 && pos.y >= 0 && pos.y <= 448;
 	}
 
-	bool Scene::IsInPlayerArea(const Pointf& pos)
+	bool Scene::IsInPlayerRegion(const vec2& pos)
 	{
-		return pos.x >= -184.0f && pos.x <= 184.0f && pos.y >= 32.0f && pos.y <= 432.0f;
+		return pos.x >= -184 && pos.x <= 184 && pos.y >= 32 && pos.y <= 432;
 	}
 
-	Pointf Scene::FixPlayerPos(const Pointf& pos)
+	vec2 Scene::FixPlayerPos(const vec2& pos)
 	{
-		Pointf ret = pos;
-		if (ret.x < -184.0f)
-			ret.x = -184.0f;
-		if (ret.x > 184.0f)
-			ret.x = 184.0f;
-		if (ret.y < 32.0f)
-			ret.y = 32.0f;
-		if (ret.y > 432.0f)
-			ret.y = 432.0f;
+		vec2 ret = pos;
+		if (ret.x < -184)
+			ret.x = -184;
+		if (ret.x > 184)
+			ret.x = 184;
+		if (ret.y < 32)
+			ret.y = 32;
+		if (ret.y > 432)
+			ret.y = 432;
 		return ret;
 	}
 
-	Pointi Scene::ToWindowPos(const Pointf& scenePos)
+	vec2 Scene::ToWindowPos(const vec2& scenePos)
 	{
-		return Pointi(static_cast<int_t>(std::round(scenePos.x + ORIGIN_POINT_OFFSET.width + OFFSET.width)),
-			static_cast<int_t>(std::round(scenePos.y + ORIGIN_POINT_OFFSET.height + OFFSET.height)));
+		return vec2(std::round(scenePos.x + ORIGIN_POINT_OFFSET.x + OFFSET.x),
+			std::round(scenePos.y + ORIGIN_POINT_OFFSET.y + OFFSET.y));
 	}
 
-	Pointf Scene::ToScenePos(const Pointi& windowPos)
+	vec2 Scene::ToScenePos(const vec2& windowPos)
 	{
-		return Pointf(static_cast<float_t>(windowPos.x) - OFFSET.width - ORIGIN_POINT_OFFSET.width,
-			static_cast<float_t>(windowPos.y) - OFFSET.height - ORIGIN_POINT_OFFSET.height);
+		return vec2(windowPos.x - OFFSET.x - ORIGIN_POINT_OFFSET.x,
+			windowPos.y - OFFSET.y - ORIGIN_POINT_OFFSET.y);
 	}
 
 	Scene::Scene() :
-		m_region(0.0f, 224.0f, 384.0f, 448.0f)
+		m_region(0, 224, 384, 448)
 	{
 	}
 

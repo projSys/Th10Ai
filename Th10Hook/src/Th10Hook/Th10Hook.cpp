@@ -10,7 +10,7 @@ namespace th
 		return *reinterpret_cast<T*>(address);
 	}
 
-	bool Th10Hook::ReadPlayer(Player& player)
+	bool Th10Hook::GetPlayer(Player& player)
 	{
 		player = {};
 
@@ -18,12 +18,12 @@ namespace th
 		if (raw == nullptr)
 			return false;
 
-		player.x = raw->x;
-		player.y = raw->y;
-		player.dx = raw->dx / 100.0;
-		player.dy = raw->dy / 100.0;
-		player.width = raw->width * 2.0;
-		player.height = raw->height * 2.0;
+		player.pos.x = raw->x;
+		player.pos.y = raw->y;
+		player.delta.x = static_cast<float_t>(raw->dx) / 100;
+		player.delta.y = static_cast<float_t>(raw->dy) / 100;
+		player.size.x = raw->width * 2;
+		player.size.y = raw->height * 2;
 		player.status = raw->status;
 		player.invincibleTime = raw->invincibleTime;
 		player.slow = raw->slow;
@@ -48,7 +48,7 @@ namespace th
 		//player.y = ReadMemory<float32_t>(baseAddr + 0x3C4);
 		//player.dx = ReadMemory<int32_t>(baseAddr + 0x3F0) / 100.0;
 		//player.dy = ReadMemory<int32_t>(baseAddr + 0x3F4) / 100.0;
-		//player.width = ReadMemory<float32_t>(baseAddr + 0x41C) * 2.0;
+		//player.width = ReadMemory<float32_t>(baseAddr + 0x41C) * 2;
 		//player.height = player.width;
 		//player.status = ReadMemory<int32_t>(baseAddr + 0x458);
 		//player.invincibleTime = ReadMemory<int32_t>(baseAddr + 0x4310);
@@ -61,10 +61,12 @@ namespace th
 		if (player.slow)
 			player.itemObtainRange *= 2.5f;
 
+		player.frame = ReadMemory<int32_t>(0x00474C88);
+
 		return true;
 	}
 
-	bool Th10Hook::ReadItems(std::vector<Item>& items)
+	bool Th10Hook::GetItems(std::vector<Item>& items)
 	{
 		items.clear();
 
@@ -86,13 +88,13 @@ namespace th
 			if (eax == 1)
 			{
 				Item item;
-				item.x = ReadMemory<float32_t>(ebp);
-				item.y = ReadMemory<float32_t>(ebp + 0x4);
-				item.dx = ReadMemory<float32_t>(ebp + 0xC);
-				item.dy = ReadMemory<float32_t>(ebp + 0x10);
+				item.pos.x = ReadMemory<float32_t>(ebp);
+				item.pos.y = ReadMemory<float32_t>(ebp + 0x4);
+				item.delta.x = ReadMemory<float32_t>(ebp + 0xC);
+				item.delta.y = ReadMemory<float32_t>(ebp + 0x10);
 				// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
-				item.width = 6.0f;
-				item.height = item.width;
+				item.size.x = 6;
+				item.size.y = 6;
 				item.type = ReadMemory<int32_t>(ebp + 0x34);
 
 				//item.id = i;
@@ -105,7 +107,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Hook::ReadEnemies(std::vector<Enemy>& enemies)
+	bool Th10Hook::GetEnemies(std::vector<Enemy>& enemies)
 	{
 		enemies.clear();
 
@@ -125,12 +127,12 @@ namespace th
 			if ((t & 0x40) == 0 && (t & 0x12) == 0)
 			{
 				Enemy enemy;
-				enemy.x = ReadMemory<float32_t>(objAddr + 0x2C);
-				enemy.y = ReadMemory<float32_t>(objAddr + 0x30);
-				enemy.dx = ReadMemory<float32_t>(objAddr + 0x38);
-				enemy.dy = ReadMemory<float32_t>(objAddr + 0x3C);
-				enemy.width = ReadMemory<float32_t>(objAddr + 0xB8);
-				enemy.height = ReadMemory<float32_t>(objAddr + 0xBC);
+				enemy.pos.x = ReadMemory<float32_t>(objAddr + 0x2C);
+				enemy.pos.y = ReadMemory<float32_t>(objAddr + 0x30);
+				enemy.delta.x = ReadMemory<float32_t>(objAddr + 0x38);
+				enemy.delta.y = ReadMemory<float32_t>(objAddr + 0x3C);
+				enemy.size.x = ReadMemory<float32_t>(objAddr + 0xB8);
+				enemy.size.y = ReadMemory<float32_t>(objAddr + 0xBC);
 
 				//enemy.id = static_cast<int_t>(objAddr);
 				//enemy.type = static_cast<int_t>(std::round(enemy.width));
@@ -145,7 +147,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Hook::ReadBullets(std::vector<Bullet>& bullets)
+	bool Th10Hook::GetBullets(std::vector<Bullet>& bullets)
 	{
 		bullets.clear();
 
@@ -167,12 +169,12 @@ namespace th
 					if ((eax & 0x00000400) == 0)
 					{
 						Bullet bullet;
-						bullet.x = ReadMemory<float32_t>(ebx + 0x3B4);
-						bullet.y = ReadMemory<float32_t>(ebx + 0x3B8);
-						bullet.dx = ReadMemory<float32_t>(ebx + 0x3C0);
-						bullet.dy = ReadMemory<float32_t>(ebx + 0x3C4);
-						bullet.width = ReadMemory<float32_t>(ebx + 0x3F0);
-						bullet.height = ReadMemory<float32_t>(ebx + 0x3F4);
+						bullet.pos.x = ReadMemory<float32_t>(ebx + 0x3B4);
+						bullet.pos.y = ReadMemory<float32_t>(ebx + 0x3B8);
+						bullet.delta.x = ReadMemory<float32_t>(ebx + 0x3C0);
+						bullet.delta.y = ReadMemory<float32_t>(ebx + 0x3C4);
+						bullet.size.x = ReadMemory<float32_t>(ebx + 0x3F0);
+						bullet.size.y = ReadMemory<float32_t>(ebx + 0x3F4);
 
 						bullet.id = static_cast<int_t>(ebx);
 						//bullet.type = static_cast<int_t>(std::round(bullet.width));
@@ -187,7 +189,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Hook::ReadLasers(std::vector<Laser>& lasers)
+	bool Th10Hook::GetLasers(std::vector<Laser>& lasers)
 	{
 		lasers.clear();
 
@@ -204,13 +206,13 @@ namespace th
 			uint32_t objNext = ReadMemory<uint32_t>(objAddr + 0x8);
 
 			Laser laser;
-			laser.x = ReadMemory<float32_t>(objAddr + 0x24);
-			laser.y = ReadMemory<float32_t>(objAddr + 0x28);
-			laser.dx = ReadMemory<float32_t>(objAddr + 0x30);
-			laser.dy = ReadMemory<float32_t>(objAddr + 0x34);
+			laser.pos.x = ReadMemory<float32_t>(objAddr + 0x24);
+			laser.pos.y = ReadMemory<float32_t>(objAddr + 0x28);
+			laser.delta.x = ReadMemory<float32_t>(objAddr + 0x30);
+			laser.delta.y = ReadMemory<float32_t>(objAddr + 0x34);
 			laser.arc = ReadMemory<float32_t>(objAddr + 0x3C);
-			laser.height = ReadMemory<float32_t>(objAddr + 0x40);
-			laser.width = ReadMemory<float32_t>(objAddr + 0x44);
+			laser.size.x = ReadMemory<float32_t>(objAddr + 0x40);
+			laser.size.y = ReadMemory<float32_t>(objAddr + 0x44);
 
 			//laser.id = static_cast<int_t>(objAddr);
 			//laser.type = static_cast<int_t>(std::round(laser.width));

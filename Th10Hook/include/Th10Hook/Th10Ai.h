@@ -48,16 +48,18 @@ namespace th
 		std::atomic<bool> m_handleDone;
 		std::atomic<bool> m_active;
 
-		std::unique_ptr<Status> m_writeStatus;
-		std::unique_ptr<Status> m_middleStatus;
-		std::unique_ptr<Status> m_readStatus;
 		std::mutex m_statusMutex;
 		std::condition_variable m_statusCond;
 		bool m_statusUpdated;
+		std::unique_ptr<Status> m_writeStatus;
+		std::unique_ptr<Status> m_middleStatus;
+		std::unique_ptr<Status> m_readStatus;
 		Status m_status2;
 		Status m_status1;
 		Status m_status0;
 
+		Scene m_scene2;
+		Scene m_scene1;
 		Scene m_scene;
 
 		int64_t m_bombTime;
@@ -68,8 +70,9 @@ namespace th
 		Input m_input;
 		std::atomic<bool> m_inputUpdated;
 
-		uint_t statusFrame;
-		uint_t inputFrame;
+		std::atomic<uint_t> inputFrame;
+		std::atomic<uint_t> statusFrame;
+		std::atomic<uint_t> handleFrame;
 	};
 
 	extern std::unique_ptr<Th10Ai> g_th10Ai;

@@ -60,19 +60,10 @@
     <ClInclude Include="include\Th10Hook\Player.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Point.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\Rect.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\Region.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\Scene.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\Size.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\Status.h">
@@ -86,18 +77,6 @@
     </ClInclude>
     <ClInclude Include="include\Th10Hook\Th10Types.h">
       <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\Utils.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h">
-      <Filter>头文件\Th10Hook\DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\DirectX\DI8Hook.h">
-      <Filter>头文件\Th10Hook\DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Th10Hook\DirectX\DXResult.h">
-      <Filter>头文件\Th10Hook\DirectX</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\Console.h">
       <Filter>头文件\Th10Hook</Filter>
@@ -115,6 +94,9 @@
       <Filter>头文件\Th10Hook\DirectX</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\Input.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Vector2.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
   </ItemGroup>
@@ -161,18 +143,6 @@
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\Utils.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp">
-      <Filter>源文件\Th10Hook\DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\DirectX\DI8Hook.cpp">
-      <Filter>源文件\Th10Hook\DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Th10Hook\DirectX\DXResult.cpp">
-      <Filter>源文件\Th10Hook\DirectX</Filter>
-    </ClCompile>
     <ClCompile Include="src\Th10Hook\Console.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
@@ -189,6 +159,9 @@
       <Filter>源文件\Th10Hook\DirectX</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Input.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Vector2.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>

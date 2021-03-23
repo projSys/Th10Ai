@@ -11,13 +11,13 @@ namespace th
 {
 	struct Action
 	{
-		Pointf fromPos;
+		vec2 fromPos;
 		DIR fromDir;
 		float_t frame;
 
 		//int_t willCollideCount;
 		//float_t minCollideFrame;
-		float64_t score;
+		float_t score;
 	};
 
 	struct Result
@@ -40,15 +40,15 @@ namespace th
 		Result dfs(const Action& action);
 
 	//private:
-		static float_t CalcFarScore(Pointf player, Pointf target);
-		static float_t CalcNearScore(Pointf player, Pointf target);
-		static float_t CalcShootScore(Pointf player, Pointf target);
+		static float_t CalcFarScore(vec2 player, vec2 target);
+		static float_t CalcNearScore(vec2 player, vec2 target);
+		static float_t CalcShootScore(vec2 player, vec2 target);
 
 		static const DIR FIND_DIRS[enum_cast(DIR::MAX_COUNT)][5];
 		static const int_t FIND_DIR_COUNTS[enum_cast(DIR::MAX_COUNT)];
 		static const int_t FIND_LIMIT;
 		static const float_t FIND_DEPTH;
-		static const Pointf RESET_POS;
+		static const vec2 RESET_POS;
 
 		Status& m_status;
 		Scene& m_scene;

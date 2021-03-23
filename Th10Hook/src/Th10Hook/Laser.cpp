@@ -1,6 +1,5 @@
 #include "Th10Hook/Laser.h"
 
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include <cmath>
 
@@ -24,69 +23,74 @@ namespace th
 		return true;
 	}
 
-	// 大概应该没有问题吧？
+	// 错的
 	std::pair<bool, float_t> Laser::willCollideWith(const Entity& other) const
 	{
-		FootPoint footPoint = calcFootPoint(other.getPosition());
+		FootPoint footPoint = calcFootPoint(other);
 		Laser temp = *this;
-		temp.setPosition(footPoint.pos);
+		temp.advance(footPoint.k);
 		if (temp.collide(other))
 			return std::make_pair(true, footPoint.k);
 		else
-			return std::make_pair(false, 0.0f);
+			return std::make_pair(false, float_t());
 	}
 
-	Pointf Laser::getLeftTop() const
+	vec2 Laser::getLeftTop() const
 	{
-		return Pointf(x - width / 2.0f, y);
+		return vec2(pos.x - size.x / 2, pos.y);
 	}
 
-	Pointf Laser::getRightTop() const
+	vec2 Laser::getRightTop() const
 	{
-		return Pointf(x + width / 2.0f, y);
+		return vec2(pos.x + size.x / 2, pos.y);
 	}
 
-	Pointf Laser::getLeftBottom() const
+	vec2 Laser::getLeftBottom() const
 	{
-		return Pointf(x - width / 2.0f, y + height);
+		return vec2(pos.x - size.x / 2, pos.y + size.y);
 	}
 
-	Pointf Laser::getRightBottom() const
+	vec2 Laser::getRightBottom() const
 	{
-		return Pointf(x + width / 2.0f, y + height);
+		return vec2(pos.x + size.x / 2, pos.y + size.y);
 	}
 
 
 
-	// 平面中，一个点(x, y)绕任意点(cx, cy)顺时针旋转a度后的坐标
-	// xx = (x - cx) * cos(-a) - (y - cy) * sin(-a) + cx;
-	// yy = (x - cx) * sin(-a) + (y - cy) * cos(-a) + cy;
-	// 平面中，一个点(x, y)绕任意点(cx, cy)逆时针旋转a度后的坐标
-	// xx = (x - cx) * cos(a) - (y - cy) * sin(a) + cx;
-	// yy = (x - cx) * sin(a) + (y - cy) * cos(a) + cy;
-	Pointf SatBox::Rotate(const Pointf& P, const Pointf& C, float_t radianC)
+	// 平面中，一个点(px, py)绕任意点(cx, cy)逆时针旋转a度后的坐标
+	// x = (px - cx) * cos(a) - (py - cy) * sin(a) + cx;
+	// y = (px - cx) * sin(a) + (py - cy) * cos(a) + cy;
+	// 平面中，一个点(px, py)绕任意点(cx, cy)顺时针旋转a度后的坐标
+	// x = (px - cx) * cos(-a) - (py - cy) * sin(-a) + cx;
+	// y = (px - cx) * sin(-a) + (py - cy) * cos(-a) + cy;
+	vec2 RotatePoint(const vec2& P, const vec2& C, float_t sinC, float_t cosC)
 	{
 		float_t dx = P.x - C.x;
 		float_t dy = P.y - C.y;
-		float_t sinC = std::sin(radianC);
-		float_t cosC = std::cos(radianC);
-		return Pointf(dx * cosC - dy * sinC + C.x, dx * sinC + dy * cosC + C.y);
+		float_t x = dx * cosC - dy * sinC + C.x;
+		float_t y = dx * sinC + dy * cosC + C.y;
+		return vec2(x, y);
 	}
 
-	bool SatBox::Collide(float_t p1, float_t s1, float_t p2, float_t s2)
+	bool Overlap(float_t minA, float_t maxA, float_t minB, float_t maxB)
 	{
-		return std::abs(p1 - p2) < (s1 + s2) / 2.0f;
+		return maxA > minB && maxB > minA;
+		//return !(maxA < minB || maxB < minA);
 	}
 
 	LaserBox::LaserBox(const Laser& laser)
 	{
-		Pointf C = laser.getPosition();
+		vec2 C = laser.pos;
 		// emmm...你说这个谁懂啊？
-		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		leftTop = Rotate(laser.getLeftTop(), C, radianC);
-		rightTop = Rotate(laser.getRightTop(), C, radianC);
-		leftBottom = Rotate(laser.getLeftBottom(), C, radianC);
-		rightBottom = Rotate(laser.getRightBottom(), C, radianC);
+		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5 / 2;
+		float_t sinC = std::sin(radianC);
+		float_t cosC = std::cos(radianC);
+
+		//leftTop = (laser.getLeftTop() - C).rotate(radianC) + C;
+		leftTop = RotatePoint(laser.getLeftTop(), C, sinC, cosC);
+		rightTop = RotatePoint(laser.getRightTop(), C, sinC, cosC);
+		leftBottom = RotatePoint(laser.getLeftBottom(), C, sinC, cosC);
+		rightBottom = RotatePoint(laser.getRightBottom(), C, sinC, cosC);
 	}
 
 	// 分离轴定理
@@ -96,29 +100,33 @@ namespace th
 		float_t minX = std::min(std::min(leftTop.x, rightTop.x), std::min(leftBottom.x, rightBottom.x));
 		float_t maxX = std::max(std::max(leftTop.x, rightTop.x), std::max(leftBottom.x, rightBottom.x));
 		// 检测2条线段是否重叠
-		if (!Collide(minX + (maxX - minX) / 2.0f, maxX - minX, other.x, other.width))
+		if (!Overlap(minX, maxX, other.pos.x - other.size.x / 2, other.pos.x + other.size.x / 2))
 			return false;
 
 		// 投影到Y轴
 		float_t minY = std::min(std::min(leftTop.y, rightTop.y), std::min(leftBottom.y, rightBottom.y));
 		float_t maxY = std::max(std::max(leftTop.y, rightTop.y), std::max(leftBottom.y, rightBottom.y));
 		// 检测2条线段是否重叠
-		if (!Collide(minY + (maxY - minY) / 2.0f, maxY - minY, other.y, other.height))
+		if (!Overlap(minY, maxY, other.pos.y - other.size.y / 2, other.pos.y + other.size.y / 2))
 			return false;
 
 		return true;
 	}
 
-	// 反向旋转画布，即把激光转回来，再反向旋转自机坐标
+	// 错的
+	// 反向旋转画布，即激光不变，反向旋转自机坐标
 	EntityBox::EntityBox(const Entity& entity, const Laser& laser)
 	{
-		Pointf C = laser.getPosition();
+		vec2 C = laser.pos;
 		// emmm...你说这个谁懂啊？
-		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5.0f / 2.0f;
-		leftTop = Rotate(entity.getLeftTop(), C, -radianC);
-		rightTop = Rotate(entity.getRightTop(), C, -radianC);
-		leftBottom = Rotate(entity.getLeftBottom(), C, -radianC);
-		rightBottom = Rotate(entity.getRightBottom(), C, -radianC);
+		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5 / 2;
+		float_t sinC = std::sin(-radianC);
+		float_t cosC = std::cos(-radianC);
+
+		leftTop = RotatePoint(entity.getLeftTop(), C, sinC, cosC);
+		rightTop = RotatePoint(entity.getRightTop(), C, sinC, cosC);
+		leftBottom = RotatePoint(entity.getLeftBottom(), C, sinC, cosC);
+		rightBottom = RotatePoint(entity.getRightBottom(), C, sinC, cosC);
 	}
 
 	// 分离轴定理
@@ -128,14 +136,14 @@ namespace th
 		float_t minX = std::min(std::min(leftTop.x, rightTop.x), std::min(leftBottom.x, rightBottom.x));
 		float_t maxX = std::max(std::max(leftTop.x, rightTop.x), std::max(leftBottom.x, rightBottom.x));
 		// 检测2条线段是否重叠
-		if (!Collide(minX + (maxX - minX) / 2.0f, maxX - minX, other.x, other.width))
+		if (!Overlap(minX, maxX, other.pos.x - other.size.x / 2, other.pos.x + other.size.x / 2))
 			return false;
 
 		// 投影到Y轴
 		float_t minY = std::min(std::min(leftTop.y, rightTop.y), std::min(leftBottom.y, rightBottom.y));
 		float_t maxY = std::max(std::max(leftTop.y, rightTop.y), std::max(leftBottom.y, rightBottom.y));
 		// 检测2条线段是否重叠
-		if (!Collide(minY + (maxY - minY) / 2.0f, maxY - minY, other.y + other.height / 2.0f, other.height))
+		if (!Overlap(minY, maxY, other.pos.y, other.pos.y + other.size.y))
 			return false;
 
 		return true;

@@ -18,6 +18,11 @@ namespace th
 #define DIRECTINPUT_VERSION 0x0800
 #endif
 
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+
 #include <iostream>
 
-#pragma warning(disable:4244)
+//#pragma warning(disable:4244)
+//#pragma warning(disable:4305)

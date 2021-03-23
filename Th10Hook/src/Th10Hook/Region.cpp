@@ -5,7 +5,7 @@
 namespace th
 {
 	Region::Region(float_t x0, float_t y0, float_t width0, float_t height0) :
-		Entity(x0, y0, 0.0f, 0.0f, width0, height0)
+		Entity(vec2(x0, y0), vec2(), vec2(width0, height0))
 	{
 		m_enemies.reserve(200);
 		m_bullets.reserve(2000);
@@ -17,15 +17,15 @@ namespace th
 		if (times <= 0)
 			return;
 
-		if (width > height)
+		if (size.x > size.y)
 		{
-			m_first = std::make_unique<Region>(x - width / 4.0f, y, width / 2.0f, height);
-			m_second = std::make_unique<Region>(x + width / 4.0f, y, width / 2.0f, height);
+			m_first = std::make_unique<Region>(pos.x - size.x / 4, pos.y, size.x / 2, size.y);
+			m_second = std::make_unique<Region>(pos.x + size.x / 4, pos.y, size.x / 2, size.y);
 		}
 		else
 		{
-			m_first = std::make_unique<Region>(x, y - height / 4.0f, width, height / 2.0f);
-			m_second = std::make_unique<Region>(x, y + height / 4.0f, width, height / 2.0f);
+			m_first = std::make_unique<Region>(pos.x, pos.y - size.y / 4, size.x, size.y / 2);
+			m_second = std::make_unique<Region>(pos.x, pos.y + size.y / 4, size.x, size.y / 2);
 		}
 
 		m_first->split(times - 1);
@@ -119,10 +119,10 @@ namespace th
 	RegionCollideResult Region::collideAll(const Player& player, float_t frame) const
 	{
 		RegionCollideResult result = {};
-		result.minCollideFrame = std::numeric_limits<float_t>::max();
-		result.minDistance = std::numeric_limits<float_t>::max();
+		//result.minCollideFrame = std::numeric_limits<float_t>::max();
+		//result.minDistance = std::numeric_limits<float_t>::max();
 
-		if (!collide(player))
+		if (!collide(player, 8))
 			return result;
 
 		// 只检测叶子节点
@@ -134,69 +134,77 @@ namespace th
 				if (enemy.collide(player))
 				{
 					result.collided = true;
-					//break;
+					break;
 				}
-				float_t distance = enemy.calcDistance(player.getPosition());
-				if (distance < result.minDistance)
-					result.minDistance = distance;
+				//float_t distance = enemy.calcDistance(player.getPosition());
+				//if (distance < result.minDistance)
+				//	result.minDistance = distance;
 				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-				//if (ret.first && ret.second < 2.0f)
+				//if (ret.first && ret.second < 2)
 				//	return true;
 			}
 
-			for (Bullet bullet : m_bullets)
-			{
-				bullet.advance(frame);
-				if (bullet.collide(player))
+			if (!result.collided)
+				for (Bullet bullet : m_bullets)
 				{
-					result.collided = true;
-					break;
-					//if (frame == 0.0)
-					//{
-					//	cout << player.x << " " << player.y << " " << player.width << " " << player.height << endl;
-					//	cout << bullet.x << " " << bullet.y << " " << bullet.width << " " << bullet.height << endl;
-					//}
-				}
-				//float_t distance = bullet.calcDistance(player.getPosition());
-				//if (distance < result.minDistance)
-				//	result.minDistance = distance;
-				//if (player.collide(temp, 0.0))
-				//{
-				//	result.collided = true;
-				//	break;
-				//}
-				//else
-				//{
-					//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-					//if (ret.first && ret.second > -1.0f && ret.second < 1.0f)
+					bullet.advance(frame);
+					if (bullet.collide(player, 0.05f))
+					{
+						result.collided = true;
+						break;
+						//if (frame == 0)
+						//{
+						//	cout << player.x << " " << player.y << " " << player.width << " " << player.height << endl;
+						//	cout << bullet.x << " " << bullet.y << " " << bullet.width << " " << bullet.height << endl;
+						//}
+					}
+					//bullet.advance(1);
+					//if (bullet.collide(player))
 					//{
 					//	result.collided = true;
 					//	break;
 					//}
-					//if (ret.first && ret.second > 0.0f && ret.second < 10.0f)
+					//float_t distance = bullet.calcDistance(player.getPosition());
+					//if (distance < result.minDistance)
+					//	result.minDistance = distance;
+					//if (player.collide(temp, 0))
 					//{
-					//	result.willCollideCount += 1;
-					//	if (ret.second < result.minCollideFrame)
-					//		result.minCollideFrame = ret.second;
+					//	result.collided = true;
+					//	break;
 					//}
-				//}
-			}
-
-			for (Laser laser : m_lasers)
-			{
-				laser.advance(frame);
-				if (laser.collide(player))
-				{
-					result.collided = true;
-					//break;
+					//else
+					//{
+						//std::pair<bool, float_t> ret = temp.willCollideWith(player);
+						//if (ret.first && ret.second > -1 && ret.second < 1)
+						//{
+						//	result.collided = true;
+						//	break;
+						//}
+						//if (ret.first && ret.second > 0 && ret.second < 10)
+						//{
+						//	result.willCollideCount += 1;
+						//	if (ret.second < result.minCollideFrame)
+						//		result.minCollideFrame = ret.second;
+						//}
+					//}
 				}
-				float_t distance = laser.calcDistance(player.getPosition());
-				if (distance < result.minDistance)
-					result.minDistance = distance;
-				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-				//if (ret.first && ret.second < 2.0f)
-				//	return true;
-			}
+
+			if (!result.collided)
+				for (Laser laser : m_lasers)
+				{
+					laser.advance(frame);
+					if (laser.collide(player))
+					{
+						result.collided = true;
+						break;
+					}
+					//float_t distance = laser.calcDistance(player.getPosition());
+					//if (distance < result.minDistance)
+					//	result.minDistance = distance;
+					//std::pair<bool, float_t> ret = temp.willCollideWith(player);
+					//if (ret.first && ret.second < 2)
+					//	return true;
+				}
 		}
 
 		if (m_first != nullptr)
@@ -204,14 +212,14 @@ namespace th
 			RegionCollideResult firstResult = m_first->collideAll(player, frame);
 			if (firstResult.collided)
 				result.collided = true;
-			if (firstResult.willCollideCount > 0)
-			{
-				result.willCollideCount += firstResult.willCollideCount;
-				if (firstResult.minCollideFrame < result.minCollideFrame)
-					result.minCollideFrame = firstResult.minCollideFrame;
-			}
-			if (firstResult.minDistance < result.minDistance)
-				result.minDistance = firstResult.minDistance;
+			//if (firstResult.willCollideCount > 0)
+			//{
+			//	result.willCollideCount += firstResult.willCollideCount;
+			//	if (firstResult.minCollideFrame < result.minCollideFrame)
+			//		result.minCollideFrame = firstResult.minCollideFrame;
+			//}
+			//if (firstResult.minDistance < result.minDistance)
+			//	result.minDistance = firstResult.minDistance;
 		}
 
 		if (m_second != nullptr)
@@ -219,14 +227,14 @@ namespace th
 			RegionCollideResult secondResult = m_second->collideAll(player, frame);
 			if (secondResult.collided)
 				result.collided = true;
-			if (secondResult.willCollideCount > 0)
-			{
-				result.willCollideCount += secondResult.willCollideCount;
-				if (secondResult.minCollideFrame < result.minCollideFrame)
-					result.minCollideFrame = secondResult.minCollideFrame;
-			}
-			if (secondResult.minDistance < result.minDistance)
-				result.minDistance = secondResult.minDistance;
+			//if (secondResult.willCollideCount > 0)
+			//{
+			//	result.willCollideCount += secondResult.willCollideCount;
+			//	if (secondResult.minCollideFrame < result.minCollideFrame)
+			//		result.minCollideFrame = secondResult.minCollideFrame;
+			//}
+			//if (secondResult.minDistance < result.minDistance)
+			//	result.minDistance = secondResult.minDistance;
 		}
 
 		return result;

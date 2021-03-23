@@ -27,10 +27,10 @@ namespace th
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 
-		Pointf getLeftTop() const;
-		Pointf getRightTop() const;
-		Pointf getLeftBottom() const;
-		Pointf getRightBottom() const;
+		vec2 getLeftTop() const;
+		vec2 getRightTop() const;
+		vec2 getLeftBottom() const;
+		vec2 getRightBottom() const;
 
 		float_t arc;
 	};
@@ -38,13 +38,10 @@ namespace th
 	class SatBox
 	{
 	public:
-		static Pointf Rotate(const Pointf& P, const Pointf& C, float_t radianC);
-		static bool Collide(float_t p1, float_t s1, float_t p2, float_t s2);
-
-		Pointf leftTop;
-		Pointf rightTop;
-		Pointf leftBottom;
-		Pointf rightBottom;
+		vec2 leftTop;
+		vec2 rightTop;
+		vec2 leftBottom;
+		vec2 rightBottom;
 	};
 
 	class LaserBox :

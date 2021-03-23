@@ -15,10 +15,10 @@ namespace th
 	class Th10Hook
 	{
 	public:
-		static bool ReadPlayer(Player& player);
-		static bool ReadItems(std::vector<Item>& items);
-		static bool ReadEnemies(std::vector<Enemy>& enemies);
-		static bool ReadBullets(std::vector<Bullet>& bullets);
-		static bool ReadLasers(std::vector<Laser>& lasers);
+		static bool GetPlayer(Player& player);
+		static bool GetItems(std::vector<Item>& items);
+		static bool GetEnemies(std::vector<Enemy>& enemies);
+		static bool GetBullets(std::vector<Bullet>& bullets);
+		static bool GetLasers(std::vector<Laser>& lasers);
 	};
 }

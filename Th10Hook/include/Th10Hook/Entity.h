@@ -2,14 +2,17 @@
 
 #include "Th10Hook/Common.h"
 
-#include "Th10Hook/Point.h"
-#include "Th10Hook/Size.h"
-#include "Th10Hook/Rect.h"
+#include "Th10Hook/Vector2.h"
 #include "Th10Hook/Direction.h"
-#include "Th10Hook/Utils.h"
 
 namespace th
 {
+	struct FootPoint
+	{
+		float_t k;
+		vec2 pos;
+	};
+
 	// 实体结构
 	// +-------+
 	// | (x,y) |
@@ -20,44 +23,32 @@ namespace th
 	class Entity
 	{
 	public:
-		static const DIR SECTOR_TO_DIR[17];
-
 		Entity();
-		Entity(float_t x0, float_t y0, float_t dx0, float_t dy0, float_t width0, float_t height0);
+		Entity(const vec2& pos0, const vec2& delta0, const vec2& size0);
 
-		float_t calcDistance(const Pointf& pos) const;
-		float_t calcAngle(const Pointf& pos) const;
-		FootPoint calcFootPoint(const Pointf& pos) const;
-		DIR calcDirection() const;
-		DIR calcDirection(const Pointf& pos) const;
+		float_t distance(const Entity& other) const;
+		FootPoint calcFootPoint(const Entity& other) const;
 
 		void advance(float_t frame);
 		bool collide(const Entity& other) const;
+		bool collide(const Entity& other, float_t epsilon) const;
 		bool collide2(const Entity& other) const;
-		bool collide(const Entity& other, float_t frame) const;
+		bool collide3(const Entity& other, float_t frame) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 		bool isHighSpeedWith(const Entity& other) const;
 
-		Pointf getPosition() const;
-		void setPosition(const Pointf& pos);
-		Pointf getLeftTop() const;
-		Pointf getRightTop() const;
-		Pointf getLeftBottom() const;
-		Pointf getRightBottom() const;
+		vec2 getLeftTop() const;
+		vec2 getRightTop() const;
+		vec2 getLeftBottom() const;
+		vec2 getRightBottom() const;
 		bool isHolding() const;
-		Pointf getDelta() const;
-		Pointf getNextPos() const;
-		Sizef getSize() const;
-		Rectf getRect() const;
+		vec2 getNextPos() const;
 
 		//int_t id;
 		//int_t type;
 
-		float_t x;			// 坐标在中心点
-		float_t y;
-		float_t dx;
-		float_t dy;
-		float_t width;
-		float_t height;
+		vec2 pos;			// 坐标在中心点
+		vec2 delta;
+		vec2 size;
 	};
 }
