@@ -18,20 +18,26 @@ namespace th
 	// |   |
 	// +---+
 	//   w
+	// OBB
 	class Laser :
 		public Entity
 	{
 	public:
 		Laser();
+		//Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0);
 
 		bool collide(const Entity& other) const;
 		std::pair<bool, float_t> willCollideWith(const Entity& other) const;
 
+		vec2 getCenter() const;
 		vec2 getLeftTop() const;
 		vec2 getRightTop() const;
 		vec2 getLeftBottom() const;
 		vec2 getRightBottom() const;
 
+		//vec2 pos;
+		//vec2 delta;
+		//vec2 size;
 		float_t arc;
 	};
 

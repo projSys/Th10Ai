@@ -4,6 +4,7 @@
 
 namespace th
 {
+	// À±¼¦·â×°
 	class MyDetours
 	{
 	public:

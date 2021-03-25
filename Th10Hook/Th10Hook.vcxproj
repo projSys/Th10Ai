@@ -153,6 +153,8 @@
     <ClInclude Include="include\Th10Hook\Common.h" />
     <ClInclude Include="include\Th10Hook\Console.h" />
     <ClInclude Include="include\Th10Hook\Direction.h" />
+    <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h" />
+    <ClInclude Include="include\Th10Hook\DirectX\DI8Hook.h" />
     <ClInclude Include="include\Th10Hook\DirectX\MyDirect3D9.h" />
     <ClInclude Include="include\Th10Hook\DirectX\MyDirect3DDevice9.h" />
     <ClInclude Include="include\Th10Hook\DirectX\MyDirectInput8A.h" />
@@ -177,6 +179,8 @@
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp" />
     <ClCompile Include="src\Th10Hook\Console.cpp" />
+    <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp" />
+    <ClCompile Include="src\Th10Hook\DirectX\DI8Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\MyDirect3D9.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\MyDirect3DDevice9.cpp" />
     <ClCompile Include="src\Th10Hook\DirectX\MyDirectInput8A.cpp" />

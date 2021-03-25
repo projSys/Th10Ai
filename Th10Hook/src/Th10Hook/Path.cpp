@@ -172,8 +172,8 @@ namespace th
 		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += Scene::SIZE.x / 2;
-		target.x += Scene::SIZE.x / 2;
+		player.x += Scene::ORIGIN_POINT_OFFSET.x;
+		target.x += Scene::ORIGIN_POINT_OFFSET.x;
 
 		// 距离越远得分越高
 		if (player.x < target.x)
@@ -194,8 +194,8 @@ namespace th
 		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += Scene::SIZE.x / 2;
-		target.x += Scene::SIZE.x / 2;
+		player.x += Scene::ORIGIN_POINT_OFFSET.x;
+		target.x += Scene::ORIGIN_POINT_OFFSET.x;
 
 		// 距离越近得分越高
 		if (player.x < target.x)
@@ -216,8 +216,8 @@ namespace th
 		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += Scene::SIZE.x / 2;
-		target.x += Scene::SIZE.x / 2;
+		player.x += Scene::ORIGIN_POINT_OFFSET.x;
+		target.x += Scene::ORIGIN_POINT_OFFSET.x;
 
 		// 距离越近得分越高
 		if (player.x < target.x)

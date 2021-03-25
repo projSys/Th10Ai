@@ -22,8 +22,12 @@ namespace th
 		{
 		}
 
-		bool operator ==(const Vector2& other) const;
-		bool operator !=(const Vector2& other) const;
+		Value_t lengthSquared() const;
+		Value_t length() const;
+		void normalize();
+		Vector2 normalized() const;
+		Value_t dot(const Vector2& other) const;
+		Vector2 rotate(Value_t radian) const;
 
 		Vector2 operator +(const Vector2& other) const;
 		Vector2 operator -(const Vector2& other) const;
@@ -34,9 +38,8 @@ namespace th
 		Vector2& operator *=(Value_t scalar);
 		Vector2& operator /=(Value_t scalar);
 
-		Value_t length() const;
-		Value_t dot(const Vector2& other) const;
-		Vector2 rotate(Value_t radian) const;
+		bool operator ==(const Vector2& other) const;
+		bool operator !=(const Vector2& other) const;
 
 		Value_t x;
 		Value_t y;

@@ -10,8 +10,74 @@ namespace th
 	{
 	}
 
+	//Laser::Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0) :
+	//	pos(pos0), delta(delta0), size(size0), arc(arc0)
+	//{
+	//}
+
+	bool Projection(const vec2& l1, const vec2& l2, const vec2& l3, const vec2& l4,
+		const vec2& e1, const vec2& e2, const vec2& e3, const vec2& e4,
+		const vec2& axis)
+	{
+		// a·b = |a||b|cosθ
+		// |b| = 1
+		// a·b = |a|cosθ
+		float_t lp1 = l1.dot(axis);
+		float_t lp2 = l2.dot(axis);
+		float_t lp3 = l3.dot(axis);
+		float_t lp4 = l4.dot(axis);
+
+		float_t ep1 = e1.dot(axis);
+		float_t ep2 = e2.dot(axis);
+		float_t ep3 = e3.dot(axis);
+		float_t ep4 = e4.dot(axis);
+
+		float_t min1 = std::min(std::min(lp1, lp2), std::min(lp3, lp4));
+		float_t max1 = std::max(std::max(lp1, lp2), std::max(lp3, lp4));
+
+		float_t min2 = std::min(std::min(ep1, ep2), std::min(ep3, ep4));
+		float_t max2 = std::max(std::max(ep1, ep2), std::max(ep3, ep4));
+
+		return max1 > min2 && max2 > min1;
+		//return !(max1 < min2 || max2 < min1);
+	}
+
 	bool Laser::collide(const Entity& other) const
 	{
+		//// emmm...你说这个谁懂啊？
+		//float_t radian = arc - static_cast<float_t>(M_PI) * 5 / 2;
+
+		//vec2 center = getCenter();
+		//vec2 leftTop = center + (getLeftTop() - center).rotate(radian);
+		//vec2 rightTop = center + (getRightTop() - center).rotate(radian);
+		//vec2 leftBottom = center + (getLeftBottom() - center).rotate(radian);
+		//vec2 rightBottom = center + (getRightBottom() - center).rotate(radian);
+
+		//vec2 axisX1(1, 0);	// 未旋转的对称轴，单位向量
+		//vec2 axisY1(0, 1);
+		//vec2 axisX2 = axisX1.rotate(radian);	// 已旋转的对称轴
+		//vec2 axisY2 = axisY1.rotate(radian);
+
+		//if (!Projection(leftTop, rightTop, leftBottom, rightBottom,
+		//	other.getLeftTop(), other.getRightTop(), other.getLeftBottom(), other.getRightBottom(),
+		//	axisX1))
+		//	return false;
+
+		//if (!Projection(leftTop, rightTop, leftBottom, rightBottom,
+		//	other.getLeftTop(), other.getRightTop(), other.getLeftBottom(), other.getRightBottom(),
+		//	axisY1))
+		//	return false;
+
+		//if (!Projection(leftTop, rightTop, leftBottom, rightBottom,
+		//	other.getLeftTop(), other.getRightTop(), other.getLeftBottom(), other.getRightBottom(),
+		//	axisX2))
+		//	return false;
+
+		//if (!Projection(leftTop, rightTop, leftBottom, rightBottom,
+		//	other.getLeftTop(), other.getRightTop(), other.getLeftBottom(), other.getRightBottom(),
+		//	axisY2))
+		//	return false;
+
 		LaserBox laserBox(*this);
 		if (!laserBox.collide(other))
 			return false;
@@ -33,6 +99,11 @@ namespace th
 			return std::make_pair(true, footPoint.k);
 		else
 			return std::make_pair(false, float_t());
+	}
+
+	vec2 Laser::getCenter() const
+	{
+		return vec2(pos.x, pos.y + size.y / 2);
 	}
 
 	vec2 Laser::getLeftTop() const
@@ -72,10 +143,10 @@ namespace th
 		return vec2(x, y);
 	}
 
-	bool Overlap(float_t minA, float_t maxA, float_t minB, float_t maxB)
+	bool Overlap(float_t min1, float_t max1, float_t min2, float_t max2)
 	{
-		return maxA > minB && maxB > minA;
-		//return !(maxA < minB || maxB < minA);
+		return max1 > min2 && max2 > min1;
+		//return !(max1 < min2 || max2 < min1);
 	}
 
 	LaserBox::LaserBox(const Laser& laser)
@@ -100,14 +171,14 @@ namespace th
 		float_t minX = std::min(std::min(leftTop.x, rightTop.x), std::min(leftBottom.x, rightBottom.x));
 		float_t maxX = std::max(std::max(leftTop.x, rightTop.x), std::max(leftBottom.x, rightBottom.x));
 		// 检测2条线段是否重叠
-		if (!Overlap(minX, maxX, other.pos.x - other.size.x / 2, other.pos.x + other.size.x / 2))
+		if (!Overlap(minX, maxX, other.getLeftTop().x, other.getRightTop().x))
 			return false;
 
 		// 投影到Y轴
 		float_t minY = std::min(std::min(leftTop.y, rightTop.y), std::min(leftBottom.y, rightBottom.y));
 		float_t maxY = std::max(std::max(leftTop.y, rightTop.y), std::max(leftBottom.y, rightBottom.y));
 		// 检测2条线段是否重叠
-		if (!Overlap(minY, maxY, other.pos.y - other.size.y / 2, other.pos.y + other.size.y / 2))
+		if (!Overlap(minY, maxY, other.getLeftTop().y, other.getLeftBottom().y))
 			return false;
 
 		return true;

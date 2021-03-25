@@ -21,7 +21,7 @@ namespace th
 		private Entity
 	{
 	public:
-		Region(float_t x0, float_t y0, float_t width0, float_t height0);
+		Region(const vec2& pos0, const vec2& size0);
 
 		void split(int_t times);
 

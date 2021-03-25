@@ -47,11 +47,6 @@ namespace th
 		return CalcFootPoint(pos, getNextPos(), other.pos);
 	}
 
-	void Entity::advance(float_t frame)
-	{
-		pos += (delta * frame);
-	}
-
 	// https://thwiki.cc/%E6%B8%B8%E6%88%8F%E6%94%BB%E7%95%A5/STG%E5%88%A4%E5%AE%9A%E6%95%B0%E6%8D%AE
 	bool Entity::collide(const Entity& other) const
 	{
@@ -152,5 +147,10 @@ namespace th
 	vec2 Entity::getNextPos() const
 	{
 		return pos + delta;
+	}
+
+	void Entity::advance(float_t frame)
+	{
+		pos += (delta * frame);
 	}
 }

@@ -3,56 +3,24 @@
 #include <Base/Windows/Module.h>
 
 #include "Th10Hook/MyDetours.h"
-#include "Th10Hook/DirectX/MyDirect3D9.h"
-#include "Th10Hook/DirectX/MyDirectInput8A.h"
+#include "Th10Hook/DirectX/D3D9Hook.h"
+#include "Th10Hook/DirectX/DI8Hook.h"
 
 HMODULE g_module = nullptr;
-
-base::Logger logger;
-
-using Direct3DCreate9_t = decltype(&Direct3DCreate9);
-Direct3DCreate9_t direct3DCreate9Orig = nullptr;
-
-IDirect3D9* WINAPI Direct3DCreate9Hook(UINT SDKVersion)
-{
-	IDirect3D9* d3d9 = direct3DCreate9Orig(SDKVersion);
-	if (d3d9 != nullptr)
-		d3d9 = new th::MyDirect3D9(d3d9);
-	return d3d9;
-}
-
-using DirectInput8Create_t = decltype(&DirectInput8Create);
-DirectInput8Create_t directInput8CreateOrig = nullptr;
-
-HRESULT WINAPI DirectInput8CreateHook(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
-{
-	HRESULT hr = directInput8CreateOrig(hinst, dwVersion, riidltf, ppvOut, punkOuter);
-	if (SUCCEEDED(hr))
-	{
-		if (riidltf == IID_IDirectInput8A)
-			*ppvOut = new th::MyDirectInput8A(reinterpret_cast<IDirectInput8A*>(*ppvOut));
-	}
-	return hr;
-}
+base::Logger g_logger;
+th::D3D9Hook g_d3d9Hook;
+th::DI8Hook g_di8Hook;
 
 void Hook()
 {
 	try
 	{
 		std::string logPath = base::win::Module(g_module).getDir() + "/Th10Hook_%N.log";
-		logger.addFileLog(logPath);
-
-		base::win::Module d3d9Dll = base::win::Module::Get("d3d9.dll");
-		direct3DCreate9Orig =
-			d3d9Dll.getProcAddress<Direct3DCreate9_t>("Direct3DCreate9");
-
-		base::win::Module dinput8Dll = base::win::Module::Get("dinput8.dll");
-		directInput8CreateOrig =
-			dinput8Dll.getProcAddress<DirectInput8Create_t>("DirectInput8Create");
+		g_logger.addFileLog(logPath);
 
 		th::MyDetours::TransactionBegin();
-		th::MyDetours::Attach(reinterpret_cast<PVOID*>(&direct3DCreate9Orig), &Direct3DCreate9Hook);
-		th::MyDetours::Attach(reinterpret_cast<PVOID*>(&directInput8CreateOrig), &DirectInput8CreateHook);
+		g_d3d9Hook.attach();
+		g_di8Hook.attach();
 		th::MyDetours::TransactionCommit();
 	}
 	catch (...)

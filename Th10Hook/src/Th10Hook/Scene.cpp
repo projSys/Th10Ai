@@ -42,7 +42,7 @@ namespace th
 	}
 
 	Scene::Scene() :
-		m_region(0, 224, 384, 448)
+		m_region(vec2(0, 224), SIZE)
 	{
 	}
 

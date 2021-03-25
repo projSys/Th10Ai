@@ -20,6 +20,7 @@ namespace th
 	// |       |
 	// +-------+
 	//     w
+	// AABB
 	class Entity
 	{
 	public:
@@ -29,7 +30,6 @@ namespace th
 		float_t distance(const Entity& other) const;
 		FootPoint calcFootPoint(const Entity& other) const;
 
-		void advance(float_t frame);
 		bool collide(const Entity& other) const;
 		bool collide(const Entity& other, float_t epsilon) const;
 		bool collide2(const Entity& other) const;
@@ -43,6 +43,7 @@ namespace th
 		vec2 getRightBottom() const;
 		bool isHolding() const;
 		vec2 getNextPos() const;
+		void advance(float_t frame);
 
 		//int_t id;
 		//int_t type;

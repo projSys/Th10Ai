@@ -4,8 +4,8 @@
 
 namespace th
 {
-	Region::Region(float_t x0, float_t y0, float_t width0, float_t height0) :
-		Entity(vec2(x0, y0), vec2(), vec2(width0, height0))
+	Region::Region(const vec2& pos0, const vec2& size0) :
+		Entity(pos0, vec2(), size0)
 	{
 		m_enemies.reserve(200);
 		m_bullets.reserve(2000);
@@ -19,13 +19,13 @@ namespace th
 
 		if (size.x > size.y)
 		{
-			m_first = std::make_unique<Region>(pos.x - size.x / 4, pos.y, size.x / 2, size.y);
-			m_second = std::make_unique<Region>(pos.x + size.x / 4, pos.y, size.x / 2, size.y);
+			m_first = std::make_unique<Region>(vec2(pos.x - size.x / 4, pos.y), vec2(size.x / 2, size.y));
+			m_second = std::make_unique<Region>(vec2(pos.x + size.x / 4, pos.y), vec2(size.x / 2, size.y));
 		}
 		else
 		{
-			m_first = std::make_unique<Region>(pos.x, pos.y - size.y / 4, size.x, size.y / 2);
-			m_second = std::make_unique<Region>(pos.x, pos.y + size.y / 4, size.x, size.y / 2);
+			m_first = std::make_unique<Region>(vec2(pos.x, pos.y - size.y / 4), vec2(size.x, size.y / 2));
+			m_second = std::make_unique<Region>(vec2(pos.x, pos.y + size.y / 4), vec2(size.x, size.y / 2));
 		}
 
 		m_first->split(times - 1);
@@ -122,7 +122,7 @@ namespace th
 		//result.minCollideFrame = std::numeric_limits<float_t>::max();
 		//result.minDistance = std::numeric_limits<float_t>::max();
 
-		if (!collide(player, 8))
+		if (!collide(player))
 			return result;
 
 		// 只检测叶子节点

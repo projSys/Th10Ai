@@ -99,6 +99,12 @@
     <ClInclude Include="include\Th10Hook\Vector2.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\DirectX\DI8Hook.h">
+      <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp">
@@ -163,6 +169,12 @@
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Vector2.cpp">
       <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\DirectX\DI8Hook.cpp">
+      <Filter>源文件\Th10Hook\DirectX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
