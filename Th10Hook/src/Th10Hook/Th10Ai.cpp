@@ -231,12 +231,12 @@ namespace th
 			//cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(laser.size.x), int_t(laser.size.y));
 			//cv::rectangle(m_mat, rect, red);
 
-			vec2 axisX = laser.axisX * 100;
-			vec2 axisY = laser.axisY * 100;
-			vec2 oX = vec2(300, 100) + axisX;
-			vec2 oY = vec2(300, 100) + axisY;
-			cv::line(m_mat, cv::Point(300, 100), cv::Point(int_t(oX.x), int_t(oX.y)), red);
-			cv::line(m_mat, cv::Point(300, 100), cv::Point(int_t(oY.x), int_t(oY.y)), red);
+			//vec2 axisX = laser.axisX * 100;
+			//vec2 axisY = laser.axisY * 100;
+			//vec2 oX = vec2(300, 100) + axisX;
+			//vec2 oY = vec2(300, 100) + axisY;
+			//cv::line(m_mat, cv::Point(300, 100), cv::Point(int_t(oX.x), int_t(oX.y)), red);
+			//cv::line(m_mat, cv::Point(300, 100), cv::Point(int_t(oY.x), int_t(oY.y)), red);
 
 			vec2 p1 = Scene::ToWindowPos(laser.leftTop);
 			vec2 p2 = Scene::ToWindowPos(laser.rightTop);
@@ -247,7 +247,7 @@ namespace th
 			cv::line(m_mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);
 			cv::line(m_mat, cv::Point(int_t(p4.x), int_t(p4.y)), cv::Point(int_t(p1.x), int_t(p1.y)), red);
 
-			break;
+			//break;
 		}
 
 		cv::imshow("Th10Ai", m_mat);

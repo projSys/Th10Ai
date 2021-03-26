@@ -9,7 +9,7 @@
 #include <condition_variable>
 #include <boost/optional.hpp>
 
-#define RENDER 1
+#define RENDER 0
 
 #if RENDER
 #include <opencv2/opencv.hpp>
