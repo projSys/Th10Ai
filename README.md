@@ -5,7 +5,7 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ![](https://github.com/GiriMind/Th10Ai/blob/master/1.png)
 
-激光的投影轴
+激光的投影轴<br />
 ![](https://github.com/GiriMind/Th10Ai/blob/master/2.png)
 
 通关视频<br />
