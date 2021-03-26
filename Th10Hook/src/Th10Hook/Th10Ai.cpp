@@ -5,6 +5,14 @@
 
 #include "Th10Hook/Path.h"
 
+#if RENDER
+#ifdef _DEBUG
+#pragma comment(lib, "opencv_world451d.lib")
+#else
+#pragma comment(lib, "opencv_world451.lib")
+#endif
+#endif
+
 namespace th
 {
 	std::unique_ptr<Th10Ai> g_th10Ai;
@@ -21,6 +29,9 @@ namespace th
 		inputFrame(0),
 		statusFrame(0),
 		handleFrame(0)
+#if RENDER
+		, m_mat(cv::Size(640, 480), CV_8UC4)
+#endif
 	{
 		SetForegroundWindow(window);
 
@@ -48,6 +59,10 @@ namespace th
 
 		m_scene.split(6);
 
+#if RENDER
+		cv::namedWindow("Th10Ai");
+#endif
+
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
 		m_handleThread = std::thread(&Th10Ai::handleProc, this);
 	}
@@ -67,6 +82,10 @@ namespace th
 		m_controlDone = true;
 		if (m_controlThread.joinable())
 			m_controlThread.join();
+
+#if RENDER
+		cv::destroyWindow("Th10Ai");
+#endif
 	}
 
 	bool IsKeyPressed(int vKey)
@@ -163,6 +182,79 @@ namespace th
 		m_readStatus->statusFrame = statusFrame;
 		m_readStatus->handleFrame = handleFrame;
 
+		m_readStatus->rotateLasers();
+
+#if RENDER
+		//int64_t t1 = Time::Now().getMilliSeconds();
+
+		cv::Scalar red(0, 0, 255);
+		cv::Scalar green(0, 255, 0);
+		cv::Scalar blue(255, 0, 0);
+
+		m_mat = cv::Scalar(255, 255, 255);
+
+		{
+			const Player& player = m_readStatus->getPlayer();
+			vec2 windowPos = Scene::ToWindowPos(player.getLeftTop());
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(player.size.x), int_t(player.size.y));
+			cv::rectangle(m_mat, rect, cv::Scalar(0, 0, 0));
+		}
+
+		const std::vector<Item>& items = m_readStatus->getItems();
+		for (const Item& item : items)
+		{
+			vec2 windowPos = Scene::ToWindowPos(item.getLeftTop());
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(item.size.x), int_t(item.size.y));
+			cv::rectangle(m_mat, rect, blue);
+		}
+
+		const std::vector<Enemy>& enemies = m_readStatus->getEnemies();
+		for (const Enemy& enemy : enemies)
+		{
+			vec2 windowPos = Scene::ToWindowPos(enemy.getLeftTop());
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(enemy.size.x), int_t(enemy.size.y));
+			cv::rectangle(m_mat, rect, red);
+		}
+
+		const std::vector<Bullet>& bullets = m_readStatus->getBullets();
+		for (const Bullet& bullet : bullets)
+		{
+			vec2 windowPos = Scene::ToWindowPos(bullet.getLeftTop());
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(bullet.size.x), int_t(bullet.size.y));
+			cv::rectangle(m_mat, rect, red);
+		}
+
+		const std::vector<Laser>& lasers = m_readStatus->getLasers();
+		for (const Laser& laser : lasers)
+		{
+			//vec2 windowPos = Scene::ToWindowPos(laser.getLeftTop());
+			//cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(laser.size.x), int_t(laser.size.y));
+			//cv::rectangle(m_mat, rect, red);
+
+			vec2 axisX = laser.axisX * 100;
+			vec2 axisY = laser.axisY * 100;
+			vec2 oX = vec2(300, 100) + axisX;
+			vec2 oY = vec2(300, 100) + axisY;
+			cv::line(m_mat, cv::Point(300, 100), cv::Point(int_t(oX.x), int_t(oX.y)), red);
+			cv::line(m_mat, cv::Point(300, 100), cv::Point(int_t(oY.x), int_t(oY.y)), red);
+
+			vec2 p1 = Scene::ToWindowPos(laser.leftTop);
+			vec2 p2 = Scene::ToWindowPos(laser.rightTop);
+			vec2 p3 = Scene::ToWindowPos(laser.rightBottom);
+			vec2 p4 = Scene::ToWindowPos(laser.leftBottom);
+			cv::line(m_mat, cv::Point(int_t(p1.x), int_t(p1.y)), cv::Point(int_t(p2.x), int_t(p2.y)), red);
+			cv::line(m_mat, cv::Point(int_t(p2.x), int_t(p2.y)), cv::Point(int_t(p3.x), int_t(p3.y)), red);
+			cv::line(m_mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);
+			cv::line(m_mat, cv::Point(int_t(p4.x), int_t(p4.y)), cv::Point(int_t(p1.x), int_t(p1.y)), red);
+
+			break;
+		}
+
+		cv::imshow("Th10Ai", m_mat);
+
+		//int64_t t2 = Time::Now().getMilliSeconds();
+		//std::cout << t2 - t1 << std::endl;
+#else
 		//m_status2.copy(m_status1);
 		//m_status1.copy(m_status0);
 		//m_status0.copy(*m_readStatus);
@@ -190,12 +282,16 @@ namespace th
 		handleMove();
 
 		m_inputUpdated = true;
-
+#endif
 		return true;
 	}
 
 	void Th10Ai::commitInput(DWORD size, LPVOID data)
 	{
+#if RENDER
+		return;
+#endif
+
 		if (!m_active)
 			return;
 

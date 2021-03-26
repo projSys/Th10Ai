@@ -9,6 +9,12 @@
 #include <condition_variable>
 #include <boost/optional.hpp>
 
+#define RENDER 1
+
+#if RENDER
+#include <opencv2/opencv.hpp>
+#endif
+
 #include "Th10Hook/Console.h"
 #include "Th10Hook/Status.h"
 #include "Th10Hook/Scene.h"
@@ -73,6 +79,10 @@ namespace th
 		std::atomic<uint_t> inputFrame;
 		std::atomic<uint_t> statusFrame;
 		std::atomic<uint_t> handleFrame;
+
+#if RENDER
+		cv::Mat m_mat;
+#endif
 	};
 
 	extern std::unique_ptr<Th10Ai> g_th10Ai;

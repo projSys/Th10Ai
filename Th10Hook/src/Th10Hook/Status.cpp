@@ -26,6 +26,12 @@ namespace th
 		frame1 = m_player.frame;
 	}
 
+	void Status::rotateLasers()
+	{
+		for (Laser& laser : m_lasers)
+			laser.rotate();
+	}
+
 	void Status::copy(const Status& other)
 	{
 		m_player = other.m_player;

@@ -10,33 +10,46 @@ namespace th
 	{
 	}
 
-	//Laser::Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0) :
-	//	pos(pos0), delta(delta0), size(size0), arc(arc0)
-	//{
-	//}
+	Laser::Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0) :
+		pos(pos0), delta(delta0), size(size0), arc(arc0)
+	{
+	}
 
-	bool Projection(const vec2& l1, const vec2& l2, const vec2& l3, const vec2& l4,
-		const vec2& e1, const vec2& e2, const vec2& e3, const vec2& e4,
-		const vec2& axis)
+	void Laser::rotate()
+	{
+		// emmm...你说这个谁懂啊？
+		float_t radian = arc - static_cast<float_t>(M_PI) * 5 / 2;
+
+		leftTop = pos + (getLeftTop() - pos).rotate(radian);
+		rightTop = pos + (getRightTop() - pos).rotate(radian);
+		leftBottom = pos + (getLeftBottom() - pos).rotate(radian);
+		rightBottom = pos + (getRightBottom() - pos).rotate(radian);
+		axisX = vec2(1, 0).rotate(radian);
+		axisY = vec2(0, 1).rotate(radian);
+	}
+
+	bool Laser::overlap(const vec2& lt2, const vec2& rt2, const vec2& lb2, const vec2& rb2,
+		const vec2& axis) const
 	{
 		// a·b = |a||b|cosθ
 		// |b| = 1
 		// a·b = |a|cosθ
-		float_t lp1 = l1.dot(axis);
-		float_t lp2 = l2.dot(axis);
-		float_t lp3 = l3.dot(axis);
-		float_t lp4 = l4.dot(axis);
+		// |a|cosθ即a在b上的投影
+		float_t proj1 = leftTop.dot(axis);
+		float_t proj2 = rightTop.dot(axis);
+		float_t proj3 = leftBottom.dot(axis);
+		float_t proj4 = rightBottom.dot(axis);
 
-		float_t ep1 = e1.dot(axis);
-		float_t ep2 = e2.dot(axis);
-		float_t ep3 = e3.dot(axis);
-		float_t ep4 = e4.dot(axis);
+		float_t proj5 = lt2.dot(axis);
+		float_t proj6 = rt2.dot(axis);
+		float_t proj7 = lb2.dot(axis);
+		float_t proj8 = rb2.dot(axis);
 
-		float_t min1 = std::min(std::min(lp1, lp2), std::min(lp3, lp4));
-		float_t max1 = std::max(std::max(lp1, lp2), std::max(lp3, lp4));
+		float_t min1 = std::min(std::min(proj1, proj2), std::min(proj3, proj4));
+		float_t max1 = std::max(std::max(proj1, proj2), std::max(proj3, proj4));
 
-		float_t min2 = std::min(std::min(ep1, ep2), std::min(ep3, ep4));
-		float_t max2 = std::max(std::max(ep1, ep2), std::max(ep3, ep4));
+		float_t min2 = std::min(std::min(proj5, proj6), std::min(proj7, proj8));
+		float_t max2 = std::max(std::max(proj5, proj6), std::max(proj7, proj8));
 
 		return max1 > min2 && max2 > min1;
 		//return !(max1 < min2 || max2 < min1);
@@ -44,49 +57,61 @@ namespace th
 
 	bool Laser::collide(const Entity& other) const
 	{
-		//// emmm...你说这个谁懂啊？
-		//float_t radian = arc - static_cast<float_t>(M_PI) * 5 / 2;
+		vec2 leftTop2 = other.getLeftTop();
+		vec2 rightTop2 = other.getRightTop();
+		vec2 leftBottom2 = other.getLeftBottom();
+		vec2 rightBottom2 = other.getRightBottom();
+		vec2 axisX2(1, 0);
+		vec2 axisY2(0, 1);
 
-		//vec2 center = getCenter();
-		//vec2 leftTop = center + (getLeftTop() - center).rotate(radian);
-		//vec2 rightTop = center + (getRightTop() - center).rotate(radian);
-		//vec2 leftBottom = center + (getLeftBottom() - center).rotate(radian);
-		//vec2 rightBottom = center + (getRightBottom() - center).rotate(radian);
-
-		//vec2 axisX1(1, 0);	// 未旋转的对称轴，单位向量
-		//vec2 axisY1(0, 1);
-		//vec2 axisX2 = axisX1.rotate(radian);	// 已旋转的对称轴
-		//vec2 axisY2 = axisY1.rotate(radian);
-
-		//if (!Projection(leftTop, rightTop, leftBottom, rightBottom,
-		//	other.getLeftTop(), other.getRightTop(), other.getLeftBottom(), other.getRightBottom(),
-		//	axisX1))
-		//	return false;
-
-		//if (!Projection(leftTop, rightTop, leftBottom, rightBottom,
-		//	other.getLeftTop(), other.getRightTop(), other.getLeftBottom(), other.getRightBottom(),
-		//	axisY1))
-		//	return false;
-
-		//if (!Projection(leftTop, rightTop, leftBottom, rightBottom,
-		//	other.getLeftTop(), other.getRightTop(), other.getLeftBottom(), other.getRightBottom(),
-		//	axisX2))
-		//	return false;
-
-		//if (!Projection(leftTop, rightTop, leftBottom, rightBottom,
-		//	other.getLeftTop(), other.getRightTop(), other.getLeftBottom(), other.getRightBottom(),
-		//	axisY2))
-		//	return false;
-
-		LaserBox laserBox(*this);
-		if (!laserBox.collide(other))
+		if (!overlap(leftTop2, rightTop2, leftBottom2, rightBottom2,
+			axisX))
 			return false;
 
-		EntityBox entityBox(other, *this);
-		if (!entityBox.collide(*this))
+		if (!overlap(leftTop2, rightTop2, leftBottom2, rightBottom2,
+			axisY))
+			return false;
+
+		if (!overlap(leftTop2, rightTop2, leftBottom2, rightBottom2,
+			axisX2))
+			return false;
+
+		if (!overlap(leftTop2, rightTop2, leftBottom2, rightBottom2,
+			axisY2))
 			return false;
 
 		return true;
+	}
+
+	// 首先，求一系数k：设直线的起点和终点分别为A（x1， y1）、B（x2， y2），直线外一点为C（x0， y0），垂足为D；并设 k = |AD| / |AB|。
+	// 则 k * AB = AD = AC + CD，又 AB * CD = 0；所以 k * AB * AB = AC * AB，故 k = AC * AB / （AB * AB）。
+	// 带入坐标，即得 k = ((x0 - x1) * (x2 - x1) + (y0 - y1) * (y2 - y1)) / ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	// 则 x = x1 + k * (x2 - x1); y = y1 + k * (y2 - y1);
+	FootPoint CalcFootPoint1(const vec2& A, const vec2& B, const vec2& C)
+	{
+		FootPoint footPoint = {};
+
+		float_t dxBA = B.x - A.x;
+		float_t dyBA = B.y - A.y;
+		if (TypeTraits<float_t>::Equal(dxBA, 0)
+			&& TypeTraits<float_t>::Equal(dyBA, 0))
+		{
+			footPoint.k = 0;
+			footPoint.pos = A;
+			return footPoint;
+		}
+
+		float_t dxCA = C.x - A.x;
+		float_t dyCA = C.y - A.y;
+		footPoint.k = (dxCA * dxBA + dyCA * dyBA) / (dxBA * dxBA + dyBA * dyBA);
+		footPoint.pos.x = A.x + footPoint.k * dxBA;
+		footPoint.pos.y = A.y + footPoint.k * dyBA;
+		return footPoint;
+	}
+
+	FootPoint Laser::calcFootPoint(const Entity& other) const
+	{
+		return CalcFootPoint1(pos, getNextPos(), other.pos);
 	}
 
 	// 错的
@@ -126,97 +151,13 @@ namespace th
 		return vec2(pos.x + size.x / 2, pos.y + size.y);
 	}
 
-
-
-	// 平面中，一个点(px, py)绕任意点(cx, cy)逆时针旋转a度后的坐标
-	// x = (px - cx) * cos(a) - (py - cy) * sin(a) + cx;
-	// y = (px - cx) * sin(a) + (py - cy) * cos(a) + cy;
-	// 平面中，一个点(px, py)绕任意点(cx, cy)顺时针旋转a度后的坐标
-	// x = (px - cx) * cos(-a) - (py - cy) * sin(-a) + cx;
-	// y = (px - cx) * sin(-a) + (py - cy) * cos(-a) + cy;
-	vec2 RotatePoint(const vec2& P, const vec2& C, float_t sinC, float_t cosC)
+	vec2 Laser::getNextPos() const
 	{
-		float_t dx = P.x - C.x;
-		float_t dy = P.y - C.y;
-		float_t x = dx * cosC - dy * sinC + C.x;
-		float_t y = dx * sinC + dy * cosC + C.y;
-		return vec2(x, y);
+		return pos + delta;
 	}
 
-	bool Overlap(float_t min1, float_t max1, float_t min2, float_t max2)
+	void Laser::advance(float_t frame)
 	{
-		return max1 > min2 && max2 > min1;
-		//return !(max1 < min2 || max2 < min1);
-	}
-
-	LaserBox::LaserBox(const Laser& laser)
-	{
-		vec2 C = laser.pos;
-		// emmm...你说这个谁懂啊？
-		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5 / 2;
-		float_t sinC = std::sin(radianC);
-		float_t cosC = std::cos(radianC);
-
-		//leftTop = (laser.getLeftTop() - C).rotate(radianC) + C;
-		leftTop = RotatePoint(laser.getLeftTop(), C, sinC, cosC);
-		rightTop = RotatePoint(laser.getRightTop(), C, sinC, cosC);
-		leftBottom = RotatePoint(laser.getLeftBottom(), C, sinC, cosC);
-		rightBottom = RotatePoint(laser.getRightBottom(), C, sinC, cosC);
-	}
-
-	// 分离轴定理
-	bool LaserBox::collide(const Entity& other) const
-	{
-		// 投影到X轴
-		float_t minX = std::min(std::min(leftTop.x, rightTop.x), std::min(leftBottom.x, rightBottom.x));
-		float_t maxX = std::max(std::max(leftTop.x, rightTop.x), std::max(leftBottom.x, rightBottom.x));
-		// 检测2条线段是否重叠
-		if (!Overlap(minX, maxX, other.getLeftTop().x, other.getRightTop().x))
-			return false;
-
-		// 投影到Y轴
-		float_t minY = std::min(std::min(leftTop.y, rightTop.y), std::min(leftBottom.y, rightBottom.y));
-		float_t maxY = std::max(std::max(leftTop.y, rightTop.y), std::max(leftBottom.y, rightBottom.y));
-		// 检测2条线段是否重叠
-		if (!Overlap(minY, maxY, other.getLeftTop().y, other.getLeftBottom().y))
-			return false;
-
-		return true;
-	}
-
-	// 错的
-	// 反向旋转画布，即激光不变，反向旋转自机坐标
-	EntityBox::EntityBox(const Entity& entity, const Laser& laser)
-	{
-		vec2 C = laser.pos;
-		// emmm...你说这个谁懂啊？
-		float_t radianC = laser.arc - static_cast<float_t>(M_PI) * 5 / 2;
-		float_t sinC = std::sin(-radianC);
-		float_t cosC = std::cos(-radianC);
-
-		leftTop = RotatePoint(entity.getLeftTop(), C, sinC, cosC);
-		rightTop = RotatePoint(entity.getRightTop(), C, sinC, cosC);
-		leftBottom = RotatePoint(entity.getLeftBottom(), C, sinC, cosC);
-		rightBottom = RotatePoint(entity.getRightBottom(), C, sinC, cosC);
-	}
-
-	// 分离轴定理
-	bool EntityBox::collide(const Laser& other) const
-	{
-		// 投影到X轴
-		float_t minX = std::min(std::min(leftTop.x, rightTop.x), std::min(leftBottom.x, rightBottom.x));
-		float_t maxX = std::max(std::max(leftTop.x, rightTop.x), std::max(leftBottom.x, rightBottom.x));
-		// 检测2条线段是否重叠
-		if (!Overlap(minX, maxX, other.pos.x - other.size.x / 2, other.pos.x + other.size.x / 2))
-			return false;
-
-		// 投影到Y轴
-		float_t minY = std::min(std::min(leftTop.y, rightTop.y), std::min(leftBottom.y, rightBottom.y));
-		float_t maxY = std::max(std::max(leftTop.y, rightTop.y), std::max(leftBottom.y, rightBottom.y));
-		// 检测2条线段是否重叠
-		if (!Overlap(minY, maxY, other.pos.y, other.pos.y + other.size.y))
-			return false;
-
-		return true;
+		pos += (delta * frame);
 	}
 }

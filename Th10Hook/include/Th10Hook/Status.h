@@ -18,6 +18,7 @@ namespace th
 		Status();
 
 		void update();
+		void rotateLasers();
 		void copy(const Status& other);
 
 		// Player

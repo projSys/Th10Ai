@@ -211,8 +211,9 @@ namespace th
 			laser.delta.x = ReadMemory<float32_t>(objAddr + 0x30);
 			laser.delta.y = ReadMemory<float32_t>(objAddr + 0x34);
 			laser.arc = ReadMemory<float32_t>(objAddr + 0x3C);
-			laser.size.x = ReadMemory<float32_t>(objAddr + 0x40);
-			laser.size.y = ReadMemory<float32_t>(objAddr + 0x44);
+			// 高度在前，宽度在后
+			laser.size.y = ReadMemory<float32_t>(objAddr + 0x40);
+			laser.size.x = ReadMemory<float32_t>(objAddr + 0x44);
 
 			//laser.id = static_cast<int_t>(objAddr);
 			//laser.type = static_cast<int_t>(std::round(laser.width));
