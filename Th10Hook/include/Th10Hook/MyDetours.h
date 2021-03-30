@@ -4,18 +4,17 @@
 
 namespace th
 {
-	// À±¼¦·â×°
 	class MyDetours
 	{
 	public:
-		static void TransactionBegin();
-		static void TransactionAbort();
-		static void TransactionCommit();
+		void transactionBegin();
+		void transactionCommit();
+		void transactionAbort();
 
 		// GetCurrentThread()
-		static void UpdateThread(HANDLE thread);
+		void updateThread(HANDLE thread);
 
-		static void Attach(PVOID* pointer, PVOID detour);
-		static void Detach(PVOID* pointer, PVOID detour);
+		void attach(PVOID* pointer, PVOID detour);
+		void detach(PVOID* pointer, PVOID detour);
 	};
 }

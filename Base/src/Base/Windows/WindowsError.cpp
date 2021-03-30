@@ -16,8 +16,8 @@ namespace base
 		{
 			os << '[' << m_errorCode << ']' << Apis::GetErrorDesc(m_errorCode);
 
-			m_sourceLocation.printTo(os);
-			m_stackTrace.printTo(os);
+			m_sourceLocation.print(os);
+			m_stackTrace.print(os);
 		}
 	}
 }

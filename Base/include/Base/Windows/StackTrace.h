@@ -16,7 +16,7 @@ namespace base
 		public:
 			StackTrace();
 
-			void printTo(std::ostream& os) const;
+			void print(std::ostream& os) const;
 
 		private:
 			static constexpr DWORD BUFFER_SIZE = 128;

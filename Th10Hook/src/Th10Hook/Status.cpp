@@ -15,6 +15,15 @@ namespace th
 		m_lasers.reserve(200);
 	}
 
+	void Status::clear()
+	{
+		m_player = {};
+		m_items.clear();
+		m_enemies.clear();
+		m_bullets.clear();
+		m_lasers.clear();
+	}
+
 	void Status::update()
 	{
 		Th10Hook::GetPlayer(m_player);

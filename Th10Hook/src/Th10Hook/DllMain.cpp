@@ -1,5 +1,6 @@
 #include "Th10Hook/DllMain.h"
 
+#include <memory>
 #include <Base/Windows/Module.h>
 
 #include "Th10Hook/MyDetours.h"
@@ -8,29 +9,50 @@
 
 HMODULE g_module = nullptr;
 base::Logger g_logger;
-th::D3D9Hook g_d3d9Hook;
-th::DI8Hook g_di8Hook;
+std::unique_ptr<th::D3D9Hook> g_d3d9Hook;
+std::unique_ptr<th::DI8Hook> g_di8Hook;
 
 void Hook()
 {
+	th::MyDetours detours;
 	try
 	{
 		std::string logPath = base::win::Module(g_module).getDir() + "/Th10Hook_%N.log";
 		g_logger.addFileLog(logPath);
 
-		th::MyDetours::TransactionBegin();
-		g_d3d9Hook.attach();
-		g_di8Hook.attach();
-		th::MyDetours::TransactionCommit();
+		g_d3d9Hook = std::make_unique<th::D3D9Hook>();
+		g_di8Hook = std::make_unique<th::DI8Hook>();
+
+		detours.transactionBegin();
+		g_d3d9Hook->attach(detours);
+		g_di8Hook->attach(detours);
+		detours.transactionCommit();
 	}
 	catch (...)
 	{
+		detours.transactionAbort();
 		BASE_LOG_ERROR(base::PrintException());
 	}
 }
 
 void Unhook()
 {
+	th::MyDetours detours;
+	try
+	{
+		detours.transactionBegin();
+		g_d3d9Hook->detach(detours);
+		g_di8Hook->detach(detours);
+		detours.transactionCommit();
+
+		g_d3d9Hook = nullptr;
+		g_di8Hook = nullptr;
+	}
+	catch (...)
+	{
+		detours.transactionAbort();
+		BASE_LOG_ERROR(base::PrintException());
+	}
 }
 
 BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)

@@ -14,15 +14,15 @@ namespace th
 			d3d9Dll.getProcAddress<Direct3DCreate9_t>("Direct3DCreate9");
 	}
 
-	void D3D9Hook::attach()
+	void D3D9Hook::attach(MyDetours& detours)
 	{
-		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig),
+		detours.attach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig),
 			&D3D9Hook::Direct3DCreate9Hook);
 	}
 
-	void D3D9Hook::detach()
+	void D3D9Hook::detach(MyDetours& detours)
 	{
-		MyDetours::Detach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig),
+		detours.detach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig),
 			&D3D9Hook::Direct3DCreate9Hook);
 	}
 

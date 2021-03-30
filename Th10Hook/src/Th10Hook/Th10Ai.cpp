@@ -154,6 +154,7 @@ namespace th
 
 		++statusFrame;
 
+		m_writeStatus->clear();
 		m_writeStatus->update();
 
 		std::unique_lock<std::mutex> lock(m_statusMutex);
@@ -187,17 +188,19 @@ namespace th
 #if RENDER
 		//int64_t t1 = Time::Now().getMilliSeconds();
 
+		cv::Scalar black(0, 0, 0);
+		cv::Scalar white(255, 255, 255);
 		cv::Scalar red(0, 0, 255);
 		cv::Scalar green(0, 255, 0);
 		cv::Scalar blue(255, 0, 0);
 
-		m_mat = cv::Scalar(255, 255, 255);
+		m_mat = white;
 
 		{
 			const Player& player = m_readStatus->getPlayer();
 			vec2 windowPos = Scene::ToWindowPos(player.getLeftTop());
 			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(player.size.x), int_t(player.size.y));
-			cv::rectangle(m_mat, rect, cv::Scalar(0, 0, 0));
+			cv::rectangle(m_mat, rect, black);
 		}
 
 		const std::vector<Item>& items = m_readStatus->getItems();
@@ -231,12 +234,6 @@ namespace th
 			//cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(laser.size.x), int_t(laser.size.y));
 			//cv::rectangle(m_mat, rect, red);
 
-			vec2 o = Scene::ToWindowPos(vec2(0, 0));
-			vec2 axisX = o + laser.axisX * 100;
-			vec2 axisY = o + laser.axisY * 100;
-			cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisX.x), int_t(axisX.y)), green);
-			cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisY.x), int_t(axisY.y)), green);
-
 			vec2 p1 = Scene::ToWindowPos(laser.leftTop);
 			vec2 p2 = Scene::ToWindowPos(laser.rightTop);
 			vec2 p3 = Scene::ToWindowPos(laser.rightBottom);
@@ -246,7 +243,13 @@ namespace th
 			cv::line(m_mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);
 			cv::line(m_mat, cv::Point(int_t(p4.x), int_t(p4.y)), cv::Point(int_t(p1.x), int_t(p1.y)), red);
 
-			break;
+			//vec2 o = Scene::ToWindowPos(vec2(0, 0));
+			//vec2 axisX = o + laser.axisX * 100;
+			//vec2 axisY = o + laser.axisY * 100;
+			//cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisX.x), int_t(axisX.y)), green);
+			//cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisY.x), int_t(axisY.y)), green);
+
+			//break;
 		}
 
 		cv::imshow("Th10Ai", m_mat);
@@ -298,7 +301,7 @@ namespace th
 
 		if (m_inputUpdated)
 		{
-			m_input.commitTo(size, data);
+			m_input.commit(size, data);
 			m_inputUpdated = false;
 		}
 		else

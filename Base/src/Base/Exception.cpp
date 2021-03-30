@@ -27,9 +27,9 @@ namespace base
 	{
 		os << what() << '\n';
 
-		m_sourceLocation.printTo(os);
+		m_sourceLocation.print(os);
 #ifdef BASE_WINDOWS
-		m_stackTrace.printTo(os);
+		m_stackTrace.print(os);
 #endif
 	}
 

@@ -18,7 +18,7 @@ namespace base
 #endif
 		}
 
-		void StackTrace::printTo(std::ostream& os) const
+		void StackTrace::print(std::ostream& os) const
 		{
 			//todo 线程同步、输出格式化
 			HANDLE process = GetCurrentProcess();

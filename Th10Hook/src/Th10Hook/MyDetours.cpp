@@ -5,57 +5,45 @@
 
 namespace th
 {
-	void MyDetours::TransactionBegin()
+	void MyDetours::transactionBegin()
 	{
-		LONG errorCode = DetourTransactionBegin();
-		if (errorCode != NO_ERROR)
-			BASE_THROW(WindowsError(errorCode));
+		LONG ret = DetourTransactionBegin();
+		if (ret != NO_ERROR)
+			BASE_THROW(WindowsError(ret));
 	}
 
-	void MyDetours::TransactionAbort()
+	void MyDetours::transactionCommit()
 	{
-		LONG errorCode = DetourTransactionAbort();
-		if (errorCode != NO_ERROR)
-			BASE_THROW(WindowsError(errorCode));
+		LONG ret = DetourTransactionCommit();
+		if (ret != NO_ERROR)
+			BASE_THROW(WindowsError(ret));
 	}
 
-	void MyDetours::TransactionCommit()
+	void MyDetours::transactionAbort()
 	{
-		LONG errorCode = DetourTransactionCommit();
-		if (errorCode != NO_ERROR)
-		{
-			DetourTransactionAbort();
-			BASE_THROW(WindowsError(errorCode));
-		}
+		LONG ret = DetourTransactionAbort();
+		//if (ret != NO_ERROR)
+		//	BASE_THROW(WindowsError(ret));
 	}
 
-	void MyDetours::UpdateThread(HANDLE thread)
+	void MyDetours::updateThread(HANDLE thread)
 	{
-		LONG errorCode = DetourUpdateThread(thread);
-		if (errorCode != NO_ERROR)
-		{
-			DetourTransactionAbort();
-			BASE_THROW(WindowsError(errorCode));
-		}
+		LONG ret = DetourUpdateThread(thread);
+		if (ret != NO_ERROR)
+			BASE_THROW(WindowsError(ret));
 	}
 
-	void MyDetours::Attach(PVOID* pointer, PVOID detour)
+	void MyDetours::attach(PVOID* pointer, PVOID detour)
 	{
-		LONG errorCode = DetourAttach(pointer, detour);
-		if (errorCode != NO_ERROR)
-		{
-			DetourTransactionAbort();
-			BASE_THROW(WindowsError(errorCode));
-		}
+		LONG ret = DetourAttach(pointer, detour);
+		if (ret != NO_ERROR)
+			BASE_THROW(WindowsError(ret));
 	}
 
-	void MyDetours::Detach(PVOID* pointer, PVOID detour)
+	void MyDetours::detach(PVOID* pointer, PVOID detour)
 	{
-		LONG errorCode = DetourDetach(pointer, detour);
-		if (errorCode != NO_ERROR)
-		{
-			DetourTransactionAbort();
-			BASE_THROW(WindowsError(errorCode));
-		}
+		LONG ret = DetourDetach(pointer, detour);
+		if (ret != NO_ERROR)
+			BASE_THROW(WindowsError(ret));
 	}
 }

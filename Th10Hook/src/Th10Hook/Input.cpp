@@ -86,7 +86,7 @@ namespace th
 		m_skip = true;
 	}
 
-	void Input::commitTo(DWORD size, LPVOID data)
+	void Input::commit(DWORD size, LPVOID data)
 	{
 		// c_dfDIKeyboard
 		if (size == 256 && data != nullptr)

@@ -17,6 +17,7 @@ namespace th
 	public:
 		Status();
 
+		void clear();
 		void update();
 		void rotateLasers();
 		void copy(const Status& other);

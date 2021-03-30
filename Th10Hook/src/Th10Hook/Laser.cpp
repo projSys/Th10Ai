@@ -114,7 +114,7 @@ namespace th
 		return CalcFootPoint1(pos, getNextPos(), other.pos);
 	}
 
-	// ´íµÄ
+	//todo ´íµÄ
 	std::pair<bool, float_t> Laser::willCollideWith(const Entity& other) const
 	{
 		FootPoint footPoint = calcFootPoint(other);

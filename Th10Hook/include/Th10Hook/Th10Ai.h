@@ -70,7 +70,6 @@ namespace th
 
 		int64_t m_bombTime;
 		int_t m_bombCount;
-
 		int64_t m_findItemTime;
 
 		Input m_input;

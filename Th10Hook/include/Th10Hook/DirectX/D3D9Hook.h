@@ -15,8 +15,8 @@ namespace th
 	public:
 		D3D9Hook();
 
-		void attach();
-		void detach();
+		void attach(MyDetours& detours);
+		void detach(MyDetours& detours);
 
 	private:
 		using Direct3DCreate9_t = decltype(&Direct3DCreate9);

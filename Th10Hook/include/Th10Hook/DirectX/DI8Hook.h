@@ -15,8 +15,8 @@ namespace th
 	public:
 		DI8Hook();
 
-		void attach();
-		void detach();
+		void attach(MyDetours& detours);
+		void detach(MyDetours& detours);
 
 	private:
 		using DirectInput8Create_t = decltype(&DirectInput8Create);

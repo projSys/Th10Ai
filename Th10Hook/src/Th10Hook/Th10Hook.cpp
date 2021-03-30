@@ -12,8 +12,6 @@ namespace th
 
 	bool Th10Hook::GetPlayer(Player& player)
 	{
-		player = {};
-
 		RawPlayer* raw = ReadMemory<RawPlayer*>(0x00477834);
 		if (raw == nullptr)
 			return false;
@@ -29,12 +27,12 @@ namespace th
 		player.slow = raw->slow;
 
 		//std::cout
-		//	<< ' ' << player.x
-		//	<< ' ' << player.y
-		//	<< ' ' << player.dx
-		//	<< ' ' << player.dy
-		//	<< ' ' << player.width
-		//	<< ' ' << player.height
+		//	<< ' ' << player.pos.x
+		//	<< ' ' << player.pos.y
+		//	<< ' ' << player.delta.x
+		//	<< ' ' << player.delta.y
+		//	<< ' ' << player.size.x
+		//	<< ' ' << player.size.y
 		//	<< ' ' << player.status
 		//	<< ' ' << player.invincibleTime
 		//	<< ' ' << player.slow
@@ -68,8 +66,6 @@ namespace th
 
 	bool Th10Hook::GetItems(std::vector<Item>& items)
 	{
-		items.clear();
-
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477818);
 		if (baseAddr == 0)
 			return false;
@@ -109,8 +105,6 @@ namespace th
 
 	bool Th10Hook::GetEnemies(std::vector<Enemy>& enemies)
 	{
-		enemies.clear();
-
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477704);
 		if (baseAddr == 0)
 			return false;
@@ -149,8 +143,6 @@ namespace th
 
 	bool Th10Hook::GetBullets(std::vector<Bullet>& bullets)
 	{
-		bullets.clear();
-
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x004776F0);
 		if (baseAddr == 0)
 			return false;
@@ -191,8 +183,6 @@ namespace th
 
 	bool Th10Hook::GetLasers(std::vector<Laser>& lasers)
 	{
-		lasers.clear();
-
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x0047781C);
 		if (baseAddr == 0)
 			return false;

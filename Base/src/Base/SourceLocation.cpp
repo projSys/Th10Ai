@@ -11,7 +11,7 @@ namespace base
 	{
 	}
 
-	void SourceLocation::printTo(std::ostream& os) const
+	void SourceLocation::print(std::ostream& os) const
 	{
 		os << " in " << m_func
 			<< " at " << m_file

@@ -14,15 +14,15 @@ namespace th
 			dinput8Dll.getProcAddress<DirectInput8Create_t>("DirectInput8Create");
 	}
 
-	void DI8Hook::attach()
+	void DI8Hook::attach(MyDetours& detours)
 	{
-		MyDetours::Attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig),
+		detours.attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig),
 			&DI8Hook::DirectInput8CreateHook);
 	}
 
-	void DI8Hook::detach()
+	void DI8Hook::detach(MyDetours& detours)
 	{
-		MyDetours::Detach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig),
+		detours.detach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig),
 			&DI8Hook::DirectInput8CreateHook);
 	}
 

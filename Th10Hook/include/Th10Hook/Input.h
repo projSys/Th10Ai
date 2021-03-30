@@ -19,7 +19,7 @@ namespace th
 		void slow();
 		void skip();
 
-		void commitTo(DWORD size, LPVOID data);
+		void commit(DWORD size, LPVOID data);
 
 	private:
 		bool m_left;

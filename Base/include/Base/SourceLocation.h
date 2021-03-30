@@ -16,7 +16,7 @@ namespace base
 		SourceLocation(
 			const char* func, const char* file, uint_t line);
 
-		void printTo(std::ostream& os) const;
+		void print(std::ostream& os) const;
 
 	private:
 		const char* m_func;
