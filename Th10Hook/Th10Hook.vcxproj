@@ -88,13 +88,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;TH10HOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_75_0;D:\Develop\Touhou\Detours-master\include;D:\Develop\OpenCV\opencv-4.5.1\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_75_0;D:\Develop\Touhou\Detours-master\include;D:\Develop\OpenCV\opencv-4.5.2\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_75_0\lib32-msvc-14.2;D:\Develop\Touhou\Detours-master\lib.X86;D:\Develop\OpenCV\opencv-4.5.1\build32\install\x86\vc16\lib;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_75_0\lib32-msvc-14.2;D:\Develop\Touhou\Detours-master\lib.X86;D:\Develop\OpenCV\opencv-4.5.2\build32\install\x86\vc16\lib;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -106,7 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;TH10HOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_75_0;D:\Develop\Touhou\Detours-master\include;D:\Develop\OpenCV\opencv-4.5.1\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_75_0;D:\Develop\Touhou\Detours-master\include;D:\Develop\OpenCV\opencv-4.5.2\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -114,7 +114,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_75_0\lib32-msvc-14.2;D:\Develop\Touhou\Detours-master\lib.X86;D:\Develop\OpenCV\opencv-4.5.1\build32\install\x86\vc16\lib;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_75_0\lib32-msvc-14.2;D:\Develop\Touhou\Detours-master\lib.X86;D:\Develop\OpenCV\opencv-4.5.2\build32\install\x86\vc16\lib;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -165,6 +165,9 @@
     <ClInclude Include="include\Th10Hook\Input.h" />
     <ClInclude Include="include\Th10Hook\Item.h" />
     <ClInclude Include="include\Th10Hook\Laser.h" />
+    <ClInclude Include="include\Th10Hook\Math\AABB.h" />
+    <ClInclude Include="include\Th10Hook\Math\OBB.h" />
+    <ClInclude Include="include\Th10Hook\Math\Vector2.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
     <ClInclude Include="include\Th10Hook\Path.h" />
     <ClInclude Include="include\Th10Hook\Player.h" />
@@ -174,7 +177,6 @@
     <ClInclude Include="include\Th10Hook\Th10Ai.h" />
     <ClInclude Include="include\Th10Hook\Th10Hook.h" />
     <ClInclude Include="include\Th10Hook\Th10Types.h" />
-    <ClInclude Include="include\Th10Hook\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp" />
@@ -191,6 +193,9 @@
     <ClCompile Include="src\Th10Hook\Input.cpp" />
     <ClCompile Include="src\Th10Hook\Item.cpp" />
     <ClCompile Include="src\Th10Hook\Laser.cpp" />
+    <ClCompile Include="src\Th10Hook\Math\AABB.cpp" />
+    <ClCompile Include="src\Th10Hook\Math\OBB.cpp" />
+    <ClCompile Include="src\Th10Hook\Math\Vector2.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
     <ClCompile Include="src\Th10Hook\Path.cpp" />
     <ClCompile Include="src\Th10Hook\Player.cpp" />
@@ -199,7 +204,6 @@
     <ClCompile Include="src\Th10Hook\Status.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Ai.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />
-    <ClCompile Include="src\Th10Hook\Vector2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

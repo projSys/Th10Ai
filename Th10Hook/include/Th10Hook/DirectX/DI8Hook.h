@@ -10,7 +10,7 @@
 namespace th
 {
 	class DI8Hook :
-		public Singleton<DI8Hook>
+		private Singleton<DI8Hook>
 	{
 	public:
 		DI8Hook();

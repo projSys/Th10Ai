@@ -22,10 +22,10 @@ namespace th
 		void commit(DWORD size, LPVOID data);
 
 	private:
-		bool m_left;
-		bool m_right;
 		bool m_up;
 		bool m_down;
+		bool m_left;
+		bool m_right;
 		bool m_shoot;
 		bool m_bomb;
 		bool m_slow;

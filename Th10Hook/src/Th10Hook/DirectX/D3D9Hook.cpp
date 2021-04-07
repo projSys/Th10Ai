@@ -36,7 +36,7 @@ namespace th
 	{
 		IDirect3D9* d3d9 = m_direct3DCreate9Orig(SDKVersion);
 		if (d3d9 != nullptr)
-			d3d9 = new th::MyDirect3D9(d3d9);
+			d3d9 = new MyDirect3D9(d3d9);
 		return d3d9;
 	}
 }

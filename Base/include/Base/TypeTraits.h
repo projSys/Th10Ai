@@ -18,7 +18,7 @@ namespace base
 	public:
 		using Value_t = T;
 
-		static bool Equal(T left, T right)
+		static bool Equal(Value_t left, Value_t right)
 		{
 			return left == right;
 		}
@@ -32,15 +32,13 @@ namespace base
 
 		// https://stackoverflow.com/questions/17333/what-is-the-most-effective-way-for-float-and-double-comparison
 		// https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
-		// https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
-		// https://www.boost.org/doc/libs/1_73_0/libs/math/doc/html/math_toolkit/float_comparison.html
-		static bool Equal(T left, T right)
+		static bool Equal(Value_t left, Value_t right)
 		{
-			T diff = std::abs(left - right);
-			if (diff <= std::numeric_limits<T>::epsilon())
+			Value_t diff = std::abs(left - right);
+			if (diff <= std::numeric_limits<Value_t>::epsilon())
 				return true;
-			T largest = std::max(std::abs(left), std::abs(right));
-			if (diff <= largest * std::numeric_limits<T>::epsilon())
+			Value_t larger = std::max(std::abs(left), std::abs(right));
+			if (diff <= larger * std::numeric_limits<Value_t>::epsilon())
 				return true;
 			return false;
 		}

@@ -40,7 +40,7 @@ namespace th
 		if (SUCCEEDED(hr))
 		{
 			if (riidltf == IID_IDirectInput8A)
-				*ppvOut = new th::MyDirectInput8A(reinterpret_cast<IDirectInput8A*>(*ppvOut));
+				*ppvOut = new MyDirectInput8A(reinterpret_cast<IDirectInput8A*>(*ppvOut));
 		}
 		return hr;
 	}

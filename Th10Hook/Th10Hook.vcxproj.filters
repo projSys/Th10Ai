@@ -25,6 +25,12 @@
     <Filter Include="源文件\Th10Hook\DirectX">
       <UniqueIdentifier>{c047154d-e1aa-41b0-bc19-badbbbcbf5d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Th10Hook\Math">
+      <UniqueIdentifier>{8a1c026f-0e9b-4f6a-acd8-32efd84009a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Th10Hook\Math">
+      <UniqueIdentifier>{6527217b-e7b1-4c13-b157-c10e1e2a695e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Th10Hook\Bullet.h">
@@ -96,14 +102,20 @@
     <ClInclude Include="include\Th10Hook\Input.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Vector2.h">
-      <Filter>头文件\Th10Hook</Filter>
-    </ClInclude>
     <ClInclude Include="include\Th10Hook\DirectX\D3D9Hook.h">
       <Filter>头文件\Th10Hook\DirectX</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\DirectX\DI8Hook.h">
       <Filter>头文件\Th10Hook\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Math\Vector2.h">
+      <Filter>头文件\Th10Hook\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Math\AABB.h">
+      <Filter>头文件\Th10Hook\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Math\OBB.h">
+      <Filter>头文件\Th10Hook\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,14 +179,20 @@
     <ClCompile Include="src\Th10Hook\Input.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\Vector2.cpp">
-      <Filter>源文件\Th10Hook</Filter>
-    </ClCompile>
     <ClCompile Include="src\Th10Hook\DirectX\D3D9Hook.cpp">
       <Filter>源文件\Th10Hook\DirectX</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\DirectX\DI8Hook.cpp">
       <Filter>源文件\Th10Hook\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Math\Vector2.cpp">
+      <Filter>源文件\Th10Hook\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Math\AABB.cpp">
+      <Filter>源文件\Th10Hook\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Math\OBB.cpp">
+      <Filter>源文件\Th10Hook\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

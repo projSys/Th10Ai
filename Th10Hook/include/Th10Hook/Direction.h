@@ -8,13 +8,13 @@ namespace th
 	enum class DIR : uint_t
 	{
 		HOLD,			// 不动
-		LEFT,			// 左
-		RIGHT,			// 右
 		UP,				// 上
 		DOWN,			// 下
+		LEFT,			// 左
+		RIGHT,			// 右
 		LEFTUP,			// 左上
-		LEFTDOWN,		// 左下
 		RIGHTUP,		// 右上
+		LEFTDOWN,		// 左下
 		RIGHTDOWN,		// 右下
 
 		MAX_COUNT
@@ -23,13 +23,13 @@ namespace th
 	constexpr DIR DIRS[enum_cast(DIR::MAX_COUNT)] =
 	{
 		DIR::HOLD,
-		DIR::LEFT,
-		DIR::RIGHT,
 		DIR::UP,
 		DIR::DOWN,
+		DIR::LEFT,
+		DIR::RIGHT,
 		DIR::LEFTUP,
-		DIR::LEFTDOWN,
 		DIR::RIGHTUP,
+		DIR::LEFTDOWN,
 		DIR::RIGHTDOWN
 	};
 }

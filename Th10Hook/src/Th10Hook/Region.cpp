@@ -54,8 +54,7 @@ namespace th
 			}
 			else
 			{
-				std::pair<bool, float_t> ret = enemy.willCollideWith(*this);
-				if (ret.first)
+				if (enemy.willCollideWith(*this))
 					m_enemies.push_back(enemy);
 			}
 		}
@@ -78,8 +77,7 @@ namespace th
 			}
 			else
 			{
-				std::pair<bool, float_t> ret = bullet.willCollideWith(*this);
-				if (ret.first)
+				if (bullet.willCollideWith(*this))
 					m_bullets.push_back(bullet);
 			}
 		}
@@ -102,8 +100,7 @@ namespace th
 			}
 			else
 			{
-				std::pair<bool, float_t> ret = laser.willCollideWith(*this);
-				if (ret.first)
+				if (laser.willCollideWith(*this))
 					m_lasers.push_back(laser);
 			}
 		}
@@ -145,10 +142,11 @@ namespace th
 			}
 
 			if (!result.collided)
+			{
 				for (Bullet bullet : m_bullets)
 				{
 					bullet.advance(frame);
-					if (bullet.collide(player, 0.05f))
+					if (bullet.collide(player))
 					{
 						result.collided = true;
 						break;
@@ -188,8 +186,10 @@ namespace th
 						//}
 					//}
 				}
+			}
 
 			if (!result.collided)
+			{
 				for (Laser laser : m_lasers)
 				{
 					laser.advance(frame);
@@ -205,6 +205,7 @@ namespace th
 					//if (ret.first && ret.second < 2)
 					//	return true;
 				}
+			}
 		}
 
 		if (m_first != nullptr)
@@ -239,4 +240,67 @@ namespace th
 
 		return result;
 	}
+
+#if RENDER
+	void Region::render(cv::Mat& mat, const Player& player)
+	{
+		if (m_first == nullptr && m_second == nullptr)
+		{
+			cv::Scalar black(0, 0, 0);
+			cv::Scalar white(255, 255, 255);
+			cv::Scalar red(0, 0, 255);
+			cv::Scalar green(0, 255, 0);
+			cv::Scalar blue(255, 0, 0);
+			cv::Scalar yellow(0, 255, 255);
+
+			{
+				vec2 windowPos = Scene::ToWindowPos(getLeftTop());
+				cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(size.x), int_t(size.y));
+				cv::rectangle(mat, rect, yellow);
+			}
+
+			if (collide(player))
+			{
+				for (const Bullet& bullet : m_bullets)
+				{
+					vec2 footPoint = bullet.getFootPoint(player);
+					vec2 wp1 = Scene::ToWindowPos(player.pos);
+					vec2 wp2 = Scene::ToWindowPos(bullet.pos);
+					vec2 wp3 = Scene::ToWindowPos(footPoint);
+					cv::line(mat, cv::Point(int_t(wp1.x), int_t(wp1.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
+					cv::line(mat, cv::Point(int_t(wp2.x), int_t(wp2.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
+				}
+
+				for (const Laser& laser : m_lasers)
+				{
+					//vec2 windowPos = Scene::ToWindowPos(laser.getLeftTop());
+					//cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(laser.size.x), int_t(laser.size.y));
+					//cv::rectangle(mat, rect, red);
+
+					vec2 p1 = Scene::ToWindowPos(laser.leftTop);
+					vec2 p2 = Scene::ToWindowPos(laser.rightTop);
+					vec2 p3 = Scene::ToWindowPos(laser.rightBottom);
+					vec2 p4 = Scene::ToWindowPos(laser.leftBottom);
+					cv::line(mat, cv::Point(int_t(p1.x), int_t(p1.y)), cv::Point(int_t(p2.x), int_t(p2.y)), red);
+					cv::line(mat, cv::Point(int_t(p2.x), int_t(p2.y)), cv::Point(int_t(p3.x), int_t(p3.y)), red);
+					cv::line(mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);
+					cv::line(mat, cv::Point(int_t(p4.x), int_t(p4.y)), cv::Point(int_t(p1.x), int_t(p1.y)), red);
+
+					//vec2 o = Scene::ToWindowPos(vec2(0, 0));
+					//vec2 axisX = o + laser.axisX * 100;
+					//vec2 axisY = o + laser.axisY * 100;
+					//cv::line(mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisX.x), int_t(axisX.y)), green);
+					//cv::line(mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisY.x), int_t(axisY.y)), green);
+
+					//break;
+				}
+			}
+		}
+
+		if (m_first != nullptr)
+			m_first->render(mat, player);
+		if (m_second != nullptr)
+			m_second->render(mat, player);
+	}
+#endif
 }

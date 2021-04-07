@@ -9,8 +9,6 @@
 #include <condition_variable>
 #include <boost/optional.hpp>
 
-#define RENDER 0
-
 #if RENDER
 #include <opencv2/opencv.hpp>
 #endif
@@ -22,6 +20,13 @@
 
 namespace th
 {
+	struct Node
+	{
+		vec2 pos;
+		int_t frame;
+		float_t score;
+	};
+
 	class Th10Ai
 	{
 	public:
@@ -57,9 +62,9 @@ namespace th
 		std::mutex m_statusMutex;
 		std::condition_variable m_statusCond;
 		bool m_statusUpdated;
-		std::unique_ptr<Status> m_writeStatus;
-		std::unique_ptr<Status> m_middleStatus;
-		std::unique_ptr<Status> m_readStatus;
+		std::unique_ptr<Status> m_writableStatus;
+		std::unique_ptr<Status> m_intermediateStatus;
+		std::unique_ptr<Status> m_readableStatus;
 		Status m_status2;
 		Status m_status1;
 		Status m_status0;

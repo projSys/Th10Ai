@@ -10,7 +10,7 @@
 namespace th
 {
 	class D3D9Hook :
-		public Singleton<D3D9Hook>
+		private Singleton<D3D9Hook>
 	{
 	public:
 		D3D9Hook();

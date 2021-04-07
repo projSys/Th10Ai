@@ -2,6 +2,10 @@
 
 #include "Th10Hook/Common.h"
 
+#if RENDER
+#include <opencv2/opencv.hpp>
+#endif
+
 #include "Th10Hook/Region.h"
 
 namespace th
@@ -50,13 +54,15 @@ namespace th
 
 		Scene();
 
-		void split(int_t times);
-
 		void clearAll();
 		void splitEnemies(const std::vector<Enemy>& enemies);
 		void splitBullets(const std::vector<Bullet>& bullets);
 		void splitLasers(const std::vector<Laser>& lasers);
 		RegionCollideResult collideAll(const Player& player, float_t frame) const;
+
+#if RENDER
+		void render(cv::Mat& mat, const Player& player);
+#endif
 
 	private:
 		Region m_region;

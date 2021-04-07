@@ -28,6 +28,7 @@ namespace th
 		Vector2 normalized() const;
 		Value_t dot(const Vector2& other) const;
 		Vector2 rotate(Value_t radian) const;
+		bool isZero() const;
 
 		Vector2 operator +(const Vector2& other) const;
 		Vector2 operator -(const Vector2& other) const;

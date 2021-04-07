@@ -3,6 +3,7 @@
 #include "Th10Hook/Common.h"
 
 #include "Th10Hook/Entity.h"
+#include "Th10Hook/Direction.h"
 
 namespace th
 {
@@ -15,43 +16,43 @@ namespace th
 		// 3.53 = 5 * sqrt(0.5)
 		static constexpr vec2 MOVE_SPEED_MARISA[enum_cast(DIR::MAX_COUNT)] =
 		{
-			{ 0, 0 },
-			{ -5, 0 },
-			{ 5, 0 },
-			{ 0, -5 },
-			{ 0, 5 },
-			{ -3.53f, -3.53f },
-			{ -3.53f, 3.53f },
-			{ 3.53f, -3.53f },
-			{ 3.53f, 3.53f }
+			vec2(0, 0),
+			vec2(0, -5),
+			vec2(0, 5),
+			vec2(-5, 0),
+			vec2(5, 0),
+			vec2(-3.53f, -3.53f),
+			vec2(3.53f, -3.53f),
+			vec2(-3.53f, 3.53f),
+			vec2(3.53f, 3.53f)
 		};
 
 		// 3.18 = 4.5 * sqrt(0.5)
 		static constexpr vec2 MOVE_SPEED_HIGH[enum_cast(DIR::MAX_COUNT)] =
 		{
-			{ 0, 0 },
-			{ -4.5f, 0 },
-			{ 4.5f, 0 },
-			{ 0, -4.5f },
-			{ 0, 4.5f },
-			{ -3.18f, -3.18f },
-			{ -3.18f, 3.18f },
-			{ 3.18f, -3.18f },
-			{ 3.18f, 3.18f }
+			vec2(0, 0),
+			vec2(0, -4.5f),
+			vec2(0, 4.5f),
+			vec2(-4.5f, 0),
+			vec2(4.5f, 0),
+			vec2(-3.18f, -3.18f),
+			vec2(3.18f, -3.18f),
+			vec2(-3.18f, 3.18f),
+			vec2(3.18f, 3.18f)
 		};
 
 		// 1.41 = 2 * sqrt(0.5)
 		static constexpr vec2 MOVE_SPEED_LOW[enum_cast(DIR::MAX_COUNT)] =
 		{
-			{ 0, 0 },
-			{ -2, 0 },
-			{ 2, 0 },
-			{ 0, -2 },
-			{ 0, 2 },
-			{ -1.41f, -1.41f },
-			{ -1.41f, 1.41f },
-			{ 1.41f, -1.41f },
-			{ 1.41f, 1.41f }
+			vec2(0, 0),
+			vec2(0, -2),
+			vec2(0, 2),
+			vec2(-2, 0),
+			vec2(2, 0),
+			vec2(-1.41f, -1.41f),
+			vec2(1.41f, -1.41f),
+			vec2(-1.41f, 1.41f),
+			vec2(1.41f, 1.41f)
 		};
 
 		Player();

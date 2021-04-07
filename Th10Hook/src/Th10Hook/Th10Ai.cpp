@@ -1,5 +1,6 @@
 #include "Th10Hook/Th10Ai.h"
 
+#include <set>
 #include <Base/Time.h>
 #include <Base/Windows/Apis.h>
 
@@ -7,9 +8,9 @@
 
 #if RENDER
 #ifdef _DEBUG
-#pragma comment(lib, "opencv_world451d.lib")
+#pragma comment(lib, "opencv_world452d.lib")
 #else
-#pragma comment(lib, "opencv_world451.lib")
+#pragma comment(lib, "opencv_world452.lib")
 #endif
 #endif
 
@@ -53,11 +54,9 @@ namespace th
 		HICON icon = LoadIconA(GetModuleHandleA(nullptr), "IDI_ICON3");
 		SendMessageA(window, WM_SETICON, ICON_SMALL, (LPARAM)icon);
 
-		m_writeStatus = std::make_unique<Status>();
-		m_middleStatus = std::make_unique<Status>();
-		m_readStatus = std::make_unique<Status>();
-
-		m_scene.split(6);
+		m_writableStatus = std::make_unique<Status>();
+		m_intermediateStatus = std::make_unique<Status>();
+		m_readableStatus = std::make_unique<Status>();
 
 #if RENDER
 		cv::namedWindow("Th10Ai");
@@ -154,11 +153,11 @@ namespace th
 
 		++statusFrame;
 
-		m_writeStatus->clear();
-		m_writeStatus->update();
+		m_writableStatus->clear();
+		m_writableStatus->update();
 
 		std::unique_lock<std::mutex> lock(m_statusMutex);
-		m_writeStatus.swap(m_middleStatus);
+		m_writableStatus.swap(m_intermediateStatus);
 		m_statusUpdated = true;
 		m_statusCond.notify_one();
 	}
@@ -171,7 +170,7 @@ namespace th
 				m_statusCond.wait(lock);
 			else
 				std::cout << "Processing is too slow." << std::endl;
-			m_readStatus.swap(m_middleStatus);
+			m_readableStatus.swap(m_intermediateStatus);
 			m_statusUpdated = false;
 		}
 
@@ -179,11 +178,9 @@ namespace th
 			return false;
 
 		++handleFrame;
-		m_readStatus->inputFrame = inputFrame;
-		m_readStatus->statusFrame = statusFrame;
-		m_readStatus->handleFrame = handleFrame;
-
-		m_readStatus->rotateLasers();
+		m_readableStatus->inputFrame = inputFrame;
+		m_readableStatus->statusFrame = statusFrame;
+		m_readableStatus->handleFrame = handleFrame;
 
 #if RENDER
 		//int64_t t1 = Time::Now().getMilliSeconds();
@@ -196,14 +193,20 @@ namespace th
 
 		m_mat = white;
 
+		m_scene.clearAll();
+		m_scene.splitEnemies(m_readableStatus->getEnemies());
+		m_scene.splitBullets(m_readableStatus->getBullets());
+		m_scene.splitLasers(m_readableStatus->getLasers());
+		m_scene.render(m_mat, m_readableStatus->getPlayer());
+
 		{
-			const Player& player = m_readStatus->getPlayer();
+			const Player& player = m_readableStatus->getPlayer();
 			vec2 windowPos = Scene::ToWindowPos(player.getLeftTop());
 			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(player.size.x), int_t(player.size.y));
 			cv::rectangle(m_mat, rect, black);
 		}
 
-		const std::vector<Item>& items = m_readStatus->getItems();
+		const std::vector<Item>& items = m_readableStatus->getItems();
 		for (const Item& item : items)
 		{
 			vec2 windowPos = Scene::ToWindowPos(item.getLeftTop());
@@ -211,7 +214,7 @@ namespace th
 			cv::rectangle(m_mat, rect, blue);
 		}
 
-		const std::vector<Enemy>& enemies = m_readStatus->getEnemies();
+		const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
 		for (const Enemy& enemy : enemies)
 		{
 			vec2 windowPos = Scene::ToWindowPos(enemy.getLeftTop());
@@ -219,15 +222,23 @@ namespace th
 			cv::rectangle(m_mat, rect, red);
 		}
 
-		const std::vector<Bullet>& bullets = m_readStatus->getBullets();
+		const std::vector<Bullet>& bullets = m_readableStatus->getBullets();
 		for (const Bullet& bullet : bullets)
 		{
 			vec2 windowPos = Scene::ToWindowPos(bullet.getLeftTop());
 			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(bullet.size.x), int_t(bullet.size.y));
 			cv::rectangle(m_mat, rect, red);
+
+			//const Player& player = m_readableStatus->getPlayer();
+			//vec2 footPoint = bullet.getFootPoint(player);
+			//vec2 wp1 = Scene::ToWindowPos(player.pos);
+			//vec2 wp2 = Scene::ToWindowPos(bullet.pos);
+			//vec2 wp3 = Scene::ToWindowPos(footPoint);
+			//cv::line(m_mat, cv::Point(int_t(wp1.x), int_t(wp1.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
+			//cv::line(m_mat, cv::Point(int_t(wp2.x), int_t(wp2.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
 		}
 
-		const std::vector<Laser>& lasers = m_readStatus->getLasers();
+		const std::vector<Laser>& lasers = m_readableStatus->getLasers();
 		for (const Laser& laser : lasers)
 		{
 			//vec2 windowPos = Scene::ToWindowPos(laser.getLeftTop());
@@ -272,9 +283,9 @@ namespace th
 		//m_scene1.splitLasers(m_status1.getLasers());
 
 		m_scene.clearAll();
-		m_scene.splitEnemies(m_readStatus->getEnemies());
-		m_scene.splitBullets(m_readStatus->getBullets());
-		m_scene.splitLasers(m_readStatus->getLasers());
+		m_scene.splitEnemies(m_readableStatus->getEnemies());
+		m_scene.splitBullets(m_readableStatus->getBullets());
+		m_scene.splitLasers(m_readableStatus->getLasers());
 
 		m_input.clear();
 
@@ -306,14 +317,14 @@ namespace th
 		}
 		else
 		{
-			std::cout << handleFrame << " Input is too slow." << std::endl;
+			std::cout << statusFrame << ' ' << handleFrame << ' ' << inputFrame << " Input is too slow." << std::endl;
 		}
 	}
 
 	// 处理炸弹
 	bool Th10Ai::handleBomb()
 	{
-		if (m_readStatus->getPlayer().isColliding())
+		if (m_readableStatus->getPlayer().isColliding())
 		{
 			int64_t now = Time::Now().getMilliSeconds();
 			if (now - m_bombTime > 1000)
@@ -335,7 +346,7 @@ namespace th
 
 				m_input.bomb();
 				++m_bombCount;
-				std::cout << handleFrame << " DeathBomb: " << m_bombCount << std::endl;
+				std::cout << statusFrame << ' ' << handleFrame << ' ' << inputFrame << " DeathBomb: " << m_bombCount << std::endl;
 				return true;
 			}
 		}
@@ -345,7 +356,7 @@ namespace th
 	// 处理对话
 	bool Th10Ai::handleTalk()
 	{
-		if (m_readStatus->isTalking())
+		if (m_readableStatus->isTalking())
 		{
 			m_input.skip();
 			return true;
@@ -356,7 +367,7 @@ namespace th
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_readStatus->haveEnemies())
+		if (m_readableStatus->haveEnemies())
 		{
 			m_input.shoot();
 			return true;
@@ -367,12 +378,67 @@ namespace th
 	// 处理移动
 	bool Th10Ai::handleMove()
 	{
-		if (!m_readStatus->getPlayer().isNormalStatus())
+		if (!m_readableStatus->getPlayer().isNormalStatus())
 			return false;
 
 		boost::optional<Item> itemTarget = findItem();
 		boost::optional<Enemy> enemyTarget = findEnemy();
-		bool underEnemy = m_readStatus->isUnderEnemy();
+		bool underEnemy = m_readableStatus->isUnderEnemy();
+		////bool slowFirst = (!itemTarget.has_value() && underEnemy);
+		//bool slowFirst = false;
+
+		//std::set<Node> closedSet;
+		//std::set<Node> openSet;
+
+		//Node start = {};
+		//start.frame = 0;
+		//start.score = 0;
+		//openSet.insert(start);
+
+		//while (true)
+		//{
+		//	// 取最高分节点
+		//	auto lowestIt = openSet.begin();
+
+		//	for (DIR dir : DIRS)
+		//	{
+		//		Node nextNode = {};
+
+		//		// 前进到下一个坐标
+		//		Player player = m_readableStatus->getPlayer();
+		//		player.pos = lowestIt->pos;
+		//		player.advance(dir, slowFirst);
+		//		//result.slow = slowFirst;
+		//		RegionCollideResult rcr = {};
+		//		if (!Scene::IsInPlayerRegion(player.pos)
+		//			|| (rcr = m_scene.collideAll(player, lowestIt->frame + 1)).collided)
+		//		{
+		//			player.pos = lowestIt->pos;
+		//			player.advance(dir, !slowFirst);
+		//			//result.slow = !slowFirst;
+		//			if (!Scene::IsInPlayerRegion(player.pos)
+		//				|| (rcr = m_scene.collideAll(player, lowestIt->frame + 1)).collided)
+		//			{
+		//				continue;
+		//			}
+		//		}
+
+		//		if (itemTarget.has_value())
+		//		{
+		//			nextNode.score += Path::CalcNearScore(player.pos, itemTarget.value().pos) * 100;
+		//		}
+		//		else if (enemyTarget.has_value())
+		//		{
+		//			nextNode.score += Path::CalcShootScore(player.pos, enemyTarget.value().pos) * 100;
+		//		}
+		//		else
+		//		{
+		//			nextNode.score += Path::CalcNearScore(player.pos, Path::RESET_POS) * 100;
+		//		}
+
+		//		openSet.insert(nextNode);
+		//	}
+		//}
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		boost::optional<DIR> bestDir;
@@ -380,7 +446,7 @@ namespace th
 
 		for (DIR dir : DIRS)
 		{
-			Path path(*m_readStatus, m_scene, itemTarget, enemyTarget, underEnemy);
+			Path path(*m_readableStatus, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
 
 			if (result.valid && path.m_bestScore > bestScore)
@@ -408,9 +474,9 @@ namespace th
 	// 查找道具
 	boost::optional<Item> Th10Ai::findItem()
 	{
-		const Player& player = m_readStatus->getPlayer();
-		const std::vector<Item>& items = m_readStatus->getItems();
-		const std::vector<Enemy>& enemies = m_readStatus->getEnemies();
+		const Player& player = m_readableStatus->getPlayer();
+		const std::vector<Item>& items = m_readableStatus->getItems();
+		const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
 
 		boost::optional<Item> target;
 
@@ -488,8 +554,8 @@ namespace th
 	// 查找敌人
 	boost::optional<Enemy> Th10Ai::findEnemy()
 	{
-		const Player& player = m_readStatus->getPlayer();
-		const std::vector<Enemy>& enemies = m_readStatus->getEnemies();
+		const Player& player = m_readableStatus->getPlayer();
+		const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
 
 		boost::optional<Enemy> target;
 

@@ -6,27 +6,27 @@ namespace th
 	{
 		// DIR::HOLD
 		{ DIR::HOLD,      DIR::UP,       DIR::DOWN,      DIR::LEFT,      DIR::RIGHT,     },//DIR::LEFTUP,  DIR::RIGHTUP,  DIR::LEFTDOWN,  DIR::RIGHTDOWN },
-		// DIR::LEFT
-		{ DIR::LEFT,      DIR::LEFTUP,   DIR::LEFTDOWN,  DIR::UP,        DIR::DOWN,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
-		// DIR::RIGHT
-		{ DIR::RIGHT,     DIR::RIGHTUP,  DIR::RIGHTDOWN, DIR::UP,        DIR::DOWN,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::UP
 		{ DIR::UP,        DIR::LEFTUP,   DIR::RIGHTUP,   DIR::LEFT,      DIR::RIGHT,     },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::DOWN
 		{ DIR::DOWN,      DIR::LEFTDOWN, DIR::RIGHTDOWN, DIR::LEFT,      DIR::RIGHT,     },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::LEFT
+		{ DIR::LEFT,      DIR::LEFTUP,   DIR::LEFTDOWN,  DIR::UP,        DIR::DOWN,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::RIGHT
+		{ DIR::RIGHT,     DIR::RIGHTUP,  DIR::RIGHTDOWN, DIR::UP,        DIR::DOWN,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::LEFTUP
 		{ DIR::LEFTUP,    DIR::LEFT,     DIR::UP,        DIR::LEFTDOWN,  DIR::RIGHTUP,   },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
-		// DIR::LEFTDOWN
-		{ DIR::LEFTDOWN,  DIR::LEFT,     DIR::DOWN,      DIR::LEFTUP,    DIR::RIGHTDOWN, },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::RIGHTUP
-		{ DIR::RIGHTUP,   DIR::RIGHT,    DIR::UP,        DIR::RIGHTDOWN, DIR::LEFTUP,    },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::RIGHTUP,   DIR::UP,       DIR::RIGHT,     DIR::LEFTUP,    DIR::RIGHTDOWN, },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::LEFTDOWN
+		{ DIR::LEFTDOWN,  DIR::DOWN,     DIR::LEFT,      DIR::RIGHTDOWN, DIR::LEFTUP,    },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::RIGHTDOWN
 		{ DIR::RIGHTDOWN, DIR::RIGHT,    DIR::DOWN,      DIR::RIGHTUP,   DIR::LEFTDOWN,  },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      }
 	};
 
 	const int_t Path::FIND_DIR_COUNTS[enum_cast(DIR::MAX_COUNT)] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
-	const int_t Path::FIND_LIMIT = 100;
+	const int_t Path::FIND_LIMIT = 50;
 	const float_t Path::FIND_DEPTH = 30;
 	const vec2 Path::RESET_POS = { 0, 432 };
 
@@ -172,8 +172,8 @@ namespace th
 		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += Scene::ORIGIN_POINT_OFFSET.x;
-		target.x += Scene::ORIGIN_POINT_OFFSET.x;
+		player += Scene::ORIGIN_POINT_OFFSET;
+		target += Scene::ORIGIN_POINT_OFFSET;
 
 		// 距离越远得分越高
 		if (player.x < target.x)
@@ -194,8 +194,8 @@ namespace th
 		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += Scene::ORIGIN_POINT_OFFSET.x;
-		target.x += Scene::ORIGIN_POINT_OFFSET.x;
+		player += Scene::ORIGIN_POINT_OFFSET;
+		target += Scene::ORIGIN_POINT_OFFSET;
 
 		// 距离越近得分越高
 		if (player.x < target.x)
@@ -216,8 +216,8 @@ namespace th
 		float_t score = 0;
 
 		// 坐标原点移到左上角
-		player.x += Scene::ORIGIN_POINT_OFFSET.x;
-		target.x += Scene::ORIGIN_POINT_OFFSET.x;
+		player += Scene::ORIGIN_POINT_OFFSET;
+		target += Scene::ORIGIN_POINT_OFFSET;
 
 		// 距离越近得分越高
 		if (player.x < target.x)

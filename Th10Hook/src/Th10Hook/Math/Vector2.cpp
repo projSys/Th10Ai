@@ -1,4 +1,4 @@
-#include "Th10Hook/Vector2.h"
+#include "Th10Hook/Math/Vector2.h"
 
 #include <math.h>
 #include <cmath>
@@ -17,12 +17,12 @@ namespace th
 
 	void Vector2::normalize()
 	{
-		(*this) /= length();
+		*this /= length();
 	}
 
 	Vector2 Vector2::normalized() const
 	{
-		return (*this) / length();
+		return *this / length();
 	}
 
 	Vector2::Value_t Vector2::dot(const Vector2& other) const
@@ -37,6 +37,11 @@ namespace th
 		Value_t x1 = x * cosVal - y * sinVal;
 		Value_t y1 = x * sinVal + y * cosVal;
 		return Vector2(x1, y1);
+	}
+
+	bool Vector2::isZero() const
+	{
+		return *this == Vector2();
 	}
 
 	Vector2 Vector2::operator +(const Vector2& other) const

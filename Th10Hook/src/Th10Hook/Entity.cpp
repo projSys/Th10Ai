@@ -1,5 +1,7 @@
 #include "Th10Hook/Entity.h"
 
+#include "Th10Hook/Math/AABB.h"
+
 namespace th
 {
 	// 首先，求一系数k：设直线的起点和终点分别为A（x1， y1）、B（x2， y2），直线外一点为C（x0， y0），垂足为D；并设 k = |AD| / |AB|。
@@ -42,16 +44,11 @@ namespace th
 		return (pos - other.pos).length();
 	}
 
-	FootPoint Entity::calcFootPoint(const Entity& other) const
-	{
-		return CalcFootPoint(pos, getNextPos(), other.pos);
-	}
-
-	// https://thwiki.cc/%E6%B8%B8%E6%88%8F%E6%94%BB%E7%95%A5/STG%E5%88%A4%E5%AE%9A%E6%95%B0%E6%8D%AE
 	bool Entity::collide(const Entity& other) const
 	{
-		return std::abs(pos.x - other.pos.x) < (size.x + other.size.x) / 2
-			&& std::abs(pos.y - other.pos.y) < (size.y + other.size.y) / 2;
+		//return std::abs(pos.x - other.pos.x) < (size.x + other.size.x) / 2
+		//	&& std::abs(pos.y - other.pos.y) < (size.y + other.size.y) / 2;
+		return AABB(*this).collide(AABB(other));
 	}
 
 	bool Entity::collide(const Entity& other, float_t epsilon) const
@@ -74,48 +71,52 @@ namespace th
 		return prev.collide(other);
 	}
 
-	// 跨帧轨迹碰撞检测
 	bool Entity::collide3(const Entity& other, float_t frame) const
 	{
-		if (isHighSpeedWith(other))
-		{
-			// 计算到当前帧与前一帧之间线段的最近点
-			Entity temp = *this;
-			temp.advance(frame - 1);
-			vec2 prevPos = temp.pos;	// 以前一帧坐标作为基准
-			temp.advance(1);
-			vec2 curPos = temp.pos;
-			FootPoint footPoint = CalcFootPoint(prevPos, curPos, other.pos);
-			if (footPoint.k > 1)	// 还未到达当前帧
-				footPoint.k = 1;
-			if (footPoint.k < 0)	// 已经远离一帧以上
-				footPoint.k = 0;
-			temp.pos = prevPos;
-			temp.advance(footPoint.k);
-			return temp.collide(other);
-		}
-		else
-		{
-			Entity temp = *this;
-			temp.advance(frame);
-			return temp.collide(other);
-		}
-	}
-
-	std::pair<bool, float_t> Entity::willCollideWith(const Entity& other) const
-	{
-		FootPoint footPoint = calcFootPoint(other);
+		// 计算到当前帧与前一帧之间线段的最近点
 		Entity temp = *this;
+		temp.advance(frame - 1);
+		vec2 prevPos = temp.pos;	// 以前一帧坐标作为基准
+		temp.advance(1);
+		vec2 curPos = temp.pos;
+		FootPoint footPoint = CalcFootPoint(prevPos, curPos, other.pos);
+		if (footPoint.k > 1)	// 还未到达当前帧
+			footPoint.k = 1;
+		if (footPoint.k < 0)	// 已经远离一帧以上
+			footPoint.k = 0;
+		temp.pos = prevPos;
 		temp.advance(footPoint.k);
-		if (temp.collide(other))
-			return std::make_pair(true, footPoint.k);
-		else
-			return std::make_pair(false, float_t());
+		return temp.collide(other);
 	}
 
-	bool Entity::isHighSpeedWith(const Entity& other) const
+	vec2 Entity::getFootPoint(const Entity& other) const
 	{
-		return delta.x > other.delta.x || delta.y > other.delta.y;
+		if (delta.isZero())
+			return pos;
+		vec2 unit = delta.normalized();
+		return pos + unit * (other.pos - pos).dot(unit);
+	}
+
+	bool Entity::willCollideWith(const Entity& other) const
+	{
+		Entity temp = *this;
+		temp.pos = getFootPoint(other);
+		return temp.collide(other);
+	}
+
+	bool Entity::isHolding() const
+	{
+		return delta.isZero();
+	}
+
+	vec2 Entity::getNextPos() const
+	{
+		return pos + delta;
+	}
+
+	void Entity::advance(float_t frame)
+	{
+		pos += (delta * frame);
 	}
 
 	vec2 Entity::getLeftTop() const
@@ -136,21 +137,5 @@ namespace th
 	vec2 Entity::getRightBottom() const
 	{
 		return vec2(pos.x + size.x / 2, pos.y + size.y / 2);
-	}
-
-	bool Entity::isHolding() const
-	{
-		return TypeTraits<float_t>::Equal(delta.x, 0)
-			&& TypeTraits<float_t>::Equal(delta.y, 0);
-	}
-
-	vec2 Entity::getNextPos() const
-	{
-		return pos + delta;
-	}
-
-	void Entity::advance(float_t frame)
-	{
-		pos += (delta * frame);
 	}
 }

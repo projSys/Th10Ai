@@ -11,10 +11,10 @@ namespace th
 
 	void Input::clear()
 	{
-		m_left = false;
-		m_right = false;
 		m_up = false;
 		m_down = false;
+		m_left = false;
+		m_right = false;
 		m_shoot = false;
 		m_bomb = false;
 		m_slow = false;
@@ -28,14 +28,6 @@ namespace th
 		case DIR::HOLD:
 			break;
 
-		case DIR::LEFT:
-			m_left = true;
-			break;
-
-		case DIR::RIGHT:
-			m_right = true;
-			break;
-
 		case DIR::UP:
 			m_up = true;
 			break;
@@ -44,19 +36,27 @@ namespace th
 			m_down = true;
 			break;
 
+		case DIR::LEFT:
+			m_left = true;
+			break;
+
+		case DIR::RIGHT:
+			m_right = true;
+			break;
+
 		case DIR::LEFTUP:
 			m_left = true;
+			m_up = true;
+			break;
+
+		case DIR::RIGHTUP:
+			m_right = true;
 			m_up = true;
 			break;
 
 		case DIR::LEFTDOWN:
 			m_left = true;
 			m_down = true;
-			break;
-
-		case DIR::RIGHTUP:
-			m_right = true;
-			m_up = true;
 			break;
 
 		case DIR::RIGHTDOWN:
@@ -93,16 +93,6 @@ namespace th
 		{
 			BYTE* keyState = reinterpret_cast<BYTE*>(data);
 
-			if (m_left)
-				keyState[DIK_LEFT] = 0x80;
-			else
-				keyState[DIK_LEFT] = 0x00;
-
-			if (m_right)
-				keyState[DIK_RIGHT] = 0x80;
-			else
-				keyState[DIK_RIGHT] = 0x00;
-
 			if (m_up)
 				keyState[DIK_UP] = 0x80;
 			else
@@ -112,6 +102,16 @@ namespace th
 				keyState[DIK_DOWN] = 0x80;
 			else
 				keyState[DIK_DOWN] = 0x00;
+
+			if (m_left)
+				keyState[DIK_LEFT] = 0x80;
+			else
+				keyState[DIK_LEFT] = 0x00;
+
+			if (m_right)
+				keyState[DIK_RIGHT] = 0x80;
+			else
+				keyState[DIK_RIGHT] = 0x00;
 
 			if (m_shoot)
 				keyState[DIK_Z] = 0x80;
