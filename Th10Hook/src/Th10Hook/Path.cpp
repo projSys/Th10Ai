@@ -28,7 +28,7 @@ namespace th
 
 	const int_t Path::FIND_LIMIT = 50;
 	const float_t Path::FIND_DEPTH = 30;
-	const vec2 Path::RESET_POS = { 0, 432 };
+	const vec2 Path::RESET_POS = { 0, 431 };
 
 	Path::Path(Status& status, Scene& scene,
 		const boost::optional<Item>& itemTarget,

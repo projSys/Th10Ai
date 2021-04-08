@@ -59,7 +59,7 @@ namespace th
 		if (player.slow)
 			player.itemObtainRange *= 2.5f;
 
-		player.frame = ReadMemory<int32_t>(0x00474C88);
+		player.stageFrame = ReadMemory<int32_t>(0x00474C88);
 
 		return true;
 	}

@@ -80,9 +80,9 @@ namespace th
 		Input m_input;
 		std::atomic<bool> m_inputUpdated;
 
-		std::atomic<uint_t> inputFrame;
-		std::atomic<uint_t> statusFrame;
-		std::atomic<uint_t> handleFrame;
+		std::atomic<int_t> inputFrame;
+		std::atomic<int_t> statusFrame;
+		std::atomic<int_t> handleFrame;
 
 #if RENDER
 		cv::Mat m_mat;

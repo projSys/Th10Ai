@@ -25,10 +25,11 @@ namespace th
 		Laser();
 		Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0);
 
+		void updateExtra();
+
 		float_t distance(const Entity& other) const;
 
 		bool collide(const Entity& other) const;
-		vec2 getFootPoint(const Entity& other) const;
 		bool willCollideWith(const Entity& other) const;
 
 		bool isHolding() const;
@@ -46,5 +47,7 @@ namespace th
 		vec2 delta;
 		vec2 size;
 		float_t arc;
+
+		vec2 deltaV;
 	};
 }

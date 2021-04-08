@@ -15,12 +15,7 @@ namespace th
 		return std::sqrt(lengthSquared());
 	}
 
-	void Vector2::normalize()
-	{
-		*this /= length();
-	}
-
-	Vector2 Vector2::normalized() const
+	Vector2 Vector2::normalize() const
 	{
 		return *this / length();
 	}
@@ -37,6 +32,16 @@ namespace th
 		Value_t x1 = x * cosVal - y * sinVal;
 		Value_t y1 = x * sinVal + y * cosVal;
 		return Vector2(x1, y1);
+	}
+
+	Vector2 Vector2::verticalize() const
+	{
+		return Vector2(-y, x);
+	}
+
+	Vector2 Vector2::negate() const
+	{
+		return Vector2(-x, -y);
 	}
 
 	bool Vector2::isZero() const
@@ -94,8 +99,8 @@ namespace th
 
 	bool Vector2::operator ==(const Vector2& other) const
 	{
-		return Traits::Equal(x, other.x)
-			&& Traits::Equal(y, other.y);
+		return Traits::Equals(x, other.x)
+			&& Traits::Equals(y, other.y);
 	}
 
 	bool Vector2::operator !=(const Vector2& other) const

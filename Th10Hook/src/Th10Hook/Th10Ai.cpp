@@ -182,6 +182,7 @@ namespace th
 		m_readableStatus->statusFrame = statusFrame;
 		m_readableStatus->handleFrame = handleFrame;
 
+		m_readableStatus->updateExtra();
 #if RENDER
 		//int64_t t1 = Time::Now().getMilliSeconds();
 
@@ -270,7 +271,7 @@ namespace th
 #else
 		//m_status2.copy(m_status1);
 		//m_status1.copy(m_status0);
-		//m_status0.copy(*m_readStatus);
+		//m_status0.copy(*m_readableStatus);
 
 		//m_scene2.clearAll();
 		//m_scene2.splitEnemies(m_status2.getEnemies());
@@ -317,7 +318,11 @@ namespace th
 		}
 		else
 		{
-			std::cout << statusFrame << ' ' << handleFrame << ' ' << inputFrame << " Input is too slow." << std::endl;
+			std::cout << statusFrame - handleFrame << "/"
+				<< handleFrame << "/"
+				<< inputFrame - handleFrame << "/"
+				<< m_readableStatus->getPlayer().stageFrame - handleFrame
+				<< " Input is too slow." << std::endl;
 		}
 	}
 
@@ -331,22 +336,29 @@ namespace th
 			{
 				m_bombTime = now;
 
-				//int_t id = m_status0.collide(m_status0.getPlayer(), 0);
+				//boost::optional<Bullet> target = m_readableStatus->collide(m_readableStatus->getPlayer(), 0);
 				//m_status1.collide(m_status0.getPlayer(), 1);
-				//m_status2.collide(m_status0.getPlayer(), 2);
-				//m_status1.collide(m_status0.getPlayer(), 1, id);
-				//m_status2.collide(m_status0.getPlayer(), 2, id);
+				////m_status2.collide(m_status0.getPlayer(), 2);
+				//if (target.has_value())
+				//{
+				//	m_status1.collide(m_status0.getPlayer(), 1, target.value().id);
+				//	//m_status2.collide(m_status0.getPlayer(), 2, target.value().id);
 
-				//RegionCollideResult rcr = m_scene.collideAll(m_status0.getPlayer(), 0);
-				//std::cout << rcr.collided << std::endl;
-				//RegionCollideResult rcr1 = m_scene1.collideAll(m_status0.getPlayer(), 1);
-				//std::cout << rcr1.collided << std::endl;
-				//RegionCollideResult rcr2 = m_scene2.collideAll(m_status0.getPlayer(), 2);
-				//std::cout << rcr2.collided << std::endl;
+				//	RegionCollideResult rcr = m_scene.collideAll(m_status0.getPlayer(), 0, target.value());
+				//	std::cout << rcr.collided << std::endl;
+				//	RegionCollideResult rcr1 = m_scene1.collideAll(m_status0.getPlayer(), 1, target.value());
+				//	std::cout << rcr1.collided << std::endl;
+				//	//RegionCollideResult rcr2 = m_scene2.collideAll(m_status0.getPlayer(), 2, target.value());
+				//	//std::cout << rcr2.collided << std::endl;
+				//}
 
 				m_input.bomb();
 				++m_bombCount;
-				std::cout << statusFrame << ' ' << handleFrame << ' ' << inputFrame << " DeathBomb: " << m_bombCount << std::endl;
+				std::cout << statusFrame - handleFrame << "/"
+					<< handleFrame << "/"
+					<< inputFrame - handleFrame << "/"
+					<< m_readableStatus->getPlayer().stageFrame - handleFrame
+					<< " DeathBomb: " << m_bombCount << std::endl;
 				return true;
 			}
 		}

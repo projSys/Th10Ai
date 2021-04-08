@@ -45,7 +45,7 @@ namespace th
 	Scene::Scene() :
 		m_region(vec2(0, 224), SIZE)
 	{
-		m_region.split(6);
+		m_region.split(4);
 	}
 
 	void Scene::clearAll()
@@ -71,6 +71,11 @@ namespace th
 	RegionCollideResult Scene::collideAll(const Player& player, float_t frame) const
 	{
 		return m_region.collideAll(player, frame);
+	}
+
+	RegionCollideResult Scene::collideAll(const Player& player, float_t frame, const Bullet& target) const
+	{
+		return m_region.collideAll(player, frame, target);
 	}
 
 #if RENDER

@@ -6,12 +6,6 @@
 
 namespace th
 {
-	struct FootPoint
-	{
-		float_t k;
-		vec2 pos;
-	};
-
 	// 实体结构
 	// +-------+
 	// | (x,y) |
@@ -25,13 +19,14 @@ namespace th
 		Entity();
 		Entity(const vec2& pos0, const vec2& delta0, const vec2& size0);
 
+		void updateExtra();
+
 		float_t distance(const Entity& other) const;
 
 		bool collide(const Entity& other) const;
 		bool collide(const Entity& other, float_t epsilon) const;
 		bool collide2(const Entity& other) const;
 		bool collide3(const Entity& other, float_t frame) const;
-		vec2 getFootPoint(const Entity& other) const;
 		bool willCollideWith(const Entity& other) const;
 
 		bool isHolding() const;
@@ -49,5 +44,7 @@ namespace th
 		vec2 pos;			// 坐标在中心点
 		vec2 delta;
 		vec2 size;
+
+		vec2 deltaV;
 	};
 }

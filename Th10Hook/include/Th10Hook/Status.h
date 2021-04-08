@@ -3,6 +3,7 @@
 #include "Th10Hook/Common.h"
 
 #include <vector>
+#include <boost/optional.hpp>
 
 #include "Th10Hook/Player.h"
 #include "Th10Hook/Item.h"
@@ -19,6 +20,7 @@ namespace th
 
 		void clear();
 		void update();
+		void updateExtra();
 		void copy(const Status& other);
 
 		// Player
@@ -32,7 +34,7 @@ namespace th
 		bool isUnderEnemy() const;
 
 		// Bullet
-		int_t collide(const Player& player, float_t frame) const;
+		boost::optional<Bullet> collide(const Player& player, float_t frame) const;
 		int_t collide(const Player& player, float_t frame, int_t id) const;
 
 		// Laser
@@ -43,9 +45,9 @@ namespace th
 		const std::vector<Bullet>& getBullets() const;
 		const std::vector<Laser>& getLasers() const;
 
-		uint_t inputFrame;
-		uint_t statusFrame;
-		uint_t handleFrame;
+		int_t inputFrame;
+		int_t statusFrame;
+		int_t handleFrame;
 		int_t frame1;
 
 	private:

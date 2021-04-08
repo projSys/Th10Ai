@@ -5,7 +5,8 @@
 namespace th
 {
 	Region::Region(const vec2& pos0, const vec2& size0) :
-		Entity(pos0, vec2(), size0)
+		Entity(pos0, vec2(), size0),
+		m_times(0)
 	{
 		m_enemies.reserve(200);
 		m_bullets.reserve(2000);
@@ -14,6 +15,7 @@ namespace th
 
 	void Region::split(int_t times)
 	{
+		m_times = times;
 		if (times <= 0)
 			return;
 
@@ -48,15 +50,15 @@ namespace th
 	{
 		for (const Enemy& enemy : enemies)
 		{
-			if (enemy.collide(*this))
-			{
+			//if (enemy.collide(*this))
+			//{
+			//	m_enemies.push_back(enemy);
+			//}
+			//else
+			//{
+			if (enemy.willCollideWith(*this))
 				m_enemies.push_back(enemy);
-			}
-			else
-			{
-				if (enemy.willCollideWith(*this))
-					m_enemies.push_back(enemy);
-			}
+			//}
 		}
 		if (m_enemies.empty())
 			return;
@@ -71,15 +73,15 @@ namespace th
 	{
 		for (const Bullet& bullet : bullets)
 		{
-			if (bullet.collide(*this))
-			{
+			//if (bullet.collide(*this))
+			//{
+			//	m_bullets.push_back(bullet);
+			//}
+			//else
+			//{
+			if (bullet.willCollideWith(*this))
 				m_bullets.push_back(bullet);
-			}
-			else
-			{
-				if (bullet.willCollideWith(*this))
-					m_bullets.push_back(bullet);
-			}
+			//}
 		}
 		if (m_bullets.empty())
 			return;
@@ -94,15 +96,15 @@ namespace th
 	{
 		for (const Laser& laser : lasers)
 		{
-			if (laser.collide(*this))
-			{
+			//if (laser.collide(*this))
+			//{
+			//	m_lasers.push_back(laser);
+			//}
+			//else
+			//{
+			if (laser.willCollideWith(*this))
 				m_lasers.push_back(laser);
-			}
-			else
-			{
-				if (laser.willCollideWith(*this))
-					m_lasers.push_back(laser);
-			}
+			//}
 		}
 		if (m_lasers.empty())
 			return;
@@ -116,8 +118,6 @@ namespace th
 	RegionCollideResult Region::collideAll(const Player& player, float_t frame) const
 	{
 		RegionCollideResult result = {};
-		//result.minCollideFrame = std::numeric_limits<float_t>::max();
-		//result.minDistance = std::numeric_limits<float_t>::max();
 
 		if (!collide(player))
 			return result;
@@ -133,12 +133,6 @@ namespace th
 					result.collided = true;
 					break;
 				}
-				//float_t distance = enemy.calcDistance(player.getPosition());
-				//if (distance < result.minDistance)
-				//	result.minDistance = distance;
-				//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-				//if (ret.first && ret.second < 2)
-				//	return true;
 			}
 
 			if (!result.collided)
@@ -150,41 +144,7 @@ namespace th
 					{
 						result.collided = true;
 						break;
-						//if (frame == 0)
-						//{
-						//	cout << player.x << " " << player.y << " " << player.width << " " << player.height << endl;
-						//	cout << bullet.x << " " << bullet.y << " " << bullet.width << " " << bullet.height << endl;
-						//}
 					}
-					//bullet.advance(1);
-					//if (bullet.collide(player))
-					//{
-					//	result.collided = true;
-					//	break;
-					//}
-					//float_t distance = bullet.calcDistance(player.getPosition());
-					//if (distance < result.minDistance)
-					//	result.minDistance = distance;
-					//if (player.collide(temp, 0))
-					//{
-					//	result.collided = true;
-					//	break;
-					//}
-					//else
-					//{
-						//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-						//if (ret.first && ret.second > -1 && ret.second < 1)
-						//{
-						//	result.collided = true;
-						//	break;
-						//}
-						//if (ret.first && ret.second > 0 && ret.second < 10)
-						//{
-						//	result.willCollideCount += 1;
-						//	if (ret.second < result.minCollideFrame)
-						//		result.minCollideFrame = ret.second;
-						//}
-					//}
 				}
 			}
 
@@ -198,12 +158,6 @@ namespace th
 						result.collided = true;
 						break;
 					}
-					//float_t distance = laser.calcDistance(player.getPosition());
-					//if (distance < result.minDistance)
-					//	result.minDistance = distance;
-					//std::pair<bool, float_t> ret = temp.willCollideWith(player);
-					//if (ret.first && ret.second < 2)
-					//	return true;
 				}
 			}
 		}
@@ -213,14 +167,6 @@ namespace th
 			RegionCollideResult firstResult = m_first->collideAll(player, frame);
 			if (firstResult.collided)
 				result.collided = true;
-			//if (firstResult.willCollideCount > 0)
-			//{
-			//	result.willCollideCount += firstResult.willCollideCount;
-			//	if (firstResult.minCollideFrame < result.minCollideFrame)
-			//		result.minCollideFrame = firstResult.minCollideFrame;
-			//}
-			//if (firstResult.minDistance < result.minDistance)
-			//	result.minDistance = firstResult.minDistance;
 		}
 
 		if (m_second != nullptr)
@@ -228,14 +174,84 @@ namespace th
 			RegionCollideResult secondResult = m_second->collideAll(player, frame);
 			if (secondResult.collided)
 				result.collided = true;
-			//if (secondResult.willCollideCount > 0)
+		}
+
+		return result;
+	}
+
+	RegionCollideResult Region::collideAll(const Player& player, float_t frame, const Bullet& target) const
+	{
+		RegionCollideResult result = {};
+
+		std::cout << m_times << " collideAll size: " << m_bullets.size() << std::endl;
+		if (target.willCollideWith(*this))
+		{
+			std::cout << m_times << " willCollideWith" << std::endl;
+		}
+		for (const Bullet& bullet : m_bullets)
+		{
+			if (bullet.id == target.id)
+			{
+				std::cout << m_times << " have target" << std::endl;
+			}
+		}
+
+		if (!collide(player))
+		{
+			return result;
+		}
+
+		// 只检测叶子节点
+		if (m_first == nullptr && m_second == nullptr)
+		{
+			//for (Enemy enemy : m_enemies)
 			//{
-			//	result.willCollideCount += secondResult.willCollideCount;
-			//	if (secondResult.minCollideFrame < result.minCollideFrame)
-			//		result.minCollideFrame = secondResult.minCollideFrame;
+			//	enemy.advance(frame);
+			//	if (enemy.collide(player))
+			//	{
+			//		result.collided = true;
+			//		break;
+			//	}
 			//}
-			//if (secondResult.minDistance < result.minDistance)
-			//	result.minDistance = secondResult.minDistance;
+
+			//if (!result.collided)
+			//{
+			//	std::cout << m_times << " collide Bullet size: " << m_bullets.size() << std::endl;
+			//	for (const Bullet& bullet : m_bullets)
+			//	{
+			//		if (bullet.id == target.id)
+			//			std::cout << m_times << " collide Bullet true" << std::endl;
+			//		else
+			//			std::cout << m_times << " collide Bullet false" << std::endl;
+			//	}
+			//}
+
+			//if (!result.collided)
+			//{
+			//	for (Laser laser : m_lasers)
+			//	{
+			//		laser.advance(frame);
+			//		if (laser.collide(player))
+			//		{
+			//			result.collided = true;
+			//			break;
+			//		}
+			//	}
+			//}
+		}
+
+		if (m_first != nullptr)
+		{
+			RegionCollideResult firstResult = m_first->collideAll(player, frame, target);
+			if (firstResult.collided)
+				result.collided = true;
+		}
+
+		if (m_second != nullptr)
+		{
+			RegionCollideResult secondResult = m_second->collideAll(player, frame, target);
+			if (secondResult.collided)
+				result.collided = true;
 		}
 
 		return result;

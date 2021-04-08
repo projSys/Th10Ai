@@ -23,32 +23,32 @@ namespace base
 		);
 	}
 
-	void Logger::logTrace(const std::string& str)
+	void Logger::trace(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(trace) << str;
 	}
 
-	void Logger::logDebug(const std::string& str)
+	void Logger::debug(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(debug) << str;
 	}
 
-	void Logger::logInfo(const std::string& str)
+	void Logger::info(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(info) << str;
 	}
 
-	void Logger::logWarning(const std::string& str)
+	void Logger::warning(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(warning) << str;
 	}
 
-	void Logger::logError(const std::string& str)
+	void Logger::error(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(error) << str;
 	}
 
-	void Logger::logFatal(const std::string& str)
+	void Logger::fatal(const std::string& str)
 	{
 		BOOST_LOG_TRIVIAL(fatal) << str;
 	}

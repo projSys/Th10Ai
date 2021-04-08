@@ -32,7 +32,20 @@ namespace th
 		Th10Hook::GetBullets(m_bullets);
 		Th10Hook::GetLasers(m_lasers);
 
-		frame1 = m_player.frame;
+		frame1 = m_player.stageFrame;
+	}
+
+	void Status::updateExtra()
+	{
+		m_player.updateExtra();
+		for (Item& item : m_items)
+			item.updateExtra();
+		for (Enemy& enemy : m_enemies)
+			enemy.updateExtra();
+		for (Bullet& bullet : m_bullets)
+			bullet.updateExtra();
+		for (Laser& laser : m_lasers)
+			laser.updateExtra();
 	}
 
 	void Status::copy(const Status& other)
@@ -86,24 +99,26 @@ namespace th
 		return underEnemy;
 	}
 
-	int_t Status::collide(const Player& player, float_t frame) const
+	boost::optional<Bullet> Status::collide(const Player& player, float_t frame) const
 	{
+		boost::optional<Bullet> target;
 		for (const Bullet& org : m_bullets)
 		{
-			Bullet bullet = org;
-			bullet.advance(frame);
-			if (bullet.collide(player))
+			Bullet now = org;
+			now.advance(frame);
+			if (now.collide(player))
 			{
-				std::cout << inputFrame << "/" << statusFrame << "/" << handleFrame << "/" << frame1 << "帧"
+				std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "帧"
 					<< " 总数：" << m_bullets.size() << " 碰撞："
 					<< "org(" << org.id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
-					<< "now(" << bullet.id << " " << bullet.pos.x << " " << bullet.pos.y << " " << bullet.delta.x << " " << bullet.delta.y << ") " << std::endl;
-				return bullet.id;
+					<< "now(" << now.id << " " << now.pos.x << " " << now.pos.y << " " << now.delta.x << " " << now.delta.y << ") " << std::endl;
+				target = now;
+				return target;
 			}
 		}
-		std::cout << inputFrame << "/" << statusFrame << "/" << handleFrame << "/" << frame1 << "帧"
+		std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "帧"
 			<< " 总数：" << m_bullets.size() << " 不碰撞" << std::endl;
-		return -1;
+		return target;
 	}
 
 	int_t Status::collide(const Player& player, float_t frame, int_t id) const
@@ -112,19 +127,19 @@ namespace th
 		{
 			if (org.id == id)
 			{
-				Bullet bullet = org;
-				bullet.advance(frame);
-				if (bullet.collide(player))
+				Bullet now = org;
+				now.advance(frame);
+				if (now.collide(player))
 				{
-					std::cout << inputFrame << "/" << statusFrame << "/" << handleFrame << "/" << frame1 << "帧"
+					std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "帧"
 						<< " 总数：" << m_bullets.size() << " 碰撞："
 						<< "org(" << org.id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
-						<< "now(" << bullet.id << " " << bullet.pos.x << " " << bullet.pos.y << " " << bullet.delta.x << " " << bullet.delta.y << ") " << std::endl;
-					return bullet.id;
+						<< "now(" << now.id << " " << now.pos.x << " " << now.pos.y << " " << now.delta.x << " " << now.delta.y << ") " << std::endl;
+					return now.id;
 				}
 			}
 		}
-		std::cout << inputFrame << "/" << statusFrame << "/" << handleFrame << "/" << frame1 << "帧"
+		std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "帧"
 			<< " 总数：" << m_bullets.size() << " 找不到子弹：" << id << std::endl;
 		return -1;
 	}

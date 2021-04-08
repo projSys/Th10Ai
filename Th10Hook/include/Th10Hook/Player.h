@@ -82,6 +82,6 @@ namespace th
 		int_t lives;
 		float_t itemObtainRange;
 
-		int_t frame;
+		int_t stageFrame;
 	};
 }

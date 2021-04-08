@@ -34,6 +34,7 @@ namespace th
 		void splitBullets(const std::vector<Bullet>& bullets);
 		void splitLasers(const std::vector<Laser>& lasers);
 		RegionCollideResult collideAll(const Player& player, float_t frame) const;
+		RegionCollideResult collideAll(const Player& player, float_t frame, const Bullet& target) const;
 
 #if RENDER
 		void render(cv::Mat& mat, const Player& player);
@@ -46,5 +47,6 @@ namespace th
 
 		std::unique_ptr<Region> m_first;
 		std::unique_ptr<Region> m_second;
+		int_t m_times;
 	};
 }
