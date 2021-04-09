@@ -336,19 +336,20 @@ namespace th
 			{
 				m_bombTime = now;
 
-				//boost::optional<Bullet> target = m_readableStatus->collide(m_readableStatus->getPlayer(), 0);
-				//m_status1.collide(m_status0.getPlayer(), 1);
-				////m_status2.collide(m_status0.getPlayer(), 2);
+				//const Player& player = m_readableStatus->getPlayer();
+				//boost::optional<Bullet> target = m_readableStatus->collide(player, 0);
+				//m_status1.collide(player, 1);
+				////m_status2.collide(player, 2);
 				//if (target.has_value())
 				//{
-				//	m_status1.collide(m_status0.getPlayer(), 1, target.value().id);
-				//	//m_status2.collide(m_status0.getPlayer(), 2, target.value().id);
+				//	m_status1.collide(player, 1, target.value().id);
+				//	//m_status2.collide(player, 2, target.value().id);
 
-				//	RegionCollideResult rcr = m_scene.collideAll(m_status0.getPlayer(), 0, target.value());
+				//	RegionCollideResult rcr = m_scene.collideAll(player, 0, target.value());
 				//	std::cout << rcr.collided << std::endl;
-				//	RegionCollideResult rcr1 = m_scene1.collideAll(m_status0.getPlayer(), 1, target.value());
+				//	RegionCollideResult rcr1 = m_scene1.collideAll(player, 1, target.value());
 				//	std::cout << rcr1.collided << std::endl;
-				//	//RegionCollideResult rcr2 = m_scene2.collideAll(m_status0.getPlayer(), 2, target.value());
+				//	//RegionCollideResult rcr2 = m_scene2.collideAll(player, 2, target.value());
 				//	//std::cout << rcr2.collided << std::endl;
 				//}
 

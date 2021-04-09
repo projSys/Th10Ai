@@ -1,10 +1,16 @@
 #include "Th10Hook/Math/AABB.h"
 
 #include "Th10Hook/Entity.h"
+#include "Th10Hook/Math/CollisionDetection.h"
 
 namespace th
 {
 	AABB::AABB(const Entity& entity)
+	{
+		update(entity);
+	}
+
+	void AABB::update(const Entity& entity)
 	{
 		leftTop = entity.getLeftTop();
 		rightTop = entity.getRightTop();
@@ -14,17 +20,13 @@ namespace th
 		axisY = vec2(0, 1);
 	}
 
-	bool Overlap(float_t min1, float_t max1, float_t min2, float_t max2)
-	{
-		//return !(max1 < min2 || max2 < min1);
-		return max1 > min2 && max2 > min1;
-	}
-
 	bool AABB::collide(const AABB& other) const
 	{
-		if (!Overlap(leftTop.x, rightBottom.x, other.leftTop.x, other.rightBottom.x))
+		if (!CollisionDetection::Overlap(
+			leftTop.x, rightBottom.x, other.leftTop.x, other.rightBottom.x))
 			return false;
-		if (!Overlap(leftTop.y, rightBottom.y, other.leftTop.y, other.rightBottom.y))
+		if (!CollisionDetection::Overlap(
+			leftTop.y, rightBottom.y, other.leftTop.y, other.rightBottom.y))
 			return false;
 		return true;
 	}

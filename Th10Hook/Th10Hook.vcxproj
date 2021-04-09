@@ -166,6 +166,7 @@
     <ClInclude Include="include\Th10Hook\Item.h" />
     <ClInclude Include="include\Th10Hook\Laser.h" />
     <ClInclude Include="include\Th10Hook\Math\AABB.h" />
+    <ClInclude Include="include\Th10Hook\Math\CollisionDetection.h" />
     <ClInclude Include="include\Th10Hook\Math\OBB.h" />
     <ClInclude Include="include\Th10Hook\Math\Vector2.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="src\Th10Hook\Item.cpp" />
     <ClCompile Include="src\Th10Hook\Laser.cpp" />
     <ClCompile Include="src\Th10Hook\Math\AABB.cpp" />
+    <ClCompile Include="src\Th10Hook\Math\CollisionDetection.cpp" />
     <ClCompile Include="src\Th10Hook\Math\OBB.cpp" />
     <ClCompile Include="src\Th10Hook\Math\Vector2.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />

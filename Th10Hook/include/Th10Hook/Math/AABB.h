@@ -14,6 +14,7 @@ namespace th
 		AABB() = default;
 		explicit AABB(const Entity& entity);
 
+		void update(const Entity& entity);
 		bool collide(const AABB& other) const;
 
 		vec2 leftTop;

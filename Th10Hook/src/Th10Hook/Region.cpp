@@ -8,6 +8,8 @@ namespace th
 		Entity(pos0, vec2(), size0),
 		m_times(0)
 	{
+		aabb.update(*this);
+
 		m_enemies.reserve(200);
 		m_bullets.reserve(2000);
 		m_lasers.reserve(200);

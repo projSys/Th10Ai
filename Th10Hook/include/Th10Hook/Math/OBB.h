@@ -15,6 +15,7 @@ namespace th
 		OBB() = default;
 		explicit OBB(const Laser& laser);
 
+		void update(const Laser& laser);
 		bool collide(const AABB& other) const;
 
 		vec2 leftTop;

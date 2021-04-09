@@ -8,7 +8,7 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 通关视频<br />
 https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
-## 待改进
+## TODO
 
 * 2帧之间的数据不一致？<br />
 

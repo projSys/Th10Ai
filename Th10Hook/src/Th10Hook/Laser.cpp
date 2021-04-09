@@ -3,8 +3,8 @@
 #include <math.h>
 #include <cmath>
 
-#include "Th10Hook/Math/AABB.h"
-#include "Th10Hook/Math/OBB.h"
+#include "Th10Hook/Entity.h"
+#include "Th10Hook/Math/CollisionDetection.h"
 
 namespace th
 {
@@ -20,13 +20,9 @@ namespace th
 
 	void Laser::updateExtra()
 	{
+		obb.update(*this);
 		if (!delta.isZero())
 			deltaV = delta.verticalize().normalize();
-	}
-
-	float_t Laser::distance(const Entity& other) const
-	{
-		return (pos - other.pos).length();
 	}
 
 	bool Laser::collide(const Entity& other) const
@@ -34,48 +30,24 @@ namespace th
 		return OBB(*this).collide(AABB(other));
 	}
 
-	bool Overlap1(const OBB& left, const AABB& right, const vec2& axis)
-	{
-		// a·b = |a||b|cosθ
-		// |b| = 1
-		// a·b = |a|cosθ
-		// |a|cosθ即a在b上的投影
-		float_t proj1 = left.leftTop.dot(axis);
-		float_t proj2 = left.rightTop.dot(axis);
-		float_t proj3 = left.leftBottom.dot(axis);
-		float_t proj4 = left.rightBottom.dot(axis);
-
-		float_t proj5 = right.leftTop.dot(axis);
-		float_t proj6 = right.rightTop.dot(axis);
-		float_t proj7 = right.leftBottom.dot(axis);
-		float_t proj8 = right.rightBottom.dot(axis);
-
-		float_t min1 = std::min({ proj1, proj2, proj3, proj4 });
-		float_t max1 = std::max({ proj1, proj2, proj3, proj4 });
-
-		float_t min2 = std::min({ proj5, proj6, proj7, proj8 });
-		float_t max2 = std::max({ proj5, proj6, proj7, proj8 });
-
-		//return !(max1 < min2 || max2 < min1);
-		return max1 > min2 && max2 > min1;
-	}
-
 	bool Laser::willCollideWith(const Entity& other) const
 	{
-		if (delta.isZero())
-			return collide(other);
+		if (!delta.isZero())
+			//return CollisionDetection::CollideSAT(OBB(*this), AABB(other),
+			//	delta.verticalize().normalize());
+			return CollisionDetection::CollideSAT(obb, other.aabb, deltaV);
+		else
+			return obb.collide(other.aabb);
+	}
 
-		return Overlap1(OBB(*this), AABB(other), deltaV);
+	float_t Laser::distance(const Entity& other) const
+	{
+		return (pos - other.pos).length();
 	}
 
 	bool Laser::isHolding() const
 	{
 		return delta.isZero();
-	}
-
-	vec2 Laser::getNextPos() const
-	{
-		return pos + delta;
 	}
 
 	void Laser::advance(float_t frame)

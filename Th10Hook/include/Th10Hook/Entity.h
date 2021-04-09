@@ -3,6 +3,7 @@
 #include "Th10Hook/Common.h"
 
 #include "Th10Hook/Math/Vector2.h"
+#include "Th10Hook/Math/AABB.h"
 
 namespace th
 {
@@ -20,17 +21,11 @@ namespace th
 		Entity(const vec2& pos0, const vec2& delta0, const vec2& size0);
 
 		void updateExtra();
-
-		float_t distance(const Entity& other) const;
-
 		bool collide(const Entity& other) const;
-		bool collide(const Entity& other, float_t epsilon) const;
-		bool collide2(const Entity& other) const;
-		bool collide3(const Entity& other, float_t frame) const;
 		bool willCollideWith(const Entity& other) const;
 
+		float_t distance(const Entity& other) const;
 		bool isHolding() const;
-		vec2 getNextPos() const;
 		void advance(float_t frame);
 
 		vec2 getLeftTop() const;
@@ -45,6 +40,8 @@ namespace th
 		vec2 delta;
 		vec2 size;
 
+		// 只在willCollideWith()里使用，基于每帧的初始坐标
+		AABB aabb;
 		vec2 deltaV;
 	};
 }

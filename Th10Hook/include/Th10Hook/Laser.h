@@ -3,10 +3,12 @@
 #include "Th10Hook/Common.h"
 
 #include "Th10Hook/Math/Vector2.h"
-#include "Th10Hook/Entity.h"
+#include "Th10Hook/Math/OBB.h"
 
 namespace th
 {
+	class Entity;
+
 	// 激光结构
 	// (x,y)
 	// +-*-+
@@ -26,14 +28,11 @@ namespace th
 		Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0);
 
 		void updateExtra();
-
-		float_t distance(const Entity& other) const;
-
 		bool collide(const Entity& other) const;
 		bool willCollideWith(const Entity& other) const;
 
+		float_t distance(const Entity& other) const;
 		bool isHolding() const;
-		vec2 getNextPos() const;
 		void advance(float_t frame);
 
 		vec2 getCenter() const;
@@ -48,6 +47,8 @@ namespace th
 		vec2 size;
 		float_t arc;
 
+		// 只在willCollideWith()里使用，基于每帧的初始坐标
+		OBB obb;
 		vec2 deltaV;
 	};
 }
