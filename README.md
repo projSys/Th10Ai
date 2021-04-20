@@ -8,9 +8,10 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 通关视频<br />
 https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 
-## TODO
+## 待改进
 
 * 2帧之间的数据不一致？<br />
+* 激光、大玉有时不闪避。<br />
 
 ## 运行要求
 

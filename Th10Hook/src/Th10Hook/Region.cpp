@@ -52,15 +52,8 @@ namespace th
 	{
 		for (const Enemy& enemy : enemies)
 		{
-			//if (enemy.collide(*this))
-			//{
-			//	m_enemies.push_back(enemy);
-			//}
-			//else
-			//{
 			if (enemy.willCollideWith(*this))
 				m_enemies.push_back(enemy);
-			//}
 		}
 		if (m_enemies.empty())
 			return;
@@ -75,15 +68,8 @@ namespace th
 	{
 		for (const Bullet& bullet : bullets)
 		{
-			//if (bullet.collide(*this))
-			//{
-			//	m_bullets.push_back(bullet);
-			//}
-			//else
-			//{
-			if (bullet.willCollideWith(*this))
+			if (bullet.willCollideWith(*this))// || bullet.collide(*this))
 				m_bullets.push_back(bullet);
-			//}
 		}
 		if (m_bullets.empty())
 			return;
@@ -98,15 +84,8 @@ namespace th
 	{
 		for (const Laser& laser : lasers)
 		{
-			//if (laser.collide(*this))
-			//{
-			//	m_lasers.push_back(laser);
-			//}
-			//else
-			//{
 			if (laser.willCollideWith(*this))
 				m_lasers.push_back(laser);
-			//}
 		}
 		if (m_lasers.empty())
 			return;

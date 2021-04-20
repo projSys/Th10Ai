@@ -21,7 +21,7 @@ namespace th
 		}
 		else
 		{
-			if (type == 1)
+			if (isMarisa())
 			{
 				pos += MOVE_SPEED_MARISA[enum_cast(dir)];
 			}
@@ -50,5 +50,20 @@ namespace th
 	bool Player::isInvincible() const
 	{
 		return invincibleTime != 0;
+	}
+
+	bool Player::isSlow() const
+	{
+		return slow != 0;
+	}
+
+	bool Player::isReimu() const
+	{
+		return type == 0;
+	}
+
+	bool Player::isMarisa() const
+	{
+		return type == 1;
 	}
 }

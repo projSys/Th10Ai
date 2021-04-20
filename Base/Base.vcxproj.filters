@@ -93,6 +93,9 @@
     <ClInclude Include="include\Base\Windows\WindowsError.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\FuncTraits.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">

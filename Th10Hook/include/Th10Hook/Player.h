@@ -63,6 +63,9 @@ namespace th
 		bool isNormalStatus() const;
 		bool isColliding() const;
 		bool isInvincible() const;
+		bool isSlow() const;
+		bool isReimu() const;
+		bool isMarisa() const;
 
 		// status == 0 重生状态，此时无敌
 		// status == 1 正常状态
