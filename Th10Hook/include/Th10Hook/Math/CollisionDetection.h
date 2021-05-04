@@ -33,6 +33,7 @@ namespace th
 
 			float_t min1 = std::min({ proj1, proj2, proj3, proj4 });
 			float_t max1 = std::max({ proj1, proj2, proj3, proj4 });
+
 			float_t min2 = std::min({ proj5, proj6, proj7, proj8 });
 			float_t max2 = std::max({ proj5, proj6, proj7, proj8 });
 

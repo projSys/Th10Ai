@@ -157,6 +157,8 @@ namespace th
 		m_writableStatus->update();
 
 		std::unique_lock<std::mutex> lock(m_statusMutex);
+		if (m_statusUpdated)
+			std::cout << "ÌøÖ¡" << std::endl;
 		m_writableStatus.swap(m_intermediateStatus);
 		m_statusUpdated = true;
 		m_statusCond.notify_one();

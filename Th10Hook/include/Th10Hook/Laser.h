@@ -47,7 +47,6 @@ namespace th
 		vec2 size;
 		float_t arc;
 
-		// 只在willCollideWith()里使用，基于每帧的初始坐标
 		OBB obb;
 		vec2 deltaV;
 	};

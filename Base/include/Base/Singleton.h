@@ -88,7 +88,7 @@ namespace base
 	//thread_local T* ThreadSingle<T>::s_instance = nullptr;
 
 	//template <typename T,
-	//	template <typename T> typename Storage = ProcessSingle>
+	//	template <typename T> class Storage = ProcessSingle>
 	//class Singleton :
 	//	private Storage<T>
 	//{

@@ -50,17 +50,15 @@ namespace th
 
 	void Status::copy(const Status& other)
 	{
+		clear();
+
 		m_player = other.m_player;
-		m_items.clear();
 		for (const Item& item : other.m_items)
 			m_items.push_back(item);
-		m_enemies.clear();
 		for (const Enemy& enemy : other.m_enemies)
 			m_enemies.push_back(enemy);
-		m_bullets.clear();
 		for (const Bullet& bullet : other.m_bullets)
 			m_bullets.push_back(bullet);
-		m_lasers.clear();
 		for (const Laser& laser : other.m_lasers)
 			m_lasers.push_back(laser);
 

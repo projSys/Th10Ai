@@ -40,7 +40,7 @@ namespace th
 		vec2 delta;
 		vec2 size;
 
-		// 只在willCollideWith()里使用，基于每帧的初始坐标
+		// 只在willCollideWith()里使用，基于每帧的原始坐标
 		AABB aabb;
 		vec2 deltaV;
 	};

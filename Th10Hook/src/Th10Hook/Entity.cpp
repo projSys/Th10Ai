@@ -33,7 +33,7 @@ namespace th
 	bool Entity::willCollideWith(const Entity& other) const
 	{
 		// 可以认为与移动向量总是重叠的
-		// 只需要再检测与移动向量的垂直向量是否重叠
+		// 然后只需要再检测与移动向量的垂直向量是否重叠
 		if (!delta.isZero())
 			//return CollisionDetection::CollideSAT(AABB(*this), AABB(other),
 			//	delta.verticalize().normalize());

@@ -120,9 +120,15 @@ namespace th
 
 	HRESULT MyDirect3DDevice9::Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion)
 	{
-		if (g_th10Ai != nullptr)
-			g_th10Ai->updateStatus();
-
+		try
+		{
+			if (g_th10Ai != nullptr)
+				g_th10Ai->updateStatus();
+		}
+		catch (...)
+		{
+			BASE_LOG_ERROR(PrintException());
+		}
 		return m_device->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 	}
 

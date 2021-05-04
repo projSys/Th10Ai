@@ -16,6 +16,8 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 ## 运行要求
 
 東方風神録　～ Mountain of Faith. ver 1.00a<br />
+窗口模式<br />
+刷新率60FPS<br />
 安装[VC++2019可再发行软件包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。<br />
 修改Th10Ai.conf里的游戏路径。<br />
 运行Th10Ai.exe。<br />

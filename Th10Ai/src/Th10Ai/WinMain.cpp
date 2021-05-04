@@ -19,18 +19,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 		logger.addFileLog(logPath);
 
 		std::ifstream ifs("Th10Ai.conf");
-		std::string appPath;
-		std::getline(ifs, appPath);
-		std::wstring appPathW = base::win::Apis::AnsiToWide(appPath);
+		std::string exePath;
+		std::getline(ifs, exePath);
+		std::wstring exePathW = base::win::Apis::AnsiToWide(exePath);
 
-		boost::filesystem::path p(appPathW);
-		std::wstring appDirW = p.remove_filename().wstring();
+		boost::filesystem::path p(exePathW);
+		std::wstring exeDirW = p.remove_filename().wstring();
 
 		STARTUPINFOW si = {};
 		si.cb = sizeof(si);
 		PROCESS_INFORMATION pi = {};
-		if (!CreateProcessW(appPathW.c_str(), nullptr, nullptr, nullptr, FALSE,
-			CREATE_SUSPENDED, nullptr, appDirW.c_str(), &si, &pi))
+		if (!CreateProcessW(exePathW.c_str(), nullptr, nullptr, nullptr, FALSE,
+			CREATE_SUSPENDED, nullptr, exeDirW.c_str(), &si, &pi))
 			BASE_THROW(base::win::WindowsError());
 		base::win::Process process(pi.hProcess);
 		base::win::Thread thread(pi.hThread);

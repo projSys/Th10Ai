@@ -65,10 +65,18 @@ namespace th
 	HRESULT MyDirectInputDevice8A::GetDeviceState(DWORD cbData, LPVOID lpvData)
 	{
 		HRESULT hr = m_device->GetDeviceState(cbData, lpvData);
-
-		if (g_th10Ai != nullptr)
-			g_th10Ai->commitInput(cbData, lpvData);
-
+		if (SUCCEEDED(hr))
+		{
+			try
+			{
+				if (g_th10Ai != nullptr)
+					g_th10Ai->commitInput(cbData, lpvData);
+			}
+			catch (...)
+			{
+				BASE_LOG_ERROR(PrintException());
+			}
+		}
 		return hr;
 	}
 
