@@ -17,17 +17,17 @@ namespace th
 	{
 		if (slow)
 		{
-			pos += MOVE_SPEED_LOW[enum_cast(dir)];
+			pos += MOVE_SPEED_LOW[to_underlying(dir)];
 		}
 		else
 		{
 			if (isMarisa())
 			{
-				pos += MOVE_SPEED_MARISA[enum_cast(dir)];
+				pos += MOVE_SPEED_MARISA[to_underlying(dir)];
 			}
 			else
 			{
-				pos += MOVE_SPEED_HIGH[enum_cast(dir)];
+				pos += MOVE_SPEED_HIGH[to_underlying(dir)];
 			}
 		}
 	}

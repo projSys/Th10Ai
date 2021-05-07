@@ -2,6 +2,8 @@
 
 #include "Th10Hook/Common.h"
 
+#include <algorithm>
+
 #include "Th10Hook/Math/Vector2.h"
 #include "Th10Hook/Math/AABB.h"
 #include "Th10Hook/Math/OBB.h"

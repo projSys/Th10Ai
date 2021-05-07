@@ -6,10 +6,4 @@
 
 namespace base
 {
-	class String
-	{
-	public:
-		static bool IsEmpty(const char* str);
-		static bool IsEmpty(const wchar_t* wstr);
-	};
 }

@@ -151,17 +151,13 @@
     <ClInclude Include="include\Base\Exception.h" />
     <ClInclude Include="include\Base\FuncTraits.h" />
     <ClInclude Include="include\Base\Logger.h" />
-    <ClInclude Include="include\Base\Object.h" />
-    <ClInclude Include="include\Base\RefCounted.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\Singleton.h" />
     <ClInclude Include="include\Base\SourceLocation.h" />
     <ClInclude Include="include\Base\String.h" />
-    <ClInclude Include="include\Base\StrongPtr.h" />
     <ClInclude Include="include\Base\Time.h" />
     <ClInclude Include="include\Base\Types.h" />
     <ClInclude Include="include\Base\TypeTraits.h" />
-    <ClInclude Include="include\Base\WeakPtr.h" />
     <ClInclude Include="include\Base\Windows\Apis.h" />
     <ClInclude Include="include\Base\Windows\Common.h" />
     <ClInclude Include="include\Base\Windows\Handle.h" />
@@ -174,10 +170,7 @@
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Logger.cpp" />
-    <ClCompile Include="src\Base\Object.cpp" />
-    <ClCompile Include="src\Base\RefCounted.cpp" />
     <ClCompile Include="src\Base\SourceLocation.cpp" />
-    <ClCompile Include="src\Base\String.cpp" />
     <ClCompile Include="src\Base\Time.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />
     <ClCompile Include="src\Base\Windows\Handle.cpp" />

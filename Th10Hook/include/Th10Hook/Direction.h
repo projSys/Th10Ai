@@ -2,6 +2,8 @@
 
 #include "Th10Hook/Common.h"
 
+#include <Base/TypeTraits.h>
+
 namespace th
 {
 	// ÒÆ¶¯·½Ïò
@@ -20,7 +22,7 @@ namespace th
 		MAX_COUNT
 	};
 
-	constexpr DIR DIRS[enum_cast(DIR::MAX_COUNT)] =
+	constexpr DIR DIRS[to_underlying(DIR::MAX_COUNT)] =
 	{
 		DIR::HOLD,
 		DIR::UP,

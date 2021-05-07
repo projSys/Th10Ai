@@ -14,7 +14,7 @@ namespace th
 		static constexpr vec2 INIT_POS = { 0, 400 };
 
 		// 3.53 = 5 * sqrt(0.5)
-		static constexpr vec2 MOVE_SPEED_MARISA[enum_cast(DIR::MAX_COUNT)] =
+		static constexpr vec2 MOVE_SPEED_MARISA[to_underlying(DIR::MAX_COUNT)] =
 		{
 			vec2(0, 0),
 			vec2(0, -5),
@@ -28,7 +28,7 @@ namespace th
 		};
 
 		// 3.18 = 4.5 * sqrt(0.5)
-		static constexpr vec2 MOVE_SPEED_HIGH[enum_cast(DIR::MAX_COUNT)] =
+		static constexpr vec2 MOVE_SPEED_HIGH[to_underlying(DIR::MAX_COUNT)] =
 		{
 			vec2(0, 0),
 			vec2(0, -4.5f),
@@ -42,7 +42,7 @@ namespace th
 		};
 
 		// 1.41 = 2 * sqrt(0.5)
-		static constexpr vec2 MOVE_SPEED_LOW[enum_cast(DIR::MAX_COUNT)] =
+		static constexpr vec2 MOVE_SPEED_LOW[to_underlying(DIR::MAX_COUNT)] =
 		{
 			vec2(0, 0),
 			vec2(0, -2),

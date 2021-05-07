@@ -36,12 +36,6 @@
     <ClInclude Include="include\Base\Logger.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Object.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\RefCounted.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\ScopeGuard.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -54,9 +48,6 @@
     <ClInclude Include="include\Base\String.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\StrongPtr.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Time.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -64,9 +55,6 @@
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\TypeTraits.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\WeakPtr.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Windows\Apis.h">
@@ -104,16 +92,7 @@
     <ClCompile Include="src\Base\Logger.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Object.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\RefCounted.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\SourceLocation.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\String.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Time.cpp">

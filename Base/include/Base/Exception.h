@@ -32,12 +32,12 @@ namespace base
 
 #ifdef BASE_WINDOWS
 #define BASE_THROW(ex) { \
-	base::SourceLocation sourceLocation(__FUNCTION__, __FILE__, __LINE__); \
+	BASE_CURRENT_LOCATION; \
 	base::win::StackTrace stackTrace; \
 	throw ex; }
 #else
 #define BASE_THROW(ex) { \
-	base::SourceLocation sourceLocation(__FUNCTION__, __FILE__, __LINE__); \
+	BASE_CURRENT_LOCATION; \
 	throw ex; }
 #endif
 

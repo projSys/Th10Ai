@@ -2,9 +2,8 @@
 
 #include "Base/Common.h"
 
-#include <cstddef>
+#include <cstddef>	// nullptr_t
 #include <cstdint>
-#include <type_traits>
 
 namespace base
 {
@@ -25,10 +24,4 @@ namespace base
 	using uint_t = uint32_t;
 	using float_t = float32_t;
 #endif
-
-	template <typename T>
-	constexpr std::underlying_type_t<T> enum_cast(T enumerator)
-	{
-		return static_cast<std::underlying_type_t<T>>(enumerator);
-	}
 }

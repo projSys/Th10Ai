@@ -1,5 +1,6 @@
 #include "Base/Windows/Apis.h"
 
+#include "Base/TypeTraits.h"
 #include "Base/Windows/WindowsError.h"
 
 namespace base
@@ -47,7 +48,7 @@ namespace base
 
 		std::wstring Apis::Utf8ToWide(const char* str)
 		{
-			if (String::IsEmpty(str))
+			if (is_empty_string(str))
 				return std::wstring();
 
 			return MultiByteToWideChar(CP_UTF8, str, -1);
@@ -63,7 +64,7 @@ namespace base
 
 		std::string Apis::WideToUtf8(const wchar_t* wstr)
 		{
-			if (String::IsEmpty(wstr))
+			if (is_empty_string(wstr))
 				return std::string();
 
 			return WideCharToMultiByte(CP_UTF8, wstr, -1);
@@ -79,7 +80,7 @@ namespace base
 
 		std::wstring Apis::AnsiToWide(const char* str)
 		{
-			if (String::IsEmpty(str))
+			if (is_empty_string(str))
 				return std::wstring();
 
 			return MultiByteToWideChar(CP_ACP, str, -1);
@@ -95,7 +96,7 @@ namespace base
 
 		std::string Apis::WideToAnsi(const wchar_t* wstr)
 		{
-			if (String::IsEmpty(wstr))
+			if (is_empty_string(wstr))
 				return std::string();
 
 			return WideCharToMultiByte(CP_ACP, wstr, -1);

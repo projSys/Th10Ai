@@ -44,8 +44,8 @@ namespace th
 		static float_t CalcNearScore(vec2 player, vec2 target);
 		static float_t CalcShootScore(vec2 player, vec2 target);
 
-		static const DIR FIND_DIRS[enum_cast(DIR::MAX_COUNT)][5];
-		static const int_t FIND_DIR_COUNTS[enum_cast(DIR::MAX_COUNT)];
+		static const DIR FIND_DIRS[to_underlying(DIR::MAX_COUNT)][5];
+		static const int_t FIND_DIR_COUNTS[to_underlying(DIR::MAX_COUNT)];
 		static const int_t FIND_LIMIT;
 		static const float_t FIND_DEPTH;
 		static const vec2 RESET_POS;

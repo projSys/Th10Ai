@@ -2,7 +2,7 @@
 
 namespace th
 {
-	const DIR Path::FIND_DIRS[enum_cast(DIR::MAX_COUNT)][5] =
+	const DIR Path::FIND_DIRS[to_underlying(DIR::MAX_COUNT)][5] =
 	{
 		// DIR::HOLD
 		{ DIR::HOLD,      DIR::UP,       DIR::DOWN,      DIR::LEFT,      DIR::RIGHT,     },//DIR::LEFTUP,  DIR::RIGHTUP,  DIR::LEFTDOWN,  DIR::RIGHTDOWN },
@@ -24,7 +24,7 @@ namespace th
 		{ DIR::RIGHTDOWN, DIR::RIGHT,    DIR::DOWN,      DIR::RIGHTUP,   DIR::LEFTDOWN,  },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      }
 	};
 
-	const int_t Path::FIND_DIR_COUNTS[enum_cast(DIR::MAX_COUNT)] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
+	const int_t Path::FIND_DIR_COUNTS[to_underlying(DIR::MAX_COUNT)] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
 	const int_t Path::FIND_LIMIT = 50;
 	const float_t Path::FIND_DEPTH = 30;
@@ -125,10 +125,10 @@ namespace th
 		if (avg > m_bestScore)
 			m_bestScore = avg;
 
-		int_t nextValidCount = FIND_DIR_COUNTS[enum_cast(m_dir)];
-		for (int_t i = 0; i < FIND_DIR_COUNTS[enum_cast(m_dir)]; ++i)
+		int_t nextValidCount = FIND_DIR_COUNTS[to_underlying(m_dir)];
+		for (int_t i = 0; i < FIND_DIR_COUNTS[to_underlying(m_dir)]; ++i)
 		{
-			DIR dir = FIND_DIRS[enum_cast(m_dir)][i];
+			DIR dir = FIND_DIRS[to_underlying(m_dir)][i];
 
 			Action nextAct = {};
 			nextAct.fromPos = player.pos;
