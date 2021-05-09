@@ -3,7 +3,6 @@
 #include "Base/Common.h"
 
 #include <ostream>
-#include<boost/assert/source_location.hpp>
 
 #include "Base/Types.h"
 #include "Base/Singleton.h"

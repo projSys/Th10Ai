@@ -8,25 +8,27 @@ namespace th
 	//todo 大玉有问题
 	bool Scene::IsInScene(const vec2& pos)
 	{
-		return pos.x >= -192 && pos.x <= 191 && pos.y >= 0 && pos.y <= 447;
+		return pos.x >= _F(-192.0) && pos.x <= _F(191.0)
+			&& pos.y >= _F(0.0) && pos.y <= _F(447.0);
 	}
 
 	bool Scene::IsInPlayerRegion(const vec2& pos)
 	{
-		return pos.x >= -184 && pos.x <= 183 && pos.y >= 32 && pos.y <= 431;
+		return pos.x >= _F(-184.0) && pos.x <= _F(183.0)
+			&& pos.y >= _F(32.0) && pos.y <= _F(431.0);
 	}
 
 	vec2 Scene::FixPlayerPos(const vec2& pos)
 	{
 		vec2 ret = pos;
-		if (ret.x < -184)
-			ret.x = -184;
-		if (ret.x > 183)
-			ret.x = 183;
-		if (ret.y < 32)
-			ret.y = 32;
-		if (ret.y > 431)
-			ret.y = 431;
+		if (ret.x < _F(-184.0))
+			ret.x = _F(-184.0);
+		if (ret.x > _F(183.0))
+			ret.x = _F(183.0);
+		if (ret.y < _F(32.0))
+			ret.y = _F(32.0);
+		if (ret.y > _F(431.0))
+			ret.y = _F(431.0);
 		return ret;
 	}
 
@@ -43,7 +45,7 @@ namespace th
 	}
 
 	Scene::Scene() :
-		m_region(vec2(0, 224), SIZE)
+		m_region(vec2(_F(0.0), _F(224.0)), SIZE)
 	{
 		m_region.split(4);
 	}

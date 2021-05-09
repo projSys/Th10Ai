@@ -6,8 +6,8 @@
 
 namespace th
 {
-	class AABB;
 	class Laser;
+	class AABB;
 
 	class OBB
 	{

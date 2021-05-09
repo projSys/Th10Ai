@@ -11,48 +11,48 @@ namespace th
 		public Entity
 	{
 	public:
-		static constexpr vec2 INIT_POS = { 0, 400 };
+		static constexpr vec2 INIT_POS = vec2(_F(0.0), _F(400.0));
 
 		// 3.53 = 5 * sqrt(0.5)
 		static constexpr vec2 MOVE_SPEED_MARISA[to_underlying(DIR::MAX_COUNT)] =
 		{
-			vec2(0, 0),
-			vec2(0, -5),
-			vec2(0, 5),
-			vec2(-5, 0),
-			vec2(5, 0),
-			vec2(-3.53f, -3.53f),
-			vec2(3.53f, -3.53f),
-			vec2(-3.53f, 3.53f),
-			vec2(3.53f, 3.53f)
+			vec2(_F(0.0), _F(0.0)),
+			vec2(_F(0.0), _F(-5.0)),
+			vec2(_F(0.0), _F(5.0)),
+			vec2(_F(-5.0), _F(0.0)),
+			vec2(_F(5.0), _F(0.0)),
+			vec2(_F(-3.53), _F(-3.53)),
+			vec2(_F(3.53), _F(-3.53)),
+			vec2(_F(-3.53), _F(3.53)),
+			vec2(_F(3.53), _F(3.53))
 		};
 
 		// 3.18 = 4.5 * sqrt(0.5)
 		static constexpr vec2 MOVE_SPEED_HIGH[to_underlying(DIR::MAX_COUNT)] =
 		{
-			vec2(0, 0),
-			vec2(0, -4.5f),
-			vec2(0, 4.5f),
-			vec2(-4.5f, 0),
-			vec2(4.5f, 0),
-			vec2(-3.18f, -3.18f),
-			vec2(3.18f, -3.18f),
-			vec2(-3.18f, 3.18f),
-			vec2(3.18f, 3.18f)
+			vec2(_F(0.0), _F(0.0)),
+			vec2(_F(0.0), _F(-4.5)),
+			vec2(_F(0.0), _F(4.5)),
+			vec2(_F(-4.5), _F(0.0)),
+			vec2(_F(4.5), _F(0.0)),
+			vec2(_F(-3.18), _F(-3.18)),
+			vec2(_F(3.18), _F(-3.18)),
+			vec2(_F(-3.18), _F(3.18)),
+			vec2(_F(3.18), _F(3.18))
 		};
 
 		// 1.41 = 2 * sqrt(0.5)
 		static constexpr vec2 MOVE_SPEED_LOW[to_underlying(DIR::MAX_COUNT)] =
 		{
-			vec2(0, 0),
-			vec2(0, -2),
-			vec2(0, 2),
-			vec2(-2, 0),
-			vec2(2, 0),
-			vec2(-1.41f, -1.41f),
-			vec2(1.41f, -1.41f),
-			vec2(-1.41f, 1.41f),
-			vec2(1.41f, 1.41f)
+			vec2(_F(0.0), _F(0.0)),
+			vec2(_F(0.0), _F(-2.0)),
+			vec2(_F(0.0), _F(2.0)),
+			vec2(_F(-2.0), _F(0.0)),
+			vec2(_F(2.0), _F(0.0)),
+			vec2(_F(-1.41), _F(-1.41)),
+			vec2(_F(1.41), _F(-1.41)),
+			vec2(_F(-1.41), _F(1.41)),
+			vec2(_F(1.41), _F(1.41))
 		};
 
 		Player();

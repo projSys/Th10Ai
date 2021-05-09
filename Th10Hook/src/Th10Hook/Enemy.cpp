@@ -8,6 +8,6 @@ namespace th
 
 	bool Enemy::isBoss() const
 	{
-		return size == vec2(32, 32);
+		return size == vec2(_F(32.0), _F(32.0));
 	}
 }

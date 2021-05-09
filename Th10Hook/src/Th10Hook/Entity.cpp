@@ -25,8 +25,8 @@ namespace th
 
 	bool Entity::collide(const Entity& other) const
 	{
-		return std::abs(pos.x - other.pos.x) < (size.x + other.size.x) / 2
-			&& std::abs(pos.y - other.pos.y) < (size.y + other.size.y) / 2;
+		return std::abs(pos.x - other.pos.x) < (size.x + other.size.x) / _F(2.0)
+			&& std::abs(pos.y - other.pos.y) < (size.y + other.size.y) / _F(2.0);
 		//return AABB(*this).collide(AABB(other));
 	}
 
@@ -59,21 +59,21 @@ namespace th
 
 	vec2 Entity::getLeftTop() const
 	{
-		return vec2(pos.x - size.x / 2, pos.y - size.y / 2);
+		return vec2(pos.x - size.x / _F(2.0), pos.y - size.y / _F(2.0));
 	}
 
 	vec2 Entity::getRightTop() const
 	{
-		return vec2(pos.x + size.x / 2, pos.y - size.y / 2);
+		return vec2(pos.x + size.x / _F(2.0), pos.y - size.y / _F(2.0));
 	}
 
 	vec2 Entity::getLeftBottom() const
 	{
-		return vec2(pos.x - size.x / 2, pos.y + size.y / 2);
+		return vec2(pos.x - size.x / _F(2.0), pos.y + size.y / _F(2.0));
 	}
 
 	vec2 Entity::getRightBottom() const
 	{
-		return vec2(pos.x + size.x / 2, pos.y + size.y / 2);
+		return vec2(pos.x + size.x / _F(2.0), pos.y + size.y / _F(2.0));
 	}
 }

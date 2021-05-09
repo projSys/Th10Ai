@@ -24,4 +24,27 @@ namespace base
 	using uint_t = uint32_t;
 	using float_t = float32_t;
 #endif
+
+#define _I8(x) INT8_C(x)
+#define _I16(x) INT16_C(x)
+#define _I32(x) INT32_C(x)
+#define _I64(x) INT64_C(x)
+
+#define _UI8(x) UINT8_C(x)
+#define _UI16(x) UINT16_C(x)
+#define _UI32(x) UINT32_C(x)
+#define _UI64(x) UINT64_C(x)
+
+#define _F32(x) (x ## F)
+#define _F64(x) (x)
+
+#ifdef BASE_64BIT
+#define _I(x) _I64(x)
+#define _UI(x) _UI64(x)
+#define _F(x) _F64(x)
+#else
+#define _I(x) _I32(x)
+#define _UI(x) _UI32(x)
+#define _F(x) _F32(x)
+#endif
 }

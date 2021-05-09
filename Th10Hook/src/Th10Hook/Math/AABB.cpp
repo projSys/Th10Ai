@@ -16,8 +16,8 @@ namespace th
 		rightTop = entity.getRightTop();
 		leftBottom = entity.getLeftBottom();
 		rightBottom = entity.getRightBottom();
-		axisX = vec2(1, 0);
-		axisY = vec2(0, 1);
+		axisX = vec2(_F(1.0), _F(0.0));
+		axisY = vec2(_F(0.0), _F(1.0));
 	}
 
 	bool AABB::collide(const AABB& other) const

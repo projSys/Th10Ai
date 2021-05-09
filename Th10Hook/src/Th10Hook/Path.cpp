@@ -28,7 +28,7 @@ namespace th
 
 	const int_t Path::FIND_LIMIT = 50;
 	const float_t Path::FIND_DEPTH = 30;
-	const vec2 Path::RESET_POS = { 0, 431 };
+	const vec2 Path::RESET_POS = vec2(_F(0.0), _F(431.0));
 
 	Path::Path(Status& status, Scene& scene,
 		const boost::optional<Item>& itemTarget,
@@ -104,15 +104,15 @@ namespace th
 
 		if (m_itemTarget.has_value())
 		{
-			result.score += CalcNearScore(player.pos, m_itemTarget.value().pos) * 100;
+			result.score += CalcNearScore(player.pos, m_itemTarget.value().pos) * _F(100.0);
 		}
 		else if (m_enemyTarget.has_value())
 		{
-			result.score += CalcShootScore(player.pos, m_enemyTarget.value().pos) * 100;
+			result.score += CalcShootScore(player.pos, m_enemyTarget.value().pos) * _F(100.0);
 		}
 		else
 		{
-			result.score += CalcNearScore(player.pos, RESET_POS) * 100;
+			result.score += CalcNearScore(player.pos, RESET_POS) * _F(100.0);
 		}
 
 		//if (ccr.minDistance > 8)
@@ -169,7 +169,7 @@ namespace th
 
 	float_t Path::CalcFarScore(vec2 player, vec2 target)
 	{
-		float_t score = 0;
+		float_t score = _F(0.0);
 
 		// 坐标原点移到左上角
 		player += Scene::ORIGIN_POINT_OFFSET;
@@ -177,21 +177,21 @@ namespace th
 
 		// 距离越远得分越高
 		if (player.x < target.x)
-			score += 0.5f * ((target.x - player.x) / target.x);
+			score += _F(0.5) * ((target.x - player.x) / target.x);
 		else
-			score += 0.5f * ((player.x - target.x) / (Scene::SIZE.x - target.x));
+			score += _F(0.5) * ((player.x - target.x) / (Scene::SIZE.x - target.x));
 
 		if (player.y < target.y)
-			score += 0.5f * ((target.y - player.y) / target.y);
+			score += _F(0.5) * ((target.y - player.y) / target.y);
 		else
-			score += 0.5f * ((player.y - target.y) / (Scene::SIZE.y - target.y));
+			score += _F(0.5) * ((player.y - target.y) / (Scene::SIZE.y - target.y));
 
 		return score;
 	}
 
 	float_t Path::CalcNearScore(vec2 player, vec2 target)
 	{
-		float_t score = 0;
+		float_t score = _F(0.0);
 
 		// 坐标原点移到左上角
 		player += Scene::ORIGIN_POINT_OFFSET;
@@ -199,21 +199,21 @@ namespace th
 
 		// 距离越近得分越高
 		if (player.x < target.x)
-			score += 0.5f * (1 - (target.x - player.x) / target.x);
+			score += _F(0.5) * (1 - (target.x - player.x) / target.x);
 		else
-			score += 0.5f * (1 - (player.x - target.x) / (Scene::SIZE.x - target.x));
+			score += _F(0.5) * (1 - (player.x - target.x) / (Scene::SIZE.x - target.x));
 
 		if (player.y < target.y)
-			score += 0.5f * (1 - (target.y - player.y) / target.y);
+			score += _F(0.5) * (1 - (target.y - player.y) / target.y);
 		else
-			score += 0.5f * (1 - (player.y - target.y) / (Scene::SIZE.y - target.y));
+			score += _F(0.5) * (1 - (player.y - target.y) / (Scene::SIZE.y - target.y));
 
 		return score;
 	}
 
 	float_t Path::CalcShootScore(vec2 player, vec2 target)
 	{
-		float_t score = 0;
+		float_t score = _F(0.0);
 
 		// 坐标原点移到左上角
 		player += Scene::ORIGIN_POINT_OFFSET;
@@ -221,15 +221,15 @@ namespace th
 
 		// 距离越近得分越高
 		if (player.x < target.x)
-			score += 0.5f * (1 - (target.x - player.x) / target.x);
+			score += _F(0.5) * (1 - (target.x - player.x) / target.x);
 		else
-			score += 0.5f * (1 - (player.x - target.x) / (Scene::SIZE.x - target.x));
+			score += _F(0.5) * (1 - (player.x - target.x) / (Scene::SIZE.x - target.x));
 
 		// 距离越远得分越高
 		if (player.y < target.y)
-			score = -1;
+			score += _F(-1.0);
 		else
-			score += 0.5f * ((player.y - target.y) / (Scene::SIZE.y - target.y));
+			score += _F(0.5) * ((player.y - target.y) / (Scene::SIZE.y - target.y));
 
 		return score;
 	}

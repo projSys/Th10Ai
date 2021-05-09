@@ -57,33 +57,33 @@ namespace th
 
 	vec2 Laser::getCenter() const
 	{
-		return vec2(pos.x, pos.y + size.y / 2);
+		return vec2(pos.x, pos.y + size.y / _F(2.0));
 	}
 
 	vec2 Laser::getLeftTop() const
 	{
-		return vec2(pos.x - size.x / 2, pos.y);
+		return vec2(pos.x - size.x / _F(2.0), pos.y);
 	}
 
 	vec2 Laser::getRightTop() const
 	{
-		return vec2(pos.x + size.x / 2, pos.y);
+		return vec2(pos.x + size.x / _F(2.0), pos.y);
 	}
 
 	vec2 Laser::getLeftBottom() const
 	{
-		return vec2(pos.x - size.x / 2, pos.y + size.y);
+		return vec2(pos.x - size.x / _F(2.0), pos.y + size.y);
 	}
 
 	vec2 Laser::getRightBottom() const
 	{
-		return vec2(pos.x + size.x / 2, pos.y + size.y);
+		return vec2(pos.x + size.x / _F(2.0), pos.y + size.y);
 	}
 
 	float_t Laser::getRadian() const
 	{
 		// emmm...ÄãËµÕâ¸öË­¶®°¡£¿
-		float_t radian = arc - static_cast<float_t>(M_PI) * 5 / 2;
+		float_t radian = arc - static_cast<float_t>(M_PI) * _F(5.0) / _F(2.0);
 		return radian;
 	}
 }

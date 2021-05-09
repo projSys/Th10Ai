@@ -18,8 +18,8 @@ namespace th
 		rightTop = laser.pos + (laser.getRightTop() - laser.pos).rotate(radian);
 		leftBottom = laser.pos + (laser.getLeftBottom() - laser.pos).rotate(radian);
 		rightBottom = laser.pos + (laser.getRightBottom() - laser.pos).rotate(radian);
-		axisX = vec2(1, 0).rotate(radian);
-		axisY = vec2(0, 1).rotate(radian);
+		axisX = vec2(_F(1.0), _F(0.0)).rotate(radian);
+		axisY = vec2(_F(0.0), _F(1.0)).rotate(radian);
 	}
 
 	bool OBB::collide(const AABB& other) const

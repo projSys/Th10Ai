@@ -24,7 +24,4 @@ namespace th
 
 #include <iostream>
 
-//#pragma warning(disable:4244)
-//#pragma warning(disable:4305)
-
 #define RENDER 0

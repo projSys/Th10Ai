@@ -23,13 +23,13 @@ namespace th
 
 		if (size.x > size.y)
 		{
-			m_first = std::make_unique<Region>(vec2(pos.x - size.x / 4, pos.y), vec2(size.x / 2, size.y));
-			m_second = std::make_unique<Region>(vec2(pos.x + size.x / 4, pos.y), vec2(size.x / 2, size.y));
+			m_first = std::make_unique<Region>(vec2(pos.x - size.x / _F(4.0), pos.y), vec2(size.x / _F(2.0), size.y));
+			m_second = std::make_unique<Region>(vec2(pos.x + size.x / _F(4.0), pos.y), vec2(size.x / _F(2.0), size.y));
 		}
 		else
 		{
-			m_first = std::make_unique<Region>(vec2(pos.x, pos.y - size.y / 4), vec2(size.x, size.y / 2));
-			m_second = std::make_unique<Region>(vec2(pos.x, pos.y + size.y / 4), vec2(size.x, size.y / 2));
+			m_first = std::make_unique<Region>(vec2(pos.x, pos.y - size.y / _F(4.0)), vec2(size.x, size.y / _F(2.0)));
+			m_second = std::make_unique<Region>(vec2(pos.x, pos.y + size.y / _F(4.0)), vec2(size.x, size.y / _F(2.0)));
 		}
 
 		m_first->split(times - 1);

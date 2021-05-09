@@ -8,6 +8,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <boost/optional.hpp>
+#include <Base/Clock.h>
 
 #if RENDER
 #include <opencv2/opencv.hpp>
@@ -73,9 +74,9 @@ namespace th
 		Scene m_scene1;
 		Scene m_scene;
 
-		int64_t m_bombTime;
+		Time m_bombTime;
 		int_t m_bombCount;
-		int64_t m_findItemTime;
+		Time m_findItemTime;
 
 		Input m_input;
 		std::atomic<bool> m_inputUpdated;

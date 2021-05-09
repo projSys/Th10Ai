@@ -1,7 +1,6 @@
 #include "Th10Hook/Th10Ai.h"
 
 #include <set>
-#include <Base/Time.h>
 #include <Base/Windows/Apis.h>
 
 #include "Th10Hook/Path.h"
@@ -107,7 +106,7 @@ namespace th
 			}
 			else
 			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(16));
+				std::this_thread::sleep_for(16ms);
 			}
 		}
 	}
@@ -141,7 +140,7 @@ namespace th
 			}
 			else
 			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(16));
+				std::this_thread::sleep_for(16ms);
 			}
 		}
 	}
@@ -333,8 +332,8 @@ namespace th
 	{
 		if (m_readableStatus->getPlayer().isColliding())
 		{
-			int64_t now = Time::Now().getMilliSeconds();
-			if (now - m_bombTime > 1000)
+			Time now = Clock::Now();
+			if (now - m_bombTime > 1000ms)
 			{
 				m_bombTime = now;
 
@@ -498,9 +497,9 @@ namespace th
 		if (items.empty())
 			return target;
 
-		int64_t now = Time::Now().getMilliSeconds();
+		Time now = Clock::Now();
 		// 拾取冷却中
-		if (now - m_findItemTime < 3000)
+		if (now - m_findItemTime < 3000ms)
 			return target;
 
 		// 自机高于1/4屏

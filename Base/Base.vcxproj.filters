@@ -48,9 +48,6 @@
     <ClInclude Include="include\Base\String.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Time.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Types.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -84,6 +81,9 @@
     <ClInclude Include="include\Base\FuncTraits.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Clock.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -93,9 +93,6 @@
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\SourceLocation.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\Time.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Windows\Apis.cpp">
@@ -118,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="src\Base\Windows\WindowsError.cpp">
       <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Clock.cpp">
+      <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

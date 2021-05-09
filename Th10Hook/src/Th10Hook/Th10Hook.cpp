@@ -18,10 +18,10 @@ namespace th
 
 		player.pos.x = raw->x;
 		player.pos.y = raw->y;
-		player.delta.x = static_cast<float_t>(raw->dx) / 100;
-		player.delta.y = static_cast<float_t>(raw->dy) / 100;
-		player.size.x = raw->width * 2;
-		player.size.y = raw->height * 2;
+		player.delta.x = static_cast<float_t>(raw->dx) / _F(100.0);
+		player.delta.y = static_cast<float_t>(raw->dy) / _F(100.0);
+		player.size.x = raw->width * _F(2.0);
+		player.size.y = raw->height * _F(2.0);
 		player.status = raw->status;
 		player.invincibleTime = raw->invincibleTime;
 		player.slow = raw->slow;
@@ -52,12 +52,12 @@ namespace th
 		//player.invincibleTime = ReadMemory<int32_t>(baseAddr + 0x4310);
 		//player.slow = ReadMemory<int32_t>(baseAddr + 0x4474);
 
-		player.powers = ReadMemory<int32_t>(0x00474C48) / 20.0f;
+		player.powers = ReadMemory<int32_t>(0x00474C48) / _F(20.0);
 		player.type = ReadMemory<int32_t>(0x00474C68);
 		player.lives = ReadMemory<int32_t>(0x00474C70) + 1;
 		player.itemObtainRange = ReadMemory<float32_t>(0x00476FB0) + player.type * 4;
 		if (player.slow)
-			player.itemObtainRange *= 2.5f;
+			player.itemObtainRange *= _F(2.5);
 
 		player.stageFrame = ReadMemory<int32_t>(0x00474C88);
 
@@ -89,8 +89,8 @@ namespace th
 				item.delta.x = ReadMemory<float32_t>(ebp + 0xC);
 				item.delta.y = ReadMemory<float32_t>(ebp + 0x10);
 				// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
-				item.size.x = 6;
-				item.size.y = 6;
+				item.size.x = _F(6.0);
+				item.size.y = _F(6.0);
 				item.type = ReadMemory<int32_t>(ebp + 0x34);
 
 				//item.id = i;
