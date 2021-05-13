@@ -10,17 +10,17 @@ namespace th
 	class Entity;
 
 	// ¼¤¹â½á¹¹
-	// (x,y)
-	// +-*-+
-	// |   |
-	// |   |
-	// |   |
-	// |   | h
-	// |   |
-	// |   |
-	// |   |
-	// +---+
-	//   w
+	//  (x,y)
+	// +--*--+
+	// |     |
+	// |     |
+	// |     |
+	// |     | h
+	// |     |
+	// |     |
+	// |     |
+	// +-----+
+	//    w
 	class Laser
 	{
 	public:
@@ -35,7 +35,6 @@ namespace th
 		bool isHolding() const;
 		void advance(float_t frame);
 
-		vec2 getCenter() const;
 		vec2 getLeftTop() const;
 		vec2 getRightTop() const;
 		vec2 getLeftBottom() const;

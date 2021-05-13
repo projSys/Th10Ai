@@ -2,18 +2,35 @@
 
 #include "Base/Windows/Common.h"
 
+#include <utility>
+
 #include "Base/Windows/Handle.h"
-#include "Base/Windows/Thread.h"
+
+namespace boost
+{
+	namespace filesystem
+	{
+		class path;
+	}
+}
 
 namespace base
 {
 	namespace win
 	{
+		namespace fs = boost::filesystem;
+
+		class Thread;
+
 		class Process :
 			public Handle
 		{
 		public:
-			//static Process Create();
+			static std::pair<Process, Thread> Create(const fs::path& applicationName,
+				LPWSTR commandLine, LPSECURITY_ATTRIBUTES processAttributes,
+				LPSECURITY_ATTRIBUTES threadAttributes, BOOL inheritHandles,
+				DWORD creationFlags, LPVOID environment, const fs::path& currentDirectory,
+				LPSTARTUPINFOW startupInfo);
 			static Process Open(DWORD desiredAccess, BOOL inheritHandle, DWORD processId);
 
 			using Handle::Handle;

@@ -4,7 +4,8 @@ namespace base
 {
 	Time Clock::Now()
 	{
-		chrono::steady_clock::time_point tp = chrono::steady_clock::now();
-		return tp.time_since_epoch();
+		return chr::duration_cast<Time>(
+			chr::steady_clock::now()
+			.time_since_epoch());
 	}
 }

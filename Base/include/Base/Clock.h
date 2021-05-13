@@ -6,10 +6,9 @@
 
 namespace base
 {
-	namespace chrono = std::chrono;
-	using namespace std::chrono_literals;
+	namespace chr = std::chrono;
 
-	using Time = chrono::steady_clock::duration;
+	using Time = chr::milliseconds;
 
 	class Clock
 	{

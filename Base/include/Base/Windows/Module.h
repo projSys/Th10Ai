@@ -3,12 +3,21 @@
 #include "Base/Windows/Common.h"
 
 #include "Base/Types.h"
-#include "Base/String.h"
+
+namespace boost
+{
+	namespace filesystem
+	{
+		class path;
+	}
+}
 
 namespace base
 {
 	namespace win
 	{
+		namespace fs = boost::filesystem;
+
 		class Module
 		{
 		public:
@@ -18,8 +27,8 @@ namespace base
 			explicit Module(HMODULE module);
 			~Module();
 
-			std::string getPath() const;
-			std::string getDir() const;
+			fs::path getPath() const;
+			fs::path getDir() const;
 
 			FARPROC getProcAddress(const char* procName) const;
 

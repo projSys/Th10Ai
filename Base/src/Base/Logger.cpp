@@ -1,5 +1,6 @@
 #include "Base/Logger.h"
 
+#include <boost/filesystem.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/file.hpp>
 
@@ -12,7 +13,7 @@ namespace base
 	{
 	}
 
-	void Logger::addFileLog(const std::string& filePath)
+	void Logger::addFileLog(const fs::path& filePath)
 	{
 		log::add_file_log
 		(

@@ -19,13 +19,88 @@
 #include "Th10Hook/Scene.h"
 #include "Th10Hook/Input.h"
 
+#include <vector>
+
 namespace th
 {
 	struct Node
 	{
+		Node() :
+			valid(false),
+			dir(DIR::HOLD),
+			slow(false),
+			score(_F(0.0)),
+			parent(nullptr)
+		{
+		}
+
+		// 选择：逐层获取最高分的节点
+		Node* select()
+		{
+			Node* highestNode = this;
+			while (true)
+			{
+				if (highestNode->isLeaf())
+					break;
+
+				float_t highestScore = std::numeric_limits<float_t>::lowest();
+				Node* highestChild = nullptr;
+				for (Node& child : highestNode->children)
+				{
+					if (child.valid && child.score > highestScore)
+					{
+						highestScore = child.score;
+						highestChild = &child;
+					}
+				}
+				if (highestChild != nullptr)
+					highestNode = highestChild;
+			}
+			return highestNode;
+		}
+
+		// 扩展：扩展子节点，检测是否可行
+		void expand()
+		{
+			children.resize(to_underlying(DIR::MAX_COUNT));
+			for (Node& child : children)
+			{
+				child.parent = this;
+			}
+		}
+
+		// 模拟：计算节点得分
+		void simulate()
+		{
+
+		}
+
+		// 反向传播：更新到根节点路径上的节点数据
+		void backPropagate()
+		{
+
+		}
+
+		bool isRoot() const
+		{
+			return parent == nullptr;
+		}
+
+		bool isLeaf() const
+		{
+			return children.empty();
+		}
+
 		vec2 pos;
 		int_t frame;
+
+		bool valid;
+		DIR dir;
+		bool slow;
 		float_t score;
+
+		Node* parent;
+		std::vector<Node> children;
 	};
 
 	class Th10Ai
@@ -84,6 +159,8 @@ namespace th
 		std::atomic<int_t> inputFrame;
 		std::atomic<int_t> statusFrame;
 		std::atomic<int_t> handleFrame;
+
+		Node* m_root;
 
 #if RENDER
 		cv::Mat m_mat;

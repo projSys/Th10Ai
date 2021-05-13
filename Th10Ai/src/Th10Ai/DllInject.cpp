@@ -1,7 +1,8 @@
 #include "Th10Ai/DllInject.h"
 
+#include <boost/filesystem.hpp>
 #include <Base/ScopeGuard.h>
-#include <Base/Windows/Apis.h>
+#include <Base/Windows/WindowsError.h>
 #include <Base/Windows/Handle.h>
 #include <Base/Windows/Module.h>
 #include <Base/Windows/Thread.h>
@@ -28,12 +29,11 @@ namespace th
 			BASE_THROW(Exception(u8"请以管理员身份运行。"));
 	}
 
-	void DllInject::Inject(Process& process, const std::string& dllPath)
+	void DllInject::Inject(Process& process, const fs::path& dllPath)
 	{
-		std::wstring dllPathW = Apis::Utf8ToWide(dllPath);
-		uint_t sizeW = sizeof(wchar_t) * (dllPathW.size() + 1);
+		uint_t size = sizeof(fs::path::value_type) * (dllPath.size() + 1);
 
-		LPVOID memory = VirtualAllocEx(process, nullptr, sizeW, MEM_COMMIT | MEM_RESERVE,
+		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT | MEM_RESERVE,
 			PAGE_READWRITE);
 		if (memory == nullptr)
 			BASE_THROW(WindowsError());
@@ -43,10 +43,10 @@ namespace th
 			});
 
 		SIZE_T written = 0;
-		if (!WriteProcessMemory(process, memory, dllPathW.c_str(), sizeW, &written))
+		if (!WriteProcessMemory(process, memory, dllPath.c_str(), size, &written))
 			BASE_THROW(WindowsError());
-		if (written != sizeW)
-			BASE_THROW(Exception("written != sizeW."));
+		if (written != size)
+			BASE_THROW(Exception("written != size."));
 
 		Module kernel32Dll = Module::Get("kernel32.dll");
 		LPTHREAD_START_ROUTINE loadLibraryW =

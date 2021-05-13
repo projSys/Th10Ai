@@ -1,15 +1,33 @@
 #include "Base/Windows/Process.h"
 
+#include <boost/filesystem.hpp>
+
 #include "Base/Windows/WindowsError.h"
+#include "Base/Windows/Thread.h"
 
 namespace base
 {
 	namespace win
 	{
-		//Process Process::Create()
-		//{
-		//	CreateProcessW();
-		//}
+		std::pair<Process, Thread> Process::Create(const fs::path& applicationName,
+			LPWSTR commandLine, LPSECURITY_ATTRIBUTES processAttributes,
+			LPSECURITY_ATTRIBUTES threadAttributes, BOOL inheritHandles,
+			DWORD creationFlags, LPVOID environment, const fs::path& currentDirectory,
+			LPSTARTUPINFOW startupInfo)
+		{
+			STARTUPINFOW si = {};
+			si.cb = sizeof(si);
+			PROCESS_INFORMATION pi = {};
+
+			if (startupInfo == nullptr)
+				startupInfo = &si;
+
+			if (!CreateProcessW(applicationName.c_str(), commandLine, processAttributes,
+				threadAttributes, inheritHandles, creationFlags, environment,
+				currentDirectory.c_str(), startupInfo, &pi))
+				BASE_THROW(WindowsError());
+			return std::make_pair(Process(pi.hProcess), Thread(pi.hThread));
+		}
 
 		Process Process::Open(DWORD desiredAccess, BOOL inheritHandle, DWORD processId)
 		{

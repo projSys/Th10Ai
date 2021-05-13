@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <ostream>
 
-#include "Base/String.h"
 #include "Base/SourceLocation.h"
 #ifdef BASE_WINDOWS
 #include "Base/Windows/StackTrace.h"

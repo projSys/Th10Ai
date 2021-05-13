@@ -28,7 +28,8 @@ namespace th
 		m_inputUpdated(false),
 		inputFrame(0),
 		statusFrame(0),
-		handleFrame(0)
+		handleFrame(0),
+		m_root(nullptr)
 #if RENDER
 		, m_mat(cv::Size(640, 480), CV_8UC4)
 #endif
@@ -106,7 +107,7 @@ namespace th
 			}
 			else
 			{
-				std::this_thread::sleep_for(16ms);
+				std::this_thread::sleep_for(Time(16));
 			}
 		}
 	}
@@ -116,7 +117,7 @@ namespace th
 		if (!m_active)
 		{
 			m_active = true;
-			std::cout << "AI has started." << std::endl;
+			std::cout << "AI start." << std::endl;
 		}
 	}
 
@@ -125,7 +126,7 @@ namespace th
 		if (m_active)
 		{
 			m_active = false;
-			std::cout << "AI has stopped." << std::endl;
+			std::cout << "AI stop." << std::endl;
 			std::cout << "DeathBomb: " << m_bombCount << std::endl;
 		}
 	}
@@ -140,7 +141,7 @@ namespace th
 			}
 			else
 			{
-				std::this_thread::sleep_for(16ms);
+				std::this_thread::sleep_for(Time(16));
 			}
 		}
 	}
@@ -333,7 +334,7 @@ namespace th
 		if (m_readableStatus->getPlayer().isColliding())
 		{
 			Time now = Clock::Now();
-			if (now - m_bombTime > 1000ms)
+			if (now - m_bombTime > Time(1000))
 			{
 				m_bombTime = now;
 
@@ -398,8 +399,8 @@ namespace th
 		boost::optional<Item> itemTarget = findItem();
 		boost::optional<Enemy> enemyTarget = findEnemy();
 		bool underEnemy = m_readableStatus->isUnderEnemy();
-		////bool slowFirst = (!itemTarget.has_value() && underEnemy);
-		//bool slowFirst = false;
+		//bool slowFirst = (!itemTarget.has_value() && underEnemy);
+		bool slowFirst = false;
 
 		//std::set<Node> closedSet;
 		//std::set<Node> openSet;
@@ -499,7 +500,7 @@ namespace th
 
 		Time now = Clock::Now();
 		// 拾取冷却中
-		if (now - m_findItemTime < 3000ms)
+		if (now - m_findItemTime < Time(3000))
 			return target;
 
 		// 自机高于1/4屏

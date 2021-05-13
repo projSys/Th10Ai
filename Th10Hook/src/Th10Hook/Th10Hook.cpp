@@ -26,18 +26,6 @@ namespace th
 		player.invincibleTime = raw->invincibleTime;
 		player.slow = raw->slow;
 
-		//std::cout
-		//	<< ' ' << player.pos.x
-		//	<< ' ' << player.pos.y
-		//	<< ' ' << player.delta.x
-		//	<< ' ' << player.delta.y
-		//	<< ' ' << player.size.x
-		//	<< ' ' << player.size.y
-		//	<< ' ' << player.status
-		//	<< ' ' << player.invincibleTime
-		//	<< ' ' << player.slow
-		//	<< std::endl;
-
 		//uint32_t baseAddr = ReadMemory<uint32_t>(0x00477834);
 		//if (baseAddr == 0)
 		//	return false;

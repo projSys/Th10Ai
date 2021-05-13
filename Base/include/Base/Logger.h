@@ -2,18 +2,28 @@
 
 #include "Base/Common.h"
 
-#include <Base/String.h>
-#include <Base/Singleton.h>
+#include "Base/String.h"
+#include "Base/Singleton.h"
+
+namespace boost
+{
+	namespace filesystem
+	{
+		class path;
+	}
+}
 
 namespace base
 {
+	namespace fs = boost::filesystem;
+
 	class Logger :
 		public Singleton<Logger>
 	{
 	public:
 		Logger();
 
-		void addFileLog(const std::string& filePath);
+		void addFileLog(const fs::path& filePath);
 
 		void logTrace(const std::string& str);
 		void logDebug(const std::string& str);

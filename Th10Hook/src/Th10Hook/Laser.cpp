@@ -55,11 +55,6 @@ namespace th
 		pos += (delta * frame);
 	}
 
-	vec2 Laser::getCenter() const
-	{
-		return vec2(pos.x, pos.y + size.y / _F(2.0));
-	}
-
 	vec2 Laser::getLeftTop() const
 	{
 		return vec2(pos.x - size.x / _F(2.0), pos.y);

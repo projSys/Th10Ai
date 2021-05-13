@@ -9,8 +9,6 @@ namespace base
 {
 	namespace win
 	{
-		namespace filesystem = boost::filesystem;
-
 		Module Module::Get(const char* name)
 		{
 			std::wstring nameW = Apis::Utf8ToWide(name);
@@ -37,7 +35,7 @@ namespace base
 			//	FreeLibrary(m_module);
 		}
 
-		std::string Module::getPath() const
+		fs::path Module::getPath() const
 		{
 			WCHAR buffer[BUFFER_SIZE] = {};
 			DWORD ret = GetModuleFileNameW(m_module, buffer, BUFFER_SIZE - 1);
@@ -46,20 +44,12 @@ namespace base
 			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 				BASE_THROW(WindowsError());
 
-			return Apis::WideToUtf8(buffer);
+			return fs::path(buffer);
 		}
 
-		std::string Module::getDir() const
+		fs::path Module::getDir() const
 		{
-			WCHAR buffer[BUFFER_SIZE] = {};
-			DWORD ret = GetModuleFileNameW(m_module, buffer, BUFFER_SIZE - 1);
-			if (ret == 0)
-				BASE_THROW(WindowsError());
-			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-				BASE_THROW(WindowsError());
-
-			filesystem::path p(buffer);
-			return Apis::WideToUtf8(p.remove_filename().wstring());
+			return getPath().remove_filename();
 		}
 
 		FARPROC Module::getProcAddress(const char* procName) const

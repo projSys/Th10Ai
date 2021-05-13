@@ -4,12 +4,22 @@
 
 #include <Base/Windows/Process.h>
 
+namespace boost
+{
+	namespace filesystem
+	{
+		class path;
+	}
+}
+
 namespace th
 {
+	namespace fs = boost::filesystem;
+
 	class DllInject
 	{
 	public:
 		static void EnableDebugPrivilege();
-		static void Inject(Process& process, const std::string& dllPath);
+		static void Inject(Process& process, const fs::path& dllPath);
 	};
 }
