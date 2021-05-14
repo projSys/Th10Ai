@@ -1,7 +1,5 @@
 #include "Base/Windows/Process.h"
 
-#include <boost/filesystem.hpp>
-
 #include "Base/Windows/WindowsError.h"
 #include "Base/Windows/Thread.h"
 

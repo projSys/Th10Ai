@@ -12,7 +12,8 @@ namespace base
 			public Exception
 		{
 		public:
-			explicit WindowsError(DWORD errorCode = GetLastError());
+			WindowsError();
+			explicit WindowsError(DWORD errorCode);
 
 			virtual void print(std::ostream& os) const override;
 

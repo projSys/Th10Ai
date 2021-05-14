@@ -69,7 +69,7 @@
     <ClInclude Include="include\Base\Windows\Process.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Windows\StackTrace.h">
+    <ClInclude Include="include\Base\Windows\StackTraceImpl.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Windows\Thread.h">
@@ -82,6 +82,9 @@
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Clock.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\StackTrace.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,7 +110,7 @@
     <ClCompile Include="src\Base\Windows\Process.cpp">
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Windows\StackTrace.cpp">
+    <ClCompile Include="src\Base\Windows\StackTraceImpl.cpp">
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Windows\Thread.cpp">
@@ -117,6 +120,9 @@
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Clock.cpp">
+      <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\StackTrace.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>

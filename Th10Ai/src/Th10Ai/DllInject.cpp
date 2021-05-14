@@ -1,6 +1,5 @@
 #include "Th10Ai/DllInject.h"
 
-#include <boost/filesystem.hpp>
 #include <Base/ScopeGuard.h>
 #include <Base/Windows/WindowsError.h>
 #include <Base/Windows/Handle.h>

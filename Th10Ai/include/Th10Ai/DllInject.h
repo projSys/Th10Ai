@@ -2,15 +2,8 @@
 
 #include "Th10Ai/Common.h"
 
+#include <boost/filesystem.hpp>
 #include <Base/Windows/Process.h>
-
-namespace boost
-{
-	namespace filesystem
-	{
-		class path;
-	}
-}
 
 namespace th
 {

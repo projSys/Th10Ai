@@ -155,6 +155,7 @@
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\Singleton.h" />
     <ClInclude Include="include\Base\SourceLocation.h" />
+    <ClInclude Include="include\Base\StackTrace.h" />
     <ClInclude Include="include\Base\String.h" />
     <ClInclude Include="include\Base\Types.h" />
     <ClInclude Include="include\Base\TypeTraits.h" />
@@ -163,7 +164,7 @@
     <ClInclude Include="include\Base\Windows\Handle.h" />
     <ClInclude Include="include\Base\Windows\Module.h" />
     <ClInclude Include="include\Base\Windows\Process.h" />
-    <ClInclude Include="include\Base\Windows\StackTrace.h" />
+    <ClInclude Include="include\Base\Windows\StackTraceImpl.h" />
     <ClInclude Include="include\Base\Windows\Thread.h" />
     <ClInclude Include="include\Base\Windows\WindowsError.h" />
   </ItemGroup>
@@ -172,11 +173,12 @@
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Logger.cpp" />
     <ClCompile Include="src\Base\SourceLocation.cpp" />
+    <ClCompile Include="src\Base\StackTrace.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />
     <ClCompile Include="src\Base\Windows\Handle.cpp" />
     <ClCompile Include="src\Base\Windows\Module.cpp" />
     <ClCompile Include="src\Base\Windows\Process.cpp" />
-    <ClCompile Include="src\Base\Windows\StackTrace.cpp" />
+    <ClCompile Include="src\Base\Windows\StackTraceImpl.cpp" />
     <ClCompile Include="src\Base\Windows\Thread.cpp" />
     <ClCompile Include="src\Base\Windows\WindowsError.cpp" />
   </ItemGroup>

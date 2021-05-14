@@ -1,7 +1,6 @@
 #include "Th10Ai/Common.h"
 
 #include <fstream>
-#include <boost/filesystem.hpp>
 #include <Base/Windows/Apis.h>
 #include <Base/Windows/Module.h>
 #include <Base/Windows/Process.h>

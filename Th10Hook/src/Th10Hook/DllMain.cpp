@@ -1,7 +1,6 @@
 #include "Th10Hook/DllMain.h"
 
 #include <memory>
-#include <boost/filesystem.hpp>
 #include <Base/Windows/Module.h>
 
 #include "Th10Hook/MyDetours.h"

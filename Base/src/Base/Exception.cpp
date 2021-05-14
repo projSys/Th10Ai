@@ -5,21 +5,16 @@
 
 namespace base
 {
+	thread_local SourceLocation Exception::stl_sourceLocation;
+	thread_local StackTrace Exception::stl_stackTrace;
+
 	Exception::Exception(const char* str) :
-		runtime_error(str),
-		m_sourceLocation(SourceLocation::GetInstance())
-#ifdef BASE_WINDOWS
-		, m_stackTrace(win::StackTrace::GetInstance())
-#endif
+		runtime_error(str)
 	{
 	}
 
 	Exception::Exception(const std::string& str) :
-		runtime_error(str),
-		m_sourceLocation(SourceLocation::GetInstance())
-#ifdef BASE_WINDOWS
-		, m_stackTrace(win::StackTrace::GetInstance())
-#endif
+		runtime_error(str)
 	{
 	}
 
@@ -27,10 +22,8 @@ namespace base
 	{
 		os << what() << '\n';
 
-		m_sourceLocation.print(os);
-#ifdef BASE_WINDOWS
-		m_stackTrace.print(os);
-#endif
+		stl_sourceLocation.print(os);
+		stl_stackTrace.print(os);
 	}
 
 	std::string PrintException()
@@ -54,7 +47,7 @@ namespace base
 		}
 		catch (...)
 		{
-			oss << "Unknown exception.\n";
+			oss << "Unclassified exception.\n";
 		}
 		return oss.str();
 	}

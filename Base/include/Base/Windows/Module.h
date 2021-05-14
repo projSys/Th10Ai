@@ -2,15 +2,9 @@
 
 #include "Base/Windows/Common.h"
 
-#include "Base/Types.h"
+#include <boost/filesystem.hpp>
 
-namespace boost
-{
-	namespace filesystem
-	{
-		class path;
-	}
-}
+#include "Base/Types.h"
 
 namespace base
 {
@@ -21,7 +15,7 @@ namespace base
 		class Module
 		{
 		public:
-			static Module Get(const char* name);
+			static Module Get(const char* moduleName);
 
 			Module();
 			explicit Module(HMODULE module);
@@ -45,7 +39,7 @@ namespace base
 			operator HMODULE() const;
 
 		protected:
-			static constexpr DWORD BUFFER_SIZE = 1024;
+			static constexpr DWORD BUFFER_SIZE = 2 * 1024;
 
 			HMODULE m_module;
 		};

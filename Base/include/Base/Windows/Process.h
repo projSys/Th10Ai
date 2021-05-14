@@ -3,16 +3,9 @@
 #include "Base/Windows/Common.h"
 
 #include <utility>
+#include <boost/filesystem.hpp>
 
 #include "Base/Windows/Handle.h"
-
-namespace boost
-{
-	namespace filesystem
-	{
-		class path;
-	}
-}
 
 namespace base
 {

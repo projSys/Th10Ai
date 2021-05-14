@@ -5,14 +5,13 @@
 #include <ostream>
 
 #include "Base/Types.h"
-#include "Base/Singleton.h"
 
 namespace base
 {
-	class SourceLocation :
-		public ThreadLocal<SourceLocation>
+	class SourceLocation
 	{
 	public:
+		SourceLocation();
 		SourceLocation(
 			const char* func, const char* file, uint_t line);
 
@@ -25,5 +24,5 @@ namespace base
 	};
 
 #define BASE_CURRENT_LOCATION \
-	base::SourceLocation sourceLocation(__FUNCTION__, __FILE__, __LINE__)
+	base::SourceLocation(__FUNCTION__, __FILE__, __LINE__)
 }

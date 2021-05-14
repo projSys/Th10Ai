@@ -1,7 +1,5 @@
 #include "Base/Windows/Module.h"
 
-#include <boost/filesystem.hpp>
-
 #include "Base/Windows/WindowsError.h"
 #include "Base/Windows/Apis.h"
 
@@ -9,11 +7,11 @@ namespace base
 {
 	namespace win
 	{
-		Module Module::Get(const char* name)
+		Module Module::Get(const char* moduleName)
 		{
-			std::wstring nameW = Apis::Utf8ToWide(name);
+			std::wstring moduleNameW = Apis::Utf8ToWide(moduleName);
 
-			Module module(GetModuleHandleW(nameW.c_str()));
+			Module module(GetModuleHandleW(moduleNameW.c_str()));
 			if (module == nullptr)
 				BASE_THROW(WindowsError());
 			return module;

@@ -27,7 +27,7 @@ namespace base
 			static std::string WideToAnsi(const std::wstring& wstr);
 
 		private:
-			static constexpr DWORD BUFFER_SIZE = 1024;
+			static constexpr DWORD BUFFER_SIZE = 2 * 1024;
 		};
 	}
 }

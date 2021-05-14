@@ -12,9 +12,19 @@ namespace base
 			WCHAR buffer[BUFFER_SIZE] = {};
 			DWORD ret = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 				nullptr, errorCode, 0, buffer, BUFFER_SIZE - 1, nullptr);
-			//if (ret == 0)
-			//	BASE_THROW(WindowsError());
+			if (ret == 0)
+				return "Unknown error.";
 
+			while (ret > 0 && (buffer[ret - 1] == L'\r' || buffer[ret - 1] == L'\n'))
+			{
+				buffer[ret - 1] = L'\0';
+				--ret;
+			}
+			//if (ret > 0 && buffer[ret - 1] == L'.')
+			//{
+			//	buffer[ret - 1] = L'\0';
+			//	--ret;
+			//}
 			return WideToUtf8(buffer);
 		}
 
