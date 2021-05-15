@@ -1,6 +1,6 @@
 #include "Th10Hook/Console.h"
 
-#include <Base/Windows/WindowsError.h>
+#include <system_error>
 
 namespace th
 {
@@ -10,7 +10,7 @@ namespace th
 		m_newStderr(nullptr)
 	{
 		if (!AllocConsole())
-			BASE_THROW(WindowsError());
+			BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 
 		//AttachConsole(ATTACH_PARENT_PROCESS);	// 将当前程序附到父进程上
 		//HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);	// 获得控制台输出句柄

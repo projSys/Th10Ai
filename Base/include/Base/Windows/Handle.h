@@ -2,8 +2,6 @@
 
 #include "Base/Windows/Common.h"
 
-#include "Base/Types.h"
-
 namespace base
 {
 	namespace win

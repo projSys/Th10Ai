@@ -28,8 +28,9 @@ namespace base
 
 			using Handle::Handle;
 
-			Thread createRemoteThread(LPSECURITY_ATTRIBUTES threadAttributes, SIZE_T stackSize,
-				LPTHREAD_START_ROUTINE startAddress, LPVOID parameter, DWORD creationFlags);
+			Thread createRemoteThread(LPSECURITY_ATTRIBUTES threadAttributes,
+				SIZE_T stackSize, LPTHREAD_START_ROUTINE startAddress, LPVOID parameter,
+				DWORD creationFlags);
 
 			DWORD getId() const;
 			DWORD getExitCode() const;

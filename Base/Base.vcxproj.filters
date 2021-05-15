@@ -75,9 +75,6 @@
     <ClInclude Include="include\Base\Windows\Thread.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Windows\WindowsError.h">
-      <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\FuncTraits.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -114,9 +111,6 @@
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Windows\Thread.cpp">
-      <Filter>源文件\Base\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\Windows\WindowsError.cpp">
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Clock.cpp">

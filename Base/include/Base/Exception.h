@@ -2,7 +2,6 @@
 
 #include "Base/Common.h"
 
-#include <type_traits>
 #include <stdexcept>
 #include <ostream>
 
@@ -36,9 +35,6 @@ namespace base
 		const SourceLocation& sourceLocation,
 		const StackTrace& stackTrace)
 	{
-		static_assert(std::is_base_of_v<Exception, T>,
-			"Parameter must inherit from Exception.");
-
 		Exception::stl_sourceLocation = sourceLocation;
 		Exception::stl_stackTrace = stackTrace;
 		throw ex;

@@ -5,7 +5,6 @@
 
 namespace th
 {
-	//todo 大玉有问题
 	bool Scene::IsInScene(const vec2& pos)
 	{
 		return pos.x >= _F(-192.0) && pos.x <= _F(191.0)
@@ -16,20 +15,6 @@ namespace th
 	{
 		return pos.x >= _F(-184.0) && pos.x <= _F(183.0)
 			&& pos.y >= _F(32.0) && pos.y <= _F(431.0);
-	}
-
-	vec2 Scene::FixPlayerPos(const vec2& pos)
-	{
-		vec2 ret = pos;
-		if (ret.x < _F(-184.0))
-			ret.x = _F(-184.0);
-		if (ret.x > _F(183.0))
-			ret.x = _F(183.0);
-		if (ret.y < _F(32.0))
-			ret.y = _F(32.0);
-		if (ret.y > _F(431.0))
-			ret.y = _F(431.0);
-		return ret;
 	}
 
 	vec2 Scene::ToWindowPos(const vec2& scenePos)

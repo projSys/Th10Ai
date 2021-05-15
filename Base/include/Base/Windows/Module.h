@@ -4,8 +4,6 @@
 
 #include <boost/filesystem.hpp>
 
-#include "Base/Types.h"
-
 namespace base
 {
 	namespace win

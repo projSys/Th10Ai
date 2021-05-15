@@ -1,8 +1,9 @@
 #include "Base/Windows/Handle.h"
 
 #include <cassert>
+#include <system_error>
 
-#include "Base/Windows/WindowsError.h"
+#include "Base/Exception.h"
 
 namespace base
 {
@@ -34,7 +35,7 @@ namespace base
 		{
 			DWORD waited = WaitForSingleObject(m_handle, milliSeconds);
 			if (waited == WAIT_FAILED)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return waited != WAIT_TIMEOUT;
 		}
 

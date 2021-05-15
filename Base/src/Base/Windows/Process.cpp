@@ -1,6 +1,8 @@
 #include "Base/Windows/Process.h"
 
-#include "Base/Windows/WindowsError.h"
+#include <system_error>
+
+#include "Base/Exception.h"
 #include "Base/Windows/Thread.h"
 
 namespace base
@@ -23,7 +25,8 @@ namespace base
 			if (!CreateProcessW(applicationName.c_str(), commandLine, processAttributes,
 				threadAttributes, inheritHandles, creationFlags, environment,
 				currentDirectory.c_str(), startupInfo, &pi))
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category(),
+					applicationName.string()));
 			return std::make_pair(Process(pi.hProcess), Thread(pi.hThread));
 		}
 
@@ -31,18 +34,19 @@ namespace base
 		{
 			Process process(OpenProcess(desiredAccess, inheritHandle, processId));
 			if (process == nullptr)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return process;
 		}
 
-		Thread Process::createRemoteThread(LPSECURITY_ATTRIBUTES threadAttributes, SIZE_T stackSize,
-			LPTHREAD_START_ROUTINE startAddress, LPVOID parameter, DWORD creationFlags)
+		Thread Process::createRemoteThread(LPSECURITY_ATTRIBUTES threadAttributes,
+			SIZE_T stackSize, LPTHREAD_START_ROUTINE startAddress, LPVOID parameter,
+			DWORD creationFlags)
 		{
 			DWORD threadId = 0;
 			Thread thread(CreateRemoteThread(m_handle, threadAttributes, stackSize,
 				startAddress, parameter, creationFlags, &threadId));
 			if (thread == nullptr)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return thread;
 		}
 
@@ -50,7 +54,7 @@ namespace base
 		{
 			DWORD id = GetProcessId(m_handle);
 			if (id == 0)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return id;
 		}
 
@@ -58,7 +62,7 @@ namespace base
 		{
 			DWORD exitCode = 0;
 			if (!GetExitCodeProcess(m_handle, &exitCode))
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return exitCode;
 		}
 	}

@@ -48,7 +48,6 @@ namespace th
 
 		static bool IsInScene(const vec2& pos);
 		static bool IsInPlayerRegion(const vec2& pos);
-		static vec2 FixPlayerPos(const vec2& pos);
 		static vec2 ToWindowPos(const vec2& scenePos);
 		static vec2 ToScenePos(const vec2& windowPos);
 

@@ -1,43 +1,24 @@
 #include "Base/Windows/Apis.h"
 
+#include <system_error>
+
+#include "Base/Exception.h"
 #include "Base/TypeTraits.h"
-#include "Base/Windows/WindowsError.h"
 
 namespace base
 {
 	namespace win
 	{
-		std::string Apis::GetErrorDesc(DWORD errorCode)
-		{
-			WCHAR buffer[BUFFER_SIZE] = {};
-			DWORD ret = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-				nullptr, errorCode, 0, buffer, BUFFER_SIZE - 1, nullptr);
-			if (ret == 0)
-				return "Unknown error.";
-
-			while (ret > 0 && (buffer[ret - 1] == L'\r' || buffer[ret - 1] == L'\n'))
-			{
-				buffer[ret - 1] = L'\0';
-				--ret;
-			}
-			//if (ret > 0 && buffer[ret - 1] == L'.')
-			//{
-			//	buffer[ret - 1] = L'\0';
-			//	--ret;
-			//}
-			return WideToUtf8(buffer);
-		}
-
 		std::wstring Apis::MultiByteToWideChar(UINT codePage, LPCCH str, int strSize)
 		{
 			int wstrSize = ::MultiByteToWideChar(codePage, 0, str, strSize, nullptr, 0);
 			if (wstrSize == 0)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 
 			std::wstring wstr(wstrSize, L'\0');
 			int ret = ::MultiByteToWideChar(codePage, 0, str, strSize, &wstr[0], wstrSize);
 			if (ret == 0)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return wstr;
 		}
 
@@ -46,13 +27,13 @@ namespace base
 			int strSize = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, nullptr, 0,
 				nullptr, nullptr);
 			if (strSize == 0)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 
 			std::string str(strSize, '\0');
 			int ret = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, &str[0], strSize,
 				nullptr, nullptr);
 			if (ret == 0)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return str;
 		}
 

@@ -1,6 +1,7 @@
 #include "Base/Exception.h"
 
 #include <sstream>
+#include <system_error>
 #include <boost/exception/all.hpp>
 
 namespace base
@@ -41,6 +42,14 @@ namespace base
 		{
 			oss << boost::diagnostic_information(be);
 		}
+		//catch (const std::system_error& ex)
+		//{
+		//	const std::error_code& ec = ex.code();
+		//	oss << "Category: " << ec.category().name() << '\n'
+		//		<< "Code: " << ec.value() << '\n'
+		//		<< "Message: " << ec.message().c_str() << '\n'
+		//		<< "What: " << ex.what() << '\n';
+		//}
 		catch (const std::exception& se)
 		{
 			oss << se.what() << '\n';

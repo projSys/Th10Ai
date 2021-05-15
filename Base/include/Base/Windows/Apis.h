@@ -11,8 +11,6 @@ namespace base
 		class Apis
 		{
 		public:
-			static std::string GetErrorDesc(DWORD errorCode);
-
 			static std::wstring MultiByteToWideChar(UINT codePage, LPCCH str, int strSize);
 			static std::string WideCharToMultiByte(UINT codePage, LPCWCH wstr, int wstrSize);
 
@@ -25,9 +23,6 @@ namespace base
 			static std::wstring AnsiToWide(const std::string& str);
 			static std::string WideToAnsi(const wchar_t* wstr);
 			static std::string WideToAnsi(const std::wstring& wstr);
-
-		private:
-			static constexpr DWORD BUFFER_SIZE = 2 * 1024;
 		};
 	}
 }

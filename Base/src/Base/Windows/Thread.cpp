@@ -1,6 +1,8 @@
 #include "Base/Windows/Thread.h"
 
-#include "Base/Windows/WindowsError.h"
+#include <system_error>
+
+#include "Base/Exception.h"
 
 namespace base
 {
@@ -13,7 +15,7 @@ namespace base
 			Thread thread(CreateThread(threadAttributes, stackSize,
 				startAddress, parameter, creationFlags, &threadId));
 			if (thread == nullptr)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return thread;
 		}
 
@@ -21,7 +23,7 @@ namespace base
 		{
 			Thread thread(OpenThread(desiredAccess, inheritHandle, threadId));
 			if (thread == nullptr)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return thread;
 		}
 
@@ -29,7 +31,7 @@ namespace base
 		{
 			DWORD count = ResumeThread(m_handle);
 			if (count == (DWORD)-1)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return count;
 		}
 
@@ -37,7 +39,7 @@ namespace base
 		{
 			DWORD id = GetThreadId(m_handle);
 			if (id == 0)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return id;
 		}
 
@@ -45,7 +47,7 @@ namespace base
 		{
 			DWORD exitCode = 0;
 			if (!GetExitCodeThread(m_handle, &exitCode))
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return exitCode;
 		}
 	}

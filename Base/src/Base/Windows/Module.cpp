@@ -1,6 +1,8 @@
 #include "Base/Windows/Module.h"
 
-#include "Base/Windows/WindowsError.h"
+#include <system_error>
+
+#include "Base/Exception.h"
 #include "Base/Windows/Apis.h"
 
 namespace base
@@ -13,7 +15,7 @@ namespace base
 
 			Module module(GetModuleHandleW(moduleNameW.c_str()));
 			if (module == nullptr)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return module;
 		}
 
@@ -38,9 +40,9 @@ namespace base
 			WCHAR buffer[BUFFER_SIZE] = {};
 			DWORD ret = GetModuleFileNameW(m_module, buffer, BUFFER_SIZE - 1);
 			if (ret == 0)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 
 			return fs::path(buffer);
 		}
@@ -54,7 +56,7 @@ namespace base
 		{
 			FARPROC proc = GetProcAddress(m_module, procName);
 			if (proc == nullptr)
-				BASE_THROW(WindowsError());
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
 			return proc;
 		}
 
