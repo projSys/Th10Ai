@@ -402,59 +402,6 @@ namespace th
 		//bool slowFirst = (!itemTarget.has_value() && underEnemy);
 		bool slowFirst = false;
 
-		//std::set<Node> closedSet;
-		//std::set<Node> openSet;
-
-		//Node start = {};
-		//start.frame = 0;
-		//start.score = 0;
-		//openSet.insert(start);
-
-		//while (true)
-		//{
-		//	// 取最高分节点
-		//	auto lowestIt = openSet.begin();
-
-		//	for (DIR dir : DIRS)
-		//	{
-		//		Node nextNode = {};
-
-		//		// 前进到下一个坐标
-		//		Player player = m_readableStatus->getPlayer();
-		//		player.pos = lowestIt->pos;
-		//		player.advance(dir, slowFirst);
-		//		//result.slow = slowFirst;
-		//		RegionCollideResult rcr = {};
-		//		if (!Scene::IsInPlayerRegion(player.pos)
-		//			|| (rcr = m_scene.collideAll(player, lowestIt->frame + 1)).collided)
-		//		{
-		//			player.pos = lowestIt->pos;
-		//			player.advance(dir, !slowFirst);
-		//			//result.slow = !slowFirst;
-		//			if (!Scene::IsInPlayerRegion(player.pos)
-		//				|| (rcr = m_scene.collideAll(player, lowestIt->frame + 1)).collided)
-		//			{
-		//				continue;
-		//			}
-		//		}
-
-		//		if (itemTarget.has_value())
-		//		{
-		//			nextNode.score += Path::CalcNearScore(player.pos, itemTarget.value().pos) * 100;
-		//		}
-		//		else if (enemyTarget.has_value())
-		//		{
-		//			nextNode.score += Path::CalcShootScore(player.pos, enemyTarget.value().pos) * 100;
-		//		}
-		//		else
-		//		{
-		//			nextNode.score += Path::CalcNearScore(player.pos, Path::RESET_POS) * 100;
-		//		}
-
-		//		openSet.insert(nextNode);
-		//	}
-		//}
-
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		boost::optional<DIR> bestDir;
 		boost::optional<bool> bestSlow;

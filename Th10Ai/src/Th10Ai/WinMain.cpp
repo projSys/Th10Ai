@@ -39,6 +39,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 	catch (...)
 	{
 		BASE_LOG_ERROR(PrintException());
+		return 1;
 	}
 	return 0;
 }

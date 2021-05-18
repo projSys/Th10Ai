@@ -17,7 +17,11 @@ namespace base
 
 		void print(std::ostream& os) const;
 
+		void clear();
+		bool isValid() const;
+
 	private:
+		bool m_valid;
 		const char* m_func;
 		const char* m_file;
 		uint_t m_line;

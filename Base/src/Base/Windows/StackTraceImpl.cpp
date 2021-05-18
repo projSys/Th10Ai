@@ -9,12 +9,14 @@ namespace base
 	namespace win
 	{
 		StackTraceImpl::StackTraceImpl() :
+			m_valid(false),
 			m_frames{},
 			m_size(0)
 		{
 		}
 
-		StackTraceImpl::StackTraceImpl(DWORD skipped)
+		StackTraceImpl::StackTraceImpl(DWORD skipped) :
+			m_valid(true)
 		{
 #ifdef _DEBUG
 			m_size = CaptureStackBackTrace(skipped, BUFFER_SIZE, m_frames, nullptr);
@@ -57,6 +59,16 @@ namespace base
 			}
 
 			SymCleanup(process);
+		}
+
+		void StackTraceImpl::clear()
+		{
+			m_valid = false;
+		}
+
+		bool StackTraceImpl::isValid() const
+		{
+			return m_valid;
 		}
 	}
 }

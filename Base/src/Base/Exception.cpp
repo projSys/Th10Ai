@@ -6,8 +6,8 @@
 
 namespace base
 {
-	thread_local SourceLocation Exception::stl_sourceLocation;
-	thread_local StackTrace Exception::stl_stackTrace;
+	thread_local SourceLocation tl_sourceLocation;
+	thread_local StackTrace tl_stackTrace;
 
 	Exception::Exception(const char* str) :
 		runtime_error(str)
@@ -22,9 +22,6 @@ namespace base
 	void Exception::print(std::ostream& os) const
 	{
 		os << what() << '\n';
-
-		stl_sourceLocation.print(os);
-		stl_stackTrace.print(os);
 	}
 
 	std::string PrintException()
@@ -57,6 +54,17 @@ namespace base
 		catch (...)
 		{
 			oss << "Unclassified exception.\n";
+		}
+
+		if (tl_sourceLocation.isValid())
+		{
+			tl_sourceLocation.print(oss);
+			tl_sourceLocation.clear();
+		}
+		if (tl_stackTrace.isValid())
+		{
+			tl_stackTrace.print(oss);
+			tl_stackTrace.clear();
 		}
 		return oss.str();
 	}

@@ -15,4 +15,14 @@ namespace base
 	{
 		m_impl.print(os);
 	}
+
+	void StackTrace::clear()
+	{
+		m_impl.clear();
+	}
+
+	bool StackTrace::isValid() const
+	{
+		return m_impl.isValid();
+	}
 }

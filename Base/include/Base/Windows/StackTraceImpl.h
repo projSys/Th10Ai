@@ -16,9 +16,13 @@ namespace base
 
 			void print(std::ostream& os) const;
 
+			void clear();
+			bool isValid() const;
+
 		private:
 			static constexpr DWORD BUFFER_SIZE = 128;
 
+			bool m_valid;
 			PVOID m_frames[BUFFER_SIZE];
 			WORD m_size;
 		};

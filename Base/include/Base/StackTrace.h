@@ -19,6 +19,9 @@ namespace base
 
 		void print(std::ostream& os) const;
 
+		void clear();
+		bool isValid() const;
+
 	private:
 #ifdef BASE_WINDOWS
 		win::StackTraceImpl m_impl;

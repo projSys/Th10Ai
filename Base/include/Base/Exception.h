@@ -19,29 +19,22 @@ namespace base
 		virtual ~Exception() = default;
 
 		virtual void print(std::ostream& os) const;
-
-	protected:
-		static thread_local SourceLocation stl_sourceLocation;
-		static thread_local StackTrace stl_stackTrace;
-
-		template <typename T>
-		friend void Throw(const T& ex,
-			const SourceLocation& sourceLocation,
-			const StackTrace& stackTrace);
 	};
+
+	extern thread_local SourceLocation tl_sourceLocation;
+	extern thread_local StackTrace tl_stackTrace;
 
 	template <typename T>
 	void Throw(const T& ex,
 		const SourceLocation& sourceLocation,
-		const StackTrace& stackTrace)
+		const StackTrace& stackTrace = StackTrace(2))
 	{
-		Exception::stl_sourceLocation = sourceLocation;
-		Exception::stl_stackTrace = stackTrace;
+		tl_sourceLocation = sourceLocation;
+		tl_stackTrace = stackTrace;
 		throw ex;
 	}
 
-#define BASE_THROW(ex) \
-	base::Throw(ex, BASE_CURRENT_LOCATION, base::StackTrace(2));
+#define BASE_THROW(ex) base::Throw(ex, BASE_CURRENT_LOCATION);
 
 	// 只能在catch里调用
 	std::string PrintException();
