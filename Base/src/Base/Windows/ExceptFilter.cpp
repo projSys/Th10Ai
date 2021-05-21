@@ -5,6 +5,8 @@
 #include <eh.h>
 #include <signal.h>
 
+#include "Base/Windows/ExceptTrace.h"
+
 namespace base
 {
 	namespace win
@@ -12,10 +14,13 @@ namespace base
 		void ExceptFilter::SetProcessExceptionHandlers()
 		{
 			// Install top-level SEH handler
-			SetUnhandledExceptionFilter(StructuredExceptionHandler);
+			SetUnhandledExceptionFilter(UnhandledExceptionFilter);
 
-			// before the system begins unwinding the stack.
+			// 在__except/catch之前，捉得太多
 			//AddVectoredExceptionHandler(1, VectoredExceptionHandler);
+
+			// 在UnhandledExceptionFilter之后，捉得太少
+			//AddVectoredContinueHandler(1, VectoredContinueHandler);
 
 			// Catch new operator memory allocation exceptions
 			_set_new_handler(NewHandler);
@@ -32,13 +37,12 @@ namespace base
 
 			// Catch invalid parameter exceptions.
 			_set_invalid_parameter_handler(InvalidParameterHandler);
-			_set_thread_local_invalid_parameter_handler(InvalidParameterHandler);
 
 			// Setup C++ signal handlers
-			signal(SIGABRT, SignalHandler);
-			signal(SIGINT, SignalHandler);
-			signal(SIGBREAK, SignalHandler);
-			signal(SIGTERM, SignalHandler);
+			signal(SIGABRT, SigabrtHandler);
+			signal(SIGINT, SigintHandler);
+			signal(SIGBREAK, SigbreakHandler);
+			signal(SIGTERM, SigtermHandler);
 		}
 
 		void ExceptFilter::SetThreadExceptionHandlers()
@@ -57,23 +61,32 @@ namespace base
 			// http://msdn.microsoft.com/en-us/library/h46t5b69.aspx
 			set_unexpected(UnexpectedHandler);
 
+			//_set_thread_local_invalid_parameter_handler(
+			//	ThreadLocalInvalidParameterHandler);
+
 			// Setup C++ signal handlers
-			signal(SIGFPE, SignalHandler);
-			signal(SIGILL, SignalHandler);
-			signal(SIGSEGV, SignalHandler);
+			signal(SIGILL, SigillHandler);
+			signal(SIGFPE, SigfpeHandler);
+			signal(SIGSEGV, SigsegvHandler);
 		}
 
-		LONG ExceptFilter::StructuredExceptionHandler(EXCEPTION_POINTERS* info)
+		LONG ExceptFilter::UnhandledExceptionFilter(EXCEPTION_POINTERS* info)
 		{
-			Filter(info);
-			return EXCEPTION_EXECUTE_HANDLER;
+			Trace(info);
+			return EXCEPTION_CONTINUE_SEARCH;
 		}
 
-		//LONG ExceptFilter::VectoredExceptionHandler(EXCEPTION_POINTERS* info)
-		//{
-		//	Filter(info);
-		//	return EXCEPTION_CONTINUE_SEARCH;
-		//}
+		LONG ExceptFilter::VectoredExceptionHandler(EXCEPTION_POINTERS* info)
+		{
+			Trace(info);
+			return EXCEPTION_CONTINUE_SEARCH;
+		}
+
+		LONG ExceptFilter::VectoredContinueHandler(EXCEPTION_POINTERS* info)
+		{
+			Trace(info);
+			return EXCEPTION_CONTINUE_SEARCH;
+		}
 
 		void ExceptFilter::TerminateHandler()
 		{
@@ -96,14 +109,53 @@ namespace base
 			Raise();
 		}
 
-		void ExceptFilter::InvalidParameterHandler(const wchar_t* expr,
-			const wchar_t* func, const wchar_t* file, unsigned int line,
+		void ExceptFilter::InvalidParameterHandler(
+			const wchar_t* expr, const wchar_t* func,
+			const wchar_t* file, unsigned int line,
 			uintptr_t reserved)
 		{
 			Raise();
 		}
 
-		void ExceptFilter::SignalHandler(int sig)
+		void ExceptFilter::ThreadLocalInvalidParameterHandler(
+			const wchar_t* expr, const wchar_t* func,
+			const wchar_t* file, unsigned int line,
+			uintptr_t reserved)
+		{
+			Raise();
+		}
+
+		void ExceptFilter::SigabrtHandler(int sig)
+		{
+			Raise();
+		}
+
+		void ExceptFilter::SigintHandler(int sig)
+		{
+			Raise();
+		}
+
+		void ExceptFilter::SigbreakHandler(int sig)
+		{
+			Raise();
+		}
+
+		void ExceptFilter::SigtermHandler(int sig)
+		{
+			Raise();
+		}
+
+		void ExceptFilter::SigillHandler(int sig)
+		{
+			Raise();
+		}
+
+		void ExceptFilter::SigfpeHandler(int sig)
+		{
+			Raise();
+		}
+
+		void ExceptFilter::SigsegvHandler(int sig)
 		{
 			Raise();
 		}
@@ -114,7 +166,6 @@ namespace base
 			{
 				RaiseException(0, 0, 0, nullptr);
 			}
-			//__except (EXCEPTION_EXECUTE_HANDLER)
 			__except (Filter(GetExceptionInformation()))
 			{
 			}
@@ -122,10 +173,17 @@ namespace base
 
 		LONG ExceptFilter::Filter(EXCEPTION_POINTERS* info)
 		{
-			// 在异常指令处继续执行
+			Trace(info);
+			// 从异常处重新执行
 			//return EXCEPTION_CONTINUE_EXECUTION;
-			// 执行__except块后的代码
+			// 从__except块后开始执行
 			return EXCEPTION_EXECUTE_HANDLER;
+		}
+
+		void ExceptFilter::Trace(EXCEPTION_POINTERS* info)
+		{
+			ExceptTrace& exceptTrace = ExceptTrace::GetInstance();
+			exceptTrace.trace(info);
 		}
 	}
 }

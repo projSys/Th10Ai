@@ -162,6 +162,7 @@
     <ClInclude Include="include\Base\Windows\Apis.h" />
     <ClInclude Include="include\Base\Windows\Common.h" />
     <ClInclude Include="include\Base\Windows\ExceptFilter.h" />
+    <ClInclude Include="include\Base\Windows\ExceptTrace.h" />
     <ClInclude Include="include\Base\Windows\Handle.h" />
     <ClInclude Include="include\Base\Windows\Module.h" />
     <ClInclude Include="include\Base\Windows\Process.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="src\Base\StackTrace.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />
     <ClCompile Include="src\Base\Windows\ExceptFilter.cpp" />
+    <ClCompile Include="src\Base\Windows\ExceptTrace.cpp" />
     <ClCompile Include="src\Base\Windows\Handle.cpp" />
     <ClCompile Include="src\Base\Windows\Module.cpp" />
     <ClCompile Include="src\Base\Windows\Process.cpp" />

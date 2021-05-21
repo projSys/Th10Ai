@@ -87,6 +87,9 @@
     <ClInclude Include="include\Base\Windows\ExceptFilter.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Windows\ExceptTrace.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -123,6 +126,9 @@
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Windows\ExceptFilter.cpp">
+      <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Windows\ExceptTrace.cpp">
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
   </ItemGroup>
