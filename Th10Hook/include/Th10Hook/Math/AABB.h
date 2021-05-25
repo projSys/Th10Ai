@@ -2,13 +2,14 @@
 
 #include "Th10Hook/Common.h"
 
-#include "Th10Hook/Math/Vector2.h"
+#include "Th10Hook/Math/BB.h"
 
 namespace th
 {
 	class Entity;
 
-	class AABB
+	class AABB :
+		public BB
 	{
 	public:
 		AABB() = default;
@@ -17,11 +18,7 @@ namespace th
 		void update(const Entity& entity);
 		bool collide(const AABB& other) const;
 
-		vec2 leftTop;
-		vec2 rightTop;
-		vec2 leftBottom;
-		vec2 rightBottom;
-		vec2 axisX;	// 投影用的对称轴，单位向量
+		vec2 axisX;
 		vec2 axisY;
 	};
 }

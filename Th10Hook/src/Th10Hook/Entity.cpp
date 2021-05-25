@@ -3,8 +3,6 @@
 #include <math.h>
 #include <cmath>
 
-#include "Th10Hook/Math/CollisionDetection.h"
-
 namespace th
 {
 	Entity::Entity()
@@ -20,7 +18,10 @@ namespace th
 	{
 		aabb.update(*this);
 		if (!delta.isZero())
+		{
 			deltaV = delta.verticalize().normalize();
+			projV = Projection(aabb, deltaV);
+		}
 	}
 
 	bool Entity::collide(const Entity& other) const
@@ -35,11 +36,16 @@ namespace th
 		// 可以认为与移动向量总是重叠的
 		// 然后只需要检测在移动向量的垂直向量上是否重叠
 		if (!delta.isZero())
-			//return CollisionDetection::CollideSAT(AABB(*this), AABB(other),
-			//	delta.verticalize().normalize());
-			return CollisionDetection::CollideSAT(aabb, other.aabb, deltaV);
+		{
+			//vec2 deltaV = delta.verticalize().normalize();
+			//return Projection(AABB(*this), deltaV).overlap(
+			//	Projection(AABB(other), deltaV));
+			return projV.overlap(Projection(other.aabb, deltaV));
+		}
 		else
+		{
 			return collide(other);
+		}
 	}
 
 	float_t Entity::distance(const Entity& other) const

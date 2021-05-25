@@ -4,6 +4,7 @@
 
 #include "Th10Hook/Math/Vector2.h"
 #include "Th10Hook/Math/AABB.h"
+#include "Th10Hook/Math/Projection.h"
 
 namespace th
 {
@@ -43,5 +44,6 @@ namespace th
 		// 只在willCollideWith()里使用，基于每帧的原始坐标
 		AABB aabb;
 		vec2 deltaV;
+		Projection projV;
 	};
 }

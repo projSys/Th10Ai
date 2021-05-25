@@ -2,7 +2,7 @@
 
 #include "Th10Hook/Laser.h"
 #include "Th10Hook/Math/AABB.h"
-#include "Th10Hook/Math/CollisionDetection.h"
+#include "Th10Hook/Math/Projection.h"
 
 namespace th
 {
@@ -24,13 +24,14 @@ namespace th
 
 	bool OBB::collide(const AABB& other) const
 	{
-		if (!CollisionDetection::CollideSAT(*this, other, other.axisX))
+		// SAT∑÷¿Î÷·∂®¿Ì
+		if (!Projection(*this, other.axisX).overlap(Projection(other, other.axisX)))
 			return false;
-		if (!CollisionDetection::CollideSAT(*this, other, other.axisY))
+		if (!Projection(*this, other.axisY).overlap(Projection(other, other.axisY)))
 			return false;
-		if (!CollisionDetection::CollideSAT(*this, other, axisX))
+		if (!Projection(*this, axisX).overlap(Projection(other, axisX)))
 			return false;
-		if (!CollisionDetection::CollideSAT(*this, other, axisY))
+		if (!Projection(*this, axisY).overlap(Projection(other, axisY)))
 			return false;
 		return true;
 	}

@@ -117,7 +117,10 @@
     <ClInclude Include="include\Th10Hook\Math\OBB.h">
       <Filter>头文件\Th10Hook\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Math\CollisionDetection.h">
+    <ClInclude Include="include\Th10Hook\Math\Projection.h">
+      <Filter>头文件\Th10Hook\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Hook\Math\BB.h">
       <Filter>头文件\Th10Hook\Math</Filter>
     </ClInclude>
   </ItemGroup>
@@ -197,7 +200,7 @@
     <ClCompile Include="src\Th10Hook\Math\OBB.cpp">
       <Filter>源文件\Th10Hook\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\Math\CollisionDetection.cpp">
+    <ClCompile Include="src\Th10Hook\Math\Projection.cpp">
       <Filter>源文件\Th10Hook\Math</Filter>
     </ClCompile>
   </ItemGroup>

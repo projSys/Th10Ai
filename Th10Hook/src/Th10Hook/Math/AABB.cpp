@@ -1,7 +1,7 @@
 #include "Th10Hook/Math/AABB.h"
 
 #include "Th10Hook/Entity.h"
-#include "Th10Hook/Math/CollisionDetection.h"
+#include "Th10Hook/Math/Projection.h"
 
 namespace th
 {
@@ -22,11 +22,11 @@ namespace th
 
 	bool AABB::collide(const AABB& other) const
 	{
-		if (!CollisionDetection::Overlap(
-			leftTop.x, rightBottom.x, other.leftTop.x, other.rightBottom.x))
+		if (!Projection(leftTop.x, rightBottom.x).overlap(
+			Projection(other.leftTop.x, other.rightBottom.x)))
 			return false;
-		if (!CollisionDetection::Overlap(
-			leftTop.y, rightBottom.y, other.leftTop.y, other.rightBottom.y))
+		if (!Projection(leftTop.y, rightBottom.y).overlap(
+			Projection(other.leftTop.y, other.rightBottom.y)))
 			return false;
 		return true;
 	}

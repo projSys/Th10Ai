@@ -4,6 +4,7 @@
 
 #include "Th10Hook/Math/Vector2.h"
 #include "Th10Hook/Math/OBB.h"
+#include "Th10Hook/Math/Projection.h"
 
 namespace th
 {
@@ -48,5 +49,6 @@ namespace th
 
 		OBB obb;
 		vec2 deltaV;
+		Projection projV;
 	};
 }

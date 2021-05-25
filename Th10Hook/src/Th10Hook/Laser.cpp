@@ -4,7 +4,6 @@
 #include <cmath>
 
 #include "Th10Hook/Entity.h"
-#include "Th10Hook/Math/CollisionDetection.h"
 
 namespace th
 {
@@ -22,7 +21,10 @@ namespace th
 	{
 		obb.update(*this);
 		if (!delta.isZero())
+		{
 			deltaV = delta.verticalize().normalize();
+			projV = Projection(obb, deltaV);
+		}
 	}
 
 	bool Laser::collide(const Entity& other) const
@@ -33,11 +35,16 @@ namespace th
 	bool Laser::willCollideWith(const Entity& other) const
 	{
 		if (!delta.isZero())
-			//return CollisionDetection::CollideSAT(OBB(*this), AABB(other),
-			//	delta.verticalize().normalize());
-			return CollisionDetection::CollideSAT(obb, other.aabb, deltaV);
+		{
+			//vec2 deltaV = delta.verticalize().normalize();
+			//return Projection(OBB(*this), deltaV).overlap(
+			//	Projection(AABB(other), deltaV));
+			return projV.overlap(Projection(other.aabb, deltaV));
+		}
 		else
+		{
 			return obb.collide(other.aabb);
+		}
 	}
 
 	float_t Laser::distance(const Entity& other) const

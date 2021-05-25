@@ -15,8 +15,8 @@ namespace base
 
 		private:
 			static LONG WINAPI UnhandledExceptionFilter(EXCEPTION_POINTERS* info);
-			static LONG NTAPI VectoredExceptionHandler(EXCEPTION_POINTERS* info);
-			static LONG NTAPI VectoredContinueHandler(EXCEPTION_POINTERS* info);
+			//static LONG NTAPI VectoredExceptionHandler(EXCEPTION_POINTERS* info);
+			//static LONG NTAPI VectoredContinueHandler(EXCEPTION_POINTERS* info);
 
 			static void __CRTDECL TerminateHandler();
 			static void __CRTDECL UnexpectedHandler();
@@ -24,10 +24,6 @@ namespace base
 			static int __CRTDECL NewHandler(size_t size);
 			static void __cdecl PurecallHandler();
 			static void __cdecl InvalidParameterHandler(
-				const wchar_t* expr, const wchar_t* func,
-				const wchar_t* file, unsigned int line,
-				uintptr_t reserved);
-			static void __cdecl ThreadLocalInvalidParameterHandler(
 				const wchar_t* expr, const wchar_t* func,
 				const wchar_t* file, unsigned int line,
 				uintptr_t reserved);

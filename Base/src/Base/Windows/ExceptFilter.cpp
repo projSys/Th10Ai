@@ -61,9 +61,6 @@ namespace base
 			// http://msdn.microsoft.com/en-us/library/h46t5b69.aspx
 			set_unexpected(UnexpectedHandler);
 
-			//_set_thread_local_invalid_parameter_handler(
-			//	ThreadLocalInvalidParameterHandler);
-
 			// Setup C++ signal handlers
 			signal(SIGILL, SigillHandler);
 			signal(SIGFPE, SigfpeHandler);
@@ -76,17 +73,17 @@ namespace base
 			return EXCEPTION_CONTINUE_SEARCH;
 		}
 
-		LONG ExceptFilter::VectoredExceptionHandler(EXCEPTION_POINTERS* info)
-		{
-			Trace(info);
-			return EXCEPTION_CONTINUE_SEARCH;
-		}
+		//LONG ExceptFilter::VectoredExceptionHandler(EXCEPTION_POINTERS* info)
+		//{
+		//	Trace(info);
+		//	return EXCEPTION_CONTINUE_SEARCH;
+		//}
 
-		LONG ExceptFilter::VectoredContinueHandler(EXCEPTION_POINTERS* info)
-		{
-			Trace(info);
-			return EXCEPTION_CONTINUE_SEARCH;
-		}
+		//LONG ExceptFilter::VectoredContinueHandler(EXCEPTION_POINTERS* info)
+		//{
+		//	Trace(info);
+		//	return EXCEPTION_CONTINUE_SEARCH;
+		//}
 
 		void ExceptFilter::TerminateHandler()
 		{
@@ -110,14 +107,6 @@ namespace base
 		}
 
 		void ExceptFilter::InvalidParameterHandler(
-			const wchar_t* expr, const wchar_t* func,
-			const wchar_t* file, unsigned int line,
-			uintptr_t reserved)
-		{
-			Raise();
-		}
-
-		void ExceptFilter::ThreadLocalInvalidParameterHandler(
 			const wchar_t* expr, const wchar_t* func,
 			const wchar_t* file, unsigned int line,
 			uintptr_t reserved)

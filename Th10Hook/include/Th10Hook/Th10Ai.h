@@ -53,19 +53,23 @@ namespace th
 						highestChild = &child;
 					}
 				}
-				if (highestChild != nullptr)
-					highestNode = highestChild;
+				// 如果子节点都无效，父节点也是无效的，无效节点不会被选中
+				highestNode = highestChild;
 			}
 			return highestNode;
 		}
 
 		// 扩展：扩展子节点，检测是否可行
-		void expand()
+		void expand(const Player& player, bool slowFirst)
 		{
 			children.resize(to_underlying(DIR::MAX_COUNT));
-			for (Node& child : children)
+			for (DIR dir : DIRS)
 			{
-				child.parent = this;
+				//Player childPlayer = player;
+				//childPlayer.pos = pos;
+				//childPlayer.advance(action.fromDir, slowFirst);
+
+				//child.parent = this;
 			}
 		}
 
