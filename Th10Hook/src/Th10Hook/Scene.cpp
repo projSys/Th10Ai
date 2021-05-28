@@ -55,12 +55,12 @@ namespace th
 		m_region.splitLasers(lasers);
 	}
 
-	RegionCollideResult Scene::collideAll(const Player& player, float_t frame) const
+	RegionCollideResult Scene::collideAll(const Player& player, int_t frame) const
 	{
 		return m_region.collideAll(player, frame);
 	}
 
-	RegionCollideResult Scene::collideAll(const Player& player, float_t frame, const Bullet& target) const
+	RegionCollideResult Scene::collideAll(const Player& player, int_t frame, const Bullet& target) const
 	{
 		return m_region.collideAll(player, frame, target);
 	}

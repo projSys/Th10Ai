@@ -18,95 +18,10 @@
 #include "Th10Hook/Status.h"
 #include "Th10Hook/Scene.h"
 #include "Th10Hook/Input.h"
-
-#include <vector>
+#include "Th10Hook/Node.h"
 
 namespace th
 {
-	struct Node
-	{
-		Node() :
-			valid(false),
-			dir(DIR::HOLD),
-			slow(false),
-			score(_F(0.0)),
-			parent(nullptr)
-		{
-		}
-
-		// 选择：逐层获取最高分的节点
-		Node* select()
-		{
-			Node* highestNode = this;
-			while (true)
-			{
-				if (highestNode->isLeaf())
-					break;
-
-				float_t highestScore = std::numeric_limits<float_t>::lowest();
-				Node* highestChild = nullptr;
-				for (Node& child : highestNode->children)
-				{
-					if (child.valid && child.score > highestScore)
-					{
-						highestScore = child.score;
-						highestChild = &child;
-					}
-				}
-				// 如果子节点都无效，父节点也是无效的，无效节点不会被选中
-				highestNode = highestChild;
-			}
-			return highestNode;
-		}
-
-		// 扩展：扩展子节点，检测是否可行
-		void expand(const Player& player, bool slowFirst)
-		{
-			children.resize(to_underlying(DIR::MAX_COUNT));
-			for (DIR dir : DIRS)
-			{
-				//Player childPlayer = player;
-				//childPlayer.pos = pos;
-				//childPlayer.advance(action.fromDir, slowFirst);
-
-				//child.parent = this;
-			}
-		}
-
-		// 模拟：计算节点得分
-		void simulate()
-		{
-
-		}
-
-		// 反向传播：更新到根节点路径上的节点数据
-		void backPropagate()
-		{
-
-		}
-
-		bool isRoot() const
-		{
-			return parent == nullptr;
-		}
-
-		bool isLeaf() const
-		{
-			return children.empty();
-		}
-
-		vec2 pos;
-		int_t frame;
-
-		bool valid;
-		DIR dir;
-		bool slow;
-		float_t score;
-
-		Node* parent;
-		std::vector<Node> children;
-	};
-
 	class Th10Ai
 	{
 	public:

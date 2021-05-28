@@ -1,6 +1,5 @@
 #include "Th10Hook/Th10Ai.h"
 
-#include <set>
 #include <Base/Windows/Apis.h>
 
 #include "Th10Hook/Path.h"
@@ -28,8 +27,7 @@ namespace th
 		m_inputUpdated(false),
 		inputFrame(0),
 		statusFrame(0),
-		handleFrame(0),
-		m_root(nullptr)
+		handleFrame(0)
 #if RENDER
 		, m_mat(cv::Size(640, 480), CV_8UC4)
 #endif
@@ -94,21 +92,29 @@ namespace th
 
 	void Th10Ai::controlProc()
 	{
-		std::cout << "Keep the focus on the game window, start the game, then press \'A\' to start AI, and press \'S\' to stop AI." << std::endl;
-		while (!m_controlDone)
+		try
 		{
-			if (IsKeyPressed('A'))
+			std::cout << "Keep the focus on the game window, start the game, then press \'A\' to start AI, and press \'S\' to stop AI." << std::endl;
+			while (!m_controlDone)
 			{
-				start();
+				if (IsKeyPressed('A'))
+				{
+					start();
+				}
+				else if (IsKeyPressed('S'))
+				{
+					stop();
+				}
+				else
+				{
+					std::this_thread::sleep_for(Time(16));
+				}
 			}
-			else if (IsKeyPressed('S'))
-			{
-				stop();
-			}
-			else
-			{
-				std::this_thread::sleep_for(Time(16));
-			}
+		}
+		catch (...)
+		{
+			BASE_LOG_ERROR(PrintException());
+			throw;
 		}
 	}
 
@@ -133,16 +139,24 @@ namespace th
 
 	void Th10Ai::handleProc()
 	{
-		while (!m_handleDone)
+		try
 		{
-			if (m_active)
+			while (!m_handleDone)
 			{
-				handle();
+				if (m_active)
+				{
+					handle();
+				}
+				else
+				{
+					std::this_thread::sleep_for(Time(16));
+				}
 			}
-			else
-			{
-				std::this_thread::sleep_for(Time(16));
-			}
+		}
+		catch (...)
+		{
+			BASE_LOG_ERROR(PrintException());
+			throw;
 		}
 	}
 
@@ -402,23 +416,66 @@ namespace th
 		//bool slowFirst = (!itemTarget.has_value() && underEnemy);
 		bool slowFirst = false;
 
+		//float_t bestScore = std::numeric_limits<float_t>::lowest();
+		//boost::optional<DIR> bestDir;
+		//boost::optional<bool> bestSlow;
+
+		//for (DIR dir : DIRS)
+		//{
+		//	Path path(*m_readableStatus, m_scene, itemTarget, enemyTarget, underEnemy);
+		//	Result result = path.find(dir);
+
+		//	if (result.valid && path.m_bestScore > bestScore)
+		//	{
+		//		bestScore = path.m_bestScore;
+		//		bestDir = path.m_dir;
+		//		bestSlow = result.slow;
+		//	}
+		//}
+
+		//if (bestDir.has_value() && bestSlow.has_value())
+		//{
+		//	m_input.move(bestDir.value());
+		//	if (bestSlow.value())
+		//		m_input.slow();
+		//}
+		//else
+		//{
+		//	std::cout << "No way to go." << std::endl;
+		//}
+
+		m_root = new Node();
+		m_root->m_valid = true;
+		m_root->m_pos = m_readableStatus->getPlayer().pos;
+
+		int count = 0;
+		while (true)
+		{
+			Node* highestLeaf = m_root->select();
+			highestLeaf->expand(*m_readableStatus, m_scene, itemTarget, enemyTarget, slowFirst);
+			if (highestLeaf == m_root && !highestLeaf->m_valid)
+			{
+				std::cout << "No way to go. 1" << std::endl;
+				break;
+			}
+
+			++count;
+			if (count > 40)
+				break;
+		}
+
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		boost::optional<DIR> bestDir;
 		boost::optional<bool> bestSlow;
-
-		for (DIR dir : DIRS)
+		for (Node& child : m_root->m_children)
 		{
-			Path path(*m_readableStatus, m_scene, itemTarget, enemyTarget, underEnemy);
-			Result result = path.find(dir);
-
-			if (result.valid && path.m_bestScore > bestScore)
+			if (child.m_valid && child.m_avgScore > bestScore)
 			{
-				bestScore = path.m_bestScore;
-				bestDir = path.m_dir;
-				bestSlow = result.slow;
+				bestScore = child.m_avgScore;
+				bestDir = child.m_dir;
+				bestSlow = child.m_slow;
 			}
 		}
-
 		if (bestDir.has_value() && bestSlow.has_value())
 		{
 			m_input.move(bestDir.value());
@@ -427,8 +484,10 @@ namespace th
 		}
 		else
 		{
-			std::cout << "No way to go." << std::endl;
+			std::cout << "No way to go. 2" << std::endl;
 		}
+
+		delete m_root;
 
 		return true;
 	}

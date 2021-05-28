@@ -13,7 +13,7 @@ namespace th
 	{
 		vec2 fromPos;
 		DIR fromDir;
-		float_t frame;
+		int_t frame;
 
 		//int_t willCollideCount;
 		//float_t minCollideFrame;

@@ -5,23 +5,23 @@ namespace th
 	const DIR Path::FIND_DIRS[to_underlying(DIR::MAX_COUNT)][5] =
 	{
 		// DIR::HOLD
-		{ DIR::HOLD,      DIR::UP,       DIR::DOWN,      DIR::LEFT,      DIR::RIGHT,     },//DIR::LEFTUP,  DIR::RIGHTUP,  DIR::LEFTDOWN,  DIR::RIGHTDOWN },
+		{ DIR::HOLD,       DIR::UP,        DIR::DOWN,       DIR::LEFT,       DIR::RIGHT,      },//DIR::UP_LEFT, DIR::UP_RIGHT, DIR::DOWN_LEFT, DIR::DOWN_RIGHT },
 		// DIR::UP
-		{ DIR::UP,        DIR::LEFTUP,   DIR::RIGHTUP,   DIR::LEFT,      DIR::RIGHT,     },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::UP,         DIR::UP_LEFT,   DIR::UP_RIGHT,   DIR::LEFT,       DIR::RIGHT,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::DOWN
-		{ DIR::DOWN,      DIR::LEFTDOWN, DIR::RIGHTDOWN, DIR::LEFT,      DIR::RIGHT,     },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::DOWN,       DIR::DOWN_LEFT, DIR::DOWN_RIGHT, DIR::LEFT,       DIR::RIGHT,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::LEFT
-		{ DIR::LEFT,      DIR::LEFTUP,   DIR::LEFTDOWN,  DIR::UP,        DIR::DOWN,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		{ DIR::LEFT,       DIR::UP_LEFT,   DIR::DOWN_LEFT,  DIR::UP,         DIR::DOWN,       },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
 		// DIR::RIGHT
-		{ DIR::RIGHT,     DIR::RIGHTUP,  DIR::RIGHTDOWN, DIR::UP,        DIR::DOWN,      },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
-		// DIR::LEFTUP
-		{ DIR::LEFTUP,    DIR::LEFT,     DIR::UP,        DIR::LEFTDOWN,  DIR::RIGHTUP,   },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
-		// DIR::RIGHTUP
-		{ DIR::RIGHTUP,   DIR::UP,       DIR::RIGHT,     DIR::LEFTUP,    DIR::RIGHTDOWN, },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
-		// DIR::LEFTDOWN
-		{ DIR::LEFTDOWN,  DIR::DOWN,     DIR::LEFT,      DIR::RIGHTDOWN, DIR::LEFTUP,    },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
-		// DIR::RIGHTDOWN
-		{ DIR::RIGHTDOWN, DIR::RIGHT,    DIR::DOWN,      DIR::RIGHTUP,   DIR::LEFTDOWN,  },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      }
+		{ DIR::RIGHT,      DIR::UP_RIGHT,  DIR::DOWN_RIGHT, DIR::UP,         DIR::DOWN,       },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::UP_LEFT
+		{ DIR::UP_LEFT,    DIR::LEFT,      DIR::UP,         DIR::DOWN_LEFT,  DIR::UP_RIGHT,   },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::UP_RIGHT
+		{ DIR::UP_RIGHT,   DIR::UP,        DIR::RIGHT,      DIR::UP_LEFT,    DIR::DOWN_RIGHT, },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::DOWN_LEFT
+		{ DIR::DOWN_LEFT,  DIR::DOWN,      DIR::LEFT,       DIR::DOWN_RIGHT, DIR::UP_LEFT,    },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      },
+		// DIR::DOWN_RIGHT
+		{ DIR::DOWN_RIGHT, DIR::RIGHT,     DIR::DOWN,       DIR::UP_RIGHT,   DIR::DOWN_LEFT,  },//DIR::HOLD,    DIR::HOLD,     DIR::HOLD,      DIR::HOLD      }
 	};
 
 	const int_t Path::FIND_DIR_COUNTS[to_underlying(DIR::MAX_COUNT)] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };

@@ -171,13 +171,14 @@
     <ClInclude Include="include\Th10Hook\Math\Projection.h" />
     <ClInclude Include="include\Th10Hook\Math\Vector2.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
+    <ClInclude Include="include\Th10Hook\Node.h" />
     <ClInclude Include="include\Th10Hook\Path.h" />
     <ClInclude Include="include\Th10Hook\Player.h" />
     <ClInclude Include="include\Th10Hook\Region.h" />
     <ClInclude Include="include\Th10Hook\Scene.h" />
     <ClInclude Include="include\Th10Hook\Status.h" />
     <ClInclude Include="include\Th10Hook\Th10Ai.h" />
-    <ClInclude Include="include\Th10Hook\Th10Hook.h" />
+    <ClInclude Include="include\Th10Hook\Th10Apis.h" />
     <ClInclude Include="include\Th10Hook\Th10Types.h" />
   </ItemGroup>
   <ItemGroup>
@@ -200,13 +201,14 @@
     <ClCompile Include="src\Th10Hook\Math\Projection.cpp" />
     <ClCompile Include="src\Th10Hook\Math\Vector2.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
+    <ClCompile Include="src\Th10Hook\Node.cpp" />
     <ClCompile Include="src\Th10Hook\Path.cpp" />
     <ClCompile Include="src\Th10Hook\Player.cpp" />
     <ClCompile Include="src\Th10Hook\Region.cpp" />
     <ClCompile Include="src\Th10Hook\Scene.cpp" />
     <ClCompile Include="src\Th10Hook\Status.cpp" />
     <ClCompile Include="src\Th10Hook\Th10Ai.cpp" />
-    <ClCompile Include="src\Th10Hook\Th10Hook.cpp" />
+    <ClCompile Include="src\Th10Hook\Th10Apis.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

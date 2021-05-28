@@ -44,24 +44,24 @@ namespace th
 			m_right = true;
 			break;
 
-		case DIR::LEFTUP:
-			m_left = true;
+		case DIR::UP_LEFT:
 			m_up = true;
-			break;
-
-		case DIR::RIGHTUP:
-			m_right = true;
-			m_up = true;
-			break;
-
-		case DIR::LEFTDOWN:
 			m_left = true;
-			m_down = true;
 			break;
 
-		case DIR::RIGHTDOWN:
+		case DIR::UP_RIGHT:
+			m_up = true;
 			m_right = true;
+			break;
+
+		case DIR::DOWN_LEFT:
 			m_down = true;
+			m_left = true;
+			break;
+
+		case DIR::DOWN_RIGHT:
+			m_down = true;
+			m_right = true;
 			break;
 		}
 	}

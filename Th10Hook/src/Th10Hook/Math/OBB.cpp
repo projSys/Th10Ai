@@ -14,10 +14,10 @@ namespace th
 	void OBB::update(const Laser& laser)
 	{
 		float_t radian = laser.getRadian();
-		leftTop = laser.pos + (laser.getLeftTop() - laser.pos).rotate(radian);
-		rightTop = laser.pos + (laser.getRightTop() - laser.pos).rotate(radian);
-		leftBottom = laser.pos + (laser.getLeftBottom() - laser.pos).rotate(radian);
-		rightBottom = laser.pos + (laser.getRightBottom() - laser.pos).rotate(radian);
+		topLeft = laser.pos + (laser.getTopLeft() - laser.pos).rotate(radian);
+		topRight = laser.pos + (laser.getTopRight() - laser.pos).rotate(radian);
+		bottomLeft = laser.pos + (laser.getBottomLeft() - laser.pos).rotate(radian);
+		bottomRight = laser.pos + (laser.getBottomRight() - laser.pos).rotate(radian);
 		axisX = vec2(_F(1.0), _F(0.0)).rotate(radian);
 		axisY = vec2(_F(0.0), _F(1.0)).rotate(radian);
 	}

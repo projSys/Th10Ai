@@ -33,8 +33,8 @@ namespace th
 		void splitEnemies(const std::vector<Enemy>& enemies);
 		void splitBullets(const std::vector<Bullet>& bullets);
 		void splitLasers(const std::vector<Laser>& lasers);
-		RegionCollideResult collideAll(const Player& player, float_t frame) const;
-		RegionCollideResult collideAll(const Player& player, float_t frame, const Bullet& target) const;
+		RegionCollideResult collideAll(const Player& player, int_t frame) const;
+		RegionCollideResult collideAll(const Player& player, int_t frame, const Bullet& target) const;
 
 #if RENDER
 		void render(cv::Mat& mat, const Player& player);

@@ -44,7 +44,7 @@ namespace th
 		}
 		else
 		{
-			return collide(other);
+			return aabb.collide(other.aabb);
 		}
 	}
 
@@ -58,27 +58,27 @@ namespace th
 		return delta.isZero();
 	}
 
-	void Entity::advance(float_t frame)
+	void Entity::advance(int_t frame)
 	{
-		pos += (delta * frame);
+		pos += (delta * static_cast<float_t>(frame));
 	}
 
-	vec2 Entity::getLeftTop() const
+	vec2 Entity::getTopLeft() const
 	{
 		return vec2(pos.x - size.x / _F(2.0), pos.y - size.y / _F(2.0));
 	}
 
-	vec2 Entity::getRightTop() const
+	vec2 Entity::getTopRight() const
 	{
 		return vec2(pos.x + size.x / _F(2.0), pos.y - size.y / _F(2.0));
 	}
 
-	vec2 Entity::getLeftBottom() const
+	vec2 Entity::getBottomLeft() const
 	{
 		return vec2(pos.x - size.x / _F(2.0), pos.y + size.y / _F(2.0));
 	}
 
-	vec2 Entity::getRightBottom() const
+	vec2 Entity::getBottomRight() const
 	{
 		return vec2(pos.x + size.x / _F(2.0), pos.y + size.y / _F(2.0));
 	}

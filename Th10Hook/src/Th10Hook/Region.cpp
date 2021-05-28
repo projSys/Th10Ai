@@ -96,7 +96,7 @@ namespace th
 			m_second->splitLasers(m_lasers);
 	}
 
-	RegionCollideResult Region::collideAll(const Player& player, float_t frame) const
+	RegionCollideResult Region::collideAll(const Player& player, int_t frame) const
 	{
 		RegionCollideResult result = {};
 
@@ -160,7 +160,7 @@ namespace th
 		return result;
 	}
 
-	RegionCollideResult Region::collideAll(const Player& player, float_t frame, const Bullet& target) const
+	RegionCollideResult Region::collideAll(const Player& player, int_t frame, const Bullet& target) const
 	{
 		RegionCollideResult result = {};
 

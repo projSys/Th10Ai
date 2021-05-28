@@ -12,21 +12,21 @@ namespace th
 
 	void AABB::update(const Entity& entity)
 	{
-		leftTop = entity.getLeftTop();
-		rightTop = entity.getRightTop();
-		leftBottom = entity.getLeftBottom();
-		rightBottom = entity.getRightBottom();
+		topLeft = entity.getTopLeft();
+		topRight = entity.getTopRight();
+		bottomLeft = entity.getBottomLeft();
+		bottomRight = entity.getBottomRight();
 		axisX = vec2(_F(1.0), _F(0.0));
 		axisY = vec2(_F(0.0), _F(1.0));
 	}
 
 	bool AABB::collide(const AABB& other) const
 	{
-		if (!Projection(leftTop.x, rightBottom.x).overlap(
-			Projection(other.leftTop.x, other.rightBottom.x)))
+		if (!Projection(topLeft.x, bottomRight.x).overlap(
+			Projection(other.topLeft.x, other.bottomRight.x)))
 			return false;
-		if (!Projection(leftTop.y, rightBottom.y).overlap(
-			Projection(other.leftTop.y, other.rightBottom.y)))
+		if (!Projection(topLeft.y, bottomRight.y).overlap(
+			Projection(other.topLeft.y, other.bottomRight.y)))
 			return false;
 		return true;
 	}

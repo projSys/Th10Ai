@@ -12,18 +12,18 @@ namespace th
 			BASE_THROW(std::system_error(ret, std::system_category()));
 	}
 
-	void MyDetours::transactionCommit()
-	{
-		LONG ret = DetourTransactionCommit();
-		if (ret != NO_ERROR)
-			BASE_THROW(std::system_error(ret, std::system_category()));
-	}
-
 	void MyDetours::transactionAbort()
 	{
 		LONG ret = DetourTransactionAbort();
 		//if (ret != NO_ERROR)
 		//	BASE_THROW(std::system_error(ret, std::system_category()));
+	}
+
+	void MyDetours::transactionCommit()
+	{
+		LONG ret = DetourTransactionCommit();
+		if (ret != NO_ERROR)
+			BASE_THROW(std::system_error(ret, std::system_category()));
 	}
 
 	void MyDetours::updateThread(HANDLE thread)

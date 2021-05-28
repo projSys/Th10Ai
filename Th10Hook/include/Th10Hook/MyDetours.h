@@ -8,10 +8,9 @@ namespace th
 	{
 	public:
 		void transactionBegin();
-		void transactionCommit();
 		void transactionAbort();
+		void transactionCommit();
 
-		// GetCurrentThread()
 		void updateThread(HANDLE thread);
 
 		void attach(PVOID* pointer, PVOID detour);

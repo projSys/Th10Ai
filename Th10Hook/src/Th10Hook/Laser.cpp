@@ -57,27 +57,27 @@ namespace th
 		return delta.isZero();
 	}
 
-	void Laser::advance(float_t frame)
+	void Laser::advance(int_t frame)
 	{
-		pos += (delta * frame);
+		pos += (delta * static_cast<float_t>(frame));
 	}
 
-	vec2 Laser::getLeftTop() const
+	vec2 Laser::getTopLeft() const
 	{
 		return vec2(pos.x - size.x / _F(2.0), pos.y);
 	}
 
-	vec2 Laser::getRightTop() const
+	vec2 Laser::getTopRight() const
 	{
 		return vec2(pos.x + size.x / _F(2.0), pos.y);
 	}
 
-	vec2 Laser::getLeftBottom() const
+	vec2 Laser::getBottomLeft() const
 	{
 		return vec2(pos.x - size.x / _F(2.0), pos.y + size.y);
 	}
 
-	vec2 Laser::getRightBottom() const
+	vec2 Laser::getBottomRight() const
 	{
 		return vec2(pos.x + size.x / _F(2.0), pos.y + size.y);
 	}

@@ -78,7 +78,7 @@
     <ClInclude Include="include\Th10Hook\Th10Ai.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Hook\Th10Hook.h">
+    <ClInclude Include="include\Th10Hook\Th10Apis.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Hook\Th10Types.h">
@@ -123,6 +123,9 @@
     <ClInclude Include="include\Th10Hook\Math\BB.h">
       <Filter>头文件\Th10Hook\Math</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Hook\Node.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\Bullet.cpp">
@@ -164,7 +167,7 @@
     <ClCompile Include="src\Th10Hook\Th10Ai.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Hook\Th10Hook.cpp">
+    <ClCompile Include="src\Th10Hook\Th10Apis.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Console.cpp">
@@ -202,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Math\Projection.cpp">
       <Filter>源文件\Th10Hook\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\Node.cpp">
+      <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

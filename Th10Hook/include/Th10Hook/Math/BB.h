@@ -9,9 +9,9 @@ namespace th
 	class BB
 	{
 	public:
-		vec2 leftTop;
-		vec2 rightTop;
-		vec2 leftBottom;
-		vec2 rightBottom;
+		vec2 topLeft;
+		vec2 topRight;
+		vec2 bottomLeft;
+		vec2 bottomRight;
 	};
 }

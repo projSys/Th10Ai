@@ -34,8 +34,8 @@ namespace th
 		bool isUnderEnemy() const;
 
 		// Bullet
-		boost::optional<Bullet> collide(const Player& player, float_t frame) const;
-		int_t collide(const Player& player, float_t frame, int_t id) const;
+		boost::optional<Bullet> collide(const Player& player, int_t frame) const;
+		int_t collide(const Player& player, int_t frame, int_t id) const;
 
 		// Laser
 

@@ -14,10 +14,10 @@ namespace th
 		DOWN,			// 下
 		LEFT,			// 左
 		RIGHT,			// 右
-		LEFTUP,			// 左上
-		RIGHTUP,		// 右上
-		LEFTDOWN,		// 左下
-		RIGHTDOWN,		// 右下
+		UP_LEFT,		// 左上
+		UP_RIGHT,		// 右上
+		DOWN_LEFT,		// 左下
+		DOWN_RIGHT,		// 右下
 
 		MAX_COUNT
 	};
@@ -29,9 +29,9 @@ namespace th
 		DIR::DOWN,
 		DIR::LEFT,
 		DIR::RIGHT,
-		DIR::LEFTUP,
-		DIR::RIGHTUP,
-		DIR::LEFTDOWN,
-		DIR::RIGHTDOWN
+		DIR::UP_LEFT,
+		DIR::UP_RIGHT,
+		DIR::DOWN_LEFT,
+		DIR::DOWN_RIGHT
 	};
 }

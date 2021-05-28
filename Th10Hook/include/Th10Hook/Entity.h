@@ -27,12 +27,12 @@ namespace th
 
 		float_t distance(const Entity& other) const;
 		bool isHolding() const;
-		void advance(float_t frame);
+		void advance(int_t frame);
 
-		vec2 getLeftTop() const;
-		vec2 getRightTop() const;
-		vec2 getLeftBottom() const;
-		vec2 getRightBottom() const;
+		vec2 getTopLeft() const;
+		vec2 getTopRight() const;
+		vec2 getBottomLeft() const;
+		vec2 getBottomRight() const;
 
 		//int_t id;
 		//int_t type;

@@ -1,6 +1,6 @@
 #include "Th10Hook/Status.h"
 
-#include "Th10Hook/Th10Hook.h"
+#include "Th10Hook/Th10Apis.h"
 
 namespace th
 {
@@ -17,7 +17,7 @@ namespace th
 
 	void Status::clear()
 	{
-		m_player = {};
+		m_player = Player();
 		m_items.clear();
 		m_enemies.clear();
 		m_bullets.clear();
@@ -26,11 +26,11 @@ namespace th
 
 	void Status::update()
 	{
-		Th10Hook::GetPlayer(m_player);
-		Th10Hook::GetItems(m_items);
-		Th10Hook::GetEnemies(m_enemies);
-		Th10Hook::GetBullets(m_bullets);
-		Th10Hook::GetLasers(m_lasers);
+		Th10Apis::GetPlayer(m_player);
+		Th10Apis::GetItems(m_items);
+		Th10Apis::GetEnemies(m_enemies);
+		Th10Apis::GetBullets(m_bullets);
+		Th10Apis::GetLasers(m_lasers);
 
 		frame1 = m_player.stageFrame;
 	}
@@ -97,7 +97,7 @@ namespace th
 		return underEnemy;
 	}
 
-	boost::optional<Bullet> Status::collide(const Player& player, float_t frame) const
+	boost::optional<Bullet> Status::collide(const Player& player, int_t frame) const
 	{
 		boost::optional<Bullet> target;
 		for (const Bullet& org : m_bullets)
@@ -119,7 +119,7 @@ namespace th
 		return target;
 	}
 
-	int_t Status::collide(const Player& player, float_t frame, int_t id) const
+	int_t Status::collide(const Player& player, int_t frame, int_t id) const
 	{
 		for (const Bullet& org : m_bullets)
 		{

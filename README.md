@@ -1,7 +1,7 @@
 # Th10Ai
 
-东方风神录AI，基于DFS算法。<br />
-Mountain of Faith's AI, based on DFS algorithm.<br />
+东方风神录AI，基于蒙特卡洛树搜索(?)算法。<br />
+Mountain of Faith's AI, based on Monte Carlo tree search(?) algorithm.<br />
 
 ![](https://github.com/GiriMind/Th10Ai/blob/master/1.png)
 
