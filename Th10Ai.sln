@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Th10Ai", "Th10Ai\Th10Ai.vcxproj", "{76B86043-DD46-427F-8180-8FB79A8BCFE3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Loader", "Loader\Loader.vcxproj", "{76B86043-DD46-427F-8180-8FB79A8BCFE3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A5277CAA-A372-4808-B01B-EF0C7B0B343C} = {A5277CAA-A372-4808-B01B-EF0C7B0B343C}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Base", "Base\Base.vcxproj", "{A5277CAA-A372-4808-B01B-EF0C7B0B343C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Th10Hook", "Th10Hook\Th10Hook.vcxproj", "{F1E1CCA2-1D84-4BED-9EE1-DA7A5D94F008}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Th10Ai", "Th10Ai\Th10Ai.vcxproj", "{F1E1CCA2-1D84-4BED-9EE1-DA7A5D94F008}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A5277CAA-A372-4808-B01B-EF0C7B0B343C} = {A5277CAA-A372-4808-B01B-EF0C7B0B343C}
 	EndProjectSection

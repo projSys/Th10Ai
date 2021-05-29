@@ -9,7 +9,24 @@ namespace base
 {
 	namespace win
 	{
-		std::wstring Apis::MultiByteToWideChar(UINT codePage, LPCCH str, int strSize)
+		fs::path Apis::GetModulePath(HMODULE module)
+		{
+			WCHAR buffer[BUFFER_SIZE] = {};
+			DWORD ret = GetModuleFileNameW(module, buffer, BUFFER_SIZE - 1);
+			if (ret == 0)
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
+			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
+
+			return fs::path(buffer);
+		}
+
+		fs::path Apis::GetModuleDir(HMODULE module)
+		{
+			return GetModulePath(module).parent_path();
+		}
+
+		std::wstring Apis::MultiByteToWideChar(UINT codePage, const char* str, int strSize)
 		{
 			int wstrSize = ::MultiByteToWideChar(codePage, 0, str, strSize, nullptr, 0);
 			if (wstrSize == 0)
@@ -22,7 +39,7 @@ namespace base
 			return wstr;
 		}
 
-		std::string Apis::WideCharToMultiByte(UINT codePage, LPCWCH wstr, int wstrSize)
+		std::string Apis::WideCharToMultiByte(UINT codePage, const wchar_t* wstr, int wstrSize)
 		{
 			int strSize = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, nullptr, 0,
 				nullptr, nullptr);
@@ -37,67 +54,59 @@ namespace base
 			return str;
 		}
 
-		std::wstring Apis::Utf8ToWide(const char* str)
+		std::wstring Apis::Utf8ToWide(const char* str, int strSize)
 		{
 			if (is_empty_string(str))
 				return std::wstring();
-
-			return MultiByteToWideChar(CP_UTF8, str, -1);
+			return MultiByteToWideChar(CP_UTF8, str, strSize);
 		}
 
 		std::wstring Apis::Utf8ToWide(const std::string& str)
 		{
 			if (str.empty())
 				return std::wstring();
-
 			return MultiByteToWideChar(CP_UTF8, str.c_str(), str.size());
 		}
 
-		std::string Apis::WideToUtf8(const wchar_t* wstr)
+		std::string Apis::WideToUtf8(const wchar_t* wstr, int wstrSize)
 		{
 			if (is_empty_string(wstr))
 				return std::string();
-
-			return WideCharToMultiByte(CP_UTF8, wstr, -1);
+			return WideCharToMultiByte(CP_UTF8, wstr, wstrSize);
 		}
 
 		std::string Apis::WideToUtf8(const std::wstring& wstr)
 		{
 			if (wstr.empty())
 				return std::string();
-
 			return WideCharToMultiByte(CP_UTF8, wstr.c_str(), wstr.size());
 		}
 
-		std::wstring Apis::AnsiToWide(const char* str)
+		std::wstring Apis::AnsiToWide(const char* str, int strSize)
 		{
 			if (is_empty_string(str))
 				return std::wstring();
-
-			return MultiByteToWideChar(CP_ACP, str, -1);
+			return MultiByteToWideChar(CP_ACP, str, strSize);
 		}
 
 		std::wstring Apis::AnsiToWide(const std::string& str)
 		{
 			if (str.empty())
 				return std::wstring();
-
 			return MultiByteToWideChar(CP_ACP, str.c_str(), str.size());
 		}
 
-		std::string Apis::WideToAnsi(const wchar_t* wstr)
+		std::string Apis::WideToAnsi(const wchar_t* wstr, int wstrSize)
 		{
 			if (is_empty_string(wstr))
 				return std::string();
-
-			return WideCharToMultiByte(CP_ACP, wstr, -1);
+			return WideCharToMultiByte(CP_ACP, wstr, wstrSize);
 		}
 
 		std::string Apis::WideToAnsi(const std::wstring& wstr)
 		{
 			if (wstr.empty())
 				return std::string();
-
 			return WideCharToMultiByte(CP_ACP, wstr.c_str(), wstr.size());
 		}
 	}

@@ -1,0 +1,54 @@
+#pragma once
+
+#include "Th10Ai/Common.h"
+
+#include "Th10Ai/Math/Vector2.h"
+#include "Th10Ai/Math/OBB.h"
+#include "Th10Ai/Math/Projection.h"
+
+namespace th
+{
+	class Entity;
+
+	// ¼¤¹â½á¹¹
+	//  (x,y)
+	// +--*--+
+	// |     |
+	// |     |
+	// |     |
+	// |     | h
+	// |     |
+	// |     |
+	// |     |
+	// +-----+
+	//    w
+	class Laser
+	{
+	public:
+		Laser();
+		Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0);
+
+		void updateExtra();
+		bool collide(const Entity& other) const;
+		bool willCollideWith(const Entity& other) const;
+
+		float_t distance(const Entity& other) const;
+		bool isHolding() const;
+		void advance(int_t frame);
+
+		vec2 getTopLeft() const;
+		vec2 getTopRight() const;
+		vec2 getBottomLeft() const;
+		vec2 getBottomRight() const;
+		float_t getRadian() const;
+
+		vec2 pos;
+		vec2 delta;
+		vec2 size;
+		float_t arc;
+
+		OBB obb;
+		vec2 deltaV;
+		Projection projV;
+	};
+}

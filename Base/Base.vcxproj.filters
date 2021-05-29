@@ -33,7 +33,7 @@
     <ClInclude Include="include\Base\Exception.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Logger.h">
+    <ClInclude Include="include\Base\Log.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\ScopeGuard.h">
@@ -60,19 +60,7 @@
     <ClInclude Include="include\Base\Windows\Common.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Windows\Handle.h">
-      <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Windows\Module.h">
-      <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Windows\Process.h">
-      <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Windows\StackTraceImpl.h">
-      <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Windows\Thread.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\FuncTraits.h">
@@ -95,7 +83,7 @@
     <ClCompile Include="src\Base\Exception.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Logger.cpp">
+    <ClCompile Include="src\Base\Log.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\SourceLocation.cpp">
@@ -104,19 +92,7 @@
     <ClCompile Include="src\Base\Windows\Apis.cpp">
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Windows\Handle.cpp">
-      <Filter>源文件\Base\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\Windows\Module.cpp">
-      <Filter>源文件\Base\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\Windows\Process.cpp">
-      <Filter>源文件\Base\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\Windows\StackTraceImpl.cpp">
-      <Filter>源文件\Base\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\Windows\Thread.cpp">
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Clock.cpp">

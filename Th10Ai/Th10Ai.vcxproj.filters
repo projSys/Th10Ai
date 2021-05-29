@@ -14,25 +14,205 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="头文件\Th10Ai">
-      <UniqueIdentifier>{4710145e-0c7a-43e2-af8e-ed4bb12afc54}</UniqueIdentifier>
+      <UniqueIdentifier>{d6465333-4e38-49c9-8c00-bda71983b8d4}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\Th10Ai">
-      <UniqueIdentifier>{339335c6-a46c-4fe9-a87c-f987ff98881d}</UniqueIdentifier>
+      <UniqueIdentifier>{6e1f796c-d01f-47a7-8d2d-927096d43f54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Th10Ai\DirectX">
+      <UniqueIdentifier>{deba2d63-1e8d-440c-9fbd-07faa97b4ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Th10Ai\DirectX">
+      <UniqueIdentifier>{c047154d-e1aa-41b0-bc19-badbbbcbf5d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Th10Ai\Math">
+      <UniqueIdentifier>{8a1c026f-0e9b-4f6a-acd8-32efd84009a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Th10Ai\Math">
+      <UniqueIdentifier>{6527217b-e7b1-4c13-b157-c10e1e2a695e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Th10Ai\Bullet.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
     <ClInclude Include="include\Th10Ai\Common.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Ai\DllInject.h">
+    <ClInclude Include="include\Th10Ai\Direction.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\DllMain.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Enemy.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Entity.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Item.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Laser.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\MyDetours.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Path.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Player.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Region.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Scene.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Status.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Th10Ai.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Th10Apis.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Th10Types.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Console.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\DirectX\MyDirect3D9.h">
+      <Filter>头文件\Th10Ai\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\DirectX\MyDirect3DDevice9.h">
+      <Filter>头文件\Th10Ai\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\DirectX\MyDirectInput8A.h">
+      <Filter>头文件\Th10Ai\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\DirectX\MyDirectInputDevice8A.h">
+      <Filter>头文件\Th10Ai\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Input.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\DirectX\D3D9Hook.h">
+      <Filter>头文件\Th10Ai\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\DirectX\DI8Hook.h">
+      <Filter>头文件\Th10Ai\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Math\Vector2.h">
+      <Filter>头文件\Th10Ai\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Math\AABB.h">
+      <Filter>头文件\Th10Ai\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Math\OBB.h">
+      <Filter>头文件\Th10Ai\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Math\Projection.h">
+      <Filter>头文件\Th10Ai\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Math\BB.h">
+      <Filter>头文件\Th10Ai\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Node.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Tree.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Th10Ai\DllInject.cpp">
+    <ClCompile Include="src\Th10Ai\Bullet.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Ai\WinMain.cpp">
+    <ClCompile Include="src\Th10Ai\DllMain.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Enemy.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Entity.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Item.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Laser.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\MyDetours.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Path.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Player.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Region.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Scene.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Status.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Th10Ai.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Th10Apis.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Console.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\DirectX\MyDirect3D9.cpp">
+      <Filter>源文件\Th10Ai\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\DirectX\MyDirect3DDevice9.cpp">
+      <Filter>源文件\Th10Ai\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\DirectX\MyDirectInput8A.cpp">
+      <Filter>源文件\Th10Ai\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\DirectX\MyDirectInputDevice8A.cpp">
+      <Filter>源文件\Th10Ai\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Input.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\DirectX\D3D9Hook.cpp">
+      <Filter>源文件\Th10Ai\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\DirectX\DI8Hook.cpp">
+      <Filter>源文件\Th10Ai\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Math\Vector2.cpp">
+      <Filter>源文件\Th10Ai\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Math\AABB.cpp">
+      <Filter>源文件\Th10Ai\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Math\OBB.cpp">
+      <Filter>源文件\Th10Ai\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Math\Projection.cpp">
+      <Filter>源文件\Th10Ai\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Node.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Ai\Tree.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
   </ItemGroup>
