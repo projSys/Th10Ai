@@ -8,7 +8,7 @@
 #include <opencv2/opencv.hpp>
 #endif
 
-#include "Th10Ai/Entity.h"
+#include "Th10Ai/Entity/AABB.h"
 #include "Th10Ai/Status.h"
 
 namespace th
@@ -22,10 +22,10 @@ namespace th
 	};
 
 	class Region :
-		private Entity
+		public AABB
 	{
 	public:
-		Region(const vec2& pos0, const vec2& size0);
+		Region(const vec2& pos, const vec2& size);
 
 		void split(int_t times);
 
@@ -41,6 +41,15 @@ namespace th
 #endif
 
 	private:
+		vec2 getTopLeft() const;
+		vec2 getTopRight() const;
+		vec2 getBottomLeft() const;
+		vec2 getBottomRight() const;
+		void updateAABB();
+
+		vec2 m_pos;			// 坐标在中心点
+		vec2 m_size;
+
 		std::vector<Enemy> m_enemies;
 		std::vector<Bullet> m_bullets;
 		std::vector<Laser> m_lasers;

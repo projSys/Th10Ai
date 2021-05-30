@@ -63,23 +63,23 @@ namespace th
 		const boost::optional<Enemy>& enemyTarget, bool slowFirst)
 	{
 		// 检测节点是否有效
-		Player current = status.getPlayer();
-		current.pos = m_parent->m_pos;
-		current.advance(m_dir, slowFirst);
-		m_pos = current.pos;
+		Player player = status.getPlayer();
+		player.setPosition(m_parent->m_pos);
+		player.advance(m_dir, slowFirst);
+		m_pos = player.pos;
 		m_slow = slowFirst;
 
 		RegionCollideResult rcr = {};
-		if (!Scene::IsInPlayerRegion(current.pos)
-			|| (rcr = scene.collideAll(current, m_frame)).collided)
+		if (!Scene::IsInPlayerRegion(player.pos)
+			|| (rcr = scene.collideAll(player, m_frame)).collided)
 		{
-			current.pos = m_parent->m_pos;
-			current.advance(m_dir, !slowFirst);
-			m_pos = current.pos;
+			player.setPosition(m_parent->m_pos);
+			player.advance(m_dir, !slowFirst);
+			m_pos = player.pos;
 			m_slow = !slowFirst;
 
-			if (!Scene::IsInPlayerRegion(current.pos)
-				|| (rcr = scene.collideAll(current, m_frame)).collided)
+			if (!Scene::IsInPlayerRegion(player.pos)
+				|| (rcr = scene.collideAll(player, m_frame)).collided)
 			{
 				return;
 			}

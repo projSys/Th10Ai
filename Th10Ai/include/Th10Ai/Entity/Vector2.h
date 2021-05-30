@@ -8,19 +8,15 @@ namespace th
 	{
 	public:
 		constexpr Vector2() :
-			x(), y()
-		{
-		}
-
+			x(), y() {}
 		constexpr Vector2(float_t x0, float_t y0) :
-			x(x0), y(y0)
-		{
-		}
+			x(x0), y(y0) {}
 
 		float_t lengthSquared() const;
 		float_t length() const;
 		Vector2 normalize() const;
 		float_t dot(const Vector2& other) const;
+		Vector2 rotate(float_t sinVal, float_t cosVal) const;
 		Vector2 rotate(float_t radian) const;
 		Vector2 verticalize() const;
 		Vector2 negate() const;

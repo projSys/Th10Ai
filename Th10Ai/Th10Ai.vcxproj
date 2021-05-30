@@ -149,7 +149,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Th10Ai\Bullet.h" />
     <ClInclude Include="include\Th10Ai\Common.h" />
     <ClInclude Include="include\Th10Ai\Console.h" />
     <ClInclude Include="include\Th10Ai\Direction.h" />
@@ -160,20 +159,21 @@
     <ClInclude Include="include\Th10Ai\DirectX\MyDirectInput8A.h" />
     <ClInclude Include="include\Th10Ai\DirectX\MyDirectInputDevice8A.h" />
     <ClInclude Include="include\Th10Ai\DllMain.h" />
-    <ClInclude Include="include\Th10Ai\Enemy.h" />
-    <ClInclude Include="include\Th10Ai\Entity.h" />
+    <ClInclude Include="include\Th10Ai\Entity\AABB.h" />
+    <ClInclude Include="include\Th10Ai\Entity\BB.h" />
+    <ClInclude Include="include\Th10Ai\Entity\Bullet.h" />
+    <ClInclude Include="include\Th10Ai\Entity\Enemy.h" />
+    <ClInclude Include="include\Th10Ai\Entity\Entity.h" />
+    <ClInclude Include="include\Th10Ai\Entity\Item.h" />
+    <ClInclude Include="include\Th10Ai\Entity\Laser.h" />
+    <ClInclude Include="include\Th10Ai\Entity\OBB.h" />
+    <ClInclude Include="include\Th10Ai\Entity\Player.h" />
+    <ClInclude Include="include\Th10Ai\Entity\Projection.h" />
+    <ClInclude Include="include\Th10Ai\Entity\Vector2.h" />
     <ClInclude Include="include\Th10Ai\Input.h" />
-    <ClInclude Include="include\Th10Ai\Item.h" />
-    <ClInclude Include="include\Th10Ai\Laser.h" />
-    <ClInclude Include="include\Th10Ai\Math\AABB.h" />
-    <ClInclude Include="include\Th10Ai\Math\BB.h" />
-    <ClInclude Include="include\Th10Ai\Math\OBB.h" />
-    <ClInclude Include="include\Th10Ai\Math\Projection.h" />
-    <ClInclude Include="include\Th10Ai\Math\Vector2.h" />
     <ClInclude Include="include\Th10Ai\MyDetours.h" />
     <ClInclude Include="include\Th10Ai\Node.h" />
     <ClInclude Include="include\Th10Ai\Path.h" />
-    <ClInclude Include="include\Th10Ai\Player.h" />
     <ClInclude Include="include\Th10Ai\Region.h" />
     <ClInclude Include="include\Th10Ai\Scene.h" />
     <ClInclude Include="include\Th10Ai\Status.h" />
@@ -183,7 +183,6 @@
     <ClInclude Include="include\Th10Ai\Tree.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Th10Ai\Bullet.cpp" />
     <ClCompile Include="src\Th10Ai\Console.cpp" />
     <ClCompile Include="src\Th10Ai\DirectX\D3D9Hook.cpp" />
     <ClCompile Include="src\Th10Ai\DirectX\DI8Hook.cpp" />
@@ -192,19 +191,21 @@
     <ClCompile Include="src\Th10Ai\DirectX\MyDirectInput8A.cpp" />
     <ClCompile Include="src\Th10Ai\DirectX\MyDirectInputDevice8A.cpp" />
     <ClCompile Include="src\Th10Ai\DllMain.cpp" />
-    <ClCompile Include="src\Th10Ai\Enemy.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\AABB.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\BB.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\Bullet.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\Enemy.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\Entity.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\Item.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\Laser.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\OBB.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\Player.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\Projection.cpp" />
+    <ClCompile Include="src\Th10Ai\Entity\Vector2.cpp" />
     <ClCompile Include="src\Th10Ai\Input.cpp" />
-    <ClCompile Include="src\Th10Ai\Item.cpp" />
-    <ClCompile Include="src\Th10Ai\Laser.cpp" />
-    <ClCompile Include="src\Th10Ai\Math\AABB.cpp" />
-    <ClCompile Include="src\Th10Ai\Math\OBB.cpp" />
-    <ClCompile Include="src\Th10Ai\Math\Projection.cpp" />
-    <ClCompile Include="src\Th10Ai\Math\Vector2.cpp" />
     <ClCompile Include="src\Th10Ai\MyDetours.cpp" />
     <ClCompile Include="src\Th10Ai\Node.cpp" />
     <ClCompile Include="src\Th10Ai\Path.cpp" />
-    <ClCompile Include="src\Th10Ai\Player.cpp" />
     <ClCompile Include="src\Th10Ai\Region.cpp" />
     <ClCompile Include="src\Th10Ai\Scene.cpp" />
     <ClCompile Include="src\Th10Ai\Status.cpp" />

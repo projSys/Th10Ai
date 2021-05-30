@@ -2,7 +2,7 @@
 
 #include "Th10Ai/Common.h"
 
-#include "Th10Ai/Entity.h"
+#include "Th10Ai/Entity/Entity.h"
 
 namespace th
 {

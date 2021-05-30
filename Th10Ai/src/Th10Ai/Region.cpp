@@ -4,11 +4,12 @@
 
 namespace th
 {
-	Region::Region(const vec2& pos0, const vec2& size0) :
-		Entity(pos0, vec2(), size0),
+	Region::Region(const vec2& pos, const vec2& size) :
+		m_pos(pos),
+		m_size(size),
 		m_times(0)
 	{
-		aabb.update(*this);
+		updateAABB();
 
 		m_enemies.reserve(200);
 		m_bullets.reserve(2000);
@@ -21,15 +22,15 @@ namespace th
 		if (times <= 0)
 			return;
 
-		if (size.x > size.y)
+		if (m_size.x > m_size.y)
 		{
-			m_first = std::make_unique<Region>(vec2(pos.x - size.x / _F(4.0), pos.y), vec2(size.x / _F(2.0), size.y));
-			m_second = std::make_unique<Region>(vec2(pos.x + size.x / _F(4.0), pos.y), vec2(size.x / _F(2.0), size.y));
+			m_first = std::make_unique<Region>(vec2(m_pos.x - m_size.x / _F(4.0), m_pos.y), vec2(m_size.x / _F(2.0), m_size.y));
+			m_second = std::make_unique<Region>(vec2(m_pos.x + m_size.x / _F(4.0), m_pos.y), vec2(m_size.x / _F(2.0), m_size.y));
 		}
 		else
 		{
-			m_first = std::make_unique<Region>(vec2(pos.x, pos.y - size.y / _F(4.0)), vec2(size.x, size.y / _F(2.0)));
-			m_second = std::make_unique<Region>(vec2(pos.x, pos.y + size.y / _F(4.0)), vec2(size.x, size.y / _F(2.0)));
+			m_first = std::make_unique<Region>(vec2(m_pos.x, m_pos.y - m_size.y / _F(4.0)), vec2(m_size.x, m_size.y / _F(2.0)));
+			m_second = std::make_unique<Region>(vec2(m_pos.x, m_pos.y + m_size.y / _F(4.0)), vec2(m_size.x, m_size.y / _F(2.0)));
 		}
 
 		m_first->split(times - 1);
@@ -100,7 +101,7 @@ namespace th
 	{
 		RegionCollideResult result = {};
 
-		if (!collide(player))
+		if (!player.collide(*this))
 			return result;
 
 		// 只检测叶子节点
@@ -177,7 +178,7 @@ namespace th
 			}
 		}
 
-		if (!collide(player))
+		if (!player.collide(*this))
 		{
 			return result;
 		}
@@ -300,4 +301,32 @@ namespace th
 			m_second->render(mat, player);
 	}
 #endif
+
+	vec2 Region::getTopLeft() const
+	{
+		return vec2(m_pos.x - m_size.x / _F(2.0), m_pos.y - m_size.y / _F(2.0));
+	}
+
+	vec2 Region::getTopRight() const
+	{
+		return vec2(m_pos.x + m_size.x / _F(2.0), m_pos.y - m_size.y / _F(2.0));
+	}
+
+	vec2 Region::getBottomLeft() const
+	{
+		return vec2(m_pos.x - m_size.x / _F(2.0), m_pos.y + m_size.y / _F(2.0));
+	}
+
+	vec2 Region::getBottomRight() const
+	{
+		return vec2(m_pos.x + m_size.x / _F(2.0), m_pos.y + m_size.y / _F(2.0));
+	}
+
+	void Region::updateAABB()
+	{
+		m_topLeft = getTopLeft();
+		m_topRight = getTopRight();
+		m_bottomLeft = getBottomLeft();
+		m_bottomRight = getBottomRight();
+	}
 }

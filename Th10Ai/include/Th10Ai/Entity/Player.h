@@ -2,7 +2,7 @@
 
 #include "Th10Ai/Common.h"
 
-#include "Th10Ai/Entity.h"
+#include "Th10Ai/Entity/Entity.h"
 #include "Th10Ai/Direction.h"
 
 namespace th
@@ -57,6 +57,7 @@ namespace th
 
 		Player();
 
+		void setPosition(const vec2& pos0);
 		void advance(DIR dir, bool slow);
 
 		bool isRebirthStatus() const;

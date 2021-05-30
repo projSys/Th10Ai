@@ -1,6 +1,7 @@
 #include "Th10Ai/DllMain.h"
 
 #include <memory>
+#include <boost/filesystem.hpp>
 #include <Base/Windows/Apis.h>
 
 #include "Th10Ai/MyDetours.h"

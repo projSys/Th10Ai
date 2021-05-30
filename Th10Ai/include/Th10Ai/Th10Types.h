@@ -4,7 +4,7 @@
 
 namespace th
 {
-	struct RawPlayer
+	struct PlayerRaw
 	{
 		byte_t unknown0[0x3C0];
 		float32_t x;				// 0x3C0
@@ -23,5 +23,5 @@ namespace th
 		int32_t slow;				// 0x4474
 	};
 
-	static_assert(sizeof(RawPlayer) == 0x4478, "Size is not correct.");
+	static_assert(sizeof(PlayerRaw) == 0x4478, "Size is not correct.");
 }

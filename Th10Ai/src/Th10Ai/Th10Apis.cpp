@@ -12,7 +12,7 @@ namespace th
 
 	bool Th10Apis::GetPlayer(Player& player)
 	{
-		RawPlayer* raw = ReadMemory<RawPlayer*>(0x00477834);
+		PlayerRaw* raw = ReadMemory<PlayerRaw*>(0x00477834);
 		if (raw == nullptr)
 			return false;
 

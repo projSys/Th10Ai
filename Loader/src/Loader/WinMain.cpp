@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <system_error>
+#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 #include <Base/ScopeGuard.h>
 #include <Base/Windows/Apis.h>
@@ -30,6 +31,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 		po::variables_map vm;
 		po::store(po::parse_config_file(ifs, desc), vm);
 		po::notify(vm);
+
 		fs::path exePath = Apis::AnsiToWide(vm["exe-path"].as<std::string>());
 		fs::path dllName = Apis::AnsiToWide(vm["dll-name"].as<std::string>());
 		fs::path exeDir = exePath.parent_path();

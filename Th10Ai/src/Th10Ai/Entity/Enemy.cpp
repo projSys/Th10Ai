@@ -1,4 +1,4 @@
-#include "Th10Ai/Enemy.h"
+#include "Th10Ai/Entity/Enemy.h"
 
 namespace th
 {

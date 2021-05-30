@@ -1,4 +1,4 @@
-#include "Th10Ai/Entity.h"
+#include "Th10Ai/Entity/Entity.h"
 
 #include <math.h>
 #include <cmath>
@@ -16,35 +16,34 @@ namespace th
 
 	void Entity::updateExtra()
 	{
-		aabb.update(*this);
+		updateAABB();
+
 		if (!delta.isZero())
 		{
 			deltaV = delta.verticalize().normalize();
-			projV = Projection(aabb, deltaV);
+			projV = project(deltaV);
 		}
 	}
 
-	bool Entity::collide(const Entity& other) const
-	{
-		return std::abs(pos.x - other.pos.x) < (size.x + other.size.x) / _F(2.0)
-			&& std::abs(pos.y - other.pos.y) < (size.y + other.size.y) / _F(2.0);
-		//return AABB(*this).collide(AABB(other));
-	}
+	//bool Entity::collide(const Entity& other) const
+	//{
+	//	return std::abs(pos.x - other.pos.x) < (size.x + other.size.x) / _F(2.0)
+	//		&& std::abs(pos.y - other.pos.y) < (size.y + other.size.y) / _F(2.0);
+	//}
 
-	bool Entity::willCollideWith(const Entity& other) const
+	bool Entity::willCollideWith(const AABB& other) const
 	{
 		// 可以认为与移动向量总是重叠的
 		// 然后只需要检测在移动向量的垂直向量上是否重叠
 		if (!delta.isZero())
 		{
 			//vec2 deltaV = delta.verticalize().normalize();
-			//return Projection(AABB(*this), deltaV).overlap(
-			//	Projection(AABB(other), deltaV));
-			return projV.overlap(Projection(other.aabb, deltaV));
+			//return project(deltaV).overlap(other.project(deltaV));
+			return projV.overlap(other.project(deltaV));
 		}
 		else
 		{
-			return aabb.collide(other.aabb);
+			return collide(other);
 		}
 	}
 
@@ -53,14 +52,11 @@ namespace th
 		return (pos - other.pos).length();
 	}
 
-	bool Entity::isHolding() const
-	{
-		return delta.isZero();
-	}
-
 	void Entity::advance(int_t frame)
 	{
-		pos += (delta * static_cast<float_t>(frame));
+		vec2 offset = delta * static_cast<float_t>(frame);
+		pos += offset;
+		translate(offset);
 	}
 
 	vec2 Entity::getTopLeft() const
@@ -81,5 +77,13 @@ namespace th
 	vec2 Entity::getBottomRight() const
 	{
 		return vec2(pos.x + size.x / _F(2.0), pos.y + size.y / _F(2.0));
+	}
+
+	void Entity::updateAABB()
+	{
+		m_topLeft = getTopLeft();
+		m_topRight = getTopRight();
+		m_bottomLeft = getBottomLeft();
+		m_bottomRight = getBottomRight();
 	}
 }

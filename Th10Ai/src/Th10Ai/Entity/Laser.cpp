@@ -1,9 +1,9 @@
-#include "Th10Ai/Laser.h"
+#include "Th10Ai/Entity/Laser.h"
 
 #include <math.h>
 #include <cmath>
 
-#include "Th10Ai/Entity.h"
+#include "Th10Ai/Entity/Entity.h"
 
 namespace th
 {
@@ -19,47 +19,39 @@ namespace th
 
 	void Laser::updateExtra()
 	{
-		obb.update(*this);
+		updateOBB();
+
 		if (!delta.isZero())
 		{
 			deltaV = delta.verticalize().normalize();
-			projV = Projection(obb, deltaV);
+			projV = project(deltaV);
 		}
 	}
 
-	bool Laser::collide(const Entity& other) const
-	{
-		return OBB(*this).collide(AABB(other));
-	}
-
-	bool Laser::willCollideWith(const Entity& other) const
+	bool Laser::willCollideWith(const AABB& other) const
 	{
 		if (!delta.isZero())
 		{
 			//vec2 deltaV = delta.verticalize().normalize();
-			//return Projection(OBB(*this), deltaV).overlap(
-			//	Projection(AABB(other), deltaV));
-			return projV.overlap(Projection(other.aabb, deltaV));
+			//return project(deltaV).overlap(other.project(deltaV));
+			return projV.overlap(other.project(deltaV));
 		}
 		else
 		{
-			return obb.collide(other.aabb);
+			return collide(other);
 		}
 	}
 
-	float_t Laser::distance(const Entity& other) const
+	float_t Laser::distance(const Entity& entity) const
 	{
-		return (pos - other.pos).length();
-	}
-
-	bool Laser::isHolding() const
-	{
-		return delta.isZero();
+		return (pos - entity.pos).length();
 	}
 
 	void Laser::advance(int_t frame)
 	{
-		pos += (delta * static_cast<float_t>(frame));
+		vec2 offset = delta * static_cast<float_t>(frame);
+		pos += offset;
+		translate(offset);
 	}
 
 	vec2 Laser::getTopLeft() const
@@ -87,5 +79,18 @@ namespace th
 		// emmm...ÄãËµÕâ¸öË­¶®°¡£¿
 		float_t radian = arc - static_cast<float_t>(M_PI) * _F(5.0) / _F(2.0);
 		return radian;
+	}
+
+	void Laser::updateOBB()
+	{
+		float_t radian = getRadian();
+		float_t sinVal = std::sin(radian);
+		float_t cosVal = std::cos(radian);
+		m_topLeft = pos + (getTopLeft() - pos).rotate(sinVal, cosVal);
+		m_topRight = pos + (getTopRight() - pos).rotate(sinVal, cosVal);
+		m_bottomLeft = pos + (getBottomLeft() - pos).rotate(sinVal, cosVal);
+		m_bottomRight = pos + (getBottomRight() - pos).rotate(sinVal, cosVal);
+		m_axisX = vec2(_F(1.0), _F(0.0)).rotate(sinVal, cosVal);
+		m_axisY = vec2(_F(0.0), _F(1.0)).rotate(sinVal, cosVal);
 	}
 }

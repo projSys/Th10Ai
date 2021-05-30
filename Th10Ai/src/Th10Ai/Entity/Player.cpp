@@ -1,4 +1,4 @@
-#include "Th10Ai/Player.h"
+#include "Th10Ai/Entity/Player.h"
 
 namespace th
 {
@@ -13,21 +13,33 @@ namespace th
 	{
 	}
 
+	void Player::setPosition(const vec2& pos0)
+	{
+		pos = pos0;
+		updateAABB();
+	}
+
 	void Player::advance(DIR dir, bool slow)
 	{
 		if (slow)
 		{
-			pos += MOVE_SPEED_LOW[to_underlying(dir)];
+			vec2 offset = MOVE_SPEED_LOW[to_underlying(dir)];
+			pos += offset;
+			translate(offset);
 		}
 		else
 		{
 			if (isMarisa())
 			{
-				pos += MOVE_SPEED_MARISA[to_underlying(dir)];
+				vec2 offset = MOVE_SPEED_MARISA[to_underlying(dir)];
+				pos += offset;
+				translate(offset);
 			}
 			else
 			{
-				pos += MOVE_SPEED_HIGH[to_underlying(dir)];
+				vec2 offset = MOVE_SPEED_HIGH[to_underlying(dir)];
+				pos += offset;
+				translate(offset);
 			}
 		}
 	}

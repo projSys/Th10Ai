@@ -1,4 +1,4 @@
-#include "Th10Ai/Math/Vector2.h"
+#include "Th10Ai/Entity/Vector2.h"
 
 #include <math.h>
 #include <cmath>
@@ -26,13 +26,18 @@ namespace th
 		return x * other.x + y * other.y;
 	}
 
+	Vector2 Vector2::rotate(float_t sinVal, float_t cosVal) const
+	{
+		float_t x1 = x * cosVal - y * sinVal;
+		float_t y1 = x * sinVal + y * cosVal;
+		return Vector2(x1, y1);
+	}
+
 	Vector2 Vector2::rotate(float_t radian) const
 	{
 		float_t sinVal = std::sin(radian);
 		float_t cosVal = std::cos(radian);
-		float_t x1 = x * cosVal - y * sinVal;
-		float_t y1 = x * sinVal + y * cosVal;
-		return Vector2(x1, y1);
+		return rotate(sinVal, cosVal);
 	}
 
 	Vector2 Vector2::verticalize() const

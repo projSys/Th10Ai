@@ -33,7 +33,6 @@ namespace th
 		void backPropagate();
 
 		bool isRoot() const;
-
 		bool isLeaf() const;
 
 	//private:

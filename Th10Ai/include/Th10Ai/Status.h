@@ -5,11 +5,11 @@
 #include <vector>
 #include <boost/optional.hpp>
 
-#include "Th10Ai/Player.h"
-#include "Th10Ai/Item.h"
-#include "Th10Ai/Enemy.h"
-#include "Th10Ai/Bullet.h"
-#include "Th10Ai/Laser.h"
+#include "Th10Ai/Entity/Player.h"
+#include "Th10Ai/Entity/Item.h"
+#include "Th10Ai/Entity/Enemy.h"
+#include "Th10Ai/Entity/Bullet.h"
+#include "Th10Ai/Entity/Laser.h"
 
 namespace th
 {

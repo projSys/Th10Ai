@@ -2,9 +2,15 @@
 
 #include "Base/Windows/Common.h"
 
-#include <boost/filesystem.hpp>
-
 #include "Base/String.h"
+
+namespace boost
+{
+	namespace filesystem
+	{
+		class path;
+	}
+}
 
 namespace base
 {

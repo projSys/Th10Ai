@@ -1,6 +1,7 @@
 #include "Base/Windows/Apis.h"
 
 #include <system_error>
+#include <boost/filesystem.hpp>
 
 #include "Base/Exception.h"
 #include "Base/TypeTraits.h"

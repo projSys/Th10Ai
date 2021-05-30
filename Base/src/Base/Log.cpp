@@ -26,31 +26,31 @@ namespace base
 
 	void Log::logTrace(const std::string& str)
 	{
-		BOOST_LOG_TRIVIAL(trace) << str;
+		BOOST_LOG_TRIVIAL(trace) << str << std::endl;
 	}
 
 	void Log::logDebug(const std::string& str)
 	{
-		BOOST_LOG_TRIVIAL(debug) << str;
+		BOOST_LOG_TRIVIAL(debug) << str << std::endl;
 	}
 
 	void Log::logInfo(const std::string& str)
 	{
-		BOOST_LOG_TRIVIAL(info) << str;
+		BOOST_LOG_TRIVIAL(info) << str << std::endl;
 	}
 
 	void Log::logWarning(const std::string& str)
 	{
-		BOOST_LOG_TRIVIAL(warning) << str;
+		BOOST_LOG_TRIVIAL(warning) << str << std::endl;
 	}
 
 	void Log::logError(const std::string& str)
 	{
-		BOOST_LOG_TRIVIAL(error) << str;
+		BOOST_LOG_TRIVIAL(error) << str << std::endl;
 	}
 
 	void Log::logFatal(const std::string& str)
 	{
-		BOOST_LOG_TRIVIAL(fatal) << str;
+		BOOST_LOG_TRIVIAL(fatal) << str << std::endl;
 	}
 }
