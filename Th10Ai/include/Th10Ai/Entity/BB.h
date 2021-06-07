@@ -11,7 +11,7 @@ namespace th
 	class BB
 	{
 	public:
-		// 投影
+		// 投影，把2维降成1维
 		Projection project(const vec2& axis) const;
 		// 平移
 		void translate(const vec2& offset);

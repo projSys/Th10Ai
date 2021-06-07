@@ -11,8 +11,8 @@ namespace th
 		public BB
 	{
 	public:
-		Projection horizontalProject() const;
-		Projection verticalProject() const;
+		Projection projectX() const;
+		Projection projectY() const;
 		bool collide(const AABB& other) const;
 	};
 }

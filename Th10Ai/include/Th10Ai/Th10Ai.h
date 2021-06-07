@@ -72,8 +72,11 @@ namespace th
 		int_t m_bombCount;
 		Time m_findItemTime;
 
-		Input m_input;
-		std::atomic<bool> m_inputUpdated;
+		std::mutex m_inputMutex;
+		bool m_inputUpdated;
+		std::unique_ptr<Input> m_writableInput;
+		std::unique_ptr<Input> m_intermediateInput;
+		std::unique_ptr<Input> m_readableInput;
 
 		std::atomic<int_t> inputFrame;
 		std::atomic<int_t> statusFrame;

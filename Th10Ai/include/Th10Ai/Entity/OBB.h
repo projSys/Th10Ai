@@ -13,10 +13,10 @@ namespace th
 		public BB
 	{
 	public:
-		bool collide(const AABB& aabb) const;
+		bool collide(const AABB& other) const;
 
 	protected:
-		vec2 m_axisX;		// 投影轴，单位向量
+		vec2 m_axisX;	// 投影轴，单位向量
 		vec2 m_axisY;
 	};
 }

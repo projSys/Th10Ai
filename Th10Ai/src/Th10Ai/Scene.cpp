@@ -32,7 +32,7 @@ namespace th
 	Scene::Scene() :
 		m_region(vec2(_F(0.0), _F(224.0)), SIZE)
 	{
-		m_region.split(4);
+		m_region.split(6);
 	}
 
 	void Scene::clearAll()

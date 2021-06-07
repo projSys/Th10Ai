@@ -1,15 +1,13 @@
 #include "Th10Ai/Entity/AABB.h"
 
-#include "Th10Ai/Entity/Projection.h"
-
 namespace th
 {
-	Projection AABB::horizontalProject() const
+	Projection AABB::projectX() const
 	{
 		return Projection(m_topLeft.x, m_bottomRight.x);
 	}
 
-	Projection AABB::verticalProject() const
+	Projection AABB::projectY() const
 	{
 		return Projection(m_topLeft.y, m_bottomRight.y);
 	}
@@ -17,9 +15,9 @@ namespace th
 	bool AABB::collide(const AABB& other) const
 	{
 		// SAT∑÷¿Î÷·∂®¿Ì
-		if (!horizontalProject().overlap(other.horizontalProject()))
+		if (!projectX().overlap(other.projectX()))
 			return false;
-		if (!verticalProject().overlap(other.verticalProject()))
+		if (!projectY().overlap(other.projectY()))
 			return false;
 		return true;
 	}

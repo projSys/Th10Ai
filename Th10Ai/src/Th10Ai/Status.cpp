@@ -38,8 +38,8 @@ namespace th
 	void Status::updateExtra()
 	{
 		m_player.updateExtra();
-		for (Item& item : m_items)
-			item.updateExtra();
+		//for (Item& item : m_items)
+		//	item.updateExtra();
 		for (Enemy& enemy : m_enemies)
 			enemy.updateExtra();
 		for (Bullet& bullet : m_bullets)

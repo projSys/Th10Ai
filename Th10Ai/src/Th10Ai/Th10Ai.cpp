@@ -56,6 +56,10 @@ namespace th
 		m_intermediateStatus = std::make_unique<Status>();
 		m_readableStatus = std::make_unique<Status>();
 
+		m_writableInput = std::make_unique<Input>();
+		m_intermediateInput = std::make_unique<Input>();
+		m_readableInput = std::make_unique<Input>();
+
 #if RENDER
 		cv::namedWindow("Th10Ai");
 #endif
@@ -172,7 +176,7 @@ namespace th
 
 		std::unique_lock<std::mutex> lock(m_statusMutex);
 		if (m_statusUpdated)
-			std::cout << "ÌøÖ¡" << std::endl;
+			std::cout << "×´Ì¬ÌøÖ¡" << std::endl;
 		m_writableStatus.swap(m_intermediateStatus);
 		m_statusUpdated = true;
 		m_statusCond.notify_one();
@@ -304,14 +308,20 @@ namespace th
 		m_scene.splitBullets(m_readableStatus->getBullets());
 		m_scene.splitLasers(m_readableStatus->getLasers());
 
-		m_input.clear();
+		m_writableInput->clear();
 
 		handleBomb();
 		handleTalk();
 		handleShoot();
 		handleMove();
 
-		m_inputUpdated = true;
+		{
+			std::unique_lock<std::mutex> lock(m_inputMutex);
+			if (m_inputUpdated)
+				std::cout << "ÊäÈëÌøÖ¡" << std::endl;
+			m_writableInput.swap(m_intermediateInput);
+			m_inputUpdated = true;
+		}
 #endif
 		return true;
 	}
@@ -327,10 +337,19 @@ namespace th
 
 		++inputFrame;
 
-		if (m_inputUpdated)
+		bool inputUpdated = false;
 		{
-			m_input.commit(size, data);
-			m_inputUpdated = false;
+			std::unique_lock<std::mutex> lock(m_inputMutex);
+			if (m_inputUpdated)
+			{
+				m_readableInput.swap(m_intermediateInput);
+				m_inputUpdated = false;
+				inputUpdated = true;
+			}
+		}
+		if (inputUpdated)
+		{
+			m_readableInput->commit(size, data);
 		}
 		else
 		{
@@ -369,7 +388,7 @@ namespace th
 				//	//std::cout << rcr2.collided << std::endl;
 				//}
 
-				m_input.bomb();
+				m_writableInput->bomb();
 				++m_bombCount;
 				std::cout << statusFrame - handleFrame << "/"
 					<< handleFrame << "/"
@@ -387,7 +406,7 @@ namespace th
 	{
 		if (m_readableStatus->isTalking())
 		{
-			m_input.skip();
+			m_writableInput->skip();
 			return true;
 		}
 		return false;
@@ -398,7 +417,7 @@ namespace th
 	{
 		if (m_readableStatus->haveEnemies())
 		{
-			m_input.shoot();
+			m_writableInput->shoot();
 			return true;
 		}
 		return false;
@@ -413,81 +432,81 @@ namespace th
 		boost::optional<Item> itemTarget = findItem();
 		boost::optional<Enemy> enemyTarget = findEnemy();
 		bool underEnemy = m_readableStatus->isUnderEnemy();
-		//bool slowFirst = (!itemTarget.has_value() && underEnemy);
-		bool slowFirst = false;
-
-		float_t bestScore = std::numeric_limits<float_t>::lowest();
-		boost::optional<DIR> bestDir;
-		boost::optional<bool> bestSlow;
-
-		for (DIR dir : DIRS)
-		{
-			Path path(*m_readableStatus, m_scene, itemTarget, enemyTarget, underEnemy);
-			Result result = path.find(dir);
-
-			if (result.valid && path.m_bestScore > bestScore)
-			{
-				bestScore = path.m_bestScore;
-				bestDir = path.m_dir;
-				bestSlow = result.slow;
-			}
-		}
-
-		if (bestDir.has_value() && bestSlow.has_value())
-		{
-			m_input.move(bestDir.value());
-			if (bestSlow.value())
-				m_input.slow();
-		}
-		else
-		{
-			std::cout << "No way to go." << std::endl;
-		}
-
-		//m_root = new Node();
-		//m_root->m_valid = true;
-		//m_root->m_pos = m_readableStatus->getPlayer().pos;
-
-		//int count = 0;
-		//while (true)
-		//{
-		//	Node* highestLeaf = m_root->select();
-		//	highestLeaf->expand(*m_readableStatus, m_scene, itemTarget, enemyTarget, slowFirst);
-		//	if (highestLeaf == m_root && !highestLeaf->m_valid)
-		//	{
-		//		std::cout << "No way to go. 1" << std::endl;
-		//		break;
-		//	}
-
-		//	++count;
-		//	if (count >= 40)
-		//		break;
-		//}
+		bool slowFirst = (!itemTarget.has_value() && underEnemy);
+		//bool slowFirst = false;
 
 		//float_t bestScore = std::numeric_limits<float_t>::lowest();
 		//boost::optional<DIR> bestDir;
 		//boost::optional<bool> bestSlow;
-		//for (Node& child : m_root->m_children)
+
+		//for (DIR dir : DIRS)
 		//{
-		//	if (child.m_valid && child.m_avgScore > bestScore)
+		//	Path path(*m_readableStatus, m_scene, itemTarget, enemyTarget, underEnemy);
+		//	Result result = path.find(dir);
+
+		//	if (result.valid && path.m_bestScore > bestScore)
 		//	{
-		//		bestScore = child.m_avgScore;
-		//		bestDir = child.m_dir;
-		//		bestSlow = child.m_slow;
+		//		bestScore = path.m_bestScore;
+		//		bestDir = path.m_dir;
+		//		bestSlow = result.slow;
 		//	}
 		//}
+
 		//if (bestDir.has_value() && bestSlow.has_value())
 		//{
-		//	m_input.move(bestDir.value());
+		//	m_writableInput->move(bestDir.value());
 		//	if (bestSlow.value())
-		//		m_input.slow();
+		//		m_writableInput->slow();
 		//}
 		//else
 		//{
-		//	std::cout << "No way to go. 2" << std::endl;
+		//	std::cout << "No way to go." << std::endl;
 		//}
 
-		//delete m_root;
+		m_root = new Node();
+		m_root->m_valid = true;
+		m_root->m_pos = m_readableStatus->getPlayer().pos;
+
+		int count = 0;
+		while (true)
+		{
+			Node* highestLeaf = m_root->select();
+			highestLeaf->expand(*m_readableStatus, m_scene, itemTarget, enemyTarget, slowFirst);
+			if (highestLeaf == m_root && !highestLeaf->m_valid)
+			{
+				std::cout << "No way to go. 1" << std::endl;
+				break;
+			}
+
+			++count;
+			if (count >= 40)
+				break;
+		}
+
+		float_t bestScore = std::numeric_limits<float_t>::lowest();
+		boost::optional<DIR> bestDir;
+		boost::optional<bool> bestSlow;
+		for (Node& child : m_root->m_children)
+		{
+			if (child.m_valid && child.m_avgScore > bestScore)
+			{
+				bestScore = child.m_avgScore;
+				bestDir = child.m_dir;
+				bestSlow = child.m_slow;
+			}
+		}
+		if (bestDir.has_value() && bestSlow.has_value())
+		{
+			m_writableInput->move(bestDir.value());
+			if (bestSlow.value())
+				m_writableInput->slow();
+		}
+		else
+		{
+			std::cout << "No way to go. 2" << std::endl;
+		}
+
+		delete m_root;
 
 		return true;
 	}

@@ -3,7 +3,6 @@
 #include "Th10Ai/Common.h"
 
 #include "Th10Ai/Entity/AABB.h"
-#include "Th10Ai/Entity/Projection.h"
 
 namespace th
 {
@@ -36,9 +35,6 @@ namespace th
 		void updateAABB();
 
 	public:
-		//int_t id;
-		//int_t type;
-
 		vec2 pos;			// 坐标在中心点
 		vec2 delta;
 		vec2 size;

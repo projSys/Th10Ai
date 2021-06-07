@@ -3,7 +3,6 @@
 #include "Th10Ai/Common.h"
 
 #include "Th10Ai/Entity/OBB.h"
-#include "Th10Ai/Entity/Projection.h"
 
 namespace th
 {
