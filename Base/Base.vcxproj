@@ -152,8 +152,8 @@
     <ClInclude Include="include\Base\Exception.h" />
     <ClInclude Include="include\Base\FuncTraits.h" />
     <ClInclude Include="include\Base\Log.h" />
+    <ClInclude Include="include\Base\Logger.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
-    <ClInclude Include="include\Base\Singleton.h" />
     <ClInclude Include="include\Base\SourceLocation.h" />
     <ClInclude Include="include\Base\StackTrace.h" />
     <ClInclude Include="include\Base\String.h" />
@@ -169,6 +169,7 @@
     <ClCompile Include="src\Base\Clock.cpp" />
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Log.cpp" />
+    <ClCompile Include="src\Base\Logger.cpp" />
     <ClCompile Include="src\Base\SourceLocation.cpp" />
     <ClCompile Include="src\Base\StackTrace.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />

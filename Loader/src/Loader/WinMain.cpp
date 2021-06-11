@@ -1,26 +1,29 @@
-#include "Loader/Common.h"
+#include "Loader/WinMain.h"
 
 #include <fstream>
 #include <system_error>
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
+#include <Base/Logger.h>
 #include <Base/ScopeGuard.h>
 #include <Base/Windows/Apis.h>
+#include <Base/Windows/ExceptFilter.h>
 
 #include "Loader/DllInject.h"
 
 namespace po = boost::program_options;
 using namespace ld;
 
-Log g_log;
-
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 	_In_ LPWSTR cmdLine, _In_ int cmdShow)
 {
+	//ExceptFilter::SetProcessExceptionHandlers();
+	//ExceptFilter::SetThreadExceptionHandlers();
+
 	try
 	{
-		fs::path logPath = Apis::GetModuleDir() / L"Loader_%N.log";
-		g_log.addFileLog(logPath);
+		fs::path logPath = Apis::GetModuleDir() / L"Loader.log";
+		g_logger.addFileLog(logPath);
+		g_logger.addCommonAttributes();
 
 		fs::path confPath = Apis::GetModuleDir() / L"Loader.conf";
 		std::ifstream ifs(confPath.c_str());
@@ -33,7 +36,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 		po::notify(vm);
 
 		fs::path exePath = Apis::AnsiToWide(vm["exe-path"].as<std::string>());
-		fs::path dllName = Apis::AnsiToWide(vm["dll-name"].as<std::string>());
+		std::wstring dllName = Apis::AnsiToWide(vm["dll-name"].as<std::string>());
 		fs::path exeDir = exePath.parent_path();
 
 		STARTUPINFOW si = {};
@@ -58,7 +61,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 	}
 	catch (...)
 	{
-		BASE_LOG_ERROR(PrintException());
+		BASE_LOG(error) << PrintException() << std::endl;
+		//throw;
 	}
+
 	return 0;
 }

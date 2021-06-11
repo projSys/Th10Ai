@@ -74,7 +74,7 @@ namespace th
 			}
 			catch (...)
 			{
-				BASE_LOG_ERROR(PrintException());
+				BASE_LOG(error) << PrintException() << std::endl;
 			}
 		}
 		return hr;

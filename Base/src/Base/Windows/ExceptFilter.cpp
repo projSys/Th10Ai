@@ -171,8 +171,7 @@ namespace base
 
 		void ExceptFilter::Trace(EXCEPTION_POINTERS* info)
 		{
-			ExceptTrace& exceptTrace = ExceptTrace::GetInstance();
-			exceptTrace.trace(info);
+			g_exceptTrace.trace(info);
 		}
 	}
 }

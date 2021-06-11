@@ -117,7 +117,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG_ERROR(PrintException());
+			BASE_LOG(error) << PrintException() << std::endl;
 			throw;
 		}
 	}
@@ -159,7 +159,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG_ERROR(PrintException());
+			BASE_LOG(error) << PrintException() << std::endl;
 			throw;
 		}
 	}
@@ -536,8 +536,8 @@ namespace th
 			return target;
 		}
 
-		// 自机高于1/2屏，道具少于10个，敌人多于5个
-		if ((player.pos.y < Scene::SIZE.y / 2) && (items.size() < 10) && (enemies.size() > 5))
+		// 自机高于1/2屏，敌人多于5个
+		if ((player.pos.y < Scene::SIZE.y / 2) && (enemies.size() > 5))
 		{
 			// 进入冷却
 			m_findItemTime = now;
@@ -548,6 +548,7 @@ namespace th
 		//float_t maxY = std::numeric_limits<float_t>::lowest();
 		for (const Item& item : items)
 		{
+			// 道具在屏幕外
 			if (!Scene::IsInScene(item.pos))
 				continue;
 
@@ -564,7 +565,7 @@ namespace th
 			bool tooClose = false;
 			for (const Enemy& enemy : enemies)
 			{
-				if (item.distance(enemy) < 100)
+				if (item.distance(enemy) < 150)
 				{
 					tooClose = true;
 					break;
@@ -609,13 +610,15 @@ namespace th
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (const Enemy& enemy : enemies)
 		{
+			// 敌人在屏幕外
 			if (!Scene::IsInScene(enemy.pos))
 				continue;
 
+			// 敌人在自机下面
 			if (enemy.pos.y > player.pos.y)
 				continue;
 
-			// 与自机X轴距离最近
+			// 敌人与自机X轴距离最近
 			float_t dx = std::abs(enemy.pos.x - player.pos.x);
 			if (dx < minDist)
 			{

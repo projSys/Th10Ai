@@ -1,8 +1,5 @@
 #include "Th10Ai/Scene.h"
 
-#include <math.h>
-#include <cmath>
-
 namespace th
 {
 	bool Scene::IsInScene(const vec2& pos)
@@ -19,14 +16,12 @@ namespace th
 
 	vec2 Scene::ToWindowPos(const vec2& scenePos)
 	{
-		return vec2(std::round(scenePos.x + ORIGIN_POINT_OFFSET.x + OFFSET.x),
-			std::round(scenePos.y + ORIGIN_POINT_OFFSET.y + OFFSET.y));
+		return BORDER_OFFSET + ORIGIN_POINT_OFFSET + scenePos;
 	}
 
 	vec2 Scene::ToScenePos(const vec2& windowPos)
 	{
-		return vec2(windowPos.x - OFFSET.x - ORIGIN_POINT_OFFSET.x,
-			windowPos.y - OFFSET.y - ORIGIN_POINT_OFFSET.y);
+		return windowPos - ORIGIN_POINT_OFFSET - BORDER_OFFSET;
 	}
 
 	Scene::Scene() :

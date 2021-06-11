@@ -6,8 +6,21 @@
 
 namespace th
 {
+	DI8Hook g_di8Hook;
+
+	HRESULT WINAPI DirectInput8CreateHook(HINSTANCE hinst, DWORD dwVersion,
+		REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
+	{
+		return g_di8Hook.directInput8CreateHook(hinst, dwVersion, riidltf,
+			ppvOut, punkOuter);
+	}
+
 	DI8Hook::DI8Hook() :
-		Singleton(this)
+		m_directInput8CreateOrig(nullptr)
+	{
+	}
+
+	void DI8Hook::attach(MyDetours& detours)
 	{
 		HMODULE dinput8Dll = GetModuleHandleW(L"dinput8.dll");
 		if (dinput8Dll == nullptr)
@@ -17,10 +30,7 @@ namespace th
 				GetProcAddress(dinput8Dll, "DirectInput8Create"));
 		if (m_directInput8CreateOrig == nullptr)
 			BASE_THROW(std::system_error(GetLastError(), std::system_category()));
-	}
 
-	void DI8Hook::attach(MyDetours& detours)
-	{
 		detours.attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig),
 			DirectInput8CreateHook);
 	}
@@ -31,17 +41,11 @@ namespace th
 			DirectInput8CreateHook);
 	}
 
-	HRESULT DI8Hook::DirectInput8CreateHook(HINSTANCE hinst, DWORD dwVersion,
-		REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
-	{
-		DI8Hook& di8Hook = DI8Hook::GetInstance();
-		return di8Hook.directInput8CreateHook(hinst, dwVersion, riidltf, ppvOut, punkOuter);
-	}
-
 	HRESULT DI8Hook::directInput8CreateHook(HINSTANCE hinst, DWORD dwVersion,
 		REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
 	{
-		HRESULT hr = m_directInput8CreateOrig(hinst, dwVersion, riidltf, ppvOut, punkOuter);
+		HRESULT hr = m_directInput8CreateOrig(hinst, dwVersion, riidltf,
+			ppvOut, punkOuter);
 		if (SUCCEEDED(hr))
 		{
 			if (riidltf == IID_IDirectInput8A)

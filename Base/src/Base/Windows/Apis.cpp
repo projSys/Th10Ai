@@ -10,23 +10,6 @@ namespace base
 {
 	namespace win
 	{
-		fs::path Apis::GetModulePath(HMODULE module)
-		{
-			WCHAR buffer[BUFFER_SIZE] = {};
-			DWORD ret = GetModuleFileNameW(module, buffer, BUFFER_SIZE - 1);
-			if (ret == 0)
-				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
-			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
-
-			return fs::path(buffer);
-		}
-
-		fs::path Apis::GetModuleDir(HMODULE module)
-		{
-			return GetModulePath(module).parent_path();
-		}
-
 		std::wstring Apis::MultiByteToWideChar(UINT codePage, const char* str, int strSize)
 		{
 			int wstrSize = ::MultiByteToWideChar(codePage, 0, str, strSize, nullptr, 0);
@@ -109,6 +92,23 @@ namespace base
 			if (wstr.empty())
 				return std::string();
 			return WideCharToMultiByte(CP_ACP, wstr.c_str(), wstr.size());
+		}
+
+		fs::path Apis::GetModulePath(HMODULE module)
+		{
+			WCHAR buffer[BUFFER_SIZE] = {};
+			DWORD ret = GetModuleFileNameW(module, buffer, BUFFER_SIZE - 1);
+			if (ret == 0)
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
+			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+				BASE_THROW(std::system_error(GetLastError(), std::system_category()));
+
+			return fs::path(buffer);
+		}
+
+		fs::path Apis::GetModuleDir(HMODULE module)
+		{
+			return GetModulePath(module).parent_path();
 		}
 	}
 }

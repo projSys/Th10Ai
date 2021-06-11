@@ -30,6 +30,9 @@
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\Loader\WinMain.h">
+      <Filter>头文件\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Loader\DllInject.cpp">

@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="include\Loader\Common.h" />
     <ClInclude Include="include\Loader\DllInject.h" />
+    <ClInclude Include="include\Loader\WinMain.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

@@ -39,6 +39,7 @@ namespace base
 
 			static void Raise();
 			static LONG Filter(EXCEPTION_POINTERS* info);
+
 			static void Trace(EXCEPTION_POINTERS* info);
 		};
 	}

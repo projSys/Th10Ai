@@ -1,7 +1,6 @@
 #include "Th10Ai/DllMain.h"
 
-#include <memory>
-#include <boost/filesystem.hpp>
+#include <Base/Logger.h>
 #include <Base/Windows/Apis.h>
 
 #include "Th10Ai/MyDetours.h"
@@ -11,30 +10,25 @@
 using namespace th;
 
 HMODULE g_module = nullptr;
-Log g_log;
-std::unique_ptr<D3D9Hook> g_d3d9Hook;
-std::unique_ptr<DI8Hook> g_di8Hook;
 
 void Hook()
 {
 	MyDetours detours;
 	try
 	{
-		fs::path logPath = Apis::GetModuleDir(g_module) / L"Th10Hook_%N.log";
-		g_log.addFileLog(logPath);
-
-		g_d3d9Hook = std::make_unique<D3D9Hook>();
-		g_di8Hook = std::make_unique<DI8Hook>();
+		fs::path logPath = Apis::GetModuleDir(g_module) / L"Th10Ai.log";
+		g_logger.addFileLog(logPath);
+		g_logger.addCommonAttributes();
 
 		detours.transactionBegin();
-		g_d3d9Hook->attach(detours);
-		g_di8Hook->attach(detours);
+		g_d3d9Hook.attach(detours);
+		g_di8Hook.attach(detours);
 		detours.transactionCommit();
 	}
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG_ERROR(PrintException());
+		BASE_LOG(error) << PrintException() << std::endl;
 	}
 }
 
@@ -44,17 +38,14 @@ void Unhook()
 	try
 	{
 		detours.transactionBegin();
-		g_d3d9Hook->detach(detours);
-		g_di8Hook->detach(detours);
+		g_d3d9Hook.detach(detours);
+		g_di8Hook.detach(detours);
 		detours.transactionCommit();
-
-		g_d3d9Hook = nullptr;
-		g_di8Hook = nullptr;
 	}
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG_ERROR(PrintException());
+		BASE_LOG(error) << PrintException() << std::endl;
 	}
 }
 

@@ -6,8 +6,19 @@
 
 namespace th
 {
+	D3D9Hook g_d3d9Hook;
+
+	IDirect3D9* WINAPI Direct3DCreate9Hook(UINT SDKVersion)
+	{
+		return g_d3d9Hook.direct3DCreate9Hook(SDKVersion);
+	}
+
 	D3D9Hook::D3D9Hook() :
-		Singleton(this)
+		m_direct3DCreate9Orig(nullptr)
+	{
+	}
+
+	void D3D9Hook::attach(MyDetours& detours)
 	{
 		HMODULE d3d9Dll = GetModuleHandleW(L"d3d9.dll");
 		if (d3d9Dll == nullptr)
@@ -17,10 +28,7 @@ namespace th
 				GetProcAddress(d3d9Dll, "Direct3DCreate9"));
 		if (m_direct3DCreate9Orig == nullptr)
 			BASE_THROW(std::system_error(GetLastError(), std::system_category()));
-	}
 
-	void D3D9Hook::attach(MyDetours& detours)
-	{
 		detours.attach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig),
 			Direct3DCreate9Hook);
 	}
@@ -29,12 +37,6 @@ namespace th
 	{
 		detours.detach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig),
 			Direct3DCreate9Hook);
-	}
-
-	IDirect3D9* D3D9Hook::Direct3DCreate9Hook(UINT SDKVersion)
-	{
-		D3D9Hook& d3d9Hook = D3D9Hook::GetInstance();
-		return d3d9Hook.direct3DCreate9Hook(SDKVersion);
 	}
 
 	IDirect3D9* D3D9Hook::direct3DCreate9Hook(UINT SDKVersion)

@@ -43,7 +43,7 @@ namespace th
 	{
 	public:
 		static constexpr vec2 SIZE = vec2(_F(384.0), _F(448.0));
-		static constexpr vec2 OFFSET = vec2(_F(32.0), _F(16.0));
+		static constexpr vec2 BORDER_OFFSET = vec2(_F(32.0), _F(16.0));
 		static constexpr vec2 ORIGIN_POINT_OFFSET = vec2(_F(192.0), _F(0.0));
 
 		static bool IsInScene(const vec2& pos);

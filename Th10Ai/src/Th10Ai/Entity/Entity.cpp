@@ -1,8 +1,5 @@
 #include "Th10Ai/Entity/Entity.h"
 
-#include <math.h>
-#include <cmath>
-
 namespace th
 {
 	Entity::Entity()
