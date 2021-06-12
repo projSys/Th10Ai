@@ -1,7 +1,6 @@
 #include "Loader/WinMain.h"
 
 #include <fstream>
-#include <system_error>
 #include <boost/program_options.hpp>
 #include <Base/Logger.h>
 #include <Base/ScopeGuard.h>
@@ -13,12 +12,8 @@
 namespace po = boost::program_options;
 using namespace ld;
 
-int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
-	_In_ LPWSTR cmdLine, _In_ int cmdShow)
+void Load()
 {
-	//ExceptFilter::SetProcessExceptionHandlers();
-	//ExceptFilter::SetThreadExceptionHandlers();
-
 	try
 	{
 		fs::path logPath = Apis::GetModuleDir() / L"Loader.log";
@@ -44,7 +39,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 		PROCESS_INFORMATION pi = {};
 		if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE,
 			CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
-			BASE_THROW(std::system_error(GetLastError(), std::system_category()));
+			BASE_THROW(SystemError, GetLastError());
 		ON_SCOPE_EXIT([&]()
 			{
 				CloseHandle(pi.hThread);
@@ -57,13 +52,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 
 		DWORD count = ResumeThread(pi.hThread);
 		if (count == (DWORD)-1)
-			BASE_THROW(std::system_error(GetLastError(), std::system_category()));
+			BASE_THROW(SystemError, GetLastError());
 	}
 	catch (...)
 	{
-		BASE_LOG(error) << PrintException() << std::endl;
-		//throw;
+		BASE_LOG(error) << PrintException() << std::flush;
+		throw;
 	}
+}
 
+int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
+	_In_ LPWSTR cmdLine, _In_ int cmdShow)
+{
+	ExceptFilter::SetProcessExceptionHandlers();
+	ExceptFilter::SetThreadExceptionHandlers();
+	Load();
 	return 0;
 }

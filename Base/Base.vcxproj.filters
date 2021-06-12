@@ -39,9 +39,6 @@
     <ClInclude Include="include\Base\ScopeGuard.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\SourceLocation.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\String.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -57,16 +54,10 @@
     <ClInclude Include="include\Base\Windows\Common.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Windows\StackTraceImpl.h">
-      <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\FuncTraits.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Clock.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\StackTrace.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Windows\ExceptFilter.h">
@@ -78,6 +69,9 @@
     <ClInclude Include="include\Base\Logger.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Windows\SystemError.h">
+      <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -86,19 +80,10 @@
     <ClCompile Include="src\Base\Log.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\SourceLocation.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\Windows\Apis.cpp">
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Windows\StackTraceImpl.cpp">
-      <Filter>源文件\Base\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\Clock.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\StackTrace.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Windows\ExceptFilter.cpp">
@@ -109,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="src\Base\Logger.cpp">
       <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Windows\SystemError.cpp">
+      <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

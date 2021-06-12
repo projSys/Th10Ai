@@ -12,7 +12,7 @@ namespace base
 		{
 			HANDLE process;
 			HANDLE thread;
-			EXCEPTION_POINTERS* info;
+			EXCEPTION_POINTERS* ep;
 			CONTEXT context;
 		};
 
@@ -21,7 +21,7 @@ namespace base
 		public:
 			ExceptTrace();
 
-			void trace(EXCEPTION_POINTERS* info);
+			void handle(EXCEPTION_POINTERS* ep);
 			void f1();
 			void f2();
 

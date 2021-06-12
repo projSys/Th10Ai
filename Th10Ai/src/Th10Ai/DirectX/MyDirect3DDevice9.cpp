@@ -15,7 +15,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << PrintException() << std::endl;
+			BASE_LOG(error) << PrintException() << std::flush;
 		}
 	}
 
@@ -127,7 +127,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << PrintException() << std::endl;
+			BASE_LOG(error) << PrintException() << std::flush;
 		}
 		return m_device->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 	}

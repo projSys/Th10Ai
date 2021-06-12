@@ -4,37 +4,39 @@
 
 #include <stdexcept>
 #include <ostream>
+#include <boost/assert/source_location.hpp>
 
-#include "Base/SourceLocation.h"
-#include "Base/StackTrace.h"
+#include "Base/Types.h"
 
 namespace base
 {
-	class Exception :
-		public std::runtime_error
+	class Throwable
 	{
 	public:
-		explicit Exception(const char* str);
-		explicit Exception(const std::string& str);
-		virtual ~Exception() = default;
+		explicit Throwable(const boost::source_location& loc);
+		virtual ~Throwable() = default;
 
 		virtual void print(std::ostream& os) const;
+
+	private:
+		boost::source_location m_loc;
 	};
 
-	extern thread_local SourceLocation tl_sourceLocation;
-	extern thread_local StackTrace tl_stackTrace;
-
-	template <typename T>
-	void Throw(const T& ex,
-		const SourceLocation& sourceLocation,
-		const StackTrace& stackTrace = StackTrace(2))
+	class Exception :
+		public std::runtime_error,
+		public Throwable
 	{
-		tl_sourceLocation = sourceLocation;
-		tl_stackTrace = stackTrace;
-		throw ex;
-	}
+	public:
+		Exception(const char* str,
+			const boost::source_location& loc);
+		Exception(const std::string& str,
+			const boost::source_location& loc);
 
-#define BASE_THROW(ex) base::Throw(ex, BASE_CURRENT_LOCATION);
+		virtual void print(std::ostream& os) const override;
+	};
+
+#define BASE_THROW(T, ...) \
+	throw T(__VA_ARGS__, BOOST_CURRENT_LOCATION)
 
 	// 只能在catch里调用
 	std::string PrintException();

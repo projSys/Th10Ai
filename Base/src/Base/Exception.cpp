@@ -1,27 +1,42 @@
 #include "Base/Exception.h"
 
 #include <sstream>
-//#include <system_error>
-#include <boost/exception/all.hpp>
+#include <boost/exception/diagnostic_information.hpp>
 
 namespace base
 {
-	thread_local SourceLocation tl_sourceLocation;
-	thread_local StackTrace tl_stackTrace;
-
-	Exception::Exception(const char* str) :
-		runtime_error(str)
+	Throwable::Throwable(const boost::source_location& loc) :
+		m_loc(loc)
 	{
 	}
 
-	Exception::Exception(const std::string& str) :
-		runtime_error(str)
+	void Throwable::print(std::ostream& os) const
+	{
+		os << "SourceLocation:\n"
+			<< " in " << m_loc.function_name()
+			<< " at " << m_loc.file_name()
+			<< " : " << m_loc.line()
+			<< '\n';
+	}
+
+	Exception::Exception(const char* str,
+		const boost::source_location& loc) :
+		runtime_error(str),
+		Throwable(loc)
+	{
+	}
+
+	Exception::Exception(const std::string& str,
+		const boost::source_location& loc) :
+		runtime_error(str),
+		Throwable(loc)
 	{
 	}
 
 	void Exception::print(std::ostream& os) const
 	{
 		os << what() << '\n';
+		Throwable::print(os);
 	}
 
 	std::string PrintException()
@@ -31,7 +46,7 @@ namespace base
 		{
 			throw;
 		}
-		catch (const Exception& ex)
+		catch (const Throwable& ex)
 		{
 			ex.print(oss);
 		}
@@ -39,14 +54,6 @@ namespace base
 		{
 			oss << boost::diagnostic_information(be);
 		}
-		//catch (const std::system_error& ex)
-		//{
-		//	const std::error_code& ec = ex.code();
-		//	oss << "Category: " << ec.category().name() << '\n'
-		//		<< "Code: " << ec.value() << '\n'
-		//		<< "Message: " << ec.message().c_str() << '\n'
-		//		<< "What: " << ex.what() << '\n';
-		//}
 		catch (const std::exception& se)
 		{
 			oss << se.what() << '\n';
@@ -54,17 +61,6 @@ namespace base
 		catch (...)
 		{
 			oss << "Unclassified exception.\n";
-		}
-
-		if (tl_sourceLocation.isValid())
-		{
-			tl_sourceLocation.print(oss);
-			tl_sourceLocation.clear();
-		}
-		if (tl_stackTrace.isValid())
-		{
-			tl_stackTrace.print(oss);
-			tl_stackTrace.clear();
 		}
 		return oss.str();
 	}

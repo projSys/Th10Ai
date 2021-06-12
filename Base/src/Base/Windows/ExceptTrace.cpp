@@ -2,7 +2,7 @@
 
 #include <DbgHelp.h>
 #include <sstream>
-#include <fstream>
+#include <iomanip>
 
 #include "Base/Log.h"
 #include "Base/Logger.h"
@@ -22,14 +22,10 @@ namespace base
 		{
 		}
 
-		void ExceptTrace::trace(EXCEPTION_POINTERS* info)
+		void ExceptTrace::handle(EXCEPTION_POINTERS* ep)
 		{
 			std::unique_lock<std::mutex> lock(m_mutex);
-
-			g_logger.flush();
-
-			memcpy_s(&m_context, sizeof(CONTEXT), info->ContextRecord, sizeof(CONTEXT));
-
+			memcpy_s(&m_context, sizeof(CONTEXT), ep->ContextRecord, sizeof(CONTEXT));
 			f1();
 			f2();
 		}
@@ -67,18 +63,14 @@ namespace base
 #error "This platform is not supported."
 #endif
 
+			m_size = 0;
 			for (DWORD64 i = 0; i < BUFFER_SIZE; ++i)
 			{
-				if (StackWalk64(machineType, process, thread, &stackFrame, &m_context,
+				if (!StackWalk64(machineType, process, thread, &stackFrame, &m_context,
 					nullptr, SymFunctionTableAccess64, SymGetModuleBase64, nullptr))
-				{
-					m_frames[i] = stackFrame.AddrPC.Offset;
-					++m_size;
-				}
-				else
-				{
 					break;
-				}
+				m_frames[i] = stackFrame.AddrPC.Offset;
+				++m_size;
 			}
 		}
 
@@ -90,36 +82,51 @@ namespace base
 			SymSetOptions(SYMOPT_LOAD_LINES);
 			SymInitialize(process, nullptr, TRUE);
 
+			DWORD64 symDisplacement = 0;
 			BYTE buffer[sizeof(SYMBOL_INFO) + sizeof(CHAR) * (MAX_SYM_NAME + 1)] = {};
-			PSYMBOL_INFO symbol = reinterpret_cast<PSYMBOL_INFO>(buffer);
+			SYMBOL_INFO* symbol = reinterpret_cast<PSYMBOL_INFO>(buffer);
 			symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
 			symbol->MaxNameLen = MAX_SYM_NAME;
 
+			DWORD lineDisplacement = 0;
 			IMAGEHLP_LINE64 line = {};
 			line.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
-
-			DWORD64 symDisplacement = 0;
-			DWORD lineDisplacement = 0;
 
 			std::ostringstream oss;
 			oss << "StackTrace:\n";
 			for (DWORD64 i = 0; i < m_size; ++i)
 			{
 				DWORD64 address = m_frames[i];
-
-				SymFromAddr(process, address, &symDisplacement, symbol);
-				SymGetLineFromAddr64(process, address, &lineDisplacement, &line);
-
-				oss << i + 1
-					<< " in " << symbol->Name
-					<< " at " << line.FileName
-					<< " : " << line.LineNumber << '\n';
+				if (SymFromAddr(process, address, &symDisplacement, symbol)
+					&& SymGetLineFromAddr64(process, address, &lineDisplacement, &line))
+				{
+					oss << i + 1
+						<< " in " << symbol->Name
+						<< " at " << line.FileName
+						<< " : " << line.LineNumber
+						<< '\n';
+				}
+				else
+				{
+					std::ios oldState(nullptr);
+					oldState.copyfmt(oss);
+					oss << i + 1
+						<< " 0x" << std::hex << std::uppercase
+#ifdef BASE_64BIT
+						<< std::setw(16) << std::setfill('0')
+#else
+						<< std::setw(8) << std::setfill('0')
+#endif
+						<< address
+						<< '\n';
+					oss.copyfmt(oldState);
+				}
 			}
 
 			SymCleanup(process);
 
-			BASE_LOG(fatal) << oss.str() << std::endl;
-			//BASE_LOG_FLUSH;
+			BASE_LOG(fatal) << oss.str() << std::flush;
+			g_logger.flush();
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace th
 				}
 			}
 			if (highestChild == nullptr)
-				BASE_THROW(Exception("当前节点的子节点都无效。"));
+				BASE_THROW(Exception, "当前节点的子节点都无效。");
 			// 如果子节点都无效，父节点也是无效的，无效节点不会被选中
 			highestNode = highestChild;
 		}

@@ -1,7 +1,5 @@
 #include "Th10Ai/Console.h"
 
-#include <system_error>
-
 namespace th
 {
 	Console::Console() :
@@ -10,7 +8,7 @@ namespace th
 		m_newStderr(nullptr)
 	{
 		if (!AllocConsole())
-			BASE_THROW(std::system_error(GetLastError(), std::system_category()));
+			BASE_THROW(SystemError, GetLastError());
 
 		//AttachConsole(ATTACH_PARENT_PROCESS);	// 将当前程序附到父进程上
 		//HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);	// 获得控制台输出句柄

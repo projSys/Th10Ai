@@ -5,6 +5,7 @@
 #include <Base/Exception.h>
 #include <Base/Log.h>
 #include <Base/Windows/Common.h>
+#include <Base/Windows/SystemError.h>
 
 namespace ld
 {

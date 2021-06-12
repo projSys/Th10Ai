@@ -14,15 +14,15 @@ namespace base
 			static void SetThreadExceptionHandlers();
 
 		private:
-			static LONG WINAPI UnhandledExceptionFilter(EXCEPTION_POINTERS* info);
-			//static LONG NTAPI VectoredExceptionHandler(EXCEPTION_POINTERS* info);
-			//static LONG NTAPI VectoredContinueHandler(EXCEPTION_POINTERS* info);
+			static LONG WINAPI UnhandledExceptionFilter(EXCEPTION_POINTERS* ep);
+			static LONG NTAPI VectoredExceptionHandler(EXCEPTION_POINTERS* ep);
+			static LONG NTAPI VectoredContinueHandler(EXCEPTION_POINTERS* ep);
 
 			static void __CRTDECL TerminateHandler();
 			static void __CRTDECL UnexpectedHandler();
 
 			static int __CRTDECL NewHandler(size_t size);
-			static void __cdecl PurecallHandler();
+			static void __cdecl PureCallHandler();
 			static void __cdecl InvalidParameterHandler(
 				const wchar_t* expr, const wchar_t* func,
 				const wchar_t* file, unsigned int line,
@@ -38,9 +38,9 @@ namespace base
 			static void __CRTDECL SigsegvHandler(int sig);
 
 			static void Raise();
-			static LONG Filter(EXCEPTION_POINTERS* info);
+			static LONG Filter(EXCEPTION_POINTERS* ep);
 
-			static void Trace(EXCEPTION_POINTERS* info);
+			static void Handle(EXCEPTION_POINTERS* ep);
 		};
 	}
 }

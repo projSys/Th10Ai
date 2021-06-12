@@ -33,16 +33,16 @@ namespace base
 			// calling this function immediately impacts all threads. The last
 			// caller on any thread sets the handler.
 			// http://msdn.microsoft.com/en-us/library/t296ys27.aspx
-			_set_purecall_handler(PurecallHandler);
+			_set_purecall_handler(PureCallHandler);
 
 			// Catch invalid parameter exceptions.
 			_set_invalid_parameter_handler(InvalidParameterHandler);
 
 			// Setup C++ signal handlers
 			signal(SIGABRT, SigabrtHandler);
-			signal(SIGINT, SigintHandler);
-			signal(SIGBREAK, SigbreakHandler);
-			signal(SIGTERM, SigtermHandler);
+			//signal(SIGINT, SigintHandler);
+			//signal(SIGBREAK, SigbreakHandler);
+			//signal(SIGTERM, SigtermHandler);
 		}
 
 		void ExceptFilter::SetThreadExceptionHandlers()
@@ -62,28 +62,28 @@ namespace base
 			set_unexpected(UnexpectedHandler);
 
 			// Setup C++ signal handlers
-			signal(SIGILL, SigillHandler);
-			signal(SIGFPE, SigfpeHandler);
-			signal(SIGSEGV, SigsegvHandler);
+			//signal(SIGILL, SigillHandler);
+			//signal(SIGFPE, SigfpeHandler);
+			//signal(SIGSEGV, SigsegvHandler);
 		}
 
-		LONG ExceptFilter::UnhandledExceptionFilter(EXCEPTION_POINTERS* info)
+		LONG ExceptFilter::UnhandledExceptionFilter(EXCEPTION_POINTERS* ep)
 		{
-			Trace(info);
+			Handle(ep);
 			return EXCEPTION_CONTINUE_SEARCH;
 		}
 
-		//LONG ExceptFilter::VectoredExceptionHandler(EXCEPTION_POINTERS* info)
-		//{
-		//	Trace(info);
-		//	return EXCEPTION_CONTINUE_SEARCH;
-		//}
+		LONG ExceptFilter::VectoredExceptionHandler(EXCEPTION_POINTERS* ep)
+		{
+			Handle(ep);
+			return EXCEPTION_CONTINUE_SEARCH;
+		}
 
-		//LONG ExceptFilter::VectoredContinueHandler(EXCEPTION_POINTERS* info)
-		//{
-		//	Trace(info);
-		//	return EXCEPTION_CONTINUE_SEARCH;
-		//}
+		LONG ExceptFilter::VectoredContinueHandler(EXCEPTION_POINTERS* ep)
+		{
+			Handle(ep);
+			return EXCEPTION_CONTINUE_SEARCH;
+		}
 
 		void ExceptFilter::TerminateHandler()
 		{
@@ -101,7 +101,7 @@ namespace base
 			return 0;
 		}
 
-		void ExceptFilter::PurecallHandler()
+		void ExceptFilter::PureCallHandler()
 		{
 			Raise();
 		}
@@ -156,22 +156,24 @@ namespace base
 				RaiseException(0, 0, 0, nullptr);
 			}
 			__except (Filter(GetExceptionInformation()))
+				//__except (EXCEPTION_EXECUTE_HANDLER)
 			{
 			}
 		}
 
-		LONG ExceptFilter::Filter(EXCEPTION_POINTERS* info)
+		LONG ExceptFilter::Filter(EXCEPTION_POINTERS* ep)
 		{
-			Trace(info);
+			Handle(ep);
 			// 从异常处重新执行
 			//return EXCEPTION_CONTINUE_EXECUTION;
-			// 从__except块后开始执行
+			// 从__except块后执行
 			return EXCEPTION_EXECUTE_HANDLER;
 		}
 
-		void ExceptFilter::Trace(EXCEPTION_POINTERS* info)
+		void ExceptFilter::Handle(EXCEPTION_POINTERS* ep)
 		{
-			g_exceptTrace.trace(info);
+			g_exceptTrace.handle(ep);
+			ExitProcess(1);
 		}
 	}
 }

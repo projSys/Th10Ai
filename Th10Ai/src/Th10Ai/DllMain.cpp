@@ -28,7 +28,7 @@ void Hook()
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG(error) << PrintException() << std::endl;
+		BASE_LOG(error) << PrintException() << std::flush;
 	}
 }
 
@@ -45,7 +45,7 @@ void Unhook()
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG(error) << PrintException() << std::endl;
+		BASE_LOG(error) << PrintException() << std::flush;
 	}
 }
 

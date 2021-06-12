@@ -117,7 +117,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << PrintException() << std::endl;
+			BASE_LOG(error) << PrintException() << std::flush;
 			throw;
 		}
 	}
@@ -159,7 +159,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << PrintException() << std::endl;
+			BASE_LOG(error) << PrintException() << std::flush;
 			throw;
 		}
 	}
@@ -524,7 +524,7 @@ namespace th
 			return target;
 
 		Time now = Clock::Now();
-		// 拾取冷却中
+		// 查找冷却中
 		if (now - m_findItemTime < Time(3000))
 			return target;
 
@@ -536,7 +536,7 @@ namespace th
 			return target;
 		}
 
-		// 自机高于1/2屏，敌人多于5个
+		// 自机高于1/2屏，敌机多于5个
 		if ((player.pos.y < Scene::SIZE.y / 2) && (enemies.size() > 5))
 		{
 			// 进入冷却
@@ -592,7 +592,7 @@ namespace th
 		return target;
 	}
 
-	// 查找敌人
+	// 查找敌机
 	boost::optional<Enemy> Th10Ai::findEnemy()
 	{
 		const Player& player = m_readableStatus->getPlayer();
@@ -610,15 +610,15 @@ namespace th
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (const Enemy& enemy : enemies)
 		{
-			// 敌人在屏幕外
+			// 敌机在屏幕外
 			if (!Scene::IsInScene(enemy.pos))
 				continue;
 
-			// 敌人在自机下面
+			// 敌机在自机下面
 			if (enemy.pos.y > player.pos.y)
 				continue;
 
-			// 敌人与自机X轴距离最近
+			// 敌机与自机X轴距离最近
 			float_t dx = std::abs(enemy.pos.x - player.pos.x);
 			if (dx < minDist)
 			{
