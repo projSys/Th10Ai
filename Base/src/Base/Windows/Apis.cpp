@@ -2,7 +2,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include "Base/TypeTraits.h"
+#include "Base/Traits.h"
 #include "Base/Windows/SystemError.h"
 
 namespace base

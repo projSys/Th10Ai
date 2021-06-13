@@ -4,6 +4,8 @@
 
 namespace th
 {
+	constexpr uint_t ITEM_MAX_COUNT = 2198;
+
 	struct PlayerRaw
 	{
 		byte_t unknown0[0x3C0];
@@ -24,4 +26,29 @@ namespace th
 	};
 
 	static_assert(sizeof(PlayerRaw) == 0x4478, "Size is not correct.");
+
+	struct ItemRaw
+	{
+		byte_t unknow0[0x3AC];
+		float32_t x;				// 0x3AC
+		float32_t y;				// 0x3B0
+		byte_t unknown1[0x4];
+		float32_t dx;				// 0x3B8
+		float32_t dy;				// 0x3BC
+		byte_t unknown2[0x1C];
+		int32_t status;				// 0x3DC
+		int32_t type;				// 0x3E0
+		byte_t unknown3[0xC];
+	};
+
+	static_assert(sizeof(ItemRaw) == 0x3F0, "Size is not correct.");
+
+	struct ItemContainer
+	{
+		byte_t unknow0[0x14];
+		ItemRaw items[ITEM_MAX_COUNT];	// 0x21CEA0
+		byte_t unknow1[0xC];
+	};
+
+	static_assert(sizeof(ItemContainer) == 0x21CEC0, "Size is not correct.");
 }

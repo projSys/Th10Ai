@@ -2,6 +2,7 @@
 
 #include "Th10Ai/Common.h"
 
+#include "Th10Ai/Th10Types.h"
 #include "Th10Ai/Entity/Entity.h"
 #include "Th10Ai/Direction.h"
 
@@ -56,9 +57,9 @@ namespace th
 		};
 
 		Player();
+		void set(const PlayerRaw* raw);
 
-		void setPosition(const vec2& pos0);
-		void advance(DIR dir, bool slow);
+		void move(DIR dir, bool slow);
 
 		bool isRebirthStatus() const;
 		bool isNormalStatus() const;
@@ -73,18 +74,19 @@ namespace th
 		// status == 2 死亡
 		// status == 3 Unknown
 		// status == 4 被弹、决死，此时放B可以决死
-		int_t status;
+		int_t m_status;
 		// 剩余无敌时间
-		int_t invincibleTime;
+		int_t m_invincibleTime;
 		// slow == 0 High Speed
 		// slow == 1 Low Speed
-		int_t slow;
+		int_t m_slow;
+
 		float_t powers;
-		// type == 0 Reimu
-		// type == 1 Marisa
-		int_t type;
+		// character == 0 Reimu
+		// character == 1 Marisa
+		int_t character;
 		int_t lives;
-		float_t itemObtainRange;
+		float_t itemGetRange;
 
 		int_t stageFrame;
 	};

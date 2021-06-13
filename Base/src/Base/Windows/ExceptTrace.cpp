@@ -84,7 +84,7 @@ namespace base
 
 			DWORD64 symDisplacement = 0;
 			BYTE buffer[sizeof(SYMBOL_INFO) + sizeof(CHAR) * (MAX_SYM_NAME + 1)] = {};
-			SYMBOL_INFO* symbol = reinterpret_cast<PSYMBOL_INFO>(buffer);
+			SYMBOL_INFO* symbol = reinterpret_cast<SYMBOL_INFO*>(buffer);
 			symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
 			symbol->MaxNameLen = MAX_SYM_NAME;
 

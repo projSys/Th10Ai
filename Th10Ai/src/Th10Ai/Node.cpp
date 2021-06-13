@@ -65,7 +65,7 @@ namespace th
 		// 检测节点是否有效
 		Player player = status.getPlayer();
 		player.setPosition(m_parent->m_pos);
-		player.advance(m_dir, slowFirst);
+		player.move(m_dir, slowFirst);
 		m_pos = player.pos;
 		m_slow = slowFirst;
 
@@ -74,7 +74,7 @@ namespace th
 			|| (rcr = scene.collideAll(player, m_frame)).collided)
 		{
 			player.setPosition(m_parent->m_pos);
-			player.advance(m_dir, !slowFirst);
+			player.move(m_dir, !slowFirst);
 			m_pos = player.pos;
 			m_slow = !slowFirst;
 

@@ -150,13 +150,12 @@
     <ClInclude Include="include\Base\Clock.h" />
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Exception.h" />
-    <ClInclude Include="include\Base\FuncTraits.h" />
     <ClInclude Include="include\Base\Log.h" />
     <ClInclude Include="include\Base\Logger.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\String.h" />
+    <ClInclude Include="include\Base\Traits.h" />
     <ClInclude Include="include\Base\Types.h" />
-    <ClInclude Include="include\Base\TypeTraits.h" />
     <ClInclude Include="include\Base\Windows\Apis.h" />
     <ClInclude Include="include\Base\Windows\Common.h" />
     <ClInclude Include="include\Base\Windows\ExceptFilter.h" />

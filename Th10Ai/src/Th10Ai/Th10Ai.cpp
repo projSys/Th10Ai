@@ -218,11 +218,11 @@ namespace th
 		m_scene.splitEnemies(m_readableStatus->getEnemies());
 		m_scene.splitBullets(m_readableStatus->getBullets());
 		m_scene.splitLasers(m_readableStatus->getLasers());
-		m_scene.render(m_mat, m_readableStatus->getPlayer());
+		//m_scene.render(m_mat, m_readableStatus->getPlayer());
 
 		{
 			const Player& player = m_readableStatus->getPlayer();
-			vec2 windowPos = Scene::ToWindowPos(player.getLeftTop());
+			vec2 windowPos = Scene::ToWindowPos(player.m_topLeft);
 			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(player.size.x), int_t(player.size.y));
 			cv::rectangle(m_mat, rect, black);
 		}
@@ -230,59 +230,55 @@ namespace th
 		const std::vector<Item>& items = m_readableStatus->getItems();
 		for (const Item& item : items)
 		{
-			vec2 windowPos = Scene::ToWindowPos(item.getLeftTop());
+			vec2 windowPos = Scene::ToWindowPos(item.m_topLeft);
 			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(item.size.x), int_t(item.size.y));
 			cv::rectangle(m_mat, rect, blue);
 		}
 
-		const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
-		for (const Enemy& enemy : enemies)
-		{
-			vec2 windowPos = Scene::ToWindowPos(enemy.getLeftTop());
-			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(enemy.size.x), int_t(enemy.size.y));
-			cv::rectangle(m_mat, rect, red);
-		}
+		//const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
+		//for (const Enemy& enemy : enemies)
+		//{
+		//	vec2 windowPos = Scene::ToWindowPos(enemy.m_topLeft);
+		//	cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(enemy.size.x), int_t(enemy.size.y));
+		//	cv::rectangle(m_mat, rect, red);
+		//}
 
-		const std::vector<Bullet>& bullets = m_readableStatus->getBullets();
-		for (const Bullet& bullet : bullets)
-		{
-			vec2 windowPos = Scene::ToWindowPos(bullet.getLeftTop());
-			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(bullet.size.x), int_t(bullet.size.y));
-			cv::rectangle(m_mat, rect, red);
+		//const std::vector<Bullet>& bullets = m_readableStatus->getBullets();
+		//for (const Bullet& bullet : bullets)
+		//{
+		//	vec2 windowPos = Scene::ToWindowPos(bullet.m_topLeft);
+		//	cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(bullet.size.x), int_t(bullet.size.y));
+		//	cv::rectangle(m_mat, rect, red);
 
-			//const Player& player = m_readableStatus->getPlayer();
-			//vec2 footPoint = bullet.getFootPoint(player);
-			//vec2 wp1 = Scene::ToWindowPos(player.pos);
-			//vec2 wp2 = Scene::ToWindowPos(bullet.pos);
-			//vec2 wp3 = Scene::ToWindowPos(footPoint);
-			//cv::line(m_mat, cv::Point(int_t(wp1.x), int_t(wp1.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
-			//cv::line(m_mat, cv::Point(int_t(wp2.x), int_t(wp2.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
-		}
+		//	//const Player& player = m_readableStatus->getPlayer();
+		//	//vec2 footPoint = bullet.getFootPoint(player);
+		//	//vec2 wp1 = Scene::ToWindowPos(player.pos);
+		//	//vec2 wp2 = Scene::ToWindowPos(bullet.pos);
+		//	//vec2 wp3 = Scene::ToWindowPos(footPoint);
+		//	//cv::line(m_mat, cv::Point(int_t(wp1.x), int_t(wp1.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
+		//	//cv::line(m_mat, cv::Point(int_t(wp2.x), int_t(wp2.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
+		//}
 
-		const std::vector<Laser>& lasers = m_readableStatus->getLasers();
-		for (const Laser& laser : lasers)
-		{
-			//vec2 windowPos = Scene::ToWindowPos(laser.getLeftTop());
-			//cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(laser.size.x), int_t(laser.size.y));
-			//cv::rectangle(m_mat, rect, red);
+		//const std::vector<Laser>& lasers = m_readableStatus->getLasers();
+		//for (const Laser& laser : lasers)
+		//{
+		//	vec2 p1 = Scene::ToWindowPos(laser.m_topLeft);
+		//	vec2 p2 = Scene::ToWindowPos(laser.m_topRight);
+		//	vec2 p3 = Scene::ToWindowPos(laser.m_bottomLeft);
+		//	vec2 p4 = Scene::ToWindowPos(laser.m_bottomRight);
+		//	cv::line(m_mat, cv::Point(int_t(p1.x), int_t(p1.y)), cv::Point(int_t(p2.x), int_t(p2.y)), red);
+		//	cv::line(m_mat, cv::Point(int_t(p2.x), int_t(p2.y)), cv::Point(int_t(p3.x), int_t(p3.y)), red);
+		//	cv::line(m_mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);
+		//	cv::line(m_mat, cv::Point(int_t(p4.x), int_t(p4.y)), cv::Point(int_t(p1.x), int_t(p1.y)), red);
 
-			vec2 p1 = Scene::ToWindowPos(laser.leftTop);
-			vec2 p2 = Scene::ToWindowPos(laser.rightTop);
-			vec2 p3 = Scene::ToWindowPos(laser.rightBottom);
-			vec2 p4 = Scene::ToWindowPos(laser.leftBottom);
-			cv::line(m_mat, cv::Point(int_t(p1.x), int_t(p1.y)), cv::Point(int_t(p2.x), int_t(p2.y)), red);
-			cv::line(m_mat, cv::Point(int_t(p2.x), int_t(p2.y)), cv::Point(int_t(p3.x), int_t(p3.y)), red);
-			cv::line(m_mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);
-			cv::line(m_mat, cv::Point(int_t(p4.x), int_t(p4.y)), cv::Point(int_t(p1.x), int_t(p1.y)), red);
+		//	//vec2 o = Scene::ToWindowPos(vec2(0, 0));
+		//	//vec2 axisX = o + laser.axisX * 100;
+		//	//vec2 axisY = o + laser.axisY * 100;
+		//	//cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisX.x), int_t(axisX.y)), green);
+		//	//cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisY.x), int_t(axisY.y)), green);
 
-			//vec2 o = Scene::ToWindowPos(vec2(0, 0));
-			//vec2 axisX = o + laser.axisX * 100;
-			//vec2 axisY = o + laser.axisY * 100;
-			//cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisX.x), int_t(axisX.y)), green);
-			//cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisY.x), int_t(axisY.y)), green);
-
-			//break;
-		}
+		//	//break;
+		//}
 
 		cv::imshow("Th10Ai", m_mat);
 
@@ -435,66 +431,23 @@ namespace th
 		bool slowFirst = (!itemTarget.has_value() && underEnemy);
 		//bool slowFirst = false;
 
-		//float_t bestScore = std::numeric_limits<float_t>::lowest();
-		//boost::optional<DIR> bestDir;
-		//boost::optional<bool> bestSlow;
-
-		//for (DIR dir : DIRS)
-		//{
-		//	Path path(*m_readableStatus, m_scene, itemTarget, enemyTarget, underEnemy);
-		//	Result result = path.find(dir);
-
-		//	if (result.valid && path.m_bestScore > bestScore)
-		//	{
-		//		bestScore = path.m_bestScore;
-		//		bestDir = path.m_dir;
-		//		bestSlow = result.slow;
-		//	}
-		//}
-
-		//if (bestDir.has_value() && bestSlow.has_value())
-		//{
-		//	m_writableInput->move(bestDir.value());
-		//	if (bestSlow.value())
-		//		m_writableInput->slow();
-		//}
-		//else
-		//{
-		//	std::cout << "No way to go." << std::endl;
-		//}
-
-		m_root = new Node();
-		m_root->m_valid = true;
-		m_root->m_pos = m_readableStatus->getPlayer().pos;
-
-		int count = 0;
-		while (true)
-		{
-			Node* highestLeaf = m_root->select();
-			highestLeaf->expand(*m_readableStatus, m_scene, itemTarget, enemyTarget, slowFirst);
-			if (highestLeaf == m_root && !highestLeaf->m_valid)
-			{
-				std::cout << "No way to go. 1" << std::endl;
-				break;
-			}
-
-			++count;
-			if (count >= 40)
-				break;
-		}
-
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		boost::optional<DIR> bestDir;
 		boost::optional<bool> bestSlow;
-		for (Node& child : m_root->m_children)
+
+		for (DIR dir : DIRS)
 		{
-			if (child.m_valid && child.m_avgScore > bestScore)
+			Path path(*m_readableStatus, m_scene, itemTarget, enemyTarget, underEnemy);
+			Result result = path.find(dir);
+
+			if (result.valid && path.m_bestScore > bestScore)
 			{
-				bestScore = child.m_avgScore;
-				bestDir = child.m_dir;
-				bestSlow = child.m_slow;
+				bestScore = path.m_bestScore;
+				bestDir = path.m_dir;
+				bestSlow = result.slow;
 			}
 		}
+
 		if (bestDir.has_value() && bestSlow.has_value())
 		{
 			m_writableInput->move(bestDir.value());
@@ -503,10 +456,53 @@ namespace th
 		}
 		else
 		{
-			std::cout << "No way to go. 2" << std::endl;
+			std::cout << "No way to go." << std::endl;
 		}
 
-		delete m_root;
+		//m_root = new Node();
+		//m_root->m_valid = true;
+		//m_root->m_pos = m_readableStatus->getPlayer().pos;
+
+		//int count = 0;
+		//while (true)
+		//{
+		//	Node* highestLeaf = m_root->select();
+		//	highestLeaf->expand(*m_readableStatus, m_scene, itemTarget, enemyTarget, slowFirst);
+		//	if (highestLeaf == m_root && !highestLeaf->m_valid)
+		//	{
+		//		std::cout << "No way to go. 1" << std::endl;
+		//		break;
+		//	}
+
+		//	++count;
+		//	if (count >= 40)
+		//		break;
+		//}
+
+		//float_t bestScore = std::numeric_limits<float_t>::lowest();
+		//boost::optional<DIR> bestDir;
+		//boost::optional<bool> bestSlow;
+		//for (Node& child : m_root->m_children)
+		//{
+		//	if (child.m_valid && child.m_avgScore > bestScore)
+		//	{
+		//		bestScore = child.m_avgScore;
+		//		bestDir = child.m_dir;
+		//		bestSlow = child.m_slow;
+		//	}
+		//}
+		//if (bestDir.has_value() && bestSlow.has_value())
+		//{
+		//	m_writableInput->move(bestDir.value());
+		//	if (bestSlow.value())
+		//		m_writableInput->slow();
+		//}
+		//else
+		//{
+		//	std::cout << "No way to go. 2" << std::endl;
+		//}
+
+		//delete m_root;
 
 		return true;
 	}
@@ -525,7 +521,7 @@ namespace th
 
 		Time now = Clock::Now();
 		// 查找冷却中
-		if (now - m_findItemTime < Time(3000))
+		if (now - m_findItemTime < Time(2000))
 			return target;
 
 		// 自机高于1/4屏

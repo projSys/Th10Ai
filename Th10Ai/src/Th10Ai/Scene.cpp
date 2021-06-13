@@ -4,14 +4,14 @@ namespace th
 {
 	bool Scene::IsInScene(const vec2& pos)
 	{
-		return pos.x >= _F(-192.0) && pos.x <= _F(191.0)
-			&& pos.y >= _F(0.0) && pos.y <= _F(447.0);
+		return pos.x >= _F(-192.0) && pos.x <= _F(192.0)
+			&& pos.y >= _F(0.0) && pos.y <= _F(448.0);
 	}
 
 	bool Scene::IsInPlayerRegion(const vec2& pos)
 	{
-		return pos.x >= _F(-184.0) && pos.x <= _F(183.0)
-			&& pos.y >= _F(32.0) && pos.y <= _F(431.0);
+		return pos.x >= _F(-184.0) && pos.x <= _F(184.0)
+			&& pos.y >= _F(32.0) && pos.y <= _F(432.0);
 	}
 
 	vec2 Scene::ToWindowPos(const vec2& scenePos)

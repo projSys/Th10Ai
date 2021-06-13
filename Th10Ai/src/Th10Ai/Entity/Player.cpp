@@ -3,23 +3,30 @@
 namespace th
 {
 	Player::Player() :
-		status(),
-		invincibleTime(),
-		slow(),
+		m_status(),
+		m_invincibleTime(),
+		m_slow(),
 		powers(),
-		type(),
+		character(),
 		lives(),
-		itemObtainRange()
+		itemGetRange()
 	{
 	}
 
-	void Player::setPosition(const vec2& pos0)
+	void Player::set(const PlayerRaw* raw)
 	{
-		pos = pos0;
-		updateAABB();
+		pos.x = raw->x;
+		pos.y = raw->y;
+		delta.x = static_cast<float_t>(raw->dx) / _F(100.0);
+		delta.y = static_cast<float_t>(raw->dy) / _F(100.0);
+		size.x = raw->width * _F(2.0);
+		size.y = raw->height * _F(2.0);
+		m_status = raw->status;
+		m_invincibleTime = raw->invincibleTime;
+		m_slow = raw->slow;
 	}
 
-	void Player::advance(DIR dir, bool slow)
+	void Player::move(DIR dir, bool slow)
 	{
 		if (slow)
 		{
@@ -46,36 +53,36 @@ namespace th
 
 	bool Player::isRebirthStatus() const
 	{
-		return status == 0;
+		return m_status == 0;
 	}
 
 	bool Player::isNormalStatus() const
 	{
-		return status == 1;
+		return m_status == 1;
 	}
 
 	bool Player::isColliding() const
 	{
-		return status == 4;
+		return m_status == 4;
 	}
 
 	bool Player::isInvincible() const
 	{
-		return invincibleTime != 0;
+		return m_invincibleTime != 0;
 	}
 
 	bool Player::isSlow() const
 	{
-		return slow != 0;
+		return m_slow != 0;
 	}
 
 	bool Player::isReimu() const
 	{
-		return type == 0;
+		return character == 0;
 	}
 
 	bool Player::isMarisa() const
 	{
-		return type == 1;
+		return character == 1;
 	}
 }

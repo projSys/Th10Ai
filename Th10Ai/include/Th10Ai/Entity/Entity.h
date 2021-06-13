@@ -18,13 +18,13 @@ namespace th
 	{
 	public:
 		Entity();
-		Entity(const vec2& pos0, const vec2& delta0, const vec2& size0);
 
 		void updateExtra();
 		//bool collide(const Entity& other) const;
 		bool willCollideWith(const AABB& other) const;
 
 		float_t distance(const Entity& other) const;
+		void setPosition(const vec2& pos0);
 		void advance(int_t frame);
 
 	protected:

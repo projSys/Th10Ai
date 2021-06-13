@@ -2,6 +2,7 @@
 
 #include "Th10Ai/Common.h"
 
+#include "Th10Ai/Th10Types.h"
 #include "Th10Ai/Entity/Entity.h"
 
 namespace th
@@ -11,7 +12,15 @@ namespace th
 	{
 	public:
 		Item();
+		explicit Item(const ItemRaw* raw);
 
+		// 点的状态分为以下几种
+		// status == 0 无效的点
+		// status == 1 正常的可收点
+		// status == 2 放B消除子弹产生的点
+		// status == 3 到达收点线、放B等自动回收的点
+		// status == 4 到达点的收取范围，自动回收的点
+		int_t status;
 		// 正常点分为以下几种
 		// type == 1 Power Items P点（红点）
 		// type == 2 Point Items 得分点（蓝点）

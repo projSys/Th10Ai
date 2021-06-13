@@ -25,12 +25,12 @@ namespace th
 	{
 	public:
 		Laser();
-		Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0);
 
 		void updateExtra();
 		bool willCollideWith(const AABB& other) const;
 
 		float_t distance(const Entity& entity) const;
+		void setPosition(const vec2& pos0);
 		void advance(int_t frame);
 
 	private:

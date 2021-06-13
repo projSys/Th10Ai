@@ -9,7 +9,7 @@ namespace th
 		statusFrame(0),
 		handleFrame(0)
 	{
-		m_items.reserve(2000);
+		m_items.reserve(ITEM_MAX_COUNT);
 		m_enemies.reserve(200);
 		m_bullets.reserve(2000);
 		m_lasers.reserve(200);
@@ -38,8 +38,8 @@ namespace th
 	void Status::updateExtra()
 	{
 		m_player.updateExtra();
-		//for (Item& item : m_items)
-		//	item.updateExtra();
+		for (Item& item : m_items)
+			item.updateExtra();
 		for (Enemy& enemy : m_enemies)
 			enemy.updateExtra();
 		for (Bullet& bullet : m_bullets)

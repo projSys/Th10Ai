@@ -78,14 +78,14 @@ namespace th
 		// 前进到下一个坐标
 		Player player = m_status.getPlayer();
 		player.setPosition(action.fromPos);
-		player.advance(action.fromDir, m_slowFirst);
+		player.move(action.fromDir, m_slowFirst);
 		result.slow = m_slowFirst;
 		RegionCollideResult rcr = {};
 		if (!Scene::IsInPlayerRegion(player.pos)
 			|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 		{
 			player.setPosition(action.fromPos);
-			player.advance(action.fromDir, !m_slowFirst);
+			player.move(action.fromDir, !m_slowFirst);
 			result.slow = !m_slowFirst;
 			if (!Scene::IsInPlayerRegion(player.pos)
 				|| (rcr = m_scene.collideAll(player, action.frame)).collided)

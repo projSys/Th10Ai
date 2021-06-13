@@ -12,11 +12,6 @@ namespace th
 	{
 	}
 
-	Laser::Laser(const vec2& pos0, const vec2& delta0, const vec2& size0, float_t arc0) :
-		pos(pos0), delta(delta0), size(size0), arc(arc0)
-	{
-	}
-
 	void Laser::updateExtra()
 	{
 		updateOBB();
@@ -45,6 +40,12 @@ namespace th
 	float_t Laser::distance(const Entity& entity) const
 	{
 		return (pos - entity.pos).length();
+	}
+
+	void Laser::setPosition(const vec2& pos0)
+	{
+		pos = pos0;
+		updateOBB();
 	}
 
 	void Laser::advance(int_t frame)

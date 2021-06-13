@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include <cmath>
-#include <Base/TypeTraits.h>
+#include <Base/Traits.h>
 
 namespace th
 {

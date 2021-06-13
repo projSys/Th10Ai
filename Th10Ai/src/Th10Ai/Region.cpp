@@ -252,33 +252,29 @@ namespace th
 			cv::Scalar yellow(0, 255, 255);
 
 			{
-				vec2 windowPos = Scene::ToWindowPos(getLeftTop());
-				cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(size.x), int_t(size.y));
+				vec2 windowPos = Scene::ToWindowPos(m_topLeft);
+				cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(m_size.x), int_t(m_size.y));
 				cv::rectangle(mat, rect, yellow);
 			}
 
 			if (collide(player))
 			{
-				for (const Bullet& bullet : m_bullets)
-				{
-					vec2 footPoint = bullet.getFootPoint(player);
-					vec2 wp1 = Scene::ToWindowPos(player.pos);
-					vec2 wp2 = Scene::ToWindowPos(bullet.pos);
-					vec2 wp3 = Scene::ToWindowPos(footPoint);
-					cv::line(mat, cv::Point(int_t(wp1.x), int_t(wp1.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
-					cv::line(mat, cv::Point(int_t(wp2.x), int_t(wp2.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
-				}
+				//for (const Bullet& bullet : m_bullets)
+				//{
+				//	vec2 footPoint = bullet.getFootPoint(player);
+				//	vec2 wp1 = Scene::ToWindowPos(player.pos);
+				//	vec2 wp2 = Scene::ToWindowPos(bullet.pos);
+				//	vec2 wp3 = Scene::ToWindowPos(footPoint);
+				//	cv::line(mat, cv::Point(int_t(wp1.x), int_t(wp1.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
+				//	cv::line(mat, cv::Point(int_t(wp2.x), int_t(wp2.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
+				//}
 
 				for (const Laser& laser : m_lasers)
 				{
-					//vec2 windowPos = Scene::ToWindowPos(laser.getLeftTop());
-					//cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(laser.size.x), int_t(laser.size.y));
-					//cv::rectangle(mat, rect, red);
-
-					vec2 p1 = Scene::ToWindowPos(laser.leftTop);
-					vec2 p2 = Scene::ToWindowPos(laser.rightTop);
-					vec2 p3 = Scene::ToWindowPos(laser.rightBottom);
-					vec2 p4 = Scene::ToWindowPos(laser.leftBottom);
+					vec2 p1 = Scene::ToWindowPos(laser.m_topLeft);
+					vec2 p2 = Scene::ToWindowPos(laser.m_topRight);
+					vec2 p3 = Scene::ToWindowPos(laser.m_bottomLeft);
+					vec2 p4 = Scene::ToWindowPos(laser.m_bottomRight);
 					cv::line(mat, cv::Point(int_t(p1.x), int_t(p1.y)), cv::Point(int_t(p2.x), int_t(p2.y)), red);
 					cv::line(mat, cv::Point(int_t(p2.x), int_t(p2.y)), cv::Point(int_t(p3.x), int_t(p3.y)), red);
 					cv::line(mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);

@@ -45,17 +45,11 @@
     <ClInclude Include="include\Base\Types.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\TypeTraits.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Windows\Apis.h">
       <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Windows\Common.h">
       <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\FuncTraits.h">
-      <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Clock.h">
       <Filter>头文件\Base</Filter>
@@ -71,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="include\Base\Windows\SystemError.h">
       <Filter>头文件\Base\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Traits.h">
+      <Filter>头文件\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

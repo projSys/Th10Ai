@@ -6,11 +6,6 @@ namespace th
 	{
 	}
 
-	Entity::Entity(const vec2& pos0, const vec2& delta0, const vec2& size0) :
-		pos(pos0), delta(delta0), size(size0)
-	{
-	}
-
 	void Entity::updateExtra()
 	{
 		updateAABB();
@@ -47,6 +42,12 @@ namespace th
 	float_t Entity::distance(const Entity& other) const
 	{
 		return (pos - other.pos).length();
+	}
+
+	void Entity::setPosition(const vec2& pos0)
+	{
+		pos = pos0;
+		updateAABB();
 	}
 
 	void Entity::advance(int_t frame)

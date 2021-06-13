@@ -2,7 +2,7 @@
 
 #include "Th10Ai/Common.h"
 
-#include <Base/TypeTraits.h>
+#include <Base/Traits.h>
 
 namespace th
 {
