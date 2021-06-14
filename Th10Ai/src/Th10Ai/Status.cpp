@@ -11,7 +11,7 @@ namespace th
 	{
 		m_items.reserve(ITEM_MAX_COUNT);
 		m_enemies.reserve(200);
-		m_bullets.reserve(2000);
+		m_bullets.reserve(BULLET_MAX_COUNT);
 		m_lasers.reserve(200);
 	}
 
@@ -108,8 +108,8 @@ namespace th
 			{
 				std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "帧"
 					<< " 总数：" << m_bullets.size() << " 碰撞："
-					<< "org(" << org.id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
-					<< "now(" << now.id << " " << now.pos.x << " " << now.pos.y << " " << now.delta.x << " " << now.delta.y << ") " << std::endl;
+					<< "org(" << org.m_id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
+					<< "now(" << now.m_id << " " << now.pos.x << " " << now.pos.y << " " << now.delta.x << " " << now.delta.y << ") " << std::endl;
 				target = now;
 				return target;
 			}
@@ -123,7 +123,7 @@ namespace th
 	{
 		for (const Bullet& org : m_bullets)
 		{
-			if (org.id == id)
+			if (org.m_id == id)
 			{
 				Bullet now = org;
 				now.advance(frame);
@@ -131,9 +131,9 @@ namespace th
 				{
 					std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "帧"
 						<< " 总数：" << m_bullets.size() << " 碰撞："
-						<< "org(" << org.id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
-						<< "now(" << now.id << " " << now.pos.x << " " << now.pos.y << " " << now.delta.x << " " << now.delta.y << ") " << std::endl;
-					return now.id;
+						<< "org(" << org.m_id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
+						<< "now(" << now.m_id << " " << now.pos.x << " " << now.pos.y << " " << now.delta.x << " " << now.delta.y << ") " << std::endl;
+					return now.m_id;
 				}
 			}
 		}

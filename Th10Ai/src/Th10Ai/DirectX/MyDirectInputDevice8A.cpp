@@ -67,15 +67,8 @@ namespace th
 		HRESULT hr = m_device->GetDeviceState(cbData, lpvData);
 		if (SUCCEEDED(hr))
 		{
-			try
-			{
-				if (g_th10Ai != nullptr)
-					g_th10Ai->commitInput(cbData, lpvData);
-			}
-			catch (...)
-			{
-				BASE_LOG(error) << PrintException() << std::flush;
-			}
+			if (g_th10Ai != nullptr)
+				g_th10Ai->commitInput(cbData, lpvData);
 		}
 		return hr;
 	}

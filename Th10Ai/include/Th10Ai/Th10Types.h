@@ -6,6 +6,8 @@ namespace th
 {
 	constexpr uint_t ITEM_MAX_COUNT = 2198;
 
+	constexpr uint_t BULLET_MAX_COUNT = 2001;
+
 	struct PlayerRaw
 	{
 		byte_t unknown0[0x3C0];
@@ -51,4 +53,32 @@ namespace th
 	};
 
 	static_assert(sizeof(ItemContainer) == 0x21CEC0, "Size is not correct.");
+
+	struct BulletRaw
+	{
+		byte_t unknow0[0x3B4];
+		float32_t x;				// 0x3B4
+		float32_t y;				// 0x3B8
+		byte_t unknown1[0x4];
+		float32_t dx;				// 0x3C0
+		float32_t dy;				// 0x3C4
+		byte_t unknown2[0x28];
+		float32_t width;			// 0x3F0
+		float32_t height;			// 0x3F4
+		byte_t unknown3[0x4C];
+		int16_t unknown4;			// 0x444
+		int16_t status;				// 0x446
+		byte_t unknown5[0x3A6];
+	};
+
+	static_assert(sizeof(BulletRaw) == 0x7F0, "Size is not correct.");
+
+	struct BulletContainer
+	{
+		byte_t unknow0[0x60];
+		BulletRaw bullets[BULLET_MAX_COUNT];	// 0x3E0AF0
+		byte_t unknow1[0x4];
+	};
+
+	static_assert(sizeof(BulletContainer) == 0x3E0B54, "Size is not correct.");
 }

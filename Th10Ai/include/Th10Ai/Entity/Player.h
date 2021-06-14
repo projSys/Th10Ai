@@ -69,6 +69,7 @@ namespace th
 		bool isReimu() const;
 		bool isMarisa() const;
 
+	//private:
 		// status == 0 重生状态，此时无敌
 		// status == 1 正常状态
 		// status == 2 死亡

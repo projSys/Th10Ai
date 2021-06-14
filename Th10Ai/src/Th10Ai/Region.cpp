@@ -12,7 +12,7 @@ namespace th
 		updateAABB();
 
 		m_enemies.reserve(200);
-		m_bullets.reserve(2000);
+		m_bullets.reserve(BULLET_MAX_COUNT);
 		m_lasers.reserve(200);
 	}
 
@@ -172,7 +172,7 @@ namespace th
 		}
 		for (const Bullet& bullet : m_bullets)
 		{
-			if (bullet.id == target.id)
+			if (bullet.m_id == target.m_id)
 			{
 				std::cout << m_times << " have target" << std::endl;
 			}

@@ -16,7 +16,7 @@ namespace th
 		// Æ½ÒÆ
 		void translate(const vec2& offset);
 
-	public:
+	//protected:
 		vec2 m_topLeft;
 		vec2 m_topRight;
 		vec2 m_bottomLeft;

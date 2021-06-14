@@ -1,5 +1,7 @@
 #include "Th10Ai/Th10Apis.h"
 
+#include <iomanip>
+
 #include "Th10Ai/Th10Types.h"
 
 namespace th
@@ -88,7 +90,7 @@ namespace th
 		{
 			ItemRaw* raw = &(container->items[i]);
 			if (raw->status == 1)
-				items.emplace_back(raw);
+				items.emplace_back(raw, i);
 		}
 
 		return true;
@@ -140,17 +142,24 @@ namespace th
 
 		uint32_t ebx = baseAddr + 0x60;
 
-		for (int_t i = 0; i < 2000; ++i)
+		// 最后一个是空子弹，status = 5，其他全0
+		for (int_t i = 0; i < BULLET_MAX_COUNT - 1; ++i)
 		{
-			uint32_t bp = ReadMemory<uint32_t>(ebx + 0x446);
-			if ((bp & 0x0000FFFF) != 0)
+			int16_t bp = ReadMemory<int16_t>(ebx + 0x446);
+			//if ((bp & 0x0000FFFF) != 0)
+			if (bp != 0)
 			{
-				uint32_t eax = ReadMemory<uint32_t>(0x00477810);
-				if (eax != 0)
-				{
-					eax = ReadMemory<uint32_t>(eax + 0x58);
-					if ((eax & 0x00000400) == 0)
-					{
+				//std::cout << bp << ' ';
+
+				// emmm...你说这个谁懂啊？
+				//uint32_t eax = ReadMemory<uint32_t>(0x00477810);
+				//if (eax != 0)
+				//{
+				//	eax = ReadMemory<uint32_t>(eax + 0x58);
+				//	if ((eax & 0x00000400) == 0)
+				//	{
+						//std::cout << std::hex << std::uppercase << eax << '\n';
+
 						Bullet bullet;
 						bullet.pos.x = ReadMemory<float32_t>(ebx + 0x3B4);
 						bullet.pos.y = ReadMemory<float32_t>(ebx + 0x3B8);
@@ -159,15 +168,30 @@ namespace th
 						bullet.size.x = ReadMemory<float32_t>(ebx + 0x3F0);
 						bullet.size.y = ReadMemory<float32_t>(ebx + 0x3F4);
 
-						bullet.id = i;
+						bullet.m_id = i;
 						//bullet.type = static_cast<int_t>(std::round(bullet.width));
+						// 真心不如用宽度来当类型
+						int32_t type = ReadMemory<int32_t>(ebx + 0x460);
+						//int32_t type = ReadMemory<int32_t>(ebx + 0x7EC);
+						//std::cout << type << ' ';
 
 						bullets.push_back(bullet);
-					}
-				}
+				//	}
+				//}
 			}
 			ebx += 0x7F0;
 		}
+		//std::cout << '\n';
+
+		//BulletContainer* container = ReadMemory<BulletContainer*>(0x004776F0);
+		//if (container == nullptr)
+		//	return false;
+
+		//for (uint_t i = 0; i < BULLET_MAX_COUNT; ++i)
+		//{
+		//	BulletRaw* raw = &(container->bullets[i]);
+
+		//}
 
 		return true;
 	}

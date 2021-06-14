@@ -156,7 +156,6 @@ namespace base
 				RaiseException(0, 0, 0, nullptr);
 			}
 			__except (Filter(GetExceptionInformation()))
-				//__except (EXCEPTION_EXECUTE_HANDLER)
 			{
 			}
 		}

@@ -1,6 +1,7 @@
 #include "Th10Ai/Th10Ai.h"
 
 #include <Base/Windows/Apis.h>
+#include <Base/Windows/ExceptFilter.h>
 
 #include "Th10Ai/Path.h"
 
@@ -32,6 +33,8 @@ namespace th
 		, m_mat(cv::Size(640, 480), CV_8UC4)
 #endif
 	{
+		ExceptFilter::SetThreadExceptionHandlers();
+
 		SetForegroundWindow(window);
 
 		RECT rect = {};
@@ -96,6 +99,7 @@ namespace th
 
 	void Th10Ai::controlProc()
 	{
+		ExceptFilter::SetThreadExceptionHandlers();
 		try
 		{
 			std::cout << "Keep the focus on the game window, start the game, then press \'A\' to start AI, and press \'S\' to stop AI." << std::endl;
@@ -143,6 +147,7 @@ namespace th
 
 	void Th10Ai::handleProc()
 	{
+		ExceptFilter::SetThreadExceptionHandlers();
 		try
 		{
 			while (!m_handleDone)
@@ -166,20 +171,27 @@ namespace th
 
 	void Th10Ai::updateStatus()
 	{
-		if (!m_active)
-			return;
+		try
+		{
+			if (!m_active)
+				return;
 
-		++statusFrame;
+			++statusFrame;
 
-		m_writableStatus->clear();
-		m_writableStatus->update();
+			m_writableStatus->clear();
+			m_writableStatus->update();
 
-		std::unique_lock<std::mutex> lock(m_statusMutex);
-		if (m_statusUpdated)
-			std::cout << "×´Ì¬ÌøÖ¡" << std::endl;
-		m_writableStatus.swap(m_intermediateStatus);
-		m_statusUpdated = true;
-		m_statusCond.notify_one();
+			std::unique_lock<std::mutex> lock(m_statusMutex);
+			if (m_statusUpdated)
+				std::cout << "×´Ì¬ÌøÖ¡" << std::endl;
+			m_writableStatus.swap(m_intermediateStatus);
+			m_statusUpdated = true;
+			m_statusCond.notify_one();
+		}
+		catch (...)
+		{
+			BASE_LOG(error) << PrintException() << std::flush;
+		}
 	}
 
 	bool Th10Ai::handle()
@@ -227,13 +239,13 @@ namespace th
 			cv::rectangle(m_mat, rect, black);
 		}
 
-		const std::vector<Item>& items = m_readableStatus->getItems();
-		for (const Item& item : items)
-		{
-			vec2 windowPos = Scene::ToWindowPos(item.m_topLeft);
-			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(item.size.x), int_t(item.size.y));
-			cv::rectangle(m_mat, rect, blue);
-		}
+		//const std::vector<Item>& items = m_readableStatus->getItems();
+		//for (const Item& item : items)
+		//{
+		//	vec2 windowPos = Scene::ToWindowPos(item.m_topLeft);
+		//	cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(item.size.x), int_t(item.size.y));
+		//	cv::rectangle(m_mat, rect, blue);
+		//}
 
 		//const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
 		//for (const Enemy& enemy : enemies)
@@ -243,21 +255,13 @@ namespace th
 		//	cv::rectangle(m_mat, rect, red);
 		//}
 
-		//const std::vector<Bullet>& bullets = m_readableStatus->getBullets();
-		//for (const Bullet& bullet : bullets)
-		//{
-		//	vec2 windowPos = Scene::ToWindowPos(bullet.m_topLeft);
-		//	cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(bullet.size.x), int_t(bullet.size.y));
-		//	cv::rectangle(m_mat, rect, red);
-
-		//	//const Player& player = m_readableStatus->getPlayer();
-		//	//vec2 footPoint = bullet.getFootPoint(player);
-		//	//vec2 wp1 = Scene::ToWindowPos(player.pos);
-		//	//vec2 wp2 = Scene::ToWindowPos(bullet.pos);
-		//	//vec2 wp3 = Scene::ToWindowPos(footPoint);
-		//	//cv::line(m_mat, cv::Point(int_t(wp1.x), int_t(wp1.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
-		//	//cv::line(m_mat, cv::Point(int_t(wp2.x), int_t(wp2.y)), cv::Point(int_t(wp3.x), int_t(wp3.y)), green);
-		//}
+		const std::vector<Bullet>& bullets = m_readableStatus->getBullets();
+		for (const Bullet& bullet : bullets)
+		{
+			vec2 windowPos = Scene::ToWindowPos(bullet.m_topLeft);
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(bullet.size.x), int_t(bullet.size.y));
+			cv::rectangle(m_mat, rect, red);
+		}
 
 		//const std::vector<Laser>& lasers = m_readableStatus->getLasers();
 		//for (const Laser& laser : lasers)
@@ -324,38 +328,45 @@ namespace th
 
 	void Th10Ai::commitInput(DWORD size, LPVOID data)
 	{
+		try
+		{
 #if RENDER
-		return;
+			return;
 #endif
 
-		if (!m_active)
-			return;
+			if (!m_active)
+				return;
 
-		++inputFrame;
+			++inputFrame;
 
-		bool inputUpdated = false;
-		{
-			std::unique_lock<std::mutex> lock(m_inputMutex);
-			if (m_inputUpdated)
+			bool inputUpdated = false;
 			{
-				m_readableInput.swap(m_intermediateInput);
-				m_inputUpdated = false;
-				inputUpdated = true;
+				std::unique_lock<std::mutex> lock(m_inputMutex);
+				if (m_inputUpdated)
+				{
+					m_readableInput.swap(m_intermediateInput);
+					m_inputUpdated = false;
+					inputUpdated = true;
+				}
 			}
-		}
-		if (inputUpdated)
-		{
-			m_readableInput->commit(size, data);
-		}
-		else
-		{
-			std::cout << statusFrame - handleFrame << "/"
-				<< handleFrame << "/"
-				<< inputFrame - handleFrame << "/"
-				<< m_readableStatus->getPlayer().stageFrame - handleFrame
-				<< " Input is too slow." << std::endl;
-		}
+			if (inputUpdated)
+			{
+				m_readableInput->commit(size, data);
+			}
+			else
+			{
+				std::cout << statusFrame - handleFrame << "/"
+					<< handleFrame << "/"
+					<< inputFrame - handleFrame << "/"
+					<< m_readableStatus->getPlayer().stageFrame - handleFrame
+					<< " Input is too slow." << std::endl;
+			}
 	}
+		catch (...)
+		{
+			BASE_LOG(error) << PrintException() << std::flush;
+		}
+}
 
 	// ´¦ÀíÕ¨µ¯
 	bool Th10Ai::handleBomb()
@@ -431,6 +442,7 @@ namespace th
 		bool slowFirst = (!itemTarget.has_value() && underEnemy);
 		//bool slowFirst = false;
 
+#if 0
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		boost::optional<DIR> bestDir;
 		boost::optional<bool> bestSlow;
@@ -458,51 +470,52 @@ namespace th
 		{
 			std::cout << "No way to go." << std::endl;
 		}
+#else
+		m_root = new Node();
+		m_root->m_valid = true;
+		m_root->m_pos = m_readableStatus->getPlayer().pos;
 
-		//m_root = new Node();
-		//m_root->m_valid = true;
-		//m_root->m_pos = m_readableStatus->getPlayer().pos;
+		int count = 0;
+		while (true)
+		{
+			Node* highestLeaf = m_root->select();
+			highestLeaf->expand(*m_readableStatus, m_scene, itemTarget, enemyTarget, slowFirst);
+			if (highestLeaf == m_root && !highestLeaf->m_valid)
+			{
+				std::cout << "No way to go. 1" << std::endl;
+				break;
+			}
 
-		//int count = 0;
-		//while (true)
-		//{
-		//	Node* highestLeaf = m_root->select();
-		//	highestLeaf->expand(*m_readableStatus, m_scene, itemTarget, enemyTarget, slowFirst);
-		//	if (highestLeaf == m_root && !highestLeaf->m_valid)
-		//	{
-		//		std::cout << "No way to go. 1" << std::endl;
-		//		break;
-		//	}
+			++count;
+			if (count >= 40)
+				break;
+		}
 
-		//	++count;
-		//	if (count >= 40)
-		//		break;
-		//}
+		float_t bestScore = std::numeric_limits<float_t>::lowest();
+		boost::optional<DIR> bestDir;
+		boost::optional<bool> bestSlow;
+		for (Node& child : m_root->m_children)
+		{
+			if (child.m_valid && child.m_avgScore > bestScore)
+			{
+				bestScore = child.m_avgScore;
+				bestDir = child.m_dir;
+				bestSlow = child.m_slow;
+			}
+		}
+		if (bestDir.has_value() && bestSlow.has_value())
+		{
+			m_writableInput->move(bestDir.value());
+			if (bestSlow.value())
+				m_writableInput->slow();
+		}
+		else
+		{
+			std::cout << "No way to go. 2" << std::endl;
+		}
 
-		//float_t bestScore = std::numeric_limits<float_t>::lowest();
-		//boost::optional<DIR> bestDir;
-		//boost::optional<bool> bestSlow;
-		//for (Node& child : m_root->m_children)
-		//{
-		//	if (child.m_valid && child.m_avgScore > bestScore)
-		//	{
-		//		bestScore = child.m_avgScore;
-		//		bestDir = child.m_dir;
-		//		bestSlow = child.m_slow;
-		//	}
-		//}
-		//if (bestDir.has_value() && bestSlow.has_value())
-		//{
-		//	m_writableInput->move(bestDir.value());
-		//	if (bestSlow.value())
-		//		m_writableInput->slow();
-		//}
-		//else
-		//{
-		//	std::cout << "No way to go. 2" << std::endl;
-		//}
-
-		//delete m_root;
+		delete m_root;
+#endif
 
 		return true;
 	}

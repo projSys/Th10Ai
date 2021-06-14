@@ -2,6 +2,7 @@
 
 #include <Base/Logger.h>
 #include <Base/Windows/Apis.h>
+#include <Base/Windows/ExceptFilter.h>
 
 #include "Th10Ai/MyDetours.h"
 #include "Th10Ai/DirectX/D3D9Hook.h"
@@ -20,6 +21,8 @@ void Hook()
 		g_logger.addFileLog(logPath);
 		g_logger.addCommonAttributes();
 
+		//BASE_THROW(Exception, "1111111111111111111111111");
+
 		detours.transactionBegin();
 		g_d3d9Hook.attach(detours);
 		g_di8Hook.attach(detours);
@@ -29,6 +32,8 @@ void Hook()
 	{
 		detours.transactionAbort();
 		BASE_LOG(error) << PrintException() << std::flush;
+		g_logger.flush();
+		throw;
 	}
 }
 
@@ -46,6 +51,7 @@ void Unhook()
 	{
 		detours.transactionAbort();
 		BASE_LOG(error) << PrintException() << std::flush;
+		throw;
 	}
 }
 
@@ -55,6 +61,8 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 	{
 	case DLL_PROCESS_ATTACH:
 		g_module = module;
+		ExceptFilter::SetProcessExceptionHandlers();
+		ExceptFilter::SetThreadExceptionHandlers();
 		Hook();
 		break;
 

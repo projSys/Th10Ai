@@ -3,7 +3,7 @@
 namespace th
 {
 	Bullet::Bullet() :
-		id(0)
+		m_id(0)
 	{
 	}
 }
