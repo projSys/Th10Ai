@@ -361,12 +361,12 @@ namespace th
 					<< m_readableStatus->getPlayer().stageFrame - handleFrame
 					<< " Input is too slow." << std::endl;
 			}
-	}
+		}
 		catch (...)
 		{
 			BASE_LOG(error) << PrintException() << std::flush;
 		}
-}
+	}
 
 	// ´¦ÀíÕ¨µ¯
 	bool Th10Ai::handleBomb()
@@ -442,7 +442,7 @@ namespace th
 		bool slowFirst = (!itemTarget.has_value() && underEnemy);
 		//bool slowFirst = false;
 
-#if 0
+#if 1
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
 		boost::optional<DIR> bestDir;
 		boost::optional<bool> bestSlow;

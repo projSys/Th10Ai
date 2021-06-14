@@ -1,7 +1,7 @@
 # Th10Ai
 
-东方风神录AI，基于蒙特卡洛树搜索(?)算法。<br />
-Mountain of Faith's AI, based on Monte Carlo tree search(?) algorithm.<br />
+东方风神录AI，基于深度优先搜索算法。<br />
+Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ![](https://github.com/GiriMind/Th10Ai/blob/master/1.png)
 
@@ -11,7 +11,7 @@ https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
 ## 待改进
 
 * 2帧之间的数据不一致？<br />
-* 激光、大玉有时不闪避。<br />
+* 有时不会闪避激光、大玉。<br />
 
 ## 运行要求
 

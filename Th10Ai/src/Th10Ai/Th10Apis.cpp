@@ -142,11 +142,12 @@ namespace th
 
 		uint32_t ebx = baseAddr + 0x60;
 
-		// 最后一个是空子弹，status = 5，其他全0
+		// 最后一个是空子弹，status == 5，其他全0
 		for (int_t i = 0; i < BULLET_MAX_COUNT - 1; ++i)
 		{
-			int16_t bp = ReadMemory<int16_t>(ebx + 0x446);
+			//uint32_t bp = ReadMemory<uint32_t>(ebx + 0x446);
 			//if ((bp & 0x0000FFFF) != 0)
+			int16_t bp = ReadMemory<int16_t>(ebx + 0x446);
 			if (bp != 0)
 			{
 				//std::cout << bp << ' ';
