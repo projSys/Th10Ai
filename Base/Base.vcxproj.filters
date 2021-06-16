@@ -69,6 +69,12 @@
     <ClInclude Include="include\Base\Traits.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Streamable.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Throwable.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -94,6 +100,12 @@
     </ClCompile>
     <ClCompile Include="src\Base\Windows\SystemError.cpp">
       <Filter>源文件\Base\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Streamable.cpp">
+      <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Throwable.cpp">
+      <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

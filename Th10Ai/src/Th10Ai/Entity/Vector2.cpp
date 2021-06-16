@@ -45,14 +45,14 @@ namespace th
 		return Vector2(-y, x);
 	}
 
-	Vector2 Vector2::negate() const
-	{
-		return Vector2(-x, -y);
-	}
-
 	bool Vector2::isZero() const
 	{
 		return *this == Vector2();
+	}
+
+	Vector2 Vector2::operator -() const
+	{
+		return Vector2(-x, -y);
 	}
 
 	Vector2 Vector2::operator +(const Vector2& other) const

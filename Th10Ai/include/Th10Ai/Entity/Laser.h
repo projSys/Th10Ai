@@ -42,12 +42,12 @@ namespace th
 		void updateOBB();
 
 	public:
-		vec2 pos;
-		vec2 delta;
-		vec2 size;
-		float_t arc;
+		vec2 m_pos;
+		vec2 m_delta;
+		vec2 m_size;
+		float_t m_arc;
 
-		vec2 deltaV;
-		Projection projV;
+		vec2 m_deltaV;
+		Projection m_projV;
 	};
 }

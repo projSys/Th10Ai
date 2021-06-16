@@ -179,7 +179,7 @@
     <ClInclude Include="include\Th10Ai\Status.h" />
     <ClInclude Include="include\Th10Ai\Th10Ai.h" />
     <ClInclude Include="include\Th10Ai\Th10Apis.h" />
-    <ClInclude Include="include\Th10Ai\Th10Types.h" />
+    <ClInclude Include="include\Th10Ai\Th10Raw.h" />
     <ClInclude Include="include\Th10Ai\Tree.h" />
   </ItemGroup>
   <ItemGroup>

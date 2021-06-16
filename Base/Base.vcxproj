@@ -153,7 +153,9 @@
     <ClInclude Include="include\Base\Log.h" />
     <ClInclude Include="include\Base\Logger.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
+    <ClInclude Include="include\Base\Streamable.h" />
     <ClInclude Include="include\Base\String.h" />
+    <ClInclude Include="include\Base\Throwable.h" />
     <ClInclude Include="include\Base\Traits.h" />
     <ClInclude Include="include\Base\Types.h" />
     <ClInclude Include="include\Base\Windows\Apis.h" />
@@ -167,6 +169,8 @@
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Log.cpp" />
     <ClCompile Include="src\Base\Logger.cpp" />
+    <ClCompile Include="src\Base\Streamable.cpp" />
+    <ClCompile Include="src\Base\Throwable.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />
     <ClCompile Include="src\Base\Windows\ExceptFilter.cpp" />
     <ClCompile Include="src\Base\Windows\ExceptTrace.cpp" />

@@ -11,13 +11,13 @@ namespace th
 
 	Item::Item(const ItemRaw* raw, uint_t id)
 	{
-		pos.x = raw->x;
-		pos.y = raw->y;
-		delta.x = raw->dx;
-		delta.y = raw->dy;
+		m_pos.x = raw->x;
+		m_pos.y = raw->y;
+		m_delta.x = raw->dx;
+		m_delta.y = raw->dy;
 		// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
-		size.x = _F(6.0);
-		size.y = _F(6.0);
+		m_size.x = _F(6.0);
+		m_size.y = _F(6.0);
 		m_status = raw->status;
 		m_type = raw->type;
 		m_id = id;

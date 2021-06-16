@@ -39,10 +39,12 @@ namespace th
 
 		RECT rect = {};
 		GetWindowRect(window, &rect);
+		int windowWidth = rect.right - rect.left;
+		int windowHeight = rect.bottom - rect.top;
 		int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 		int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-		int x = (screenWidth - (rect.right - rect.left)) / 2;
-		int y = (screenHeight - (rect.bottom - rect.top)) / 2;
+		int x = screenWidth / 2 - windowWidth;
+		int y = (screenHeight - windowHeight) / 2;
 		SetWindowPos(window, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
 		char buf1[1024] = {};
@@ -178,8 +180,13 @@ namespace th
 
 			++statusFrame;
 
+			//Time t1 = Clock::Now();
+
 			m_writableStatus->clear();
 			m_writableStatus->update();
+
+			//Time t2 = Clock::Now();
+			//std::cout << t2 - t1 << std::endl;
 
 			std::unique_lock<std::mutex> lock(m_statusMutex);
 			if (m_statusUpdated)
@@ -216,7 +223,7 @@ namespace th
 
 		m_readableStatus->updateExtra();
 #if RENDER
-		//int64_t t1 = Time::Now().getMilliSeconds();
+		//Time t1 = Clock::Now();
 
 		cv::Scalar black(0, 0, 0);
 		cv::Scalar white(255, 255, 255);
@@ -235,58 +242,50 @@ namespace th
 		{
 			const Player& player = m_readableStatus->getPlayer();
 			vec2 windowPos = Scene::ToWindowPos(player.m_topLeft);
-			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(player.size.x), int_t(player.size.y));
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(player.m_size.x), int_t(player.m_size.y));
 			cv::rectangle(m_mat, rect, black);
 		}
 
-		//const std::vector<Item>& items = m_readableStatus->getItems();
-		//for (const Item& item : items)
-		//{
-		//	vec2 windowPos = Scene::ToWindowPos(item.m_topLeft);
-		//	cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(item.size.x), int_t(item.size.y));
-		//	cv::rectangle(m_mat, rect, blue);
-		//}
+		const std::vector<Item>& items = m_readableStatus->getItems();
+		for (const Item& item : items)
+		{
+			vec2 windowPos = Scene::ToWindowPos(item.m_topLeft);
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(item.m_size.x), int_t(item.m_size.y));
+			cv::rectangle(m_mat, rect, blue);
+		}
 
-		//const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
-		//for (const Enemy& enemy : enemies)
-		//{
-		//	vec2 windowPos = Scene::ToWindowPos(enemy.m_topLeft);
-		//	cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(enemy.size.x), int_t(enemy.size.y));
-		//	cv::rectangle(m_mat, rect, red);
-		//}
+		const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
+		for (const Enemy& enemy : enemies)
+		{
+			vec2 windowPos = Scene::ToWindowPos(enemy.m_topLeft);
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(enemy.m_size.x), int_t(enemy.m_size.y));
+			cv::rectangle(m_mat, rect, red);
+		}
 
 		const std::vector<Bullet>& bullets = m_readableStatus->getBullets();
 		for (const Bullet& bullet : bullets)
 		{
 			vec2 windowPos = Scene::ToWindowPos(bullet.m_topLeft);
-			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(bullet.size.x), int_t(bullet.size.y));
+			cv::Rect rect(int_t(windowPos.x), int_t(windowPos.y), int_t(bullet.m_size.x), int_t(bullet.m_size.y));
 			cv::rectangle(m_mat, rect, red);
 		}
 
-		//const std::vector<Laser>& lasers = m_readableStatus->getLasers();
-		//for (const Laser& laser : lasers)
-		//{
-		//	vec2 p1 = Scene::ToWindowPos(laser.m_topLeft);
-		//	vec2 p2 = Scene::ToWindowPos(laser.m_topRight);
-		//	vec2 p3 = Scene::ToWindowPos(laser.m_bottomLeft);
-		//	vec2 p4 = Scene::ToWindowPos(laser.m_bottomRight);
-		//	cv::line(m_mat, cv::Point(int_t(p1.x), int_t(p1.y)), cv::Point(int_t(p2.x), int_t(p2.y)), red);
-		//	cv::line(m_mat, cv::Point(int_t(p2.x), int_t(p2.y)), cv::Point(int_t(p3.x), int_t(p3.y)), red);
-		//	cv::line(m_mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);
-		//	cv::line(m_mat, cv::Point(int_t(p4.x), int_t(p4.y)), cv::Point(int_t(p1.x), int_t(p1.y)), red);
-
-		//	//vec2 o = Scene::ToWindowPos(vec2(0, 0));
-		//	//vec2 axisX = o + laser.axisX * 100;
-		//	//vec2 axisY = o + laser.axisY * 100;
-		//	//cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisX.x), int_t(axisX.y)), green);
-		//	//cv::line(m_mat, cv::Point(int_t(o.x), int_t(o.y)), cv::Point(int_t(axisY.x), int_t(axisY.y)), green);
-
-		//	//break;
-		//}
+		const std::vector<Laser>& lasers = m_readableStatus->getLasers();
+		for (const Laser& laser : lasers)
+		{
+			vec2 p1 = Scene::ToWindowPos(laser.m_topLeft);
+			vec2 p2 = Scene::ToWindowPos(laser.m_topRight);
+			vec2 p3 = Scene::ToWindowPos(laser.m_bottomRight);
+			vec2 p4 = Scene::ToWindowPos(laser.m_bottomLeft);
+			cv::line(m_mat, cv::Point(int_t(p1.x), int_t(p1.y)), cv::Point(int_t(p2.x), int_t(p2.y)), red);
+			cv::line(m_mat, cv::Point(int_t(p2.x), int_t(p2.y)), cv::Point(int_t(p3.x), int_t(p3.y)), red);
+			cv::line(m_mat, cv::Point(int_t(p3.x), int_t(p3.y)), cv::Point(int_t(p4.x), int_t(p4.y)), red);
+			cv::line(m_mat, cv::Point(int_t(p4.x), int_t(p4.y)), cv::Point(int_t(p1.x), int_t(p1.y)), red);
+		}
 
 		cv::imshow("Th10Ai", m_mat);
 
-		//int64_t t2 = Time::Now().getMilliSeconds();
+		//Time t2 = Clock::Now();
 		//std::cout << t2 - t1 << std::endl;
 #else
 		//m_status2.copy(m_status1);
@@ -303,10 +302,14 @@ namespace th
 		//m_scene1.splitBullets(m_status1.getBullets());
 		//m_scene1.splitLasers(m_status1.getLasers());
 
+		Time t1 = Clock::Now();
+
 		m_scene.clearAll();
 		m_scene.splitEnemies(m_readableStatus->getEnemies());
 		m_scene.splitBullets(m_readableStatus->getBullets());
 		m_scene.splitLasers(m_readableStatus->getLasers());
+
+		Time t2 = Clock::Now();
 
 		m_writableInput->clear();
 
@@ -315,14 +318,21 @@ namespace th
 		handleShoot();
 		handleMove();
 
+		Time t3 = Clock::Now();
+		if (t2 - t1 > Time(5) || t3 - t2 > Time(5))
+			std::cout << t2 - t1 << ' ' << t3 - t2 << std::endl;
+
 		{
 			std::unique_lock<std::mutex> lock(m_inputMutex);
 			if (m_inputUpdated)
+			{
 				std::cout << "输入跳帧" << std::endl;
+			}
 			m_writableInput.swap(m_intermediateInput);
 			m_inputUpdated = true;
 		}
 #endif
+
 		return true;
 	}
 
@@ -538,7 +548,7 @@ namespace th
 			return target;
 
 		// 自机高于1/4屏
-		if (player.pos.y < Scene::SIZE.y / 4)
+		if (player.m_pos.y < Scene::SIZE.y / 4)
 		{
 			// 进入冷却
 			m_findItemTime = now;
@@ -546,7 +556,7 @@ namespace th
 		}
 
 		// 自机高于1/2屏，敌机多于5个
-		if ((player.pos.y < Scene::SIZE.y / 2) && (enemies.size() > 5))
+		if ((player.m_pos.y < Scene::SIZE.y / 2) && (enemies.size() > 5))
 		{
 			// 进入冷却
 			m_findItemTime = now;
@@ -558,15 +568,15 @@ namespace th
 		for (const Item& item : items)
 		{
 			// 道具在屏幕外
-			if (!Scene::IsInScene(item.pos))
+			if (!Scene::IsInScene(item.m_pos))
 				continue;
 
 			// 道具高于1/5屏
-			if (item.pos.y < Scene::SIZE.y / 5)
+			if (item.m_pos.y < Scene::SIZE.y / 5)
 				continue;
 
 			// 道具不在自机1/4屏内
-			float_t dy = std::abs(item.pos.y - player.pos.y);
+			float_t dy = std::abs(item.m_pos.y - player.m_pos.y);
 			if (dy > Scene::SIZE.y / 4)
 				continue;
 
@@ -613,22 +623,22 @@ namespace th
 			return target;
 
 		// 自机高于1/4屏
-		if (player.pos.y < Scene::SIZE.y / 4)
+		if (player.m_pos.y < Scene::SIZE.y / 4)
 			return target;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (const Enemy& enemy : enemies)
 		{
 			// 敌机在屏幕外
-			if (!Scene::IsInScene(enemy.pos))
+			if (!Scene::IsInScene(enemy.m_pos))
 				continue;
 
 			// 敌机在自机下面
-			if (enemy.pos.y > player.pos.y)
+			if (enemy.m_pos.y > player.m_pos.y)
 				continue;
 
 			// 敌机与自机X轴距离最近
-			float_t dx = std::abs(enemy.pos.x - player.pos.x);
+			float_t dx = std::abs(enemy.m_pos.x - player.m_pos.x);
 			if (dx < minDist)
 			{
 				minDist = dx;

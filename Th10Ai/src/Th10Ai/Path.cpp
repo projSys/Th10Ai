@@ -26,7 +26,7 @@ namespace th
 
 	const int_t Path::FIND_DIR_COUNTS[to_underlying(DIR::MAX_COUNT)] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
-	const int_t Path::FIND_LIMIT = 30;
+	const int_t Path::FIND_LIMIT = 100;
 	const float_t Path::FIND_DEPTH = 30;
 	const vec2 Path::RESET_POS = vec2(_F(0.0), _F(431.0));
 
@@ -52,7 +52,7 @@ namespace th
 		//m_slowFirst = (!m_itemTarget.has_value() && m_underEnemy);
 
 		Action action = {};
-		action.fromPos = m_status.getPlayer().pos;
+		action.fromPos = m_status.getPlayer().m_pos;
 		action.fromDir = m_dir;
 		action.frame = 1;
 
@@ -81,13 +81,13 @@ namespace th
 		player.move(action.fromDir, m_slowFirst);
 		result.slow = m_slowFirst;
 		RegionCollideResult rcr = {};
-		if (!Scene::IsInPlayerRegion(player.pos)
+		if (!Scene::IsInPlayerRegion(player.m_pos)
 			|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 		{
 			player.setPosition(action.fromPos);
 			player.move(action.fromDir, !m_slowFirst);
 			result.slow = !m_slowFirst;
-			if (!Scene::IsInPlayerRegion(player.pos)
+			if (!Scene::IsInPlayerRegion(player.m_pos)
 				|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 			{
 				//result.ttd = 10;
@@ -104,15 +104,15 @@ namespace th
 
 		if (m_itemTarget.has_value())
 		{
-			result.score += CalcNearScore(player.pos, m_itemTarget.value().pos) * _F(100.0);
+			result.score += CalcNearScore(player.m_pos, m_itemTarget.value().m_pos) * _F(100.0);
 		}
 		else if (m_enemyTarget.has_value())
 		{
-			result.score += CalcShootScore(player.pos, m_enemyTarget.value().pos) * _F(100.0);
+			result.score += CalcShootScore(player.m_pos, m_enemyTarget.value().m_pos) * _F(100.0);
 		}
 		else
 		{
-			result.score += CalcNearScore(player.pos, RESET_POS) * _F(100.0);
+			result.score += CalcNearScore(player.m_pos, RESET_POS) * _F(100.0);
 		}
 
 		//if (ccr.minDistance > 8)
@@ -131,7 +131,7 @@ namespace th
 			DIR dir = FIND_DIRS[to_underlying(m_dir)][i];
 
 			Action nextAct = {};
-			nextAct.fromPos = player.pos;
+			nextAct.fromPos = player.m_pos;
 			nextAct.fromDir = dir;
 			nextAct.frame = action.frame + 1;
 			nextAct.score = total;

@@ -2,8 +2,8 @@
 
 #include "Th10Ai/Common.h"
 
-#include "Th10Ai/Th10Types.h"
 #include "Th10Ai/Entity/Entity.h"
+#include "Th10Ai/Th10Raw.h"
 #include "Th10Ai/Direction.h"
 
 namespace th

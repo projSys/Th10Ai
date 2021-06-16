@@ -19,9 +19,9 @@ namespace th
 		Vector2 rotate(float_t sinVal, float_t cosVal) const;
 		Vector2 rotate(float_t radian) const;
 		Vector2 verticalize() const;
-		Vector2 negate() const;
 		bool isZero() const;
 
+		Vector2 operator -() const;
 		Vector2 operator +(const Vector2& other) const;
 		Vector2 operator -(const Vector2& other) const;
 		Vector2 operator *(float_t scalar) const;

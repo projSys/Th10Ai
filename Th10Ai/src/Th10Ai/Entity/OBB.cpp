@@ -6,17 +6,14 @@ namespace th
 {
 	bool OBB::collide(const AABB& other) const
 	{
-		// AABB的投影轴
-		vec2 axisX(_F(1.0), _F(0.0));
-		vec2 axisY(_F(0.0), _F(1.0));
 		// SAT分离轴定理
-		if (!project(axisX).overlap(other.project(axisX)))
+		if (!project(AABB::PROJ_AXIS_X).overlap(other.project(AABB::PROJ_AXIS_X)))
 			return false;
-		if (!project(axisY).overlap(other.project(axisY)))
+		if (!project(AABB::PROJ_AXIS_Y).overlap(other.project(AABB::PROJ_AXIS_Y)))
 			return false;
-		if (!project(m_axisX).overlap(other.project(m_axisX)))
+		if (!project(m_projAxisX).overlap(other.project(m_projAxisX)))
 			return false;
-		if (!project(m_axisY).overlap(other.project(m_axisY)))
+		if (!project(m_projAxisY).overlap(other.project(m_projAxisY)))
 			return false;
 		return true;
 	}

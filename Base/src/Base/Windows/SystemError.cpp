@@ -1,5 +1,7 @@
 #include "Base/Windows/SystemError.h"
 
+#include <ostream>
+
 namespace base
 {
 	SystemError::SystemError(DWORD errorCode,
@@ -9,7 +11,7 @@ namespace base
 	{
 	}
 
-	void SystemError::print(std::ostream& os) const
+	void SystemError::toStream(std::ostream& os) const
 	{
 		//const std::error_code& ec = code();
 		//os << "Category: " << ec.category().name() << '\n'
@@ -17,6 +19,6 @@ namespace base
 		//	<< "Message: " << ec.message().c_str() << '\n'
 		//	<< "What: " << what() << '\n';
 		os << what() << '\n';
-		Throwable::print(os);
+		Throwable::toStream(os);
 	}
 }

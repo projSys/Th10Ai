@@ -1,5 +1,6 @@
 #include "Loader/DllInject.h"
 
+#include <Base/Exception.h>
 #include <Base/ScopeGuard.h>
 
 namespace ld

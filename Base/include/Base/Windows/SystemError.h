@@ -4,7 +4,7 @@
 
 #include <system_error>
 
-#include "Base/Exception.h"
+#include "Base/Throwable.h"
 
 namespace base
 {
@@ -16,6 +16,6 @@ namespace base
 		SystemError(DWORD errorCode,
 			const boost::source_location& loc);
 
-		virtual void print(std::ostream& os) const override;
+		virtual void toStream(std::ostream& os) const override;
 	};
 }

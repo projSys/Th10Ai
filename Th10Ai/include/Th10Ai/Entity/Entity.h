@@ -35,11 +35,11 @@ namespace th
 		void updateAABB();
 
 	public:
-		vec2 pos;			// 坐标在中心点
-		vec2 delta;
-		vec2 size;
+		vec2 m_pos;			// 坐标在中心点
+		vec2 m_delta;
+		vec2 m_size;
 
-		vec2 deltaV;
-		Projection projV;
+		vec2 m_deltaV;
+		Projection m_projV;
 	};
 }

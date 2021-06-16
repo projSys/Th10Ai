@@ -1,5 +1,7 @@
 #include "Th10Ai/DirectX/MyDirect3DDevice9.h"
 
+#include <Base/Clock.h>
+
 #include "Th10Ai/DirectX/MyDirect3D9.h"
 #include "Th10Ai/Th10Ai.h"
 
@@ -120,10 +122,17 @@ namespace th
 
 	HRESULT MyDirect3DDevice9::Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion)
 	{
+		//Time t1 = Clock::Now();
+
 		if (g_th10Ai != nullptr)
 			g_th10Ai->updateStatus();
 
-		return m_device->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
+		HRESULT hr = m_device->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
+
+		//Time t2 = Clock::Now();
+		//std::cout << t2 - t1 << std::endl;
+
+		return hr;
 	}
 
 	HRESULT MyDirect3DDevice9::GetBackBuffer(UINT iSwapChain, UINT iBackBuffer, D3DBACKBUFFER_TYPE Type, IDirect3DSurface9** ppBackBuffer)

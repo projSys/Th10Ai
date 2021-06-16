@@ -63,7 +63,7 @@
     <ClInclude Include="include\Th10Ai\Th10Apis.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Ai\Th10Types.h">
+    <ClInclude Include="include\Th10Ai\Th10Raw.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Ai\Console.h">

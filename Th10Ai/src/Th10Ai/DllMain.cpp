@@ -1,5 +1,6 @@
 #include "Th10Ai/DllMain.h"
 
+#include <Base/Exception.h>
 #include <Base/Logger.h>
 #include <Base/Windows/Apis.h>
 #include <Base/Windows/ExceptFilter.h>

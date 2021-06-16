@@ -3,6 +3,7 @@
 #include "Base/Common.h"
 
 #include <chrono>
+#include <iosfwd>
 
 namespace base
 {
@@ -15,4 +16,7 @@ namespace base
 	public:
 		static Time Now();
 	};
+
+	std::ostream& operator <<(std::ostream& os,
+		const Time& time);
 }

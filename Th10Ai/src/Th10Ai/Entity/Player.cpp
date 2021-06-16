@@ -15,12 +15,12 @@ namespace th
 
 	void Player::set(const PlayerRaw* raw)
 	{
-		pos.x = raw->x;
-		pos.y = raw->y;
-		delta.x = static_cast<float_t>(raw->dx) / _F(100.0);
-		delta.y = static_cast<float_t>(raw->dy) / _F(100.0);
-		size.x = raw->width * _F(2.0);
-		size.y = raw->height * _F(2.0);
+		m_pos.x = raw->x;
+		m_pos.y = raw->y;
+		m_delta.x = static_cast<float_t>(raw->dx) / _F(100.0);
+		m_delta.y = static_cast<float_t>(raw->dy) / _F(100.0);
+		m_size.x = raw->width * _F(2.0);
+		m_size.y = raw->height * _F(2.0);
 		m_status = raw->status;
 		m_invincibleTime = raw->invincibleTime;
 		m_slow = raw->slow;
@@ -31,7 +31,7 @@ namespace th
 		if (slow)
 		{
 			vec2 offset = MOVE_SPEED_LOW[to_underlying(dir)];
-			pos += offset;
+			m_pos += offset;
 			translate(offset);
 		}
 		else
@@ -39,13 +39,13 @@ namespace th
 			if (isMarisa())
 			{
 				vec2 offset = MOVE_SPEED_MARISA[to_underlying(dir)];
-				pos += offset;
+				m_pos += offset;
 				translate(offset);
 			}
 			else
 			{
 				vec2 offset = MOVE_SPEED_HIGH[to_underlying(dir)];
-				pos += offset;
+				m_pos += offset;
 				translate(offset);
 			}
 		}
