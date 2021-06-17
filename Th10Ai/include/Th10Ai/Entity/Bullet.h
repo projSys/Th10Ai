@@ -12,6 +12,7 @@ namespace th
 	{
 	public:
 		Bullet();
+		Bullet(const BulletRaw* raw, uint_t id);
 
 	//private:
 		// status == 0 ÎÞÐ§

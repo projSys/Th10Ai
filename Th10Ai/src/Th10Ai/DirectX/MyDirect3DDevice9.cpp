@@ -1,6 +1,7 @@
 #include "Th10Ai/DirectX/MyDirect3DDevice9.h"
 
 #include <Base/Clock.h>
+#include <Base/Windows/SystemError.h>
 
 #include "Th10Ai/DirectX/MyDirect3D9.h"
 #include "Th10Ai/Th10Ai.h"
@@ -127,10 +128,12 @@ namespace th
 		if (g_th10Ai != nullptr)
 			g_th10Ai->updateStatus();
 
+		//Time t2 = Clock::Now();
+
 		HRESULT hr = m_device->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 
-		//Time t2 = Clock::Now();
-		//std::cout << t2 - t1 << std::endl;
+		//Time t3 = Clock::Now();
+		//std::cout << t2 - t1 << ' ' << t3 - t2 << std::endl;
 
 		return hr;
 	}

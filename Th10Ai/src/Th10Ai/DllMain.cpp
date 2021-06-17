@@ -2,8 +2,8 @@
 
 #include <Base/Exception.h>
 #include <Base/Logger.h>
-#include <Base/Windows/Apis.h>
 #include <Base/Windows/ExceptFilter.h>
+#include <Base/Windows/Apis.h>
 
 #include "Th10Ai/MyDetours.h"
 #include "Th10Ai/DirectX/D3D9Hook.h"

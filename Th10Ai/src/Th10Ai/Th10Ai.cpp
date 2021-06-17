@@ -1,7 +1,8 @@
 #include "Th10Ai/Th10Ai.h"
 
-#include <Base/Windows/Apis.h>
+#include <Base/Exception.h>
 #include <Base/Windows/ExceptFilter.h>
+#include <Base/Windows/Apis.h>
 
 #include "Th10Ai/Path.h"
 
@@ -221,6 +222,8 @@ namespace th
 		m_readableStatus->statusFrame = statusFrame;
 		m_readableStatus->handleFrame = handleFrame;
 
+		Time t1 = Clock::Now();
+
 		m_readableStatus->updateExtra();
 #if RENDER
 		//Time t1 = Clock::Now();
@@ -302,14 +305,14 @@ namespace th
 		//m_scene1.splitBullets(m_status1.getBullets());
 		//m_scene1.splitLasers(m_status1.getLasers());
 
-		Time t1 = Clock::Now();
+		Time t2 = Clock::Now();
 
 		m_scene.clearAll();
 		m_scene.splitEnemies(m_readableStatus->getEnemies());
 		m_scene.splitBullets(m_readableStatus->getBullets());
 		m_scene.splitLasers(m_readableStatus->getLasers());
 
-		Time t2 = Clock::Now();
+		Time t3 = Clock::Now();
 
 		m_writableInput->clear();
 
@@ -318,9 +321,9 @@ namespace th
 		handleShoot();
 		handleMove();
 
-		Time t3 = Clock::Now();
-		if (t2 - t1 > Time(5) || t3 - t2 > Time(5))
-			std::cout << t2 - t1 << ' ' << t3 - t2 << std::endl;
+		Time t4 = Clock::Now();
+		if (t4 - t1 > Time(5))
+			std::cout << t2 - t1 << ' ' << t3 - t2 << ' ' << t4 - t3 << std::endl;
 
 		{
 			std::unique_lock<std::mutex> lock(m_inputMutex);
@@ -481,6 +484,7 @@ namespace th
 			std::cout << "No way to go." << std::endl;
 		}
 #else
+		// 暂停MCTS，缺少历史数据辅助节点选择，退化成了BFS
 		m_root = new Node();
 		m_root->m_valid = true;
 		m_root->m_pos = m_readableStatus->getPlayer().pos;

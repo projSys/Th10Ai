@@ -1,7 +1,8 @@
 #include "Loader/DllInject.h"
 
-#include <Base/Exception.h>
 #include <Base/ScopeGuard.h>
+#include <Base/Exception.h>
+#include <Base/Windows/SystemError.h>
 
 namespace ld
 {

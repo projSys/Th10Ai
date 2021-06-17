@@ -5,7 +5,7 @@ namespace th
 	Item::Item() :
 		m_status(),
 		m_type(),
-		m_id(0)
+		m_id()
 	{
 	}
 

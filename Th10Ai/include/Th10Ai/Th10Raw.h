@@ -49,7 +49,7 @@ namespace th
 	{
 		byte_t unknow0[0x14];
 		ItemRaw items[ITEM_MAX_COUNT];	// 0x21CEA0
-		int32_t itemCount;
+		uint32_t itemsCount;
 		byte_t unknow1[0x8];
 	};
 
@@ -69,7 +69,9 @@ namespace th
 		byte_t unknown3[0x4C];
 		int16_t unknown4;
 		int16_t status;				// 0x446
-		byte_t unknown5[0x3A6];
+		byte_t unknown5[0x18];
+		int32_t type;				// 0x460
+		byte_t unknown6[0x38C];
 	};
 
 	static_assert(sizeof(BulletRaw) == 0x7F0, "Size is not correct.");
@@ -77,7 +79,7 @@ namespace th
 	struct BulletContainer
 	{
 		byte_t unknow0[0x5C];
-		int32_t bulletCount;
+		uint32_t bulletsCount;
 		BulletRaw bullets[BULLET_MAX_COUNT];	// 0x3E0AF0
 		byte_t unknow1[0x4];
 	};

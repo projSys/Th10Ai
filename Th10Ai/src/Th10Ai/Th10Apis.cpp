@@ -136,63 +136,65 @@ namespace th
 
 	bool Th10Apis::GetBullets(std::vector<Bullet>& bullets)
 	{
-		uint32_t baseAddr = ReadMemory<uint32_t>(0x004776F0);
-		if (baseAddr == 0)
-			return false;
-
-		uint32_t ebx = baseAddr + 0x60;
-
-		for (int_t i = 0; i < BULLET_MAX_COUNT - 1; ++i)
-		{
-			//uint32_t bp = ReadMemory<uint32_t>(ebx + 0x446);
-			//if ((bp & 0x0000FFFF) != 0)
-			int16_t bp = ReadMemory<int16_t>(ebx + 0x446);
-			if (bp != 0)
-			{
-				//std::cout << bp << ' ';
-
-				// emmm...你说这个谁懂啊？
-				//uint32_t eax = ReadMemory<uint32_t>(0x00477810);
-				//if (eax != 0)
-				//{
-				//	eax = ReadMemory<uint32_t>(eax + 0x58);
-				//	if ((eax & 0x00000400) == 0)
-				//	{
-						//std::cout << std::hex << std::uppercase << eax << '\n';
-
-						Bullet bullet;
-						bullet.m_pos.x = ReadMemory<float32_t>(ebx + 0x3B4);
-						bullet.m_pos.y = ReadMemory<float32_t>(ebx + 0x3B8);
-						bullet.m_delta.x = ReadMemory<float32_t>(ebx + 0x3C0);
-						bullet.m_delta.y = ReadMemory<float32_t>(ebx + 0x3C4);
-						bullet.m_size.x = ReadMemory<float32_t>(ebx + 0x3F0);
-						bullet.m_size.y = ReadMemory<float32_t>(ebx + 0x3F4);
-
-						bullet.m_id = i;
-						//bullet.type = static_cast<int_t>(std::round(bullet.width));
-						// 真心不如用宽度来当类型
-						int32_t type = ReadMemory<int32_t>(ebx + 0x460);
-						//int32_t type = ReadMemory<int32_t>(ebx + 0x7EC);
-						//std::cout << type << ' ';
-
-						bullets.push_back(bullet);
-				//	}
-				//}
-			}
-			ebx += 0x7F0;
-		}
-		//std::cout << '\n';
-
-		//const BulletContainer* container = ReadMemory<const BulletContainer*>(0x004776F0);
-		//if (container == nullptr)
+		//uint32_t baseAddr = ReadMemory<uint32_t>(0x004776F0);
+		//if (baseAddr == 0)
 		//	return false;
 
-		// 最后一个是空子弹，status == 5，其他全0
-		//for (uint_t i = 0; i < BULLET_MAX_COUNT - 1; ++i)
-		//{
-		//	const BulletRaw* raw = &(container->bullets[i]);
+		//uint32_t ebx = baseAddr + 0x60;
 
+		//for (int_t i = 0; i < BULLET_MAX_COUNT - 1; ++i)
+		//{
+		//	//uint32_t bp = ReadMemory<uint32_t>(ebx + 0x446);
+		//	//if ((bp & 0x0000FFFF) != 0)
+		//	int16_t bp = ReadMemory<int16_t>(ebx + 0x446);
+		//	if (bp != 0)
+		//	{
+		//		// emmm...你说这个谁懂啊？
+		//		//uint32_t eax = ReadMemory<uint32_t>(0x00477810);
+		//		//if (eax != 0)
+		//		//{
+		//		//	eax = ReadMemory<uint32_t>(eax + 0x58);
+		//		//	if ((eax & 0x00000400) == 0)
+		//		//	{
+		//				Bullet bullet;
+		//				bullet.m_pos.x = ReadMemory<float32_t>(ebx + 0x3B4);
+		//				bullet.m_pos.y = ReadMemory<float32_t>(ebx + 0x3B8);
+		//				bullet.m_delta.x = ReadMemory<float32_t>(ebx + 0x3C0);
+		//				bullet.m_delta.y = ReadMemory<float32_t>(ebx + 0x3C4);
+		//				bullet.m_size.x = ReadMemory<float32_t>(ebx + 0x3F0);
+		//				bullet.m_size.y = ReadMemory<float32_t>(ebx + 0x3F4);
+
+		//				bullet.m_id = i;
+		//				//bullet.type = static_cast<int_t>(std::round(bullet.width));
+		//				// 真心不如用宽度来当类型
+		//				int32_t type = ReadMemory<int32_t>(ebx + 0x460);
+		//				//int32_t type = ReadMemory<int32_t>(ebx + 0x7EC);
+
+		//				bullets.push_back(bullet);
+		//		//	}
+		//		//}
+		//	}
+		//	ebx += 0x7F0;
 		//}
+
+		const BulletContainer* container = ReadMemory<const BulletContainer*>(0x004776F0);
+		if (container == nullptr)
+			return false;
+
+		// 最后一个是空子弹，status == 5，其他全0
+		for (uint_t i = 0; i < BULLET_MAX_COUNT - 1; ++i)
+		{
+			const BulletRaw* raw = &(container->bullets[i]);
+			if (raw->status != 0)
+			{
+				//std::cout << raw->status << ' ';
+				//std::cout << raw->type << ' ';
+				bullets.emplace_back(raw, i);
+			}
+		}
+		//std::cout << '\n';
+		if (bullets.size() != container->bulletsCount)
+			std::cout << "读取到的子弹数量不一致。" << std::endl;
 
 		return true;
 	}

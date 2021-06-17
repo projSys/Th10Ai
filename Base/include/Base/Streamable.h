@@ -30,13 +30,10 @@ namespace base
 
 	std::istream& operator >>(std::istream& is,
 		IStreamable& istreamable);
-
 	std::ostream& operator <<(std::ostream& os,
 		const OStreamable& ostreamable);
-
 	std::istream& operator >>(std::istream& is,
 		Streamable& streamable);
-
 	std::ostream& operator <<(std::ostream& os,
 		const Streamable& streamable);
 }

@@ -1,5 +1,7 @@
 #include "Th10Ai/DirectX/D3D9Hook.h"
 
+#include <Base/Windows/SystemError.h>
+
 #include "Th10Ai/DirectX/MyDirect3D9.h"
 
 namespace th

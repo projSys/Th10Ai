@@ -34,7 +34,7 @@ namespace base
 		}
 		catch (const boost::exception& be)
 		{
-			oss << boost::diagnostic_information(be);
+			return boost::diagnostic_information(be);
 		}
 		catch (const std::exception& se)
 		{

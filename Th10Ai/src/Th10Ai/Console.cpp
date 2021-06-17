@@ -1,5 +1,7 @@
 #include "Th10Ai/Console.h"
 
+#include <Base/Windows/SystemError.h>
+
 namespace th
 {
 	Console::Console() :

@@ -25,7 +25,7 @@ namespace base
 		void ExceptTrace::handle(EXCEPTION_POINTERS* ep)
 		{
 			std::unique_lock<std::mutex> lock(m_mutex);
-			memcpy_s(&m_context, sizeof(CONTEXT), ep->ContextRecord, sizeof(CONTEXT));
+			memcpy(&m_context, ep->ContextRecord, sizeof(CONTEXT));
 			f1();
 			f2();
 		}

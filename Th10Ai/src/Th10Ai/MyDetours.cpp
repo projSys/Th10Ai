@@ -1,6 +1,7 @@
 #include "Th10Ai/MyDetours.h"
 
 #include <detours.h>
+#include <Base/Windows/SystemError.h>
 
 namespace th
 {

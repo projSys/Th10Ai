@@ -27,8 +27,8 @@ namespace th
 	{
 		if (!m_delta.isZero())
 		{
-			//vec2 m_deltaV = m_delta.verticalize().normalize();
-			//return project(m_deltaV).overlap(other.project(m_deltaV));
+			//vec2 deltaV = m_delta.verticalize().normalize();
+			//return project(deltaV).overlap(other.project(deltaV));
 			return m_projV.overlap(other.project(m_deltaV));
 		}
 		else

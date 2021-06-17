@@ -1,5 +1,7 @@
 #include "Th10Ai/DirectX/DI8Hook.h"
 
+#include <Base/Windows/SystemError.h>
+
 #include "Th10Ai/DirectX/MyDirectInput8A.h"
 
 namespace th

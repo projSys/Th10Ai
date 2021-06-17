@@ -14,7 +14,7 @@ namespace th
 		Item();
 		Item(const ItemRaw* raw, uint_t id);
 
-	//private:
+	private:
 		// 点的状态分为以下几种
 		// status == 0 无效的点
 		// status == 1 正常的可收点

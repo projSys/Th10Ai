@@ -4,8 +4,9 @@
 #include <boost/program_options.hpp>
 #include <Base/Logger.h>
 #include <Base/ScopeGuard.h>
-#include <Base/Windows/Apis.h>
 #include <Base/Windows/ExceptFilter.h>
+#include <Base/Windows/Apis.h>
+#include <Base/Windows/SystemError.h>
 
 #include "Loader/DllInject.h"
 
