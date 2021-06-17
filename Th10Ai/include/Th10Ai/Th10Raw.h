@@ -8,6 +8,8 @@ namespace th
 
 	constexpr uint_t BULLET_MAX_COUNT = 2001;
 
+#pragma pack(1)
+
 	struct PlayerRaw
 	{
 		byte_t unknown0[0x3C0];
@@ -31,7 +33,7 @@ namespace th
 
 	struct ItemRaw
 	{
-		byte_t unknow0[0x3AC];
+		byte_t unknown0[0x3AC];
 		float32_t x;				// 0x3AC
 		float32_t y;				// 0x3B0
 		byte_t unknown1[0x4];
@@ -47,17 +49,17 @@ namespace th
 
 	struct ItemContainer
 	{
-		byte_t unknow0[0x14];
+		byte_t unknown0[0x14];
 		ItemRaw items[ITEM_MAX_COUNT];	// 0x21CEA0
 		uint32_t itemsCount;
-		byte_t unknow1[0x8];
+		byte_t unknown1[0x8];
 	};
 
 	static_assert(sizeof(ItemContainer) == 0x21CEC0, "Size is not correct.");
 
 	struct BulletRaw
 	{
-		byte_t unknow0[0x3B4];
+		byte_t unknown0[0x3B4];
 		float32_t x;				// 0x3B4
 		float32_t y;				// 0x3B8
 		byte_t unknown1[0x4];
@@ -78,11 +80,13 @@ namespace th
 
 	struct BulletContainer
 	{
-		byte_t unknow0[0x5C];
+		byte_t unknown0[0x5C];
 		uint32_t bulletsCount;
 		BulletRaw bullets[BULLET_MAX_COUNT];	// 0x3E0AF0
-		byte_t unknow1[0x4];
+		byte_t unknown1[0x4];
 	};
 
 	static_assert(sizeof(BulletContainer) == 0x3E0B54, "Size is not correct.");
+
+#pragma pack()
 }

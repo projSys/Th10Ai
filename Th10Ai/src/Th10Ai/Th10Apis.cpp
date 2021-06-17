@@ -110,6 +110,7 @@ namespace th
 		{
 			uint32_t objAddr = ReadMemory<uint32_t>(objBase) + 0x103C;
 			uint32_t objNext = ReadMemory<uint32_t>(objBase + 0x4);
+
 			uint32_t t = ReadMemory<uint32_t>(objAddr + 0x1444);
 			if ((t & 0x40) == 0 && (t & 0x12) == 0)
 			{
@@ -186,13 +187,8 @@ namespace th
 		{
 			const BulletRaw* raw = &(container->bullets[i]);
 			if (raw->status != 0)
-			{
-				//std::cout << raw->status << ' ';
-				//std::cout << raw->type << ' ';
 				bullets.emplace_back(raw, i);
-			}
 		}
-		//std::cout << '\n';
 		if (bullets.size() != container->bulletsCount)
 			std::cout << "读取到的子弹数量不一致。" << std::endl;
 
