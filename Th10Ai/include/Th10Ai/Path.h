@@ -9,14 +9,17 @@
 
 namespace th
 {
+	struct Record
+	{
+		DIR dir;
+		bool slow;
+	};
+
 	struct Action
 	{
 		vec2 fromPos;
 		DIR fromDir;
 		int_t frame;
-
-		//int_t willCollideCount;
-		//float_t minCollideFrame;
 		float_t score;
 	};
 
@@ -25,7 +28,6 @@ namespace th
 		bool valid;
 		bool slow;		// 实际是否慢速
 		float_t score;
-		//int_t ttd;
 	};
 
 	class Path
@@ -61,5 +63,7 @@ namespace th
 
 		float_t m_bestScore;
 		int_t m_count;
+
+		Record m_record[100];
 	};
 }

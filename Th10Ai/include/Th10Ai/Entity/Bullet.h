@@ -17,8 +17,8 @@ namespace th
 	//private:
 		// status == 0 无效
 		// status == 1 正常状态
-		// status == 2 8帧子弹初始状态
-		// status == 3 放B、符卡结束时子弹消除状态
+		// status == 2 初始状态8帧
+		// status == 3 放B、符卡结束时的消除状态
 		// status == 5 最后一个空子弹的状态
 		int_t m_status;
 		// type == 0 28.0 大玉

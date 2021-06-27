@@ -1,5 +1,8 @@
 #include "Th10Ai/DirectX/MyDirectInputDevice8A.h"
 
+#include <Base/Catcher.h>
+#include <Base/Clock.h>
+
 #include "Th10Ai/DirectX/MyDirectInput8A.h"
 #include "Th10Ai/Th10Ai.h"
 
@@ -67,8 +70,21 @@ namespace th
 		HRESULT hr = m_device->GetDeviceState(cbData, lpvData);
 		if (SUCCEEDED(hr))
 		{
-			if (g_th10Ai != nullptr)
-				g_th10Ai->commitInput(cbData, lpvData);
+			//Time t1 = Clock::Now();
+
+			try
+			{
+				if (g_th10Ai != nullptr)
+					g_th10Ai->commitInput(cbData, lpvData);
+			}
+			catch (...)
+			{
+				BASE_LOG(error) << Catcher() << std::flush;
+				ExitProcess(1);
+			}
+
+			//Time t2 = Clock::Now();
+			//std::cout << t2 - t1 << std::endl;
 		}
 		return hr;
 	}

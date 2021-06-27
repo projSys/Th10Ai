@@ -1,6 +1,6 @@
 #include "Th10Ai/DllMain.h"
 
-#include <Base/Exception.h>
+#include <Base/Catcher.h>
 #include <Base/Logger.h>
 #include <Base/Windows/ExceptFilter.h>
 #include <Base/Windows/Apis.h>
@@ -22,8 +22,6 @@ void Hook()
 		g_logger.addFileLog(logPath);
 		g_logger.addCommonAttributes();
 
-		//BASE_THROW(Exception, "1111111111111111111111111");
-
 		detours.transactionBegin();
 		g_d3d9Hook.attach(detours);
 		g_di8Hook.attach(detours);
@@ -32,9 +30,8 @@ void Hook()
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG(error) << PrintException() << std::flush;
-		g_logger.flush();
-		throw;
+		BASE_LOG(error) << Catcher() << std::flush;
+		ExitProcess(1);
 	}
 }
 
@@ -51,8 +48,8 @@ void Unhook()
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG(error) << PrintException() << std::flush;
-		throw;
+		BASE_LOG(error) << Catcher() << std::flush;
+		ExitProcess(1);
 	}
 }
 

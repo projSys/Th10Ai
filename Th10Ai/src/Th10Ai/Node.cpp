@@ -2,6 +2,8 @@
 
 #include <Base/Exception.h>
 
+#include "Th10Ai/Path.h"
+
 namespace th
 {
 	Node::Node() :

@@ -23,6 +23,7 @@ namespace th
 	//		&& std::abs(m_pos.y - other.m_pos.y) < (m_size.y + other.m_size.y) / _F(2.0);
 	//}
 
+	//todo 还是有错，并非一定是直线运动，太难了
 	bool Entity::willCollideWith(const AABB& other) const
 	{
 		// 可以认为与移动向量总是重叠的

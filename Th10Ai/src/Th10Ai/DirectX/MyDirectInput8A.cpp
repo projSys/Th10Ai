@@ -34,7 +34,10 @@ namespace th
 	{
 		HRESULT hr = m_di8->CreateDevice(rguid, lplpDirectInputDevice, pUnkOuter);
 		if (SUCCEEDED(hr))
+		{
+			//if (rguid == IID_IDirectInputDevice8A)
 			*lplpDirectInputDevice = new MyDirectInputDevice8A(*lplpDirectInputDevice, this);
+		}
 		return hr;
 	}
 

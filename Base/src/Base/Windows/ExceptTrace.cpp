@@ -69,6 +69,10 @@ namespace base
 				if (!StackWalk64(machineType, process, thread, &stackFrame, &m_context,
 					nullptr, SymFunctionTableAccess64, SymGetModuleBase64, nullptr))
 					break;
+
+				if (stackFrame.AddrReturn.Offset == 0)
+					break;
+
 				m_frames[i] = stackFrame.AddrPC.Offset;
 				++m_size;
 			}

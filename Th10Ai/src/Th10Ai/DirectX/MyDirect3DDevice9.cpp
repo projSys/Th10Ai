@@ -1,7 +1,7 @@
 #include "Th10Ai/DirectX/MyDirect3DDevice9.h"
 
+#include <Base/Catcher.h>
 #include <Base/Clock.h>
-#include <Base/Windows/SystemError.h>
 
 #include "Th10Ai/DirectX/MyDirect3D9.h"
 #include "Th10Ai/Th10Ai.h"
@@ -18,7 +18,8 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << PrintException() << std::flush;
+			BASE_LOG(error) << Catcher() << std::flush;
+			ExitProcess(1);
 		}
 	}
 
@@ -125,8 +126,16 @@ namespace th
 	{
 		//Time t1 = Clock::Now();
 
-		if (g_th10Ai != nullptr)
-			g_th10Ai->updateStatus();
+		try
+		{
+			if (g_th10Ai != nullptr)
+				g_th10Ai->updateStatus();
+		}
+		catch (...)
+		{
+			BASE_LOG(error) << Catcher() << std::flush;
+			ExitProcess(1);
+		}
 
 		//Time t2 = Clock::Now();
 

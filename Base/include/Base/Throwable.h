@@ -5,7 +5,6 @@
 #include <boost/assert/source_location.hpp>
 
 #include "Base/Streamable.h"
-#include "Base/String.h"
 
 namespace base
 {
@@ -24,7 +23,4 @@ namespace base
 
 #define BASE_THROW(T, ...) \
 	throw T(__VA_ARGS__, BOOST_CURRENT_LOCATION)
-
-	// 只能在catch里调用
-	std::string PrintException();
 }

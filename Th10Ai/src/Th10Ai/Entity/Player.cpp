@@ -38,7 +38,7 @@ namespace th
 		{
 			if (isMarisa())
 			{
-				vec2 offset = MOVE_SPEED_MARISA[to_underlying(dir)];
+				vec2 offset = MOVE_SPEED_HIGH_MARISA[to_underlying(dir)];
 				m_pos += offset;
 				translate(offset);
 			}

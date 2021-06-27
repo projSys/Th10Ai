@@ -18,7 +18,8 @@ namespace th
 		m_size.x = raw->width;
 		m_size.y = raw->height;
 		m_status = raw->status;
-		m_type = raw->type;
+		//m_type = raw->type;
+		m_type = static_cast<int_t>(raw->width);
 		m_id = id;
 	}
 }

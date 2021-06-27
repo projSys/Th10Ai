@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Base\Catcher.h" />
     <ClInclude Include="include\Base\Clock.h" />
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Exception.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="include\Base\Windows\SystemError.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Base\Catcher.cpp" />
     <ClCompile Include="src\Base\Clock.cpp" />
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Log.cpp" />

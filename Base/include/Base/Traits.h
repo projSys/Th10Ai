@@ -49,6 +49,6 @@ namespace base
 	class FuncTraits<R(__stdcall C::*)(Args...)>
 	{
 	public:
-		using Raw_t = R(__stdcall*)(C*, Args...);
+		using Raw_t = R(__stdcall *)(C*, Args...);
 	};
 }

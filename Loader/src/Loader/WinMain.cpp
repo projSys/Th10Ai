@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <boost/program_options.hpp>
+#include <Base/Catcher.h>
 #include <Base/Logger.h>
 #include <Base/ScopeGuard.h>
 #include <Base/Windows/ExceptFilter.h>
@@ -57,7 +58,7 @@ void Load()
 	}
 	catch (...)
 	{
-		BASE_LOG(error) << PrintException() << std::flush;
+		BASE_LOG(error) << Catcher() << std::flush;
 		throw;
 	}
 }

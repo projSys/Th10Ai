@@ -15,7 +15,7 @@ namespace th
 		static constexpr vec2 INIT_POS = vec2(_F(0.0), _F(400.0));
 
 		// 3.53 = 5 * sqrt(0.5)
-		static constexpr vec2 MOVE_SPEED_MARISA[to_underlying(DIR::MAX_COUNT)] =
+		static constexpr vec2 MOVE_SPEED_HIGH_MARISA[to_underlying(DIR::MAX_COUNT)] =
 		{
 			vec2(_F(0.0), _F(0.0)),
 			vec2(_F(0.0), _F(-5.0)),

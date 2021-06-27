@@ -1,6 +1,6 @@
 #include "Th10Ai/Th10Ai.h"
 
-#include <Base/Exception.h>
+#include <Base/Catcher.h>
 #include <Base/Windows/ExceptFilter.h>
 #include <Base/Windows/Apis.h>
 
@@ -44,7 +44,7 @@ namespace th
 		int windowHeight = rect.bottom - rect.top;
 		int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 		int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-		int x = screenWidth / 2 - windowWidth;
+		int x = (screenWidth - windowWidth) / 2;
 		int y = (screenHeight - windowHeight) / 2;
 		SetWindowPos(window, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
@@ -124,7 +124,7 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << PrintException() << std::flush;
+			BASE_LOG(error) << Catcher() << std::flush;
 			throw;
 		}
 	}
@@ -167,39 +167,27 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << PrintException() << std::flush;
+			BASE_LOG(error) << Catcher() << std::flush;
 			throw;
 		}
 	}
 
 	void Th10Ai::updateStatus()
 	{
-		try
-		{
-			if (!m_active)
-				return;
+		if (!m_active)
+			return;
 
-			++statusFrame;
+		++statusFrame;
 
-			//Time t1 = Clock::Now();
+		m_writableStatus->clear();
+		m_writableStatus->update();
 
-			m_writableStatus->clear();
-			m_writableStatus->update();
-
-			//Time t2 = Clock::Now();
-			//std::cout << t2 - t1 << std::endl;
-
-			std::unique_lock<std::mutex> lock(m_statusMutex);
-			if (m_statusUpdated)
-				std::cout << "×´Ì¬ÌøÖ¡" << std::endl;
-			m_writableStatus.swap(m_intermediateStatus);
-			m_statusUpdated = true;
-			m_statusCond.notify_one();
-		}
-		catch (...)
-		{
-			BASE_LOG(error) << PrintException() << std::flush;
-		}
+		std::unique_lock<std::mutex> lock(m_statusMutex);
+		if (m_statusUpdated)
+			std::cout << "×´Ì¬ÌøÖ¡" << std::endl;
+		m_writableStatus.swap(m_intermediateStatus);
+		m_statusUpdated = true;
+		m_statusCond.notify_one();
 	}
 
 	bool Th10Ai::handle()
@@ -327,10 +315,10 @@ namespace th
 
 		{
 			std::unique_lock<std::mutex> lock(m_inputMutex);
-			if (m_inputUpdated)
-			{
-				std::cout << "ÊäÈëÌøÖ¡" << std::endl;
-			}
+			//if (m_inputUpdated)
+			//{
+			//	std::cout << "ÊäÈëÌøÖ¡" << std::endl;
+			//}
 			m_writableInput.swap(m_intermediateInput);
 			m_inputUpdated = true;
 		}
@@ -339,45 +327,68 @@ namespace th
 		return true;
 	}
 
+	std::mutex g_recordMutex;
+	bool g_recordUpdated;
+	Record g_writableRecord = {};
+	Record g_intermediateRecord = {};
+	Record g_readableRecord = {};
+
 	void Th10Ai::commitInput(DWORD size, LPVOID data)
 	{
-		try
-		{
 #if RENDER
-			return;
+		return;
 #endif
 
-			if (!m_active)
-				return;
+		if (!m_active)
+			return;
 
-			++inputFrame;
+		++inputFrame;
 
-			bool inputUpdated = false;
+		bool inputUpdated = false;
+		{
+			std::unique_lock<std::mutex> lock(m_inputMutex);
+			if (m_inputUpdated)
 			{
-				std::unique_lock<std::mutex> lock(m_inputMutex);
-				if (m_inputUpdated)
+				m_readableInput.swap(m_intermediateInput);
+				m_inputUpdated = false;
+				inputUpdated = true;
+			}
+		}
+		if (inputUpdated)
+		{
+			m_readableInput->commit(size, data);
+		}
+		else
+		{
+			bool recordUpdated = false;
+			{
+				std::unique_lock<std::mutex> lock(g_recordMutex);
+				if (g_recordUpdated)
 				{
-					m_readableInput.swap(m_intermediateInput);
-					m_inputUpdated = false;
-					inputUpdated = true;
+					std::swap(g_readableRecord, g_intermediateRecord);
+					g_recordUpdated = false;
+					recordUpdated = true;
 				}
 			}
-			if (inputUpdated)
+			if (recordUpdated)
 			{
-				m_readableInput->commit(size, data);
+				Input input;
+				input.move(g_readableRecord.dir);
+				if (g_readableRecord.slow)
+					input.slow();
+				input.commit(size, data);
 			}
 			else
 			{
-				std::cout << statusFrame - handleFrame << "/"
-					<< handleFrame << "/"
-					<< inputFrame - handleFrame << "/"
-					<< m_readableStatus->getPlayer().stageFrame - handleFrame
-					<< " Input is too slow." << std::endl;
+				std::cout
+					<< "1111111111111111111111 Input is too slow." << std::endl;
 			}
-		}
-		catch (...)
-		{
-			BASE_LOG(error) << PrintException() << std::flush;
+
+			std::cout << statusFrame - handleFrame << "/"
+				<< handleFrame << "/"
+				<< inputFrame - handleFrame << "/"
+				<< m_readableStatus->getPlayer().stageFrame - handleFrame
+				<< " Input is too slow." << std::endl;
 		}
 	}
 
@@ -470,7 +481,14 @@ namespace th
 				bestScore = path.m_bestScore;
 				bestDir = path.m_dir;
 				bestSlow = result.slow;
+				g_writableRecord = path.m_record[1];
 			}
+		}
+
+		{
+			std::unique_lock<std::mutex> lock(g_recordMutex);
+			std::swap(g_writableRecord, g_intermediateRecord);
+			g_recordUpdated = true;
 		}
 
 		if (bestDir.has_value() && bestSlow.has_value())

@@ -9,7 +9,6 @@
 #include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
 #include "Th10Ai/Input.h"
-#include "Th10Ai/Path.h"
 
 namespace th
 {

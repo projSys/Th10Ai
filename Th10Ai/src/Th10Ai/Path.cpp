@@ -42,7 +42,8 @@ namespace th
 		m_dir(DIR::HOLD),
 		m_slowFirst(false),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
-		m_count(0)
+		m_count(0),
+		m_record{}
 	{
 	}
 
@@ -55,9 +56,6 @@ namespace th
 		action.fromPos = m_status.getPlayer().m_pos;
 		action.fromDir = m_dir;
 		action.frame = 1;
-
-		//action.willCollideCount = 0;
-		//action.minCollideFrame = 0;
 		action.score = 0;
 
 		return dfs(action);
@@ -90,17 +88,11 @@ namespace th
 			if (!Scene::IsInPlayerRegion(player.m_pos)
 				|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 			{
-				//result.ttd = 10;
 				return result;
 			}
 		}
 
 		result.valid = true;
-
-		//result.score = action.minCollideFrame;
-		//if (ccResult.willCollideCount > 0)
-		//	result.score += ccResult.minCollideFrame;
-		//result.score /= action.frame;
 
 		if (m_itemTarget.has_value())
 		{
@@ -115,15 +107,14 @@ namespace th
 			result.score += CalcNearScore(player.m_pos, RESET_POS) * _F(100.0);
 		}
 
-		//if (ccr.minDistance > 8)
-		//	result.score += 150;
-		//else
-		//	result.score += ccr.minDistance / 8 * 150;
-
 		float_t total = action.score + result.score;
 		float_t avg = total / action.frame;
 		if (avg > m_bestScore)
+		{
 			m_bestScore = avg;
+			m_record[action.frame - 1].dir = action.fromDir;
+			m_record[action.frame - 1].slow = result.slow;
+		}
 
 		int_t nextValidCount = FIND_DIR_COUNTS[to_underlying(m_dir)];
 		for (int_t i = 0; i < FIND_DIR_COUNTS[to_underlying(m_dir)]; ++i)
@@ -136,31 +127,15 @@ namespace th
 			nextAct.frame = action.frame + 1;
 			nextAct.score = total;
 
-			//nextAct.willCollideCount = action.willCollideCount;
-			//nextAct.minCollideFrame = action.minCollideFrame;
-			//if (ccResult.willCollideCount > 0)
-			//{
-			//	nextAct.willCollideCount += ccResult.willCollideCount;
-			//	nextAct.minCollideFrame += ccResult.minCollideFrame;
-			//}
-
 			Result nextRes = dfs(nextAct);
 
 			if (m_count > FIND_LIMIT)
 				break;
 
-			//if (!nextRes.valid)
-			//{
-			//	int_t ttd = nextRes.ttd - 1;
-			//	if (ttd > result.ttd)
-			//		result.ttd = ttd;
-			//}
 			if (!nextRes.valid)
 				nextValidCount -= 1;
 		}
 		// 没气了，当前节点也无效
-		//if (result.ttd > 0)
-		//	result.valid = false;
 		if (nextValidCount == 0)
 			result.valid = false;
 

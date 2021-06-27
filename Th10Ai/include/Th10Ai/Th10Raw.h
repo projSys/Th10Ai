@@ -10,6 +10,10 @@ namespace th
 
 #pragma pack(1)
 
+	struct GlobalVar
+	{
+	};
+
 	struct PlayerRaw
 	{
 		byte_t unknown0[0x3C0];
@@ -56,6 +60,29 @@ namespace th
 	};
 
 	static_assert(sizeof(ItemContainer) == 0x21CEC0, "Size is not correct.");
+
+	struct EnemyRaw
+	{
+		byte_t unknown0[0x2518];
+	};
+
+	static_assert(sizeof(EnemyRaw) == 0x2518, "Size is not correct.");
+
+	// 尺寸未知，在EnemyRaw内部，成员或基类？
+	struct EnemyElement
+	{
+		EnemyRaw* raw;
+		EnemyElement* next;
+	};
+
+	struct EnemyContainer
+	{
+		byte_t unknown0[0x58];
+		EnemyElement* head;
+		byte_t unknown1[0xC];
+	};
+
+	static_assert(sizeof(EnemyContainer) == 0x68, "Size is not correct.");
 
 	struct BulletRaw
 	{

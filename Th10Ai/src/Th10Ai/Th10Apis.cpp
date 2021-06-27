@@ -26,9 +26,9 @@ namespace th
 
 		//player.x = ReadMemory<float32_t>(baseAddr + 0x3C0);
 		//player.y = ReadMemory<float32_t>(baseAddr + 0x3C4);
-		//player.dx = ReadMemory<int32_t>(baseAddr + 0x3F0) / 100.0;
-		//player.dy = ReadMemory<int32_t>(baseAddr + 0x3F4) / 100.0;
-		//player.width = ReadMemory<float32_t>(baseAddr + 0x41C) * 2;
+		//player.dx = ReadMemory<int32_t>(baseAddr + 0x3F0) / _F(100.0);
+		//player.dy = ReadMemory<int32_t>(baseAddr + 0x3F4) / _F(100.0);
+		//player.width = ReadMemory<float32_t>(baseAddr + 0x41C) * _F(2.0);
 		//player.height = player.width;
 		//player.status = ReadMemory<int32_t>(baseAddr + 0x458);
 		//player.invincibleTime = ReadMemory<int32_t>(baseAddr + 0x4310);
