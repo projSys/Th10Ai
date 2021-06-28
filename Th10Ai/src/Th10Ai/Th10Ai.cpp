@@ -380,8 +380,7 @@ namespace th
 			}
 			else
 			{
-				std::cout
-					<< "1111111111111111111111 Input is too slow." << std::endl;
+				std::cout << "缺少前一帧的搜索记录。" << std::endl;
 			}
 
 			std::cout << statusFrame - handleFrame << "/"

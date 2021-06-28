@@ -6,7 +6,7 @@
 
 namespace base
 {
-	// 只能在catch里调用
+	// 只能在catch块里调用
 	class Catcher :
 		public OStreamable
 	{
