@@ -5,13 +5,10 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ![](https://github.com/GiriMind/Th10Ai/blob/master/1.png)
 
-通关视频<br />
-https://www.youtube.com/channel/UC3905dcUD8fsVZHjZMhKfkw<br />
-
 ## 待改进
 
-* 2帧之间的数据不一致？<br />
-* 有时不会闪避激光、大玉。<br />
+* 重现子弹的移动轨迹，除了直线移动，还有曲线移动、随机移动，否则后续的碰撞预测和节点搜索都是错的。（难度太大，弃坑）<br />
+* 5面激光不闪避。<br />
 
 ## 运行要求
 
