@@ -39,8 +39,8 @@ namespace th
 				}
 			}
 			if (highestChild == nullptr)
-				BASE_THROW(Exception, "µ±Ç°½ÚµãµÄ×Ó½Úµã¶¼ÎŞĞ§¡£");
-			// Èç¹û×Ó½Úµã¶¼ÎŞĞ§£¬¸¸½ÚµãÒ²ÊÇÎŞĞ§µÄ£¬ÎŞĞ§½Úµã²»»á±»Ñ¡ÖĞ
+				BASE_THROW(Exception, "å½“å‰èŠ‚ç‚¹çš„å­èŠ‚ç‚¹éƒ½æ— æ•ˆã€‚");
+			// å¦‚æœå­èŠ‚ç‚¹éƒ½æ— æ•ˆï¼Œçˆ¶èŠ‚ç‚¹ä¹Ÿæ˜¯æ— æ•ˆçš„ï¼Œæ— æ•ˆèŠ‚ç‚¹ä¸ä¼šè¢«é€‰ä¸­
 			highestNode = highestChild;
 		}
 		return highestNode;
@@ -66,7 +66,7 @@ namespace th
 	void Node::simulate(Status& status, Scene& scene, const boost::optional<Item>& itemTarget,
 		const boost::optional<Enemy>& enemyTarget, bool slowFirst)
 	{
-		// ¼ì²â½ÚµãÊÇ·ñÓĞĞ§
+		// æ£€æµ‹èŠ‚ç‚¹æ˜¯å¦æœ‰æ•ˆ
 		Player player = status.getPlayer();
 		player.setPosition(m_parent->m_pos);
 		player.move(m_dir, slowFirst);
@@ -91,7 +91,7 @@ namespace th
 
 		m_valid = true;
 
-		// ¼ÆËã½ÚµãµÃ·Ö
+		// è®¡ç®—èŠ‚ç‚¹å¾—åˆ†
 		if (itemTarget.has_value())
 		{
 			m_score = Path::CalcNearScore(m_pos, itemTarget.value().m_pos) * _F(100.0);

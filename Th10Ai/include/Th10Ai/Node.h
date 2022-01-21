@@ -17,30 +17,30 @@ namespace th
 	public:
 		Node();
 
-		// Ñ¡Ôñ£ºÖğ²ã»ñÈ¡×î¸ß·ÖµÄ½Úµã
+		// é€‰æ‹©ï¼šé€å±‚è·å–æœ€é«˜åˆ†çš„èŠ‚ç‚¹
 		Node* select();
 
-		// À©Õ¹£ºÀ©Õ¹×Ó½Úµã
+		// æ‰©å±•ï¼šæ‰©å±•å­èŠ‚ç‚¹
 		void expand(Status& status, Scene& scene, const boost::optional<Item>& itemTarget,
 			const boost::optional<Enemy>& enemyTarget, bool slowFirst);
 
-		// Ä£Äâ£º¼ì²â½ÚµãÊÇ·ñÓĞĞ§£¬¼ÆËã½ÚµãµÃ·Ö
+		// æ¨¡æ‹Ÿï¼šæ£€æµ‹èŠ‚ç‚¹æ˜¯å¦æœ‰æ•ˆï¼Œè®¡ç®—èŠ‚ç‚¹å¾—åˆ†
 		void simulate(Status& status, Scene& scene, const boost::optional<Item>& itemTarget,
 			const boost::optional<Enemy>& enemyTarget, bool slowFirst);
 
-		// ·´Ïò´«²¥£º¸üĞÂµ½¸ù½ÚµãÂ·¾¶ÉÏµÄ½ÚµãÊı¾İ
+		// åå‘ä¼ æ’­ï¼šæ›´æ–°åˆ°æ ¹èŠ‚ç‚¹è·¯å¾„ä¸Šçš„èŠ‚ç‚¹æ•°æ®
 		void backPropagate();
 
 		bool isRoot() const;
 		bool isLeaf() const;
 
 	//private:
-		// ´«¹ıÀ´µÄ
+		// ä¼ è¿‡æ¥çš„
 		Node* m_parent;
 		DIR m_dir;
 		int_t m_frame;
 
-		// ¼ÆËãµÃµ½µÄ
+		// è®¡ç®—å¾—åˆ°çš„
 		bool m_valid;
 		vec2 m_pos;
 		bool m_slow;

@@ -47,7 +47,7 @@ namespace th
 		vec2 getBottomRight() const;
 		void updateAABB();
 
-		vec2 m_pos;			// 坐标在中心点
+		vec2 m_pos;			// 鍧愭爣鍦ㄤ腑蹇冪偣
 		vec2 m_size;
 
 		std::vector<Enemy> m_enemies;

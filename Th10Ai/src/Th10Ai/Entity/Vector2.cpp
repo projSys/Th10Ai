@@ -105,8 +105,8 @@ namespace th
 
 	bool Vector2::operator ==(const Vector2& other) const
 	{
-		return float_equals(x, other.x)
-			&& float_equals(y, other.y);
+		return float_equal(x, other.x)
+			&& float_equal(y, other.y);
 	}
 
 	bool Vector2::operator !=(const Vector2& other) const

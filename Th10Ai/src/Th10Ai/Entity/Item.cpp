@@ -15,7 +15,7 @@ namespace th
 		m_pos.y = raw->y;
 		m_delta.x = raw->dx;
 		m_delta.y = raw->dy;
-		// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
+		// 鐐规病鏈夊搴﹀拰楂樺害锛岃嚜鏈洪潬杩戠偣鏃朵細鑷姩鏀跺彇锛屼负浜嗘柟渚挎樉绀鸿瀹氫负6
 		m_size.x = _F(6.0);
 		m_size.y = _F(6.0);
 		m_status = raw->status;

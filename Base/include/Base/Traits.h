@@ -12,7 +12,7 @@ namespace base
 	// https://stackoverflow.com/questions/17333/what-is-the-most-effective-way-for-float-and-double-comparison
 	// https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
 	template <typename T>
-	bool float_equals(T left, T right)
+	bool float_equal(T left, T right)
 	{
 		static_assert(std::is_floating_point_v<T>,
 			"Parameter must be a floating point number.");

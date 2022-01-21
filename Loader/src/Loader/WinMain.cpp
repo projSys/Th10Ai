@@ -24,7 +24,7 @@ void Load()
 
 		fs::path confPath = Apis::GetModuleDir() / L"Loader.conf";
 		std::ifstream ifs(confPath.c_str());
-		po::options_description desc("Configuration");
+		po::options_description desc("Config");
 		desc.add_options()
 			("exe-path", po::value<std::string>(), "exe path")
 			("dll-name", po::value<std::string>(), "dll name");
@@ -39,8 +39,7 @@ void Load()
 		STARTUPINFOW si = {};
 		si.cb = sizeof(si);
 		PROCESS_INFORMATION pi = {};
-		if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE,
-			CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
+		if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
 			BASE_THROW(SystemError, GetLastError());
 		ON_SCOPE_EXIT([&]()
 			{
@@ -63,8 +62,7 @@ void Load()
 	}
 }
 
-int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
-	_In_ LPWSTR cmdLine, _In_ int cmdShow)
+int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In_ LPWSTR cmdLine, _In_ int cmdShow)
 {
 	ExceptFilter::SetProcessExceptionHandlers();
 	ExceptFilter::SetThreadExceptionHandlers();

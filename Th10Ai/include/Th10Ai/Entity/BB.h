@@ -7,13 +7,13 @@
 
 namespace th
 {
-	// °üÎ§ºĞ
+	// åŒ…å›´ç›’
 	class BB
 	{
 	public:
-		// Í¶Ó°£¬°Ñ2Î¬½µ³É1Î¬
+		// æŠ•å½±ï¼ŒæŠŠ2ç»´é™æˆ1ç»´
 		Projection project(const vec2& axis) const;
-		// Æ½ÒÆ
+		// å¹³ç§»
 		void translate(const vec2& offset);
 
 	//protected:

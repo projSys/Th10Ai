@@ -16,16 +16,16 @@ namespace base
 			// Install top-level SEH handler
 			SetUnhandledExceptionFilter(UnhandledExceptionFilter);
 
-			// ÔÚ__except/catchÖ®Ç°£¬×½µÃÌ«¶à
+			// åœ¨__except/catchä¹‹å‰ï¼Œæ‰å¾—å¤ªå¤š
 			//AddVectoredExceptionHandler(1, VectoredExceptionHandler);
 
-			// ÔÚUnhandledExceptionFilterÖ®ºó£¬×½µÃÌ«ÉÙ
+			// åœ¨UnhandledExceptionFilterä¹‹åï¼Œæ‰å¾—å¤ªå°‘
 			//AddVectoredContinueHandler(1, VectoredContinueHandler);
 
 			// Catch new operator memory allocation exceptions
 			_set_new_handler(NewHandler);
 
-			// ÉèÖÃ´¦ÀímallocÄÚ´æÊ§°ÜÒì³£¸únewĞĞÎªÒ»Ñù
+			// è®¾ç½®å¤„ç†mallocå†…å­˜å¤±è´¥å¼‚å¸¸è·Ÿnewè¡Œä¸ºä¸€æ ·
 			_set_new_mode(1);
 
 			// Catch pure virtual function calls.
@@ -163,9 +163,9 @@ namespace base
 		LONG ExceptFilter::Filter(EXCEPTION_POINTERS* ep)
 		{
 			Handle(ep);
-			// ´ÓÒì³£´¦ÖØĞÂÖ´ĞĞ
+			// ä»å¼‚å¸¸å¤„é‡æ–°æ‰§è¡Œ
 			//return EXCEPTION_CONTINUE_EXECUTION;
-			// ´Ó__except¿éºóÖ´ĞĞ
+			// ä»__exceptå—åæ‰§è¡Œ
 			return EXCEPTION_EXECUTE_HANDLER;
 		}
 

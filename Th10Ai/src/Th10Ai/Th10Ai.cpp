@@ -184,7 +184,7 @@ namespace th
 
 		std::unique_lock<std::mutex> lock(m_statusMutex);
 		if (m_statusUpdated)
-			std::cout << "×´Ì¬ÌøÖ¡" << std::endl;
+			std::cout << "çŠ¶æ€è·³å¸§" << std::endl;
 		m_writableStatus.swap(m_intermediateStatus);
 		m_statusUpdated = true;
 		m_statusCond.notify_one();
@@ -317,7 +317,7 @@ namespace th
 			std::unique_lock<std::mutex> lock(m_inputMutex);
 			//if (m_inputUpdated)
 			//{
-			//	std::cout << "ÊäÈëÌøÖ¡" << std::endl;
+			//	std::cout << "è¾“å…¥è·³å¸§" << std::endl;
 			//}
 			m_writableInput.swap(m_intermediateInput);
 			m_inputUpdated = true;
@@ -380,7 +380,7 @@ namespace th
 			}
 			else
 			{
-				std::cout << "È±ÉÙÇ°Ò»Ö¡µÄËÑË÷¼ÇÂ¼¡£" << std::endl;
+				std::cout << "ç¼ºå°‘å‰ä¸€å¸§çš„æœç´¢è®°å½•ã€‚" << std::endl;
 			}
 
 			std::cout << statusFrame - handleFrame << "/"
@@ -391,7 +391,7 @@ namespace th
 		}
 	}
 
-	// ´¦ÀíÕ¨µ¯
+	// å¤„ç†ç‚¸å¼¹
 	bool Th10Ai::handleBomb()
 	{
 		if (m_readableStatus->getPlayer().isColliding())
@@ -431,7 +431,7 @@ namespace th
 		return false;
 	}
 
-	// ´¦Àí¶Ô»°
+	// å¤„ç†å¯¹è¯
 	bool Th10Ai::handleTalk()
 	{
 		if (m_readableStatus->isTalking())
@@ -442,7 +442,7 @@ namespace th
 		return false;
 	}
 
-	// ´¦Àí¹¥»÷
+	// å¤„ç†æ”»å‡»
 	bool Th10Ai::handleShoot()
 	{
 		if (m_readableStatus->haveEnemies())
@@ -453,7 +453,7 @@ namespace th
 		return false;
 	}
 
-	// ´¦ÀíÒÆ¶¯
+	// å¤„ç†ç§»åŠ¨
 	bool Th10Ai::handleMove()
 	{
 		if (!m_readableStatus->getPlayer().isNormalStatus())
@@ -501,7 +501,7 @@ namespace th
 			std::cout << "No way to go." << std::endl;
 		}
 #else
-		// ÔİÍ£MCTS£¬È±ÉÙÀúÊ·Êı¾İ¸¨Öú½ÚµãÑ¡Ôñ£¬ÍË»¯³ÉÁËBFS
+		// æš‚åœMCTSï¼Œç¼ºå°‘å†å²æ•°æ®è¾…åŠ©èŠ‚ç‚¹é€‰æ‹©ï¼Œé€€åŒ–æˆäº†BFS
 		m_root = new Node();
 		m_root->m_valid = true;
 		m_root->m_pos = m_readableStatus->getPlayer().pos;
@@ -551,7 +551,7 @@ namespace th
 		return true;
 	}
 
-	// ²éÕÒµÀ¾ß
+	// æŸ¥æ‰¾é“å…·
 	boost::optional<Item> Th10Ai::findItem()
 	{
 		const Player& player = m_readableStatus->getPlayer();
@@ -564,22 +564,22 @@ namespace th
 			return target;
 
 		Time now = Clock::Now();
-		// ²éÕÒÀäÈ´ÖĞ
+		// æŸ¥æ‰¾å†·å´ä¸­
 		if (now - m_findItemTime < Time(2000))
 			return target;
 
-		// ×Ô»ú¸ßÓÚ1/4ÆÁ
+		// è‡ªæœºé«˜äº1/4å±
 		if (player.m_pos.y < Scene::SIZE.y / 4)
 		{
-			// ½øÈëÀäÈ´
+			// è¿›å…¥å†·å´
 			m_findItemTime = now;
 			return target;
 		}
 
-		// ×Ô»ú¸ßÓÚ1/2ÆÁ£¬µĞ»ú¶àÓÚ5¸ö
+		// è‡ªæœºé«˜äº1/2å±ï¼Œæ•Œæœºå¤šäº5ä¸ª
 		if ((player.m_pos.y < Scene::SIZE.y / 2) && (enemies.size() > 5))
 		{
-			// ½øÈëÀäÈ´
+			// è¿›å…¥å†·å´
 			m_findItemTime = now;
 			return target;
 		}
@@ -588,20 +588,20 @@ namespace th
 		//float_t maxY = std::numeric_limits<float_t>::lowest();
 		for (const Item& item : items)
 		{
-			// µÀ¾ßÔÚÆÁÄ»Íâ
+			// é“å…·åœ¨å±å¹•å¤–
 			if (!Scene::IsInScene(item.m_pos))
 				continue;
 
-			// µÀ¾ß¸ßÓÚ1/5ÆÁ
+			// é“å…·é«˜äº1/5å±
 			if (item.m_pos.y < Scene::SIZE.y / 5)
 				continue;
 
-			// µÀ¾ß²»ÔÚ×Ô»ú1/4ÆÁÄÚ
+			// é“å…·ä¸åœ¨è‡ªæœº1/4å±å†…
 			float_t dy = std::abs(item.m_pos.y - player.m_pos.y);
 			if (dy > Scene::SIZE.y / 4)
 				continue;
 
-			// µÀ¾ßÌ«¿¿½üµĞ»ú
+			// é“å…·å¤ªé è¿‘æ•Œæœº
 			bool tooClose = false;
 			for (const Enemy& enemy : enemies)
 			{
@@ -614,7 +614,7 @@ namespace th
 			if (tooClose)
 				continue;
 
-			// µÀ¾ßÓë×Ô»ú¾àÀë×î½ü
+			// é“å…·ä¸è‡ªæœºè·ç¦»æœ€è¿‘
 			float_t dist = item.distance(player);
 			if (dist < minDist)
 			{
@@ -632,7 +632,7 @@ namespace th
 		return target;
 	}
 
-	// ²éÕÒµĞ»ú
+	// æŸ¥æ‰¾æ•Œæœº
 	boost::optional<Enemy> Th10Ai::findEnemy()
 	{
 		const Player& player = m_readableStatus->getPlayer();
@@ -643,22 +643,22 @@ namespace th
 		if (enemies.empty())
 			return target;
 
-		// ×Ô»ú¸ßÓÚ1/4ÆÁ
+		// è‡ªæœºé«˜äº1/4å±
 		if (player.m_pos.y < Scene::SIZE.y / 4)
 			return target;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (const Enemy& enemy : enemies)
 		{
-			// µĞ»úÔÚÆÁÄ»Íâ
+			// æ•Œæœºåœ¨å±å¹•å¤–
 			if (!Scene::IsInScene(enemy.m_pos))
 				continue;
 
-			// µĞ»úÔÚ×Ô»úÏÂÃæ
+			// æ•Œæœºåœ¨è‡ªæœºä¸‹é¢
 			if (enemy.m_pos.y > player.m_pos.y)
 				continue;
 
-			// µĞ»úÓë×Ô»úXÖá¾àÀë×î½ü
+			// æ•Œæœºä¸è‡ªæœºXè½´è·ç¦»æœ€è¿‘
 			float_t dx = std::abs(enemy.m_pos.x - player.m_pos.x);
 			if (dx < minDist)
 			{

@@ -77,7 +77,7 @@ namespace th
 
 	float_t Laser::getRadian() const
 	{
-		// emmm...ÄãËµÕâ¸öË­¶®°¡£¿
+		// emmm...ä½ è¯´è¿™ä¸ªè°æ‡‚å•Šï¼Ÿ
 		float_t radian = m_arc - static_cast<float_t>(M_PI) * _F(5.0) / _F(2.0);
 		return radian;
 	}

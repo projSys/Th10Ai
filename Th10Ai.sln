@@ -15,6 +15,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Th10Ai", "Th10Ai\Th10Ai.vcx
 		{A5277CAA-A372-4808-B01B-EF0C7B0B343C} = {A5277CAA-A372-4808-B01B-EF0C7B0B343C}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2AE0294D-A3E5-4DC9-A16E-7AEEB4148175}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

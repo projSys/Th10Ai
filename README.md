@@ -18,7 +18,6 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 安装[VC++2019可再发行软件包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。<br />
 修改Loader.conf里的exe-path，运行Loader.exe。<br />
 由于使用了DLL注入，请在杀毒软件放行。<br />
-CPU越快越好。<br />
 
 ## 编译依赖
 

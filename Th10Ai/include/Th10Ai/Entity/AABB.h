@@ -6,12 +6,12 @@
 
 namespace th
 {
-	// 轴对齐包围盒
+	// 杞村榻愬寘鍥寸洅
 	class AABB :
 		public BB
 	{
 	public:
-		// 投影轴，单位向量
+		// 鎶曞奖杞达紝鍗曚綅鍚戦噺
 		static constexpr vec2 PROJ_AXIS_X = vec2(_F(1.0), _F(0.0));
 		static constexpr vec2 PROJ_AXIS_Y = vec2(_F(0.0), _F(1.0));
 

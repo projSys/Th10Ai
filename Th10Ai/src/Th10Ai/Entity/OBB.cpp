@@ -6,7 +6,7 @@ namespace th
 {
 	bool OBB::collide(const AABB& other) const
 	{
-		// SAT·ÖÀëÖá¶¨Àí
+		// SATåˆ†ç¦»è½´å®šç†
 		if (!project(AABB::PROJ_AXIS_X).overlap(other.project(AABB::PROJ_AXIS_X)))
 			return false;
 		if (!project(AABB::PROJ_AXIS_Y).overlap(other.project(AABB::PROJ_AXIS_Y)))

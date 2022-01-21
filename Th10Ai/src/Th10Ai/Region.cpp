@@ -104,7 +104,7 @@ namespace th
 		if (!player.collide(*this))
 			return result;
 
-		// ֻ���Ҷ�ӽڵ�
+		// 只检测叶子节点
 		if (m_first == nullptr && m_second == nullptr)
 		{
 			for (Enemy enemy : m_enemies)
@@ -183,7 +183,7 @@ namespace th
 			return result;
 		}
 
-		// ֻ���Ҷ�ӽڵ�
+		// 只检测叶子节点
 		if (m_first == nullptr && m_second == nullptr)
 		{
 			//for (Enemy enemy : m_enemies)

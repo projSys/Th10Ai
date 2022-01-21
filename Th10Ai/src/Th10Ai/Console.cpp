@@ -12,8 +12,8 @@ namespace th
 		if (!AllocConsole())
 			BASE_THROW(SystemError, GetLastError());
 
-		//AttachConsole(ATTACH_PARENT_PROCESS);	// ½«µ±Ç°³ÌĞò¸½µ½¸¸½ø³ÌÉÏ
-		//HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);	// »ñµÃ¿ØÖÆÌ¨Êä³ö¾ä±ú
+		//AttachConsole(ATTACH_PARENT_PROCESS);	// å°†å½“å‰ç¨‹åºé™„åˆ°çˆ¶è¿›ç¨‹ä¸Š
+		//HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);	// è·å¾—æ§åˆ¶å°è¾“å‡ºå¥æŸ„
 
 		HWND console = GetConsoleWindow();
 		HMENU menu = GetSystemMenu(console, FALSE);

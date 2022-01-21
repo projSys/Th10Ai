@@ -14,7 +14,7 @@ namespace th
 
 	bool AABB::collide(const AABB& other) const
 	{
-		// SAT·ÖÀëÖá¶¨Àí
+		// SATåˆ†ç¦»è½´å®šç†
 		if (!projectX().overlap(other.projectX()))
 			return false;
 		if (!projectY().overlap(other.projectY()))

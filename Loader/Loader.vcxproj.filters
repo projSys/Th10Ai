@@ -27,9 +27,6 @@
     <ClInclude Include="include\Loader\DllInject.h">
       <Filter>头文件\Loader</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\Loader\WinMain.h">
       <Filter>头文件\Loader</Filter>
     </ClInclude>
@@ -41,15 +38,5 @@
     <ClCompile Include="src\Loader\WinMain.cpp">
       <Filter>源文件\Loader</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="icon1.ico">
-      <Filter>资源文件</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Loader.rc">
-      <Filter>资源文件</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

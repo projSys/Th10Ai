@@ -70,13 +70,13 @@ namespace th
 		bool isMarisa() const;
 
 	//private:
-		// status == 0 ÖØÉú×´Ì¬£¬´ËÊ±ÎŞµĞ
-		// status == 1 Õı³£×´Ì¬
-		// status == 2 ËÀÍö
+		// status == 0 é‡ç”ŸçŠ¶æ€ï¼Œæ­¤æ—¶æ— æ•Œ
+		// status == 1 æ­£å¸¸çŠ¶æ€
+		// status == 2 æ­»äº¡
 		// status == 3 Unknown
-		// status == 4 ±»µ¯¡¢¾öËÀ£¬´ËÊ±·ÅB¿ÉÒÔ¾öËÀ
+		// status == 4 è¢«å¼¹ã€å†³æ­»ï¼Œæ­¤æ—¶æ”¾Bå¯ä»¥å†³æ­»
 		int_t m_status;
-		// Ê£ÓàÎŞµĞÊ±¼ä
+		// å‰©ä½™æ— æ•Œæ—¶é—´
 		int_t m_invincibleTime;
 		// slow == 0 High Speed
 		// slow == 1 Low Speed

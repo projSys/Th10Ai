@@ -6,7 +6,7 @@
 
 namespace th
 {
-	// 实体结构
+	// 瀹炰綋缁撴瀯
 	// +-------+
 	// | (x,y) |
 	// |   +   | h
@@ -35,7 +35,7 @@ namespace th
 		void updateAABB();
 
 	public:
-		vec2 m_pos;			// 坐标在中心点
+		vec2 m_pos;			// 鍧愭爣鍦ㄤ腑蹇冪偣
 		vec2 m_delta;
 		vec2 m_size;
 

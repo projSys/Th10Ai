@@ -23,11 +23,11 @@ namespace th
 	//		&& std::abs(m_pos.y - other.m_pos.y) < (m_size.y + other.m_size.y) / _F(2.0);
 	//}
 
-	// ÑÏÖØ´íÎó£º²¢²»¶¼ÊÇÖ±ÏßÔË¶¯
+	// ä¸¥é‡é”™è¯¯ï¼šå¹¶ä¸éƒ½æ˜¯ç›´çº¿è¿åŠ¨
 	bool Entity::willCollideWith(const AABB& other) const
 	{
-		// ¿ÉÒÔÈÏÎªÓëÒÆ¶¯ÏòÁ¿×ÜÊÇÖØµþµÄ
-		// È»ºóÖ»ÐèÒª¼ì²âÔÚÒÆ¶¯ÏòÁ¿µÄ´¹Ö±ÏòÁ¿ÉÏÊÇ·ñÖØµþ
+		// å¯ä»¥è®¤ä¸ºä¸Žç§»åŠ¨å‘é‡æ€»æ˜¯é‡å çš„
+		// ç„¶åŽåªéœ€è¦æ£€æµ‹åœ¨ç§»åŠ¨å‘é‡çš„åž‚ç›´å‘é‡ä¸Šæ˜¯å¦é‡å 
 		if (!m_delta.isZero())
 		{
 			//vec2 deltaV = m_delta.verticalize().normalize();

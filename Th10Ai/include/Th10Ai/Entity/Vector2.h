@@ -34,6 +34,7 @@ namespace th
 		bool operator ==(const Vector2& other) const;
 		bool operator !=(const Vector2& other) const;
 
+	public:
 		float_t x;
 		float_t y;
 	};

@@ -20,7 +20,6 @@ namespace base
 		}
 		catch (const boost::exception& be)
 		{
-			// “ª€Á ∫
 			os << boost::diagnostic_information(be);
 		}
 		catch (const std::exception& se)

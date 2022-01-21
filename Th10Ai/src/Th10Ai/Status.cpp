@@ -106,16 +106,16 @@ namespace th
 			now.advance(frame);
 			if (now.collide(player))
 			{
-				std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "Ö¡"
-					<< " ×ÜÊý£º" << m_bullets.size() << " Åö×²£º"
+				std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "å¸§"
+					<< " æ€»æ•°ï¼š" << m_bullets.size() << " ç¢°æ’žï¼š"
 					<< "org(" << org.m_id << " " << org.m_pos.x << " " << org.m_pos.y << " " << org.m_delta.x << " " << org.m_delta.y << ") "
 					<< "now(" << now.m_id << " " << now.m_pos.x << " " << now.m_pos.y << " " << now.m_delta.x << " " << now.m_delta.y << ") " << std::endl;
 				target = now;
 				return target;
 			}
 		}
-		std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "Ö¡"
-			<< " ×ÜÊý£º" << m_bullets.size() << " ²»Åö×²" << std::endl;
+		std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "å¸§"
+			<< " æ€»æ•°ï¼š" << m_bullets.size() << " ä¸ç¢°æ’ž" << std::endl;
 		return target;
 	}
 
@@ -129,16 +129,16 @@ namespace th
 				now.advance(frame);
 				if (now.collide(player))
 				{
-					std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "Ö¡"
-						<< " ×ÜÊý£º" << m_bullets.size() << " Åö×²£º"
+					std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "å¸§"
+						<< " æ€»æ•°ï¼š" << m_bullets.size() << " ç¢°æ’žï¼š"
 						<< "org(" << org.m_id << " " << org.m_pos.x << " " << org.m_pos.y << " " << org.m_delta.x << " " << org.m_delta.y << ") "
 						<< "now(" << now.m_id << " " << now.m_pos.x << " " << now.m_pos.y << " " << now.m_delta.x << " " << now.m_delta.y << ") " << std::endl;
 					return now.m_id;
 				}
 			}
 		}
-		std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "Ö¡"
-			<< " ×ÜÊý£º" << m_bullets.size() << " ÕÒ²»µ½×Óµ¯£º" << id << std::endl;
+		std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "å¸§"
+			<< " æ€»æ•°ï¼š" << m_bullets.size() << " æ‰¾ä¸åˆ°å­å¼¹ï¼š" << id << std::endl;
 		return -1;
 	}
 

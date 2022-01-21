@@ -65,7 +65,7 @@ namespace th
 	{
 		Result result = {};
 
-		// ³¬¹ıËÑË÷½ÚµãÏŞÖÆ
+		// è¶…è¿‡æœç´¢èŠ‚ç‚¹é™åˆ¶
 		++m_count;
 		if (m_count > FIND_LIMIT)
 			return result;
@@ -73,7 +73,7 @@ namespace th
 		if (action.frame > FIND_DEPTH)
 			return result;
 
-		// Ç°½øµ½ÏÂÒ»¸ö×ø±ê
+		// å‰è¿›åˆ°ä¸‹ä¸€ä¸ªåæ ‡
 		Player player = m_status.getPlayer();
 		player.setPosition(action.fromPos);
 		player.move(action.fromDir, m_slowFirst);
@@ -135,7 +135,7 @@ namespace th
 			if (!nextRes.valid)
 				nextValidCount -= 1;
 		}
-		// Ã»ÆøÁË£¬µ±Ç°½ÚµãÒ²ÎŞĞ§
+		// æ²¡æ°”äº†ï¼Œå½“å‰èŠ‚ç‚¹ä¹Ÿæ— æ•ˆ
 		if (nextValidCount == 0)
 			result.valid = false;
 
@@ -146,11 +146,11 @@ namespace th
 	{
 		float_t score = _F(0.0);
 
-		// ×ø±êÔ­µãÒÆµ½×óÉÏ½Ç
+		// åæ ‡åŸç‚¹ç§»åˆ°å·¦ä¸Šè§’
 		player += Scene::ORIGIN_POINT_OFFSET;
 		target += Scene::ORIGIN_POINT_OFFSET;
 
-		// ¾àÀëÔ½Ô¶µÃ·ÖÔ½¸ß
+		// è·ç¦»è¶Šè¿œå¾—åˆ†è¶Šé«˜
 		if (player.x < target.x)
 			score += _F(0.5) * ((target.x - player.x) / target.x);
 		else
@@ -168,11 +168,11 @@ namespace th
 	{
 		float_t score = _F(0.0);
 
-		// ×ø±êÔ­µãÒÆµ½×óÉÏ½Ç
+		// åæ ‡åŸç‚¹ç§»åˆ°å·¦ä¸Šè§’
 		player += Scene::ORIGIN_POINT_OFFSET;
 		target += Scene::ORIGIN_POINT_OFFSET;
 
-		// ¾àÀëÔ½½üµÃ·ÖÔ½¸ß
+		// è·ç¦»è¶Šè¿‘å¾—åˆ†è¶Šé«˜
 		if (player.x < target.x)
 			score += _F(0.5) * (1 - (target.x - player.x) / target.x);
 		else
@@ -190,17 +190,17 @@ namespace th
 	{
 		float_t score = _F(0.0);
 
-		// ×ø±êÔ­µãÒÆµ½×óÉÏ½Ç
+		// åæ ‡åŸç‚¹ç§»åˆ°å·¦ä¸Šè§’
 		player += Scene::ORIGIN_POINT_OFFSET;
 		target += Scene::ORIGIN_POINT_OFFSET;
 
-		// ¾àÀëÔ½½üµÃ·ÖÔ½¸ß
+		// è·ç¦»è¶Šè¿‘å¾—åˆ†è¶Šé«˜
 		if (player.x < target.x)
 			score += _F(0.5) * (1 - (target.x - player.x) / target.x);
 		else
 			score += _F(0.5) * (1 - (player.x - target.x) / (Scene::SIZE.x - target.x));
 
-		// ¾àÀëÔ½Ô¶µÃ·ÖÔ½¸ß
+		// è·ç¦»è¶Šè¿œå¾—åˆ†è¶Šé«˜
 		if (player.y < target.y)
 			score += _F(-1.0);
 		else

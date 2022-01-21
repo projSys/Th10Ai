@@ -57,12 +57,12 @@ namespace th
 		//for (int_t i = 0; i < 2000; ++i)
 		//{
 		//	uint32_t eax = ReadMemory<uint32_t>(ebp + 0x30);
-		//	// µãµÄÀàĞÍ·ÖÎªÒÔÏÂ¼¸ÖÖ
-		//	// eax == 0 ²»´æÔÚ
-		//	// eax == 1 Õı³£µÄ¿ÉÊÕµã
-		//	// eax == 2 ·ÅBÏû³ı×Óµ¯²úÉúµÄµã
-		//	// eax == 3 µ½´ïÊÕµãÏß¡¢·ÅBµÈ×Ô¶¯»ØÊÕµÄµã
-		//	// eax == 4 µ½´ïµãµÄÊÕÈ¡·¶Î§£¬×Ô¶¯»ØÊÕµÄµã
+		//	// ç‚¹çš„ç±»å‹åˆ†ä¸ºä»¥ä¸‹å‡ ç§
+		//	// eax == 0 ä¸å­˜åœ¨
+		//	// eax == 1 æ­£å¸¸çš„å¯æ”¶ç‚¹
+		//	// eax == 2 æ”¾Bæ¶ˆé™¤å­å¼¹äº§ç”Ÿçš„ç‚¹
+		//	// eax == 3 åˆ°è¾¾æ”¶ç‚¹çº¿ã€æ”¾Bç­‰è‡ªåŠ¨å›æ”¶çš„ç‚¹
+		//	// eax == 4 åˆ°è¾¾ç‚¹çš„æ”¶å–èŒƒå›´ï¼Œè‡ªåŠ¨å›æ”¶çš„ç‚¹
 		//	if (eax == 1)
 		//	{
 		//		Item item;
@@ -70,7 +70,7 @@ namespace th
 		//		item.m_pos.y = ReadMemory<float32_t>(ebp + 0x4);
 		//		item.m_delta.x = ReadMemory<float32_t>(ebp + 0xC);
 		//		item.m_delta.y = ReadMemory<float32_t>(ebp + 0x10);
-		//		// µãÃ»ÓĞ¿í¶ÈºÍ¸ß¶È£¬×Ô»ú¿¿½üµãÊ±»á×Ô¶¯ÊÕÈ¡£¬ÎªÁË·½±ãÏÔÊ¾Éè¶¨Îª6
+		//		// ç‚¹æ²¡æœ‰å®½åº¦å’Œé«˜åº¦ï¼Œè‡ªæœºé è¿‘ç‚¹æ—¶ä¼šè‡ªåŠ¨æ”¶å–ï¼Œä¸ºäº†æ–¹ä¾¿æ˜¾ç¤ºè®¾å®šä¸º6
 		//		item.m_size.x = _F(6.0);
 		//		item.m_size.y = _F(6.0);
 		//		item.m_type = ReadMemory<int32_t>(ebp + 0x34);
@@ -150,7 +150,7 @@ namespace th
 		//	int16_t bp = ReadMemory<int16_t>(ebx + 0x446);
 		//	if (bp != 0)
 		//	{
-		//		// emmm...ÄãËµÕâ¸öË­¶®°¡£¿
+		//		// emmm...ä½ è¯´è¿™ä¸ªè°æ‡‚å•Šï¼Ÿ
 		//		//uint32_t eax = ReadMemory<uint32_t>(0x00477810);
 		//		//if (eax != 0)
 		//		//{
@@ -167,7 +167,7 @@ namespace th
 
 		//				bullet.m_id = i;
 		//				//bullet.type = static_cast<int_t>(std::round(bullet.width));
-		//				// ÕæĞÄ²»ÈçÓÃ¿í¶ÈÀ´µ±ÀàĞÍ
+		//				// çœŸå¿ƒä¸å¦‚ç”¨å®½åº¦æ¥å½“ç±»å‹
 		//				int32_t type = ReadMemory<int32_t>(ebx + 0x460);
 		//				//int32_t type = ReadMemory<int32_t>(ebx + 0x7EC);
 
@@ -182,7 +182,7 @@ namespace th
 		if (container == nullptr)
 			return false;
 
-		// ×îºóÒ»¸öÊÇ¿Õ×Óµ¯£¬status == 5£¬ÆäËûÈ«0
+		// æœ€åä¸€ä¸ªæ˜¯ç©ºå­å¼¹ï¼Œstatus == 5ï¼Œå…¶ä»–å…¨0
 		for (uint_t i = 0; i < BULLET_MAX_COUNT - 1; ++i)
 		{
 			const BulletRaw* raw = &(container->bullets[i]);
@@ -190,7 +190,7 @@ namespace th
 				bullets.emplace_back(raw, i);
 		}
 		if (bullets.size() != container->bulletsCount)
-			std::cout << "¶ÁÈ¡µ½µÄ×Óµ¯ÊıÁ¿²»Ò»ÖÂ¡£" << std::endl;
+			std::cout << "è¯»å–åˆ°çš„å­å¼¹æ•°é‡ä¸ä¸€è‡´ã€‚" << std::endl;
 
 		return true;
 	}
@@ -215,7 +215,7 @@ namespace th
 			laser.m_delta.x = ReadMemory<float32_t>(objAddr + 0x30);
 			laser.m_delta.y = ReadMemory<float32_t>(objAddr + 0x34);
 			laser.m_arc = ReadMemory<float32_t>(objAddr + 0x3C);
-			// ¸ß¶ÈÔÚÇ°£¬¿í¶ÈÔÚºó
+			// é«˜åº¦åœ¨å‰ï¼Œå®½åº¦åœ¨å
 			laser.m_size.y = ReadMemory<float32_t>(objAddr + 0x40);
 			laser.m_size.x = ReadMemory<float32_t>(objAddr + 0x44);
 

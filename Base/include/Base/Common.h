@@ -18,6 +18,11 @@
 #define BOOST_USE_WINDOWS_H
 #endif
 
+// 官方预构建使用这个版本
+#ifndef BOOST_USE_WINAPI_VERSION
+#define BOOST_USE_WINAPI_VERSION 0x0600
+#endif
+
 #define BASE_WINDOWS 1
 
 #ifdef _WIN64
@@ -31,8 +36,8 @@
 
 namespace base
 {
-	// �������ĺ꣬�ȶԲ�����չ�������Ǻ궨�����а���#��##
-	// #��##����ֹ����չ��
+	// 带参数的宏，先对参数做展开，除非宏定义体中包含#或##
+	// #或##会阻止参数展开
 #define _MACRO_STRINGIFY(a) #a
 #define MACRO_STRINGIFY(a) _MACRO_STRINGIFY(a)
 

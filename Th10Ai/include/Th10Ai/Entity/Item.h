@@ -15,24 +15,24 @@ namespace th
 		Item(const ItemRaw* raw, uint_t id);
 
 	private:
-		// µãµÄ×´Ì¬·ÖÎªÒÔÏÂ¼¸ÖÖ
-		// status == 0 ÎŞĞ§µÄµã
-		// status == 1 Õı³£µÄ¿ÉÊÕµã
-		// status == 2 ·ÅBÏû³ı×Óµ¯²úÉúµÄµã
-		// status == 3 µ½´ïÊÕµãÏß¡¢·ÅBµÈ×Ô¶¯»ØÊÕµÄµã
-		// status == 4 µ½´ïµãµÄÊÕÈ¡·¶Î§£¬×Ô¶¯»ØÊÕµÄµã
+		// ç‚¹çš„çŠ¶æ€åˆ†ä¸ºä»¥ä¸‹å‡ ç§
+		// status == 0 æ— æ•ˆçš„ç‚¹
+		// status == 1 æ­£å¸¸çš„å¯æ”¶ç‚¹
+		// status == 2 æ”¾Bæ¶ˆé™¤å­å¼¹äº§ç”Ÿçš„ç‚¹
+		// status == 3 åˆ°è¾¾æ”¶ç‚¹çº¿ã€æ”¾Bç­‰è‡ªåŠ¨å›æ”¶çš„ç‚¹
+		// status == 4 åˆ°è¾¾ç‚¹çš„æ”¶å–èŒƒå›´ï¼Œè‡ªåŠ¨å›æ”¶çš„ç‚¹
 		int_t m_status;
-		// Õı³£µã·ÖÎªÒÔÏÂ¼¸ÖÖ
-		// type == 1 Power Items Pµã£¨ºìµã£©
-		// type == 2 Point Items µÃ·Öµã£¨À¶µã£©
-		// type == 3 Faith Items ĞÅÑöµã£¨ÂÌµã£©
-		// type == 4 Large Power Items ´óPµã£¨ºìµã£©
-		// type == 5 Large Point Items ´óµÃ·Öµã£¨´ø»ÆÉ«±ßÏßµÄÀ¶µã£©£¬ÓÉBOSSµôÂä
+		// æ­£å¸¸ç‚¹åˆ†ä¸ºä»¥ä¸‹å‡ ç§
+		// type == 1 Power Items Pç‚¹ï¼ˆçº¢ç‚¹ï¼‰
+		// type == 2 Point Items å¾—åˆ†ç‚¹ï¼ˆè“ç‚¹ï¼‰
+		// type == 3 Faith Items ä¿¡ä»°ç‚¹ï¼ˆç»¿ç‚¹ï¼‰
+		// type == 4 Large Power Items å¤§Pç‚¹ï¼ˆçº¢ç‚¹ï¼‰
+		// type == 5 Large Point Items å¤§å¾—åˆ†ç‚¹ï¼ˆå¸¦é»„è‰²è¾¹çº¿çš„è“ç‚¹ï¼‰ï¼Œç”±BOSSæ‰è½
 		// type == 6 Unknown
-		// type == 7 Life Items ĞøÃüµã£¨×Ïµã¡¢1UPµã£©
+		// type == 7 Life Items ç»­å‘½ç‚¹ï¼ˆç´«ç‚¹ã€1UPç‚¹ï¼‰
 		// type == 8 Unknown
-		// type == 9 Faith Items ĞÅÑöµã£¨ÂÌµã£©£¬ÂúÁéÁ¦Ê±ÓÉPµã×ª»¯¶øÀ´
-		// type == 10 Power Items Pµã£¨ºìµã£©£¬ÓÉBOSSµôÂä
+		// type == 9 Faith Items ä¿¡ä»°ç‚¹ï¼ˆç»¿ç‚¹ï¼‰ï¼Œæ»¡çµåŠ›æ—¶ç”±Pç‚¹è½¬åŒ–è€Œæ¥
+		// type == 10 Power Items Pç‚¹ï¼ˆçº¢ç‚¹ï¼‰ï¼Œç”±BOSSæ‰è½
 		int_t m_type;
 		uint_t m_id;
 	};

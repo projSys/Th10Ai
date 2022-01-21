@@ -8,7 +8,7 @@ namespace th
 {
 	class AABB;
 
-	// ¶¨Ïò°üÎ§ºĞ
+	// å®šå‘åŒ…å›´ç›’
 	class OBB :
 		public BB
 	{
@@ -16,7 +16,7 @@ namespace th
 		bool collide(const AABB& other) const;
 
 	protected:
-		vec2 m_projAxisX;	// Í¶Ó°Öá£¬µ¥Î»ÏòÁ¿
+		vec2 m_projAxisX;	// æŠ•å½±è½´ï¼Œå•ä½å‘é‡
 		vec2 m_projAxisY;
 	};
 }

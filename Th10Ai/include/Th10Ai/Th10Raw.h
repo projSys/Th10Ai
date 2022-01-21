@@ -68,7 +68,7 @@ namespace th
 
 	static_assert(sizeof(EnemyRaw) == 0x2518, "Size is not correct.");
 
-	// ³ß´çÎ´Öª£¬ÔÚEnemyRawÄÚ²¿£¬³ÉÔ±»ò»ùÀà£¿
+	// å°ºå¯¸æœªçŸ¥ï¼Œåœ¨EnemyRawå†…éƒ¨ï¼Œæˆå‘˜æˆ–åŸºç±»ï¼Ÿ
 	struct EnemyElement
 	{
 		EnemyRaw* raw;

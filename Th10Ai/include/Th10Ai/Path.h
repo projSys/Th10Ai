@@ -26,7 +26,7 @@ namespace th
 	struct Result
 	{
 		bool valid;
-		bool slow;		// Êµ¼ÊÊÇ·ñÂıËÙ
+		bool slow;		// å®é™…æ˜¯å¦æ…¢é€Ÿ
 		float_t score;
 	};
 
@@ -59,7 +59,7 @@ namespace th
 		bool m_underEnemy;
 
 		DIR m_dir;
-		bool m_slowFirst;			// ÊÇ·ñÂıËÙÓÅÏÈ
+		bool m_slowFirst;			// æ˜¯å¦æ…¢é€Ÿä¼˜å…ˆ
 
 		float_t m_bestScore;
 		int_t m_count;

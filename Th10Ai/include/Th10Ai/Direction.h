@@ -6,18 +6,18 @@
 
 namespace th
 {
-	// рф╤╞╥╫оР
+	// Г╖╩Е┼╗Ф√╧Е░▒
 	enum class DIR : uint_t
 	{
-		HOLD,			// ╡╩╤╞
-		UP,				// ио
-		DOWN,			// об
-		LEFT,			// вС
-		RIGHT,			// ср
-		UP_LEFT,		// вСио
-		UP_RIGHT,		// срио
-		DOWN_LEFT,		// вСоб
-		DOWN_RIGHT,		// сроб
+		HOLD,			// Д╦█Е┼╗
+		UP,				// Д╦┼
+		DOWN,			// Д╦▀
+		LEFT,			// Е╥╕
+		RIGHT,			// Е▐Ё
+		UP_LEFT,		// Е╥╕Д╦┼
+		UP_RIGHT,		// Е▐ЁД╦┼
+		DOWN_LEFT,		// Е╥╕Д╦▀
+		DOWN_RIGHT,		// Е▐ЁД╦▀
 
 		MAX_COUNT
 	};

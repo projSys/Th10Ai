@@ -6,11 +6,11 @@ namespace th
 {
 	Projection BB::project(const vec2& axis) const
 	{
-		// a·b = |a||b|cosθ
+		// a路b = |a||b|cos胃
 		// |b| = 1
-		// a·b = |a|cosθ
-		// |a|cosθ = |邻边|
-		// a·b即a在b上的投影
+		// a路b = |a|cos胃
+		// |a|cos胃 = |閭昏竟|
+		// a路b鍗砤鍦╞涓婄殑鎶曞奖
 		float_t proj1 = m_topLeft.dot(axis);
 		float_t proj2 = m_topRight.dot(axis);
 		float_t proj3 = m_bottomLeft.dot(axis);

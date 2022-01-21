@@ -4,6 +4,8 @@
 
 #include <string>
 
+#include "Base/Types.h"
+
 namespace base
 {
 }

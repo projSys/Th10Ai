@@ -9,8 +9,7 @@ namespace ld
 	void DllInject::EnableDebugPrivilege()
 	{
 		HANDLE token = nullptr;
-		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-			&token))
+		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
 			BASE_THROW(SystemError, GetLastError());
 		ON_SCOPE_EXIT([&]()
 			{
@@ -28,15 +27,14 @@ namespace ld
 		if (!AdjustTokenPrivileges(token, FALSE, &tp, sizeof(tp), nullptr, nullptr))
 			BASE_THROW(SystemError, GetLastError());
 		if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
-			BASE_THROW(Exception, u8"«Î“‘π‹¿Ì‘±…Ì∑›‘À––°£");
+			BASE_THROW(Exception, "ËØ∑‰ª•ÁÆ°ÁêÜÂëòË∫´‰ªΩËøêË°å„ÄÇ");
 	}
 
 	void DllInject::Inject(HANDLE process, const fs::path& dllPath)
 	{
 		uint_t size = sizeof(fs::path::value_type) * (dllPath.size() + 1);
 
-		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT | MEM_RESERVE,
-			PAGE_READWRITE);
+		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 		if (memory == nullptr)
 			BASE_THROW(SystemError, GetLastError());
 		ON_SCOPE_EXIT([&]()
@@ -53,15 +51,12 @@ namespace ld
 		HMODULE kernel32Dll = GetModuleHandleW(L"kernel32.dll");
 		if (kernel32Dll == nullptr)
 			BASE_THROW(SystemError, GetLastError());
-		LPTHREAD_START_ROUTINE loadLibraryW =
-			reinterpret_cast<LPTHREAD_START_ROUTINE>(
-				GetProcAddress(kernel32Dll, "LoadLibraryW"));
+		FARPROC loadLibraryW = GetProcAddress(kernel32Dll, "LoadLibraryW");
 		if (loadLibraryW == nullptr)
 			BASE_THROW(SystemError, GetLastError());
 
 		DWORD threadId = 0;
-		HANDLE thread = CreateRemoteThread(process, nullptr, 0, loadLibraryW, memory,
-			0, &threadId);
+		HANDLE thread = CreateRemoteThread(process, nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibraryW), memory, 0, &threadId);
 		if (thread == nullptr)
 			BASE_THROW(SystemError, GetLastError());
 		ON_SCOPE_EXIT([&]()
@@ -73,12 +68,12 @@ namespace ld
 		if (waited == WAIT_FAILED)
 			BASE_THROW(SystemError, GetLastError());
 		if (waited == WAIT_TIMEOUT)
-			BASE_THROW(Exception, u8"◊¢»Îœﬂ≥Ã÷¥––≥¨ ±°£");
+			BASE_THROW(Exception, "Ê≥®ÂÖ•Á∫øÁ®ãÊâßË°åË∂ÖÊó∂„ÄÇ");
 
 		DWORD exitCode = 0;
 		if (!GetExitCodeThread(thread, &exitCode))
 			BASE_THROW(SystemError, GetLastError());
 		if (exitCode == 0)
-			BASE_THROW(Exception, u8"LoadLibraryW()µ˜”√ ß∞‹°£");
+			BASE_THROW(Exception, "LoadLibraryW()Ë∞ÉÁî®Â§±Ë¥•„ÄÇ");
 	}
 }
