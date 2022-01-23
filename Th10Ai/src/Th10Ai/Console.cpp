@@ -10,7 +10,7 @@ namespace th
 		m_newStderr(nullptr)
 	{
 		if (!AllocConsole())
-			BASE_THROW(SystemError, GetLastError());
+			throw SystemError();
 
 		//AttachConsole(ATTACH_PARENT_PROCESS);	// 将当前程序附到父进程上
 		//HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);	// 获得控制台输出句柄
@@ -39,7 +39,7 @@ namespace th
 		std::wcerr.clear();
 		std::wclog.clear();
 
-		//system("chcp 65001");
+		system("chcp 65001");
 	}
 
 	Console::~Console()

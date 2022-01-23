@@ -24,12 +24,12 @@ namespace th
 	{
 		HMODULE dinput8Dll = GetModuleHandleW(L"dinput8.dll");
 		if (dinput8Dll == nullptr)
-			BASE_THROW(SystemError, GetLastError());
+			throw SystemError();
 		m_directInput8CreateOrig =
 			reinterpret_cast<DirectInput8Create_t>(
 				GetProcAddress(dinput8Dll, "DirectInput8Create"));
 		if (m_directInput8CreateOrig == nullptr)
-			BASE_THROW(SystemError, GetLastError());
+			throw SystemError();
 
 		detours.attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig),
 			DirectInput8CreateHook);

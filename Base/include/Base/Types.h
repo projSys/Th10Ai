@@ -12,8 +12,8 @@ namespace base
 	using float32_t = float;
 	using float64_t = double;
 
-	static_assert(sizeof(float32_t) == 4, "Size is not correct.");
-	static_assert(sizeof(float64_t) == 8, "Size is not correct.");
+	static_assert(sizeof(float32_t) == 4);
+	static_assert(sizeof(float64_t) == 8);
 
 #ifdef BASE_64BIT
 	using int_t = int64_t;

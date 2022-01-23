@@ -4,7 +4,7 @@
 
 namespace base
 {
-	Throwable::Throwable(const boost::source_location& loc) :
+	Throwable::Throwable(const std::source_location& loc) :
 		m_loc(loc)
 	{
 	}

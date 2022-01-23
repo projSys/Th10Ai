@@ -5,14 +5,14 @@
 namespace base
 {
 	Exception::Exception(const char* str,
-		const boost::source_location& loc) :
+		const std::source_location& loc) :
 		runtime_error(str),
 		Throwable(loc)
 	{
 	}
 
 	Exception::Exception(const std::string& str,
-		const boost::source_location& loc) :
+		const std::source_location& loc) :
 		runtime_error(str),
 		Throwable(loc)
 	{

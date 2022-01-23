@@ -8,8 +8,8 @@ namespace th
 	{
 	public:
 		void transactionBegin();
-		void transactionAbort();
 		void transactionCommit();
+		void transactionAbort();
 
 		void updateThread(HANDLE thread);
 

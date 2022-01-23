@@ -2,49 +2,28 @@
 
 #include "Base/Common.h"
 
+#include <concepts>
 #include <type_traits>
 
 namespace base
 {
-	template <typename T>
-	class ScopeGuard
-	{
-	public:
-		explicit ScopeGuard(T&& functor) :
-			m_functor(std::forward<T>(functor)),
-			m_dismissed(false)
+	template <typename T> requires std::invocable<T>
+		class ScopeGuard
 		{
-		}
+		public:
+			explicit ScopeGuard(T&& functor) :
+				m_functor(std::forward<T>(functor))
+			{
+			}
 
-		~ScopeGuard()
-		{
-			if (!m_dismissed)
+			~ScopeGuard()
+			{
 				m_functor();
-		}
+			}
 
-		ScopeGuard(const ScopeGuard&) = delete;
+		private:
+			T m_functor;
+		};
 
-		ScopeGuard(ScopeGuard&& other) :
-			m_functor(std::move(other.m_functor)),
-			m_dismissed(other.m_dismissed)
-		{
-			other.m_dismissed = true;
-		}
-
-		ScopeGuard& operator =(const ScopeGuard&) = delete;
-		ScopeGuard& operator =(ScopeGuard&&) = delete;
-
-	private:
-		T m_functor;
-		bool m_dismissed;
-	};
-
-	template <typename T>
-	ScopeGuard<T> MakeScopeGuard(T&& functor)
-	{
-		return ScopeGuard<T>(std::forward<T>(functor));
-	}
-
-#define ON_SCOPE_EXIT(functor) \
-	auto MACRO_CONCAT(scopeGuard, __LINE__) = base::MakeScopeGuard(functor)
+#define ON_SCOPE_EXIT(functor) ScopeGuard MACRO_CONCAT(scopeGuard, __LINE__)(functor)
 }

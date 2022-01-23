@@ -28,12 +28,27 @@ namespace base
 		virtual void toStream(std::ostream& os) const = 0;
 	};
 
-	std::istream& operator >>(std::istream& is,
-		IStreamable& istreamable);
-	std::ostream& operator <<(std::ostream& os,
-		const OStreamable& ostreamable);
-	std::istream& operator >>(std::istream& is,
-		Streamable& streamable);
-	std::ostream& operator <<(std::ostream& os,
-		const Streamable& streamable);
+	inline std::istream& operator >>(std::istream& is, IStreamable& istreamable)
+	{
+		istreamable.fromStream(is);
+		return is;
+	}
+
+	inline std::ostream& operator <<(std::ostream& os, const OStreamable& ostreamable)
+	{
+		ostreamable.toStream(os);
+		return os;
+	}
+
+	inline std::istream& operator >>(std::istream& is, Streamable& streamable)
+	{
+		streamable.fromStream(is);
+		return is;
+	}
+
+	inline std::ostream& operator <<(std::ostream& os, const Streamable& streamable)
+	{
+		streamable.toStream(os);
+		return os;
+	}
 }

@@ -14,9 +14,9 @@ namespace base
 	{
 	public:
 		Exception(const char* str,
-			const boost::source_location& loc);
+			const std::source_location& loc = std::source_location::current());
 		Exception(const std::string& str,
-			const boost::source_location& loc);
+			const std::source_location& loc = std::source_location::current());
 
 		virtual void toStream(std::ostream& os) const override;
 	};

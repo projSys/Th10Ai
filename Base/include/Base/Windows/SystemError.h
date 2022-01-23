@@ -13,8 +13,8 @@ namespace base
 		public Throwable
 	{
 	public:
-		SystemError(DWORD errorCode,
-			const boost::source_location& loc);
+		SystemError(DWORD errorCode = GetLastError(),
+			const std::source_location& loc = std::source_location::current());
 
 		virtual void toStream(std::ostream& os) const override;
 	};

@@ -40,7 +40,7 @@ void Load()
 		si.cb = sizeof(si);
 		PROCESS_INFORMATION pi = {};
 		if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
-			BASE_THROW(SystemError, GetLastError());
+			throw SystemError();
 		ON_SCOPE_EXIT([&]()
 			{
 				CloseHandle(pi.hThread);
@@ -53,7 +53,7 @@ void Load()
 
 		DWORD count = ResumeThread(pi.hThread);
 		if (count == (DWORD)-1)
-			BASE_THROW(SystemError, GetLastError());
+			throw SystemError();
 	}
 	catch (...)
 	{

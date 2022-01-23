@@ -104,9 +104,6 @@
     <ClCompile Include="src\Base\Windows\SystemError.cpp">
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Streamable.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\Throwable.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>

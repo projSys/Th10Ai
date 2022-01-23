@@ -14,8 +14,7 @@ namespace base
 	template <typename T>
 	bool float_equal(T left, T right)
 	{
-		static_assert(std::is_floating_point_v<T>,
-			"Parameter must be a floating point number.");
+		static_assert(std::is_floating_point_v<T>);
 
 		T diff = std::abs(left - right);
 		if (diff <= std::numeric_limits<T>::epsilon())

@@ -2,7 +2,7 @@
 
 #include "Base/Common.h"
 
-#include <boost/assert/source_location.hpp>
+#include <source_location>
 
 #include "Base/Streamable.h"
 
@@ -12,15 +12,12 @@ namespace base
 		public OStreamable
 	{
 	public:
-		explicit Throwable(const boost::source_location& loc);
+		explicit Throwable(const std::source_location& loc = std::source_location::current());
 		virtual ~Throwable() = default;
 
 		virtual void toStream(std::ostream& os) const override;
 
 	private:
-		boost::source_location m_loc;
+		std::source_location m_loc;
 	};
-
-#define BASE_THROW(T, ...) \
-	throw T(__VA_ARGS__, BOOST_CURRENT_LOCATION)
 }

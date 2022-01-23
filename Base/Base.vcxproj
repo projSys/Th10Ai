@@ -179,7 +179,6 @@
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Log.cpp" />
     <ClCompile Include="src\Base\Logger.cpp" />
-    <ClCompile Include="src\Base\Streamable.cpp" />
     <ClCompile Include="src\Base\Throwable.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />
     <ClCompile Include="src\Base\Windows\ExceptFilter.cpp" />

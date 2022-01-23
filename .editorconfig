@@ -13,7 +13,7 @@ root = true
 charset = utf-8
 
 # end_of_line: set to "lf", "cr", or "crlf" to control how line breaks are represented.
-end_of_line = lf
+#end_of_line = lf
 
 #indent_style = tab
 #indent_size = 4

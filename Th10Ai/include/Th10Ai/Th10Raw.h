@@ -33,7 +33,7 @@ namespace th
 		int32_t slow;				// 0x4474
 	};
 
-	static_assert(sizeof(PlayerRaw) == 0x4478, "Size is not correct.");
+	static_assert(sizeof(PlayerRaw) == 0x4478);
 
 	struct ItemRaw
 	{
@@ -49,7 +49,7 @@ namespace th
 		byte_t unknown3[0xC];
 	};
 
-	static_assert(sizeof(ItemRaw) == 0x3F0, "Size is not correct.");
+	static_assert(sizeof(ItemRaw) == 0x3F0);
 
 	struct ItemContainer
 	{
@@ -59,14 +59,14 @@ namespace th
 		byte_t unknown1[0x8];
 	};
 
-	static_assert(sizeof(ItemContainer) == 0x21CEC0, "Size is not correct.");
+	static_assert(sizeof(ItemContainer) == 0x21CEC0);
 
 	struct EnemyRaw
 	{
 		byte_t unknown0[0x2518];
 	};
 
-	static_assert(sizeof(EnemyRaw) == 0x2518, "Size is not correct.");
+	static_assert(sizeof(EnemyRaw) == 0x2518);
 
 	// 尺寸未知，在EnemyRaw内部，成员或基类？
 	struct EnemyElement
@@ -82,7 +82,7 @@ namespace th
 		byte_t unknown1[0xC];
 	};
 
-	static_assert(sizeof(EnemyContainer) == 0x68, "Size is not correct.");
+	static_assert(sizeof(EnemyContainer) == 0x68);
 
 	struct BulletRaw
 	{
@@ -103,7 +103,7 @@ namespace th
 		byte_t unknown6[0x38C];
 	};
 
-	static_assert(sizeof(BulletRaw) == 0x7F0, "Size is not correct.");
+	static_assert(sizeof(BulletRaw) == 0x7F0);
 
 	struct BulletContainer
 	{
@@ -113,7 +113,7 @@ namespace th
 		byte_t unknown1[0x4];
 	};
 
-	static_assert(sizeof(BulletContainer) == 0x3E0B54, "Size is not correct.");
+	static_assert(sizeof(BulletContainer) == 0x3E0B54);
 
 #pragma pack()
 }
