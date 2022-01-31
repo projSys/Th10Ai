@@ -3,7 +3,7 @@
 #include <boost/filesystem.hpp>
 
 #include "Base/Traits.h"
-#include "Base/Windows/SystemError.h"
+#include "Base/ErrorCode.h"
 
 namespace base
 {
@@ -13,12 +13,12 @@ namespace base
 		{
 			int wstrSize = ::MultiByteToWideChar(codePage, 0, str, strSize, nullptr, 0);
 			if (wstrSize == 0)
-				throw SystemError();
+				throw ErrorCode(GetLastError());
 
 			std::wstring wstr(wstrSize, L'\0');
 			int ret = ::MultiByteToWideChar(codePage, 0, str, strSize, &wstr[0], wstrSize);
 			if (ret == 0)
-				throw SystemError();
+				throw ErrorCode(GetLastError());
 			return wstr;
 		}
 
@@ -27,13 +27,13 @@ namespace base
 			int strSize = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, nullptr, 0,
 				nullptr, nullptr);
 			if (strSize == 0)
-				throw SystemError();
+				throw ErrorCode(GetLastError());
 
 			std::string str(strSize, '\0');
 			int ret = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, &str[0], strSize,
 				nullptr, nullptr);
 			if (ret == 0)
-				throw SystemError();
+				throw ErrorCode(GetLastError());
 			return str;
 		}
 
@@ -98,9 +98,9 @@ namespace base
 			WCHAR buffer[BUFFER_SIZE] = {};
 			DWORD ret = GetModuleFileNameW(module, buffer, BUFFER_SIZE - 1);
 			if (ret == 0)
-				throw SystemError();
+				throw ErrorCode(GetLastError());
 			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-				throw SystemError();
+				throw ErrorCode(GetLastError());
 
 			return fs::path(buffer);
 		}

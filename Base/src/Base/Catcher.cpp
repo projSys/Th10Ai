@@ -24,11 +24,11 @@ namespace base
 		}
 		catch (const std::exception& se)
 		{
-			os << se.what() << '\n';
+			os << se.what();
 		}
 		catch (...)
 		{
-			os << "Unclassified exception.\n";
+			os << "Unclassified exception.";
 		}
 	}
 }

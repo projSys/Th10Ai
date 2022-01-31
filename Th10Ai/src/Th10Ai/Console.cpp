@@ -1,6 +1,6 @@
 #include "Th10Ai/Console.h"
 
-#include <Base/Windows/SystemError.h>
+#include <Base/ErrorCode.h>
 
 namespace th
 {
@@ -10,7 +10,7 @@ namespace th
 		m_newStderr(nullptr)
 	{
 		if (!AllocConsole())
-			throw SystemError();
+			throw ErrorCode(GetLastError());
 
 		//AttachConsole(ATTACH_PARENT_PROCESS);	// 将当前程序附到父进程上
 		//HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);	// 获得控制台输出句柄

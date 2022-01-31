@@ -1,7 +1,7 @@
 #include "Th10Ai/DirectX/MyDirectInputDevice8A.h"
 
 #include <Base/Catcher.h>
-#include <Base/Clock.h>
+#include <Base/Time.h>
 
 #include "Th10Ai/DirectX/MyDirectInput8A.h"
 #include "Th10Ai/Th10Ai.h"

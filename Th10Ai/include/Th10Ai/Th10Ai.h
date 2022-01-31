@@ -8,7 +8,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <boost/optional.hpp>
-#include <Base/Clock.h>
+#include <Base/Time.h>
 
 #if RENDER
 #include <opencv2/opencv.hpp>

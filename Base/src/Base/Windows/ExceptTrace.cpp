@@ -80,8 +80,8 @@ namespace base
 
 		void ExceptTrace::f2()
 		{
+			//todo 线程安全
 			HANDLE process = GetCurrentProcess();
-			HANDLE thread = GetCurrentThread();
 
 			SymSetOptions(SYMOPT_LOAD_LINES);
 			SymInitialize(process, nullptr, TRUE);
@@ -100,31 +100,30 @@ namespace base
 			oss << "StackTrace:\n";
 			for (DWORD64 i = 0; i < m_size; ++i)
 			{
+				oss << i + 1;
 				DWORD64 address = m_frames[i];
-				if (SymFromAddr(process, address, &symDisplacement, symbol)
-					&& SymGetLineFromAddr64(process, address, &lineDisplacement, &line))
+				if (SymFromAddr(process, address, &symDisplacement, symbol))
 				{
-					oss << i + 1
-						<< " in " << symbol->Name
-						<< " at " << line.FileName
-						<< " : " << line.LineNumber
-						<< '\n';
+					oss << " in " << symbol->Name;
+					if (SymGetLineFromAddr64(process, address, &lineDisplacement, &line))
+					{
+						oss << " at " << line.FileName << " : " << line.LineNumber;
+					}
 				}
 				else
 				{
 					std::ios oldState(nullptr);
 					oldState.copyfmt(oss);
-					oss << i + 1
-						<< " 0x" << std::hex << std::uppercase
+					oss << " 0x" << std::hex << std::uppercase
 #ifdef BASE_64BIT
 						<< std::setw(16) << std::setfill('0')
 #else
 						<< std::setw(8) << std::setfill('0')
 #endif
-						<< address
-						<< '\n';
+						<< address;
 					oss.copyfmt(oldState);
 				}
+				oss << '\n';
 			}
 
 			SymCleanup(process);

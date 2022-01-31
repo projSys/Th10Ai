@@ -4,17 +4,17 @@
 
 namespace base
 {
-	Throwable::Throwable(const std::source_location& loc) :
-		m_loc(loc)
+	Throwable::Throwable(const std::source_location& sl) :
+		m_sl(sl)
 	{
 	}
 
 	void Throwable::toStream(std::ostream& os) const
 	{
 		os << "SourceLocation:\n"
-			<< " in " << m_loc.function_name()
-			<< " at " << m_loc.file_name()
-			<< " : " << m_loc.line()
+			<< " in " << m_sl.function_name()
+			<< " at " << m_sl.file_name()
+			<< " : " << m_sl.line()
 			<< '\n';
 	}
 }

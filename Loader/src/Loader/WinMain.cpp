@@ -5,9 +5,9 @@
 #include <Base/Catcher.h>
 #include <Base/Logger.h>
 #include <Base/ScopeGuard.h>
+#include <Base/ErrorCode.h>
 #include <Base/Windows/ExceptFilter.h>
 #include <Base/Windows/Apis.h>
-#include <Base/Windows/SystemError.h>
 
 #include "Loader/DllInject.h"
 
@@ -40,7 +40,7 @@ void Load()
 		si.cb = sizeof(si);
 		PROCESS_INFORMATION pi = {};
 		if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
-			throw SystemError();
+			throw ErrorCode(GetLastError());
 		ON_SCOPE_EXIT([&]()
 			{
 				CloseHandle(pi.hThread);
@@ -53,11 +53,11 @@ void Load()
 
 		DWORD count = ResumeThread(pi.hThread);
 		if (count == (DWORD)-1)
-			throw SystemError();
+			throw ErrorCode(GetLastError());
 	}
 	catch (...)
 	{
-		BASE_LOG(error) << Catcher() << std::flush;
+		BASE_LOG(error) << Catcher() << std::endl;
 		throw;
 	}
 }

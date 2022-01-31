@@ -13,10 +13,10 @@ namespace base
 		public Throwable
 	{
 	public:
-		Exception(const char* str,
-			const std::source_location& loc = std::source_location::current());
-		Exception(const std::string& str,
-			const std::source_location& loc = std::source_location::current());
+		explicit Exception(const char* str,
+			const std::source_location& sl = std::source_location::current());
+		explicit Exception(const std::string& str,
+			const std::source_location& sl = std::source_location::current());
 
 		virtual void toStream(std::ostream& os) const override;
 	};

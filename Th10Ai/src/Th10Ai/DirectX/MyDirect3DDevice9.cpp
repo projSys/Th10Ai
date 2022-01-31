@@ -1,7 +1,7 @@
 #include "Th10Ai/DirectX/MyDirect3DDevice9.h"
 
 #include <Base/Catcher.h>
-#include <Base/Clock.h>
+#include <Base/Time.h>
 
 #include "Th10Ai/DirectX/MyDirect3D9.h"
 #include "Th10Ai/Th10Ai.h"

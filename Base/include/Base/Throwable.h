@@ -12,12 +12,12 @@ namespace base
 		public OStreamable
 	{
 	public:
-		explicit Throwable(const std::source_location& loc = std::source_location::current());
+		explicit Throwable(const std::source_location& sl = std::source_location::current());
 		virtual ~Throwable() = default;
 
 		virtual void toStream(std::ostream& os) const override;
 
 	private:
-		std::source_location m_loc;
+		std::source_location m_sl;
 	};
 }
