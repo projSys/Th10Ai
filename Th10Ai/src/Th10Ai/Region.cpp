@@ -320,9 +320,9 @@ namespace th
 
 	void Region::updateAABB()
 	{
-		m_topLeft = getTopLeft();
-		m_topRight = getTopRight();
-		m_bottomLeft = getBottomLeft();
-		m_bottomRight = getBottomRight();
+		topLeft = getTopLeft();
+		topRight = getTopRight();
+		bottomLeft = getBottomLeft();
+		bottomRight = getBottomRight();
 	}
 }

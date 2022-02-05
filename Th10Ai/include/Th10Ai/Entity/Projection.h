@@ -8,12 +8,12 @@ namespace th
 	{
 	public:
 		Projection();
-		Projection(float_t min, float_t max);
+		Projection(float_t min0, float_t max0);
 
 		bool overlap(const Projection& other) const;
 
-	private:
-		float_t m_min;
-		float_t m_max;
+	public:
+		float_t min;
+		float_t max;
 	};
 }

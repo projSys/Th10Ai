@@ -15,8 +15,8 @@ namespace th
 	public:
 		bool collide(const AABB& other) const;
 
-	protected:
-		vec2 m_projAxisX;	// 投影轴，单位向量
-		vec2 m_projAxisY;
+	public:
+		vec2 projAxisX;		// 投影轴，单位向量
+		vec2 projAxisY;
 	};
 }

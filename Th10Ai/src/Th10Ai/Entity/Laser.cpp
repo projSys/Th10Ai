@@ -87,11 +87,11 @@ namespace th
 		float_t radian = getRadian();
 		float_t sinVal = std::sin(radian);
 		float_t cosVal = std::cos(radian);
-		m_topLeft = m_pos + (getTopLeft() - m_pos).rotate(sinVal, cosVal);
-		m_topRight = m_pos + (getTopRight() - m_pos).rotate(sinVal, cosVal);
-		m_bottomLeft = m_pos + (getBottomLeft() - m_pos).rotate(sinVal, cosVal);
-		m_bottomRight = m_pos + (getBottomRight() - m_pos).rotate(sinVal, cosVal);
-		m_projAxisX = vec2(_F(1.0), _F(0.0)).rotate(sinVal, cosVal);
-		m_projAxisY = vec2(_F(0.0), _F(1.0)).rotate(sinVal, cosVal);
+		topLeft = m_pos + (getTopLeft() - m_pos).rotate(sinVal, cosVal);
+		topRight = m_pos + (getTopRight() - m_pos).rotate(sinVal, cosVal);
+		bottomLeft = m_pos + (getBottomLeft() - m_pos).rotate(sinVal, cosVal);
+		bottomRight = m_pos + (getBottomRight() - m_pos).rotate(sinVal, cosVal);
+		projAxisX = vec2(_F(1.0), _F(0.0)).rotate(sinVal, cosVal);
+		projAxisY = vec2(_F(0.0), _F(1.0)).rotate(sinVal, cosVal);
 	}
 }

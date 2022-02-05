@@ -3,20 +3,20 @@
 namespace th
 {
 	Projection::Projection() :
-		m_min(),
-		m_max()
+		min(),
+		max()
 	{
 	}
 
-	Projection::Projection(float_t min, float_t max) :
-		m_min(min),
-		m_max(max)
+	Projection::Projection(float_t min0, float_t max0) :
+		min(min0),
+		max(max0)
 	{
 	}
 
 	bool Projection::overlap(const Projection& other) const
 	{
-		//return !(m_max < other.m_min || other.m_max < m_min);
-		return m_max > other.m_min && other.m_max > m_min;
+		//return !(max < other.min || other.max < min);
+		return max > other.min && other.max > min;
 	}
 }

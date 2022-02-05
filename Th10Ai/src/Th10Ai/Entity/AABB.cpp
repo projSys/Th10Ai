@@ -4,12 +4,12 @@ namespace th
 {
 	Projection AABB::projectX() const
 	{
-		return Projection(m_topLeft.x, m_bottomRight.x);
+		return Projection(topLeft.x, bottomRight.x);
 	}
 
 	Projection AABB::projectY() const
 	{
-		return Projection(m_topLeft.y, m_bottomRight.y);
+		return Projection(topLeft.y, bottomRight.y);
 	}
 
 	bool AABB::collide(const AABB& other) const

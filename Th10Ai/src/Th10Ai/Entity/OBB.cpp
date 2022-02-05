@@ -11,9 +11,9 @@ namespace th
 			return false;
 		if (!project(AABB::PROJ_AXIS_Y).overlap(other.project(AABB::PROJ_AXIS_Y)))
 			return false;
-		if (!project(m_projAxisX).overlap(other.project(m_projAxisX)))
+		if (!project(projAxisX).overlap(other.project(projAxisX)))
 			return false;
-		if (!project(m_projAxisY).overlap(other.project(m_projAxisY)))
+		if (!project(projAxisY).overlap(other.project(projAxisY)))
 			return false;
 		return true;
 	}

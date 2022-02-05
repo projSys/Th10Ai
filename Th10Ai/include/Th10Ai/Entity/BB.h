@@ -11,15 +11,15 @@ namespace th
 	class BB
 	{
 	public:
-		// 投影，把2维降成1维
-		Projection project(const vec2& axis) const;
+		// 投影，把2维降成1维，投影轴必须是单位向量
+		Projection project(const vec2& projAxis) const;
 		// 平移
 		void translate(const vec2& offset);
 
-	//protected:
-		vec2 m_topLeft;
-		vec2 m_topRight;
-		vec2 m_bottomLeft;
-		vec2 m_bottomRight;
+	public:
+		vec2 topLeft;
+		vec2 topRight;
+		vec2 bottomLeft;
+		vec2 bottomRight;
 	};
 }
