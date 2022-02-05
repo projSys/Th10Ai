@@ -6,7 +6,6 @@
 #include <Base/Logger.h>
 #include <Base/ScopeGuard.h>
 #include <Base/ErrorCode.h>
-#include <Base/Windows/ExceptFilter.h>
 #include <Base/Windows/Apis.h>
 
 #include "Loader/DllInject.h"
@@ -14,7 +13,7 @@
 namespace po = boost::program_options;
 using namespace ld;
 
-void Load()
+int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In_ LPWSTR cmdLine, _In_ int cmdShow)
 {
 	try
 	{
@@ -58,14 +57,6 @@ void Load()
 	catch (...)
 	{
 		BASE_LOG(error) << Catcher() << std::endl;
-		throw;
 	}
-}
-
-int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In_ LPWSTR cmdLine, _In_ int cmdShow)
-{
-	ExceptFilter::SetProcessExceptionHandlers();
-	ExceptFilter::SetThreadExceptionHandlers();
-	Load();
 	return 0;
 }

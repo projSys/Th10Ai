@@ -1,7 +1,6 @@
 #include "Th10Ai/Th10Ai.h"
 
 #include <Base/Catcher.h>
-#include <Base/Windows/ExceptFilter.h>
 #include <Base/Windows/Apis.h>
 
 #include "Th10Ai/Path.h"
@@ -34,8 +33,6 @@ namespace th
 		, m_mat(cv::Size(640, 480), CV_8UC4)
 #endif
 	{
-		ExceptFilter::SetThreadExceptionHandlers();
-
 		SetForegroundWindow(window);
 
 		RECT rect = {};
@@ -102,7 +99,6 @@ namespace th
 
 	void Th10Ai::controlProc()
 	{
-		ExceptFilter::SetThreadExceptionHandlers();
 		try
 		{
 			std::cout << "Keep the focus on the game window, start the game, then press \'A\' to start AI, and press \'S\' to stop AI." << std::endl;
@@ -124,8 +120,8 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << Catcher() << std::flush;
-			throw;
+			BASE_LOG(error) << Catcher() << std::endl;
+			ExitProcess(1);
 		}
 	}
 
@@ -150,7 +146,6 @@ namespace th
 
 	void Th10Ai::handleProc()
 	{
-		ExceptFilter::SetThreadExceptionHandlers();
 		try
 		{
 			while (!m_handleDone)
@@ -167,8 +162,8 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << Catcher() << std::flush;
-			throw;
+			BASE_LOG(error) << Catcher() << std::endl;
+			ExitProcess(1);
 		}
 	}
 

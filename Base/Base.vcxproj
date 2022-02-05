@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="include\Base\Catcher.h" />
     <ClInclude Include="include\Base\ErrorCode.h" />
+    <ClInclude Include="include\Base\StackTrace.h" />
     <ClInclude Include="include\Base\Time.h" />
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Exception.h" />
@@ -170,20 +171,19 @@
     <ClInclude Include="include\Base\Types.h" />
     <ClInclude Include="include\Base\Windows\Apis.h" />
     <ClInclude Include="include\Base\Windows\Common.h" />
-    <ClInclude Include="include\Base\Windows\ExceptFilter.h" />
-    <ClInclude Include="include\Base\Windows\ExceptTrace.h" />
+    <ClInclude Include="include\Base\Windows\StackTraceImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Catcher.cpp" />
     <ClCompile Include="src\Base\ErrorCode.cpp" />
+    <ClCompile Include="src\Base\StackTrace.cpp" />
     <ClCompile Include="src\Base\Time.cpp" />
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Log.cpp" />
     <ClCompile Include="src\Base\Logger.cpp" />
     <ClCompile Include="src\Base\Throwable.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />
-    <ClCompile Include="src\Base\Windows\ExceptFilter.cpp" />
-    <ClCompile Include="src\Base\Windows\ExceptTrace.cpp" />
+    <ClCompile Include="src\Base\Windows\StackTraceImpl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

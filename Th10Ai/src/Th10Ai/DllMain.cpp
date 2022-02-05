@@ -2,7 +2,6 @@
 
 #include <Base/Catcher.h>
 #include <Base/Logger.h>
-#include <Base/Windows/ExceptFilter.h>
 #include <Base/Windows/Apis.h>
 
 #include "Th10Ai/MyDetours.h"
@@ -30,7 +29,7 @@ void Hook()
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG(error) << Catcher() << std::flush;
+		BASE_LOG(error) << Catcher() << std::endl;
 		ExitProcess(1);
 	}
 }
@@ -48,7 +47,7 @@ void Unhook()
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG(error) << Catcher() << std::flush;
+		BASE_LOG(error) << Catcher() << std::endl;
 		ExitProcess(1);
 	}
 }
@@ -59,8 +58,6 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 	{
 	case DLL_PROCESS_ATTACH:
 		g_module = module;
-		ExceptFilter::SetProcessExceptionHandlers();
-		ExceptFilter::SetThreadExceptionHandlers();
 		Hook();
 		break;
 

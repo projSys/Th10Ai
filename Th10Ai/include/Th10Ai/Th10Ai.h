@@ -25,7 +25,7 @@ namespace th
 	class Th10Ai
 	{
 	public:
-		Th10Ai(HWND window);
+		explicit Th10Ai(HWND window);
 		~Th10Ai();
 
 		void updateStatus();

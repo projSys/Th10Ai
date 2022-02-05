@@ -79,7 +79,7 @@ namespace th
 			}
 			catch (...)
 			{
-				BASE_LOG(error) << Catcher() << std::flush;
+				BASE_LOG(error) << Catcher() << std::endl;
 				ExitProcess(1);
 			}
 
