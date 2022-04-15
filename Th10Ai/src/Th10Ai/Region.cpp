@@ -172,7 +172,7 @@ namespace th
 		}
 		for (const Bullet& bullet : m_bullets)
 		{
-			if (bullet.m_id == target.m_id)
+			if (bullet.id == target.id)
 			{
 				std::cout << m_times << " have target" << std::endl;
 			}

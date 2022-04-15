@@ -39,7 +39,9 @@ namespace th
 		std::wcerr.clear();
 		std::wclog.clear();
 
-		system("chcp 65001");
+		//system("chcp 65001");
+		SetConsoleCP(CP_UTF8);
+		SetConsoleOutputCP(CP_UTF8);
 	}
 
 	Console::~Console()

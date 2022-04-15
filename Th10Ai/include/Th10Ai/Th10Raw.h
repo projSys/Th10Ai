@@ -68,7 +68,7 @@ namespace th
 
 	static_assert(sizeof(EnemyRaw) == 0x2518);
 
-	// 尺寸未知，在EnemyRaw内部，成员或基类？
+	// 大小未知，在EnemyRaw内部，成员或基类？
 	struct EnemyElement
 	{
 		EnemyRaw* raw;

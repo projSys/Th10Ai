@@ -7,7 +7,7 @@
 
 namespace th
 {
-	// 包围盒
+	// 矩形包围盒
 	class BB
 	{
 	public:

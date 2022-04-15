@@ -53,7 +53,7 @@ namespace th
 		//m_slowFirst = (!m_itemTarget.has_value() && m_underEnemy);
 
 		Action action = {};
-		action.fromPos = m_status.getPlayer().m_pos;
+		action.fromPos = m_status.getPlayer().pos;
 		action.fromDir = m_dir;
 		action.frame = 1;
 		action.score = 0;
@@ -79,13 +79,13 @@ namespace th
 		player.move(action.fromDir, m_slowFirst);
 		result.slow = m_slowFirst;
 		RegionCollideResult rcr = {};
-		if (!Scene::IsInPlayerRegion(player.m_pos)
+		if (!Scene::IsInPlayerRegion(player.pos)
 			|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 		{
 			player.setPosition(action.fromPos);
 			player.move(action.fromDir, !m_slowFirst);
 			result.slow = !m_slowFirst;
-			if (!Scene::IsInPlayerRegion(player.m_pos)
+			if (!Scene::IsInPlayerRegion(player.pos)
 				|| (rcr = m_scene.collideAll(player, action.frame)).collided)
 			{
 				return result;
@@ -96,15 +96,15 @@ namespace th
 
 		if (m_itemTarget.has_value())
 		{
-			result.score += CalcNearScore(player.m_pos, m_itemTarget.value().m_pos) * _F(100.0);
+			result.score += CalcNearScore(player.pos, m_itemTarget.value().pos) * _F(100.0);
 		}
 		else if (m_enemyTarget.has_value())
 		{
-			result.score += CalcShootScore(player.m_pos, m_enemyTarget.value().m_pos) * _F(100.0);
+			result.score += CalcShootScore(player.pos, m_enemyTarget.value().pos) * _F(100.0);
 		}
 		else
 		{
-			result.score += CalcNearScore(player.m_pos, RESET_POS) * _F(100.0);
+			result.score += CalcNearScore(player.pos, RESET_POS) * _F(100.0);
 		}
 
 		float_t total = action.score + result.score;
@@ -122,7 +122,7 @@ namespace th
 			DIR dir = FIND_DIRS[to_underlying(m_dir)][i];
 
 			Action nextAct = {};
-			nextAct.fromPos = player.m_pos;
+			nextAct.fromPos = player.pos;
 			nextAct.fromDir = dir;
 			nextAct.frame = action.frame + 1;
 			nextAct.score = total;

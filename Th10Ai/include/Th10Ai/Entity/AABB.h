@@ -6,7 +6,7 @@
 
 namespace th
 {
-	// 轴对齐包围盒
+	// 矩形轴对齐包围盒
 	class AABB :
 		public BB
 	{

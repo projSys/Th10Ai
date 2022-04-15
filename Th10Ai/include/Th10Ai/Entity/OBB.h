@@ -8,7 +8,7 @@ namespace th
 {
 	class AABB;
 
-	// 定向包围盒
+	// 矩形定向包围盒
 	class OBB :
 		public BB
 	{

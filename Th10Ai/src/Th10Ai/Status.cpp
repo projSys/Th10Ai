@@ -88,7 +88,7 @@ namespace th
 		bool underEnemy = false;
 		for (const Enemy& enemy : m_enemies)
 		{
-			if (std::abs(m_player.m_pos.x - enemy.m_pos.x) < 16 && m_player.m_pos.y > enemy.m_pos.y)
+			if (std::abs(m_player.pos.x - enemy.pos.x) < 16 && m_player.pos.y > enemy.pos.y)
 			{
 				underEnemy = true;
 				break;
@@ -108,8 +108,8 @@ namespace th
 			{
 				std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "帧"
 					<< " 总数：" << m_bullets.size() << " 碰撞："
-					<< "org(" << org.m_id << " " << org.m_pos.x << " " << org.m_pos.y << " " << org.m_delta.x << " " << org.m_delta.y << ") "
-					<< "now(" << now.m_id << " " << now.m_pos.x << " " << now.m_pos.y << " " << now.m_delta.x << " " << now.m_delta.y << ") " << std::endl;
+					<< "org(" << org.id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
+					<< "now(" << now.id << " " << now.pos.x << " " << now.pos.y << " " << now.delta.x << " " << now.delta.y << ") " << std::endl;
 				target = now;
 				return target;
 			}
@@ -123,7 +123,7 @@ namespace th
 	{
 		for (const Bullet& org : m_bullets)
 		{
-			if (org.m_id == id)
+			if (org.id == id)
 			{
 				Bullet now = org;
 				now.advance(frame);
@@ -131,9 +131,9 @@ namespace th
 				{
 					std::cout << statusFrame - handleFrame << "/" << handleFrame << "/" << inputFrame - handleFrame << "/" << frame1 - handleFrame << "帧"
 						<< " 总数：" << m_bullets.size() << " 碰撞："
-						<< "org(" << org.m_id << " " << org.m_pos.x << " " << org.m_pos.y << " " << org.m_delta.x << " " << org.m_delta.y << ") "
-						<< "now(" << now.m_id << " " << now.m_pos.x << " " << now.m_pos.y << " " << now.m_delta.x << " " << now.m_delta.y << ") " << std::endl;
-					return now.m_id;
+						<< "org(" << org.id << " " << org.pos.x << " " << org.pos.y << " " << org.delta.x << " " << org.delta.y << ") "
+						<< "now(" << now.id << " " << now.pos.x << " " << now.pos.y << " " << now.delta.x << " " << now.delta.y << ") " << std::endl;
+					return now.id;
 				}
 			}
 		}

@@ -101,7 +101,7 @@ namespace th
 	{
 		try
 		{
-			std::cout << "Keep the focus on the game window, start the game, then press \'A\' to start AI, and press \'S\' to stop AI." << std::endl;
+			std::cout << "保持焦点在游戏窗口，开始游戏，按A启动AI，按S停止AI。" << std::endl;
 			while (!m_controlDone)
 			{
 				if (IsKeyPressed('A'))
@@ -130,7 +130,7 @@ namespace th
 		if (!m_active)
 		{
 			m_active = true;
-			std::cout << "AI start." << std::endl;
+			std::cout << "AI启动。" << std::endl;
 		}
 	}
 
@@ -139,7 +139,7 @@ namespace th
 		if (m_active)
 		{
 			m_active = false;
-			std::cout << "AI stop." << std::endl;
+			std::cout << "AI停止。" << std::endl;
 			std::cout << "DeathBomb: " << m_bombCount << std::endl;
 		}
 	}
@@ -192,7 +192,7 @@ namespace th
 			if (!m_statusUpdated)
 				m_statusCond.wait(lock);
 			else
-				std::cout << "Processing is too slow." << std::endl;
+				std::cout << "计算太慢了。" << std::endl;
 			m_readableStatus.swap(m_intermediateStatus);
 			m_statusUpdated = false;
 		}
@@ -382,7 +382,7 @@ namespace th
 				<< handleFrame << "/"
 				<< inputFrame - handleFrame << "/"
 				<< m_readableStatus->getPlayer().stageFrame - handleFrame
-				<< " Input is too slow." << std::endl;
+				<< " 输入太慢了。" << std::endl;
 		}
 	}
 
@@ -493,7 +493,7 @@ namespace th
 		}
 		else
 		{
-			std::cout << "No way to go." << std::endl;
+			std::cout << "无路可走。" << std::endl;
 		}
 #else
 		// 暂停MCTS，缺少历史数据辅助节点选择，退化成了BFS
@@ -508,7 +508,7 @@ namespace th
 			highestLeaf->expand(*m_readableStatus, m_scene, itemTarget, enemyTarget, slowFirst);
 			if (highestLeaf == m_root && !highestLeaf->m_valid)
 			{
-				std::cout << "No way to go. 1" << std::endl;
+				std::cout << "无路可走。1" << std::endl;
 				break;
 			}
 
@@ -537,7 +537,7 @@ namespace th
 		}
 		else
 		{
-			std::cout << "No way to go. 2" << std::endl;
+			std::cout << "无路可走。2" << std::endl;
 		}
 
 		delete m_root;
@@ -564,7 +564,7 @@ namespace th
 			return target;
 
 		// 自机高于1/4屏
-		if (player.m_pos.y < Scene::SIZE.y / 4)
+		if (player.pos.y < Scene::SIZE.y / 4)
 		{
 			// 进入冷却
 			m_findItemTime = now;
@@ -572,7 +572,7 @@ namespace th
 		}
 
 		// 自机高于1/2屏，敌机多于5个
-		if ((player.m_pos.y < Scene::SIZE.y / 2) && (enemies.size() > 5))
+		if ((player.pos.y < Scene::SIZE.y / 2) && (enemies.size() > 5))
 		{
 			// 进入冷却
 			m_findItemTime = now;
@@ -584,15 +584,15 @@ namespace th
 		for (const Item& item : items)
 		{
 			// 道具在屏幕外
-			if (!Scene::IsInScene(item.m_pos))
+			if (!Scene::IsInScene(item.pos))
 				continue;
 
 			// 道具高于1/5屏
-			if (item.m_pos.y < Scene::SIZE.y / 5)
+			if (item.pos.y < Scene::SIZE.y / 5)
 				continue;
 
 			// 道具不在自机1/4屏内
-			float_t dy = std::abs(item.m_pos.y - player.m_pos.y);
+			float_t dy = std::abs(item.pos.y - player.pos.y);
 			if (dy > Scene::SIZE.y / 4)
 				continue;
 
@@ -639,22 +639,22 @@ namespace th
 			return target;
 
 		// 自机高于1/4屏
-		if (player.m_pos.y < Scene::SIZE.y / 4)
+		if (player.pos.y < Scene::SIZE.y / 4)
 			return target;
 
 		float_t minDist = std::numeric_limits<float_t>::max();
 		for (const Enemy& enemy : enemies)
 		{
 			// 敌机在屏幕外
-			if (!Scene::IsInScene(enemy.m_pos))
+			if (!Scene::IsInScene(enemy.pos))
 				continue;
 
 			// 敌机在自机下面
-			if (enemy.m_pos.y > player.m_pos.y)
+			if (enemy.pos.y > player.pos.y)
 				continue;
 
 			// 敌机与自机X轴距离最近
-			float_t dx = std::abs(enemy.m_pos.x - player.m_pos.x);
+			float_t dx = std::abs(enemy.pos.x - player.pos.x);
 			if (dx < minDist)
 			{
 				minDist = dx;

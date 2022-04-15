@@ -66,16 +66,16 @@ namespace th
 		//	if (eax == 1)
 		//	{
 		//		Item item;
-		//		item.m_pos.x = ReadMemory<float32_t>(ebp);
-		//		item.m_pos.y = ReadMemory<float32_t>(ebp + 0x4);
-		//		item.m_delta.x = ReadMemory<float32_t>(ebp + 0xC);
-		//		item.m_delta.y = ReadMemory<float32_t>(ebp + 0x10);
+		//		item.pos.x = ReadMemory<float32_t>(ebp);
+		//		item.pos.y = ReadMemory<float32_t>(ebp + 0x4);
+		//		item.delta.x = ReadMemory<float32_t>(ebp + 0xC);
+		//		item.delta.y = ReadMemory<float32_t>(ebp + 0x10);
 		//		// 点没有宽度和高度，自机靠近点时会自动收取，为了方便显示设定为6
-		//		item.m_size.x = _F(6.0);
-		//		item.m_size.y = _F(6.0);
-		//		item.m_type = ReadMemory<int32_t>(ebp + 0x34);
+		//		item.size.x = _F(6.0);
+		//		item.size.y = _F(6.0);
+		//		item.type = ReadMemory<int32_t>(ebp + 0x34);
 
-		//		//item.m_id = i;
+		//		//item.id = i;
 
 		//		items.push_back(item);
 		//	}
@@ -115,12 +115,12 @@ namespace th
 			if ((t & 0x40) == 0 && (t & 0x12) == 0)
 			{
 				Enemy enemy;
-				enemy.m_pos.x = ReadMemory<float32_t>(objAddr + 0x2C);
-				enemy.m_pos.y = ReadMemory<float32_t>(objAddr + 0x30);
-				enemy.m_delta.x = ReadMemory<float32_t>(objAddr + 0x38);
-				enemy.m_delta.y = ReadMemory<float32_t>(objAddr + 0x3C);
-				enemy.m_size.x = ReadMemory<float32_t>(objAddr + 0xB8);
-				enemy.m_size.y = ReadMemory<float32_t>(objAddr + 0xBC);
+				enemy.pos.x = ReadMemory<float32_t>(objAddr + 0x2C);
+				enemy.pos.y = ReadMemory<float32_t>(objAddr + 0x30);
+				enemy.delta.x = ReadMemory<float32_t>(objAddr + 0x38);
+				enemy.delta.y = ReadMemory<float32_t>(objAddr + 0x3C);
+				enemy.size.x = ReadMemory<float32_t>(objAddr + 0xB8);
+				enemy.size.y = ReadMemory<float32_t>(objAddr + 0xBC);
 
 				//enemy.id = static_cast<int_t>(objAddr);
 				//enemy.type = static_cast<int_t>(std::round(enemy.width));
@@ -158,14 +158,14 @@ namespace th
 		//		//	if ((eax & 0x00000400) == 0)
 		//		//	{
 		//				Bullet bullet;
-		//				bullet.m_pos.x = ReadMemory<float32_t>(ebx + 0x3B4);
-		//				bullet.m_pos.y = ReadMemory<float32_t>(ebx + 0x3B8);
-		//				bullet.m_delta.x = ReadMemory<float32_t>(ebx + 0x3C0);
-		//				bullet.m_delta.y = ReadMemory<float32_t>(ebx + 0x3C4);
-		//				bullet.m_size.x = ReadMemory<float32_t>(ebx + 0x3F0);
-		//				bullet.m_size.y = ReadMemory<float32_t>(ebx + 0x3F4);
+		//				bullet.pos.x = ReadMemory<float32_t>(ebx + 0x3B4);
+		//				bullet.pos.y = ReadMemory<float32_t>(ebx + 0x3B8);
+		//				bullet.delta.x = ReadMemory<float32_t>(ebx + 0x3C0);
+		//				bullet.delta.y = ReadMemory<float32_t>(ebx + 0x3C4);
+		//				bullet.size.x = ReadMemory<float32_t>(ebx + 0x3F0);
+		//				bullet.size.y = ReadMemory<float32_t>(ebx + 0x3F4);
 
-		//				bullet.m_id = i;
+		//				bullet.id = i;
 		//				//bullet.type = static_cast<int_t>(std::round(bullet.width));
 		//				// 真心不如用宽度来当类型
 		//				int32_t type = ReadMemory<int32_t>(ebx + 0x460);
@@ -210,14 +210,14 @@ namespace th
 			uint32_t objNext = ReadMemory<uint32_t>(objAddr + 0x8);
 
 			Laser laser;
-			laser.m_pos.x = ReadMemory<float32_t>(objAddr + 0x24);
-			laser.m_pos.y = ReadMemory<float32_t>(objAddr + 0x28);
-			laser.m_delta.x = ReadMemory<float32_t>(objAddr + 0x30);
-			laser.m_delta.y = ReadMemory<float32_t>(objAddr + 0x34);
-			laser.m_arc = ReadMemory<float32_t>(objAddr + 0x3C);
+			laser.pos.x = ReadMemory<float32_t>(objAddr + 0x24);
+			laser.pos.y = ReadMemory<float32_t>(objAddr + 0x28);
+			laser.delta.x = ReadMemory<float32_t>(objAddr + 0x30);
+			laser.delta.y = ReadMemory<float32_t>(objAddr + 0x34);
+			laser.arc = ReadMemory<float32_t>(objAddr + 0x3C);
 			// 高度在前，宽度在后
-			laser.m_size.y = ReadMemory<float32_t>(objAddr + 0x40);
-			laser.m_size.x = ReadMemory<float32_t>(objAddr + 0x44);
+			laser.size.y = ReadMemory<float32_t>(objAddr + 0x40);
+			laser.size.x = ReadMemory<float32_t>(objAddr + 0x44);
 
 			//laser.id = static_cast<int_t>(objAddr);
 			//laser.type = static_cast<int_t>(std::round(laser.width));

@@ -3,9 +3,9 @@
 namespace th
 {
 	Player::Player() :
-		m_status(),
-		m_invincibleTime(),
-		m_slow(),
+		status(),
+		invincibleTime(),
+		slow(),
 		powers(),
 		character(),
 		lives(),
@@ -15,15 +15,15 @@ namespace th
 
 	void Player::set(const PlayerRaw* raw)
 	{
-		m_pos.x = raw->x;
-		m_pos.y = raw->y;
-		m_delta.x = static_cast<float_t>(raw->dx) / _F(100.0);
-		m_delta.y = static_cast<float_t>(raw->dy) / _F(100.0);
-		m_size.x = raw->width * _F(2.0);
-		m_size.y = raw->height * _F(2.0);
-		m_status = raw->status;
-		m_invincibleTime = raw->invincibleTime;
-		m_slow = raw->slow;
+		pos.x = raw->x;
+		pos.y = raw->y;
+		delta.x = static_cast<float_t>(raw->dx) / _F(100.0);
+		delta.y = static_cast<float_t>(raw->dy) / _F(100.0);
+		size.x = raw->width * _F(2.0);
+		size.y = raw->height * _F(2.0);
+		status = raw->status;
+		invincibleTime = raw->invincibleTime;
+		slow = raw->slow;
 	}
 
 	void Player::move(DIR dir, bool slow)
@@ -31,7 +31,7 @@ namespace th
 		if (slow)
 		{
 			vec2 offset = MOVE_SPEED_LOW[to_underlying(dir)];
-			m_pos += offset;
+			pos += offset;
 			translate(offset);
 		}
 		else
@@ -39,13 +39,13 @@ namespace th
 			if (isMarisa())
 			{
 				vec2 offset = MOVE_SPEED_HIGH_MARISA[to_underlying(dir)];
-				m_pos += offset;
+				pos += offset;
 				translate(offset);
 			}
 			else
 			{
 				vec2 offset = MOVE_SPEED_HIGH[to_underlying(dir)];
-				m_pos += offset;
+				pos += offset;
 				translate(offset);
 			}
 		}
@@ -53,27 +53,27 @@ namespace th
 
 	bool Player::isRebirthStatus() const
 	{
-		return m_status == 0;
+		return status == 0;
 	}
 
 	bool Player::isNormalStatus() const
 	{
-		return m_status == 1;
+		return status == 1;
 	}
 
 	bool Player::isColliding() const
 	{
-		return m_status == 4;
+		return status == 4;
 	}
 
 	bool Player::isInvincible() const
 	{
-		return m_invincibleTime != 0;
+		return invincibleTime != 0;
 	}
 
 	bool Player::isSlow() const
 	{
-		return m_slow != 0;
+		return slow != 0;
 	}
 
 	bool Player::isReimu() const

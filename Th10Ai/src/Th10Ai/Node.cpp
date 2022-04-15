@@ -70,19 +70,19 @@ namespace th
 		Player player = status.getPlayer();
 		player.setPosition(m_parent->m_pos);
 		player.move(m_dir, slowFirst);
-		m_pos = player.m_pos;
+		m_pos = player.pos;
 		m_slow = slowFirst;
 
 		RegionCollideResult rcr = {};
-		if (!Scene::IsInPlayerRegion(player.m_pos)
+		if (!Scene::IsInPlayerRegion(player.pos)
 			|| (rcr = scene.collideAll(player, m_frame)).collided)
 		{
 			player.setPosition(m_parent->m_pos);
 			player.move(m_dir, !slowFirst);
-			m_pos = player.m_pos;
+			m_pos = player.pos;
 			m_slow = !slowFirst;
 
-			if (!Scene::IsInPlayerRegion(player.m_pos)
+			if (!Scene::IsInPlayerRegion(player.pos)
 				|| (rcr = scene.collideAll(player, m_frame)).collided)
 			{
 				return;
@@ -94,11 +94,11 @@ namespace th
 		// 计算节点得分
 		if (itemTarget.has_value())
 		{
-			m_score = Path::CalcNearScore(m_pos, itemTarget.value().m_pos) * _F(100.0);
+			m_score = Path::CalcNearScore(m_pos, itemTarget.value().pos) * _F(100.0);
 		}
 		else if (enemyTarget.has_value())
 		{
-			m_score = Path::CalcShootScore(m_pos, enemyTarget.value().m_pos) * _F(100.0);
+			m_score = Path::CalcShootScore(m_pos, enemyTarget.value().pos) * _F(100.0);
 		}
 		else
 		{
