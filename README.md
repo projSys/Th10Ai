@@ -21,8 +21,8 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ## 编译依赖
 
-[boost](https://www.boost.org)<br />
-[Detours](https://github.com/microsoft/detours)<br />
+[Boost](https://www.boost.org)<br />
+[Detours](https://github.com/microsoft/detours)(x86 Native Tools Command Prompt for VS 2022 -> cd Detours-path/src -> nmake)<br />
 
 ## 感谢
 
