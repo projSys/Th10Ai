@@ -3,7 +3,7 @@
 东方风神录AI，基于深度优先搜索算法。<br />
 Mountain of Faith's AI, based on depth first search algorithm.<br />
 
-![](https://github.com/deepmaid/Th10Ai/blob/master/1.png)
+![](https://github.com/unnamedmemory/Th10Ai/blob/master/1.png)
 
 ## 待改进
 
