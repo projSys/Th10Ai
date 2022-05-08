@@ -58,7 +58,7 @@ namespace th
 		std::condition_variable m_statusCond;
 		bool m_statusUpdated;
 		std::unique_ptr<Status> m_writableStatus;
-		std::unique_ptr<Status> m_intermediateStatus;
+		std::unique_ptr<Status> m_swappableStatus;
 		std::unique_ptr<Status> m_readableStatus;
 		Status m_status2;
 		Status m_status1;
@@ -75,7 +75,7 @@ namespace th
 		std::mutex m_inputMutex;
 		bool m_inputUpdated;
 		std::unique_ptr<Input> m_writableInput;
-		std::unique_ptr<Input> m_intermediateInput;
+		std::unique_ptr<Input> m_swappableInput;
 		std::unique_ptr<Input> m_readableInput;
 
 		std::atomic<int_t> inputFrame;

@@ -56,11 +56,11 @@ namespace th
 		SendMessageA(window, WM_SETICON, ICON_SMALL, (LPARAM)icon);
 
 		m_writableStatus = std::make_unique<Status>();
-		m_intermediateStatus = std::make_unique<Status>();
+		m_swappableStatus = std::make_unique<Status>();
 		m_readableStatus = std::make_unique<Status>();
 
 		m_writableInput = std::make_unique<Input>();
-		m_intermediateInput = std::make_unique<Input>();
+		m_swappableInput = std::make_unique<Input>();
 		m_readableInput = std::make_unique<Input>();
 
 #if RENDER
@@ -76,10 +76,10 @@ namespace th
 		m_handleDone = true;
 		m_active = false;
 		{
-			std::unique_lock<std::mutex> lock(m_statusMutex);
+			std::lock_guard<std::mutex> lock(m_statusMutex);
 			m_statusUpdated = true;
-			m_statusCond.notify_one();
 		}
+		m_statusCond.notify_one();
 		if (m_handleThread.joinable())
 			m_handleThread.join();
 
@@ -101,7 +101,7 @@ namespace th
 	{
 		try
 		{
-			std::cout << "保持焦点在游戏窗口，开始游戏，按A启动AI，按S停止AI。" << std::endl;
+			std::cout << "保持窗口焦点在风神录上，开始游戏，按A启动AI，按S停止AI。" << std::endl;
 			while (!m_controlDone)
 			{
 				if (IsKeyPressed('A'))
@@ -140,7 +140,7 @@ namespace th
 		{
 			m_active = false;
 			std::cout << "AI停止。" << std::endl;
-			std::cout << "DeathBomb: " << m_bombCount << std::endl;
+			std::cout << "决死：" << m_bombCount << std::endl;
 		}
 	}
 
@@ -177,11 +177,13 @@ namespace th
 		m_writableStatus->clear();
 		m_writableStatus->update();
 
-		std::unique_lock<std::mutex> lock(m_statusMutex);
-		if (m_statusUpdated)
-			std::cout << "状态跳帧" << std::endl;
-		m_writableStatus.swap(m_intermediateStatus);
-		m_statusUpdated = true;
+		{
+			std::lock_guard<std::mutex> lock(m_statusMutex);
+			if (m_statusUpdated)
+				std::cout << "状态跳帧了。" << std::endl;
+			m_writableStatus.swap(m_swappableStatus);
+			m_statusUpdated = true;
+		}
 		m_statusCond.notify_one();
 	}
 
@@ -189,11 +191,11 @@ namespace th
 	{
 		{
 			std::unique_lock<std::mutex> lock(m_statusMutex);
-			if (!m_statusUpdated)
+			if (m_statusUpdated)
+				std::cout << "处理太慢了。" << std::endl;
+			while (!m_statusUpdated)
 				m_statusCond.wait(lock);
-			else
-				std::cout << "计算太慢了。" << std::endl;
-			m_readableStatus.swap(m_intermediateStatus);
+			m_readableStatus.swap(m_swappableStatus);
 			m_statusUpdated = false;
 		}
 
@@ -309,12 +311,10 @@ namespace th
 			std::cout << t2 - t1 << ' ' << t3 - t2 << ' ' << t4 - t3 << std::endl;
 
 		{
-			std::unique_lock<std::mutex> lock(m_inputMutex);
-			//if (m_inputUpdated)
-			//{
-			//	std::cout << "输入跳帧" << std::endl;
-			//}
-			m_writableInput.swap(m_intermediateInput);
+			std::lock_guard<std::mutex> lock(m_inputMutex);
+			if (m_inputUpdated)
+				std::cout << "输入跳帧了。" << std::endl;
+			m_writableInput.swap(m_swappableInput);
 			m_inputUpdated = true;
 		}
 #endif
@@ -325,7 +325,7 @@ namespace th
 	std::mutex g_recordMutex;
 	bool g_recordUpdated;
 	Record g_writableRecord = {};
-	Record g_intermediateRecord = {};
+	Record g_swappableRecord = {};
 	Record g_readableRecord = {};
 
 	void Th10Ai::commitInput(DWORD size, LPVOID data)
@@ -341,10 +341,10 @@ namespace th
 
 		bool inputUpdated = false;
 		{
-			std::unique_lock<std::mutex> lock(m_inputMutex);
+			std::lock_guard<std::mutex> lock(m_inputMutex);
 			if (m_inputUpdated)
 			{
-				m_readableInput.swap(m_intermediateInput);
+				m_readableInput.swap(m_swappableInput);
 				m_inputUpdated = false;
 				inputUpdated = true;
 			}
@@ -357,10 +357,10 @@ namespace th
 		{
 			bool recordUpdated = false;
 			{
-				std::unique_lock<std::mutex> lock(g_recordMutex);
+				std::lock_guard<std::mutex> lock(g_recordMutex);
 				if (g_recordUpdated)
 				{
-					std::swap(g_readableRecord, g_intermediateRecord);
+					std::swap(g_readableRecord, g_swappableRecord);
 					g_recordUpdated = false;
 					recordUpdated = true;
 				}
@@ -419,7 +419,7 @@ namespace th
 					<< handleFrame << "/"
 					<< inputFrame - handleFrame << "/"
 					<< m_readableStatus->getPlayer().stageFrame - handleFrame
-					<< " DeathBomb: " << m_bombCount << std::endl;
+					<< " 决死：" << m_bombCount << std::endl;
 				return true;
 			}
 		}
@@ -480,8 +480,8 @@ namespace th
 		}
 
 		{
-			std::unique_lock<std::mutex> lock(g_recordMutex);
-			std::swap(g_writableRecord, g_intermediateRecord);
+			std::lock_guard<std::mutex> lock(g_recordMutex);
+			std::swap(g_writableRecord, g_swappableRecord);
 			g_recordUpdated = true;
 		}
 

@@ -48,13 +48,4 @@ namespace base
 #define _F(x) _F32(x)
 #endif
 
-	using charA_t = char;
-	using charW_t = wchar_t;
-
-#define _CA(x) x
-#define _CW(x) _MACRO_CONCAT(L, x)
-#define _C8(x) _MACRO_CONCAT(u8, x)
-#define _C16(x) _MACRO_CONCAT(u, x)
-#define _C32(x) _MACRO_CONCAT(U, x)
-
 }

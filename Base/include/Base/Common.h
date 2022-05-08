@@ -23,10 +23,6 @@
 #ifndef BOOST_USE_WINAPI_VERSION
 #define BOOST_USE_WINAPI_VERSION 0x0600
 #endif
-#else
-#ifndef BOOST_USE_WINAPI_VERSION
-#define BOOST_USE_WINAPI_VERSION 0x0600
-#endif
 #endif
 
 #define BASE_WINDOWS 1
