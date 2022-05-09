@@ -12,7 +12,7 @@ namespace th
 		return *reinterpret_cast<T*>(address);
 	}
 
-	bool Th10Apis::GetPlayer(Player& player)
+	bool Th10Apis::GetPlayerTo(Player& player)
 	{
 		const PlayerRaw* raw = ReadMemory<const PlayerRaw*>(0x00477834);
 		if (raw == nullptr)
@@ -46,7 +46,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Apis::GetItems(std::vector<Item>& items)
+	bool Th10Apis::GetItemsTo(std::vector<Item>& items)
 	{
 		//uint32_t baseAddr = ReadMemory<uint32_t>(0x00477818);
 		//if (baseAddr == 0)
@@ -96,7 +96,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Apis::GetEnemies(std::vector<Enemy>& enemies)
+	bool Th10Apis::GetEnemiesTo(std::vector<Enemy>& enemies)
 	{
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477704);
 		if (baseAddr == 0)
@@ -135,7 +135,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Apis::GetBullets(std::vector<Bullet>& bullets)
+	bool Th10Apis::GetBulletsTo(std::vector<Bullet>& bullets)
 	{
 		//uint32_t baseAddr = ReadMemory<uint32_t>(0x004776F0);
 		//if (baseAddr == 0)
@@ -195,7 +195,7 @@ namespace th
 		return true;
 	}
 
-	bool Th10Apis::GetLasers(std::vector<Laser>& lasers)
+	bool Th10Apis::GetLasersTo(std::vector<Laser>& lasers)
 	{
 		uint32_t baseAddr = ReadMemory<uint32_t>(0x0047781C);
 		if (baseAddr == 0)

@@ -3,7 +3,7 @@
 #include "Th10Ai/Common.h"
 
 #include <vector>
-#include <boost/optional.hpp>
+#include <optional>
 
 #include "Th10Ai/Entity/Player.h"
 #include "Th10Ai/Entity/Item.h"
@@ -34,7 +34,7 @@ namespace th
 		bool isUnderEnemy() const;
 
 		// Bullet
-		boost::optional<Bullet> collide(const Player& player, int_t frame) const;
+		std::optional<Bullet> collide(const Player& player, int_t frame) const;
 		int_t collide(const Player& player, int_t frame, int_t id) const;
 
 		// Laser

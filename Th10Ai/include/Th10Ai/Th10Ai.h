@@ -7,7 +7,7 @@
 #include <atomic>
 #include <mutex>
 #include <condition_variable>
-#include <boost/optional.hpp>
+#include <optional>
 #include <Base/Time.h>
 
 #if RENDER
@@ -29,7 +29,7 @@ namespace th
 		~Th10Ai();
 
 		void updateStatus();
-		void commitInput(DWORD size, LPVOID data);
+		void commitInputTo(DWORD size, LPVOID data);
 
 	private:
 		void controlProc();
@@ -43,8 +43,8 @@ namespace th
 		bool handleShoot();
 		bool handleMove();
 
-		boost::optional<Item> findItem();
-		boost::optional<Enemy> findEnemy();
+		std::optional<Item> findItem();
+		std::optional<Enemy> findEnemy();
 
 		Console m_console;
 
@@ -60,6 +60,7 @@ namespace th
 		std::unique_ptr<Status> m_writableStatus;
 		std::unique_ptr<Status> m_swappableStatus;
 		std::unique_ptr<Status> m_readableStatus;
+
 		Status m_status2;
 		Status m_status1;
 		Status m_status0;
@@ -73,6 +74,7 @@ namespace th
 		Time m_findItemTime;
 
 		std::mutex m_inputMutex;
+		std::condition_variable m_inputCond;
 		bool m_inputUpdated;
 		std::unique_ptr<Input> m_writableInput;
 		std::unique_ptr<Input> m_swappableInput;

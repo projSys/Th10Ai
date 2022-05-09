@@ -15,10 +15,10 @@ namespace th
 	class Th10Apis
 	{
 	public:
-		static bool GetPlayer(Player& player);
-		static bool GetItems(std::vector<Item>& items);
-		static bool GetEnemies(std::vector<Enemy>& enemies);
-		static bool GetBullets(std::vector<Bullet>& bullets);
-		static bool GetLasers(std::vector<Laser>& lasers);
+		static bool GetPlayerTo(Player& player);
+		static bool GetItemsTo(std::vector<Item>& items);
+		static bool GetEnemiesTo(std::vector<Enemy>& enemies);
+		static bool GetBulletsTo(std::vector<Bullet>& bullets);
+		static bool GetLasersTo(std::vector<Laser>& lasers);
 	};
 }

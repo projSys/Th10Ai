@@ -32,7 +32,7 @@ namespace ld
 
 	void DllInject::Inject(HANDLE process, const fs::path& dllPath)
 	{
-		uint_t size = sizeof(fs::path::value_type) * (dllPath.size() + 1);
+		uint_t size = sizeof(fs::path::value_type) * (dllPath.native().size() + 1);
 
 		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 		if (memory == nullptr)

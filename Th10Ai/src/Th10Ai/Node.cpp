@@ -46,8 +46,8 @@ namespace th
 		return highestNode;
 	}
 
-	void Node::expand(Status& status, Scene& scene, const boost::optional<Item>& itemTarget,
-		const boost::optional<Enemy>& enemyTarget, bool slowFirst)
+	void Node::expand(Status& status, Scene& scene, const std::optional<Item>& itemTarget,
+		const std::optional<Enemy>& enemyTarget, bool slowFirst)
 	{
 		m_childrenCount = to_underlying(DIR::MAX_COUNT);
 		m_children.resize(to_underlying(DIR::MAX_COUNT));
@@ -63,8 +63,8 @@ namespace th
 		}
 	}
 
-	void Node::simulate(Status& status, Scene& scene, const boost::optional<Item>& itemTarget,
-		const boost::optional<Enemy>& enemyTarget, bool slowFirst)
+	void Node::simulate(Status& status, Scene& scene, const std::optional<Item>& itemTarget,
+		const std::optional<Enemy>& enemyTarget, bool slowFirst)
 	{
 		// 检测节点是否有效
 		Player player = status.getPlayer();

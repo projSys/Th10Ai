@@ -3,7 +3,7 @@
 #include "Th10Ai/Common.h"
 
 #include <vector>
-#include <boost/optional.hpp>
+#include <optional>
 
 #include "Th10Ai/Direction.h"
 #include "Th10Ai/Status.h"
@@ -21,12 +21,12 @@ namespace th
 		Node* select();
 
 		// 扩展：扩展子节点
-		void expand(Status& status, Scene& scene, const boost::optional<Item>& itemTarget,
-			const boost::optional<Enemy>& enemyTarget, bool slowFirst);
+		void expand(Status& status, Scene& scene, const std::optional<Item>& itemTarget,
+			const std::optional<Enemy>& enemyTarget, bool slowFirst);
 
 		// 模拟：检测节点是否有效，计算节点得分
-		void simulate(Status& status, Scene& scene, const boost::optional<Item>& itemTarget,
-			const boost::optional<Enemy>& enemyTarget, bool slowFirst);
+		void simulate(Status& status, Scene& scene, const std::optional<Item>& itemTarget,
+			const std::optional<Enemy>& enemyTarget, bool slowFirst);
 
 		// 反向传播：更新到根节点路径上的节点数据
 		void backPropagate();

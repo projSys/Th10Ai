@@ -25,7 +25,7 @@ namespace th
 		m_bombTime(0),
 		m_bombCount(0),
 		m_findItemTime(0),
-		m_inputUpdated(false),
+		m_inputUpdated(true),
 		inputFrame(0),
 		statusFrame(0),
 		handleFrame(0)
@@ -62,11 +62,9 @@ namespace th
 		m_writableInput = std::make_unique<Input>();
 		m_swappableInput = std::make_unique<Input>();
 		m_readableInput = std::make_unique<Input>();
-
 #if RENDER
 		cv::namedWindow("Th10Ai");
 #endif
-
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
 		m_handleThread = std::thread(&Th10Ai::handleProc, this);
 	}
@@ -80,13 +78,17 @@ namespace th
 			m_statusUpdated = true;
 		}
 		m_statusCond.notify_one();
+		{
+			std::lock_guard<std::mutex> lock(m_inputMutex);
+			m_inputUpdated = true;
+		}
+		m_inputCond.notify_one();
 		if (m_handleThread.joinable())
 			m_handleThread.join();
 
 		m_controlDone = true;
 		if (m_controlThread.joinable())
 			m_controlThread.join();
-
 #if RENDER
 		cv::destroyWindow("Th10Ai");
 #endif
@@ -192,7 +194,7 @@ namespace th
 		{
 			std::unique_lock<std::mutex> lock(m_statusMutex);
 			if (m_statusUpdated)
-				std::cout << "处理太慢了。" << std::endl;
+				std::cout << "处理太慢了，状态早已更新。" << std::endl;
 			while (!m_statusUpdated)
 				m_statusCond.wait(lock);
 			m_readableStatus.swap(m_swappableStatus);
@@ -317,73 +319,33 @@ namespace th
 			m_writableInput.swap(m_swappableInput);
 			m_inputUpdated = true;
 		}
+		m_inputCond.notify_one();
 #endif
 
 		return true;
 	}
 
-	std::mutex g_recordMutex;
-	bool g_recordUpdated;
-	Record g_writableRecord = {};
-	Record g_swappableRecord = {};
-	Record g_readableRecord = {};
-
-	void Th10Ai::commitInput(DWORD size, LPVOID data)
+	void Th10Ai::commitInputTo(DWORD size, LPVOID data)
 	{
 #if RENDER
 		return;
 #endif
-
 		if (!m_active)
 			return;
 
+		{
+			std::unique_lock<std::mutex> lock(m_inputMutex);
+			if (!m_inputUpdated)
+				std::cout << "处理太慢了，等待输入。" << std::endl;
+			while (!m_inputUpdated)
+				m_inputCond.wait(lock);
+			m_readableInput.swap(m_swappableInput);
+			m_inputUpdated = false;
+		}
+
 		++inputFrame;
 
-		bool inputUpdated = false;
-		{
-			std::lock_guard<std::mutex> lock(m_inputMutex);
-			if (m_inputUpdated)
-			{
-				m_readableInput.swap(m_swappableInput);
-				m_inputUpdated = false;
-				inputUpdated = true;
-			}
-		}
-		if (inputUpdated)
-		{
-			m_readableInput->commit(size, data);
-		}
-		else
-		{
-			bool recordUpdated = false;
-			{
-				std::lock_guard<std::mutex> lock(g_recordMutex);
-				if (g_recordUpdated)
-				{
-					std::swap(g_readableRecord, g_swappableRecord);
-					g_recordUpdated = false;
-					recordUpdated = true;
-				}
-			}
-			if (recordUpdated)
-			{
-				Input input;
-				input.move(g_readableRecord.dir);
-				if (g_readableRecord.slow)
-					input.slow();
-				input.commit(size, data);
-			}
-			else
-			{
-				std::cout << "缺少前一帧的搜索记录。" << std::endl;
-			}
-
-			std::cout << statusFrame - handleFrame << "/"
-				<< handleFrame << "/"
-				<< inputFrame - handleFrame << "/"
-				<< m_readableStatus->getPlayer().stageFrame - handleFrame
-				<< " 输入太慢了。" << std::endl;
-		}
+		m_readableInput->commitTo(size, data);
 	}
 
 	// 处理炸弹
@@ -454,16 +416,15 @@ namespace th
 		if (!m_readableStatus->getPlayer().isNormalStatus())
 			return false;
 
-		boost::optional<Item> itemTarget = findItem();
-		boost::optional<Enemy> enemyTarget = findEnemy();
+		std::optional<Item> itemTarget = findItem();
+		std::optional<Enemy> enemyTarget = findEnemy();
 		bool underEnemy = m_readableStatus->isUnderEnemy();
 		bool slowFirst = (!itemTarget.has_value() && underEnemy);
 		//bool slowFirst = false;
-
 #if 1
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
-		boost::optional<DIR> bestDir;
-		boost::optional<bool> bestSlow;
+		std::optional<DIR> bestDir;
+		std::optional<bool> bestSlow;
 
 		for (DIR dir : DIRS)
 		{
@@ -475,14 +436,7 @@ namespace th
 				bestScore = path.m_bestScore;
 				bestDir = path.m_dir;
 				bestSlow = result.slow;
-				g_writableRecord = path.m_record[1];
 			}
-		}
-
-		{
-			std::lock_guard<std::mutex> lock(g_recordMutex);
-			std::swap(g_writableRecord, g_swappableRecord);
-			g_recordUpdated = true;
 		}
 
 		if (bestDir.has_value() && bestSlow.has_value())
@@ -542,18 +496,16 @@ namespace th
 
 		delete m_root;
 #endif
-
 		return true;
 	}
 
 	// 查找道具
-	boost::optional<Item> Th10Ai::findItem()
+	std::optional<Item> Th10Ai::findItem()
 	{
 		const Player& player = m_readableStatus->getPlayer();
 		const std::vector<Item>& items = m_readableStatus->getItems();
 		const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
-
-		boost::optional<Item> target;
+		std::optional<Item> target;
 
 		if (items.empty())
 			return target;
@@ -628,12 +580,11 @@ namespace th
 	}
 
 	// 查找敌机
-	boost::optional<Enemy> Th10Ai::findEnemy()
+	std::optional<Enemy> Th10Ai::findEnemy()
 	{
 		const Player& player = m_readableStatus->getPlayer();
 		const std::vector<Enemy>& enemies = m_readableStatus->getEnemies();
-
-		boost::optional<Enemy> target;
+		std::optional<Enemy> target;
 
 		if (enemies.empty())
 			return target;

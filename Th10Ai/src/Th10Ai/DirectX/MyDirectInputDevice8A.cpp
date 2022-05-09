@@ -75,7 +75,7 @@ namespace th
 			try
 			{
 				if (g_th10Ai != nullptr)
-					g_th10Ai->commitInput(cbData, lpvData);
+					g_th10Ai->commitInputTo(cbData, lpvData);
 			}
 			catch (...)
 			{

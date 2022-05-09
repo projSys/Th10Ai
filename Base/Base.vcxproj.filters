@@ -39,9 +39,6 @@
     <ClInclude Include="include\Base\ScopeGuard.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\String.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Types.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>

@@ -2,11 +2,11 @@
 
 #include "Loader/Common.h"
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 namespace ld
 {
-	namespace fs = boost::filesystem;
+	namespace fs = std::filesystem;
 
 	class DllInject
 	{

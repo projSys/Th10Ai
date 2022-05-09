@@ -165,7 +165,6 @@
     <ClInclude Include="include\Base\Logger.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\Streamable.h" />
-    <ClInclude Include="include\Base\String.h" />
     <ClInclude Include="include\Base\Throwable.h" />
     <ClInclude Include="include\Base\Traits.h" />
     <ClInclude Include="include\Base\Types.h" />

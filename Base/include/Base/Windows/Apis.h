@@ -2,21 +2,14 @@
 
 #include "Base/Windows/Common.h"
 
-#include "Base/String.h"
-
-namespace boost
-{
-	namespace filesystem
-	{
-		class path;
-	}
-}
+#include <string>
+#include <filesystem>
 
 namespace base
 {
 	namespace win
 	{
-		namespace fs = boost::filesystem;
+		namespace fs = std::filesystem;
 
 		class Apis
 		{

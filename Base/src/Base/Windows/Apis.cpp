@@ -1,7 +1,5 @@
 #include "Base/Windows/Apis.h"
 
-#include <boost/filesystem.hpp>
-
 #include "Base/Traits.h"
 #include "Base/ErrorCode.h"
 

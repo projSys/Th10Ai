@@ -26,11 +26,11 @@ namespace th
 
 	void Status::update()
 	{
-		Th10Apis::GetPlayer(m_player);
-		Th10Apis::GetItems(m_items);
-		Th10Apis::GetEnemies(m_enemies);
-		Th10Apis::GetBullets(m_bullets);
-		Th10Apis::GetLasers(m_lasers);
+		Th10Apis::GetPlayerTo(m_player);
+		Th10Apis::GetItemsTo(m_items);
+		Th10Apis::GetEnemiesTo(m_enemies);
+		Th10Apis::GetBulletsTo(m_bullets);
+		Th10Apis::GetLasersTo(m_lasers);
 
 		frame1 = m_player.stageFrame;
 	}
@@ -97,9 +97,9 @@ namespace th
 		return underEnemy;
 	}
 
-	boost::optional<Bullet> Status::collide(const Player& player, int_t frame) const
+	std::optional<Bullet> Status::collide(const Player& player, int_t frame) const
 	{
-		boost::optional<Bullet> target;
+		std::optional<Bullet> target;
 		for (const Bullet& org : m_bullets)
 		{
 			Bullet now = org;

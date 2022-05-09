@@ -31,8 +31,8 @@ namespace th
 	const vec2 Path::RESET_POS = vec2(_F(0.0), _F(431.0));
 
 	Path::Path(Status& status, Scene& scene,
-		const boost::optional<Item>& itemTarget,
-		const boost::optional<Enemy>& enemyTarget,
+		const std::optional<Item>& itemTarget,
+		const std::optional<Enemy>& enemyTarget,
 		bool underEnemy) :
 		m_status(status),
 		m_scene(scene),
@@ -42,8 +42,7 @@ namespace th
 		m_dir(DIR::HOLD),
 		m_slowFirst(false),
 		m_bestScore(std::numeric_limits<float_t>::lowest()),
-		m_count(0),
-		m_record{}
+		m_count(0)
 	{
 	}
 
@@ -112,8 +111,6 @@ namespace th
 		if (avg > m_bestScore)
 		{
 			m_bestScore = avg;
-			m_record[action.frame - 1].dir = action.fromDir;
-			m_record[action.frame - 1].slow = result.slow;
 		}
 
 		int_t nextValidCount = FIND_DIR_COUNTS[to_underlying(m_dir)];

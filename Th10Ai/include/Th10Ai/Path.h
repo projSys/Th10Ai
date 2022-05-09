@@ -2,19 +2,13 @@
 
 #include "Th10Ai/Common.h"
 
-#include <boost/optional.hpp>
+#include <optional>
 
 #include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
 
 namespace th
 {
-	struct Record
-	{
-		DIR dir;
-		bool slow;
-	};
-
 	struct Action
 	{
 		vec2 fromPos;
@@ -34,8 +28,8 @@ namespace th
 	{
 	public:
 		Path(Status& status, Scene& scene,
-			const boost::optional<Item>& itemTarget,
-			const boost::optional<Enemy>& enemyTarget,
+			const std::optional<Item>& itemTarget,
+			const std::optional<Enemy>& enemyTarget,
 			bool underEnemy);
 
 		Result find(DIR dir);
@@ -54,8 +48,8 @@ namespace th
 
 		Status& m_status;
 		Scene& m_scene;
-		const boost::optional<Item>& m_itemTarget;
-		const boost::optional<Enemy>& m_enemyTarget;
+		const std::optional<Item>& m_itemTarget;
+		const std::optional<Enemy>& m_enemyTarget;
 		bool m_underEnemy;
 
 		DIR m_dir;
@@ -63,7 +57,5 @@ namespace th
 
 		float_t m_bestScore;
 		int_t m_count;
-
-		Record m_record[100];
 	};
 }
