@@ -338,7 +338,14 @@ namespace th
 			if (!m_inputUpdated)
 				std::cout << "处理太慢了，等待输入。" << std::endl;
 			while (!m_inputUpdated)
-				m_inputCond.wait(lock);
+			{
+				std::cv_status status = m_inputCond.wait_for(lock, Time(10));
+				if (status == std::cv_status::timeout)
+				{
+					std::cout << "等待输入超时。" << std::endl;
+					return;
+				}
+			}
 			m_readableInput.swap(m_swappableInput);
 			m_inputUpdated = false;
 		}
