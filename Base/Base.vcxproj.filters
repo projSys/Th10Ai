@@ -51,9 +51,6 @@
     <ClInclude Include="include\Base\Time.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Windows\StackTraceImpl.h">
-      <Filter>头文件\Base\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Logger.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -72,9 +69,6 @@
     <ClInclude Include="include\Base\ErrorCode.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\StackTrace.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">
@@ -89,9 +83,6 @@
     <ClCompile Include="src\Base\Time.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Windows\StackTraceImpl.cpp">
-      <Filter>源文件\Base\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\Logger.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
@@ -102,9 +93,6 @@
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\ErrorCode.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\StackTrace.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>

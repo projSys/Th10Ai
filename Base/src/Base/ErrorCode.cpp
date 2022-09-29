@@ -7,19 +7,17 @@ namespace base
 {
 	ErrorCode::ErrorCode(int_t code, bool hex,
 		const std::error_category& category,
-		const std::source_location& sl,
-		const StackTrace& st) :
+		const std::source_location& sl) :
 		system_error(code, category),
-		Throwable(sl, st),
+		Throwable(sl),
 		m_hex(hex)
 	{
 	}
 
 	ErrorCode::ErrorCode(int_t code,
 		const std::error_category& category,
-		const std::source_location& sl,
-		const StackTrace& st) :
-		ErrorCode(code, false, category, sl, st)
+		const std::source_location& sl) :
+		ErrorCode(code, false, category, sl)
 	{
 	}
 

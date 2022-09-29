@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;TH10AI_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_79_0;D:\Develop\Touhou\Detours-master\include;D:\Develop\OpenCV\opencv-4.5.2\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Software\Boost\boost_1_80_0;D:\Software\Touhou\Detours-master\include;D:\Software\OpenCV\opencv-4.5.2\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -96,7 +96,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_79_0\lib32-msvc-14.3;D:\Develop\Touhou\Detours-master\lib.X86;D:\Develop\OpenCV\opencv-4.5.2\build32\install\x86\vc16\lib;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Software\Boost\boost_1_80_0\lib32-msvc-14.3;D:\Software\Touhou\Detours-master\lib.X86;D:\Software\OpenCV\opencv-4.5.2\build32\install\x86\vc16\lib;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;TH10AI_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_79_0;D:\Develop\Touhou\Detours-master\include;D:\Develop\OpenCV\opencv-4.5.2\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Software\Boost\boost_1_80_0;D:\Software\Touhou\Detours-master\include;D:\Software\OpenCV\opencv-4.5.2\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -118,7 +118,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_79_0\lib32-msvc-14.3;D:\Develop\Touhou\Detours-master\lib.X86;D:\Develop\OpenCV\opencv-4.5.2\build32\install\x86\vc16\lib;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Software\Boost\boost_1_80_0\lib32-msvc-14.3;D:\Software\Touhou\Detours-master\lib.X86;D:\Software\OpenCV\opencv-4.5.2\build32\install\x86\vc16\lib;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

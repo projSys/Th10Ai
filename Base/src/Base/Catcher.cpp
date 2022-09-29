@@ -26,9 +26,5 @@ namespace base
 		{
 			os << se.what();
 		}
-		catch (...)
-		{
-			os << "Unclassified exception.";
-		}
 	}
 }

@@ -17,16 +17,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, 
 {
 	try
 	{
-		fs::path logPath = Apis::GetModuleDir() / L"Loader.log";
+		fs::path dir = Apis::GetModuleDir();
+		fs::path logPath = dir / L"Loader.log";
 		g_logger.addFileLog(logPath);
 		g_logger.addCommonAttributes();
 
-		fs::path confPath = Apis::GetModuleDir() / L"Loader.conf";
+		fs::path confPath = dir / L"Loader.conf";
 		std::ifstream ifs(confPath.c_str());
 		po::options_description desc("Config");
 		desc.add_options()
 			("exe-path", po::value<std::string>(), "exe path")
-			("dll-name", po::value<std::string>(), "dll name");
+			("dll-name", po::value<std::string>(), "dll name")
+			("dump", po::value<bool>(), "dump");
 		po::variables_map vm;
 		po::store(po::parse_config_file(ifs, desc), vm);
 		po::notify(vm);
@@ -35,18 +37,38 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, 
 		std::wstring dllName = Apis::AnsiToWide(vm["dll-name"].as<std::string>());
 		fs::path exeDir = exePath.parent_path();
 
+		bool dump = vm["dump"].as<bool>();
+		if (dump)
+		{
+			fs::path pdPath = dir / L"procdump.exe";
+			std::wostringstream oss;
+			oss << pdPath.c_str() << L" -accepteula -e -w " << exePath.filename().c_str();
+			//oss << pdPath.c_str() << L" -accepteula -e " << pi.dwProcessId;
+
+			STARTUPINFOW si = {};
+			si.cb = sizeof(si);
+			PROCESS_INFORMATION pi = {};
+			if (!CreateProcessW(nullptr, const_cast<LPWSTR>(oss.str().c_str()), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, dir.c_str(), &si, &pi))
+				throw ErrorCode(GetLastError());
+			ON_SCOPE_EXIT([&pi]()
+				{
+					CloseHandle(pi.hThread);
+					CloseHandle(pi.hProcess);
+				});
+		}
+
 		STARTUPINFOW si = {};
 		si.cb = sizeof(si);
 		PROCESS_INFORMATION pi = {};
 		if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
 			throw ErrorCode(GetLastError());
-		ON_SCOPE_EXIT([&]()
+		ON_SCOPE_EXIT([&pi]()
 			{
 				CloseHandle(pi.hThread);
 				CloseHandle(pi.hProcess);
 			});
 
-		fs::path dllPath = Apis::GetModuleDir() / dllName;
+		fs::path dllPath = dir / dllName;
 		//DllInject::EnableDebugPrivilege();
 		DllInject::Inject(pi.hProcess, dllPath);
 

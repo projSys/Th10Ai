@@ -98,7 +98,7 @@ namespace base
 			if (ret == 0)
 				throw ErrorCode(GetLastError());
 			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-				throw ErrorCode(GetLastError());
+				throw ErrorCode(ERROR_INSUFFICIENT_BUFFER);
 
 			return fs::path(buffer);
 		}

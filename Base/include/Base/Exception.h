@@ -14,11 +14,9 @@ namespace base
 	{
 	public:
 		explicit Exception(const char* str,
-			const std::source_location& sl = std::source_location::current(),
-			const StackTrace& st = StackTrace());
+			const std::source_location& sl = std::source_location::current());
 		explicit Exception(const std::string& str,
-			const std::source_location& sl = std::source_location::current(),
-			const StackTrace& st = StackTrace());
+			const std::source_location& sl = std::source_location::current());
 
 		virtual void toStream(std::ostream& os) const override;
 	};

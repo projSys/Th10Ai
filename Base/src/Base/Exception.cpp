@@ -5,18 +5,16 @@
 namespace base
 {
 	Exception::Exception(const char* str,
-		const std::source_location& sl,
-		const StackTrace& st) :
+		const std::source_location& sl) :
 		runtime_error(str),
-		Throwable(sl, st)
+		Throwable(sl)
 	{
 	}
 
 	Exception::Exception(const std::string& str,
-		const std::source_location& sl,
-		const StackTrace& st) :
+		const std::source_location& sl) :
 		runtime_error(str),
-		Throwable(sl, st)
+		Throwable(sl)
 	{
 	}
 

@@ -16,12 +16,10 @@ namespace base
 	public:
 		ErrorCode(int_t code, bool hex,
 			const std::error_category& category = std::system_category(),
-			const std::source_location& sl = std::source_location::current(),
-			const StackTrace& st = StackTrace());
+			const std::source_location& sl = std::source_location::current());
 		explicit ErrorCode(int_t code,
 			const std::error_category& category = std::system_category(),
-			const std::source_location& sl = std::source_location::current(),
-			const StackTrace& st = StackTrace());
+			const std::source_location& sl = std::source_location::current());
 
 		virtual void toStream(std::ostream& os) const override;
 
