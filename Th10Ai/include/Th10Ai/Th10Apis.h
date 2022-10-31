@@ -15,6 +15,7 @@ namespace th
 	class Th10Apis
 	{
 	public:
+		static bool GetGlobalVarTo(GlobalVar& globalVar);
 		static bool GetPlayerTo(Player& player);
 		static bool GetItemsTo(std::vector<Item>& items);
 		static bool GetEnemiesTo(std::vector<Enemy>& enemies);

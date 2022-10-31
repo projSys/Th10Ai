@@ -2,7 +2,7 @@
 
 #include <Base/ScopeGuard.h>
 #include <Base/Exception.h>
-#include <Base/ErrorCode.h>
+#include <Base/Error.h>
 
 namespace ld
 {
@@ -10,7 +10,7 @@ namespace ld
 	{
 		HANDLE token = nullptr;
 		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &token))
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		ON_SCOPE_EXIT([&]()
 			{
 				CloseHandle(token);
@@ -18,14 +18,14 @@ namespace ld
 
 		LUID luid = {};
 		if (!LookupPrivilegeValue(nullptr, SE_DEBUG_NAME, &luid))
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 
 		TOKEN_PRIVILEGES tp = {};
 		tp.PrivilegeCount = 1;
 		tp.Privileges[0].Luid = luid;
 		tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 		if (!AdjustTokenPrivileges(token, FALSE, &tp, sizeof(tp), nullptr, nullptr))
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
 			throw Exception("请以管理员身份运行。");
 	}
@@ -36,7 +36,7 @@ namespace ld
 
 		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 		if (memory == nullptr)
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		ON_SCOPE_EXIT([&]()
 			{
 				VirtualFreeEx(process, memory, 0, MEM_RELEASE);
@@ -44,21 +44,21 @@ namespace ld
 
 		SIZE_T written = 0;
 		if (!WriteProcessMemory(process, memory, dllPath.c_str(), size, &written))
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		if (written != size)
 			throw Exception("written != size.");
 
 		HMODULE kernel32Dll = GetModuleHandleW(L"kernel32.dll");
 		if (kernel32Dll == nullptr)
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		FARPROC loadLibraryW = GetProcAddress(kernel32Dll, "LoadLibraryW");
 		if (loadLibraryW == nullptr)
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 
 		DWORD threadId = 0;
 		HANDLE thread = CreateRemoteThread(process, nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibraryW), memory, 0, &threadId);
 		if (thread == nullptr)
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		ON_SCOPE_EXIT([&]()
 			{
 				CloseHandle(thread);
@@ -66,13 +66,13 @@ namespace ld
 
 		DWORD waited = WaitForSingleObject(thread, 3000);
 		if (waited == WAIT_FAILED)
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		if (waited == WAIT_TIMEOUT)
 			throw Exception("注入线程执行超时。");
 
 		DWORD exitCode = 0;
 		if (!GetExitCodeThread(thread, &exitCode))
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		if (exitCode == 0)
 			throw Exception("LoadLibraryW()调用失败。");
 	}

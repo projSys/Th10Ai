@@ -12,14 +12,22 @@ namespace th
 		return *reinterpret_cast<T*>(address);
 	}
 
+	bool Th10Apis::GetGlobalVarTo(GlobalVar& globalVar)
+	{
+		globalVar.power = ReadMemory<int32_t>(0x00474C48) / _F(20.0);
+		globalVar.character = ReadMemory<int32_t>(0x00474C68);
+		globalVar.player = ReadMemory<int32_t>(0x00474C70) + 1;
+		globalVar.itemGetRange = ReadMemory<float32_t>(0x00476FB0) + globalVar.character * 4;
+		//if (player.isSlow())
+		//	globalVar.itemGetRange *= _F(2.5);
+
+		globalVar.stageFrame = ReadMemory<int32_t>(0x00474C88);
+
+		return true;
+	}
+
 	bool Th10Apis::GetPlayerTo(Player& player)
 	{
-		const PlayerRaw* raw = ReadMemory<const PlayerRaw*>(0x00477834);
-		if (raw == nullptr)
-			return false;
-
-		player.set(raw);
-
 		//uint32_t baseAddr = ReadMemory<uint32_t>(0x00477834);
 		//if (baseAddr == 0)
 		//	return false;
@@ -42,6 +50,12 @@ namespace th
 			player.itemGetRange *= _F(2.5);
 
 		player.stageFrame = ReadMemory<int32_t>(0x00474C88);
+
+		const PlayerRaw* raw = ReadMemory<const PlayerRaw*>(0x00477834);
+		if (raw == nullptr)
+			return false;
+
+		player.set(raw);
 
 		return true;
 	}
@@ -98,39 +112,56 @@ namespace th
 
 	bool Th10Apis::GetEnemiesTo(std::vector<Enemy>& enemies)
 	{
-		uint32_t baseAddr = ReadMemory<uint32_t>(0x00477704);
-		if (baseAddr == 0)
+		//uint32_t baseAddr = ReadMemory<uint32_t>(0x00477704);
+		//if (baseAddr == 0)
+		//	return false;
+
+		//uint32_t objBase = ReadMemory<uint32_t>(baseAddr + 0x58);
+		//if (objBase == 0)
+		//	return false;
+
+		//while (true)
+		//{
+		//	uint32_t objAddr = ReadMemory<uint32_t>(objBase) + 0x103C;
+		//	uint32_t objNext = ReadMemory<uint32_t>(objBase + 0x4);
+
+		//	uint32_t t = ReadMemory<uint32_t>(objAddr + 0x1444);
+		//	if ((t & 0x40) == 0 && (t & 0x12) == 0)
+		//	{
+		//		Enemy enemy;
+		//		enemy.pos.x = ReadMemory<float32_t>(objAddr + 0x2C);
+		//		enemy.pos.y = ReadMemory<float32_t>(objAddr + 0x30);
+		//		enemy.delta.x = ReadMemory<float32_t>(objAddr + 0x38);
+		//		enemy.delta.y = ReadMemory<float32_t>(objAddr + 0x3C);
+		//		enemy.size.x = ReadMemory<float32_t>(objAddr + 0xB8);
+		//		enemy.size.y = ReadMemory<float32_t>(objAddr + 0xBC);
+
+		//		//enemy.id = static_cast<int_t>(objAddr);
+		//		//enemy.type = static_cast<int_t>(std::round(enemy.width));
+
+		//		enemies.push_back(enemy);
+		//	}
+		//	if (objNext == 0)
+		//		break;
+		//	objBase = objNext;
+		//}
+
+		const EnemyContainer* container = ReadMemory<const EnemyContainer*>(0x00477704);
+		if (container == nullptr)
 			return false;
 
-		uint32_t objBase = ReadMemory<uint32_t>(baseAddr + 0x58);
-		if (objBase == 0)
+		const EnemyElement* element = container->head;
+		if (element == nullptr)
 			return false;
 
-		while (true)
+		do
 		{
-			uint32_t objAddr = ReadMemory<uint32_t>(objBase) + 0x103C;
-			uint32_t objNext = ReadMemory<uint32_t>(objBase + 0x4);
+			EnemyRaw* raw = element->raw;
+			if ((raw->status & 0x40) == 0 && (raw->status & 0x12) == 0)
+				enemies.emplace_back(raw);
 
-			uint32_t t = ReadMemory<uint32_t>(objAddr + 0x1444);
-			if ((t & 0x40) == 0 && (t & 0x12) == 0)
-			{
-				Enemy enemy;
-				enemy.pos.x = ReadMemory<float32_t>(objAddr + 0x2C);
-				enemy.pos.y = ReadMemory<float32_t>(objAddr + 0x30);
-				enemy.delta.x = ReadMemory<float32_t>(objAddr + 0x38);
-				enemy.delta.y = ReadMemory<float32_t>(objAddr + 0x3C);
-				enemy.size.x = ReadMemory<float32_t>(objAddr + 0xB8);
-				enemy.size.y = ReadMemory<float32_t>(objAddr + 0xBC);
-
-				//enemy.id = static_cast<int_t>(objAddr);
-				//enemy.type = static_cast<int_t>(std::round(enemy.width));
-
-				enemies.push_back(enemy);
-			}
-			if (objNext == 0)
-				break;
-			objBase = objNext;
-		}
+			element = element->next;
+		} while (element != nullptr);
 
 		return true;
 	}
@@ -189,7 +220,7 @@ namespace th
 			if (raw->status != 0)
 				bullets.emplace_back(raw, i);
 		}
-		if (bullets.size() != container->bulletsCount)
+		if (bullets.size() != container->bulletCount)
 			std::cout << "读取到的子弹数量不一致。" << std::endl;
 
 		return true;
@@ -197,37 +228,52 @@ namespace th
 
 	bool Th10Apis::GetLasersTo(std::vector<Laser>& lasers)
 	{
-		uint32_t baseAddr = ReadMemory<uint32_t>(0x0047781C);
-		if (baseAddr == 0)
+		//uint32_t baseAddr = ReadMemory<uint32_t>(0x0047781C);
+		//if (baseAddr == 0)
+		//	return false;
+
+		//uint32_t objAddr = ReadMemory<uint32_t>(baseAddr + 0x18);
+		//if (objAddr == 0)
+		//	return false;
+
+		//while (true)
+		//{
+		//	uint32_t objNext = ReadMemory<uint32_t>(objAddr + 0x8);
+
+		//	Laser laser;
+		//	laser.pos.x = ReadMemory<float32_t>(objAddr + 0x24);
+		//	laser.pos.y = ReadMemory<float32_t>(objAddr + 0x28);
+		//	laser.delta.x = ReadMemory<float32_t>(objAddr + 0x30);
+		//	laser.delta.y = ReadMemory<float32_t>(objAddr + 0x34);
+		//	laser.arc = ReadMemory<float32_t>(objAddr + 0x3C);
+		//	// 高度在前，宽度在后
+		//	laser.size.y = ReadMemory<float32_t>(objAddr + 0x40);
+		//	laser.size.x = ReadMemory<float32_t>(objAddr + 0x44);
+
+		//	//laser.id = static_cast<int_t>(objAddr);
+		//	//laser.type = static_cast<int_t>(std::round(laser.width));
+
+		//	lasers.push_back(laser);
+
+		//	if (objNext == 0)
+		//		break;
+		//	objAddr = objNext;
+		//}
+
+		const LaserContainer* container = ReadMemory<const LaserContainer*>(0x0047781C);
+		if (container == nullptr)
 			return false;
 
-		uint32_t objAddr = ReadMemory<uint32_t>(baseAddr + 0x18);
-		if (objAddr == 0)
+		const LaserRaw* raw = container->head;
+		if (raw == nullptr)
 			return false;
 
-		while (true)
+		do
 		{
-			uint32_t objNext = ReadMemory<uint32_t>(objAddr + 0x8);
+			lasers.emplace_back(raw);
 
-			Laser laser;
-			laser.pos.x = ReadMemory<float32_t>(objAddr + 0x24);
-			laser.pos.y = ReadMemory<float32_t>(objAddr + 0x28);
-			laser.delta.x = ReadMemory<float32_t>(objAddr + 0x30);
-			laser.delta.y = ReadMemory<float32_t>(objAddr + 0x34);
-			laser.arc = ReadMemory<float32_t>(objAddr + 0x3C);
-			// 高度在前，宽度在后
-			laser.size.y = ReadMemory<float32_t>(objAddr + 0x40);
-			laser.size.x = ReadMemory<float32_t>(objAddr + 0x44);
-
-			//laser.id = static_cast<int_t>(objAddr);
-			//laser.type = static_cast<int_t>(std::round(laser.width));
-
-			lasers.push_back(laser);
-
-			if (objNext == 0)
-				break;
-			objAddr = objNext;
-		}
+			raw = raw->next;
+		} while (raw != nullptr);
 
 		return true;
 	}

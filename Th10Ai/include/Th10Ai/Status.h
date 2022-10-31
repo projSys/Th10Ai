@@ -51,6 +51,7 @@ namespace th
 		int_t frame1;
 
 	private:
+		GlobalVar m_globalVar;
 		Player m_player;
 		std::vector<Item> m_items;
 		std::vector<Enemy> m_enemies;

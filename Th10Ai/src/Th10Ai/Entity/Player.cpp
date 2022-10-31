@@ -5,11 +5,11 @@ namespace th
 	Player::Player() :
 		status(),
 		invincibleTime(),
-		slow(),
+		slow()/*,
 		powers(),
 		character(),
 		lives(),
-		itemGetRange()
+		itemGetRange()*/
 	{
 	}
 

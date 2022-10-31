@@ -1,11 +1,11 @@
-#include "Base/ErrorCode.h"
+#include "Base/Error.h"
 
 #include <ostream>
 #include <iomanip>
 
 namespace base
 {
-	ErrorCode::ErrorCode(int_t code, bool hex,
+	Error::Error(int_t code, bool hex,
 		const std::error_category& category,
 		const std::source_location& sl) :
 		system_error(code, category),
@@ -14,14 +14,14 @@ namespace base
 	{
 	}
 
-	ErrorCode::ErrorCode(int_t code,
+	Error::Error(int_t code,
 		const std::error_category& category,
 		const std::source_location& sl) :
-		ErrorCode(code, false, category, sl)
+		Error(code, false, category, sl)
 	{
 	}
 
-	void ErrorCode::toStream(std::ostream& os) const
+	void Error::toStream(std::ostream& os) const
 	{
 		const std::error_code& ec = code();
 		os << "Category: " << ec.category().name() << '\n';

@@ -12,6 +12,17 @@ namespace th
 	{
 	}
 
+	Laser::Laser(const LaserRaw* raw)
+	{
+		pos.x = raw->x;
+		pos.y = raw->y;
+		delta.x = raw->dx;
+		delta.y = raw->dy;
+		size.x = raw->width;
+		size.y = raw->height;
+		arc = raw->arc;
+	}
+
 	void Laser::updateExtra()
 	{
 		updateOBB();

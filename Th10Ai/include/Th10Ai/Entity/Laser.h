@@ -3,6 +3,7 @@
 #include "Th10Ai/Common.h"
 
 #include "Th10Ai/Entity/OBB.h"
+#include "Th10Ai/Th10Raw.h"
 
 namespace th
 {
@@ -25,6 +26,7 @@ namespace th
 	{
 	public:
 		Laser();
+		explicit Laser(const LaserRaw* raw);
 
 		void updateExtra();
 		bool willCollideWith(const AABB& other) const;

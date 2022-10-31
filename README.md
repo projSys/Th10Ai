@@ -5,7 +5,7 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ![](https://github.com/unnamedmemory/Th10Ai/blob/master/1.png)
 
-## 待改进
+## 问题
 
 * 重现子弹的移动轨迹，除了直线移动，还有曲线移动、随机移动，否则后续的碰撞预测和节点搜索都是错的。（缺少子弹ID，导致帧与帧之间的子弹无法关联起来进行轨迹推导，弃坑）<br />
 * 5面激光不闪避。（可能是激光的速度过快，需要检测穿越判定）<br />
@@ -18,10 +18,10 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 修改Loader.conf里的exe-path为你的风神录程序路径，运行Loader.exe。<br />
 保持窗口焦点在风神录上，开始游戏，按A启动AI，按S停止AI。<br />
 
-## 编译依赖
+## 依赖
 
 [Boost](https://www.boost.org)<br />
-[Detours](https://github.com/microsoft/detours)(x86 Native Tools Command Prompt for VS 2022 -> cd Detours-path/src -> nmake)<br />
+[Detours](https://github.com/microsoft/detours)<br />
 
 ## 感谢
 

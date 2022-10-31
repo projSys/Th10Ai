@@ -5,6 +5,7 @@
 namespace th
 {
 	Status::Status() :
+		m_globalVar{},
 		inputFrame(0),
 		statusFrame(0),
 		handleFrame(0)
@@ -17,6 +18,7 @@ namespace th
 
 	void Status::clear()
 	{
+		m_globalVar = {};
 		m_player = Player();
 		m_items.clear();
 		m_enemies.clear();
@@ -26,13 +28,14 @@ namespace th
 
 	void Status::update()
 	{
+		Th10Apis::GetGlobalVarTo(m_globalVar);
 		Th10Apis::GetPlayerTo(m_player);
 		Th10Apis::GetItemsTo(m_items);
 		Th10Apis::GetEnemiesTo(m_enemies);
 		Th10Apis::GetBulletsTo(m_bullets);
 		Th10Apis::GetLasersTo(m_lasers);
 
-		frame1 = m_player.stageFrame;
+		frame1 = m_globalVar.stageFrame;
 	}
 
 	void Status::updateExtra()

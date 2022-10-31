@@ -3,6 +3,7 @@
 #include "Th10Ai/Common.h"
 
 #include "Th10Ai/Entity/Entity.h"
+#include "Th10Ai/Th10Raw.h"
 
 namespace th
 {
@@ -11,6 +12,7 @@ namespace th
 	{
 	public:
 		Enemy();
+		explicit Enemy(const EnemyRaw* raw);
 
 		bool isBoss() const;
 	};

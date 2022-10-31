@@ -66,7 +66,7 @@
     <ClInclude Include="include\Base\Catcher.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\ErrorCode.h">
+    <ClInclude Include="include\Base\Error.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClCompile Include="src\Base\Catcher.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\ErrorCode.cpp">
+    <ClCompile Include="src\Base\Error.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,7 +5,7 @@
 #include <Base/Catcher.h>
 #include <Base/Logger.h>
 #include <Base/ScopeGuard.h>
-#include <Base/ErrorCode.h>
+#include <Base/Error.h>
 #include <Base/Windows/Apis.h>
 
 #include "Loader/DllInject.h"
@@ -37,19 +37,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, 
 		std::wstring dllName = Apis::AnsiToWide(vm["dll-name"].as<std::string>());
 		fs::path exeDir = exePath.parent_path();
 
-		bool dump = vm["dump"].as<bool>();
+		bool dump = vm.count("dump") ? vm["dump"].as<bool>() : false;
 		if (dump)
 		{
 			fs::path pdPath = dir / L"procdump.exe";
 			std::wostringstream oss;
-			oss << pdPath.c_str() << L" -accepteula -e -w " << exePath.filename().c_str();
-			//oss << pdPath.c_str() << L" -accepteula -e " << pi.dwProcessId;
+			oss << pdPath.c_str() << L" -accepteula -h -e -w " << exePath.filename().c_str();
+			//oss << pdPath.c_str() << L" -accepteula -h -e " << pi.dwProcessId;
+			std::wstring cmd = oss.str();
 
 			STARTUPINFOW si = {};
 			si.cb = sizeof(si);
 			PROCESS_INFORMATION pi = {};
-			if (!CreateProcessW(nullptr, const_cast<LPWSTR>(oss.str().c_str()), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, dir.c_str(), &si, &pi))
-				throw ErrorCode(GetLastError());
+			if (!CreateProcessW(nullptr, const_cast<LPWSTR>(cmd.c_str()), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, dir.c_str(), &si, &pi))
+				throw Error(GetLastError());
 			ON_SCOPE_EXIT([&pi]()
 				{
 					CloseHandle(pi.hThread);
@@ -61,7 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, 
 		si.cb = sizeof(si);
 		PROCESS_INFORMATION pi = {};
 		if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 		ON_SCOPE_EXIT([&pi]()
 			{
 				CloseHandle(pi.hThread);
@@ -74,7 +75,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, 
 
 		DWORD count = ResumeThread(pi.hThread);
 		if (count == (DWORD)-1)
-			throw ErrorCode(GetLastError());
+			throw Error(GetLastError());
 	}
 	catch (...)
 	{

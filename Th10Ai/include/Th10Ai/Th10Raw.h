@@ -12,6 +12,14 @@ namespace th
 
 	struct GlobalVar
 	{
+		float32_t power;
+		// character == 0 Reimu
+		// character == 1 Marisa
+		int32_t character;
+		int32_t player;
+		float32_t itemGetRange;
+
+		int32_t stageFrame;
 	};
 
 	struct PlayerRaw
@@ -55,18 +63,13 @@ namespace th
 	{
 		byte_t unknown0[0x14];
 		ItemRaw items[ITEM_MAX_COUNT];	// 0x21CEA0
-		uint32_t itemsCount;
+		uint32_t itemCount;
 		byte_t unknown1[0x8];
 	};
 
 	static_assert(sizeof(ItemContainer) == 0x21CEC0);
 
-	struct EnemyRaw
-	{
-		byte_t unknown0[0x2518];
-	};
-
-	static_assert(sizeof(EnemyRaw) == 0x2518);
+	struct EnemyRaw;
 
 	// 大小未知，在EnemyRaw内部，成员或基类？
 	struct EnemyElement
@@ -74,6 +77,26 @@ namespace th
 		EnemyRaw* raw;
 		EnemyElement* next;
 	};
+
+	struct EnemyRaw
+	{
+		byte_t unknown0[0x1068];
+		float32_t x;				// 0x1068
+		float32_t y;				// 0x106C
+		byte_t unknown1[0x4];
+		float32_t dx;				// 0x1074
+		float32_t dy;				// 0x1078
+		byte_t unknown2[0x78];
+		float32_t width;			// 0x10F4
+		float32_t height;			// 0x10F8
+		byte_t unknown3[0x70];
+		EnemyElement element;		// 0x116C
+		byte_t unknown4[0x130C];
+		int32_t status;				// 0x2480
+		byte_t unknown5[0x94];
+	};
+
+	static_assert(sizeof(EnemyRaw) == 0x2518);
 
 	struct EnemyContainer
 	{
@@ -108,12 +131,43 @@ namespace th
 	struct BulletContainer
 	{
 		byte_t unknown0[0x5C];
-		uint32_t bulletsCount;
+		uint32_t bulletCount;
 		BulletRaw bullets[BULLET_MAX_COUNT];	// 0x3E0AF0
 		byte_t unknown1[0x4];
 	};
 
 	static_assert(sizeof(BulletContainer) == 0x3E0B54);
+
+	// 有2种大小 0xD58 0xD74
+	struct LaserRaw
+	{
+		byte_t unknown0[0x8];
+		LaserRaw* next;				// 0x8
+		byte_t unknown1[0x18];
+		float32_t x;				// 0x24
+		float32_t y;				// 0x28
+		byte_t unknown2[0x4];
+		float32_t dx;				// 0x30
+		float32_t dy;				// 0x34
+		byte_t unknown3[0x4];
+		float32_t arc;				// 0x3C
+		// 高度在前，宽度在后
+		float32_t height;			// 0x40
+		float32_t width;			// 0x44
+		byte_t unknown4[0xD10];
+	};
+
+	static_assert(sizeof(LaserRaw) == 0xD58);
+
+	// head 赋值地址 0041C588 sub_41C510
+	struct LaserContainer
+	{
+		byte_t unknown0[0x18];
+		LaserRaw* head;
+		byte_t unknown1[0x440];
+	};
+
+	static_assert(sizeof(LaserContainer) == 0x45C);
 
 #pragma pack()
 }
