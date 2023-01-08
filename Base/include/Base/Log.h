@@ -13,11 +13,6 @@ namespace base
 		~Log();
 	};
 
-#define LOG_INFO() LOG(INFO)
-#define LOG_WARNING() LOG(WARNING)
-#define LOG_ERROR() LOG(ERROR)
-#define LOG_FATAL() LOG(FATAL)
-
 	// BASE_LOG(trace)
 	// BASE_LOG(debug)
 	// BASE_LOG(info)

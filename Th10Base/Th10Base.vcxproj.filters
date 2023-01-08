@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="头文件\Th10Base">
+      <UniqueIdentifier>{f93fcd63-c990-4076-8f25-b9fd29899620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Th10Base">
+      <UniqueIdentifier>{76914a75-8c71-498d-aebd-a430dc85eba9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Th10Base\Common.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\AABB.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\BB.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Bullet.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Enemy.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Entity.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Item.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Laser.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\OBB.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Player.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Projection.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Vector2.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Th10Raws.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Direction.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\SharedData.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\Input.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\SharedStatus.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Base\SharedMemory.h">
+      <Filter>头文件\Th10Base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Th10Base\AABB.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\BB.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Bullet.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Enemy.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Entity.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Item.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Laser.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\OBB.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Player.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Projection.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Vector2.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\SharedData.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\Input.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Base\SharedStatus.cpp">
+      <Filter>源文件\Th10Base</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

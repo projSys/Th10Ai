@@ -9,12 +9,14 @@ namespace base
 	{
 		std::wstring Apis::MultiByteToWideChar(UINT codePage, const char* str, int strSize)
 		{
+			std::wstring wstr;
+
 			int wstrSize = ::MultiByteToWideChar(codePage, 0, str, strSize, nullptr, 0);
 			if (wstrSize == 0)
 				throw Error(GetLastError());
 
-			std::wstring wstr(wstrSize, L'\0');
-			int ret = ::MultiByteToWideChar(codePage, 0, str, strSize, &wstr[0], wstrSize);
+			wstr.resize(wstrSize + 10);
+			int ret = ::MultiByteToWideChar(codePage, 0, str, strSize, &wstr[0], wstrSize + 10);
 			if (ret == 0)
 				throw Error(GetLastError());
 			return wstr;
@@ -22,12 +24,14 @@ namespace base
 
 		std::string Apis::WideCharToMultiByte(UINT codePage, const wchar_t* wstr, int wstrSize)
 		{
+			std::string str;
+
 			int strSize = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, nullptr, 0,
 				nullptr, nullptr);
 			if (strSize == 0)
 				throw Error(GetLastError());
 
-			std::string str(strSize, '\0');
+			str.resize(strSize);
 			int ret = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, &str[0], strSize,
 				nullptr, nullptr);
 			if (ret == 0)

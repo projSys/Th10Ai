@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f1e1cca2-1d84-4bed-9ee1-da7a5d94f008}</ProjectGuid>
+    <ProjectGuid>{d6de18dc-8268-44d3-825a-98e69cdffdc1}</ProjectGuid>
     <RootNamespace>Th10Ai</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -70,34 +70,21 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;TH10AI_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Software\Boost\boost_1_80_0;D:\Software\Touhou\Detours-master\include;D:\Software\OpenCV\opencv-4.5.2\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>D:\Software\Boost\boost_1_81_0;..\Base\include;..\Th10Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>D:\Software\Boost\boost_1_80_0\lib32-msvc-14.3;D:\Software\Touhou\Detours-master\lib.X86;D:\Software\OpenCV\opencv-4.5.2\build32\install\x86\vc16\lib;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Software\Boost\boost_1_81_0\lib32-msvc-14.3;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Base.lib;Th10Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -106,33 +93,31 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;TH10AI_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Software\Boost\boost_1_80_0;D:\Software\Touhou\Detours-master\include;D:\Software\OpenCV\opencv-4.5.2\build32\install\include;..\Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>D:\Software\Boost\boost_1_81_0;..\Base\include;..\Th10Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>D:\Software\Boost\boost_1_80_0\lib32-msvc-14.3;D:\Software\Touhou\Detours-master\lib.X86;D:\Software\OpenCV\opencv-4.5.2\build32\install\x86\vc16\lib;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>dxguid.lib;detours.lib;Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Software\Boost\boost_1_81_0\lib32-msvc-14.3;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Base.lib;Th10Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;TH10AI_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,81 +126,33 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;TH10AI_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Th10Ai\Common.h" />
-    <ClInclude Include="include\Th10Ai\Console.h" />
-    <ClInclude Include="include\Th10Ai\Direction.h" />
-    <ClInclude Include="include\Th10Ai\DirectX\D3D9Hook.h" />
-    <ClInclude Include="include\Th10Ai\DirectX\DI8Hook.h" />
-    <ClInclude Include="include\Th10Ai\DirectX\MyDirect3D9.h" />
-    <ClInclude Include="include\Th10Ai\DirectX\MyDirect3DDevice9.h" />
-    <ClInclude Include="include\Th10Ai\DirectX\MyDirectInput8A.h" />
-    <ClInclude Include="include\Th10Ai\DirectX\MyDirectInputDevice8A.h" />
-    <ClInclude Include="include\Th10Ai\DllMain.h" />
-    <ClInclude Include="include\Th10Ai\Entity\AABB.h" />
-    <ClInclude Include="include\Th10Ai\Entity\BB.h" />
-    <ClInclude Include="include\Th10Ai\Entity\Bullet.h" />
-    <ClInclude Include="include\Th10Ai\Entity\Enemy.h" />
-    <ClInclude Include="include\Th10Ai\Entity\Entity.h" />
-    <ClInclude Include="include\Th10Ai\Entity\Item.h" />
-    <ClInclude Include="include\Th10Ai\Entity\Laser.h" />
-    <ClInclude Include="include\Th10Ai\Entity\OBB.h" />
-    <ClInclude Include="include\Th10Ai\Entity\Player.h" />
-    <ClInclude Include="include\Th10Ai\Entity\Projection.h" />
-    <ClInclude Include="include\Th10Ai\Entity\Vector2.h" />
-    <ClInclude Include="include\Th10Ai\Input.h" />
-    <ClInclude Include="include\Th10Ai\MyDetours.h" />
-    <ClInclude Include="include\Th10Ai\Node.h" />
-    <ClInclude Include="include\Th10Ai\Path.h" />
-    <ClInclude Include="include\Th10Ai\Region.h" />
-    <ClInclude Include="include\Th10Ai\Scene.h" />
-    <ClInclude Include="include\Th10Ai\Status.h" />
-    <ClInclude Include="include\Th10Ai\Th10Ai.h" />
-    <ClInclude Include="include\Th10Ai\Th10Apis.h" />
-    <ClInclude Include="include\Th10Ai\Th10Raw.h" />
-    <ClInclude Include="include\Th10Ai\Tree.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Th10Ai\Console.cpp" />
-    <ClCompile Include="src\Th10Ai\DirectX\D3D9Hook.cpp" />
-    <ClCompile Include="src\Th10Ai\DirectX\DI8Hook.cpp" />
-    <ClCompile Include="src\Th10Ai\DirectX\MyDirect3D9.cpp" />
-    <ClCompile Include="src\Th10Ai\DirectX\MyDirect3DDevice9.cpp" />
-    <ClCompile Include="src\Th10Ai\DirectX\MyDirectInput8A.cpp" />
-    <ClCompile Include="src\Th10Ai\DirectX\MyDirectInputDevice8A.cpp" />
-    <ClCompile Include="src\Th10Ai\DllMain.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\AABB.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\BB.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\Bullet.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\Enemy.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\Entity.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\Item.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\Laser.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\OBB.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\Player.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\Projection.cpp" />
-    <ClCompile Include="src\Th10Ai\Entity\Vector2.cpp" />
-    <ClCompile Include="src\Th10Ai\Input.cpp" />
-    <ClCompile Include="src\Th10Ai\MyDetours.cpp" />
-    <ClCompile Include="src\Th10Ai\Node.cpp" />
+    <ClCompile Include="src\Th10Ai\DllInject.cpp" />
+    <ClCompile Include="src\Th10Ai\Main.cpp" />
     <ClCompile Include="src\Th10Ai\Path.cpp" />
     <ClCompile Include="src\Th10Ai\Region.cpp" />
     <ClCompile Include="src\Th10Ai\Scene.cpp" />
     <ClCompile Include="src\Th10Ai\Status.cpp" />
     <ClCompile Include="src\Th10Ai\Th10Ai.cpp" />
-    <ClCompile Include="src\Th10Ai\Th10Apis.cpp" />
-    <ClCompile Include="src\Th10Ai\Tree.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Th10Ai\Common.h" />
+    <ClInclude Include="include\Th10Ai\DllInject.h" />
+    <ClInclude Include="include\Th10Ai\Path.h" />
+    <ClInclude Include="include\Th10Ai\Region.h" />
+    <ClInclude Include="include\Th10Ai\Scene.h" />
+    <ClInclude Include="include\Th10Ai\Status.h" />
+    <ClInclude Include="include\Th10Ai\Th10Ai.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

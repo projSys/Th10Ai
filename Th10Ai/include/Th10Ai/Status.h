@@ -5,11 +5,12 @@
 #include <vector>
 #include <optional>
 
-#include "Th10Ai/Entity/Player.h"
-#include "Th10Ai/Entity/Item.h"
-#include "Th10Ai/Entity/Enemy.h"
-#include "Th10Ai/Entity/Bullet.h"
-#include "Th10Ai/Entity/Laser.h"
+#include "Th10Base/Player.h"
+#include "Th10Base/Item.h"
+#include "Th10Base/Enemy.h"
+#include "Th10Base/Bullet.h"
+#include "Th10Base/Laser.h"
+#include "Th10Base/SharedStatus.h"
 
 namespace th
 {
@@ -22,6 +23,7 @@ namespace th
 		void update();
 		void updateExtra();
 		void copy(const Status& other);
+		void copy(const SharedStatus& other);
 
 		// Player
 

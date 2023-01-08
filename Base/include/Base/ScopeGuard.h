@@ -22,6 +22,11 @@ namespace base
 			m_functor();
 		}
 
+		ScopeGuard(const ScopeGuard&) = delete;
+		ScopeGuard(ScopeGuard&&) = delete;
+		ScopeGuard& operator =(const ScopeGuard&) = delete;
+		ScopeGuard& operator =(ScopeGuard&&) = delete;
+
 	private:
 		T m_functor;
 	};

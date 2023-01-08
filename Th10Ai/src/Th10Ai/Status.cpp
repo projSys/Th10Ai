@@ -1,6 +1,6 @@
 #include "Th10Ai/Status.h"
 
-#include "Th10Ai/Th10Apis.h"
+//#include "Th10Ai/Th10Apis.h"
 
 namespace th
 {
@@ -28,12 +28,12 @@ namespace th
 
 	void Status::update()
 	{
-		Th10Apis::GetGlobalVarTo(m_globalVar);
-		Th10Apis::GetPlayerTo(m_player);
-		Th10Apis::GetItemsTo(m_items);
-		Th10Apis::GetEnemiesTo(m_enemies);
-		Th10Apis::GetBulletsTo(m_bullets);
-		Th10Apis::GetLasersTo(m_lasers);
+		//Th10Apis::GetGlobalVarTo(m_globalVar);
+		//Th10Apis::GetPlayerTo(m_player);
+		//Th10Apis::GetItemsTo(m_items);
+		//Th10Apis::GetEnemiesTo(m_enemies);
+		//Th10Apis::GetBulletsTo(m_bullets);
+		//Th10Apis::GetLasersTo(m_lasers);
 
 		frame1 = m_globalVar.stageFrame;
 	}
@@ -69,6 +69,21 @@ namespace th
 		statusFrame = other.statusFrame;
 		handleFrame = other.handleFrame;
 		frame1 = other.frame1;
+	}
+
+	void Status::copy(const SharedStatus& other)
+	{
+		clear();
+
+		m_player = other.player;
+		for (const Item& item : other.items)
+			m_items.push_back(item);
+		for (const Enemy& enemy : other.enemies)
+			m_enemies.push_back(enemy);
+		for (const Bullet& bullet : other.bullets)
+			m_bullets.push_back(bullet);
+		for (const Laser& laser : other.lasers)
+			m_lasers.push_back(laser);
 	}
 
 	bool Status::haveEnemies() const

@@ -69,6 +69,9 @@
     <ClInclude Include="include\Base\Error.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Singleton.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp">

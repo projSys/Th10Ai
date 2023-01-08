@@ -8,8 +8,15 @@
 #include <opencv2/opencv.hpp>
 #endif
 
-#include "Th10Ai/Entity/AABB.h"
-#include "Th10Ai/Status.h"
+#include "Th10Base/AABB.h"
+#include "Th10Base/SharedMemory.h"
+#include "Th10Base/SharedData.h"
+#include "Th10Base/Player.h"
+#include "Th10Base/Item.h"
+#include "Th10Base/Enemy.h"
+#include "Th10Base/Bullet.h"
+#include "Th10Base/Laser.h"
+//#include "Th10Ai/Status.h"
 
 namespace th
 {

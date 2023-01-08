@@ -26,8 +26,8 @@ namespace th
 
 	const int_t Path::FIND_DIR_COUNTS[to_underlying(DIR::MAX_COUNT)] = { 1, 5, 5, 5, 5, 5, 5, 5, 5 };
 
-	const int_t Path::FIND_LIMIT = 100;
-	const float_t Path::FIND_DEPTH = 30;
+	const int_t Path::FIND_LIMIT = 120;
+	const float_t Path::FIND_DEPTH = 40;
 	const vec2 Path::RESET_POS = vec2(_F(0.0), _F(431.0));
 
 	Path::Path(Status& status, Scene& scene,
@@ -49,7 +49,7 @@ namespace th
 	Result Path::find(DIR dir)
 	{
 		m_dir = dir;
-		//m_slowFirst = (!m_itemTarget.has_value() && m_underEnemy);
+		m_slowFirst = (!m_itemTarget.has_value() && m_underEnemy);
 
 		Action action = {};
 		action.fromPos = m_status.getPlayer().pos;

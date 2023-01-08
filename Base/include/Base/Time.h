@@ -17,9 +17,5 @@ namespace base
 		static Time Now();
 	};
 
-	inline std::ostream& operator <<(std::ostream& os, const Time& time)
-	{
-		os << time.count();
-		return os;
-	}
+	std::ostream& operator <<(std::ostream& os, const Time& time);
 }
