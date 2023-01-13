@@ -2,24 +2,14 @@
 
 #include "Th10Ai/Common.h"
 
-#include <memory>
 #include <thread>
 #include <atomic>
-#include <mutex>
-#include <condition_variable>
 #include <optional>
 #include <Base/Time.h>
 
-#include "Th10Base/SharedMemory.h"
-#include "Th10Base/SharedData.h"
-#include "Th10Base/Player.h"
-#include "Th10Base/Item.h"
-#include "Th10Base/Enemy.h"
-#include "Th10Base/Bullet.h"
-#include "Th10Base/Laser.h"
+#include "Th10Ai/Th10Hook.h"
 #include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
-//#include "Th10Ai/Input.h"
 
 namespace th
 {
@@ -45,13 +35,13 @@ namespace th
 		std::optional<Item> findItem();
 		std::optional<Enemy> findEnemy();
 
+	private:
+		Th10Hook m_th10Hook;
+
 		std::thread m_controlThread;
 		std::atomic<bool> m_controlDone;
 		std::thread m_handleThread;
 		std::atomic<bool> m_handleDone;
-
-		SharedMemory m_sharedMemory;
-		SharedData* m_sharedData;
 
 		//Status m_status2;
 		//Status m_status1;

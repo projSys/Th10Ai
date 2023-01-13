@@ -86,10 +86,6 @@ namespace th
 			//Time t2 = Clock::Now();
 			//std::cout << t2 - t1 << std::endl;
 		}
-		else
-		{
-			//std::cout << "MyDirectInputDevice8A::GetDeviceState() failed." << std::endl;
-		}
 		return hr;
 	}
 

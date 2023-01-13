@@ -7,6 +7,7 @@ namespace base
 {
 	namespace win
 	{
+		// 有BUG
 		std::wstring Apis::MultiByteToWideChar(UINT codePage, const char* str, int strSize)
 		{
 			std::wstring wstr;
@@ -22,6 +23,7 @@ namespace base
 			return wstr;
 		}
 
+		// 有BUG
 		std::string Apis::WideCharToMultiByte(UINT codePage, const wchar_t* wstr, int wstrSize)
 		{
 			std::string str;

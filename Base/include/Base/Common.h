@@ -14,16 +14,9 @@
 #include <WinSock2.h>
 #include <Windows.h>
 
-#if defined(_MSC_VER)
-#ifndef BOOST_USE_WINDOWS_H
-#define BOOST_USE_WINDOWS_H
-#endif
-
-// 官方预构建使用这个版本
-#ifndef BOOST_USE_WINAPI_VERSION
-#define BOOST_USE_WINAPI_VERSION 0x0600
-#endif
-#endif
+//#ifndef BOOST_USE_WINDOWS_H
+//#define BOOST_USE_WINDOWS_H
+//#endif
 
 #define BASE_WINDOWS 1
 
@@ -34,6 +27,7 @@
 // define something for Windows (32-bit only)
 #define BASE_32BIT 1
 #endif	// _WIN64
+
 #endif	// _WIN32
 
 namespace base

@@ -17,7 +17,7 @@ void Hook()
 	MyDetours detours;
 	try
 	{
-		fs::path logPath = Apis::GetModuleDir(g_module) / L"Th10Ai.log";
+		fs::path logPath = Apis::GetModuleDir(g_module) / L"Th10Hook.log";
 		g_logger.addFileLog(logPath);
 		g_logger.addCommonAttributes();
 

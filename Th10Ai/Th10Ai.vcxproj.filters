@@ -42,6 +42,9 @@
     <ClCompile Include="src\Th10Ai\Status.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
+    <ClCompile Include="src\Th10Ai\Th10Hook.cpp">
+      <Filter>源文件\Th10Ai</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Th10Ai\Common.h">
@@ -63,6 +66,9 @@
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Ai\Status.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Th10Ai\Th10Hook.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
   </ItemGroup>

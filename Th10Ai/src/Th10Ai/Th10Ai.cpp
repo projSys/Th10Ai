@@ -1,17 +1,15 @@
 #include "Th10Ai/Th10Ai.h"
 
-#include <Base/Catcher.h>
-
-#include "Th10Ai/Path.h"
-
 #include <fstream>
 #include <boost/program_options.hpp>
 #include <Base/Logger.h>
+#include <Base/Catcher.h>
+#include <Base/Windows/Apis.h>
 #include <Base/ScopeGuard.h>
 #include <Base/Error.h>
-#include <Base/Windows/Apis.h>
 
 #include "Th10Ai/DllInject.h"
+#include "Th10Ai/Path.h"
 
 namespace th
 {
@@ -27,11 +25,6 @@ namespace th
 		statusFrame(0),
 		handleFrame(0)
 	{
-		m_sharedMemory = SharedMemory(ip::create_only, "Th10SharedMemory", 64 * 1024 * 1024);
-		m_sharedData = m_sharedMemory.construct<SharedData>("Th10SharedData")(m_sharedMemory);
-		if (m_sharedData == nullptr)
-			throw Exception("Th10SharedData名称已被使用。");
-
 		fs::path dir = Apis::GetModuleDir();
 		fs::path logPath = dir / L"Th10Ai.log";
 		g_logger.addFileLog(logPath);
@@ -41,44 +34,21 @@ namespace th
 		std::ifstream ifs(confPath.c_str());
 		po::options_description desc("Config");
 		desc.add_options()
-			("exe-path", po::value<std::string>(), "exe path")
-			("dll-name", po::value<std::string>(), "dll name")
-			("dump", po::value<bool>(), "dump");
+			("Th10Path", po::value<std::string>(), "Th10Path");
 		po::variables_map vm;
 		po::store(po::parse_config_file(ifs, desc), vm);
 		po::notify(vm);
 
-		fs::path exePath = Apis::AnsiToWide(vm["exe-path"].as<std::string>());
-		std::wstring dllName = Apis::AnsiToWide(vm["dll-name"].as<std::string>());
-		fs::path exeDir = exePath.parent_path();
-
-		{
-			STARTUPINFOW si = {};
-			si.cb = sizeof(si);
-			PROCESS_INFORMATION pi = {};
-			if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
-				throw Error(GetLastError());
-			ON_SCOPE_EXIT([&pi]()
-				{
-					CloseHandle(pi.hThread);
-			CloseHandle(pi.hProcess);
-				});
-
-			fs::path dllPath = dir / dllName;
-			//DllInject::EnableDebugPrivilege();
-			DllInject::Inject(pi.hProcess, dllPath);
-
-			DWORD count = ResumeThread(pi.hThread);
-			if (count == (DWORD)-1)
-				throw Error(GetLastError());
-		}
+		fs::path th10Path = Apis::AnsiToWide(vm["Th10Path"].as<std::string>());
+		fs::path dllPath = dir / L"Th10Hook.dll";
+		DllInject::Launch(th10Path, dllPath);
 
 		bool dump = vm.count("dump") ? vm["dump"].as<bool>() : false;
 		if (dump)
 		{
 			fs::path pdPath = dir / L"procdump.exe";
 			std::wostringstream oss;
-			oss << pdPath.c_str() << L" -accepteula -h -e -w " << exePath.filename().c_str();
+			oss << pdPath.c_str() << L" -accepteula -h -e " << th10Path.filename().c_str();
 			//oss << pdPath.c_str() << L" -accepteula -h -e " << pi.dwProcessId;
 			std::wstring cmd = oss.str();
 
@@ -94,7 +64,7 @@ namespace th
 				});
 		}
 
-		if (!m_sharedData->waitInit())
+		if (!m_th10Hook.waitInit())
 			throw Exception("Th10Hook初始化超时。");
 
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
@@ -142,18 +112,18 @@ namespace th
 
 	void Th10Ai::start()
 	{
-		if (!m_sharedData->isActive())
+		if (!m_th10Hook.isActive())
 		{
-			m_sharedData->setActive(true);
+			m_th10Hook.setActive(true);
 			std::cout << "AI启动。" << std::endl;
 		}
 	}
 
 	void Th10Ai::stop()
 	{
-		if (m_sharedData->isActive())
+		if (m_th10Hook.isActive())
 		{
-			m_sharedData->setActive(false);
+			m_th10Hook.setActive(false);
 			std::cout << "AI停止。" << std::endl;
 			std::cout << "决死：" << m_bombCount << std::endl;
 		}
@@ -167,13 +137,13 @@ namespace th
 
 	bool Th10Ai::handle()
 	{
-		if (!m_sharedData->isActive())
+		if (!m_th10Hook.isActive())
 		{
 			std::this_thread::sleep_for(Time(16));
 			return false;
 		}
 
-		if (!m_sharedData->waitUpdate())
+		if (!m_th10Hook.waitUpdate())
 		{
 			std::cout << "退出。" << std::endl;
 			m_handleDone = true;
@@ -187,7 +157,7 @@ namespace th
 
 		Time t1 = Clock::Now();
 
-		m_status.copy(m_sharedData->getReadableStatus());
+		m_status.copy(m_th10Hook.getReadableStatus());
 		m_status.updateExtra();
 
 		//m_status2.copy(m_status1);
@@ -213,7 +183,7 @@ namespace th
 
 		Time t3 = Clock::Now();
 
-		Input& input = m_sharedData->getWritableInput();
+		Input& input = m_th10Hook.getWritableInput();
 		input.clear();
 
 		handleBomb();
@@ -225,7 +195,7 @@ namespace th
 		if (t4 - t1 > Time(5))
 			std::cout << t2 - t1 << ' ' << t3 - t2 << ' ' << t4 - t3 << std::endl;
 
-		m_sharedData->notifyInput();
+		m_th10Hook.notifyInput();
 
 		return true;
 	}
@@ -257,7 +227,7 @@ namespace th
 				//	//std::cout << rcr2.collided << std::endl;
 				//}
 
-				Input& input = m_sharedData->getWritableInput();
+				Input& input = m_th10Hook.getWritableInput();
 				input.bomb();
 				++m_bombCount;
 				//std::cout << statusFrame - handleFrame << "/"
@@ -276,7 +246,7 @@ namespace th
 	{
 		if (m_status.isTalking())
 		{
-			Input& input = m_sharedData->getWritableInput();
+			Input& input = m_th10Hook.getWritableInput();
 			input.skip();
 			return true;
 		}
@@ -288,7 +258,7 @@ namespace th
 	{
 		if (m_status.haveEnemies())
 		{
-			Input& input = m_sharedData->getWritableInput();
+			Input& input = m_th10Hook.getWritableInput();
 			input.shoot();
 			return true;
 		}
@@ -326,7 +296,7 @@ namespace th
 
 		if (bestDir.has_value() && bestSlow.has_value())
 		{
-			Input& input = m_sharedData->getWritableInput();
+			Input& input = m_th10Hook.getWritableInput();
 			input.move(bestDir.value());
 			if (bestSlow.value())
 			{

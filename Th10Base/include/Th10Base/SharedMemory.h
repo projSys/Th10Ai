@@ -2,13 +2,13 @@
 
 #include "Th10Base/Common.h"
 
-// 默认的通用interprocess_condition性能太低
+// 通用interprocess_mutex/interprocess_condition性能太低
 #ifndef BOOST_INTERPROCESS_FORCE_NATIVE_EMULATION
 #define BOOST_INTERPROCESS_FORCE_NATIVE_EMULATION
 #endif
 
 #include <boost/interprocess/managed_windows_shared_memory.hpp>
-#include <boost/interprocess/allocators/allocator.hpp> 
+#include <boost/interprocess/allocators/allocator.hpp>
 #include <boost/interprocess/containers/vector.hpp>
 #include <boost/interprocess/smart_ptr/unique_ptr.hpp>
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
