@@ -26,7 +26,7 @@ namespace th
 		slow = raw->slow;
 	}
 
-	void Player::move(DIR dir, bool slow)
+	void Player::move(Direction dir, bool slow)
 	{
 		if (slow)
 		{

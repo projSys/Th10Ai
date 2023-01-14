@@ -2,11 +2,9 @@
 
 #include <fstream>
 #include <boost/program_options.hpp>
-#include <Base/Logger.h>
 #include <Base/Catcher.h>
+#include <Base/Logger.h>
 #include <Base/Windows/Apis.h>
-#include <Base/ScopeGuard.h>
-#include <Base/Error.h>
 
 #include "Th10Ai/DllInject.h"
 #include "Th10Ai/Path.h"
@@ -42,27 +40,6 @@ namespace th
 		fs::path th10Path = Apis::AnsiToWide(vm["Th10Path"].as<std::string>());
 		fs::path dllPath = dir / L"Th10Hook.dll";
 		DllInject::Launch(th10Path, dllPath);
-
-		bool dump = vm.count("dump") ? vm["dump"].as<bool>() : false;
-		if (dump)
-		{
-			fs::path pdPath = dir / L"procdump.exe";
-			std::wostringstream oss;
-			oss << pdPath.c_str() << L" -accepteula -h -e " << th10Path.filename().c_str();
-			//oss << pdPath.c_str() << L" -accepteula -h -e " << pi.dwProcessId;
-			std::wstring cmd = oss.str();
-
-			STARTUPINFOW si = {};
-			si.cb = sizeof(si);
-			PROCESS_INFORMATION pi = {};
-			if (!CreateProcessW(nullptr, const_cast<LPWSTR>(cmd.c_str()), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, dir.c_str(), &si, &pi))
-				throw Error(GetLastError());
-			ON_SCOPE_EXIT([&pi]()
-				{
-					CloseHandle(pi.hThread);
-			CloseHandle(pi.hProcess);
-				});
-		}
 
 		if (!m_th10Hook.waitInit())
 			throw Exception("Th10Hook初始化超时。");
@@ -278,10 +255,10 @@ namespace th
 		//bool slowFirst = false;
 
 		float_t bestScore = std::numeric_limits<float_t>::lowest();
-		std::optional<DIR> bestDir;
+		std::optional<Direction> bestDir;
 		std::optional<bool> bestSlow;
 
-		for (DIR dir : DIRS)
+		for (Direction dir : g_directions)
 		{
 			Path path(m_status, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);

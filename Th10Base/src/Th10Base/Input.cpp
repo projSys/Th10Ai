@@ -21,45 +21,45 @@ namespace th
 		m_skip = false;
 	}
 
-	void Input::move(DIR dir)
+	void Input::move(Direction dir)
 	{
 		switch (dir)
 		{
-		case DIR::HOLD:
+		case Direction::HOLD:
 			break;
 
-		case DIR::UP:
+		case Direction::UP:
 			m_up = true;
 			break;
 
-		case DIR::DOWN:
+		case Direction::DOWN:
 			m_down = true;
 			break;
 
-		case DIR::LEFT:
+		case Direction::LEFT:
 			m_left = true;
 			break;
 
-		case DIR::RIGHT:
+		case Direction::RIGHT:
 			m_right = true;
 			break;
 
-		case DIR::UP_LEFT:
+		case Direction::UP_LEFT:
 			m_up = true;
 			m_left = true;
 			break;
 
-		case DIR::UP_RIGHT:
+		case Direction::UP_RIGHT:
 			m_up = true;
 			m_right = true;
 			break;
 
-		case DIR::DOWN_LEFT:
+		case Direction::DOWN_LEFT:
 			m_down = true;
 			m_left = true;
 			break;
 
-		case DIR::DOWN_RIGHT:
+		case Direction::DOWN_RIGHT:
 			m_down = true;
 			m_right = true;
 			break;

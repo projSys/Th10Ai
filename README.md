@@ -21,7 +21,15 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 ## 依赖
 
 [Boost](https://www.boost.org)<br />
+x86 Native Tools Command Prompt for VS 2022<br />
+cd path/to/boost<br />
+bootstrap.bat<br />
+b2 stage link=static runtime-link=shared threading=multi define=BOOST_USE_WINAPI_VERSION=0x0A00 --without-python<br />
+
 [Detours](https://github.com/microsoft/detours)<br />
+x86 Native Tools Command Prompt for VS 2022<br />
+cd path/to/detours/src<br />
+nmake<br />
 
 ## 感谢
 

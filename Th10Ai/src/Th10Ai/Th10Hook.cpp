@@ -3,7 +3,7 @@
 namespace th
 {
 	Th10Hook::Th10Hook() :
-		m_sharedMemory(ip::create_only, "Th10SharedMemory", 64 * 1024 * 1024),
+		m_sharedMemory(bip::create_only, "Th10SharedMemory", 64 * 1024 * 1024),
 		m_sharedData(nullptr)
 	{
 		m_sharedData = m_sharedMemory.construct<SharedData>("Th10SharedData")(m_sharedMemory);
@@ -18,13 +18,13 @@ namespace th
 
 	bool Th10Hook::waitInit(const Time& timeout)
 	{
-		//ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->initMutex);
-		ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->statusMutex);
+		//bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->initMutex);
+		bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->statusMutex);
 		while (!m_sharedData->inited)
 		{
-			//ip::cv_status status = m_sharedData->initCond.wait_for(lock, timeout);
-			ip::cv_status status = m_sharedData->statusCond.wait_for(lock, timeout);
-			if (status == ip::cv_status::timeout)
+			//bip::cv_status status = m_sharedData->initCond.wait_for(lock, timeout);
+			bip::cv_status status = m_sharedData->statusCond.wait_for(lock, timeout);
+			if (status == bip::cv_status::timeout)
 				return false;
 		}
 		return true;
@@ -47,7 +47,7 @@ namespace th
 
 	bool Th10Hook::waitUpdate()
 	{
-		ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->statusMutex);
+		bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->statusMutex);
 		if (m_sharedData->statusUpdated)
 			std::cout << "警告：处理太慢，状态已更新。" << std::endl;
 		while (!m_sharedData->statusUpdated && !m_sharedData->exit)
@@ -65,7 +65,7 @@ namespace th
 	void Th10Hook::notifyInput()
 	{
 		{
-			ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->inputMutex);
+			bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->inputMutex);
 			if (m_sharedData->inputUpdated)
 				std::cout << "错误：处理太慢，输入跳帧了。" << std::endl;
 			m_sharedData->writableInput.swap(m_sharedData->swappableInput);

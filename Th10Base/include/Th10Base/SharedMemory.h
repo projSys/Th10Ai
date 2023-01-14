@@ -17,18 +17,18 @@
 
 namespace th
 {
-	namespace ip = boost::interprocess;
+	namespace bip = boost::interprocess;
 
-	using SharedMemory = ip::managed_windows_shared_memory;
+	using SharedMemory = bip::managed_windows_shared_memory;
 	using SegmentManager = SharedMemory::segment_manager;
 
-	using VoidAllocator = ip::allocator<void, SegmentManager>;
+	using VoidAllocator = bip::allocator<void, SegmentManager>;
 	template <typename T>
-	using Allocator = ip::allocator<T, SegmentManager>;
+	using Allocator = bip::allocator<T, SegmentManager>;
 
 	template <typename T>
-	using ManagedVector = ip::vector<T, Allocator<T>>;
+	using ManagedVector = bip::vector<T, Allocator<T>>;
 
 	template <typename T>
-	using ManagedPtr = ip::managed_unique_ptr<T, SharedMemory>::type;
+	using ManagedPtr = bip::managed_unique_ptr<T, SharedMemory>::type;
 }

@@ -12,7 +12,7 @@ namespace th
 	struct Action
 	{
 		vec2 fromPos;
-		DIR fromDir;
+		Direction fromDir;
 		int_t frame;
 		float_t score;
 	};
@@ -32,7 +32,7 @@ namespace th
 			const std::optional<Enemy>& enemyTarget,
 			bool underEnemy);
 
-		Result find(DIR dir);
+		Result find(Direction dir);
 		Result dfs(const Action& action);
 
 	//private:
@@ -40,8 +40,8 @@ namespace th
 		static float_t CalcNearScore(vec2 player, vec2 target);
 		static float_t CalcShootScore(vec2 player, vec2 target);
 
-		static const DIR FIND_DIRS[to_underlying(DIR::MAX_COUNT)][5];
-		static const int_t FIND_DIR_COUNTS[to_underlying(DIR::MAX_COUNT)];
+		static const Direction FIND_DIRS[to_underlying(Direction::MAX_COUNT)][5];
+		static const int_t FIND_DIR_COUNTS[to_underlying(Direction::MAX_COUNT)];
 		static const int_t FIND_LIMIT;
 		static const float_t FIND_DEPTH;
 		static const vec2 RESET_POS;
@@ -52,7 +52,7 @@ namespace th
 		const std::optional<Enemy>& m_enemyTarget;
 		bool m_underEnemy;
 
-		DIR m_dir;
+		Direction m_dir;
 		bool m_slowFirst;			// 是否慢速优先
 
 		float_t m_bestScore;

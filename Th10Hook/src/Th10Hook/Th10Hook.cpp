@@ -7,7 +7,7 @@ namespace th
 	std::unique_ptr<Th10Hook> g_th10Hook;
 
 	Th10Hook::Th10Hook(HWND window) :
-		m_sharedMemory(ip::open_only, "Th10SharedMemory"),
+		m_sharedMemory(bip::open_only, "Th10SharedMemory"),
 		m_sharedData(nullptr)
 	{
 		m_sharedData = m_sharedMemory.find<SharedData>("Th10SharedData").first;
@@ -57,8 +57,8 @@ namespace th
 	void Th10Hook::notifyInit()
 	{
 		{
-			//ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->initMutex);
-			ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->statusMutex);
+			//bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->initMutex);
+			bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->statusMutex);
 			m_sharedData->inited = true;
 		}
 		//m_sharedData->initCond.notify_one();
@@ -68,7 +68,7 @@ namespace th
 	void Th10Hook::notifyExit()
 	{
 		{
-			ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->statusMutex);
+			bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->statusMutex);
 			m_sharedData->exit = true;
 		}
 		m_sharedData->statusCond.notify_one();
@@ -77,7 +77,7 @@ namespace th
 	void Th10Hook::notifyUpdate()
 	{
 		{
-			ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->statusMutex);
+			bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->statusMutex);
 			//if (m_sharedData->statusUpdated)
 			//	std::cout << "错误：处理太慢，状态跳帧了。" << std::endl;
 			m_sharedData->writableStatus.swap(m_sharedData->swappableStatus);
@@ -88,13 +88,13 @@ namespace th
 
 	bool Th10Hook::waitInput(const Time& timeout)
 	{
-		ip::scoped_lock<ip::interprocess_mutex> lock(m_sharedData->inputMutex);
+		bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->inputMutex);
 		//if (!m_sharedData->inputUpdated)
 		//	std::cout << "警告：处理太慢，等待输入。" << std::endl;
 		while (!m_sharedData->inputUpdated)
 		{
-			ip::cv_status status = m_sharedData->inputCond.wait_for(lock, timeout);
-			if (status == ip::cv_status::timeout)
+			bip::cv_status status = m_sharedData->inputCond.wait_for(lock, timeout);
+			if (status == bip::cv_status::timeout)
 				return false;
 		}
 		m_sharedData->readableInput.swap(m_sharedData->swappableInput);

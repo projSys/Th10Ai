@@ -13,7 +13,7 @@ namespace th
 
 		void clear();
 
-		void move(DIR dir);
+		void move(Direction dir);
 		void shoot();
 		void bomb();
 		void slow();

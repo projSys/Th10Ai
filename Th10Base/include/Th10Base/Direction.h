@@ -7,7 +7,7 @@
 namespace th
 {
 	// 移动方向
-	enum class DIR : uint_t
+	enum class Direction : uint_t
 	{
 		HOLD,			// 不动
 		UP,				// 上
@@ -22,16 +22,16 @@ namespace th
 		MAX_COUNT
 	};
 
-	constexpr DIR DIRS[to_underlying(DIR::MAX_COUNT)] =
+	constexpr Direction g_directions[to_underlying(Direction::MAX_COUNT)] =
 	{
-		DIR::HOLD,
-		DIR::UP,
-		DIR::DOWN,
-		DIR::LEFT,
-		DIR::RIGHT,
-		DIR::UP_LEFT,
-		DIR::UP_RIGHT,
-		DIR::DOWN_LEFT,
-		DIR::DOWN_RIGHT
+		Direction::HOLD,
+		Direction::UP,
+		Direction::DOWN,
+		Direction::LEFT,
+		Direction::RIGHT,
+		Direction::UP_LEFT,
+		Direction::UP_RIGHT,
+		Direction::DOWN_LEFT,
+		Direction::DOWN_RIGHT
 	};
 }
