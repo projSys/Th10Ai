@@ -46,11 +46,11 @@ namespace th
 
 		if (!waitInput())
 		{
-			//std::cout << "错误：等待输入超时。" << std::endl;
+			std::cout << "错误：等待输入超时。" << std::endl;
 			return;
 		}
 
-		const Input& input = *(m_sharedData->readableInput);
+		const SharedInput& input = *(m_sharedData->readableInput);
 		input.commitTo(size, data);
 	}
 
@@ -78,8 +78,8 @@ namespace th
 	{
 		{
 			bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->statusMutex);
-			//if (m_sharedData->statusUpdated)
-			//	std::cout << "错误：处理太慢，状态跳帧了。" << std::endl;
+			if (m_sharedData->statusUpdated)
+				std::cout << "错误：处理太慢，状态跳帧了。" << std::endl;
 			m_sharedData->writableStatus.swap(m_sharedData->swappableStatus);
 			m_sharedData->statusUpdated = true;
 		}
@@ -89,8 +89,8 @@ namespace th
 	bool Th10Hook::waitInput(const Time& timeout)
 	{
 		bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->inputMutex);
-		//if (!m_sharedData->inputUpdated)
-		//	std::cout << "警告：处理太慢，等待输入。" << std::endl;
+		if (!m_sharedData->inputUpdated)
+			std::cout << "警告：处理太慢，等待输入。" << std::endl;
 		while (!m_sharedData->inputUpdated)
 		{
 			bip::cv_status status = m_sharedData->inputCond.wait_for(lock, timeout);

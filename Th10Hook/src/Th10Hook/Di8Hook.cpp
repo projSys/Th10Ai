@@ -23,12 +23,12 @@ namespace th
 		if (m_directInput8CreateOrig == nullptr)
 			throw Error(GetLastError());
 
-		detours.attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig), DirectInput8CreateHook);
+		detours.attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig), &Di8Hook::DirectInput8CreateHook);
 	}
 
 	void Di8Hook::detach(MyDetours& detours)
 	{
-		detours.detach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig), DirectInput8CreateHook);
+		detours.detach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig), &Di8Hook::DirectInput8CreateHook);
 	}
 
 	HRESULT Di8Hook::DirectInput8CreateHook(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)

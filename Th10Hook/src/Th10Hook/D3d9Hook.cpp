@@ -23,12 +23,12 @@ namespace th
 		if (m_direct3DCreate9Orig == nullptr)
 			throw Error(GetLastError());
 
-		detours.attach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig), Direct3DCreate9Hook);
+		detours.attach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig), &D3d9Hook::Direct3DCreate9Hook);
 	}
 
 	void D3d9Hook::detach(MyDetours& detours)
 	{
-		detours.detach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig), Direct3DCreate9Hook);
+		detours.detach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig), &D3d9Hook::Direct3DCreate9Hook);
 	}
 
 	IDirect3D9* D3d9Hook::Direct3DCreate9Hook(UINT SDKVersion)

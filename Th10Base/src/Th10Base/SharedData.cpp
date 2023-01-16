@@ -19,13 +19,13 @@ namespace th
 			sharedMemory)),
 		inputUpdated(true),	// 跳过第一帧输入
 		writableInput(bip::make_managed_unique_ptr(
-			sharedMemory.construct<Input>(bip::anonymous_instance)(),
+			sharedMemory.construct<SharedInput>(bip::anonymous_instance)(),
 			sharedMemory)),
 		swappableInput(bip::make_managed_unique_ptr(
-			sharedMemory.construct<Input>(bip::anonymous_instance)(),
+			sharedMemory.construct<SharedInput>(bip::anonymous_instance)(),
 			sharedMemory)),
 		readableInput(bip::make_managed_unique_ptr(
-			sharedMemory.construct<Input>(bip::anonymous_instance)(),
+			sharedMemory.construct<SharedInput>(bip::anonymous_instance)(),
 			sharedMemory))
 	{
 	}

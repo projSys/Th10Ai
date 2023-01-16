@@ -6,7 +6,7 @@
 
 #include "Th10Base/SharedMemory.h"
 #include "Th10Base/SharedStatus.h"
-#include "Th10Base/Input.h"
+#include "Th10Base/SharedInput.h"
 
 namespace th
 {
@@ -34,8 +34,8 @@ namespace th
 		bip::interprocess_mutex inputMutex;
 		bip::interprocess_condition inputCond;
 		bool inputUpdated;
-		ManagedPtr<Input> writableInput;
-		ManagedPtr<Input> swappableInput;
-		ManagedPtr<Input> readableInput;
+		ManagedPtr<SharedInput> writableInput;
+		ManagedPtr<SharedInput> swappableInput;
+		ManagedPtr<SharedInput> readableInput;
 	};
 }

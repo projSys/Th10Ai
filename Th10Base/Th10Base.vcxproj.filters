@@ -66,7 +66,7 @@
     <ClInclude Include="include\Th10Base\SharedData.h">
       <Filter>头文件\Th10Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Th10Base\Input.h">
+    <ClInclude Include="include\Th10Base\SharedInput.h">
       <Filter>头文件\Th10Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Th10Base\SharedStatus.h">
@@ -113,7 +113,7 @@
     <ClCompile Include="src\Th10Base\SharedData.cpp">
       <Filter>源文件\Th10Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Base\Input.cpp">
+    <ClCompile Include="src\Th10Base\SharedInput.cpp">
       <Filter>源文件\Th10Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Base\SharedStatus.cpp">

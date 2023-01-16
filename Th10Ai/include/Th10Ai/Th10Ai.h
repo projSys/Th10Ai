@@ -55,9 +55,5 @@ namespace th
 		Time m_bombTime;
 		int_t m_bombCount;
 		Time m_findItemTime;
-
-		std::atomic<int_t> inputFrame;
-		std::atomic<int_t> statusFrame;
-		std::atomic<int_t> handleFrame;
 	};
 }

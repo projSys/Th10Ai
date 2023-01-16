@@ -144,7 +144,7 @@
     <ClInclude Include="include\Th10Base\Direction.h" />
     <ClInclude Include="include\Th10Base\Enemy.h" />
     <ClInclude Include="include\Th10Base\Entity.h" />
-    <ClInclude Include="include\Th10Base\Input.h" />
+    <ClInclude Include="include\Th10Base\SharedInput.h" />
     <ClInclude Include="include\Th10Base\Item.h" />
     <ClInclude Include="include\Th10Base\Laser.h" />
     <ClInclude Include="include\Th10Base\OBB.h" />
@@ -162,7 +162,7 @@
     <ClCompile Include="src\Th10Base\Bullet.cpp" />
     <ClCompile Include="src\Th10Base\Enemy.cpp" />
     <ClCompile Include="src\Th10Base\Entity.cpp" />
-    <ClCompile Include="src\Th10Base\Input.cpp" />
+    <ClCompile Include="src\Th10Base\SharedInput.cpp" />
     <ClCompile Include="src\Th10Base\Item.cpp" />
     <ClCompile Include="src\Th10Base\Laser.cpp" />
     <ClCompile Include="src\Th10Base\OBB.cpp" />

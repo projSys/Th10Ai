@@ -22,9 +22,9 @@ namespace th
 	using SharedMemory = bip::managed_windows_shared_memory;
 	using SegmentManager = SharedMemory::segment_manager;
 
-	using VoidAllocator = bip::allocator<void, SegmentManager>;
 	template <typename T>
 	using Allocator = bip::allocator<T, SegmentManager>;
+	using VoidAllocator = Allocator<void>;
 
 	template <typename T>
 	using ManagedVector = bip::vector<T, Allocator<T>>;

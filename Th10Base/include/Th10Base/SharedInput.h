@@ -6,10 +6,10 @@
 
 namespace th
 {
-	class Input
+	class SharedInput
 	{
 	public:
-		Input();
+		SharedInput();
 
 		void clear();
 
@@ -22,10 +22,7 @@ namespace th
 		void commitTo(DWORD size, LPVOID data) const;
 
 	private:
-		bool m_up;
-		bool m_down;
-		bool m_left;
-		bool m_right;
+		Direction m_dir;
 		bool m_shoot;
 		bool m_bomb;
 		bool m_slow;

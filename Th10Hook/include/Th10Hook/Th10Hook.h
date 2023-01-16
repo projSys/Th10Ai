@@ -26,7 +26,7 @@ namespace th
 		void notifyExit();
 		void notifyUpdate();
 
-		bool waitInput(const Time& timeout = Time(10));
+		bool waitInput(const Time& timeout = Time(8));
 
 	private:
 		SharedMemory m_sharedMemory;

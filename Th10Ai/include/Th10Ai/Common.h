@@ -13,14 +13,8 @@ namespace th
 	using namespace base::win;
 }
 
-#ifndef DIRECTINPUT_VERSION
-#define DIRECTINPUT_VERSION 0x0800
-#endif
-
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #endif
 
 #include <iostream>
-
-#define RENDER 0

@@ -6,7 +6,7 @@
 #include <Base/Logger.h>
 #include <Base/Windows/Apis.h>
 
-#include "Th10Ai/DllInject.h"
+//#include "Th10Ai/DllInject.h"
 #include "Th10Ai/Path.h"
 
 namespace th
@@ -18,10 +18,7 @@ namespace th
 		m_handleDone(false),
 		m_bombTime(0),
 		m_bombCount(0),
-		m_findItemTime(0),
-		inputFrame(0),
-		statusFrame(0),
-		handleFrame(0)
+		m_findItemTime(0)
 	{
 		fs::path dir = Apis::GetModuleDir();
 		fs::path logPath = dir / L"Th10Ai.log";
@@ -38,11 +35,9 @@ namespace th
 		po::notify(vm);
 
 		fs::path th10Path = Apis::AnsiToWide(vm["Th10Path"].as<std::string>());
-		fs::path dllPath = dir / L"Th10Hook.dll";
-		DllInject::Launch(th10Path, dllPath);
-
-		if (!m_th10Hook.waitInit())
-			throw Exception("Th10Hook初始化超时。");
+		//fs::path dllPath = dir / L"Th10Hook.dll";
+		//DllInject::Launch(th10Path, dllPath);
+		m_th10Hook.launch(th10Path);
 
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
 	}
@@ -127,11 +122,6 @@ namespace th
 			return false;
 		}
 
-		++handleFrame;
-		//m_readableStatus->inputFrame = inputFrame;
-		//m_readableStatus->statusFrame = statusFrame;
-		//m_readableStatus->handleFrame = handleFrame;
-
 		Time t1 = Clock::Now();
 
 		m_status.copy(m_th10Hook.getReadableStatus());
@@ -160,7 +150,7 @@ namespace th
 
 		Time t3 = Clock::Now();
 
-		Input& input = m_th10Hook.getWritableInput();
+		SharedInput& input = m_th10Hook.getWritableInput();
 		input.clear();
 
 		handleBomb();
@@ -169,8 +159,8 @@ namespace th
 		handleMove();
 
 		Time t4 = Clock::Now();
-		if (t4 - t1 > Time(5))
-			std::cout << t2 - t1 << ' ' << t3 - t2 << ' ' << t4 - t3 << std::endl;
+		//if (t4 - t1 > Time(5))
+		//	std::cout << t2 - t1 << ' ' << t3 - t2 << ' ' << t4 - t3 << std::endl;
 
 		m_th10Hook.notifyInput();
 
@@ -204,14 +194,10 @@ namespace th
 				//	//std::cout << rcr2.collided << std::endl;
 				//}
 
-				Input& input = m_th10Hook.getWritableInput();
+				SharedInput& input = m_th10Hook.getWritableInput();
 				input.bomb();
 				++m_bombCount;
-				//std::cout << statusFrame - handleFrame << "/"
-				//	<< handleFrame << "/"
-				//	<< inputFrame - handleFrame << "/"
-				//	<< m_readableStatus->getPlayer().stageFrame - handleFrame
-				//	<< " 决死：" << m_bombCount << std::endl;
+				std::cout << " 决死：" << m_bombCount << std::endl;
 				return true;
 			}
 		}
@@ -223,7 +209,7 @@ namespace th
 	{
 		if (m_status.isTalking())
 		{
-			Input& input = m_th10Hook.getWritableInput();
+			SharedInput& input = m_th10Hook.getWritableInput();
 			input.skip();
 			return true;
 		}
@@ -235,7 +221,7 @@ namespace th
 	{
 		if (m_status.haveEnemies())
 		{
-			Input& input = m_th10Hook.getWritableInput();
+			SharedInput& input = m_th10Hook.getWritableInput();
 			input.shoot();
 			return true;
 		}
@@ -273,7 +259,7 @@ namespace th
 
 		if (bestDir.has_value() && bestSlow.has_value())
 		{
-			Input& input = m_th10Hook.getWritableInput();
+			SharedInput& input = m_th10Hook.getWritableInput();
 			input.move(bestDir.value());
 			if (bestSlow.value())
 			{
