@@ -2,17 +2,16 @@
 
 #include "Th10Ai/Common.h"
 
-#include <filesystem>
 #include <thread>
 #include <boost/process.hpp>
-#include <Base/Time.h>
 #include <Th10Base/SharedMemory.h>
 #include <Th10Base/SharedData.h>
 
 namespace th
 {
-	namespace fs = std::filesystem;
 	namespace bp = boost::process;
+
+	class Config;
 
 	class Th10Hook
 	{
@@ -20,22 +19,20 @@ namespace th
 		Th10Hook();
 		~Th10Hook();
 
-		void launch(const fs::path& exePath);
+		void launch(const Config& config);
 
 		bool isActive() const;
 		void setActive(bool active);
 		HWND getWindow() const;
-
 		bool waitUpdate();
+		bool waitUpdate(const Time& timeout);
+		bool isExit() const;
 		const SharedStatus& getReadableStatus() const;
-
 		void notifyInput();
 		SharedInput& getWritableInput();
 
 	private:
-		void stdioProc();
-
-		bool waitInit(const Time& timeout = Time(3000));
+		void th10Proc();
 
 	private:
 		SharedMemory m_sharedMemory;
@@ -43,6 +40,6 @@ namespace th
 
 		bp::child m_th10;
 		bp::ipstream m_ips;
-		std::thread m_stdioThread;
+		std::thread m_th10Thread;
 	};
 }

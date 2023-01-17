@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Th10Ai\Config.cpp" />
     <ClCompile Include="src\Th10Ai\DllInject.cpp" />
     <ClCompile Include="src\Th10Ai\Main.cpp" />
     <ClCompile Include="src\Th10Ai\Path.cpp" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Th10Ai\Common.h" />
+    <ClInclude Include="include\Th10Ai\Config.h" />
     <ClInclude Include="include\Th10Ai\DllInject.h" />
     <ClInclude Include="include\Th10Ai\Path.h" />
     <ClInclude Include="include\Th10Ai\Region.h" />

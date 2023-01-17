@@ -5,6 +5,7 @@
 #include <Base/Catcher.h>
 #include <Base/Windows/Apis.h>
 
+#include "Th10Ai/Config.h"
 #include "Th10Ai/DllInject.h"
 
 namespace th
@@ -20,8 +21,8 @@ namespace th
 
 	Th10Hook::~Th10Hook()
 	{
-		if (m_stdioThread.joinable())
-			m_stdioThread.join();
+		if (m_th10Thread.joinable())
+			m_th10Thread.join();
 
 		m_sharedMemory.destroy_ptr(m_sharedData);
 	}
@@ -47,7 +48,6 @@ namespace th
 		{
 			fs::path dir = Apis::GetModuleDir();
 			fs::path dllPath = dir / L"Th10Hook.dll";
-
 			//DllInject::EnableDebugPrivilege();
 			DllInject::Inject(exec.proc_info.hProcess, dllPath);
 
@@ -57,19 +57,19 @@ namespace th
 		}
 	};
 
-	void Th10Hook::launch(const fs::path& exePath)
+	void Th10Hook::launch(const Config& config)
 	{
-		fs::path exeDir = exePath.parent_path();
-		m_th10 = bp::child(exePath.c_str(),
+		fs::path th10Dir = config.th10Path.parent_path();
+		m_th10 = bp::child(config.th10Path.c_str(),
 			bp::std_out > m_ips, //bp::std_err > stderr, bp::std_in < stdin,
-			bp::start_dir(exeDir.c_str()), LaunchHandler());
-		m_stdioThread = std::thread(&Th10Hook::stdioProc, this);
+			bp::start_dir(th10Dir.c_str()), LaunchHandler());
+		m_th10Thread = std::thread(&Th10Hook::th10Proc, this);
 
-		if (!waitInit())
+		if (!m_sharedData->waitInit(Time(3000)))
 			throw Exception("Th10Hook初始化超时。");
 	}
 
-	void Th10Hook::stdioProc()
+	void Th10Hook::th10Proc()
 	{
 		try
 		{
@@ -84,66 +84,48 @@ namespace th
 		}
 	}
 
-	bool Th10Hook::waitInit(const Time& timeout)
-	{
-		//bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->initMutex);
-		bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->statusMutex);
-		while (!m_sharedData->inited)
-		{
-			//bip::cv_status status = m_sharedData->initCond.wait_for(lock, timeout);
-			bip::cv_status status = m_sharedData->statusCond.wait_for(lock, timeout);
-			if (status == bip::cv_status::timeout)
-				return false;
-		}
-		return true;
-	}
-
 	bool Th10Hook::isActive() const
 	{
-		return m_sharedData->active;
+		return m_sharedData->isActive();
 	}
 
 	void Th10Hook::setActive(bool active)
 	{
-		m_sharedData->active = active;
+		m_sharedData->setActive(active);
 	}
 
 	HWND Th10Hook::getWindow() const
 	{
-		return m_sharedData->window;
+		return m_sharedData->getWindow();
 	}
 
 	bool Th10Hook::waitUpdate()
 	{
-		bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->statusMutex);
-		if (m_sharedData->statusUpdated)
-			std::cout << "警告：处理太慢，状态已更新。" << std::endl;
-		while (!m_sharedData->statusUpdated && !m_sharedData->exit)
-			m_sharedData->statusCond.wait(lock);
-		m_sharedData->readableStatus.swap(m_sharedData->swappableStatus);
-		m_sharedData->statusUpdated = false;
-		return !m_sharedData->exit;
+		return m_sharedData->waitUpdate();
+	}
+
+	bool Th10Hook::waitUpdate(const Time& timeout)
+	{
+		return m_sharedData->waitUpdate(timeout);
+	}
+
+	bool Th10Hook::isExit() const
+	{
+		return m_sharedData->isExit();
 	}
 
 	const SharedStatus& Th10Hook::getReadableStatus() const
 	{
-		return *(m_sharedData->readableStatus);
+		return m_sharedData->getReadableStatus();
 	}
 
 	void Th10Hook::notifyInput()
 	{
-		{
-			bip::scoped_lock<bip::interprocess_mutex> lock(m_sharedData->inputMutex);
-			if (m_sharedData->inputUpdated)
-				std::cout << "错误：处理太慢，输入跳帧了。" << std::endl;
-			m_sharedData->writableInput.swap(m_sharedData->swappableInput);
-			m_sharedData->inputUpdated = true;
-		}
-		m_sharedData->inputCond.notify_one();
+		m_sharedData->notifyInput();
 	}
 
 	SharedInput& Th10Hook::getWritableInput()
 	{
-		return *(m_sharedData->writableInput);
+		return m_sharedData->getWritableInput();
 	}
 }

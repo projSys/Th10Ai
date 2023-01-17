@@ -7,6 +7,7 @@
 #include <optional>
 #include <Base/Time.h>
 
+#include "Th10Ai/Config.h"
 #include "Th10Ai/Th10Hook.h"
 #include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
@@ -36,6 +37,7 @@ namespace th
 		std::optional<Enemy> findEnemy();
 
 	private:
+		Config m_config;
 		Th10Hook m_th10Hook;
 
 		std::thread m_controlThread;

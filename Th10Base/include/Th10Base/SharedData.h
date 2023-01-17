@@ -3,6 +3,7 @@
 #include "Th10Base/Common.h"
 
 #include <atomic>
+#include <Base/Time.h>
 
 #include "Th10Base/SharedMemory.h"
 #include "Th10Base/SharedStatus.h"
@@ -15,27 +16,47 @@ namespace th
 	public:
 		explicit SharedData(SharedMemory& sharedMemory);
 
-	public:
+		void notifyInit();
+		bool waitInit(const Time& timeout);
+		bool isActive() const;
+		void setActive(bool active);
+		HWND getWindow() const;
+		void setWindow(HWND window);
+
+		void notifyExit();
+		void notifyUpdate();
+		bool waitUpdate();
+		bool waitUpdate(const Time& timeout);
+		bool isExit() const;
+		SharedStatus& getWritableStatus();
+		const SharedStatus& getReadableStatus() const;
+
+		void notifyInput();
+		bool waitInput(const Time& timeout);
+		SharedInput& getWritableInput();
+		const SharedInput& getReadableInput() const;
+
+	private:
 		// BUG：在托管共享内存中创建超过5个同步对象会导致析构异常
-		//bip::interprocess_mutex initMutex;
-		//bip::interprocess_condition initCond;
-		bool inited;
-		std::atomic<bool> active;
-		HWND window;
+		//bip::interprocess_mutex m_initMutex;
+		//bip::interprocess_condition m_initCond;
+		bool m_inited;
+		std::atomic<bool> m_active;
+		HWND m_window;
 
-		bip::interprocess_mutex statusMutex;
-		bip::interprocess_condition statusCond;
-		bool statusUpdated;
-		bool exit;
-		ManagedPtr<SharedStatus> writableStatus;
-		ManagedPtr<SharedStatus> swappableStatus;
-		ManagedPtr<SharedStatus> readableStatus;
+		bip::interprocess_mutex m_statusMutex;
+		bip::interprocess_condition m_statusCond;
+		bool m_statusUpdated;
+		bool m_exit;
+		ManagedPtr<SharedStatus> m_writableStatus;
+		ManagedPtr<SharedStatus> m_swappableStatus;
+		ManagedPtr<SharedStatus> m_readableStatus;
 
-		bip::interprocess_mutex inputMutex;
-		bip::interprocess_condition inputCond;
-		bool inputUpdated;
-		ManagedPtr<SharedInput> writableInput;
-		ManagedPtr<SharedInput> swappableInput;
-		ManagedPtr<SharedInput> readableInput;
+		bip::interprocess_mutex m_inputMutex;
+		bip::interprocess_condition m_inputCond;
+		bool m_inputUpdated;
+		ManagedPtr<SharedInput> m_writableInput;
+		ManagedPtr<SharedInput> m_swappableInput;
+		ManagedPtr<SharedInput> m_readableInput;
 	};
 }

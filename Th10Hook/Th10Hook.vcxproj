@@ -142,7 +142,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\Th10Hook\Common.h" />
-    <ClInclude Include="include\Th10Hook\Console.h" />
     <ClInclude Include="include\Th10Hook\D3d9Hook.h" />
     <ClInclude Include="include\Th10Hook\Di8Hook.h" />
     <ClInclude Include="include\Th10Hook\DllMain.h" />
@@ -155,7 +154,6 @@
     <ClInclude Include="include\Th10Hook\Th10Hook.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Th10Hook\Console.cpp" />
     <ClCompile Include="src\Th10Hook\D3d9Hook.cpp" />
     <ClCompile Include="src\Th10Hook\Di8Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DllMain.cpp" />

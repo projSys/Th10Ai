@@ -1,18 +1,13 @@
 #include "Th10Ai/Th10Ai.h"
 
-#include <fstream>
-#include <boost/program_options.hpp>
 #include <Base/Catcher.h>
 #include <Base/Logger.h>
 #include <Base/Windows/Apis.h>
 
-//#include "Th10Ai/DllInject.h"
 #include "Th10Ai/Path.h"
 
 namespace th
 {
-	namespace po = boost::program_options;
-
 	Th10Ai::Th10Ai() :
 		m_controlDone(false),
 		m_handleDone(false),
@@ -25,19 +20,7 @@ namespace th
 		g_logger.addFileLog(logPath);
 		g_logger.addCommonAttributes();
 
-		fs::path confPath = dir / L"Th10Ai.conf";
-		std::ifstream ifs(confPath.c_str());
-		po::options_description desc("Config");
-		desc.add_options()
-			("Th10Path", po::value<std::string>(), "Th10Path");
-		po::variables_map vm;
-		po::store(po::parse_config_file(ifs, desc), vm);
-		po::notify(vm);
-
-		fs::path th10Path = Apis::AnsiToWide(vm["Th10Path"].as<std::string>());
-		//fs::path dllPath = dir / L"Th10Hook.dll";
-		//DllInject::Launch(th10Path, dllPath);
-		m_th10Hook.launch(th10Path);
+		m_th10Hook.launch(m_config);
 
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
 	}
@@ -114,13 +97,23 @@ namespace th
 			std::this_thread::sleep_for(Time(16));
 			return false;
 		}
-
 		if (!m_th10Hook.waitUpdate())
 		{
 			std::cout << "退出。" << std::endl;
 			m_handleDone = true;
 			return false;
 		}
+		//if (!m_th10Hook.waitUpdate(Time(17)))
+		//{
+		//	std::cout << "错误：等待状态更新超时。" << std::endl;
+		//	return false;
+		//}
+		//if (m_th10Hook.isExit())
+		//{
+		//	std::cout << "退出。" << std::endl;
+		//	m_handleDone = true;
+		//	return false;
+		//}
 
 		Time t1 = Clock::Now();
 
