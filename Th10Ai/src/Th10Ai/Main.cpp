@@ -19,9 +19,6 @@ int main(int argc, char* argv[])
 		SetConsoleCP(CP_UTF8);
 		SetConsoleOutputCP(CP_UTF8);
 
-		//base::Throw(base::Exception("请以管理员身份运行。"));
-		base::Throw(base::win::WindowsError(ERROR_INSUFFICIENT_BUFFER));
-
 		std::unique_ptr<th::Th10Ai> th10Ai = std::make_unique<th::Th10Ai>();
 		th10Ai->run();
 	}
