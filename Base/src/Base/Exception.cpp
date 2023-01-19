@@ -4,23 +4,18 @@
 
 namespace base
 {
-	Exception::Exception(const char* str,
-		const std::source_location& sl) :
-		runtime_error(str),
-		Throwable(sl)
+	Exception::Exception(const char* str) :
+		runtime_error(str)
 	{
 	}
 
-	Exception::Exception(const std::string& str,
-		const std::source_location& sl) :
-		runtime_error(str),
-		Throwable(sl)
+	Exception::Exception(const std::string& str) :
+		runtime_error(str)
 	{
 	}
 
 	void Exception::toStream(std::ostream& os) const
 	{
 		os << what() << '\n';
-		Throwable::toStream(os);
 	}
 }

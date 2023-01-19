@@ -2,7 +2,6 @@
 
 #include <Base/Common.h>
 #include <Base/Types.h>
-#include <Base/Exception.h>
 #include <Base/Log.h>
 #include <Base/Windows/Common.h>
 

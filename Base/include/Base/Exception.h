@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-#include "Base/Throwable.h"
+#include "Base/Throw.h"
 
 namespace base
 {
@@ -13,10 +13,8 @@ namespace base
 		public Throwable
 	{
 	public:
-		explicit Exception(const char* str,
-			const std::source_location& sl = std::source_location::current());
-		explicit Exception(const std::string& str,
-			const std::source_location& sl = std::source_location::current());
+		explicit Exception(const char* str);
+		explicit Exception(const std::string& str);
 
 		virtual void toStream(std::ostream& os) const override;
 	};

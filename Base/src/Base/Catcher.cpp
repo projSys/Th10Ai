@@ -4,7 +4,7 @@
 #include <exception>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include "Base/Throwable.h"
+#include "Base/Throw.h"
 
 namespace base
 {

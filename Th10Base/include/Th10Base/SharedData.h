@@ -32,9 +32,15 @@ namespace th
 		const SharedStatus& getReadableStatus() const;
 
 		void notifyInput();
+		void waitInput();
 		bool waitInput(const Time& timeout);
 		SharedInput& getWritableInput();
 		const SharedInput& getReadableInput() const;
+
+		void checkUpdate();
+		void checkInput();
+		Time updateTime;
+		Time inputTime;
 
 	private:
 		// BUG：在托管共享内存中创建超过5个同步对象会导致析构异常

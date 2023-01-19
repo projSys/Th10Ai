@@ -115,6 +115,12 @@ namespace th
 		//	return false;
 		//}
 
+		//Time t0 = Clock::Now();
+		//Time diff = t0 - m_handleTime;
+		//if (diff > Time(17))
+		//	std::cout << diff << std::endl;
+		//m_handleTime = t0;
+
 		Time t1 = Clock::Now();
 
 		m_status.copy(m_th10Hook.getReadableStatus());
@@ -212,7 +218,7 @@ namespace th
 	// 处理攻击
 	bool Th10Ai::handleShoot()
 	{
-		if (m_status.haveEnemies())
+		if (m_status.hasEnemy())
 		{
 			SharedInput& input = m_th10Hook.getWritableInput();
 			input.shoot();
@@ -241,7 +247,6 @@ namespace th
 		{
 			Path path(m_status, m_scene, itemTarget, enemyTarget, underEnemy);
 			Result result = path.find(dir);
-
 			if (result.valid && path.m_bestScore > bestScore)
 			{
 				bestScore = path.m_bestScore;
@@ -255,9 +260,7 @@ namespace th
 			SharedInput& input = m_th10Hook.getWritableInput();
 			input.move(bestDir.value());
 			if (bestSlow.value())
-			{
 				input.slow();
-			}
 		}
 		else
 		{
@@ -279,7 +282,7 @@ namespace th
 			return target;
 
 		Time now = Clock::Now();
-		// 查找冷却中
+		// 检测冷却
 		if (now - m_findItemTime < Time(2000))
 			return target;
 

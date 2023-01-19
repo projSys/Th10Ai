@@ -86,7 +86,7 @@ namespace th
 			m_lasers.push_back(laser);
 	}
 
-	bool Status::haveEnemies() const
+	bool Status::hasEnemy() const
 	{
 		return !m_enemies.empty();
 	}

@@ -60,17 +60,17 @@
     <ClInclude Include="include\Base\Streamable.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Throwable.h">
+    <ClInclude Include="include\Base\Throw.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Catcher.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Error.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Singleton.h">
       <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Windows\WindowsError.h">
+      <Filter>头文件\Base\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -89,14 +89,14 @@
     <ClCompile Include="src\Base\Logger.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Throwable.cpp">
+    <ClCompile Include="src\Base\Throw.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Catcher.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Error.cpp">
-      <Filter>源文件\Base</Filter>
+    <ClCompile Include="src\Base\Windows\WindowsError.cpp">
+      <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

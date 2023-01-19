@@ -1,9 +1,10 @@
 #include "Th10Ai/Th10Hook.h"
 
 #include <boost/process/detail/handler_base.hpp>
-#include <Base/Error.h>
+#include <Base/Exception.h>
 #include <Base/Catcher.h>
 #include <Base/Windows/Apis.h>
+#include <Base/Windows/WindowsError.h>
 
 #include "Th10Ai/Config.h"
 #include "Th10Ai/DllInject.h"
@@ -11,12 +12,12 @@
 namespace th
 {
 	Th10Hook::Th10Hook() :
-		m_sharedMemory(bip::create_only, "Th10SharedMemory", 64 * 1024 * 1024),
+		m_sharedMemory(bip::create_only, "Th10SharedMemory", 32 * 1024 * 1024),
 		m_sharedData(nullptr)
 	{
 		m_sharedData = m_sharedMemory.construct<SharedData>("Th10SharedData")(m_sharedMemory);
 		if (m_sharedData == nullptr)
-			throw Exception("Th10SharedData名称已被使用。");
+			Throw(Exception("Th10SharedData名称已被使用。"));
 	}
 
 	Th10Hook::~Th10Hook()
@@ -40,7 +41,7 @@ namespace th
 		template <typename Executor>
 		void on_error(Executor& exec, const std::error_code& ec) const
 		{
-			throw Error(ec.value());
+			Throw(WindowsError(ec.value()));
 		}
 
 		template <typename Executor>
@@ -53,7 +54,7 @@ namespace th
 
 			DWORD count = ResumeThread(exec.proc_info.hThread);
 			if (count == (DWORD)-1)
-				throw Error(GetLastError());
+				Throw(WindowsError(GetLastError()));
 		}
 	};
 
@@ -66,7 +67,7 @@ namespace th
 		m_th10Thread = std::thread(&Th10Hook::th10Proc, this);
 
 		if (!m_sharedData->waitInit(Time(3000)))
-			throw Exception("Th10Hook初始化超时。");
+			Throw(Exception("Th10Hook初始化超时。"));
 	}
 
 	void Th10Hook::th10Proc()

@@ -42,7 +42,9 @@ namespace base
 	}
 
 	template <typename T>
-	class FuncTraits;
+	class FuncTraits
+	{
+	};
 
 	template <typename C, typename R, typename... Args>
 	class FuncTraits<R(__stdcall C::*)(Args...)>

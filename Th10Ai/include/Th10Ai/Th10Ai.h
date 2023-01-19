@@ -57,5 +57,6 @@ namespace th
 		Time m_bombTime;
 		int_t m_bombCount;
 		Time m_findItemTime;
+		Time m_handleTime;
 	};
 }

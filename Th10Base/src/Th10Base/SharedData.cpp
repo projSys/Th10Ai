@@ -95,6 +95,7 @@ namespace th
 			m_writableStatus.swap(m_swappableStatus);
 			m_statusUpdated = true;
 		}
+		//updateTime = Clock::Now();
 		m_statusCond.notify_one();
 	}
 
@@ -107,6 +108,7 @@ namespace th
 			m_statusCond.wait(lock);
 		m_readableStatus.swap(m_swappableStatus);
 		m_statusUpdated = false;
+		//checkUpdate();
 		return !m_exit;
 	}
 
@@ -123,6 +125,7 @@ namespace th
 		}
 		m_readableStatus.swap(m_swappableStatus);
 		m_statusUpdated = false;
+		//checkUpdate();
 		return true;
 	}
 
@@ -150,7 +153,20 @@ namespace th
 			m_writableInput.swap(m_swappableInput);
 			m_inputUpdated = true;
 		}
+		//inputTime = Clock::Now();
 		m_inputCond.notify_one();
+	}
+
+	void SharedData::waitInput()
+	{
+		bip::scoped_lock<bip::interprocess_mutex> lock(m_inputMutex);
+		if (!m_inputUpdated)
+			std::cout << "警告：处理太慢，等待输入。" << std::endl;
+		while (!m_inputUpdated)
+			m_inputCond.wait(lock);
+		m_readableInput.swap(m_swappableInput);
+		m_inputUpdated = false;
+		//checkInput();
 	}
 
 	bool SharedData::waitInput(const Time& timeout)
@@ -166,6 +182,7 @@ namespace th
 		}
 		m_readableInput.swap(m_swappableInput);
 		m_inputUpdated = false;
+		//checkInput();
 		return true;
 	}
 
@@ -177,5 +194,19 @@ namespace th
 	const SharedInput& SharedData::getReadableInput() const
 	{
 		return *m_readableInput;
+	}
+
+	void SharedData::checkUpdate()
+	{
+		Time diff = Clock::Now() - updateTime;
+		if (diff > Time(0))
+			std::cout << diff << std::endl;
+	}
+
+	void SharedData::checkInput()
+	{
+		Time diff = Clock::Now() - inputTime;
+		if (diff > Time(0))
+			std::cout << diff << std::endl;
 	}
 }

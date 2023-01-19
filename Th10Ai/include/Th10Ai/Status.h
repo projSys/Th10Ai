@@ -30,7 +30,7 @@ namespace th
 		// Item
 
 		// Enemy
-		bool haveEnemies() const;
+		bool hasEnemy() const;
 		bool isBoss() const;
 		bool isTalking() const;
 		bool isUnderEnemy() const;

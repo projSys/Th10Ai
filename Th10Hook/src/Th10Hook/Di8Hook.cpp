@@ -1,6 +1,6 @@
 #include "Th10Hook/Di8Hook.h"
 
-#include <Base/Error.h>
+#include <Base/Windows/WindowsError.h>
 
 #include "Th10Hook/MyDirectInput8A.h"
 
@@ -18,10 +18,10 @@ namespace th
 	{
 		HMODULE dinput8Dll = GetModuleHandleW(L"dinput8.dll");
 		if (dinput8Dll == nullptr)
-			throw Error(GetLastError());
+			Throw(WindowsError(GetLastError()));
 		m_directInput8CreateOrig = reinterpret_cast<DirectInput8Create_t>(GetProcAddress(dinput8Dll, "DirectInput8Create"));
 		if (m_directInput8CreateOrig == nullptr)
-			throw Error(GetLastError());
+			Throw(WindowsError(GetLastError()));
 
 		detours.attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig), &Di8Hook::DirectInput8CreateHook);
 	}

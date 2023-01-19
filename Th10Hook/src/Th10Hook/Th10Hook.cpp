@@ -1,5 +1,7 @@
 #include "Th10Hook/Th10Hook.h"
 
+#include <Base/Exception.h>
+
 #include "Th10Hook/Th10Apis.h"
 
 namespace th
@@ -12,7 +14,7 @@ namespace th
 	{
 		m_sharedData = m_sharedMemory.find<SharedData>("Th10SharedData").first;
 		if (m_sharedData == nullptr)
-			throw Exception("Th10SharedData未找到。");
+			Throw(Exception("Th10SharedData未找到。"));
 
 		m_sharedData->setWindow(window);
 		m_sharedData->notifyInit();
@@ -44,6 +46,7 @@ namespace th
 		if (!m_sharedData->isActive())
 			return;
 
+		//m_sharedData->waitInput();
 		if (!m_sharedData->waitInput(Time(8)))
 		{
 			std::cout << "错误：等待输入超时。" << std::endl;
