@@ -3,6 +3,8 @@
 #include "Base/Windows/WindowsError.h"
 #include "Base/Traits.h"
 
+#pragma warning(disable: 6387)
+
 namespace base
 {
 	namespace win

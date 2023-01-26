@@ -24,7 +24,7 @@ namespace base
 		}
 		catch (const std::exception& se)
 		{
-			os << se.what();
+			os << se.what() << '\n';
 		}
 	}
 }

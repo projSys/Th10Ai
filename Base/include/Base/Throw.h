@@ -20,8 +20,12 @@ namespace base
 	{
 	public:
 		virtual ~Throwable() = default;
+
 		virtual void toStream(std::ostream& os) const override;
-		virtual const std::source_location* getSourceLocation() const;
+		virtual const std::source_location& getSourceLocation() const;
+
+	private:
+		static const std::source_location s_invalidSl;
 	};
 
 	template <typename T, typename Enable = void>
@@ -45,9 +49,9 @@ namespace base
 			os << m_sl;
 		}
 
-		virtual const std::source_location* getSourceLocation() const override
+		virtual const std::source_location& getSourceLocation() const override
 		{
-			return &m_sl;
+			return m_sl;
 		}
 
 	private:

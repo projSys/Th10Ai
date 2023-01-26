@@ -41,7 +41,7 @@ namespace th
 		template <typename Executor>
 		void on_error(Executor& exec, const std::error_code& ec) const
 		{
-			Throw(WindowsError(ec.value()));
+			Throw(WindowsError(ec));
 		}
 
 		template <typename Executor>

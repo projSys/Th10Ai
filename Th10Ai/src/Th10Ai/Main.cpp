@@ -2,9 +2,6 @@
 
 #include <memory>
 #include <Base/Catcher.h>
-#include <Base/Exception.h>
-#include "Base/Windows/Apis.h"
-#include "Base/Windows/WindowsError.h"
 
 #include "Th10Ai/Th10Ai.h"
 

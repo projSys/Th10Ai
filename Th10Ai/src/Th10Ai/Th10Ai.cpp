@@ -97,6 +97,7 @@ namespace th
 			std::this_thread::sleep_for(Time(16));
 			return false;
 		}
+
 		if (!m_th10Hook.waitUpdate())
 		{
 			std::cout << "退出。" << std::endl;
@@ -120,6 +121,16 @@ namespace th
 		//if (diff > Time(17))
 		//	std::cout << diff << std::endl;
 		//m_handleTime = t0;
+
+		//static Time t0 = Clock::Now();
+		//static int_t c0 = 0;
+		//c0++;
+		//if (Clock::Now() - t0 > Time(1000))
+		//{
+		//	std::cout << c0 << std::endl;
+		//	t0 += Time(1000);
+		//	c0 = 0;
+		//}
 
 		Time t1 = Clock::Now();
 

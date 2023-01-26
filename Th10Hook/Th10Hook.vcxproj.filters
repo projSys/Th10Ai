@@ -54,6 +54,9 @@
     <ClInclude Include="include\Th10Hook\Th10Apis.h">
       <Filter>头文件\Th10Hook</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Hook\InlineHook32.h">
+      <Filter>头文件\Th10Hook</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Hook\DllMain.cpp">
@@ -84,6 +87,9 @@
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
     <ClCompile Include="src\Th10Hook\Th10Apis.cpp">
+      <Filter>源文件\Th10Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Th10Hook\InlineHook32.cpp">
       <Filter>源文件\Th10Hook</Filter>
     </ClCompile>
   </ItemGroup>

@@ -15,12 +15,14 @@ namespace base
 		return os;
 	}
 
+	const std::source_location Throwable::s_invalidSl;
+
 	void Throwable::toStream(std::ostream& os) const
 	{
 	}
 
-	const std::source_location* Throwable::getSourceLocation() const
+	const std::source_location& Throwable::getSourceLocation() const
 	{
-		return nullptr;
+		return s_invalidSl;
 	}
 }

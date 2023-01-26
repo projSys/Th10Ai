@@ -38,6 +38,16 @@ namespace th
 		Th10Apis::GetBulletsTo(status.bullets);
 		Th10Apis::GetLasersTo(status.lasers);
 
+		//static Time t0 = Clock::Now();
+		//static int_t c0 = 0;
+		//c0++;
+		//if (Clock::Now() - t0 > Time(1000))
+		//{
+		//	std::cout << c0 << std::endl;
+		//	t0 += Time(1000);
+		//	c0 = 0;
+		//}
+
 		m_sharedData->notifyUpdate();
 	}
 
@@ -55,5 +65,15 @@ namespace th
 
 		const SharedInput& input = m_sharedData->getReadableInput();
 		input.commitTo(size, data);
+
+		//static Time t0 = Clock::Now();
+		//static int_t c0 = 0;
+		//c0++;
+		//if (Clock::Now() - t0 > Time(1000))
+		//{
+		//	std::cout << c0 << std::endl;
+		//	t0 += Time(1000);
+		//	c0 = 0;
+		//}
 	}
 }

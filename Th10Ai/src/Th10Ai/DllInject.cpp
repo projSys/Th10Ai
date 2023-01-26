@@ -4,6 +4,8 @@
 #include <Base/Exception.h>
 #include <Base/Windows/WindowsError.h>
 
+#pragma warning(disable: 6387)
+
 namespace th
 {
 	void DllInject::EnableDebugPrivilege()
@@ -32,9 +34,9 @@ namespace th
 
 	void DllInject::Inject(HANDLE process, const fs::path& dllPath)
 	{
-		uint_t size = sizeof(fs::path::value_type) * (dllPath.native().size() + 1);
+		SIZE_T size = sizeof(fs::path::value_type) * (dllPath.native().size() + 1);
 
-		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+		LPVOID memory = VirtualAllocEx(process, nullptr, size, MEM_COMMIT, PAGE_READWRITE);
 		if (memory == nullptr)
 			Throw(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()
@@ -42,21 +44,18 @@ namespace th
 				VirtualFreeEx(process, memory, 0, MEM_RELEASE);
 			});
 
-		SIZE_T written = 0;
-		if (!WriteProcessMemory(process, memory, dllPath.c_str(), size, &written))
+		if (!WriteProcessMemory(process, memory, dllPath.c_str(), size, nullptr))
 			Throw(WindowsError(GetLastError()));
-		if (written != size)
-			Throw(Exception("written != size."));
 
 		HMODULE kernel32Dll = GetModuleHandleW(L"kernel32.dll");
 		if (kernel32Dll == nullptr)
 			Throw(WindowsError(GetLastError()));
-		FARPROC loadLibraryW = GetProcAddress(kernel32Dll, "LoadLibraryW");
+		LPTHREAD_START_ROUTINE loadLibraryW = reinterpret_cast<LPTHREAD_START_ROUTINE>(
+			GetProcAddress(kernel32Dll, "LoadLibraryW"));
 		if (loadLibraryW == nullptr)
 			Throw(WindowsError(GetLastError()));
 
-		DWORD threadId = 0;
-		HANDLE thread = CreateRemoteThread(process, nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibraryW), memory, 0, &threadId);
+		HANDLE thread = CreateRemoteThread(process, nullptr, 0, loadLibraryW, memory, 0, nullptr);
 		if (thread == nullptr)
 			Throw(WindowsError(GetLastError()));
 		ON_SCOPE_EXIT([&]()

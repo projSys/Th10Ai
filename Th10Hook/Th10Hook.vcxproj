@@ -145,6 +145,7 @@
     <ClInclude Include="include\Th10Hook\D3d9Hook.h" />
     <ClInclude Include="include\Th10Hook\Di8Hook.h" />
     <ClInclude Include="include\Th10Hook\DllMain.h" />
+    <ClInclude Include="include\Th10Hook\InlineHook32.h" />
     <ClInclude Include="include\Th10Hook\MyDetours.h" />
     <ClInclude Include="include\Th10Hook\MyDirect3D9.h" />
     <ClInclude Include="include\Th10Hook\MyDirect3DDevice9.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="src\Th10Hook\D3d9Hook.cpp" />
     <ClCompile Include="src\Th10Hook\Di8Hook.cpp" />
     <ClCompile Include="src\Th10Hook\DllMain.cpp" />
+    <ClCompile Include="src\Th10Hook\InlineHook32.cpp" />
     <ClCompile Include="src\Th10Hook\MyDetours.cpp" />
     <ClCompile Include="src\Th10Hook\MyDirect3D9.cpp" />
     <ClCompile Include="src\Th10Hook\MyDirect3DDevice9.cpp" />
