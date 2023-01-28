@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="include\Base\Exception\Catcher.h" />
     <ClInclude Include="include\Base\Exception\Exception.h" />
+    <ClInclude Include="include\Base\Exception\StackTrace.h" />
     <ClInclude Include="include\Base\Exception\SystemError.h" />
     <ClInclude Include="include\Base\Exception\Throw.h" />
     <ClInclude Include="include\Base\Singleton.h" />
@@ -174,6 +175,7 @@
   <ItemGroup>
     <ClCompile Include="src\Base\Exception\Catcher.cpp" />
     <ClCompile Include="src\Base\Exception\Exception.cpp" />
+    <ClCompile Include="src\Base\Exception\StackTrace.cpp" />
     <ClCompile Include="src\Base\Exception\SystemError.cpp" />
     <ClCompile Include="src\Base\Exception\Throw.cpp" />
     <ClCompile Include="src\Base\Time.cpp" />

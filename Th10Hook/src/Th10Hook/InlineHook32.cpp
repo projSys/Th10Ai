@@ -6,6 +6,7 @@
 
 namespace th
 {
+	// 不稳定
 	void* InlineHook32::attach(void* original, void* detour)
 	{
 		HANDLE process = GetCurrentProcess();

@@ -9,23 +9,20 @@
 
 namespace base
 {
-	namespace win
+	class SystemError :
+		public Throwable
 	{
-		class SystemError :
-			public Throwable
-		{
-		public:
-			explicit SystemError(int32_t value,
-				const std::error_category& category = std::system_category());
-			explicit SystemError(const std::error_code& ec);
+	public:
+		explicit SystemError(int32_t value,
+			const std::error_category& category = std::system_category());
+		explicit SystemError(const std::error_code& ec);
 
-			virtual void toStream(std::ostream& os) const override;
+		virtual void toStream(std::ostream& os) const override;
 
-			int32_t getValue() const;
-			const std::error_code& getErrorCode() const;
+		int32_t getValue() const;
+		const std::error_code& getErrorCode() const;
 
-		private:
-			std::error_code m_ec;
-		};
-	}
+	private:
+		std::error_code m_ec;
+	};
 }

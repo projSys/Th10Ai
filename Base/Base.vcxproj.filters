@@ -78,6 +78,9 @@
     <ClInclude Include="include\Base\Exception\Catcher.h">
       <Filter>头文件\Base\Exception</Filter>
     </ClInclude>
+    <ClInclude Include="include\Base\Exception\StackTrace.h">
+      <Filter>头文件\Base\Exception</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Log.cpp">
@@ -102,6 +105,9 @@
       <Filter>源文件\Base\Exception</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Exception\Catcher.cpp">
+      <Filter>源文件\Base\Exception</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Exception\StackTrace.cpp">
       <Filter>源文件\Base\Exception</Filter>
     </ClCompile>
   </ItemGroup>
