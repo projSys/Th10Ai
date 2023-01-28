@@ -1,6 +1,6 @@
 #include "Th10Hook/Th10Hook.h"
 
-#include <Base/Exception.h>
+#include <Base/Exception/Exception.h>
 
 #include "Th10Hook/Th10Apis.h"
 

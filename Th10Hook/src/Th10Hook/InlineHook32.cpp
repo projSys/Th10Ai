@@ -1,6 +1,6 @@
 #include "Th10Hook/InlineHook32.h"
 
-#include <Base/Windows/WindowsError.h>
+#include <Base/Exception/SystemError.h>
 
 #pragma warning(disable: 6387)
 
@@ -12,7 +12,7 @@ namespace th
 
 		BYTE origCodes[5] = {};
 		if (!ReadProcessMemory(process, original, origCodes, 5, nullptr))
-			Throw(WindowsError(GetLastError()));
+			Throw(SystemError(GetLastError()));
 
 		DWORD src = reinterpret_cast<DWORD>(original) + 5;
 		DWORD dst = reinterpret_cast<DWORD>(detour);
@@ -21,12 +21,12 @@ namespace th
 		memcpy(detCodes, "\xE9", 1);
 		memcpy(detCodes + 1, &offset, 4);
 		if (!WriteProcessMemory(process, original, detCodes, 5, nullptr))
-			Throw(WindowsError(GetLastError()));
+			Throw(SystemError(GetLastError()));
 
 		BYTE* trampoline = reinterpret_cast<BYTE*>(
 			VirtualAlloc(nullptr, 11, MEM_COMMIT, PAGE_EXECUTE_READWRITE));
 		if (trampoline == nullptr)
-			Throw(WindowsError(GetLastError()));
+			Throw(SystemError(GetLastError()));
 		memcpy(trampoline, origCodes, 5);
 		memcpy(trampoline + 5, "\x68", 1);
 		memcpy(trampoline + 6, &src, 4);

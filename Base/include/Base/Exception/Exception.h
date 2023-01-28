@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-#include "Base/Throw.h"
+#include "Base/Exception/Throw.h"
 
 namespace base
 {

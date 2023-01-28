@@ -25,12 +25,15 @@
     <Filter Include="源文件\Base\Windows">
       <UniqueIdentifier>{dde89f0a-566a-4a7a-957f-f494744e5151}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Base\Exception">
+      <UniqueIdentifier>{bd203abb-2c7f-4f4e-8ae7-eb51ac5ac4a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Base\Exception">
+      <UniqueIdentifier>{a52daeeb-83a7-4ac7-a21f-506a09a72316}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Base\Common.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Exception.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Log.h">
@@ -60,23 +63,23 @@
     <ClInclude Include="include\Base\Streamable.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Throw.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Base\Catcher.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Singleton.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Windows\WindowsError.h">
-      <Filter>头文件\Base\Windows</Filter>
+    <ClInclude Include="include\Base\Exception\Exception.h">
+      <Filter>头文件\Base\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Exception\SystemError.h">
+      <Filter>头文件\Base\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Exception\Throw.h">
+      <Filter>头文件\Base\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Exception\Catcher.h">
+      <Filter>头文件\Base\Exception</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Base\Exception.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\Log.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
@@ -89,14 +92,17 @@
     <ClCompile Include="src\Base\Logger.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Throw.cpp">
-      <Filter>源文件\Base</Filter>
+    <ClCompile Include="src\Base\Exception\Exception.cpp">
+      <Filter>源文件\Base\Exception</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Catcher.cpp">
-      <Filter>源文件\Base</Filter>
+    <ClCompile Include="src\Base\Exception\SystemError.cpp">
+      <Filter>源文件\Base\Exception</Filter>
     </ClCompile>
-    <ClCompile Include="src\Base\Windows\WindowsError.cpp">
-      <Filter>源文件\Base\Windows</Filter>
+    <ClCompile Include="src\Base\Exception\Throw.cpp">
+      <Filter>源文件\Base\Exception</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Exception\Catcher.cpp">
+      <Filter>源文件\Base\Exception</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

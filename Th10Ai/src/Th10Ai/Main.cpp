@@ -1,7 +1,7 @@
 #include "Th10Ai/Common.h"
 
 #include <memory>
-#include <Base/Catcher.h>
+#include <Base/Exception/Catcher.h>
 
 #include "Th10Ai/Th10Ai.h"
 

@@ -1,7 +1,7 @@
 #include "Th10Hook/MyDirectInputDevice8A.h"
 
-#include <Base/Catcher.h>
 #include <Base/Time.h>
+#include <Base/Exception/Catcher.h>
 
 #include "Th10Hook/MyDirectInput8A.h"
 #include "Th10Hook/Th10Hook.h"

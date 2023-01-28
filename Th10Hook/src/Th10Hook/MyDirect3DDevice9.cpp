@@ -1,7 +1,7 @@
 #include "Th10Hook/MyDirect3DDevice9.h"
 
-#include <Base/Catcher.h>
 #include <Base/Time.h>
+#include <Base/Exception/Catcher.h>
 
 #include "Th10Hook/MyDirect3D9.h"
 #include "Th10Hook/Th10Hook.h"

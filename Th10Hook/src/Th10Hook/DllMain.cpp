@@ -1,7 +1,7 @@
 #include "Th10Hook/DllMain.h"
 
-#include <Base/Catcher.h>
 #include <Base/Logger.h>
+#include <Base/Exception/Catcher.h>
 #include <Base/Windows/Apis.h>
 
 #include "Th10Hook/MyDetours.h"

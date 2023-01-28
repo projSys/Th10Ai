@@ -1,10 +1,10 @@
 #include "Th10Ai/Th10Hook.h"
 
 #include <boost/process/detail/handler_base.hpp>
-#include <Base/Exception.h>
-#include <Base/Catcher.h>
+#include <Base/Exception/Exception.h>
+#include <Base/Exception/SystemError.h>
+#include <Base/Exception/Catcher.h>
 #include <Base/Windows/Apis.h>
-#include <Base/Windows/WindowsError.h>
 
 #include "Th10Ai/Config.h"
 #include "Th10Ai/DllInject.h"
@@ -41,7 +41,7 @@ namespace th
 		template <typename Executor>
 		void on_error(Executor& exec, const std::error_code& ec) const
 		{
-			Throw(WindowsError(ec));
+			Throw(SystemError(ec));
 		}
 
 		template <typename Executor>
@@ -54,7 +54,7 @@ namespace th
 
 			DWORD count = ResumeThread(exec.proc_info.hThread);
 			if (count == (DWORD)-1)
-				Throw(WindowsError(GetLastError()));
+				Throw(SystemError(GetLastError()));
 		}
 	};
 
@@ -63,7 +63,7 @@ namespace th
 		fs::path th10Dir = config.th10Path.parent_path();
 		m_th10 = bp::child(config.th10Path.c_str(),
 			bp::std_out > m_ips, //bp::std_err > stderr, bp::std_in < stdin,
-			bp::start_dir(th10Dir.c_str()), LaunchHandler());
+			bp::start_dir(th10Dir.native()), LaunchHandler());
 		m_th10Thread = std::thread(&Th10Hook::th10Proc, this);
 
 		if (!m_sharedData->waitInit(Time(3000)))

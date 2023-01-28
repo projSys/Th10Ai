@@ -4,22 +4,24 @@
 
 #include <system_error>
 
-#include "Base/Throw.h"
+#include "Base/Types.h"
+#include "Base/Exception/Throw.h"
 
 namespace base
 {
 	namespace win
 	{
-		class WindowsError :
+		class SystemError :
 			public Throwable
 		{
 		public:
-			explicit WindowsError(const std::error_code& ec);
-			explicit WindowsError(DWORD value,
+			explicit SystemError(int32_t value,
 				const std::error_category& category = std::system_category());
+			explicit SystemError(const std::error_code& ec);
 
 			virtual void toStream(std::ostream& os) const override;
 
+			int32_t getValue() const;
 			const std::error_code& getErrorCode() const;
 
 		private:

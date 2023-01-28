@@ -1,6 +1,6 @@
 #include "Th10Hook/D3d9Hook.h"
 
-#include <Base/Windows/WindowsError.h>
+#include <Base/Exception/SystemError.h>
 
 #include "Th10Hook/InlineHook32.h"
 #include "Th10Hook/MyDirect3D9.h"
@@ -21,11 +21,11 @@ namespace th
 	{
 		HMODULE d3d9Dll = GetModuleHandleW(L"d3d9.dll");
 		if (d3d9Dll == nullptr)
-			Throw(WindowsError(GetLastError()));
+			Throw(SystemError(GetLastError()));
 		m_direct3DCreate9Orig = reinterpret_cast<Direct3DCreate9_t>(
 			GetProcAddress(d3d9Dll, "Direct3DCreate9"));
 		if (m_direct3DCreate9Orig == nullptr)
-			Throw(WindowsError(GetLastError()));
+			Throw(SystemError(GetLastError()));
 
 		detours.attach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig), &D3d9Hook::Direct3DCreate9Hook);
 		//InlineHook32 hook;

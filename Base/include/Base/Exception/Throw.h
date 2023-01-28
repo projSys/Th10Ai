@@ -38,8 +38,18 @@ namespace base
 		public T
 	{
 	public:
-		ThrowPacket(const T& exception, const std::source_location& sl) :
-			T(exception), m_sl(sl)
+		ThrowPacket(const T& exception,
+			const std::source_location& sl) :
+			T(exception),
+			m_sl(sl)
+		{
+		}
+
+		template <typename... Args>
+		ThrowPacket(const std::source_location& sl,
+			Args&&... args) :
+			T(std::forward<Args>(args)...),
+			m_sl(sl)
 		{
 		}
 
@@ -64,8 +74,10 @@ namespace base
 	//	public T
 	//{
 	//public:
-	//	ThrowPacket(const T& exception, const std::source_location& sl) :
-	//		T(exception), m_sl(sl)
+	//	ThrowPacket(const T& exception,
+	//		const std::source_location& sl) :
+	//		T(exception),
+	//		m_sl(sl)
 	//	{
 	//		std::ostringstream oss;
 	//		oss << exception.what() << '\n';
@@ -89,4 +101,24 @@ namespace base
 	{
 		throw ThrowPacket<T>(exception, sl);
 	}
+
+	template <typename T>
+	class Thrower
+	{
+	public:
+		explicit Thrower(
+			const std::source_location& sl = std::source_location::current()) :
+			m_sl(sl)
+		{
+		}
+
+		template <typename... Args>
+		void operator ()(Args&&... args) const
+		{
+			throw ThrowPacket<T>(m_sl, std::forward<Args>(args)...);
+		}
+
+	private:
+		std::source_location m_sl;
+	};
 }

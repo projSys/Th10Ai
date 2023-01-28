@@ -1,7 +1,7 @@
 #include "Base/Windows/Apis.h"
 
-#include "Base/Windows/WindowsError.h"
 #include "Base/Traits.h"
+#include "Base/Exception/SystemError.h"
 
 #pragma warning(disable: 6387)
 
@@ -14,9 +14,9 @@ namespace base
 			WCHAR buffer[BUFFER_SIZE] = {};
 			DWORD ret = GetModuleFileNameW(module, buffer, BUFFER_SIZE - 1);
 			if (ret == 0)
-				Throw(WindowsError(GetLastError()));
+				Throw(SystemError(GetLastError()));
 			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-				Throw(WindowsError(ERROR_INSUFFICIENT_BUFFER));
+				Throw(SystemError(ERROR_INSUFFICIENT_BUFFER));
 			return fs::path(buffer);
 		}
 
@@ -32,12 +32,12 @@ namespace base
 
 			int wstrSize = ::MultiByteToWideChar(codePage, 0, str, strSize, nullptr, 0);
 			if (wstrSize == 0)
-				Throw(WindowsError(GetLastError()));
+				Throw(SystemError(GetLastError()));
 
 			wstr.resize(wstrSize + 10);
 			int ret = ::MultiByteToWideChar(codePage, 0, str, strSize, &wstr[0], wstrSize + 10);
 			if (ret == 0)
-				Throw(WindowsError(GetLastError()));
+				Throw(SystemError(GetLastError()));
 			return wstr;
 		}
 
@@ -49,13 +49,13 @@ namespace base
 			int strSize = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, nullptr, 0,
 				nullptr, nullptr);
 			if (strSize == 0)
-				Throw(WindowsError(GetLastError()));
+				Throw(SystemError(GetLastError()));
 
 			str.resize(strSize);
 			int ret = ::WideCharToMultiByte(codePage, 0, wstr, wstrSize, &str[0], strSize,
 				nullptr, nullptr);
 			if (ret == 0)
-				Throw(WindowsError(GetLastError()));
+				Throw(SystemError(GetLastError()));
 			return str;
 		}
 

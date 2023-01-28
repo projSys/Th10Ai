@@ -1,7 +1,7 @@
 #include "Th10Ai/Th10Ai.h"
 
-#include <Base/Catcher.h>
 #include <Base/Logger.h>
+#include <Base/Exception/Catcher.h>
 #include <Base/Windows/Apis.h>
 
 #include "Th10Ai/Path.h"
@@ -100,7 +100,6 @@ namespace th
 
 		if (!m_th10Hook.waitUpdate())
 		{
-			std::cout << "退出。" << std::endl;
 			m_handleDone = true;
 			return false;
 		}
@@ -111,7 +110,6 @@ namespace th
 		//}
 		//if (m_th10Hook.isExit())
 		//{
-		//	std::cout << "退出。" << std::endl;
 		//	m_handleDone = true;
 		//	return false;
 		//}

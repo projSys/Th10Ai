@@ -1,10 +1,10 @@
-#include "Base/Catcher.h"
+#include "Base/Exception/Catcher.h"
 
 #include <ostream>
 #include <exception>
 #include <boost/exception/diagnostic_information.hpp>
 
-#include "Base/Throw.h"
+#include "Base/Exception/Throw.h"
 
 namespace base
 {
