@@ -13,12 +13,12 @@ namespace base
 
 	void Logger::addCommonAttributes()
 	{
-		log::add_common_attributes();
+		bl::add_common_attributes();
 	}
 
 	void Logger::addFileLog(const fs::path& filePath)
 	{
-		m_fileSink = log::add_file_log(filePath);
+		m_fileSink = bl::add_file_log(filePath);
 	}
 
 	void Logger::flush()

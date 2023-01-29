@@ -116,8 +116,7 @@ namespace base
 	template <typename T>
 	inline void Throw(const T& exception,
 		const std::source_location& sl = std::source_location::current(),
-		StackTrace&& st = StackTrace()
-	)
+		StackTrace&& st = StackTrace())
 	{
 		throw ThrowPacket<T>(exception, sl, std::move(st));
 	}

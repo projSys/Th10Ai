@@ -2,7 +2,7 @@
 
 #include "Base/Common.h"
 
-// 修改此项需要全部代码重新编译
+// 修改此项需要重新编译全部代码
 //#ifndef BASE_THROW_STACKTRACE
 //#define BASE_THROW_STACKTRACE
 //#endif
@@ -12,6 +12,8 @@
 //#include <stacktrace>	// C++23
 #include <boost/stacktrace.hpp>
 #endif
+
+#include "Base/Types.h"
 
 namespace base
 {
@@ -28,10 +30,8 @@ namespace base
 #ifdef BASE_THROW_STACKTRACE
 		using bst::stacktrace::stacktrace;
 #else
-		StackTrace() = default;
-		StackTrace(const StackTrace&) = default;
-		StackTrace(StackTrace&&) = default;
-		StackTrace(size_t, size_t) {}
+		StackTrace() {}
+		StackTrace(uint_t, uint_t) {}
 #endif
 	};
 

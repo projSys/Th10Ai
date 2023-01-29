@@ -37,4 +37,5 @@ Debug/
 Release/
 *.aps
 
-CMakeLists.txt
+build/
+bin/
