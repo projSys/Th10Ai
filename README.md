@@ -33,7 +33,7 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 * Install [Visual C++ Redistributable 2022](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).(optional)<br />
 * Prepare the "東方風神録　～ Mountain of Faith. ver 1.00a", set to window mode.<br />
-* Monitor refresh rate set to 60FPS.<br />
+* Monitor refresh rate set to __60FPS__.<br />
 * Modify Th10Path in Th10Ai.conf to your th10.exe path, and run Th10Ai.exe.<br />
 * Keep window focus on the game, select Reimu to start the game, press 'A' to start AI, press 'S' to stop AI.<br />
 
