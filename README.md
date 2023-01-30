@@ -8,6 +8,7 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 ## Building
 
 * open x86 Native Tools Command Prompt for VS 2022<br />
+	replace with your path: path/to/boost, path/to/detours, path/to/Th10Ai.
 * [Boost](https://www.boost.org)<br />
 	```
 	cd path/to/boost
@@ -30,16 +31,16 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ## Usage
 
-東方風神録　～ Mountain of Faith. ver 1.00a<br />
-安装[VC++2022可再发行组件包](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)。<br />
-显示器刷新率设置为60FPS，风神录设置为窗口模式。<br />
-修改Th10Ai.conf里的Th10Path为你的风神录程序路径，运行Th10Ai.exe。<br />
-保持窗口焦点在风神录上，开始游戏，按A启动AI，按S停止AI。<br />
+* Install [Visual C++ Redistributable 2022](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).(optional)<br />
+* Prepare the "東方風神録　～ Mountain of Faith. ver 1.00a", set to window mode.<br />
+* Monitor refresh rate set to 60FPS.<br />
+* Modify Th10Path in Th10Ai.conf to your th10.exe path, and run Th10Ai.exe.<br />
+* Keep window focus on the game, select Reimu to start the game, press 'A' to start AI, press 'S' to stop AI.<br />
 
 ## Issues
 
-* 重现子弹的移动轨迹，除了直线移动，还有曲线移动、随机移动，否则后续的碰撞预测和节点搜索都是错的。（缺少子弹ID，导致帧与帧之间的子弹无法关联起来进行轨迹推导）<br />
-* 5面激光不闪避。（可能是激光的速度过快，需要检测穿越判定）<br />
+* 重现子弹的移动轨迹：子弹除了直线移动，还有曲线移动、随机移动等，现在都是按直线移动处理，后续的碰撞预测和节点搜索都是错的。缺少子弹ID，导致帧与帧之间的子弹无法关联起来进行轨迹推导。<br />
+* 5面激光不闪避：可能是激光的速度过快，需要检测穿越判定。<br />
 
 ## Thanks
 
