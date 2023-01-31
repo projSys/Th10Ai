@@ -19,13 +19,13 @@ namespace th
 		void detach(MyDetours& detours);
 
 	private:
-		using Direct3DCreate9_t = decltype(&Direct3DCreate9);
+		using Direct3DCreate9_t = decltype(Direct3DCreate9);
 
 		static IDirect3D9* WINAPI Direct3DCreate9Hook(UINT SDKVersion);
 
 		IDirect3D9* direct3DCreate9Hook(UINT SDKVersion);
 
-		Direct3DCreate9_t m_direct3DCreate9Orig;
+		Direct3DCreate9_t* m_direct3DCreate9Orig;
 	};
 
 	extern D3d9Hook g_d3d9Hook;

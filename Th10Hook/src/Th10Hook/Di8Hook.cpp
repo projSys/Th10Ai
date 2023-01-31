@@ -22,14 +22,14 @@ namespace th
 		HMODULE dinput8Dll = GetModuleHandleW(L"dinput8.dll");
 		if (dinput8Dll == nullptr)
 			Throw(SystemError(GetLastError()));
-		m_directInput8CreateOrig = reinterpret_cast<DirectInput8Create_t>(
+		m_directInput8CreateOrig = reinterpret_cast<DirectInput8Create_t*>(
 			GetProcAddress(dinput8Dll, "DirectInput8Create"));
 		if (m_directInput8CreateOrig == nullptr)
 			Throw(SystemError(GetLastError()));
 
 		detours.attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig), &Di8Hook::DirectInput8CreateHook);
 		//InlineHook32 hook;
-		//m_directInput8CreateOrig = reinterpret_cast<DirectInput8Create_t>(
+		//m_directInput8CreateOrig = reinterpret_cast<DirectInput8Create_t*>(
 		//	hook.attach(m_directInput8CreateOrig, &Di8Hook::DirectInput8CreateHook));
 	}
 
