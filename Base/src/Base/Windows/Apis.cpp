@@ -61,7 +61,7 @@ namespace base
 
 		std::wstring Apis::Utf8ToWide(const char* str, int strSize)
 		{
-			if (is_empty_string(str))
+			if (string_is_empty(str))
 				return std::wstring();
 			return MultiByteToWideChar(CP_UTF8, str, strSize);
 		}
@@ -75,7 +75,7 @@ namespace base
 
 		std::string Apis::WideToUtf8(const wchar_t* wstr, int wstrSize)
 		{
-			if (is_empty_string(wstr))
+			if (string_is_empty(wstr))
 				return std::string();
 			return WideCharToMultiByte(CP_UTF8, wstr, wstrSize);
 		}
@@ -89,7 +89,7 @@ namespace base
 
 		std::wstring Apis::AnsiToWide(const char* str, int strSize)
 		{
-			if (is_empty_string(str))
+			if (string_is_empty(str))
 				return std::wstring();
 			return MultiByteToWideChar(CP_ACP, str, strSize);
 		}
@@ -103,7 +103,7 @@ namespace base
 
 		std::string Apis::WideToAnsi(const wchar_t* wstr, int wstrSize)
 		{
-			if (is_empty_string(wstr))
+			if (string_is_empty(wstr))
 				return std::string();
 			return WideCharToMultiByte(CP_ACP, wstr, wstrSize);
 		}

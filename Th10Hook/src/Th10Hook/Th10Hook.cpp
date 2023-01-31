@@ -1,6 +1,7 @@
 #include "Th10Hook/Th10Hook.h"
 
 #include <Base/Exception/Exception.h>
+#include <Base/Windows/Apis.h>
 
 #include "Th10Hook/Th10Apis.h"
 
@@ -12,6 +13,28 @@ namespace th
 		m_sharedMemory(bip::open_only, "Th10SharedMemory"),
 		m_sharedData(nullptr)
 	{
+		SetForegroundWindow(window);
+
+		RECT rect = {};
+		GetWindowRect(window, &rect);
+		int windowWidth = rect.right - rect.left;
+		int windowHeight = rect.bottom - rect.top;
+		int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+		int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+		int x = (screenWidth - windowWidth) / 2;
+		int y = (screenHeight - windowHeight) / 2;
+		SetWindowPos(window, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+		char buf1[1024] = {};
+		GetWindowTextA(window, buf1, 1023);
+		std::wstring buf2 = Apis::MultiByteToWideChar(932, buf1);	// Shift-JIS
+		std::string buf3 = Apis::WideToAnsi(buf2);
+		SetWindowTextA(window, buf3.c_str());
+
+		//ULONG_PTR icon = GetClassLongPtrA(window, GCLP_HICON);
+		HICON icon = LoadIconA(GetModuleHandleA(nullptr), "IDI_ICON3");
+		SendMessageA(window, WM_SETICON, ICON_SMALL, (LPARAM)icon);
+
 		m_sharedData = m_sharedMemory.find<SharedData>("Th10SharedData").first;
 		if (m_sharedData == nullptr)
 			Throw(Exception("Th10SharedData未找到。"));

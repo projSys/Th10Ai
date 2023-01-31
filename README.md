@@ -3,12 +3,11 @@
 东方风神录AI，基于深度优先搜索算法。<br />
 Mountain of Faith's AI, based on depth first search algorithm.<br />
 
-![](https://github.com/unnamedmemory/Th10Ai/blob/master/1.png)
+![](https://github.com/rebuildworld/Th10Ai/blob/master/1.png)
 
 ## Building
 
-* open x86 Native Tools Command Prompt for VS 2022<br />
-	replace with your path: path/to/boost, path/to/detours, path/to/Th10Ai.
+* Open "x86 Native Tools Command Prompt for VS 2022".<br />
 * [Boost](https://www.boost.org)<br />
 	```
 	cd path/to/boost

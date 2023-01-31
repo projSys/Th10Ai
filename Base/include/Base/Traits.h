@@ -25,12 +25,12 @@ namespace base
 		return false;
 	}
 
-	inline bool is_empty_string(const char* str)
+	inline bool string_is_empty(const char* str)
 	{
 		return str == nullptr || str[0] == '\0';
 	}
 
-	inline bool is_empty_string(const wchar_t* wstr)
+	inline bool string_is_empty(const wchar_t* wstr)
 	{
 		return wstr == nullptr || wstr[0] == L'\0';
 	}
