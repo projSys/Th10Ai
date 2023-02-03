@@ -47,7 +47,7 @@ namespace th
 
 		m_sharedData = m_sharedMemory.find<SharedData>("Th10SharedData").first;
 		if (m_sharedData == nullptr)
-			Throw(Exception("Th10SharedData未找到。"));
+			Throw(Exception("Th10SharedData查找失败。"));
 
 		m_sharedData->setWindow(window);
 		m_sharedData->notifyInit();
@@ -92,7 +92,7 @@ namespace th
 		//m_sharedData->waitInput();
 		if (!m_sharedData->waitInput(Time(8)))
 		{
-			std::cout << "错误：等待输入超时。" << std::endl;
+			std::cerr << "等待输入超时。" << std::endl;
 			return;
 		}
 

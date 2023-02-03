@@ -12,18 +12,23 @@
 namespace th
 {
 	Th10Hook::Th10Hook() :
-		m_sharedMemory(bip::create_only, "Th10SharedMemory", 32 * 1024 * 1024),
-		m_sharedData(nullptr)
+		m_sharedMemory(bip::create_only, "Th10SharedMemory", MEMORY_SIZE),
+		m_sharedData(nullptr),
+		m_apOut(m_ioc),
+		m_apErr(m_ioc),
+		m_bufOut{},
+		m_bufErr{}
 	{
 		m_sharedData = m_sharedMemory.construct<SharedData>("Th10SharedData")(m_sharedMemory);
 		if (m_sharedData == nullptr)
-			Throw(Exception("Th10SharedData名称已被使用。"));
+			Throw(Exception("Th10SharedData构造失败。"));
 	}
 
 	Th10Hook::~Th10Hook()
 	{
-		if (m_th10Thread.joinable())
-			m_th10Thread.join();
+		m_ioc.stop();
+		if (m_asioThread.joinable())
+			m_asioThread.join();
 
 		m_sharedMemory.destroy_ptr(m_sharedData);
 	}
@@ -61,28 +66,66 @@ namespace th
 	void Th10Hook::launch(const Config& config)
 	{
 		fs::path th10Dir = config.th10Path.parent_path();
-		m_th10 = bp::child(config.th10Path.c_str(),
-			bp::std_out > m_ips, //bp::std_err > stderr, bp::std_in < stdin,
+		m_th10 = bp::child(config.th10Path.native(),
+			bp::std_out > m_apOut, bp::std_err > m_apErr, //bp::std_in < stdin,
 			bp::start_dir(th10Dir.native()), LaunchHandler());
-		m_th10Thread = std::thread(&Th10Hook::th10Proc, this);
+		m_asioThread = std::thread(&Th10Hook::asioProc, this);
 
 		if (!m_sharedData->waitInit(Time(3000)))
 			Throw(Exception("Th10Hook初始化超时。"));
 	}
 
-	void Th10Hook::th10Proc()
+	void Th10Hook::asioProc()
 	{
 		try
 		{
-			std::string line;
-			while (m_th10.running() && std::getline(m_ips, line) && !line.empty())
-				std::cout << line.c_str() << std::endl;
+			doStdoutRead();
+			doStderrRead();
+			m_ioc.run();
 		}
 		catch (...)
 		{
 			BASE_LOG(error) << Catcher() << std::endl;
 			ExitProcess(1);
 		}
+	}
+
+	void Th10Hook::doStdoutRead()
+	{
+		m_apOut.async_read_some(
+			ba::buffer(m_bufOut, BUFFER_SIZE - 1),
+			[this](const bs::error_code& ec, uint_t size)
+			{
+				if (!ec)
+				{
+					m_bufOut[size] = '\0';
+					std::cout << m_bufOut;
+					doStdoutRead();
+				}
+				else
+				{
+					std::cout << ec.message() << std::endl;
+				}
+			});
+	}
+
+	void Th10Hook::doStderrRead()
+	{
+		m_apErr.async_read_some(
+			ba::buffer(m_bufErr, BUFFER_SIZE - 1),
+			[this](const bs::error_code& ec, uint_t size)
+			{
+				if (!ec)
+				{
+					m_bufErr[size] = '\0';
+					std::cerr << m_bufErr;
+					doStderrRead();
+				}
+				else
+				{
+					std::cout << ec.message() << std::endl;
+				}
+			});
 	}
 
 	bool Th10Hook::isActive() const

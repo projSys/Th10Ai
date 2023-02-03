@@ -91,7 +91,7 @@ namespace th
 		{
 			bip::scoped_lock<bip::interprocess_mutex> lock(m_statusMutex);
 			if (m_statusUpdated)
-				std::cout << "错误：处理太慢，状态跳帧了。" << std::endl;
+				std::cerr << "处理太慢，状态跳帧了。" << std::endl;
 			m_writableStatus.swap(m_swappableStatus);
 			m_statusUpdated = true;
 		}
@@ -103,7 +103,7 @@ namespace th
 	{
 		bip::scoped_lock<bip::interprocess_mutex> lock(m_statusMutex);
 		if (m_statusUpdated)
-			std::cout << "警告：处理太慢，状态已更新。" << std::endl;
+			std::cout << "处理太慢，状态已更新。" << std::endl;
 		while (!m_statusUpdated && !m_exit)
 			m_statusCond.wait(lock);
 		m_readableStatus.swap(m_swappableStatus);
@@ -116,7 +116,7 @@ namespace th
 	{
 		bip::scoped_lock<bip::interprocess_mutex> lock(m_statusMutex);
 		if (m_statusUpdated)
-			std::cout << "警告：处理太慢，状态已更新。" << std::endl;
+			std::cout << "处理太慢，状态已更新。" << std::endl;
 		while (!m_statusUpdated && !m_exit)
 		{
 			bip::cv_status status = m_statusCond.wait_for(lock, timeout);
@@ -149,7 +149,7 @@ namespace th
 		{
 			bip::scoped_lock<bip::interprocess_mutex> lock(m_inputMutex);
 			if (m_inputUpdated)
-				std::cout << "错误：处理太慢，输入跳帧了。" << std::endl;
+				std::cerr << "处理太慢，输入跳帧了。" << std::endl;
 			m_writableInput.swap(m_swappableInput);
 			m_inputUpdated = true;
 		}
@@ -161,7 +161,7 @@ namespace th
 	{
 		bip::scoped_lock<bip::interprocess_mutex> lock(m_inputMutex);
 		if (!m_inputUpdated)
-			std::cout << "警告：处理太慢，等待输入。" << std::endl;
+			std::cout << "处理太慢，等待输入。" << std::endl;
 		while (!m_inputUpdated)
 			m_inputCond.wait(lock);
 		m_readableInput.swap(m_swappableInput);
@@ -173,7 +173,7 @@ namespace th
 	{
 		bip::scoped_lock<bip::interprocess_mutex> lock(m_inputMutex);
 		if (!m_inputUpdated)
-			std::cout << "警告：处理太慢，等待输入。" << std::endl;
+			std::cout << "处理太慢，等待输入。" << std::endl;
 		while (!m_inputUpdated)
 		{
 			bip::cv_status status = m_inputCond.wait_for(lock, timeout);

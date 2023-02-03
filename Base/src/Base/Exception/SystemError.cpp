@@ -29,7 +29,7 @@ namespace base
 			bloc::generator gen;
 			msg = blc::to_utf<char>(msg, gen(id));
 		}
-		os << msg.c_str() << '\n';
+		os << msg << '\n';
 	}
 
 	int32_t SystemError::getValue() const

@@ -32,7 +32,7 @@ namespace base
 				bloc::generator gen;
 				info = blc::to_utf<char>(info, gen(id));
 			}
-			os << info.c_str();
+			os << info;
 		}
 		catch (const std::exception& se)
 		{
@@ -41,7 +41,7 @@ namespace base
 			{
 				bloc::generator gen;
 				std::string buf = blc::to_utf<char>(se.what(), gen(id));
-				os << buf.c_str() << '\n';
+				os << buf << '\n';
 			}
 			else
 			{

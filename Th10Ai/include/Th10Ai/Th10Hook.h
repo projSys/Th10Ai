@@ -4,12 +4,15 @@
 
 #include <thread>
 #include <boost/process.hpp>
+#include <boost/asio.hpp>
 #include <Th10Base/SharedMemory.h>
 #include <Th10Base/SharedData.h>
 
 namespace th
 {
 	namespace bp = boost::process;
+	namespace ba = boost::asio;
+	namespace bs = boost::system;
 
 	class Config;
 
@@ -32,14 +35,23 @@ namespace th
 		SharedInput& getWritableInput();
 
 	private:
-		void th10Proc();
+		void asioProc();
+		void doStdoutRead();
+		void doStderrRead();
 
 	private:
+		static constexpr uint_t MEMORY_SIZE = 32 * 1024 * 1024;
+		static constexpr uint_t BUFFER_SIZE = 2 * 1024;
+
 		SharedMemory m_sharedMemory;
 		SharedData* m_sharedData;
 
 		bp::child m_th10;
-		bp::ipstream m_ips;
-		std::thread m_th10Thread;
+		std::thread m_asioThread;
+		ba::io_context m_ioc;
+		bp::async_pipe m_apOut;
+		bp::async_pipe m_apErr;
+		char m_bufOut[BUFFER_SIZE];
+		char m_bufErr[BUFFER_SIZE];
 	};
 }

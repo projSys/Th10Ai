@@ -15,7 +15,7 @@ namespace th
 	{
 		fs::path dir = Apis::GetModuleDir();
 		fs::path confPath = dir / L"Th10Ai.conf";
-		std::ifstream ifs(confPath.c_str());
+		std::ifstream ifs(confPath.native());
 		bpo::options_description desc("Config");
 		desc.add_options()
 			("Th10Path", bpo::value<std::string>(), "Th10Path");

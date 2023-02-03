@@ -24,7 +24,7 @@ namespace base
 			bloc::generator gen;
 			buf = blc::to_utf<char>(buf, gen(id));
 		}
-		os << buf.c_str();
+		os << buf;
 #endif
 		return os;
 	}

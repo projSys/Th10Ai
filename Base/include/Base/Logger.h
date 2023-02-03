@@ -13,6 +13,7 @@ namespace base
 	namespace blog = boost::log;
 	namespace sinks = boost::log::sinks;
 
+	//TODO: 重写辣鸡log
 	class Logger
 	{
 	public:
