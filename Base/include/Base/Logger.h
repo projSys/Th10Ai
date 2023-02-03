@@ -10,7 +10,7 @@
 namespace base
 {
 	namespace fs = std::filesystem;
-	namespace bl = boost::log;
+	namespace blog = boost::log;
 	namespace sinks = boost::log::sinks;
 
 	class Logger

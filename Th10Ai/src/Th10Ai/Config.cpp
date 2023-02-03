@@ -2,12 +2,14 @@
 
 #include <fstream>
 #include <boost/program_options.hpp>
+#include <boost/locale.hpp>
 
 #include <Base/Windows/Apis.h>
 
 namespace th
 {
 	namespace bpo = boost::program_options;
+	namespace blc = boost::locale::conv;
 
 	Config::Config()
 	{
@@ -21,6 +23,6 @@ namespace th
 		bpo::store(bpo::parse_config_file(ifs, desc), vm);
 		bpo::notify(vm);
 
-		th10Path = Apis::AnsiToWide(vm["Th10Path"].as<std::string>());
+		th10Path = blc::to_utf<wchar_t>(vm["Th10Path"].as<std::string>(), "UTF-8");
 	}
 }

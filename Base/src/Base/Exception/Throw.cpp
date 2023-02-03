@@ -8,7 +8,7 @@ namespace base
 	{
 		os << "SourceLocation:\n"
 			<< " in " << sl.function_name()
-			//TODO：ANSI转UTF8
+			// 不需要转码，和代码文件的编码一致
 			<< " at " << sl.file_name()
 			<< ':' << sl.line()
 			<< '\n';

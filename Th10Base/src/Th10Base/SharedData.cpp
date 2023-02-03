@@ -196,17 +196,17 @@ namespace th
 		return *m_readableInput;
 	}
 
-	void SharedData::checkUpdate()
-	{
-		Time diff = Clock::Now() - updateTime;
-		if (diff > Time(0))
-			std::cout << diff << std::endl;
-	}
+	//void SharedData::checkUpdate()
+	//{
+	//	Time diff = Clock::Now() - updateTime;
+	//	if (diff > Time(0))
+	//		std::cout << diff << std::endl;
+	//}
 
-	void SharedData::checkInput()
-	{
-		Time diff = Clock::Now() - inputTime;
-		if (diff > Time(0))
-			std::cout << diff << std::endl;
-	}
+	//void SharedData::checkInput()
+	//{
+	//	Time diff = Clock::Now() - inputTime;
+	//	if (diff > Time(0))
+	//		std::cout << diff << std::endl;
+	//}
 }
