@@ -11,6 +11,8 @@
 
 namespace th
 {
+	namespace bs = boost::system;
+
 	Th10Hook::Th10Hook() :
 		m_sharedMemory(bip::create_only, "Th10SharedMemory", MEMORY_SIZE),
 		m_sharedData(nullptr),
@@ -85,8 +87,9 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << Catcher() << std::endl;
-			ExitProcess(1);
+			LOG_FATAL() << Catcher() << std::endl;
+			Log::Flush();
+			//ExitProcess(1);
 		}
 	}
 

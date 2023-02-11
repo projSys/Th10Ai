@@ -1,6 +1,5 @@
 #include "Th10Hook/DllMain.h"
 
-#include <Base/Logger.h>
 #include <Base/Exception/Catcher.h>
 #include <Base/Windows/Apis.h>
 
@@ -14,13 +13,21 @@ HMODULE g_module = nullptr;
 
 void Hook()
 {
+	try
+	{
+		fs::path dir = Apis::GetModuleDir();
+		fs::path logPath = dir / L"Th10Hook.log";
+		Log::Initialize(logPath);
+	}
+	catch (...)
+	{
+		MessageBoxW(nullptr, L"Log初始化失败。", L"Th10Hook", MB_OK);
+		throw;
+	}
+
 	MyDetours detours;
 	try
 	{
-		fs::path logPath = Apis::GetModuleDir(g_module) / L"Th10Hook.log";
-		g_logger.addFileLog(logPath);
-		g_logger.addCommonAttributes();
-
 		detours.transactionBegin();
 		g_d3d9Hook.attach(detours);
 		g_di8Hook.attach(detours);
@@ -29,8 +36,9 @@ void Hook()
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG(error) << Catcher() << std::endl;
-		ExitProcess(1);
+		LOG_FATAL() << Catcher() << std::endl;
+		Log::Flush();
+		//ExitProcess(1);
 	}
 }
 
@@ -47,8 +55,9 @@ void Unhook()
 	catch (...)
 	{
 		detours.transactionAbort();
-		BASE_LOG(error) << Catcher() << std::endl;
-		ExitProcess(1);
+		LOG_FATAL() << Catcher() << std::endl;
+		Log::Flush();
+		//ExitProcess(1);
 	}
 }
 

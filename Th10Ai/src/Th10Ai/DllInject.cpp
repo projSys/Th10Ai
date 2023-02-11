@@ -75,27 +75,4 @@ namespace th
 		if (exitCode == 0)
 			Throw(Exception("LoadLibraryW()调用失败。"));
 	}
-
-	void DllInject::Launch(const fs::path& exePath, const fs::path& dllPath)
-	{
-		fs::path exeDir = exePath.parent_path();
-
-		STARTUPINFOW si = {};
-		si.cb = sizeof(si);
-		PROCESS_INFORMATION pi = {};
-		if (!CreateProcessW(exePath.c_str(), nullptr, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, exeDir.c_str(), &si, &pi))
-			Throw(SystemError(GetLastError()));
-		ON_SCOPE_EXIT([&pi]()
-			{
-				CloseHandle(pi.hThread);
-				CloseHandle(pi.hProcess);
-			});
-
-		//EnableDebugPrivilege();
-		Inject(pi.hProcess, dllPath);
-
-		DWORD count = ResumeThread(pi.hThread);
-		if (count == (DWORD)-1)
-			Throw(SystemError(GetLastError()));
-	}
 }

@@ -12,7 +12,6 @@ namespace th
 {
 	namespace bp = boost::process;
 	namespace ba = boost::asio;
-	namespace bs = boost::system;
 
 	class Config;
 

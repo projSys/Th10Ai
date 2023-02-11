@@ -21,12 +21,12 @@ namespace th
 
 		RECT rect = {};
 		GetWindowRect(window, &rect);
-		int windowWidth = rect.right - rect.left;
-		int windowHeight = rect.bottom - rect.top;
-		int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-		int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-		int x = (screenWidth - windowWidth) / 2;
-		int y = (screenHeight - windowHeight) / 2;
+		int32_t windowWidth = rect.right - rect.left;
+		int32_t windowHeight = rect.bottom - rect.top;
+		int32_t screenWidth = GetSystemMetrics(SM_CXSCREEN);
+		int32_t screenHeight = GetSystemMetrics(SM_CYSCREEN);
+		int32_t x = (screenWidth - windowWidth) / 2;
+		int32_t y = (screenHeight - windowHeight) / 2;
 		SetWindowPos(window, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
 		std::string srcId = "ja_JP.windows-932";	// ja_JP.windows-932 ja_JP.SJIS Shift-JIS

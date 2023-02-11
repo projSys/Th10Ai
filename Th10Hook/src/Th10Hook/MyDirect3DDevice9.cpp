@@ -18,8 +18,9 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << Catcher() << std::endl;
-			ExitProcess(1);
+			LOG_FATAL() << Catcher() << std::endl;
+			Log::Flush();
+			//ExitProcess(1);
 		}
 	}
 
@@ -134,8 +135,9 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << Catcher() << std::endl;
-			ExitProcess(1);
+			LOG_FATAL() << Catcher() << std::endl;
+			Log::Flush();
+			//ExitProcess(1);
 		}
 
 		//Time t2 = Clock::Now();

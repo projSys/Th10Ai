@@ -54,9 +54,6 @@
     <ClInclude Include="include\Base\Time.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\Base\Logger.h">
-      <Filter>头文件\Base</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Traits.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -90,9 +87,6 @@
       <Filter>源文件\Base\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Time.cpp">
-      <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Base\Logger.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Exception\Exception.cpp">

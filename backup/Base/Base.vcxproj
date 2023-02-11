@@ -164,7 +164,6 @@
     <ClInclude Include="include\Base\Time.h" />
     <ClInclude Include="include\Base\Common.h" />
     <ClInclude Include="include\Base\Log.h" />
-    <ClInclude Include="include\Base\Logger.h" />
     <ClInclude Include="include\Base\ScopeGuard.h" />
     <ClInclude Include="include\Base\Streamable.h" />
     <ClInclude Include="include\Base\Traits.h" />
@@ -180,7 +179,6 @@
     <ClCompile Include="src\Base\Exception\Throw.cpp" />
     <ClCompile Include="src\Base\Time.cpp" />
     <ClCompile Include="src\Base\Log.cpp" />
-    <ClCompile Include="src\Base\Logger.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

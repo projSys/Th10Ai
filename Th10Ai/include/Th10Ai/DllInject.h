@@ -13,6 +13,5 @@ namespace th
 	public:
 		static void EnableDebugPrivilege();
 		static void Inject(HANDLE process, const fs::path& dllPath);
-		static void Launch(const fs::path& exePath, const fs::path& dllPath);
 	};
 }

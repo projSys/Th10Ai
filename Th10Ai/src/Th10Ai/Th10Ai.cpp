@@ -1,8 +1,6 @@
 #include "Th10Ai/Th10Ai.h"
 
-#include <Base/Logger.h>
 #include <Base/Exception/Catcher.h>
-#include <Base/Windows/Apis.h>
 
 #include "Th10Ai/Path.h"
 
@@ -15,13 +13,7 @@ namespace th
 		m_bombCount(0),
 		m_findItemTime(0)
 	{
-		fs::path dir = Apis::GetModuleDir();
-		fs::path logPath = dir / L"Th10Ai.log";
-		g_logger.addFileLog(logPath);
-		g_logger.addCommonAttributes();
-
 		m_th10Hook.launch(m_config);
-
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
 	}
 
@@ -60,8 +52,9 @@ namespace th
 		}
 		catch (...)
 		{
-			BASE_LOG(error) << Catcher() << std::endl;
-			ExitProcess(1);
+			LOG_FATAL() << Catcher() << std::endl;
+			Log::Flush();
+			//ExitProcess(1);
 		}
 	}
 
