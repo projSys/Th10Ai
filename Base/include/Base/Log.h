@@ -23,7 +23,7 @@ namespace base
 	class Log
 	{
 	public:
-		static void Initialize(const fs::path& filePath);
+		static void Initialize(const fs::path& logPath);
 		static void Flush();
 	};
 

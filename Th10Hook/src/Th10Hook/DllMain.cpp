@@ -6,16 +6,19 @@
 #include "Th10Hook/MyDetours.h"
 #include "Th10Hook/D3d9Hook.h"
 #include "Th10Hook/Di8Hook.h"
+//#include "Th10Hook/Th10Hook.h"
 
 using namespace th;
 
 HMODULE g_module = nullptr;
+D3d9Hook g_d3d9Hook;
+Di8Hook g_di8Hook;
 
 void Hook()
 {
 	try
 	{
-		fs::path dir = Apis::GetModuleDir();
+		fs::path dir = Apis::GetModuleDir(g_module);
 		fs::path logPath = dir / L"Th10Hook.log";
 		Log::Initialize(logPath);
 	}
@@ -77,6 +80,8 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reasonForCall, LPVOID reserved)
 		break;
 
 	case DLL_PROCESS_DETACH:
+		//if (g_th10Hook != nullptr)
+		//	g_th10Hook = nullptr;
 		//Unhook();
 		break;
 	}

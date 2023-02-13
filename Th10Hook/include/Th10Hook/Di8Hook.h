@@ -27,6 +27,4 @@ namespace th
 
 		DirectInput8Create_t* m_directInput8CreateOrig;
 	};
-
-	extern Di8Hook g_di8Hook;
 }

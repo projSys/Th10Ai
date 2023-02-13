@@ -9,8 +9,6 @@
 
 namespace th
 {
-	Di8Hook g_di8Hook;
-
 	Di8Hook::Di8Hook() :
 		Singleton(this),
 		m_directInput8CreateOrig(nullptr)

@@ -40,7 +40,7 @@ namespace base
 		return logger;
 	}
 
-	void Log::Initialize(const fs::path& filePath)
+	void Log::Initialize(const fs::path& logPath)
 	{
 		logging::core_ptr core = logging::core::get();
 
@@ -57,7 +57,7 @@ namespace base
 		);
 
 		Sink::locked_backend_ptr backend = sink->locked_backend();
-		boost::shared_ptr<std::ostream> ofs = boost::make_shared<std::ofstream>(filePath.native(), std::ios::app);
+		boost::shared_ptr<std::ostream> ofs = boost::make_shared<std::ofstream>(logPath.native(), std::ios::app);
 		backend->add_stream(ofs);
 		boost::shared_ptr<std::ostream> clog(&std::clog, boost::null_deleter());
 		backend->add_stream(clog);

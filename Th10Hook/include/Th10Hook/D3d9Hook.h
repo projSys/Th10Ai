@@ -27,6 +27,4 @@ namespace th
 
 		Direct3DCreate9_t* m_direct3DCreate9Orig;
 	};
-
-	extern D3d9Hook g_d3d9Hook;
 }

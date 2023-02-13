@@ -9,8 +9,6 @@
 
 namespace th
 {
-	D3d9Hook g_d3d9Hook;
-
 	D3d9Hook::D3d9Hook() :
 		Singleton(this),
 		m_direct3DCreate9Orig(nullptr)

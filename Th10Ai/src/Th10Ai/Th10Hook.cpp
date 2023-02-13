@@ -1,6 +1,7 @@
 #include "Th10Ai/Th10Hook.h"
 
 #include <boost/process/detail/handler_base.hpp>
+#include <boost/locale.hpp>
 #include <Base/Exception/Exception.h>
 #include <Base/Exception/SystemError.h>
 #include <Base/Exception/Catcher.h>
@@ -12,6 +13,9 @@
 namespace th
 {
 	namespace bs = boost::system;
+	namespace bloc = boost::locale;
+	namespace blc = boost::locale::conv;
+	namespace blu = boost::locale::util;
 
 	Th10Hook::Th10Hook() :
 		m_sharedMemory(bip::create_only, "Th10SharedMemory", MEMORY_SIZE),
@@ -107,7 +111,14 @@ namespace th
 				}
 				else
 				{
-					std::cout << ec.message() << std::endl;
+					std::string msg = ec.message();
+					std::string id = blu::get_system_locale();
+					if (id.find("UTF-8") == std::string::npos)
+					{
+						bloc::generator gen;
+						msg = blc::to_utf<char>(msg, gen(id));
+					}
+					std::cout << msg << std::endl;
 				}
 			});
 	}
@@ -126,7 +137,14 @@ namespace th
 				}
 				else
 				{
-					std::cout << ec.message() << std::endl;
+					std::string msg = ec.message();
+					std::string id = blu::get_system_locale();
+					if (id.find("UTF-8") == std::string::npos)
+					{
+						bloc::generator gen;
+						msg = blc::to_utf<char>(msg, gen(id));
+					}
+					std::cout << msg << std::endl;
 				}
 			});
 	}
