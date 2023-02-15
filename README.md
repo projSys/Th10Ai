@@ -12,7 +12,7 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 	```
 	cd path/to/boost
 	bootstrap.bat
-	b2 stage link=static runtime-link=shared threading=multi define=BOOST_USE_WINAPI_VERSION=0x0A00 --without-python
+	b2 stage link=static runtime-link=shared threading=multi define=BOOST_USE_WINAPI_VERSION=0x0A00 compileflags=/utf-8
 	```
 
 * [Detours](https://github.com/microsoft/detours)<br />
