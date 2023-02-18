@@ -1,4 +1,4 @@
-#include "Th10Ai/Common.h"
+/*#include "Th10Ai/Common.h"
 
 #include <memory>
 #include <Base/Exception/Catcher.h>
@@ -43,3 +43,4 @@ int main(int argc, char* argv[])
 	system("pause");
 	return 0;
 }
+*/

@@ -25,7 +25,7 @@ namespace th
 		int32_t windowHeight = rect.bottom - rect.top;
 		int32_t screenWidth = GetSystemMetrics(SM_CXSCREEN);
 		int32_t screenHeight = GetSystemMetrics(SM_CYSCREEN);
-		int32_t x = (screenWidth - windowWidth) / 2;
+		int32_t x = (screenWidth / 2) - windowWidth;
 		int32_t y = (screenHeight - windowHeight) / 2;
 		SetWindowPos(window, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 

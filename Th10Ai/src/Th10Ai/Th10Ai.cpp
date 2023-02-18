@@ -6,7 +6,8 @@
 
 namespace th
 {
-	Th10Ai::Th10Ai() :
+	Th10Ai::Th10Ai(Listener* listener) :
+		m_listener(listener),
 		m_controlDone(false),
 		m_handleDone(false),
 		m_bombTime(0),
@@ -15,10 +16,16 @@ namespace th
 	{
 		m_th10Hook.launch(m_config);
 		m_controlThread = std::thread(&Th10Ai::controlProc, this);
+		m_handleThread = std::thread(&Th10Ai::handleProc, this);
 	}
 
 	Th10Ai::~Th10Ai()
 	{
+		m_handleDone = true;
+		m_th10Hook.notifyExit();
+		if (m_handleThread.joinable())
+			m_handleThread.join();
+
 		m_controlDone = true;
 		if (m_controlThread.joinable())
 			m_controlThread.join();
@@ -77,10 +84,24 @@ namespace th
 		}
 	}
 
-	void Th10Ai::run()
+	void Th10Ai::focus()
 	{
-		while (!m_handleDone)
-			handle();
+		m_th10Hook.focus();
+	}
+
+	void Th10Ai::handleProc()
+	{
+		try
+		{
+			while (!m_handleDone)
+				handle();
+		}
+		catch (...)
+		{
+			LOG_FATAL() << Catcher() << std::endl;
+			Log::Flush();
+			//ExitProcess(1);
+		}
 	}
 
 	bool Th10Ai::handle()
@@ -127,6 +148,8 @@ namespace th
 
 		m_status.copy(m_th10Hook.getReadableStatus());
 		m_status.updateExtra();
+
+		m_listener->onStatusUpdate(m_th10Hook.getReadableStatus());
 
 		//m_status2.copy(m_status1);
 		//m_status1.copy(m_status0);

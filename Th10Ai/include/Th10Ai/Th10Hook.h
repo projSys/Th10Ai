@@ -22,14 +22,18 @@ namespace th
 		~Th10Hook();
 
 		void launch(const Config& config);
+		void focus();
 
 		bool isActive() const;
 		void setActive(bool active);
 		HWND getWindow() const;
+
+		void notifyExit();
 		bool waitUpdate();
 		bool waitUpdate(const Time& timeout);
 		bool isExit() const;
 		const SharedStatus& getReadableStatus() const;
+
 		void notifyInput();
 		SharedInput& getWritableInput();
 

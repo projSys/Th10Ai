@@ -149,6 +149,11 @@ namespace th
 			});
 	}
 
+	void Th10Hook::focus()
+	{
+		SetForegroundWindow(m_sharedData->getWindow());
+	}
+
 	bool Th10Hook::isActive() const
 	{
 		return m_sharedData->isActive();
@@ -162,6 +167,11 @@ namespace th
 	HWND Th10Hook::getWindow() const
 	{
 		return m_sharedData->getWindow();
+	}
+
+	void Th10Hook::notifyExit()
+	{
+		m_sharedData->notifyExit();
 	}
 
 	bool Th10Hook::waitUpdate()
