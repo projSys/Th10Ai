@@ -140,6 +140,7 @@
     <ClInclude Include="include\Th10Ai\Common.h" />
     <ClInclude Include="include\Th10Ai\Config.h" />
     <ClInclude Include="include\Th10Ai\DllInject.h" />
+    <ClInclude Include="include\Th10Ai\Listener.h" />
     <ClInclude Include="include\Th10Ai\MyApp.h" />
     <ClInclude Include="include\Th10Ai\MyFrame.h" />
     <ClInclude Include="include\Th10Ai\MyWindow.h" />

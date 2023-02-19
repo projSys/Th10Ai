@@ -57,6 +57,9 @@
     <ClInclude Include="include\Th10Ai\MyWindow.h">
       <Filter>头文件\Th10Ai</Filter>
     </ClInclude>
+    <ClInclude Include="include\Th10Ai\Listener.h">
+      <Filter>头文件\Th10Ai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Th10Ai\Config.cpp">

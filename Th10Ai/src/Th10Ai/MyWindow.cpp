@@ -92,20 +92,16 @@ namespace th
 		dc.SetPen(*wxRED_PEN);
 		dc.SetBrush(wxNullBrush);
 		const std::vector<Laser>& lasers = m_readableStatus->getLasers();
-		for (Laser laser : lasers)
+		for (const Laser& laser : lasers)
 		{
-			laser.updateExtra();
-			dc.DrawLine(wxPoint(std::round(laser.topLeft.x + 192.0), std::round(laser.topLeft.y)),
-				wxPoint(std::round(laser.topRight.x + 192.0), std::round(laser.topRight.y)));
-
-			dc.DrawLine(wxPoint(std::round(laser.topRight.x + 192.0), std::round(laser.topRight.y)),
-				wxPoint(std::round(laser.bottomRight.x + 192.0), std::round(laser.bottomRight.y)));
-
-			dc.DrawLine(wxPoint(std::round(laser.bottomRight.x + 192.0), std::round(laser.bottomRight.y)),
-				wxPoint(std::round(laser.bottomLeft.x + 192.0), std::round(laser.bottomLeft.y)));
-
-			dc.DrawLine(wxPoint(std::round(laser.bottomLeft.x + 192.0), std::round(laser.bottomLeft.y)),
-				wxPoint(std::round(laser.topLeft.x + 192.0), std::round(laser.topLeft.y)));
+			wxPoint p1(std::round(laser.topLeft.x + 192.0), std::round(laser.topLeft.y));
+			wxPoint p2(std::round(laser.topRight.x + 192.0), std::round(laser.topRight.y));
+			wxPoint p3(std::round(laser.bottomRight.x + 192.0), std::round(laser.bottomRight.y));
+			wxPoint p4(std::round(laser.bottomLeft.x + 192.0), std::round(laser.bottomLeft.y));
+			dc.DrawLine(p1, p2);
+			dc.DrawLine(p2, p3);
+			dc.DrawLine(p3, p4);
+			dc.DrawLine(p4, p1);
 		}
 	}
 
@@ -117,12 +113,13 @@ namespace th
 	void MyWindow::onStatusUpdate(const SharedStatus& status)
 	{
 		m_writableStatus->copy(status);
+		m_writableStatus->updateExtra();
 		{
 			std::lock_guard<std::mutex> lock(m_statusMutex);
 			m_writableStatus.swap(m_swappableStatus);
 			m_statusUpdated = true;
 		}
-		Refresh();
+		Refresh(false);
 		//Update();
 	}
 }
