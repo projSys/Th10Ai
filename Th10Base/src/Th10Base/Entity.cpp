@@ -13,7 +13,7 @@ namespace th
 		if (!delta.isZero())
 		{
 			deltaV = delta.verticalize().normalize();
-			projV = projectByNormalized(deltaV);
+			projV = projectWithNormalized(deltaV);
 		}
 	}
 
@@ -23,7 +23,6 @@ namespace th
 	//		&& std::abs(pos.y - other.pos.y) < (size.y + other.size.y) / _F(2.0);
 	//}
 
-	// 严重错误：并不都是直线运动
 	bool Entity::willCollideWith(const AABB& other) const
 	{
 		// 可以认为与移动向量总是重叠的
@@ -31,8 +30,8 @@ namespace th
 		if (!delta.isZero())
 		{
 			//vec2 deltaV = delta.verticalize().normalize();
-			//return projectByNormalized(deltaV).overlap(other.projectByNormalized(deltaV));
-			return projV.overlap(other.projectByNormalized(deltaV));
+			//return projectWithNormalized(deltaV).overlap(other.projectWithNormalized(deltaV));
+			return projV.overlap(other.projectWithNormalized(deltaV));
 		}
 		else
 		{
@@ -40,7 +39,7 @@ namespace th
 		}
 	}
 
-	float_t Entity::distance(const Entity& other) const
+	vec2::value_t Entity::distance(const Entity& other) const
 	{
 		return (pos - other.pos).length();
 	}
@@ -51,6 +50,7 @@ namespace th
 		updateAABB();
 	}
 
+	// 严重错误：子弹除了直线移动，还有曲线移动、随机移动等，现在使用单帧偏移量叠加得到的移动轨迹是错误的。
 	void Entity::advance(int_t frame)
 	{
 		vec2 offset = delta * static_cast<float_t>(frame);

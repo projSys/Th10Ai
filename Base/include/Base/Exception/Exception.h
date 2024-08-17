@@ -9,7 +9,6 @@
 namespace base
 {
 	class Exception :
-		public std::runtime_error,
 		public Throwable
 	{
 	public:
@@ -17,5 +16,10 @@ namespace base
 		explicit Exception(const std::string& str);
 
 		virtual void toStream(std::ostream& os) const override;
+
+		const char* what() const;
+
+	private:
+		std::runtime_error m_impl;
 	};
 }

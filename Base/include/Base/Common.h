@@ -3,20 +3,24 @@
 #ifdef _WIN32
 // define something for Windows (32-bit and 64-bit, this part is common)
 #ifndef NOMINMAX
-#define NOMINMAX
+#define NOMINMAX 1
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN 1
 #endif
 
 #include <sdkddkver.h>
 #include <WinSock2.h>
 #include <Windows.h>
 
-//#ifndef BOOST_USE_WINDOWS_H
-//#define BOOST_USE_WINDOWS_H
-//#endif
+#ifndef BOOST_USE_WINDOWS_H
+#define BOOST_USE_WINDOWS_H 1
+#endif
+
+#ifndef BOOST_USE_WINAPI_VERSION
+#define BOOST_USE_WINAPI_VERSION 0x0A00
+#endif
 
 #define BASE_WINDOWS 1
 

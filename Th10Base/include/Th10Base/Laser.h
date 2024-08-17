@@ -31,7 +31,7 @@ namespace th
 		void updateExtra();
 		bool willCollideWith(const AABB& other) const;
 
-		float_t distance(const Entity& entity) const;
+		vec2::value_t distance(const Entity& entity) const;
 		void setPosition(const vec2& pos0);
 		void advance(int_t frame);
 

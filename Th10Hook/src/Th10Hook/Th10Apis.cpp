@@ -224,6 +224,7 @@ namespace th
 		// 最后一个是空子弹，status == 5，其他全0
 		for (uint_t i = 0; i < BULLET_MAX_COUNT - 1; ++i)
 		{
+			// 数组索引id无效，子弹在数组中的位置每帧都会变化
 			const BulletRaw* raw = &(container->bullets[i]);
 			if (raw->status != 0)
 				bullets.emplace_back(raw, i);

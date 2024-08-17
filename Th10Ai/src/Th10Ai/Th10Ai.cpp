@@ -6,7 +6,7 @@
 
 namespace th
 {
-	Th10Ai::Th10Ai(Listener* listener) :
+	Th10Ai::Th10Ai(Th10AiListener* listener) :
 		m_listener(listener),
 		m_controlDone(false),
 		m_handleDone(false),
@@ -149,7 +149,7 @@ namespace th
 		m_status.copy(m_th10Hook.getReadableStatus());
 		m_status.updateExtra();
 
-		m_listener->onStatusUpdate(m_th10Hook.getReadableStatus());
+		m_listener->onStatusUpdate(m_status);
 
 		//m_status2.copy(m_status1);
 		//m_status1.copy(m_status0);

@@ -2,8 +2,6 @@
 
 #include "Base/Exception/SystemError.h"
 
-#pragma warning(disable: 6387)
-
 namespace base
 {
 	namespace win

@@ -23,7 +23,7 @@ namespace th
 		//bool collide(const Entity& other) const;
 		bool willCollideWith(const AABB& other) const;
 
-		float_t distance(const Entity& other) const;
+		vec2::value_t distance(const Entity& other) const;
 		void setPosition(const vec2& pos0);
 		void advance(int_t frame);
 

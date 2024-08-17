@@ -43,9 +43,8 @@ namespace th
 		//Time inputTime;
 
 	private:
-		// BUG：在托管共享内存中创建超过5个同步对象会导致析构异常
-		//bip::interprocess_mutex m_initMutex;
-		//bip::interprocess_condition m_initCond;
+		bip::interprocess_mutex m_initMutex;
+		bip::interprocess_condition m_initCond;
 		bool m_inited;
 		std::atomic<bool> m_active;
 		HWND m_window;

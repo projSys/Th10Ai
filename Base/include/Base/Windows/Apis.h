@@ -17,7 +17,7 @@ namespace base
 			static fs::path GetModuleDir(HMODULE module = nullptr);
 
 		private:
-			static constexpr DWORD BUFFER_SIZE = 2 * 1024;
+			static constexpr DWORD BUFFER_SIZE = 1 * 1024;
 		};
 	}
 }

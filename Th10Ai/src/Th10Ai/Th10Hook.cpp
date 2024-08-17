@@ -1,6 +1,5 @@
 #include "Th10Ai/Th10Hook.h"
 
-#include <boost/process/detail/handler_base.hpp>
 #include <boost/locale.hpp>
 #include <Base/Exception/Exception.h>
 #include <Base/Exception/SystemError.h>
@@ -16,28 +15,6 @@ namespace th
 	namespace bloc = boost::locale;
 	namespace blc = boost::locale::conv;
 	namespace blu = boost::locale::util;
-
-	Th10Hook::Th10Hook() :
-		m_sharedMemory(bip::create_only, "Th10SharedMemory", MEMORY_SIZE),
-		m_sharedData(nullptr),
-		m_apOut(m_ioc),
-		m_apErr(m_ioc),
-		m_bufOut{},
-		m_bufErr{}
-	{
-		m_sharedData = m_sharedMemory.construct<SharedData>("Th10SharedData")(m_sharedMemory);
-		if (m_sharedData == nullptr)
-			Throw(Exception("Th10SharedData构造失败。"));
-	}
-
-	Th10Hook::~Th10Hook()
-	{
-		m_ioc.stop();
-		if (m_asioThread.joinable())
-			m_asioThread.join();
-
-		m_sharedMemory.destroy_ptr(m_sharedData);
-	}
 
 	class LaunchHandler :
 		public bp::detail::handler_base
@@ -68,6 +45,28 @@ namespace th
 				Throw(SystemError(GetLastError()));
 		}
 	};
+
+	Th10Hook::Th10Hook() :
+		m_sharedData(nullptr),
+		m_apOut(m_ioc),
+		m_apErr(m_ioc),
+		m_bufOut{},
+		m_bufErr{}
+	{
+		m_sharedMemory = SharedMemory(bip::create_only, "Th10SharedMemory", SHARED_SIZE);
+		m_sharedData = m_sharedMemory.construct<SharedData>("Th10SharedData")(m_sharedMemory);
+		if (m_sharedData == nullptr)
+			Throw(Exception("Th10SharedData构造失败。"));
+	}
+
+	Th10Hook::~Th10Hook()
+	{
+		m_ioc.stop();
+		if (m_asioThread.joinable())
+			m_asioThread.join();
+
+		m_sharedMemory.destroy_ptr(m_sharedData);
+	}
 
 	void Th10Hook::launch(const Config& config)
 	{

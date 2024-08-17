@@ -8,7 +8,7 @@ namespace th
 	{
 	}
 
-	Projection::Projection(float_t min0, float_t max0) :
+	Projection::Projection(value_t min0, value_t max0) :
 		min(min0),
 		max(max0)
 	{

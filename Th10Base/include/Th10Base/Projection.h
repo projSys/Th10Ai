@@ -2,18 +2,22 @@
 
 #include "Th10Base/Common.h"
 
+#include "Th10Base/Vector2.h"
+
 namespace th
 {
 	class Projection
 	{
 	public:
+		using value_t = vec2::value_t;
+
 		Projection();
-		Projection(float_t min0, float_t max0);
+		Projection(value_t min0, value_t max0);
 
 		bool overlap(const Projection& other) const;
 
 	public:
-		float_t min;
-		float_t max;
+		value_t min;
+		value_t max;
 	};
 }

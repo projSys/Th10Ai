@@ -14,7 +14,6 @@ namespace th
 	std::unique_ptr<Th10Hook> g_th10Hook;
 
 	Th10Hook::Th10Hook(HWND window) :
-		m_sharedMemory(bip::open_only, "Th10SharedMemory"),
 		m_sharedData(nullptr)
 	{
 		SetForegroundWindow(window);
@@ -45,6 +44,7 @@ namespace th
 		HICON icon = LoadIconA(GetModuleHandleA(nullptr), "IDI_ICON3");
 		SendMessageA(window, WM_SETICON, ICON_SMALL, (LPARAM)icon);
 
+		m_sharedMemory = SharedMemory(bip::open_only, "Th10SharedMemory");
 		m_sharedData = m_sharedMemory.find<SharedData>("Th10SharedData").first;
 		if (m_sharedData == nullptr)
 			Throw(Exception("Th10SharedData查找失败。"));

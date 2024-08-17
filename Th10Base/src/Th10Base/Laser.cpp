@@ -30,7 +30,7 @@ namespace th
 		if (!delta.isZero())
 		{
 			deltaV = delta.verticalize().normalize();
-			projV = projectByNormalized(deltaV);
+			projV = projectWithNormalized(deltaV);
 		}
 	}
 
@@ -39,8 +39,8 @@ namespace th
 		if (!delta.isZero())
 		{
 			//vec2 deltaV = delta.verticalize().normalize();
-			//return projectByNormalized(deltaV).overlap(other.projectByNormalized(deltaV));
-			return projV.overlap(other.projectByNormalized(deltaV));
+			//return projectWithNormalized(deltaV).overlap(other.projectWithNormalized(deltaV));
+			return projV.overlap(other.projectWithNormalized(deltaV));
 		}
 		else
 		{
@@ -48,7 +48,7 @@ namespace th
 		}
 	}
 
-	float_t Laser::distance(const Entity& entity) const
+	vec2::value_t Laser::distance(const Entity& entity) const
 	{
 		return (pos - entity.pos).length();
 	}

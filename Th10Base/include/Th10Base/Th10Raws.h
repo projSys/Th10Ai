@@ -8,8 +8,6 @@ namespace th
 
 	constexpr uint_t BULLET_MAX_COUNT = 2001;
 
-#pragma pack(1)
-
 	struct GlobalVar
 	{
 		float32_t power;
@@ -21,6 +19,8 @@ namespace th
 
 		int32_t stageFrame;
 	};
+
+#pragma pack(push, 1)
 
 	struct PlayerRaw
 	{
@@ -169,5 +169,5 @@ namespace th
 
 	static_assert(sizeof(LaserContainer) == 0x45C);
 
-#pragma pack()
+#pragma pack(pop)
 }

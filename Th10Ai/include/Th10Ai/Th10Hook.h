@@ -43,8 +43,8 @@ namespace th
 		void doStderrRead();
 
 	private:
-		static constexpr uint_t MEMORY_SIZE = 32 * 1024 * 1024;
-		static constexpr uint_t BUFFER_SIZE = 2 * 1024;
+		static constexpr uint_t SHARED_SIZE = 32 * 1024 * 1024;
+		static constexpr uint_t BUFFER_SIZE = 1 * 1024;
 
 		SharedMemory m_sharedMemory;
 		SharedData* m_sharedData;

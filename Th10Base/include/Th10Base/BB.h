@@ -12,7 +12,7 @@ namespace th
 	{
 	public:
 		// 投影，把2维降成1维，投影轴必须是单位向量
-		Projection projectByNormalized(const vec2& projAxis) const;
+		Projection projectWithNormalized(const vec2& projAxis) const;
 		Projection project(const vec2& projAxis) const;
 
 		// 平移

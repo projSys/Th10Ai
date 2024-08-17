@@ -4,7 +4,7 @@
 
 // 通用interprocess_mutex/interprocess_condition性能太低
 #ifndef BOOST_INTERPROCESS_FORCE_NATIVE_EMULATION
-#define BOOST_INTERPROCESS_FORCE_NATIVE_EMULATION
+#define BOOST_INTERPROCESS_FORCE_NATIVE_EMULATION 1
 #endif
 
 #include <boost/interprocess/managed_windows_shared_memory.hpp>

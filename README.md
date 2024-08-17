@@ -3,7 +3,7 @@
 东方风神录AI，基于深度优先搜索算法。<br />
 Mountain of Faith's AI, based on depth first search algorithm.<br />
 
-![](https://github.com/rebuildworld/Th10Ai/blob/master/2.png)
+![](https://github.com/rebuildworld/Th10Ai/blob/master/1.png)
 
 ## Building
 
@@ -12,7 +12,7 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 	```
 	cd path/to/boost
 	bootstrap.bat
-	b2 stage link=static runtime-link=shared threading=multi define=BOOST_USE_WINAPI_VERSION=0x0A00 compileflags=/utf-8
+	b2 stage address-model=32 link=static runtime-link=shared threading=multi define=_WIN32_WINNT=0x0A00 define=BOOST_USE_WINAPI_VERSION=0x0A00 compileflags=/utf-8
 	```
 
 * [wxWidgets](https://github.com/wxWidgets/wxWidgets)<br />
@@ -20,7 +20,7 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 	git clone https://github.com/wxWidgets/wxWidgets.git wxWidgets-git
 	cd wxWidgets-git
 	git submodule update --init --recursive
-	git checkout v3.2.2.1
+	git checkout v3.2.5
 	open build/msw/wx_vc17.sln file, select the appropriate configuration (DLL Debug or DLL Release, Win32) and build the solution. 
 	```
 
@@ -39,15 +39,15 @@ Mountain of Faith's AI, based on depth first search algorithm.<br />
 
 ## Usage
 
-* Install [Visual C++ 2022 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).(optional)<br />
-* Prepare the "東方風神録　～ Mountain of Faith. ver 1.00a", set to window mode.<br />
+* Install [Visual C++ 2022 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).<br />
+* Prepare the "東方風神録　～ Mountain of Faith. ver 1.00a", set to windowed mode.<br />
 * Monitor refresh rate set to __60FPS__.<br />
 * Modify th10Path in Th10Ai.conf to your th10.exe path, and run Th10Ai.exe.<br />
 * Keep window focus on the game, select Reimu to start the game, press 'A' to start AI, press 'S' to stop AI.<br />
 
 ## Issues
 
-* 重现子弹的移动轨迹：子弹除了直线移动，还有曲线移动、随机移动等，现在都是按直线移动处理，后续的碰撞预测和节点搜索都是错的。缺少子弹ID，导致帧与帧之间的子弹无法关联起来进行轨迹推导。<br />
+* 严重错误：子弹除了直线移动，还有曲线移动、随机移动等，现在使用单帧偏移量叠加得到的移动轨迹是错误的。缺少子弹ID，导致帧与帧之间的子弹信息无法用于轨迹计算。<br />
 * 5、6面激光不闪避：可能是激光的速度过快，需要检测穿越判定。<br />
 * 小概率Hook失败。<br />
 

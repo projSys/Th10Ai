@@ -11,14 +11,14 @@
 #include "Th10Ai/Th10Hook.h"
 #include "Th10Ai/Status.h"
 #include "Th10Ai/Scene.h"
-#include "Th10Ai/Listener.h"
+#include "Th10Ai/Th10AiListener.h"
 
 namespace th
 {
 	class Th10Ai
 	{
 	public:
-		explicit Th10Ai(Listener* listener);
+		explicit Th10Ai(Th10AiListener* listener);
 		~Th10Ai();
 
 		void start();
@@ -39,7 +39,7 @@ namespace th
 		std::optional<Enemy> findEnemy();
 
 	private:
-		Listener* m_listener;
+		Th10AiListener* m_listener;
 
 		Config m_config;
 		Th10Hook m_th10Hook;

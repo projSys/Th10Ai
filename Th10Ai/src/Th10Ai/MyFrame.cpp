@@ -1,5 +1,6 @@
 #include "Th10Ai/MyFrame.h"
 
+#include <wx/notebook.h>
 #include <Base/Exception/Catcher.h>
 #include <Base/Windows/Apis.h>
 
@@ -19,29 +20,35 @@ namespace th
 
 	MyFrame::MyFrame() :
 		wxFrame(nullptr, wxID_ANY, wxT("Th10Ai")),
+		m_size(640, 480),
 		m_statusWindow(nullptr)
 	{
+		//SetClientSize(m_size);
+		//SetMinClientSize(m_size);
 		SetWindowStyle(wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX));
-		SetClientSize(640, 480);
-		RECT rect = {};
-		::GetWindowRect(GetHandle(), &rect);
-		int32_t windowWidth = rect.right - rect.left;
-		int32_t windowHeight = rect.bottom - rect.top;
-		int32_t screenWidth = ::GetSystemMetrics(SM_CXSCREEN);
-		int32_t screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
-		int32_t x = (screenWidth / 2);
-		int32_t y = (screenHeight - windowHeight) / 2;
-		SetPosition(wxPoint(x, y));
 
-		wxPanel* panel = new wxPanel(this, wxID_ANY);
+		wxPanel* framePanel = new wxPanel(this);
+		wxNotebook* notebook = new wxNotebook(framePanel, wxID_ANY);
+
+		wxPanel* mainPanel = new wxPanel(notebook);
+		mainPanel->SetClientSize(m_size);
+		mainPanel->SetMinClientSize(m_size);
+		mainPanel->SetBackgroundColour(framePanel->GetBackgroundColour());
+
+		wxPanel* outputPanel = new wxPanel(notebook);
+		outputPanel->SetBackgroundColour(framePanel->GetBackgroundColour());
+
 		wxBoxSizer* verSizer = new wxBoxSizer(wxVERTICAL);
 		wxBoxSizer* horSizer = new wxBoxSizer(wxHORIZONTAL);
-		m_statusWindow = new MyWindow(panel);
+		m_statusWindow = new MyWindow(mainPanel);
 		wxGridSizer* gridSizer = new wxGridSizer(1, 2, 0, 0);
-		wxButton* startBtn = new wxButton(panel, myID_START, wxT("StartAI"));
-		wxButton* stopBtn = new wxButton(panel, myID_STOP, wxT("StopAI"));
+		wxButton* startBtn = new wxButton(mainPanel, myID_START, wxT("StartAI"));
+		wxButton* stopBtn = new wxButton(mainPanel, myID_STOP, wxT("StopAI"));
 
-		panel->SetSizer(verSizer);
+		notebook->AddPage(mainPanel, wxT("Main"), true);
+		notebook->AddPage(outputPanel, wxT("Output"));
+
+		mainPanel->SetSizer(verSizer);
 
 		verSizer->AddSpacer(16);
 		verSizer->Add(horSizer, wxSizerFlags());
@@ -55,6 +62,22 @@ namespace th
 
 		gridSizer->Add(startBtn, wxSizerFlags());
 		gridSizer->Add(stopBtn, wxSizerFlags());
+
+		mainPanel->Layout();
+		mainPanel->Fit();
+		notebook->Fit();
+		framePanel->Fit();
+		Fit();
+
+		RECT rect = {};
+		::GetWindowRect(GetHandle(), &rect);
+		int32_t windowWidth = rect.right - rect.left;
+		int32_t windowHeight = rect.bottom - rect.top;
+		int32_t screenWidth = ::GetSystemMetrics(SM_CXSCREEN);
+		int32_t screenHeight = ::GetSystemMetrics(SM_CYSCREEN);
+		int32_t x = (screenWidth / 2);
+		int32_t y = (screenHeight - windowHeight) / 2;
+		SetPosition(wxPoint(x, y));
 
 		try
 		{
@@ -76,6 +99,7 @@ namespace th
 		{
 			LOG_FATAL() << Catcher() << std::endl;
 			Log::Flush();
+			throw;
 		}
 	}
 
@@ -107,7 +131,7 @@ namespace th
 		m_th10Ai->focus();
 	}
 
-	void MyFrame::onStatusUpdate(const SharedStatus& status)
+	void MyFrame::onStatusUpdate(const Status& status)
 	{
 		m_statusWindow->onStatusUpdate(status);
 	}

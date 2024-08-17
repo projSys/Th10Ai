@@ -17,7 +17,7 @@ namespace th
 		explicit MyWindow(wxWindow* parent);
 		virtual ~MyWindow();
 
-		void onStatusUpdate(const SharedStatus& status);
+		void onStatusUpdate(const Status& status);
 
 	private:
 		void onPaint(wxPaintEvent& event);

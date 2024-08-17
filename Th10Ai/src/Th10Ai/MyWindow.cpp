@@ -110,10 +110,9 @@ namespace th
 	{
 	}
 
-	void MyWindow::onStatusUpdate(const SharedStatus& status)
+	void MyWindow::onStatusUpdate(const Status& status)
 	{
 		m_writableStatus->copy(status);
-		m_writableStatus->updateExtra();
 		{
 			std::lock_guard<std::mutex> lock(m_statusMutex);
 			m_writableStatus.swap(m_swappableStatus);

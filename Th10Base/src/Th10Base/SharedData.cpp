@@ -35,22 +35,18 @@ namespace th
 	void SharedData::notifyInit()
 	{
 		{
-			//bip::scoped_lock<bip::interprocess_mutex> lock(m_initMutex);
-			bip::scoped_lock<bip::interprocess_mutex> lock(m_statusMutex);
+			bip::scoped_lock<bip::interprocess_mutex> lock(m_initMutex);
 			m_inited = true;
 		}
-		//m_initCond.notify_one();
-		m_statusCond.notify_one();
+		m_initCond.notify_one();
 	}
 
 	bool SharedData::waitInit(const Time& timeout)
 	{
-		//bip::scoped_lock<bip::interprocess_mutex> lock(m_initMutex);
-		bip::scoped_lock<bip::interprocess_mutex> lock(m_statusMutex);
+		bip::scoped_lock<bip::interprocess_mutex> lock(m_initMutex);
 		while (!m_inited)
 		{
-			//bip::cv_status status = m_initCond.wait_for(lock, timeout);
-			bip::cv_status status = m_statusCond.wait_for(lock, timeout);
+			bip::cv_status status = m_initCond.wait_for(lock, timeout);
 			if (status == bip::cv_status::timeout)
 				return false;
 		}

@@ -68,8 +68,8 @@ namespace th
 	HRESULT MyDirectInputDevice8A::GetDeviceState(DWORD cbData, LPVOID lpvData)
 	{
 		HRESULT hr = m_device->GetDeviceState(cbData, lpvData);
-		if (SUCCEEDED(hr))
-		{
+		//if (SUCCEEDED(hr))
+		//{
 			//Time t1 = Clock::Now();
 
 			try
@@ -86,8 +86,9 @@ namespace th
 
 			//Time t2 = Clock::Now();
 			//std::cout << t2 - t1 << std::endl;
-		}
-		return hr;
+		//}
+		//return hr;
+		return DI_OK;
 	}
 
 	HRESULT MyDirectInputDevice8A::GetDeviceData(DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags)
@@ -107,6 +108,8 @@ namespace th
 
 	HRESULT MyDirectInputDevice8A::SetCooperativeLevel(HWND hwnd, DWORD dwFlags)
 	{
+		//dwFlags &= ~(DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+		//dwFlags |= (DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 		return m_device->SetCooperativeLevel(hwnd, dwFlags);
 	}
 
