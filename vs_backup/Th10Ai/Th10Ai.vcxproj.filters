@@ -68,9 +68,6 @@
     <ClCompile Include="src\Th10Ai\DllInject.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
-    <ClCompile Include="src\Th10Ai\Main.cpp">
-      <Filter>源文件\Th10Ai</Filter>
-    </ClCompile>
     <ClCompile Include="src\Th10Ai\Path.cpp">
       <Filter>源文件\Th10Ai</Filter>
     </ClCompile>
