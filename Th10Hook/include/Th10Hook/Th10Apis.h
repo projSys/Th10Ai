@@ -2,13 +2,13 @@
 
 #include "Th10Hook/Common.h"
 
-#include <Th10Base/Th10Raws.h>
-#include <Th10Base/SharedMemory.h>
-#include <Th10Base/Player.h>
-#include <Th10Base/Item.h>
-#include <Th10Base/Enemy.h>
-#include <Th10Base/Bullet.h>
-#include <Th10Base/Laser.h>
+#include "Th10Base/Th10Raws.h"
+#include "Th10Base/SharedMemory.h"
+#include "Th10Base/Player.h"
+#include "Th10Base/Item.h"
+#include "Th10Base/Enemy.h"
+#include "Th10Base/Bullet.h"
+#include "Th10Base/Laser.h"
 
 namespace th
 {

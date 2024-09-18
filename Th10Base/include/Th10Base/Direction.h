@@ -2,7 +2,7 @@
 
 #include "Th10Base/Common.h"
 
-#include <Base/Traits.h>
+#include "Base/Traits.h"
 
 namespace th
 {

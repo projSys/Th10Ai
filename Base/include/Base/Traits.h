@@ -3,19 +3,19 @@
 #include "Base/Common.h"
 
 #include <cstdlib>
-#include <type_traits>
+#include <algorithm>
 #include <limits>
-#include <utility>
+#include <type_traits>
+#include <concepts>
 
 namespace base
 {
 	// https://stackoverflow.com/questions/17333/what-is-the-most-effective-way-for-float-and-double-comparison
 	// https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
 	template <typename T>
+		requires std::floating_point<T>
 	bool float_equal(T left, T right)
 	{
-		static_assert(std::is_floating_point_v<T>);
-
 		T diff = std::abs(left - right);
 		if (diff <= std::numeric_limits<T>::epsilon())
 			return true;
@@ -35,6 +35,7 @@ namespace base
 		return wstr == nullptr || wstr[0] == L'\0';
 	}
 
+	// 等C++23
 	template <typename T>
 	constexpr std::underlying_type_t<T> to_underlying(T enumerator)
 	{

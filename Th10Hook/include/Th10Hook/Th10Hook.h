@@ -3,8 +3,9 @@
 #include "Th10Hook/Common.h"
 
 #include <memory>
-#include <Th10Base/SharedMemory.h>
-#include <Th10Base/SharedData.h>
+
+#include "Th10Base/SharedMemory.h"
+#include "Th10Base/SharedData.h"
 
 namespace th
 {

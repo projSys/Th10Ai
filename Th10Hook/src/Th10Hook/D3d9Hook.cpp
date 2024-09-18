@@ -1,11 +1,10 @@
 #include "Th10Hook/D3d9Hook.h"
 
-#include <Base/Exception/SystemError.h>
-
+#include "Base/Exception/SystemError.h"
 #include "Th10Hook/InlineHook32.h"
 #include "Th10Hook/MyDirect3D9.h"
 
-#pragma warning(disable: 6387)
+//#pragma warning(disable: 6387)
 
 namespace th
 {

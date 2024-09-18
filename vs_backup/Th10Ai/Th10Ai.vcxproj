@@ -77,14 +77,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_86_0;D:\Develop\wxWidgets\wxWidgets-3.2.5\lib\vc14x_dll\mswud;D:\Develop\wxWidgets\wxWidgets-3.2.5\include\msvc;D:\Develop\wxWidgets\wxWidgets-3.2.5\include;..\Base\include;..\Th10Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_86_0;D:\Develop\wxWidgets\wxWidgets-git\lib\vc_dll\mswud;D:\Develop\wxWidgets\wxWidgets-git\include\msvc;D:\Develop\wxWidgets\wxWidgets-git\include;..\Base\include;..\Th10Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_86_0\stage\lib;D:\Develop\wxWidgets\wxWidgets-3.2.5\lib\vc14x_dll;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>wxbase32ud.lib;wxmsw32ud_core.lib;Base.lib;Th10Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_86_0\stage\lib;D:\Develop\wxWidgets\wxWidgets-git\lib\vc_dll;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wxbase33ud.lib;wxmsw33ud_core.lib;Base.lib;Th10Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,7 +96,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_86_0;D:\Develop\wxWidgets\wxWidgets-3.2.5\lib\vc14x_dll\mswu;D:\Develop\wxWidgets\wxWidgets-3.2.5\include\msvc;D:\Develop\wxWidgets\wxWidgets-3.2.5\include;..\Base\include;..\Th10Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Develop\Boost\boost_1_86_0;D:\Develop\wxWidgets\wxWidgets-git\lib\vc_dll\mswu;D:\Develop\wxWidgets\wxWidgets-git\include\msvc;D:\Develop\wxWidgets\wxWidgets-git\include;..\Base\include;..\Th10Base\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -104,8 +104,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_86_0\stage\lib;D:\Develop\wxWidgets\wxWidgets-3.2.5\lib\vc14x_dll;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>wxbase32u.lib;wxmsw32u_core.lib;Base.lib;Th10Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Develop\Boost\boost_1_86_0\stage\lib;D:\Develop\wxWidgets\wxWidgets-git\lib\vc_dll;..\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wxbase33u.lib;wxmsw33u_core.lib;Base.lib;Th10Base.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

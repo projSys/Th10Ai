@@ -1,7 +1,6 @@
 #include "Th10Ai/Th10Ai.h"
 
-#include <Base/Exception/Catcher.h>
-
+#include "Base/Exception/Catcher.h"
 #include "Th10Ai/Path.h"
 
 namespace th

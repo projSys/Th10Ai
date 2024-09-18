@@ -1,8 +1,8 @@
 #include "Th10Hook/Th10Hook.h"
 
 #include <boost/locale.hpp>
-#include <Base/Exception/Exception.h>
 
+#include "Base/Exception/Exception.h"
 #include "Th10Hook/Th10Apis.h"
 
 namespace th

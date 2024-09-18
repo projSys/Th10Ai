@@ -1,8 +1,8 @@
 #include "Th10Base/Vector2.h"
 
-#include <math.h>
 #include <cmath>
-#include <Base/Traits.h>
+
+#include "Base/Traits.h"
 
 namespace th
 {

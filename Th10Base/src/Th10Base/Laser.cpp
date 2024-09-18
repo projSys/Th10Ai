@@ -1,7 +1,7 @@
 #include "Th10Base/Laser.h"
 
-#include <math.h>
 #include <cmath>
+#include <numbers>
 
 #include "Th10Base/Entity.h"
 
@@ -89,7 +89,7 @@ namespace th
 	float_t Laser::getRadian() const
 	{
 		// emmm...你说这个谁懂啊？
-		float_t radian = arc - static_cast<float_t>(M_PI) * _F(5.0) / _F(2.0);
+		float_t radian = arc - static_cast<float_t>(std::numbers::pi) * _F(5.0) / _F(2.0);
 		return radian;
 	}
 

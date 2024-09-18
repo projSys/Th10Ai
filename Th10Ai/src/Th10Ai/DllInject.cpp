@@ -1,10 +1,10 @@
 #include "Th10Ai/DllInject.h"
 
-#include <Base/ScopeGuard.h>
-#include <Base/Exception/Exception.h>
-#include <Base/Exception/SystemError.h>
+#include "Base/ScopeGuard.h"
+#include "Base/Exception/Exception.h"
+#include "Base/Exception/SystemError.h"
 
-#pragma warning(disable: 6387)
+//#pragma warning(disable: 6387)
 
 namespace th
 {

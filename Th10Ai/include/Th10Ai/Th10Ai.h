@@ -5,8 +5,8 @@
 #include <thread>
 #include <atomic>
 #include <optional>
-#include <Base/Time.h>
 
+#include "Base/Time.h"
 #include "Th10Ai/Config.h"
 #include "Th10Ai/Th10Hook.h"
 #include "Th10Ai/Status.h"

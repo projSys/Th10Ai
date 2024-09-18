@@ -1,8 +1,7 @@
 #include "Th10Hook/DllMain.h"
 
-#include <Base/Exception/Catcher.h>
-#include <Base/Windows/Apis.h>
-
+#include "Base/Exception/Catcher.h"
+#include "Base/Windows/Apis.h"
 #include "Th10Hook/MyDetours.h"
 #include "Th10Hook/D3d9Hook.h"
 #include "Th10Hook/Di8Hook.h"

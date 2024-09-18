@@ -1,8 +1,8 @@
 #include "Th10Hook/InlineHook32.h"
 
-#include <Base/Exception/SystemError.h>
+#include "Base/Exception/SystemError.h"
 
-#pragma warning(disable: 6387)
+//#pragma warning(disable: 6387)
 
 namespace th
 {

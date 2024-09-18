@@ -1,8 +1,9 @@
 #include "Th10Ai/MyFrame.h"
 
 #include <wx/notebook.h>
-#include <Base/Exception/Catcher.h>
-#include <Base/Windows/Apis.h>
+
+#include "Base/Exception/Catcher.h"
+#include "Base/Windows/Apis.h"
 
 namespace th
 {

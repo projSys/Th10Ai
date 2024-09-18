@@ -3,8 +3,8 @@
 #include "Th10Hook/Common.h"
 
 #include <d3d9.h>
-#include <Base/Singleton.h>
 
+#include "Base/Singleton.h"
 #include "Th10Hook/MyDetours.h"
 
 namespace th

@@ -21,6 +21,10 @@ namespace base
 	namespace bst = boost::stacktrace;
 #endif
 
+	// https://stackoverflow.com/questions/691719/how-to-display-a-stack-trace-when-an-exception-is-thrown
+	// https://github.com/JochenKalmbach/StackWalker
+	// https://github.com/jeremy-rifkin/cpptrace
+	// https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p2490r3.html 等C++26
 	class StackTrace
 #ifdef BASE_THROW_STACKTRACE
 		: public bst::stacktrace

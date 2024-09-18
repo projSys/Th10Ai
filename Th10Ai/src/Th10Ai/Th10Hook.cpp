@@ -1,11 +1,11 @@
 #include "Th10Ai/Th10Hook.h"
 
 #include <boost/locale.hpp>
-#include <Base/Exception/Exception.h>
-#include <Base/Exception/SystemError.h>
-#include <Base/Exception/Catcher.h>
-#include <Base/Windows/Apis.h>
 
+#include "Base/Exception/Exception.h"
+#include "Base/Exception/SystemError.h"
+#include "Base/Exception/Catcher.h"
+#include "Base/Windows/Apis.h"
 #include "Th10Ai/Config.h"
 #include "Th10Ai/DllInject.h"
 
