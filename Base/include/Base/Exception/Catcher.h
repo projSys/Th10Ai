@@ -11,6 +11,6 @@ namespace base
 		public OStreamable
 	{
 	public:
-		virtual void toStream(std::ostream& os) const override;
+		virtual void toStream(std::ostream& out) const override;
 	};
 }

@@ -29,7 +29,7 @@ namespace th
 		template <typename Executor>
 		void on_error(Executor& exec, const std::error_code& ec) const
 		{
-			Throw(SystemError(ec));
+			throw SystemError(ec);
 		}
 
 		template <typename Executor>
@@ -42,7 +42,7 @@ namespace th
 
 			DWORD count = ResumeThread(exec.proc_info.hThread);
 			if (count == (DWORD)-1)
-				Throw(SystemError(GetLastError()));
+				throw SystemError(GetLastError());
 		}
 	};
 
@@ -56,7 +56,7 @@ namespace th
 		m_sharedMemory = SharedMemory(bip::create_only, "Th10SharedMemory", SHARED_SIZE);
 		m_sharedData = m_sharedMemory.construct<SharedData>("Th10SharedData")(m_sharedMemory);
 		if (m_sharedData == nullptr)
-			Throw(Exception("Th10SharedData构造失败。"));
+			throw Exception("Th10SharedData构造失败。");
 	}
 
 	Th10Hook::~Th10Hook()
@@ -77,7 +77,7 @@ namespace th
 		m_asioThread = std::thread(&Th10Hook::asioProc, this);
 
 		if (!m_sharedData->waitInit(Time(3000)))
-			Throw(Exception("Th10Hook初始化超时。"));
+			throw Exception("Th10Hook初始化超时。");
 	}
 
 	void Th10Hook::asioProc()

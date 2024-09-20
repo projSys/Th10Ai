@@ -47,7 +47,7 @@ namespace th
 		m_sharedMemory = SharedMemory(bip::open_only, "Th10SharedMemory");
 		m_sharedData = m_sharedMemory.find<SharedData>("Th10SharedData").first;
 		if (m_sharedData == nullptr)
-			Throw(Exception("Th10SharedData查找失败。"));
+			throw Exception("Th10SharedData查找失败。");
 
 		m_sharedData->setWindow(window);
 		m_sharedData->notifyInit();

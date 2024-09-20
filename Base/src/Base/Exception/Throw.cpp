@@ -4,21 +4,21 @@
 
 namespace base
 {
-	std::ostream& operator <<(std::ostream& os, const std::source_location& sl)
+	std::ostream& operator <<(std::ostream& out, const std::source_location& sl)
 	{
-		os << "SourceLocation:\n"
+		out << "SourceLocation:\n"
 			<< " in " << sl.function_name()
 			// 不需要转码，和代码文件的编码一致
 			<< " at " << sl.file_name()
 			<< ':' << sl.line()
 			<< '\n';
-		return os;
+		return out;
 	}
 
 	const std::source_location Throwable::s_invalidSl;
-	const StackTrace Throwable::s_invalidSt(0, 0);
+	//const StackTrace Throwable::s_invalidSt(0, 0);
 
-	void Throwable::toStream(std::ostream& os) const
+	void Throwable::toStream(std::ostream& out) const
 	{
 	}
 
@@ -27,8 +27,8 @@ namespace base
 		return s_invalidSl;
 	}
 
-	const StackTrace& Throwable::getStackTrace() const
-	{
-		return s_invalidSt;
-	}
+	//const StackTrace& Throwable::getStackTrace() const
+	//{
+	//	return s_invalidSt;
+	//}
 }

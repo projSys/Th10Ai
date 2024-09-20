@@ -157,7 +157,6 @@
   <ItemGroup>
     <ClInclude Include="include\Base\Exception\Catcher.h" />
     <ClInclude Include="include\Base\Exception\Exception.h" />
-    <ClInclude Include="include\Base\Exception\StackTrace.h" />
     <ClInclude Include="include\Base\Exception\SystemError.h" />
     <ClInclude Include="include\Base\Exception\Throw.h" />
     <ClInclude Include="include\Base\Singleton.h" />
@@ -170,16 +169,17 @@
     <ClInclude Include="include\Base\Types.h" />
     <ClInclude Include="include\Base\Windows\Apis.h" />
     <ClInclude Include="include\Base\Windows\Common.h" />
+    <ClInclude Include="include\Base\Windows\StackTrace.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception\Catcher.cpp" />
     <ClCompile Include="src\Base\Exception\Exception.cpp" />
-    <ClCompile Include="src\Base\Exception\StackTrace.cpp" />
     <ClCompile Include="src\Base\Exception\SystemError.cpp" />
     <ClCompile Include="src\Base\Exception\Throw.cpp" />
     <ClCompile Include="src\Base\Time.cpp" />
     <ClCompile Include="src\Base\Log.cpp" />
     <ClCompile Include="src\Base\Windows\Apis.cpp" />
+    <ClCompile Include="src\Base\Windows\StackTrace.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

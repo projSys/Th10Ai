@@ -11,9 +11,9 @@ namespace base
 			WCHAR buffer[BUFFER_SIZE] = {};
 			DWORD ret = GetModuleFileNameW(module, buffer, BUFFER_SIZE - 1);
 			if (ret == 0)
-				Throw(SystemError(GetLastError()));
+				throw SystemError(GetLastError());
 			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-				Throw(SystemError(ERROR_INSUFFICIENT_BUFFER));
+				throw SystemError(ERROR_INSUFFICIENT_BUFFER);
 			return fs::path(buffer);
 		}
 

@@ -4,8 +4,6 @@
 #include "Th10Hook/InlineHook32.h"
 #include "Th10Hook/MyDirect3D9.h"
 
-//#pragma warning(disable: 6387)
-
 namespace th
 {
 	D3d9Hook::D3d9Hook() :
@@ -18,11 +16,11 @@ namespace th
 	{
 		HMODULE d3d9Dll = GetModuleHandleW(L"d3d9.dll");
 		if (d3d9Dll == nullptr)
-			Throw(SystemError(GetLastError()));
+			throw SystemError(GetLastError());
 		m_direct3DCreate9Orig = reinterpret_cast<Direct3DCreate9_t*>(
 			GetProcAddress(d3d9Dll, "Direct3DCreate9"));
 		if (m_direct3DCreate9Orig == nullptr)
-			Throw(SystemError(GetLastError()));
+			throw SystemError(GetLastError());
 
 		detours.attach(reinterpret_cast<PVOID*>(&m_direct3DCreate9Orig), &D3d9Hook::Direct3DCreate9Hook);
 		//InlineHook32 hook;

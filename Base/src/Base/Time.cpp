@@ -10,9 +10,9 @@ namespace base
 			chr::steady_clock::now().time_since_epoch());
 	}
 
-	std::ostream& operator <<(std::ostream& os, const Time& time)
+	std::ostream& operator <<(std::ostream& out, const Time& time)
 	{
-		os << time.count();
-		return os;
+		out << time.count();
+		return out;
 	}
 }

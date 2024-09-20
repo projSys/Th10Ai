@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Base/Windows/Common.h"
+#include "Base/Common.h"
 
 #include <system_error>
 
@@ -17,7 +17,7 @@ namespace base
 			const std::error_category& category = std::system_category());
 		explicit SystemError(const std::error_code& ec);
 
-		virtual void toStream(std::ostream& os) const override;
+		virtual void toStream(std::ostream& out) const override;
 
 		int32_t getValue() const;
 		const std::error_code& getErrorCode() const;

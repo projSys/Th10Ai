@@ -20,7 +20,7 @@ namespace base
 	{
 	}
 
-	void SystemError::toStream(std::ostream& os) const
+	void SystemError::toStream(std::ostream& out) const
 	{
 		std::string msg = m_ec.message();
 		std::string id = blu::get_system_locale();
@@ -29,7 +29,7 @@ namespace base
 			bloc::generator gen;
 			msg = blc::to_utf<char>(msg, gen(id));
 		}
-		os << msg << '\n';
+		out << msg << '\n';
 	}
 
 	int32_t SystemError::getValue() const

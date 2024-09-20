@@ -4,8 +4,6 @@
 #include "Th10Hook/InlineHook32.h"
 #include "Th10Hook/MyDirectInput8A.h"
 
-//#pragma warning(disable: 6387)
-
 namespace th
 {
 	Di8Hook::Di8Hook() :
@@ -18,11 +16,11 @@ namespace th
 	{
 		HMODULE dinput8Dll = GetModuleHandleW(L"dinput8.dll");
 		if (dinput8Dll == nullptr)
-			Throw(SystemError(GetLastError()));
+			throw SystemError(GetLastError());
 		m_directInput8CreateOrig = reinterpret_cast<DirectInput8Create_t*>(
 			GetProcAddress(dinput8Dll, "DirectInput8Create"));
 		if (m_directInput8CreateOrig == nullptr)
-			Throw(SystemError(GetLastError()));
+			throw SystemError(GetLastError());
 
 		detours.attach(reinterpret_cast<PVOID*>(&m_directInput8CreateOrig), &Di8Hook::DirectInput8CreateHook);
 		//InlineHook32 hook;

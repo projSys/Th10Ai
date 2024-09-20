@@ -36,7 +36,7 @@ namespace base
 		FATAL
 	};
 
-	std::ostream& operator <<(std::ostream& os, SeverityLevel level);
+	std::ostream& operator <<(std::ostream& out, SeverityLevel level);
 
 	BOOST_LOG_GLOBAL_LOGGER(Logger, src::severity_logger_mt<SeverityLevel>)
 

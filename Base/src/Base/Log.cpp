@@ -19,7 +19,7 @@ namespace base
 {
 	namespace aux = boost::log::aux;
 
-	std::ostream& operator <<(std::ostream& os, SeverityLevel level)
+	std::ostream& operator <<(std::ostream& out, SeverityLevel level)
 	{
 		static const char* descs[] =
 		{
@@ -29,8 +29,8 @@ namespace base
 			"ERROR",
 			"FATAL"
 		};
-		os << descs[to_underlying(level)];
-		return os;
+		out << descs[to_underlying(level)];
+		return out;
 	}
 
 	BOOST_LOG_GLOBAL_LOGGER_INIT(Logger, src::severity_logger_mt<SeverityLevel>)

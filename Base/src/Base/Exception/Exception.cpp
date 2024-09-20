@@ -14,9 +14,9 @@ namespace base
 	{
 	}
 
-	void Exception::toStream(std::ostream& os) const
+	void Exception::toStream(std::ostream& out) const
 	{
-		os << m_impl.what() << '\n';
+		out << m_impl.what() << '\n';
 	}
 
 	const char* Exception::what() const

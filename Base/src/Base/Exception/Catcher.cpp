@@ -6,6 +6,7 @@
 #include <boost/locale.hpp>
 
 #include "Base/Exception/Throw.h"
+#include "Base/Windows/StackTrace.h"
 
 namespace base
 {
@@ -13,7 +14,7 @@ namespace base
 	namespace blc = boost::locale::conv;
 	namespace blu = boost::locale::util;
 
-	void Catcher::toStream(std::ostream& os) const
+	void Catcher::toStream(std::ostream& out) const
 	{
 		try
 		{
@@ -21,7 +22,7 @@ namespace base
 		}
 		catch (const Throwable& throwable)
 		{
-			os << throwable;
+			out << throwable;
 		}
 		catch (const boost::exception& be)
 		{
@@ -32,7 +33,7 @@ namespace base
 				bloc::generator gen;
 				info = blc::to_utf<char>(info, gen(id));
 			}
-			os << info;
+			out << info;
 		}
 		catch (const std::exception& se)
 		{
@@ -41,12 +42,15 @@ namespace base
 			{
 				bloc::generator gen;
 				std::string buf = blc::to_utf<char>(se.what(), gen(id));
-				os << buf << '\n';
+				out << buf << '\n';
 			}
 			else
 			{
-				os << se.what() << '\n';
+				out << se.what() << '\n';
 			}
 		}
+
+		win::StackTrace trace = win::StackTrace::FromCurrentException();
+		out << "StackTrace:\n" << trace;
 	}
 }

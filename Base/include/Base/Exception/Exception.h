@@ -15,7 +15,7 @@ namespace base
 		explicit Exception(const char* str);
 		explicit Exception(const std::string& str);
 
-		virtual void toStream(std::ostream& os) const override;
+		virtual void toStream(std::ostream& out) const override;
 
 		const char* what() const;
 
