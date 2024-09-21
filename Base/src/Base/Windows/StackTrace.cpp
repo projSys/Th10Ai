@@ -57,12 +57,13 @@ namespace base
 
 			if (!SymInitialize(process, nullptr, TRUE))
 			{
-				// FATAL
+				out << "SymInitialize() failed: " << GetLastError() << '\n';
 				return;
 			}
 			ON_SCOPE_EXIT([&]()
 				{
-					SymCleanup(process);
+					if (!SymCleanup(process))
+						out << "SymCleanup() failed: " << GetLastError() << '\n';
 				});
 
 			DWORD machineType = 0;
@@ -125,6 +126,8 @@ namespace base
 				if (!StackWalk64(machineType, process, thread, &frame, &context,
 					nullptr, SymFunctionTableAccess64, SymGetModuleBase64, nullptr))
 					break;
+				if (frame.AddrPC.Offset == 0)
+					break;
 
 				if (skip != 0)
 				{
@@ -133,34 +136,26 @@ namespace base
 				}
 
 				DWORD64 address = frame.AddrPC.Offset;
-				if (address != 0)
+				out << i++ << "# ";
+				if (SymGetSymFromAddr64(process, address, &symDisp, symbol))
 				{
-					out << i++ << "# ";
-					if (SymGetSymFromAddr64(process, address, &symDisp, symbol))
-					{
-						out << symbol->Name;
-
-						if (SymGetLineFromAddr64(process, address, &lineDisp, &line))
-							out << " at " << line.FileName << ":" << line.LineNumber;
-					}
-					else
-					{
-						std::ios oldState(nullptr);
-						oldState.copyfmt(out);
-						out << "0x" << std::hex << std::uppercase << std::setfill('0');
-#ifdef BASE_64BIT
-						out << std::setw(16) << address;
-#else
-						out << std::setw(8) << address;
-#endif
-						out.copyfmt(oldState);
-					}
-					out << '\n';
+					out << symbol->Name;
+					if (SymGetLineFromAddr64(process, address, &lineDisp, &line))
+						out << " at " << line.FileName << ":" << line.LineNumber;
 				}
 				else
 				{
-					break;
+					std::ios oldState(nullptr);
+					oldState.copyfmt(out);
+					out << "0x" << std::hex << std::uppercase << std::setfill('0');
+#ifdef BASE_64BIT
+					out << std::setw(16) << address;
+#else
+					out << std::setw(8) << address;
+#endif
+					out.copyfmt(oldState);
 				}
+				out << '\n';
 
 				if (frame.AddrReturn.Offset == 0)
 					break;
